@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Fonts/Bungee-Regular.ttf</file>
+    </qresource>
+</RCC>

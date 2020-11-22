@@ -1,0 +1,6 @@
+[submodule "CompileOptions"]
+	path = CompileOptions
+	url = git@github.com:MusicLab-Dev/CompileOptions.git
+[submodule "Audio"]
+	path = Audio
+	url = git@github.com:MusicLab-Dev/Audio.git
