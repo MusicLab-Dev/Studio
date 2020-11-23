@@ -5,6 +5,7 @@ find_package(GTest REQUIRED)
 get_filename_component(StudioTestsDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
 set(StudioTestsSources
+    ${StudioTestsDir}/tests_Studio.cpp
 )
 
 add_executable(${PROJECT_NAME} ${StudioTestsSources})

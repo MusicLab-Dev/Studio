@@ -7,8 +7,10 @@
 
 #include <Studio/Studio.hpp>
 
+
 int main(int argc, char *argv[])
 {
+    Studio::InitResources();
     try {
         Studio studio(argc, argv);
 
@@ -16,4 +18,5 @@ int main(int argc, char *argv[])
     } catch (const std::exception &e) {
         std::cerr << "\nAn error occured:\n\t" << e.what() << std::endl;
     }
+    Studio::DestroyResources();
 }

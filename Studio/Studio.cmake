@@ -20,7 +20,7 @@ set(StudioSources
     ${StudioDir}/Studio.cpp
 )
 
-add_library(${PROJECT_NAME} ${StudioSources})
+add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${StudioDir}/..)
 
@@ -37,6 +37,6 @@ set(StudioAppSources
 
 set(Application ${PROJECT_NAME}App)
 
-add_executable(${Application} ${StudioAppSources} ${QtResources})
+add_executable(${Application} ${StudioAppSources})
 
 target_link_libraries(${Application} Studio)
