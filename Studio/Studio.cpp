@@ -5,31 +5,10 @@
 
 #include "Studio.hpp"
 
-void Studio::InitResources(void)
+Studio::Studio(int argc, char *argv[])
+    : QGuiApplication(argc, argv)
 {
-    Q_INIT_RESOURCE(Resources);
-    Q_INIT_RESOURCE(Main);
-    Q_INIT_RESOURCE(Default);
-}
-
-void Studio::DestroyResources(void)
-{
-    Q_CLEANUP_RESOURCE(Resources);
-    Q_CLEANUP_RESOURCE(Main);
-    Q_CLEANUP_RESOURCE(Default);
-}
-
-static int DefaultArgc = 1;
-static char DefaultArg[] = { 'S', 't', 'u', 'd', 'i', 'o', '\0' };
-static char *DefaultArgv[] = { DefaultArg, nullptr };
-
-Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
-{
-}
-
-Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
-{
-    const QUrl url(QStringLiteral("qrc:/Main/Main.qml"));
+    const QUrl url(QStringLiteral("qrc:/Main.qml"));
 
     QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this,
         [url](QObject *obj, const QUrl &objUrl) {
@@ -39,10 +18,6 @@ Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
     Qt::QueuedConnection);
 
     _engine.load(url);
-}
-
-Studio::~Studio(void)
-{
 }
 
 int Studio::run(void)
