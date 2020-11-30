@@ -10,15 +10,17 @@
 #include <QObject>
 #include <QAbstractListModel>
 
-#include <MLCore/Utils.hpp>
-#include <MLCore/UniqueAlloc.hpp>
-#include <MLAudio/Base.hpp>
+#include <Audio/Core/Core/Utils.hpp>
+#include <Audio/Core/Core/UniqueAlloc.hpp>
+#include <Audio/Base.hpp>
+#include <Audio/Automation.hpp>
+#include "InstancesModel.hpp"
 
 struct Point : public Audio::Point
 {
     Q_GADGET
 
-    Q_ENUM(CurveType);
+    Q_ENUM(CurveType)
 
     Q_PROPERTY(Beat beat MEMBER beat)
     Q_PROPERTY(CurveType curveType MEMBER curveType)
@@ -38,21 +40,18 @@ public:
     /** @brief Default constructor */
     explicit AutomationModel(QObject *parent, Audio::Automation *automation) noexcept;
 
-    /** @brief Destruct the AutomationModel */
-    ~AutomationModel(void) noexcept = default;
-
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  _data->size(); }
+    [[nodiscard]] int count(void) const noexcept { return  static_cast<int>(_data->size()); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     /** @brief Modify a role from children */
-    [[nodiscard]] void setData(const QModelIndex &index, const QVariant &value, int role) override;
+    [[nodiscard]] bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
     /** @brief Get the internal data pointer */
     [[nodiscard]] Audio::Automation *getInternal(void) noexcept { return _data; }

@@ -20,6 +20,8 @@ set(StudioSources
     ${StudioDir}/Studio.cpp
     ${StudioDir}/InstancesModel.hpp
     ${StudioDir}/InstancesModel.cpp
+    ${StudioDir}/AutomationModel.hpp
+    ${StudioDir}/AutomationModel.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

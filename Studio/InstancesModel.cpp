@@ -5,21 +5,26 @@
 
 #include <stdexcept>
 
+#include <QHash>
+
 #include "InstancesModel.hpp"
 
 QHash<int, QByteArray> InstancesModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::Range, "range" }
+        { Roles::From, "from" },
+        { Roles::To, "to" }
     };
 }
 
-QVariant InstancesModel::data(const QModelIndex &index, int role) const noexcept_ndebug
+QVariant InstancesModel::data(const QModelIndex &index, int role) const noexcept/* noexcept_ndebug*/
 {
     const auto &child = get(index.row());
     switch (role) {
-    case Roles::Range:
-        return child;
+    case Roles::From:
+        return child.from;
+    case Roles::To:
+        return child.to;
     default:
         return QVariant();
     }
@@ -29,7 +34,7 @@ const Audio::BeatRange &InstancesModel::get(const int index) const noexcept_ndeb
 {
     coreAssert(index < 0 || index >= count(),
         throw std::range_error("InstancesModel::get: Given index is not in range"));
-    return (*_data)[index];
+    return (*_data)[static_cast<unsigned long>(index)];
 }
 
 void InstancesModel::add(const Audio::BeatRange &range) noexcept
@@ -48,6 +53,6 @@ void InstancesModel::move(const int index, const Audio::BeatRange &range) noexce
 {
     coreAssert(index < 0 || index >= count(),
         throw std::range_error("InstancesModel::move: Given index is not in range"));
-    _data->at(index) = range;
+    _data->at(static_cast<unsigned long>(index)) = range;
     //_data->sort();
 }

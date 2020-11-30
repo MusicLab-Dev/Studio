@@ -3,6 +3,9 @@
  * @ Description: Studio class
  */
 
+
+#include "QDebug"
+#include "InstancesModel.hpp"
 #include "Studio.hpp"
 
 Studio::Studio(int argc, char *argv[])
@@ -22,5 +25,6 @@ Studio::Studio(int argc, char *argv[])
 
 int Studio::run(void)
 {
+    qDebug("ok");
     return QGuiApplication::exec();
 }

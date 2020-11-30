@@ -8,8 +8,8 @@
 #include <QObject>
 #include <QAbstractListModel>
 
-#include <MLCore/Utils.hpp>
-#include <MLAudio/Base.hpp>
+#include <Audio/Core/Core/Utils.hpp>
+#include <Audio/Base.hpp>
 
 /** @brief The studio is the instance running the application process */
 class InstancesModel : public QAbstractListModel
@@ -17,22 +17,21 @@ class InstancesModel : public QAbstractListModel
     Q_OBJECT
 
 public:
+
     /** @brief Roles of each instance */
-    enum class Roles {
-        Range = Qt::UserRole + 1
+    enum Roles {
+        From = Qt::UserRole + 1,
+        To
     };
 
     /** @brief Default constructor */
     explicit InstancesModel(QObject *parent = nullptr) noexcept;
 
-    /** @brief Destruct the instance */
-    ~InstancesModel(void) noexcept = default;
-
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  _data->size(); }
+    [[nodiscard]] int count(void) const noexcept { return  static_cast<int>(_data->size()); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -49,10 +48,10 @@ public slots:
     void add(const Audio::BeatRange &range) noexcept;
 
     /** @brief Remove a children from the list */
-    void remove(const int index) noexcept_ndebug;
+    void remove(const int index) /*noexcept_ndebug*/;
 
     /** @brief Move beatrange at index */
-    void move(const int index, const Audio::BeatRange &range) noexcept_ndebug;
+    void move(const int index, const Audio::BeatRange &range) /*noexcept_ndebug*/;
 
 private:
     Audio::BeatRanges *_data;
