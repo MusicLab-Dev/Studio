@@ -63,7 +63,7 @@ public:
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
-    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const noexcept override;
+    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
 
     /** @brief Get if the node is muted */

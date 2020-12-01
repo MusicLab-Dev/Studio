@@ -12,9 +12,9 @@ ControlModel::ControlModel(QObject *parent, Audio::Control *control) noexcept
     : QAbstractListModel(parent), _data(control)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    /*_automations.reserve(_data->automations().size());
+    _automations.reserve(_data->automations().size());
     for (auto &automation : _data->automations())
-        _automations.push(&automation);*/
+        _automations.push(&automation);
 }
 
 QHash<int, QByteArray> ControlModel::roleNames(void) const noexcept

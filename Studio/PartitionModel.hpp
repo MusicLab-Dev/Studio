@@ -42,7 +42,7 @@ public:
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
-    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const noexcept override noexcept_ndebug; //noexcept_ndebug remplace noexcept ou faut mettre les deux ?
+    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     /** @brief Return true is the partition model is muted */
     [[nodiscard]] bool muted(void) const noexcept { return _muted; }

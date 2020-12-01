@@ -23,7 +23,7 @@ QHash<int, QByteArray> DeviceModel::roleNames(void) const noexcept
     };
 }
 
-QVariant DeviceModel::data(const QModelIndex &index, int role) const noexcept_ndebug
+QVariant DeviceModel::data(const QModelIndex &index, int role) const
 {
     coreAssert(index.row() < 0 || index.row() >= count(),
         throw std::range_error("InstancesModel::data: Given index is not in range"));

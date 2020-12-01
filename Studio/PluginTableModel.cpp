@@ -24,7 +24,7 @@ QHash<int, QByteArray> PluginTableModel::roleNames(void) const noexcept
     };
 }
 
-QVariant PluginTableModel::data(const QModelIndex &index, int role) const noexcept_ndebug
+QVariant PluginTableModel::data(const QModelIndex &index, int role) const
 {
     const auto *factory = get();
     switch (role) {

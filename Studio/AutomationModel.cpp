@@ -24,6 +24,7 @@ QHash<int, QByteArray> AutomationModel::roleNames(void) const noexcept
 QVariant AutomationModel::data(const QModelIndex &index, int role) const
 {
     const auto &child = get(index.row());
+
     switch (role) {
     case static_cast<int>(Roles::Point):
         return child.beat;
@@ -72,18 +73,13 @@ void AutomationModel::remove(const int index) noexcept_ndebug
     endRemoveRows();
 }
 
-/*const Point &AutomationModel::get(const int index) const noexcept_ndebug
+Point AutomationModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index < 0 || index >= count(),
         throw std::range_error("AutomationModel::get: Given index is not in range"));
 
-    Point point;
-    //point.beat = _data->points().at(index).beat;
-    //point.type = _data->points().at(index).type;
-    //point.curveRate = _data->points().at(index).curveRate;
-
-    return point;
-}*/
+    return Point { _data->points().at(index) };
+}
 
 void AutomationModel::set(const int index, const Point &point) noexcept_ndebug
 {
@@ -92,5 +88,5 @@ void AutomationModel::set(const int index, const Point &point) noexcept_ndebug
     _data->points().at(index) = point;
     // _data->points().sort()
     const auto modelIndex = QAbstractListModel::index(index, 0);
-    emit dataChanged(modelIndex, modelIndex, { Roles::Point });
+    emit dataChanged(modelIndex, modelIndex, { static_cast<int>(Roles::Point) });
 }

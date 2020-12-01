@@ -19,7 +19,7 @@ QHash<int, QByteArray> PartitionsModel::roleNames(void) const noexcept
     };
 }
 
-QVariant PartitionsModel::data(const QModelIndex &index, int role) const noexcept_ndebug
+QVariant PartitionsModel::data(const QModelIndex &index, int role) const
 {
     coreAssert(index.row() < 0 || index.row() >= count(),
         throw std::range_error("PartitionsModel::data: Given index is not in range"));

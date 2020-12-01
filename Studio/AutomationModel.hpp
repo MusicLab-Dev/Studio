@@ -14,18 +14,9 @@
 #include <Audio/Core/Core/UniqueAlloc.hpp>
 #include <Audio/Base.hpp>
 #include <Audio/Automation.hpp>
+
 #include "InstancesModel.hpp"
-
-struct Point : public Audio::Point
-{
-    Q_GADGET
-
-    Q_ENUM(CurveType)
-
-    Q_PROPERTY(Beat beat MEMBER beat)
-    Q_PROPERTY(CurveType type MEMBER type)
-    Q_PROPERTY(CurveRate curveRate MEMBER rate)
-};
+#include "Point.hpp"
 
 /** @brief Exposes an audio automation */
 class AutomationModel : public QAbstractListModel
@@ -34,7 +25,7 @@ class AutomationModel : public QAbstractListModel
 
 public:
     /** @brief Roles of each Control */
-    enum class Roles {
+    enum class Roles : int {
         Point = Qt::UserRole + 1
     };
 
@@ -65,14 +56,15 @@ public slots:
     /** @brief Insert point at index */
     void add(const Point &point) noexcept;
 
+public /* slots */:
     /** @brief Remove point at index */
-    void remove(const int index) /*noexcept_ndebug*/;
+    void remove(const int index) noexcept_ndebug;
 
     /** @brief Get point from index */
-    //[[nodiscard]] const Point &get(const int index) const /*noexcept_ndebug*/;
+    [[nodiscard]] Point get(const int index) const noexcept_ndebug;
 
     /** @brief Set point index */
-    void set(const int index, const Point &point) /*noexcept_ndebug*/;
+    void set(const int index, const Point &point) noexcept_ndebug;
 
 private:
     Audio::Automation *_data { nullptr };

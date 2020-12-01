@@ -22,7 +22,7 @@ QHash<int, QByteArray> ControlsModel::roleNames(void) const noexcept override
     };
 }
 
-QVariant ControlsModel::data(const QModelIndex &index, int role) const noexcept override
+QVariant ControlsModel::data(const QModelIndex &index, int role) const override
 {
     const auto &child = (*_data)[index.row()];
     switch (role) {

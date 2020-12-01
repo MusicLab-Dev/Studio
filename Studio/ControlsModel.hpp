@@ -38,7 +38,7 @@ public:
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
-    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const noexcept override;
+    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     /** @brief Get the index controlModel */
     [[nodiscard]] ControlModel *get(const int index) noexcept_ndebug { return const_cast<ControlModel *>(std::as_const(this)->get(index)); }

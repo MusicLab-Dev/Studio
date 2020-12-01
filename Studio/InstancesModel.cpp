@@ -17,7 +17,7 @@ QHash<int, QByteArray> InstancesModel::roleNames(void) const noexcept
     };
 }
 
-QVariant InstancesModel::data(const QModelIndex &index, int role) const noexcept/* noexcept_ndebug*/
+QVariant InstancesModel::data(const QModelIndex &index, int role) const
 {
     const auto &child = get(index.row());
     switch (role) {
