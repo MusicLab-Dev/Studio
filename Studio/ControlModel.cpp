@@ -8,13 +8,13 @@
 
 #include "ControlModel.hpp"
 
-ControlModel::ControlModel(QObject *parent, Audio::Control *control) noexcept
+ControlModel::ControlModel(Audio::Control *control, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(control)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
     _automations.reserve(_data->automations().size());
     for (auto &automation : _data->automations())
-        _automations.push(&automation);
+        _automations.push(&automation, this);
 }
 
 QHash<int, QByteArray> ControlModel::roleNames(void) const noexcept
@@ -48,7 +48,7 @@ bool ControlModel::setData(const QModelIndex &index, const QVariant &value, int 
     }
 }
 
-AutomationModel *ControlModel::get(const int index) noexcept_ndebug
+const AutomationModel *ControlModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index < 0 || index >= count(),
         throw std::range_error("ControlModel::get: Given index is not in range"));
@@ -93,4 +93,28 @@ bool ControlModel::setMuted(const bool muted) noexcept
 void ControlModel::refreshAutomations(void)
 {
 
+}
+
+void ControlModel::updateInternal(Audio::Control *data)
+{
+     if (_data == data)
+        return;
+    std::swap(_data, data);
+    // Check if the underlying instances have different data pointer than new one
+    if (_data->automations().data() != data->automations().data()) {
+        beginResetModel();
+        auto modelIt = _automations.begin();
+        auto modelEnd = _automations.end();
+        for (auto &automation : _data->automations()) {
+            if (modelIt != modelEnd) {
+                (*modelIt)->updateInternal(&automation);
+                ++modelIt;
+            } else {
+                _automations.push(&automation, this);
+                modelIt = _automations.begin() + std::distance(modelIt, modelEnd);
+                modelEnd = _automations.end();
+            }
+        }
+        endResetModel();
+    }
 }

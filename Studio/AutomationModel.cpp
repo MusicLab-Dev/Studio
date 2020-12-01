@@ -8,8 +8,8 @@
 
 #include "AutomationModel.hpp"
 
-AutomationModel::AutomationModel(QObject *parent, Audio::Automation *automation) noexcept
-    : QAbstractListModel(parent), _data(automation)
+AutomationModel::AutomationModel(Audio::Automation *automation, QObject *parent) noexcept
+    : QAbstractListModel(parent), _data(automation), _instances(&automation->instances(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
@@ -25,8 +25,8 @@ QVariant AutomationModel::data(const QModelIndex &index, int role) const
 {
     const auto &child = get(index.row());
 
-    switch (role) {
-    case static_cast<int>(Roles::Point):
+    switch (static_cast<Roles>(role)) {
+    case Roles::Point:
         return child.beat;
     default:
         return QVariant();
@@ -35,24 +35,25 @@ QVariant AutomationModel::data(const QModelIndex &index, int role) const
 
 bool AutomationModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    switch (role) {
-    case static_cast<int>(Roles::Point):
-        //set(index.row(), value);
+    switch (static_cast<Roles>(role)) {
+    case Roles::Point:
+        set(index.row(), value.value<Point>());
         return true;
     default:
         throw std::logic_error("ControlModel::setData: Couldn't change invalid role");
     }
 }
 
-void AutomationModel::updateIternal(Audio::Automation *data)
+
+void AutomationModel::updateInternal(Audio::Automation *data)
 {
     if (_data == data)
         return;
-    _data = data;
+    std::swap(_data, data);
     // Check if the underlying instances have different data pointer than new one
-    if (data->instances().data() != _instancesModel->internal()->data()) {
+    if (_data->instances().data() != data->instances().data()) {
         beginResetModel();
-        _instancesModel->updateInternal(&_data->instances());
+       _instances->updateInternal(&_data->instances());
         endResetModel();
     }
 }

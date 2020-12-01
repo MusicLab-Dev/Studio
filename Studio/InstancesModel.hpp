@@ -25,7 +25,7 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit InstancesModel(QObject *parent = nullptr) noexcept;
+    explicit InstancesModel(Audio::BeatRanges *beatRanges, QObject *parent = nullptr) noexcept;
 
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
@@ -41,7 +41,7 @@ public:
     [[nodiscard]] const Audio::BeatRange &get(const int index) const noexcept_ndebug;
 
     /** @brief Update internal data pointer if it changed */
-    void updateInternal(Audio::BeatRanges *data) { _data = data; }
+    void updateInternal(Audio::BeatRanges *data);
 
     /** @brief Get internal data pointer */
     Audio::BeatRanges *internal(void) { return _data; }
@@ -58,5 +58,5 @@ public /* slots */:
     Q_INVOKABLE void move(const int index, const Audio::BeatRange &range) noexcept_ndebug;
 
 private:
-    Audio::BeatRanges *_data;
+    Audio::BeatRanges *_data { nullptr };
 };

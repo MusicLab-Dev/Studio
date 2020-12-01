@@ -15,7 +15,7 @@ struct Point : public Audio::Point
 
     Q_PROPERTY(Audio::Beat beat MEMBER beat)
     Q_PROPERTY(CurveType type READ getType WRITE setType)
-    Q_PROPERTY(Audio::CurveRate curveRate MEMBER rate)
+    Q_PROPERTY(std::int16_t curveRate MEMBER curveRate)
 
 public:
     /** @brief Describe the interpolation type between points */
@@ -29,3 +29,7 @@ public:
     bool setType(const CurveType type_) noexcept;
 
 };
+
+Q_DECLARE_METATYPE(Point)
+
+#include "Point.ipp"

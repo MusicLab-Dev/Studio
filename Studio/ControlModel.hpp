@@ -32,7 +32,7 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit ControlModel(QObject *parent, Audio::Control *control) noexcept;
+    explicit ControlModel(Audio::Control *control, QObject *parent = nullptr) noexcept;
 
     /** @brief Destruct the ControlModel */
     ~ControlModel(void) noexcept = default;
@@ -51,8 +51,9 @@ public:
     [[nodiscard]] bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
     /** @brief Get the index controlModel */
-    [[nodiscard]] AutomationModel *get(const int index);
-    [[nodiscard]] AutomationModel *get(const int index) const;
+    [[nodiscard]] const AutomationModel *get(const int index) const noexcept_ndebug;
+    [[nodiscard]] AutomationModel *get(const int index) noexcept_ndebug
+        { return const_cast<AutomationModel *>(std::as_const(*this).get(index)); }
 
     /** @brief Get PararmID */
     [[nodiscard]] Audio::ParamID paramID(void) const noexcept { return _data->paramID(); }
@@ -68,6 +69,10 @@ public:
 
     /** @brief Set the muted state of a child automation */
     bool setAutomationMutedState(const int index, const bool state) noexcept_ndebug;
+
+
+    /** @brief Update the internal data */
+    void updateInternal(Audio::Control *data);
 
 public slots:
     /** @brief Add a children to the list */
@@ -87,7 +92,7 @@ signals:
 
 private:
     Audio::Control *_data { nullptr };
-    std::vector<Core::UniqueAlloc<AutomationModel>> _automations {};
+    Core::Vector<Core::UniqueAlloc<AutomationModel>> _automations {};
 
     /** @brief Refresh children AutomationModel addresses */
     void refreshAutomations(void);

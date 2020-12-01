@@ -30,13 +30,13 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit AutomationModel(QObject *parent, Audio::Automation *automation) noexcept;
+    explicit AutomationModel(Audio::Automation *automation, QObject *parent = nullptr) noexcept;
 
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  static_cast<int>(_instancesModel->count()); }
+    [[nodiscard]] int count(void) const noexcept { return  static_cast<int>(_instances->count()); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -46,11 +46,11 @@ public:
     [[nodiscard]] bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
     /** @brief Get the internal data pointer */
-    [[nodiscard]] Audio::Automation *getInternal(void) noexcept { return _data; }
-    [[nodiscard]] const Audio::Automation *getInternal(void) const noexcept { return _data; }
+    [[nodiscard]] Audio::Automation *internal(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::Automation *internal(void) const noexcept { return _data; }
 
     /** @brief Update the internal data */
-    void updateIternal(Audio::Automation *data);
+    void updateInternal(Audio::Automation *data);
 
 public slots:
     /** @brief Insert point at index */
@@ -68,5 +68,5 @@ public /* slots */:
 
 private:
     Audio::Automation *_data { nullptr };
-    Core::UniqueAlloc<InstancesModel> _instancesModel;
+    Core::UniqueAlloc<InstancesModel> _instances;
 };

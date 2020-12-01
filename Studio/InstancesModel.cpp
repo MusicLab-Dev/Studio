@@ -9,6 +9,11 @@
 
 #include "InstancesModel.hpp"
 
+InstancesModel::InstancesModel(Audio::BeatRanges *beatRanges, QObject *parent) noexcept
+    : QAbstractListModel(parent), _data(beatRanges)
+{
+}
+
 QHash<int, QByteArray> InstancesModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
@@ -28,6 +33,15 @@ QVariant InstancesModel::data(const QModelIndex &index, int role) const
     default:
         return QVariant();
     }
+}
+
+void InstancesModel::updateInternal(Audio::BeatRanges *data)
+{
+    if (_data == data)
+        return;
+    beginResetModel();
+    _data = data;
+    endResetModel();
 }
 
 const Audio::BeatRange &InstancesModel::get(const int index) const noexcept_ndebug

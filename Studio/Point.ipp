@@ -3,10 +3,12 @@
  * @ Description: Point gadget
  */
 
-bool Point::setType(const CurveType type_) noexcept
+inline bool Point::setType(const CurveType type_) noexcept
 {
-    if (type == type_)
+    const auto audioCurve = static_cast<Audio::Point::CurveType>(type_);
+
+    if (type == audioCurve)
         return false;
-    type = type_;
+    type = audioCurve;
     return true;
 }
