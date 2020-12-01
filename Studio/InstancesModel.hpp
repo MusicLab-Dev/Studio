@@ -41,7 +41,10 @@ public:
     [[nodiscard]] const Audio::BeatRange &get(const int index) const noexcept_ndebug;
 
     /** @brief Update internal data pointer if it changed */
-    void updateData(Audio::BeatRanges *data) { _data = data; }
+    void updateInternal(Audio::BeatRanges *data) { _data = data; }
+
+    /** @brief Get internal data pointer */
+    Audio::BeatRanges *internal(void) { return _data; }
 
 public slots:
     /** @brief Add a children to the list */

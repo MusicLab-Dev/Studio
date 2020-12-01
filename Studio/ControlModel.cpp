@@ -3,18 +3,21 @@
  * @ Description: Control Model class
  */
 
+#include <QQmlEngine>
+#include <QHash>
+
 #include "ControlModel.hpp"
 
-ControlModel::ControlModel(QObject *parent, Audio::Control *control) noexcept;
+ControlModel::ControlModel(QObject *parent, Audio::Control *control) noexcept
     : QAbstractListModel(parent), _data(control)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    _automations.reserve(_data->automations().size());
+    /*_automations.reserve(_data->automations().size());
     for (auto &automation : _data->automations())
-        _automations.push(&automation);
+        _automations.push(&automation);*/
 }
 
-QHash<int, QByteArray> ControlModel::roleNames(void) const noexcept override
+QHash<int, QByteArray> ControlModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
         { Roles::Automation, "automation"},
@@ -22,7 +25,7 @@ QHash<int, QByteArray> ControlModel::roleNames(void) const noexcept override
     };
 }
 
-QVariant ControlModel::data(const QModelIndex &index, int role) const override
+QVariant ControlModel::data(const QModelIndex &index, int role) const
 {
     switch (role) {
     case Roles::Automation:
@@ -34,18 +37,18 @@ QVariant ControlModel::data(const QModelIndex &index, int role) const override
     }
 }
 
-void ControlModel::setData(const QModelIndex &index, const QVariant &value, int role) override
+bool ControlModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     switch (role) {
     case Roles::Muted:
         setAutomationMutedState(index.row(), value.toBool());
-        break;
+        return true;
     default:
         throw std::logic_error("ControlModel::setData: Couldn't change invalid role");
     }
 }
 
-AutomationModel *ControlModel::get(const int index) const noexcept_ndebug
+AutomationModel *ControlModel::get(const int index) noexcept_ndebug
 {
     coreAssert(index < 0 || index >= count(),
         throw std::range_error("ControlModel::get: Given index is not in range"));

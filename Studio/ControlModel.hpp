@@ -10,8 +10,11 @@
 #include <QObject>
 #include <QAbstractListModel>
 
-#include <MLCore/Utils.hpp>
-#include <MLAudio/Base.hpp>
+#include <Audio/Core/Core/Utils.hpp>
+#include <Audio/Base.hpp>
+#include <Audio/Control.hpp>
+
+#include "AutomationModel.hpp"
 
 /** @brief Exposes an audio control */
 class ControlModel : public QAbstractListModel
@@ -23,7 +26,7 @@ class ControlModel : public QAbstractListModel
 
 public:
     /** @brief Roles of each Control */
-    enum class Roles {
+    enum Roles {
         Automation = Qt::UserRole + 1,
         Muted
     };
@@ -45,7 +48,7 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     /** @brief Set a role of children */
-    [[nodiscard]] void setData(const QModelIndex &index, const QVariant &value, int role) override;
+    [[nodiscard]] bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
     /** @brief Get the index controlModel */
     [[nodiscard]] AutomationModel *get(const int index);
@@ -71,10 +74,10 @@ public slots:
     void add(void);
 
     /** @brief Remove a children from the list */
-    void remove(const int index) noexcept_ndebug;
+    void remove(const int index) /*noexcept_ndebug*/;
 
     /** @brief Move Control from to */
-    void move(const int from, const int to) noexcept_ndebug;
+    void move(const int from, const int to) /*noexcept_ndebug*/;
 
 signals:
     /** @brief Notify that muted property has changed */

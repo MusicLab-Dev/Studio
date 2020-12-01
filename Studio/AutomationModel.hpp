@@ -23,7 +23,8 @@ struct Point : public Audio::Point
     Q_ENUM(CurveType)
 
     Q_PROPERTY(Beat beat MEMBER beat)
-    Q_PROPERTY(CurveType curveType MEMBER curveType)
+    Q_PROPERTY(CurveType type MEMBER type)
+    Q_PROPERTY(CurveRate curveRate MEMBER rate)
 };
 
 /** @brief Exposes an audio automation */
@@ -44,7 +45,7 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  static_cast<int>(_data->size()); }
+    [[nodiscard]] int count(void) const noexcept { return  static_cast<int>(_instancesModel->count()); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -65,13 +66,13 @@ public slots:
     void add(const Point &point) noexcept;
 
     /** @brief Remove point at index */
-    void remove(const int index) noexcept_ndebug;
+    void remove(const int index) /*noexcept_ndebug*/;
 
     /** @brief Get point from index */
-    [[nodiscard]] const Point &get(const int index) const noexcept_ndebug;
+    //[[nodiscard]] const Point &get(const int index) const /*noexcept_ndebug*/;
 
     /** @brief Set point index */
-    void set(const int index, const Point &point) noexcept_ndebug;
+    void set(const int index, const Point &point) /*noexcept_ndebug*/;
 
 private:
     Audio::Automation *_data { nullptr };

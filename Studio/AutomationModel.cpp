@@ -3,6 +3,9 @@
  * @ Description: Automation Model class
  */
 
+#include <QHash>
+#include <QQmlEngine>
+
 #include "AutomationModel.hpp"
 
 AutomationModel::AutomationModel(QObject *parent, Audio::Automation *automation) noexcept
@@ -11,29 +14,30 @@ AutomationModel::AutomationModel(QObject *parent, Audio::Automation *automation)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
-QHash<int, QByteArray> AutomationModel::roleNames(void) const noexcept override
+QHash<int, QByteArray> AutomationModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::Point, "point" }
+        { static_cast<int>(Roles::Point), "point" }
     };
 }
 
-QVariant AutomationModel::data(const QModelIndex &index, int role) const override
+QVariant AutomationModel::data(const QModelIndex &index, int role) const
 {
     const auto &child = get(index.row());
     switch (role) {
-    case Roles::Point:
-        return child.get();
+    case static_cast<int>(Roles::Point):
+        return child.beat;
     default:
         return QVariant();
     }
 }
 
-void AutomationModel::setData(const QModelIndex &index, const QVariant &value, int role) override
+bool AutomationModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     switch (role) {
-    case Role::Point:
-        set(index.row(), value.)
+    case static_cast<int>(Roles::Point):
+        //set(index.row(), value);
+        return true;
     default:
         throw std::logic_error("ControlModel::setData: Couldn't change invalid role");
     }
@@ -45,9 +49,9 @@ void AutomationModel::updateIternal(Audio::Automation *data)
         return;
     _data = data;
     // Check if the underlying instances have different data pointer than new one
-    if (data->instances().data() != _instancesModel->getInternal()->data()) {
+    if (data->instances().data() != _instancesModel->internal()->data()) {
         beginResetModel();
-        _instancesModel.updateInternal(&_data->instances());
+        _instancesModel->updateInternal(&_data->instances());
         endResetModel();
     }
 }
@@ -68,12 +72,18 @@ void AutomationModel::remove(const int index) noexcept_ndebug
     endRemoveRows();
 }
 
-const Point &AutomationModel::get(const int index) const noexcept_ndebug
+/*const Point &AutomationModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index < 0 || index >= count(),
         throw std::range_error("AutomationModel::get: Given index is not in range"));
-    return _data->points().at(index);
-}
+
+    Point point;
+    //point.beat = _data->points().at(index).beat;
+    //point.type = _data->points().at(index).type;
+    //point.curveRate = _data->points().at(index).curveRate;
+
+    return point;
+}*/
 
 void AutomationModel::set(const int index, const Point &point) noexcept_ndebug
 {
