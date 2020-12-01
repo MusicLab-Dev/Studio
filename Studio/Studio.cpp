@@ -3,15 +3,33 @@
  * @ Description: Studio class
  */
 
-
-#include "QDebug"
-#include "InstancesModel.hpp"
 #include "Studio.hpp"
 
-Studio::Studio(int argc, char *argv[])
-    : QGuiApplication(argc, argv)
+void Studio::InitResources(void)
 {
-    const QUrl url(QStringLiteral("qrc:/Main.qml"));
+    Q_INIT_RESOURCE(Resources);
+    Q_INIT_RESOURCE(Main);
+    Q_INIT_RESOURCE(Default);
+}
+
+void Studio::DestroyResources(void)
+{
+    Q_CLEANUP_RESOURCE(Resources);
+    Q_CLEANUP_RESOURCE(Main);
+    Q_CLEANUP_RESOURCE(Default);
+}
+
+static int DefaultArgc = 1;
+static char DefaultArg[] = { 'S', 't', 'u', 'd', 'i', 'o', '\0' };
+static char *DefaultArgv[] = { DefaultArg, nullptr };
+
+Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
+{
+}
+
+Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
+{
+    const QUrl url(QStringLiteral("qrc:/Main/Main.qml"));
 
     QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this,
         [url](QObject *obj, const QUrl &objUrl) {
@@ -23,8 +41,11 @@ Studio::Studio(int argc, char *argv[])
     _engine.load(url);
 }
 
+Studio::~Studio(void)
+{
+}
+
 int Studio::run(void)
 {
-    qDebug("ok");
     return QGuiApplication::exec();
 }
