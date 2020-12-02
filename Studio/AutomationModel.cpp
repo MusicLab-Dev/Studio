@@ -67,22 +67,16 @@ void AutomationModel::add(const Point &point) noexcept
 
 void AutomationModel::remove(const int index) noexcept_ndebug
 {
-    coreAssert(index < 0 || index >= count(),
+    coreAssert(index >= 0 || index < count(),
         throw std::range_error("AutomationModel::remove: Given index is not in range"));
-    beginRemoveRows(QModelIndex(), index, index);void AutomationModel::add(const Point &point) noexcept
-{
-    beginResetModel();
-    _data->points().push(point);
-    endResetModel();
-}
-
+    beginRemoveRows(QModelIndex(), index, index);
     _data->points().erase(_data->points().begin() + index);
     endRemoveRows();
 }
 
 Point AutomationModel::get(const int index) const noexcept_ndebug
 {
-    coreAssert(index < 0 || index >= count(),
+    coreAssert(index >= 0 && index < count(),
         throw std::range_error("AutomationModel::get: Given index is not in range"));
 
     return Point { _data->points().at(index) };
@@ -90,7 +84,7 @@ Point AutomationModel::get(const int index) const noexcept_ndebug
 
 void AutomationModel::set(const int index, const Point &point) noexcept_ndebug
 {
-    coreAssert(index < 0 || index >= count(),
+    coreAssert(index >= 0 || index < count(),
         throw std::range_error("AutomationModel::remove: Given index is not in range"));
     _data->points().at(index) = point;
     // _data->points().sort()
