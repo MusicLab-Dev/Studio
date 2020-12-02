@@ -8,6 +8,7 @@ set(StudioTestsSources
     ${StudioTestsDir}/tests_Studio.cpp
     ${StudioTestsDir}/tests_InstancesModel.cpp
     ${StudioTestsDir}/tests_AutomationModel.cpp
+    ${StudioTestsDir}/tests_Point.cpp
 )
 
 add_executable(${PROJECT_NAME} ${StudioTestsSources})

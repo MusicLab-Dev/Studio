@@ -36,7 +36,7 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  static_cast<int>(_instances->count()); }
+    [[nodiscard]] int count(void) const noexcept { return static_cast<int>( _data->points().size() ); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
