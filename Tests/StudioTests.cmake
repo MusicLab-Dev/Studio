@@ -7,6 +7,7 @@ get_filename_component(StudioTestsDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 set(StudioTestsSources
     ${StudioTestsDir}/tests_Studio.cpp
     ${StudioTestsDir}/tests_InstancesModel.cpp
+    ${StudioTestsDir}/tests_AutomationModel.cpp
 )
 
 add_executable(${PROJECT_NAME} ${StudioTestsSources})
