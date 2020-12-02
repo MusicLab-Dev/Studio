@@ -36,7 +36,7 @@ QVariant ControlsModel::data(const QModelIndex &index, int role) const override
 
 const ControlModel *ControlsModel::get(const int index) const noexcept_ndebug
 {
-    coreAssert(index < 0 || index >= count(),
+    coreAssert(index >= 0 && index < count(),
         throw std::range_error("ControlsModel::get: Given index is not in range"));
     return _models.at(index).get();
 }
