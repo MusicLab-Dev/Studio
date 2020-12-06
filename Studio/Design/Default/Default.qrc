@@ -1,5 +1,14 @@
 <RCC>
     <qresource prefix="/Default/">
         <file>DefaultCheckBox.qml</file>
+        <file>DefaultCheckBox.qml<file>
+        <file>DefaultColoredImage.qml<file>
+        <file>DefaultComboBox.qml<file>
+        <file>DefaultFoldButton.qml<file>
+        <file>DefaultMenuButton.qml<file>
+        <file>DefaultOverlayedImage.qml<file>
+        <file>DefaultScrollBar.qml<file>
+        <file>DefaultTextButton.qml<file>
+        <file>DefaultTextInput.qml<file>
     </qresource>
 </RCC>
