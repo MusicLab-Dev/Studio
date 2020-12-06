@@ -2,6 +2,7 @@
     <qresource prefix="/Common/">
         <file>SettingsCategoryButton.qml</file>
         <file>AddPluginButton.qml</file>
+        <file>MenuButton.qml</file>
         <file>AddPreviewButton.qml</file>
     </qresource>
 </RCC>
