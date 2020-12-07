@@ -56,6 +56,21 @@ TEST(AutomationModel, AddPoint)
     model.add(point);
 
     ASSERT_EQ(model.count(), 1);
-    ASSERT_EQ(model.get(1).beat, 4);
-    ASSERT_EQ(model.get(1).curveRate, 2);
+    ASSERT_EQ(model.get(0).beat, 4);
+    ASSERT_EQ(model.get(0).curveRate, 2);
+}
+
+TEST(AutomationModel, RemovePoint)
+{
+    Audio::Automation automation {};
+
+    AutomationModel model(&automation);
+
+    Point point;
+
+    model.add(point);
+    model.remove(0);
+
+
+    ASSERT_EQ(model.count(), 0);
 }
