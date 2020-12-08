@@ -13,6 +13,7 @@ qt_add_resources(QtResources
     ${StudioDir}/Resources/Resources.qrc
     ${StudioDir}/Design/Main/Main.qrc
     ${StudioDir}/Design/Default/Default.qrc
+    ${StudioDir}/Design/ModulesView/ModulesView.qrc
 )
 
 set(StudioSources
