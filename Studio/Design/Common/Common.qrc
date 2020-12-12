@@ -2,7 +2,6 @@
     <qresource prefix="/Common">
         <file>AddPluginButton.qml</file>
         <file>AddPreviewButton.qml</file>
-        <file>DefaultCheckBox.qml</file>
         <file>SettingsCategoryButton.qml</file>
     </qresource>
 </RCC>

@@ -14,6 +14,7 @@ void Studio::InitResources(void)
 
     /** Modules **/
     Q_INIT_RESOURCE(Plugins);
+    Q_INIT_RESOURCE(Workspaces);
 }
 
 void Studio::DestroyResources(void)
@@ -24,7 +25,8 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Common);
 
     /** Modules **/
-    Q_INIT_RESOURCE(Plugins);
+    Q_CLEANUP_RESOURCE(Plugins);
+    Q_CLEANUP_RESOURCE(Workspaces);
 }
 
 static int DefaultArgc = 1;

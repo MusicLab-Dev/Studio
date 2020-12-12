@@ -2,14 +2,19 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 
 import "../Modules/Plugins"
+import "../Modules/Workspaces"
 
 Window {
     visible: true
-    width: 640
-    height: 480
+    width: 1280
+    height: 1000
     title: qsTr("MusicLab")
 
-    PluginsView {
+    // PluginsView {
+    //     anchors.fill: parent
+    // }
+
+    WorkspacesView {
         anchors.fill: parent
     }
 }
