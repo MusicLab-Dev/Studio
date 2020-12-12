@@ -14,6 +14,9 @@ qt_add_resources(QtResources
     ${StudioDir}/Design/Main/Main.qrc
     ${StudioDir}/Design/Default/Default.qrc
     ${StudioDir}/Design/Common/Common.qrc
+
+    # Modules
+    ${StudioDir}/Design/Modules/Plugins/Plugins.qrc
 )
 
 set(StudioSources

@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 
-import "../Default"
+import "../Modules/Plugins"
 
 Window {
     visible: true
@@ -9,7 +9,7 @@ Window {
     height: 480
     title: qsTr("MusicLab")
 
-    DefaultCheckBox {
-        anchors.centerIn: parent
+    PluginsView {
+        anchors.fill: parent
     }
 }

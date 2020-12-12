@@ -4,6 +4,8 @@
         <file>Assets/FoldButton.png</file>
         <file>Assets/MenuButton.png</file>
         <file>Assets/SettingsCategoryButton.png</file>
+        <file>Assets/TestImage1.png</file>
+        <file>Assets/TestImage2.png</file>
         <file>Fonts/Bungee-Regular.ttf</file>
     </qresource>
 </RCC>
