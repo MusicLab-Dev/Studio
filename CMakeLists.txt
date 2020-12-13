@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
-project(Studio)
 
 get_filename_component(StudioRoot ${CMAKE_CURRENT_LIST_FILE} PATH)
 
 include(${StudioRoot}/CompileOptions/CompileOptions.cmake)
+
+project(Studio)
 
 add_submodule_directory(${StudioRoot}/Audio)
 
