@@ -6,6 +6,7 @@
 #include <QHash>
 #include <QQmlEngine>
 
+#include "Models.hpp"
 #include "AutomationModel.hpp"
 
 AutomationModel::AutomationModel(Audio::Automation *automation, QObject *parent) noexcept
@@ -44,20 +45,6 @@ bool AutomationModel::setData(const QModelIndex &index, const QVariant &value, i
     }
 }
 
-
-void AutomationModel::updateInternal(Audio::Automation *data)
-{
-    if (_data == data)
-        return;
-    std::swap(_data, data);
-    // Check if the underlying instances have different data pointer than new one
-    if (_data->instances().data() != data->instances().data()) {
-        beginResetModel();
-       _instances->updateInternal(&_data->instances());
-        endResetModel();
-    }
-}
-
 void AutomationModel::add(const Point &point) noexcept
 {
     beginResetModel();
@@ -88,6 +75,20 @@ void AutomationModel::set(const int index, const Point &point) noexcept_ndebug
         throw std::range_error("AutomationModel::remove: Given index is not in range"));
     _data->points().at(index) = point;
     // _data->points().sort()
+    beginResetModel();
+    endResetModel();
     const auto modelIndex = QAbstractListModel::index(index, 0);
     emit dataChanged(modelIndex, modelIndex, { static_cast<int>(Roles::Point) });
+}
+
+void AutomationModel::updateInternal(Audio::Automation *data)
+{
+    if (_data == data)
+        return;
+    std::swap(_data, data);
+    if (_data->points().data() != data->points().data()) {
+        beginResetModel();
+        endResetModel();
+    }
+    _instances->updateInternal(&_data->instances());
 }

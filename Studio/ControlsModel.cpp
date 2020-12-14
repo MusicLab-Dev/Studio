@@ -3,6 +3,7 @@
  * @ Description: Controls Model implementation
  */
 
+#include "Models.hpp"
 #include "ControlsModel.hpp"
 
 ControlsModel::ControlsModel(QObject *parent, Audio::Controls *controls) noexcept;
@@ -10,9 +11,9 @@ ControlsModel::ControlsModel(QObject *parent, Audio::Controls *controls) noexcep
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
-    _models.reserve(_data->size());
+    _controls.reserve(_data->size());
     for (auto &control : *_data)
-        _models.push(&control);
+        _controls.push(&control);
 }
 
 QHash<int, QByteArray> ControlsModel::roleNames(void) const noexcept override
@@ -38,14 +39,14 @@ const ControlModel *ControlsModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
         throw std::range_error("ControlsModel::get: Given index is not in range"));
-    return _models.at(index).get();
+    return _controls.at(index).get();
 }
 
 void ControlsModel::add(const Audio::ParamID paramID) noexcept_ndebug
 {
     beginInsertRows(QModelIndex(), count(), count());
     _data->push(paramID);
-    refreshModels();
+    refreshControls();
     endInsertRows();
 }
 
@@ -53,8 +54,8 @@ void ControlsModel::remove(const int index)
 {
     beginRemoveRows(QModelIndex(), index, index);
     _data->erase(_data->begin() + index);
-    _models.erase(_models.begin() + index);
-    refreshModels();
+    _controls.erase(_controls.begin() + index);
+    refreshControls();
     endRemoveRows();
 }
 
@@ -62,10 +63,11 @@ void ControlsModel::move(const int from, const int to)
 {
     beginMoveRows(QModelIndex(), from, from, QModelIndex(), to);
     _data->at(from).swap(_data->at(to));
-    refreshModels();
+    refreshControls();
     endMoveRows();
 }
 
-void ControlsModel::refreshModels(void)
+void ControlsModel::refreshControls(void)
 {
+    Models::RefreshModels(_controls, *_data, this);
 }

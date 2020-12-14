@@ -81,10 +81,10 @@ public slots:
 public /* slots */:
 
     /** @brief Remove a children from the list */
-    void remove(const int index) noexcept_ndebug;
+    Q_INVOKABLE void remove(const int index) noexcept_ndebug;
 
     /** @brief Move Control from to */
-    void move(const int from, const int to) noexcept_ndebug;
+    Q_INVOKABLE void move(const int from, const int to) noexcept_ndebug;
 
 signals:
     /** @brief Notify that muted property has changed */

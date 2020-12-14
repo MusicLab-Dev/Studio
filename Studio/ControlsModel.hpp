@@ -45,19 +45,20 @@ public:
     [[nodiscard]] const ControlModel *get(const int index) const noexcept_ndebug;
 
 public slots:
-    /** @brief Add a children to the list */
-    void add(const Audio::ParamID paramID) noexcept_ndebug;
-
-    /** @brief Remove a children from the list */
-    void remove(const int index) noexcept_ndebug;
-
     /** @brief Move Control from to */
     void move(const int from, const int to);
 
+public /* slots */:
+    /** @brief Add a children to the list */
+    Q_INVOKABLE void add(const Audio::ParamID paramID) noexcept_ndebug;
+
+    /** @brief Remove a children from the list */
+    Q_INVOKABLE void remove(const int index) noexcept_ndebug;
+
 private:
     Audio::Controls *_data { nullptr };
-    std::vector<UniqueAlloc<ControlModel>> _models;
+    std::vector<UniqueAlloc<ControlModel>> _controls;
 
     /** @brief Refresh internal models */
-    void refreshModels(void);
+    void refreshControls(void);
 }

@@ -60,15 +60,18 @@ public slots:
     /** @brief Insert point at index */
     void add(const Point &point) noexcept;
 
+    /** @brief Get the internal list of instances */
+    [[nodiscard]] InstancesModel *getInstances(void) noexcept { return _instances.get(); }
+
 public /* slots */:
     /** @brief Remove point at index */
-    void remove(const int index) noexcept_ndebug;
+    Q_INVOKABLE void remove(const int index) noexcept_ndebug;
 
     /** @brief Get point from index */
-    [[nodiscard]] Point get(const int index) const noexcept_ndebug;
+    Q_INVOKABLE [[nodiscard]] Point get(const int index) const noexcept_ndebug;
 
     /** @brief Set point index */
-    void set(const int index, const Point &point) noexcept_ndebug;
+    Q_INVOKABLE void set(const int index, const Point &point) noexcept_ndebug;
 
 private:
     Audio::Automation *_data { nullptr };

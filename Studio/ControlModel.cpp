@@ -6,6 +6,7 @@
 #include <QQmlEngine>
 #include <QHash>
 
+#include "Models.hpp"
 #include "ControlModel.hpp"
 
 ControlModel::ControlModel(Audio::Control *control, QObject *parent) noexcept
@@ -72,10 +73,20 @@ bool ControlModel::setAutomationMutedState(const int index, const bool state) no
 
 void ControlModel::add(void)
 {
+    beginResetModel();
+    _data->automations().push(Audio::Automation());
+    refreshAutomations();
+    endResetModel();
 }
 
 void ControlModel::remove(const int index) noexcept_ndebug
 {
+    beginResetModel();
+    auto *it = _data->automations().begin() + index;
+    if (it != _data->automations().end())
+        _data->automations().erase(it);
+    refreshAutomations();
+    endResetModel();
 }
 
 void ControlModel::move(const int from, const int to) noexcept_ndebug
@@ -92,29 +103,18 @@ bool ControlModel::setMuted(const bool muted) noexcept
 
 void ControlModel::refreshAutomations(void)
 {
-
+    Models::RefreshModels(_automations, _data->automations(), this);
 }
 
 void ControlModel::updateInternal(Audio::Control *data)
 {
-     if (_data == data)
+    if (_data == data)
         return;
     std::swap(_data, data);
     // Check if the underlying instances have different data pointer than new one
     if (_data->automations().data() != data->automations().data()) {
         beginResetModel();
-        auto modelIt = _automations.begin();
-        auto modelEnd = _automations.end();
-        for (auto &automation : _data->automations()) {
-            if (modelIt != modelEnd) {
-                (*modelIt)->updateInternal(&automation);
-                ++modelIt;
-            } else {
-                _automations.push(&automation, this);
-                modelIt = _automations.begin() + std::distance(modelIt, modelEnd);
-                modelEnd = _automations.end();
-            }
-        }
+        refreshAutomations();
         endResetModel();
     }
 }

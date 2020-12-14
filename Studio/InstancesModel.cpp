@@ -53,20 +53,26 @@ const Audio::BeatRange &InstancesModel::get(const int index) const noexcept_ndeb
 
 void InstancesModel::add(const Audio::BeatRange &range) noexcept
 {
+    beginResetModel();
     _data->push(range);
+    endResetModel();
 }
 
 void InstancesModel::remove(const int index) noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
         throw std::range_error("InstancesModel::remove: Given index is not in range"));
+    beginRemoveRows(QModelIndex(), index, index);
     _data->erase(_data->begin() + index);
+    endRemoveRows();
 }
 
 void InstancesModel::move(const int index, const Audio::BeatRange &range) noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
         throw std::range_error("InstancesModel::move: Given index is not in range"));
+    beginRemoveRows(QModelIndex(), index, index);
     _data->at(static_cast<unsigned long>(index)) = range;
     //_data->sort();
+    endRemoveRows();
 }

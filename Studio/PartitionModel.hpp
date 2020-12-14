@@ -5,8 +5,14 @@
 
 #pragma once
 
-#include <MLCore/Utils.hpp>
-#include <MLAudio/Base.hpp>
+#include <QAbstractListModel>
+
+#include <Audio/Partition.hpp>
+#include <Audio/Core/Core/Utils.hpp>
+#include <Audio/Core/Core/UniqueAlloc.hpp>
+#include <Audio/Base.hpp>
+
+#include "InstancesModel.hpp"
 
 
 /** @brief Class that exposes a list of note in audio backend */
@@ -38,7 +44,7 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  _data->size(); }
+    [[nodiscard]] int count(void) const noexcept { return  _data->count(); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -49,15 +55,16 @@ public:
 
     /** @brief Set the muted propertie */
     bool setMuted(bool muted) noexcept;
+#pragma once
 
     /** @brief Return the channel of the partition */
-    [[nodiscard]] Channel channel(void) const noexcept { return _channel; }
+    [[nodiscard]] Audio::Channel channel(void) const noexcept { return _channel; }
 
     /** @brief Set the channel of the partition */
-    bool setChannel(const Channel channel) noexcept;
+    bool setChannel(const Audio::Channel channel) noexcept;
 
     /** @brief Update internal data pointer if it changed */
-    void updateData(Audio::BeatRanges *data) { _data = data; }
+    void updateData(Audio::Partition *data) { _data = data; }
 
 signals:
     /** @brief Notify that the muted property has changed */
@@ -68,10 +75,10 @@ signals:
 
 private:
     Audio::Partition *_data { nullptr };
-    UniqueAlloc<InstancesModel> _instancesModel {};
+    Core::UniqueAlloc<InstancesModel> _instancesModel {};
 
     //Properties
     bool _muted { false };
-    Channel _channel {} ;
+    Audio::Channel _channel {} ;
     InstancesModel *_instances { nullptr };
-}
+};

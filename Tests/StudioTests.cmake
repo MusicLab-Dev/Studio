@@ -8,6 +8,7 @@ set(StudioTestsSources
     ${StudioTestsDir}/tests_Studio.cpp
     ${StudioTestsDir}/tests_InstancesModel.cpp
     ${StudioTestsDir}/tests_AutomationModel.cpp
+    ${StudioTestsDir}/tests_ControlModel.cpp
     ${StudioTestsDir}/tests_Point.cpp
 )
 

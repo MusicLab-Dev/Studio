@@ -60,15 +60,14 @@ bool PartitionModel::setChannel(const Channel channel) noexcept
     return true;
 }
 
-void PartitionModel::updateIternal(Audio::Automation *data)
+void PartitionModel::updateInternal(Audio::Partition *data)
 {
     if (_data == data)
         return;
-    _data = data;
-    // Check if the underlying instances have different data pointer than new one
-    if (data->instances().data() != _instancesModel->getInternal()->data()) {
+    std::swap(_data, data);
+    if (_data->notes().data() != data->notes().data()) {
         beginResetModel();
-        _instancesModel.updateInternal(&_data->instances());
         endResetModel();
     }
+    _instances->updateInternal(&_data->instances());
 }
