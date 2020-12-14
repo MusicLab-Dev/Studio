@@ -36,9 +36,14 @@ Item {
                 }
             }
 
+            /** Todo: improve the stability of loaded modules
+                1st way : Make a setting to enable 1 loader per ModulesView
+                2nd way : Dynamically unload unused tabs by time
+                3nd way: Mix both 1st and 2nd
+            */
             Loader {
                 id: loadedComponent
-                height: parent.height
+                height: parent.height * 0.95
                 width: parent.width
                 source: path
                 z: moduleZ

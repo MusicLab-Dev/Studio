@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/ModulesView">
+        <file>SequencerView.qml</file>
+    </qresource>
+</RCC>
