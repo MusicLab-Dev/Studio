@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QAbstractListModel>
 
-#include <Audio/Core/Core/Utils.hpp>
+#include <Core/Utils.hpp>
 #include <Audio/Base.hpp>
 #include <Audio/Control.hpp>
 

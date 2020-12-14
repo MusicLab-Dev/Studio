@@ -7,9 +7,9 @@
 
 #include <QAbstractListModel>
 
+#include <Core/Utils.hpp>
+#include <Core/UniqueAlloc.hpp>
 #include <Audio/Partition.hpp>
-#include <Audio/Core/Core/Utils.hpp>
-#include <Audio/Core/Core/UniqueAlloc.hpp>
 #include <Audio/Base.hpp>
 
 #include "InstancesModel.hpp"

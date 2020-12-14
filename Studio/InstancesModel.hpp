@@ -8,7 +8,7 @@
 #include <QObject>
 #include <QAbstractListModel>
 
-#include <Audio/Core/Core/Utils.hpp>
+#include <Core/Utils.hpp>
 #include <Audio/Base.hpp>
 
 /** @brief The studio is the instance running the application process */
