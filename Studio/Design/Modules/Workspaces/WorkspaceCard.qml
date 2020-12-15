@@ -24,14 +24,10 @@ Rectangle {
         width: parent.width - workspaceFoldButton.width - workspaceFoldButton.x - editModeButton.width * 2
         x: workspaceFoldButton.width + workspaceFoldButton.x
         y: parent.height / 2 - height / 2
-        text: "WORKSPACE PAR DEFAULT"
         color: "#FFFFFF"
         opacity: enabled ? 0.6 : 0.4
         enabled: false
-
-        TextMetrics {
-            elide: Text.ElideRight
-        }
+        text: name + " (" + path + ")"
 
         background: Rectangle {
             anchors.fill: parent

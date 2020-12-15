@@ -43,11 +43,17 @@ Rectangle {
         ListView {
             id: listView
             anchors.fill: parent
-            model: 1
             spacing: Math.max(workspaceForeground.height / 30, 20)
+            model: ListModel {
+                id: listModel
+                ListElement {
+                    name: "Default Workspace"
+                    path: "./"
+                }
+            }
 
             delegate: WorkspaceCard {
-                width: parent.width
+                width: listView.width
                 height: Math.max(workspaceForeground.height / 14, 50)
             }
 
@@ -58,10 +64,13 @@ Rectangle {
                     else
                         listView.height * 1.04
                 }
-                text: "+ NOUVEAU WORKSPACE"
+                text: qsTr("+ NEW WORKSPACE")
 
                 onClicked: {
-                    listView.model += 1
+                    listModel.append({
+                                         name: "New workspace",
+                                         path: "./"
+                                     })
                 }
 
             }

@@ -7,7 +7,7 @@ import "../Modules/Workspaces"
 Window {
     visible: true
     width: 1280
-    height: 1000
+    height: 720
     title: qsTr("MusicLab")
 
     // PluginsView {
