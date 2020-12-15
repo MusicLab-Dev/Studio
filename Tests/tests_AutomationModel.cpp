@@ -49,7 +49,7 @@ TEST(AutomationModel, AddPoint)
 
     AutomationModel model(&automation);
 
-    Point point;
+    GPoint point;
     point.beat = 4;
     point.curveRate = 2;
 
@@ -66,7 +66,7 @@ TEST(AutomationModel, Count)
 
     AutomationModel model(&automation);
 
-    Point point;
+    GPoint point;
     point.beat = 4;
     point.curveRate = 2;
 
@@ -83,7 +83,7 @@ TEST(AutomationModel, RemovePoint)
 
     AutomationModel model(&automation);
 
-    Point point;
+    GPoint point;
 
     model.add(point);
     model.remove(0);
@@ -97,11 +97,11 @@ TEST(AutomationModel, SetPoint)
 
     AutomationModel model(&automation);
 
-    Point point1;
+    GPoint point1;
     point1.beat = 4;
     point1.curveRate = 2;
 
-    Point point2;
+    GPoint point2;
     point2.beat = 6;
     point2.curveRate = 7;
 

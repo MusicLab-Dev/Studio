@@ -4,10 +4,14 @@
  */
 
 #include <stdexcept>
+#include <QQmlEngine>
+#include <QHash>
 
+#include "Models.hpp"
 #include "PartitionsModel.hpp"
 
-PartitionsModel::PartitionsModel(QObject *parent) noexcept
+PartitionsModel::PartitionsModel(Audio::Partitions *partitions, QObject *parent) noexcept
+    : QAbstractListModel(parent), _data(partitions)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
@@ -15,7 +19,7 @@ PartitionsModel::PartitionsModel(QObject *parent) noexcept
 QHash<int, QByteArray> PartitionsModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::Partition, "partition"}
+        { static_cast<int>(Roles::Partition), "partition" }
     };
 }
 
@@ -23,23 +27,27 @@ QVariant PartitionsModel::data(const QModelIndex &index, int role) const
 {
     coreAssert(index.row() < 0 || index.row() >= count(),
         throw std::range_error("PartitionsModel::data: Given index is not in range"));
-    const auto &child = (*_data)[index.row()];
-    switch (role) {
+    switch (static_cast<PartitionsModel::Roles>(role)) {
     case Roles::Partition:
-        return child;
+        return get(index.row());
     default:
         return QVariant();
     }
 }
 
-const PartitionModel &PartitionsModel::get(const int index) const
+const PartitionModel *PartitionsModel::get(const int index) const
 {
-    /** TODO */
+    coreAssert(index >= 0 && index < count(),
+        throw std::range_error("PartitionsModel::get: Given index is not in range"));
+    return _partitions.at(index).get();
 }
 
 void PartitionsModel::add(const Audio::BeatRange &range) noexcept_ndebug
 {
-    /** TODO */
+    beginInsertRows(QModelIndex(), count(), count());
+    //_data->push();
+    refreshControls();
+    endInsertRows();
 }
 
 void PartitionsModel::remove(const int index)
@@ -50,4 +58,9 @@ void PartitionsModel::remove(const int index)
 void PartitionsModel::move(const int from, const int to)
 {
     /** TODO */
+}
+
+void PartitionsModel::refreshControls(void)
+{
+    Models::RefreshModels(_partitions, *_data, this);
 }

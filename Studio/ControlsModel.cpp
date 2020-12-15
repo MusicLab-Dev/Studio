@@ -3,10 +3,13 @@
  * @ Description: Controls Model implementation
  */
 
+#include <QQmlEngine>
+#include <QHash>
+
 #include "Models.hpp"
 #include "ControlsModel.hpp"
 
-ControlsModel::ControlsModel(QObject *parent, Audio::Controls *controls) noexcept;
+ControlsModel::ControlsModel(Audio::Controls *controls, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(controls)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
@@ -16,20 +19,18 @@ ControlsModel::ControlsModel(QObject *parent, Audio::Controls *controls) noexcep
         _controls.push(&control);
 }
 
-QHash<int, QByteArray> ControlsModel::roleNames(void) const noexcept override
+QHash<int, QByteArray> ControlsModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::Control, "control"}
+        { static_cast<int>(ControlsModel::Roles::Control), "control" }
     };
 }
 
-QVariant ControlsModel::data(const QModelIndex &index, int role) const override
+QVariant ControlsModel::data(const QModelIndex &index, int role) const
 {
-    const auto &child = (*_data)[index.row()];
-    switch (role) {
-        case Roles::Control:
-        case Roles::Muted:
-            return QVariant();
+    switch (static_cast<ControlsModel::Roles>(role)) {
+        case ControlsModel::Roles::Control:
+            return get(index.row());
         default:
             return QVariant();
     }
@@ -45,16 +46,16 @@ const ControlModel *ControlsModel::get(const int index) const noexcept_ndebug
 void ControlsModel::add(const Audio::ParamID paramID) noexcept_ndebug
 {
     beginInsertRows(QModelIndex(), count(), count());
-    _data->push(paramID);
+    //_data->push();
     refreshControls();
     endInsertRows();
 }
 
-void ControlsModel::remove(const int index)
+void ControlsModel::remove(const int index) noexcept_ndebug
 {
     beginRemoveRows(QModelIndex(), index, index);
-    _data->erase(_data->begin() + index);
-    _controls.erase(_controls.begin() + index);
+    //_data->erase(_data->begin() + index);
+    //_controls.erase(_controls.begin() + index);
     refreshControls();
     endRemoveRows();
 }
@@ -62,7 +63,7 @@ void ControlsModel::remove(const int index)
 void ControlsModel::move(const int from, const int to)
 {
     beginMoveRows(QModelIndex(), from, from, QModelIndex(), to);
-    _data->at(from).swap(_data->at(to));
+    //_data->at(from).swap(_data->at(to));
     refreshControls();
     endMoveRows();
 }

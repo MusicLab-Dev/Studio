@@ -6,12 +6,16 @@
 #pragma once
 
 #include <vector>
+#include <utility>
 
 #include <QObject>
 #include <QAbstractListModel>
 
-#include <MLCore/Utils.hpp>
-#include <MLAudio/Base.hpp>
+#include <Core/Utils.hpp>
+#include <Audio/Base.hpp>
+#include <Audio/Control.hpp>
+
+#include "ControlModel.hpp"
 
 /** @brief Exposes a list of audio controls */
 class ControlsModel : public QAbstractListModel
@@ -20,12 +24,12 @@ class ControlsModel : public QAbstractListModel
 
 public:
     /** @brief Roles of each Controls */
-    enum class Roles {
+    enum class Roles : int {
         Control = Qt::UserRole + 1
     };
 
     /** @brief Default constructor */
-    explicit ControlsModel(QObject *parent, Audio::Controls *controls) noexcept;
+    explicit ControlsModel(Audio::Controls *controls, QObject *parent = nullptr) noexcept;
 
     /** @brief Destruct the ControlsModel */
     ~ControlsModel(void) noexcept = default;
@@ -34,14 +38,15 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  _data->size(); }
+    [[nodiscard]] int count(void) const noexcept { return  _controls.size(); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     /** @brief Get the index controlModel */
-    [[nodiscard]] ControlModel *get(const int index) noexcept_ndebug { return const_cast<ControlModel *>(std::as_const(this)->get(index)); }
+    /*TODO [[nodiscard]] ControlModel *get(const int index) noexcept_ndebug { return const_cast<ControlModel *>(std::as_const(this)->get(index)); }
+    */
     [[nodiscard]] const ControlModel *get(const int index) const noexcept_ndebug;
 
 public slots:
@@ -57,8 +62,8 @@ public /* slots */:
 
 private:
     Audio::Controls *_data { nullptr };
-    std::vector<UniqueAlloc<ControlModel>> _controls;
+    Core::Vector<Core::UniqueAlloc<ControlModel>> _controls;
 
     /** @brief Refresh internal models */
     void refreshControls(void);
-}
+};

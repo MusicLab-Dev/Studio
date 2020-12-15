@@ -3,7 +3,7 @@
  * @ Description: Point gadget
  */
 
-inline bool Point::setType(const CurveType type_) noexcept
+inline bool GPoint::setType(const CurveType type_) noexcept
 {
     const auto audioCurve = static_cast<Audio::Point::CurveType>(type_);
 

@@ -38,14 +38,14 @@ bool AutomationModel::setData(const QModelIndex &index, const QVariant &value, i
 {
     switch (static_cast<Roles>(role)) {
     case Roles::Point:
-        set(index.row(), value.value<Point>());
+        set(index.row(), value.value<GPoint>());
         return true;
     default:
         throw std::logic_error("ControlModel::setData: Couldn't change invalid role");
     }
 }
 
-void AutomationModel::add(const Point &point) noexcept
+void AutomationModel::add(const GPoint &point) noexcept
 {
     beginResetModel();
     _data->points().push(point);
@@ -61,15 +61,15 @@ void AutomationModel::remove(const int index) noexcept_ndebug
     endRemoveRows();
 }
 
-Point AutomationModel::get(const int index) const noexcept_ndebug
+GPoint AutomationModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
         throw std::range_error("AutomationModel::get: Given index is not in range"));
 
-    return Point { _data->points().at(index) };
+    return GPoint { _data->points().at(index) };
 }
 
-void AutomationModel::set(const int index, const Point &point) noexcept_ndebug
+void AutomationModel::set(const int index, const GPoint &point) noexcept_ndebug
 {
     coreAssert(index >= 0 || index < count(),
         throw std::range_error("AutomationModel::remove: Given index is not in range"));

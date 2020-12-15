@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <QObject>
 #include <QAbstractListModel>
 
 #include <Core/Utils.hpp>
@@ -13,7 +14,6 @@
 #include <Audio/Base.hpp>
 
 #include "InstancesModel.hpp"
-
 
 /** @brief Class that exposes a list of note in audio backend */
 class PartitionModel : public QAbstractListModel
@@ -25,7 +25,7 @@ class PartitionModel : public QAbstractListModel
 
 public:
     /** @brief Roles of each partition */
-    enum class Roles {
+    enum class Roles : int {
         Range = Qt::UserRole + 1,
         Velocity,
         Tuning,
@@ -35,7 +35,7 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit PartitionModel(QObject *parent = nullptr) noexcept;
+    explicit PartitionModel(Audio::Partition *partition, QObject *parent = nullptr) noexcept;
 
     /** @brief Destruct the Partition */
     ~PartitionModel(void) noexcept = default;
@@ -55,7 +55,6 @@ public:
 
     /** @brief Set the muted propertie */
     bool setMuted(bool muted) noexcept;
-#pragma once
 
     /** @brief Return the channel of the partition */
     [[nodiscard]] Audio::Channel channel(void) const noexcept { return _channel; }
@@ -64,7 +63,7 @@ public:
     bool setChannel(const Audio::Channel channel) noexcept;
 
     /** @brief Update internal data pointer if it changed */
-    void updateData(Audio::Partition *data) { _data = data; }
+    void updateInternal(Audio::Partition *data);
 
 signals:
     /** @brief Notify that the muted property has changed */
@@ -75,10 +74,9 @@ signals:
 
 private:
     Audio::Partition *_data { nullptr };
-    Core::UniqueAlloc<InstancesModel> _instancesModel {};
+    Core::UniqueAlloc<InstancesModel> _instances {};
 
     //Properties
     bool _muted { false };
     Audio::Channel _channel {} ;
-    InstancesModel *_instances { nullptr };
 };

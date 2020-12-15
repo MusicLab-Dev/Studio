@@ -5,13 +5,15 @@
 
 #pragma once
 
-#include "PartitionModel.hpp"
-
 #include <vector>
 
-#include <MLCore/Utils.hpp>
-#include <MLAudio/Base.hpp>
+#include <QAbstractListModel>
+#include <Core/UniqueAlloc.hpp>
+#include <Core/Utils.hpp>
+#include <Audio/Base.hpp>
+#include <Audio/Node.hpp>
 
+#include "PartitionModel.hpp"
 
 /** @brief class that contaign a list of partitionModel */
 class PartitionsModel : public QAbstractListModel
@@ -20,12 +22,12 @@ class PartitionsModel : public QAbstractListModel
 
 public:
     /** @brief Roles of each instance */
-    enum class Roles {
+    enum class Roles : int {
         Partition = Qt::UserRole + 1
     };
 
     /** @brief Default constructor */
-    explicit PartitionsModel(QObject *parent = nullptr) noexcept;
+    explicit PartitionsModel(Audio::Partitions *partitions, QObject *parent = nullptr) noexcept;
 
     /** @brief Destruct the Partitions */
     ~PartitionsModel(void) noexcept = default;
@@ -41,7 +43,7 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     /** @brief Get a beat range from internal list */
-    [[nodiscard]] const PartitionModel &get(const int index) const;
+    [[nodiscard]] const PartitionModel *get(const int index) const;
 
 public slots:
     /** @brief Remove a children from the list */
@@ -57,5 +59,8 @@ public /* slots */:
 
 private:
     Audio::Partitions *_data { nullptr };
-    std::vector<UniqueAlloc<PartitionModel>> _models {};
-}
+    Core::Vector<Core::UniqueAlloc<PartitionModel>> _partitions;
+
+    /** @brief Refresh internal models */
+    void refreshControls();
+};

@@ -5,9 +5,13 @@
 
 #include <stdexcept>
 
+#include <QHash>
+#include <QQmlEngine>
+
 #include "PartitionModel.hpp"
 
-PartitionModel::PartitionModel(QObject *parent) noexcept
+PartitionModel::PartitionModel(Audio::Partition *partition, QObject *parent) noexcept
+    : QAbstractListModel(parent), _data(partition), _instances(&partition->instances(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
@@ -15,12 +19,12 @@ PartitionModel::PartitionModel(QObject *parent) noexcept
 QHash<int, QByteArray> PartitionModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::Range, "range"},
-        { Roles::Velocity, "velocity"},
-        { Roles::Tuning, "tuning"},
-        { Roles::NoteIndex, "noteIndex"},
-        { Roles::EventType, "eventType"},
-        { Roles::Key, "key"}
+        { static_cast<int>(Roles::Range), "range"},
+        { static_cast<int>(Roles::Velocity), "velocity"},
+        { static_cast<int>(Roles::Tuning), "tuning"},
+        { static_cast<int>(Roles::NoteIndex), "noteIndex"},
+        { static_cast<int>(Roles::EventType), "eventType"},
+        { static_cast<int>(Roles::Key), "key"}
     };
 }
 
@@ -28,8 +32,8 @@ QVariant PartitionModel::data(const QModelIndex &index, int role) const
 {
     coreAssert(index.row() < 0 || index.row() >= count(),
         throw std::range_error("PartitionModel::data: Given index is not in range"));
-    const auto &child = (*_data)[index.row()];
-    switch (role) {
+    //const auto &child = (*_data)[index.row()];
+    switch (static_cast<Roles>(role)) {
         case Roles::Range:
         case Roles::Velocity:
         case Roles::Tuning:

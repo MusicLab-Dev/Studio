@@ -17,6 +17,8 @@ qt_add_resources(QtResources
 )
 
 set(StudioSources
+    ${StudioDir}/Point.hpp
+    ${StudioDir}/Point.ipp
     ${StudioDir}/Studio.hpp
     ${StudioDir}/Studio.cpp
     ${StudioDir}/InstancesModel.hpp
@@ -25,8 +27,13 @@ set(StudioSources
     ${StudioDir}/AutomationModel.cpp
     ${StudioDir}/ControlModel.hpp
     ${StudioDir}/ControlModel.cpp
-    ${StudioDir}/Point.hpp
-    ${StudioDir}/Point.ipp
+    ${StudioDir}/ControlsModel.hpp
+    ${StudioDir}/ControlsModel.cpp
+    ${StudioDir}/PartitionModel.hpp
+    ${StudioDir}/PartitionModel.cpp
+    ${StudioDir}/PartitionsModel.hpp
+    ${StudioDir}/PartitionsModel.cpp
+
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

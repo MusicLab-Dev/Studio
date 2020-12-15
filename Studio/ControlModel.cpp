@@ -21,17 +21,17 @@ ControlModel::ControlModel(Audio::Control *control, QObject *parent) noexcept
 QHash<int, QByteArray> ControlModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::Automation, "automation"},
-        { Roles::Muted, "muted"}
+        { static_cast<int>(ControlModel::Roles::Automation), "automation"},
+        { static_cast<int>(ControlModel::Roles::Muted), "muted"}
     };
 }
 
 QVariant ControlModel::data(const QModelIndex &index, int role) const
 {
-    switch (role) {
-    case Roles::Automation:
+    switch (static_cast<ControlModel::Roles>(role)) {
+    case ControlModel::Roles::Automation:
         return get(index.row());
-    case Roles::Muted:
+    case ControlModel::Roles::Muted:
         return isAutomationMuted(index.row());
     default:
         return QVariant();
@@ -40,7 +40,7 @@ QVariant ControlModel::data(const QModelIndex &index, int role) const
 
 bool ControlModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    switch (role) {
+    switch (static_cast<ControlModel::Roles>(role)) {
     case Roles::Muted:
         setAutomationMutedState(index.row(), value.toBool());
         return true;

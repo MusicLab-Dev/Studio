@@ -9,5 +9,5 @@
 
 TEST(Point, InitDestroy)
 {
-    ASSERT_NO_THROW(Point tmp);
+    ASSERT_NO_THROW(GPoint tmp);
 }

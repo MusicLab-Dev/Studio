@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <vector>
+
 namespace Models
 {
     template<typename ModelVector, typename AudioModelVector, typename ...Args>

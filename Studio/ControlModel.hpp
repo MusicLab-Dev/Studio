@@ -26,7 +26,7 @@ class ControlModel : public QAbstractListModel
 
 public:
     /** @brief Roles of each Control */
-    enum Roles {
+    enum class Roles : int {
         Automation = Qt::UserRole + 1,
         Muted
     };

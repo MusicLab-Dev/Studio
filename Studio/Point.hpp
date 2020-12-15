@@ -9,7 +9,7 @@
 
 #include <Audio/Automation.hpp> // Todo: replace with <Audio/Point>
 
-struct Point : public Audio::Point
+struct GPoint : public Audio::Point
 {
     Q_GADGET
 
@@ -25,11 +25,11 @@ public:
     Q_ENUMS(CurveType)
 
     /** @brief Get / Set the internal curve type */
-    [[nodiscard]] CurveType getType(void) const noexcept { return static_cast<Point::CurveType>(type); }
+    [[nodiscard]] CurveType getType(void) const noexcept { return static_cast<GPoint::CurveType>(type); }
     bool setType(const CurveType type_) noexcept;
 
 };
 
-Q_DECLARE_METATYPE(Point)
+Q_DECLARE_METATYPE(GPoint)
 
 #include "Point.ipp"
