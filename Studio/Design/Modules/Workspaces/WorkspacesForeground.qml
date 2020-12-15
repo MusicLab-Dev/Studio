@@ -1,10 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+
 import "../../Default"
 
+
 Rectangle {
-    id: workspacesForeground
+    id: workspaceForeground
     color: "#0D2D47"
     radius: 30
 
@@ -16,7 +18,7 @@ Rectangle {
     }
 
     Item {
-        id: workspacesResearchTextInput
+        id: workspaceResearchTextInput
         width: parent.width * 0.8
         height : parent.height * 0.05
         x: (parent.width - width) / 2
@@ -24,6 +26,7 @@ Rectangle {
 
         DefaultTextInput {
             anchors.fill: parent
+            placeholderText: "Fichiers par défault"
             color: "white"
             opacity: 0.42
         }
@@ -31,18 +34,39 @@ Rectangle {
 
 
     Item {
-        id: workspacesForegroundContent
+        id: workspaceForegroundContent
         width: parent.width * 0.8
         height: parent.height * 0.7
         x: (parent.width - width) / 2
-        y: workspacesResearchTextInput.y + workspacesResearchTextInput.height * 2
+        y: workspaceResearchTextInput.y + workspaceResearchTextInput.height * 2
 
-        //ListView {
-        //    anchors.fill: parent
-        //    spacing: parent.height * 0.04
-        //
-        //    }
-        //}
+        ListView {
+            id: listView
+            anchors.fill: parent
+            model: 1
+            spacing: Math.max(workspaceForeground.height / 30, 20)
+
+            delegate: WorkspaceCard {
+                width: parent.width
+                height: Math.max(workspaceForeground.height / 14, 50)
+            }
+
+            DefaultTextButton {
+                y: {
+                    if (listView.height >= listView.count * Math.max(workspaceForeground.height / 14, 50) + listView.count * Math.max(workspaceForeground.height / 30, 20))
+                        listView.count * Math.max(workspaceForeground.height / 14, 50) + listView.count * Math.max(workspaceForeground.height / 30, 20)
+                    else
+                        listView.height * 1.04
+                }
+                text: "+ NOUVEAU WORKSPACE"
+
+                onClicked: {
+                    listView.model += 1
+                }
+
+            }
+        }
+
 
     }
 }

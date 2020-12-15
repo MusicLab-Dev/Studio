@@ -4,5 +4,7 @@
         <file>WorkspacesForeground.qml</file>
         <file>WorkspacesViewTitle.qml</file>
         <file>WorkspacesView.qml</file>
+        <file>WorkspaceCard.qml</file>
+        <file>editWorkspaceName.png</file>
     </qresource>
 </RCC>
