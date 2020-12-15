@@ -45,7 +45,7 @@ Rectangle {
         height: parent.height * 0.4
         x: parent.width * 0.85
         y: parent.height / 2 - height / 2
-        //source: "qrc:/editWorkspaceName.png"
+        //source: "qrc:/Assets/EditWorkspaceName.png"
 
         onClicked:  {
             editModeEnabled ? editModeEnabled = false : editModeEnabled = true

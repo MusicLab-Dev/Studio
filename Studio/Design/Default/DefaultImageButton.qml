@@ -16,7 +16,7 @@ Button {
     indicator: DefaultColoredImage {
         width: control.width
         height: control.height
-        source: "qrc:/Workspace/editWorkspaceName.png"
+        source: "qrc:/Assets/EditWorkspaceName.png"
         color: control.pressed ? "#1A6DAA" : control.hovered ? "#338DCF" : "#0D2D47"
     }
 }

@@ -3,16 +3,16 @@ import QtQuick.Controls 2.15
 
 import "../../Default"
 
-WorkspaceBackground {
+WorkspacesBackground {
     id: workspaceView
 
-    WorkspaceViewTitle {
+    WorkspacesViewTitle {
         id: workspaceViewTitle
         x: (workspaceForeground.width + (parent.width - workspaceForeground.width) / 2) - width / 2
         y: height
     }
 
-    WorkspaceForeground {
+    WorkspacesForeground {
         id: workspaceForeground
         x: parent.parent.x
         y: parent.parent.y
@@ -20,7 +20,7 @@ WorkspaceBackground {
         height: parent.height
     }
 
-    //WorkspaceContentArea {
+    //WorkspacesContentArea {
     //    id: workspaceContentArea
     //    anchors.top: workspaceViewTitle.bottom
     //    anchors.left: workspaceForeground.right

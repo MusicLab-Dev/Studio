@@ -10,6 +10,7 @@ Button {
     background: Rectangle {
         width: control.width
         height: control.height
+        color: "transparent"
     }
 
     indicator: DefaultColoredImage {
