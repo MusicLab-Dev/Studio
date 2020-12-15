@@ -20,7 +20,7 @@ Rectangle {
                 anchors.fill: parent
 
                 onReleased: {
-                    modulesViewContent.modules.append({path: "qrc:/ModulesView/TestModule.qml", moduleZ: modulesViewContent.modules.count})
+                    modulesViewContent.modules.append({path: "qrc:/SequencerView/SequencerView.qml", moduleZ: modulesViewContent.modules.count})
                     modulesViewContent.componentSelected = modulesViewContent.modules.count - 1
                 }
 

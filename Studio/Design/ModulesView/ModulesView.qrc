@@ -3,6 +3,5 @@
         <file>ModulesView.qml</file>
         <file>ModulesViewBar.qml</file>
         <file>ModulesViewContent.qml</file>
-        <file>TestModule.qml</file>
     </qresource>
 </RCC>
