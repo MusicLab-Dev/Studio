@@ -1,11 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-
 import "../../Default"
 
 
 Rectangle {
+    property var workspacesModel
+
     id: workspaceForeground
     color: "#0D2D47"
     radius: 30
@@ -32,7 +33,6 @@ Rectangle {
         }
     }
 
-
     Item {
         id: workspaceForegroundContent
         width: parent.width * 0.8
@@ -44,13 +44,7 @@ Rectangle {
             id: listView
             anchors.fill: parent
             spacing: Math.max(workspaceForeground.height / 30, 20)
-            model: ListModel {
-                id: listModel
-                ListElement {
-                    name: "Default Workspace"
-                    path: "./"
-                }
-            }
+            model: workspacesModel
 
             delegate: WorkspaceCard {
                 width: listView.width
@@ -66,16 +60,8 @@ Rectangle {
                 }
                 text: qsTr("+ NEW WORKSPACE")
 
-                onClicked: {
-                    listModel.append({
-                                         name: "New workspace",
-                                         path: "./"
-                                     })
-                }
-
+                onClicked: folderPicker.open()
             }
         }
-
-
     }
 }

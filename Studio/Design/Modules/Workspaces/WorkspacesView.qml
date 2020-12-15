@@ -1,5 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.3
+
 
 import "../../Default"
 
@@ -18,6 +20,15 @@ WorkspacesBackground {
         y: parent.parent.y
         width: Math.max(parent.width * 0.2, 350)
         height: parent.height
+
+        workspacesModel: ListModel {
+            id: workspacesModel
+
+            ListElement {
+                name: "Default Workspace"
+                path: "./"
+            }
+        }
     }
 
     //WorkspacesContentArea {
@@ -28,4 +39,18 @@ WorkspacesBackground {
     //    anchors.bottom: workspaceView.bottom
     //    anchors.margins: parent.width * 0.05
     //}
+
+    FileDialog {
+        id: folderPicker
+        title: "Please choose a workspace folder"
+        folder: shortcuts.documents
+        selectFolder: true
+
+        onAccepted: {
+            workspacesModel.append({
+                                       name: "New workspace",
+                                       path: folderPicker.fileUrl.toString()
+                                   })
+        }
+    }
 }

@@ -27,7 +27,7 @@ Rectangle {
         color: "#FFFFFF"
         opacity: enabled ? 0.6 : 0.4
         enabled: false
-        text: name + " (" + path + ")"
+        text: name + " " + path
 
         background: Rectangle {
             anchors.fill: parent
