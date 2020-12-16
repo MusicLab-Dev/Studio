@@ -46,7 +46,7 @@ const ControlModel *ControlsModel::get(const int index) const noexcept_ndebug
 void ControlsModel::add(const Audio::ParamID paramID) noexcept_ndebug
 {
     beginInsertRows(QModelIndex(), count(), count());
-    //_data->push();
+    _data->push(paramID, 0.0);
     refreshControls();
     endInsertRows();
 }
@@ -54,8 +54,8 @@ void ControlsModel::add(const Audio::ParamID paramID) noexcept_ndebug
 void ControlsModel::remove(const int index) noexcept_ndebug
 {
     beginRemoveRows(QModelIndex(), index, index);
-    //_data->erase(_data->begin() + index);
-    //_controls.erase(_controls.begin() + index);
+    _data->erase(_data->begin() + index);
+    _controls.erase(_controls.begin() + index);
     refreshControls();
     endRemoveRows();
 }

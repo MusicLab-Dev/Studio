@@ -1,6 +1,6 @@
 /**
  * @ Author: Cédric Lucchese
- * @ Description: InstancesModel tests
+ * @ Description: AutomationModel tests
  */
 
 #include <gtest/gtest.h>

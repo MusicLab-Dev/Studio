@@ -26,7 +26,7 @@ QVariant NodeModel::data(const QModelIndex &index, int role) const
     coreAssert(index.row() < 0 || index.row() >= count(),
         throw std::range_error("InstancesModel::data: Given index is not in range"));
     const auto &child = (*_data)[index.row()];
-    switch (role) {
+    switch (static_cast<NodeModel::Roles>(role)) {
     case Roles::Node:
         return child.get();
     default:

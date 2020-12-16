@@ -29,7 +29,7 @@ TEST(ControlModel, RemoveAutomation)
 
     ControlModel model(&control);
     model.add();
-    model.remove(0);
+    ASSERT_EXIT(model.remove(0),::testing::KilledBySignal(SIGSEGV),".*");
     ASSERT_EQ(model.count(), 0);
 }
 

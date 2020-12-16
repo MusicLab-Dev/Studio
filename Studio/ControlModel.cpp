@@ -79,11 +79,13 @@ void ControlModel::add(void)
     endResetModel();
 }
 
+#include <iostream>
+
 void ControlModel::remove(const int index) noexcept_ndebug
 {
     beginResetModel();
     auto *it = _data->automations().begin() + index;
-    if (it != _data->automations().end())
+    if (it != _data->automations().end() && it != nullptr)
         _data->automations().erase(it);
     refreshAutomations();
     endResetModel();

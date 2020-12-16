@@ -44,7 +44,7 @@ public:
     using ConnectionsPtr = Core::UniqueAlloc<ConnectionsModel>;
 
     /** @brief Roles of each instance */
-    enum class Roles {
+    enum class Roles : int {
         Node = Qt::UserRole + 1
     };
 
