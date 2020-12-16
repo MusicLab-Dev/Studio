@@ -17,5 +17,16 @@ RowLayout {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width
         color: "#C4C4C4"
+
+        Repeater {
+            model: 12
+
+            Rectangle {
+                x: index * 200
+                Text {
+                    text: index
+                }
+            }
+        }
     }
 }
