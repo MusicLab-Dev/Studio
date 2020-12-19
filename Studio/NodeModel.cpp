@@ -5,11 +5,14 @@
 
 #include <stdexcept>
 
+#include <QHash>
 #include <QQmlEngine>
+#include <QAbstractListModel>
 
 #include "NodeModel.hpp"
 
-NodeModel::NodeModel(QObject *parent) noexcept
+NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
+    : QAbstractListModel(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
@@ -17,7 +20,7 @@ NodeModel::NodeModel(QObject *parent) noexcept
 QHash<int, QByteArray> NodeModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::Node, "node" }
+        { static_cast<int>(Roles::Node), "node" }
     };
 }
 
@@ -25,38 +28,45 @@ QVariant NodeModel::data(const QModelIndex &index, int role) const
 {
     coreAssert(index.row() < 0 || index.row() >= count(),
         throw std::range_error("InstancesModel::data: Given index is not in range"));
-    const auto &child = (*_data)[index.row()];
     switch (static_cast<NodeModel::Roles>(role)) {
     case Roles::Node:
-        return child.get();
+        return get(index.row());
     default:
         return QVariant();
     }
 }
 
+const NodeModel *NodeModel::get(const int index) const
+{
+    coreAssert(index >= 0 && index < count(),
+        throw std::range_error("PartitionsModel::get: Given index is not in range"));
+    return _children.at(index).get();
+}
+
+
 bool NodeModel::setMuted(bool muted) noexcept
 {
-    if (_muted == muted)
+    if (_data->muted() == muted)
         return false;
-    _muted = muted;
-    emit mutedChanged();
+    _data->setMuted(muted);
+    //emit mutedChanged();
     return true;
 }
 
 bool NodeModel::setName(const QString &name) noexcept
 {
-    if (_name == name)
+    if (_data->name() == name.toStdString())
         return false;
-    _name = name;
-    emit nameChanged();
+    _data->setName(Core::FlatString(name.toStdString()));
+    //emit nameChanged();
     return true;
 }
 
 bool NodeModel::setColor(const QColor &color) noexcept
 {
-    if (_color == color)
-        return false;
-    _color = color;
-    emit colorChanged();
+    //if (_color == color)
+    //    return false;
+    //_data->setColor(color);
+    //emit colorChanged();
     return true;
 }

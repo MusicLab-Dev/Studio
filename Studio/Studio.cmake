@@ -33,6 +33,8 @@ set(StudioSources
     ${StudioDir}/PartitionModel.cpp
     ${StudioDir}/PartitionsModel.hpp
     ${StudioDir}/PartitionsModel.cpp
+    ${StudioDir}/NodeModel.hpp
+    ${StudioDir}/NodeModel.cpp
 
 )
 

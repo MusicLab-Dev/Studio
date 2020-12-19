@@ -51,7 +51,7 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     /** @brief Return true is the partition model is muted */
-    [[nodiscard]] bool muted(void) const noexcept { return _muted; }
+    [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
 
     /** @brief Set the muted propertie */
     bool setMuted(bool muted) noexcept;
@@ -62,8 +62,20 @@ public:
     /** @brief Set the channel of the partition */
     bool setChannel(const Audio::Channel channel) noexcept;
 
+    /** @brief Get the instances */
+    [[nodiscard]] Core::UniqueAlloc<InstancesModel> &instances(void) noexcept { return _instances; }
+    [[nodiscard]] const Core::UniqueAlloc<InstancesModel> &instances(void) const noexcept { return _instances; }
+
+
     /** @brief Update internal data pointer if it changed */
     void updateInternal(Audio::Partition *data);
+
+public slots:
+    /** @brief Add note */
+    void addNote(const Audio::Note &note) noexcept;
+
+    /** @brief Remove note at the index */
+    void removeNote(const int index) noexcept;
 
 signals:
     /** @brief Notify that the muted property has changed */
@@ -76,7 +88,5 @@ private:
     Audio::Partition *_data { nullptr };
     Core::UniqueAlloc<InstancesModel> _instances {};
 
-    //Properties
-    bool _muted { false };
     Audio::Channel _channel {} ;
 };
