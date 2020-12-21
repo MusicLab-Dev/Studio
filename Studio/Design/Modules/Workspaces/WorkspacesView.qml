@@ -31,14 +31,15 @@ WorkspacesBackground {
         }
     }
 
-    //WorkspacesContentArea {
-    //    id: workspaceContentArea
-    //    anchors.top: workspaceViewTitle.bottom
-    //    anchors.left: workspaceForeground.right
-    //    anchors.right: workspaceView.right
-    //    anchors.bottom: workspaceView.bottom
-    //    anchors.margins: parent.width * 0.05
-    //}
+    WorkspacesContentArea {
+        id: workspaceContentArea
+        anchors.top: workspaceViewTitle.bottom
+        anchors.left: workspaceForeground.right
+        anchors.right: workspaceView.right
+        anchors.bottom: workspaceView.bottom
+        anchors.margins: parent.width * 0.05
+    }
+
 
     FileDialog {
         id: folderPicker

@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import Qt.labs.folderlistmodel 2.15
 
 import '../../Default'
 
@@ -46,6 +47,25 @@ Rectangle {
         onClicked:  {
             editModeEnabled ? editModeEnabled = false : editModeEnabled = true
             editModeEnabled ? workspaceName.enabled = true : workspaceName.enabled = false
+            console.log(workspacesCardListView.height)
+        }
+    }
+
+    ListView {
+        id: workspacesCardListView
+        width: parent.width
+        height: 20 * count
+        y: editModeButton.y + editModeButton.height
+
+        FolderListModel {
+            id: folderModel
+            rootFolder: workspaceForeground.actualPath
+            nameFilters: ["*.*"]
+        }
+
+        model: folderModel
+        delegate: Text {
+            text: fileName
         }
     }
 }

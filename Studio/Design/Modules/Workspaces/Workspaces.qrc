@@ -5,5 +5,8 @@
         <file>WorkspacesViewTitle.qml</file>
         <file>WorkspacesView.qml</file>
         <file>WorkspaceCard.qml</file>
+        <file>WorkspacesSquareComponent.qml</file>
+        <file>WorkspacesSquareComponentTitle.qml</file>
+        <file>WorkspacesContentArea.qml</file>
     </qresource>
 </RCC>

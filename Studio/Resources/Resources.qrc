@@ -8,5 +8,7 @@
         <file>Assets/TestImage2.png</file>
         <file>Fonts/Bungee-Regular.ttf</file>
         <file>Assets/EditWorkspaceName.png</file>
+        <file>Assets/TestImage3.png</file>
+        <file>Assets/TestImage4.png</file>
     </qresource>
 </RCC>

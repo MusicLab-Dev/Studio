@@ -6,6 +6,7 @@ import "../../Default"
 
 Rectangle {
     property var workspacesModel
+    property string actualPath: ""
 
     id: workspaceForeground
     color: "#0D2D47"
@@ -41,22 +42,27 @@ Rectangle {
         y: workspaceResearchTextInput.y + workspaceResearchTextInput.height * 2
 
         ListView {
-            id: listView
+            id: workspacesForegroundListView
             anchors.fill: parent
             spacing: Math.max(workspaceForeground.height / 30, 20)
             model: workspacesModel
 
             delegate: WorkspaceCard {
-                width: listView.width
+                width: workspacesForegroundListView.width
                 height: Math.max(workspaceForeground.height / 14, 50)
+
+                MouseArea {
+                    anchors.fill: parent
+                    onPressed: actualPath = path
+                }
             }
 
             DefaultTextButton {
                 y: {
-                    if (listView.height >= listView.count * Math.max(workspaceForeground.height / 14, 50) + listView.count * Math.max(workspaceForeground.height / 30, 20))
-                        listView.count * Math.max(workspaceForeground.height / 14, 50) + listView.count * Math.max(workspaceForeground.height / 30, 20)
+                    if (workspacesForegroundListView.height >= workspacesForegroundListView.count * Math.max(workspaceForeground.height / 14, 50) + workspacesForegroundListView.count * Math.max(workspaceForeground.height / 30, 20))
+                        workspacesForegroundListView.count * Math.max(workspaceForeground.height / 14, 50) + workspacesForegroundListView.count * Math.max(workspaceForeground.height / 30, 20)
                     else
-                        listView.height * 1.04
+                        workspacesForegroundListView.height * 1.04
                 }
                 text: qsTr("+ NEW WORKSPACE")
 
