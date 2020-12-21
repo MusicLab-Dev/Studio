@@ -11,15 +11,12 @@ Rectangle {
         cellWidth: 250
         cellHeight: 250
 
-        FolderListModel {
+        model: FolderListModel {
             id: folderModel
-            rootFolder: workspaceForeground.actualPath
-            nameFilters: ["*.*"]
+            folder: workspaceForeground.actualPath
         }
 
-        model: folderModel
         delegate: WorkspacesSquareComponent {
-
             Image {
                 anchors.fill: parent
                 source: fileIsDir ? "qrc:/Assets/TestImage3.png" : "qrc:/Assets/TestImage4.png"
@@ -33,9 +30,8 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onPressed: {
-                    workspaceForeground.actualPath = filePath
-                    folderModel.rootFolder = filePath
-                    console.log(workspaceForeground.actualPath)
+                    if (fileIsDir)
+                        workspaceForeground.actualPath = fileUrl
                 }
             }
         }

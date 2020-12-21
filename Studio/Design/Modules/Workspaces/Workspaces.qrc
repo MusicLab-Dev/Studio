@@ -8,5 +8,8 @@
         <file>WorkspacesSquareComponent.qml</file>
         <file>WorkspacesSquareComponentTitle.qml</file>
         <file>WorkspacesContentArea.qml</file>
+        <file>FolderColumnView.qml</file>
+        <file>FolderColumnFileDelegate.qml</file>
+        <file>FolderColumnFolderDelegate.qml</file>
     </qresource>
 </RCC>

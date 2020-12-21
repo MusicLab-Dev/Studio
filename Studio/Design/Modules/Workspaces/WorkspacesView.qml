@@ -26,7 +26,7 @@ WorkspacesBackground {
 
             ListElement {
                 name: "Default Workspace"
-                path: "./"
+                path: ""
             }
         }
     }

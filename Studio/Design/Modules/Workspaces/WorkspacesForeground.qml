@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import "../../Default"
 
@@ -28,13 +29,13 @@ Rectangle {
 
         DefaultTextInput {
             anchors.fill: parent
-            placeholderText: "Fichiers par défault"
+            placeholderText: qsTr("Default files")
             color: "white"
             opacity: 0.42
         }
     }
 
-    Item {
+    ColumnLayout {
         id: workspaceForegroundContent
         width: parent.width * 0.8
         height: parent.height * 0.7
@@ -43,31 +44,26 @@ Rectangle {
 
         ListView {
             id: workspacesForegroundListView
-            anchors.fill: parent
             spacing: Math.max(workspaceForeground.height / 30, 20)
             model: workspacesModel
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
 
             delegate: WorkspaceCard {
                 width: workspacesForegroundListView.width
-                height: Math.max(workspaceForeground.height / 14, 50)
 
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: actualPath = path
+                Component.onCompleted: {
+                    if (index === 0)
+                        workspaceForeground.actualPath = realPath
                 }
             }
+        }
 
-            DefaultTextButton {
-                y: {
-                    if (workspacesForegroundListView.height >= workspacesForegroundListView.count * Math.max(workspaceForeground.height / 14, 50) + workspacesForegroundListView.count * Math.max(workspaceForeground.height / 30, 20))
-                        workspacesForegroundListView.count * Math.max(workspaceForeground.height / 14, 50) + workspacesForegroundListView.count * Math.max(workspaceForeground.height / 30, 20)
-                    else
-                        workspacesForegroundListView.height * 1.04
-                }
-                text: qsTr("+ NEW WORKSPACE")
+        DefaultTextButton {
+            text: qsTr("+ NEW WORKSPACE")
 
-                onClicked: folderPicker.open()
-            }
+            onClicked: folderPicker.open()
         }
     }
 }
