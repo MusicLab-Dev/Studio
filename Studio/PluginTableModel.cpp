@@ -10,6 +10,7 @@
 #include "PluginTableModel.hpp"
 
 PluginTableModel::PluginTableModel(QObject *parent) noexcept
+    : QAbstractListModel(parent)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
@@ -17,31 +18,31 @@ PluginTableModel::PluginTableModel(QObject *parent) noexcept
 QHash<int, QByteArray> PluginTableModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::Name, "name" },
-        { Roles::Path, "path" },
-        { Roles::SDK, "sdk" },
-        { Roles::Tags, "tags" }
+        { static_cast<int>(Roles::Name), "name" },
+        { static_cast<int>(Roles::Path), "path" },
+        { static_cast<int>(Roles::SDK), "sdk" },
+        { static_cast<int>(Roles::Tags), "tags" }
     };
 }
 
 QVariant PluginTableModel::data(const QModelIndex &index, int role) const
 {
-    const auto *factory = get();
-    switch (role) {
+    const auto *factory = get(index.row());
+    switch (static_cast<PluginTableModel::Roles>(role)) {
     case Roles::Name:
-        return factory->name();
+        return factory->getName();
     case Roles::Path:
-        return factory->path();
+        return factory->getPath();
     case Roles::SDK:
-        return factory->sdk();
+        return factory->getSDK();
     case Roles::Tags:
-        return factory->tags();
+        return factory->getTags();
     default:
         return QVariant();
     }
 }
 
-Audio::IPluginFactory *PluginTableModel::get(const int index) noexcept_ndebug
+Audio::IPluginFactory *PluginTableModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
         throw std::out_of_range("PluginTableModel::get: Invalid index " + std::to_string(index)));
@@ -51,6 +52,7 @@ Audio::IPluginFactory *PluginTableModel::get(const int index) noexcept_ndebug
 int PluginTableModel::add(const QString &path)
 {
     /** TODO */
+    return 0;
 }
 
 void PluginTableModel::remove(const int index)

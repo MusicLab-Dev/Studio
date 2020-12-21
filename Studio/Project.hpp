@@ -7,7 +7,10 @@
 
 #include <QObject>
 
-#include <MLAudio/Project.hpp>
+#include <Core/UniqueAlloc.hpp>
+#include <Audio/Project.hpp>
+
+#include "NodeModel.hpp"
 
 /** @brief The project own the main node and all the project data */
 class Project : public QObject
@@ -21,7 +24,7 @@ class Project : public QObject
 
 public:
     /** @brief The different types of playback mode */
-    enum class PlaybackMode
+    enum class PlaybackMode : int
     {
         Production = Audio::Project::PlaybackMode::Production,
         Live = Audio::Project::PlaybackMode::Live
@@ -30,30 +33,30 @@ public:
 
 
     /** @brief Construct a new project instance */
-    explicit Project(QObject *parent = nullptr);
+    explicit Project(Audio::Project *project, QObject *parent = nullptr);
 
 
     /** @brief Get the master node */
-    [[nodiscard]] NodeModel *master(void) noexcept { return _master; }
-    [[nodiscard]] NodeModel *master(void) const noexcept { return _master; }
+    [[nodiscard]] NodeModel *master(void) noexcept { return _master.get(); }
+    [[nodiscard]] NodeModel *master(void) const noexcept { return _master.get(); }
 
 
     /** @brief Get the playback mode */
-    [[nodiscard]] Project::PlaybackMode playbackMode(void) const noexcept { return _playbackMode};
+    [[nodiscard]] Project::PlaybackMode playbackMode(void) const noexcept { return static_cast<Project::PlaybackMode>(_data->playbackMode()); };
 
     /** @brief Set the playback mode, return true and emit playbackModeChanged on change */
     bool setPlaybackMode(const PlaybackMode mode) noexcept;
 
 
     /** @brief Get the project name */
-    const QString &name(void) const noexcept { return _name; }
+    QString name(void) const noexcept { return _data->name().data(); }
 
     /** @brief Set the project name, return true and emit nameChanged on change */
     bool setName(const QString &name) noexcept;
 
 
     /** @brief Get the project path */
-    const QString &path(void) const noexcept { return _path; }
+    const QString &path(void) const noexcept { return _data->path(); }
 
 
     /** @brief Load a project file */
@@ -80,7 +83,6 @@ signals:
     void pathChanged(void);
 
 private:
-    Audio::Project _data {};
-    QString _path {};
-    UniqueAlloc<NodeModel> _master { nullptr };
+    Audio::Project *_data { nullptr };
+    Core::UniqueAlloc<NodeModel> _master { nullptr };
 };

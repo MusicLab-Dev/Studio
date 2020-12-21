@@ -18,8 +18,8 @@ DeviceModel::DeviceModel(QObject *parent) noexcept
 QHash<int, QByteArray> DeviceModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::Name, "name" },
-        { Roles::IsInput, "isInput" }
+        { static_cast<int>(Roles::Name), "name" },
+        { static_cast<int>(Roles::IsInput), "isInput" }
     };
 }
 
@@ -28,7 +28,7 @@ QVariant DeviceModel::data(const QModelIndex &index, int role) const
     coreAssert(index.row() < 0 || index.row() >= count(),
         throw std::range_error("InstancesModel::data: Given index is not in range"));
     const auto &child = (*_data)[index.row()];
-    switch (role) {
+    switch (static_cast<DeviceModel::Roles>(role)) {
     case Roles::Name:
         return child.name();
     case Roles::IsInput:

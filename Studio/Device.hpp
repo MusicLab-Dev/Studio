@@ -7,10 +7,10 @@
 
 #include <QObject>
 
-#include <MLAudio/Device.hpp>
+#include <Audio/Device.hpp>
 
 /** @brief Device class */
-class Device alignas(32) : public QObject
+class Device : public QObject
 {
     Q_OBJECT
 
@@ -21,7 +21,7 @@ class Device alignas(32) : public QObject
 
 public:
     /** @brief Default constructor */
-    explicit Device(QObject *parent, const Audio::Device::Descriptor &descriptor);
+    explicit Device(Audio::Device *device, const Audio::Device::Descriptor &descriptor, QObject *parent = nullptr);
 
     /** @brief Destruct the instance */
     ~Device(void) noexcept = default;
@@ -68,8 +68,8 @@ signals:
     void sampleChanged(void);
 
 private:
-    Audio::DevicePtr _data { nullptr };
+    Audio::Device *_data { nullptr };
 };
 
-static_assert(sizeof(Device) == 32, "Device must take 32 bytes");
-static_assert(alignof(Device) == 32, "Device must be aligned to 32 bytes");
+//static_assert(sizeof(Device) == 32, "Device must take 32 bytes");
+//static_assert(alignof(Device) == 32, "Device must be aligned to 32 bytes");

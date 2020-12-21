@@ -3,27 +3,30 @@
  * @ Description: Project implementation
  */
 
+#include <QQmlEngine>
+
 #include "Project.hpp"
 
-Project::Project(QObject *parent) noexcept
+Project::Project(Audio::Project *project, QObject *parent)
+    : QObject(parent), _data(project)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
 bool Project::setPlaybackMode(const PlaybackMode mode) noexcept
 {
-    if (_playbackMode == mode)
+    if (this->playbackMode() == mode)
         return false;
-    _playbackMode = mode;
+    _data->setPlaybackMode(mode);
     emit playbackModeChanged();
     return true;
 }
 
 bool Project::setName(const QString &name) noexcept
 {
-    if (_name == name)
+    if (this->name() == name)
         return false;
-    _name = name;
+    _data->setName(name);
     emit nameChanged();
     return true;
 }

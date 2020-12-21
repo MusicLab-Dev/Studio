@@ -7,7 +7,8 @@
 
 #include "Scheduler.hpp"
 
-Scheduler::Scheduler(QObject *parent) noexcept
+Scheduler::Scheduler(Audio::Scheduler *scheduler, QObject *parent) noexcept
+    : QObject(parent), _data(scheduler)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }

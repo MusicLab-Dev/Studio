@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-#include <MLAudio/Scheduler.hpp>
+#include <Audio/Scheduler.hpp>
 
 /**
  * @brief Scheduler class
@@ -20,7 +20,7 @@ class Scheduler : public QObject, Audio::AScheduler
 
 public:
     /** @brief Default constructor */
-    explicit Scheduler(QObject *parent = nullptr) noexcept;
+    explicit Scheduler(Audio::Scheduler *scheduler, QObject *parent = nullptr) noexcept;
 
     /** @brief Destruct the instance */
     ~Scheduler(void) noexcept = default;

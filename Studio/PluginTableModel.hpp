@@ -8,8 +8,8 @@
 #include <QObject>
 #include <QAbstractListModel>
 
-#include <MLCore/Assert.hpp>
-#include <MLAudio/PluginTable.hpp>
+#include <Core/Assert.hpp>
+#include <Audio/PluginTable.hpp>
 
 
 /** @brief Plugin Table Model class */
@@ -19,7 +19,7 @@ class PluginTableModel : public QAbstractListModel
 
 public:
     /** @brief Roles of each instance */
-    enum class Roles {
+    enum class Roles : int {
         Name = Qt::UserRole + 1,
         Path,
         SDK,
@@ -45,7 +45,7 @@ public:
 
 
     /** @brief Get an factory instance */
-    [[nodiscard]] Audio::IPluginFactory *get(const int index) noexcept_ndebug;
+    [[nodiscard]] Audio::IPluginFactory *get(const int index) const noexcept_ndebug;
 
 public slots:
     /** @brief Add an new instance */

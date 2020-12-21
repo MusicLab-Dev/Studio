@@ -19,13 +19,13 @@ class DeviceModel : public QAbstractListModel
 
 public:
     /** @brief Roles of each instance */
-    enum class Roles {
+    enum class Roles : int {
         Name = Qt::UserRole + 1,
         IsInput
     };
 
     /** @brief Default constructor */
-    explicit DevideModel(QObject *parent = nullptr) noexcept;
+    explicit DeviceModel(QObject *parent = nullptr) noexcept;
 
     /** @brief Destruct the instance */
     ~DeviceModel(void) noexcept = default;
