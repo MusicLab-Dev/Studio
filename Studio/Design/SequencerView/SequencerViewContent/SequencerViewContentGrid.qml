@@ -42,6 +42,17 @@ Rectangle {
         contentHeight: totalGridHeight
 
         Repeater {
+            model: 12
+
+            delegate: Rectangle {
+                height: totalGridHeight
+                width: 2
+                color: "black"
+                x: index * 200 + (keyWidth + 200)
+            }
+        }
+
+        Repeater {
             model: grid.keys
 
             delegate: Item {
@@ -51,6 +62,7 @@ Rectangle {
                 readonly property bool isInMiddleOfHashKeys: middleHashKeysStates[keyIndex]
                 readonly property bool isUpHashKey: upHashKeyStates[keyIndex]
                 readonly property bool isDownHashKey: downHashKeyStates[keyIndex]
+                readonly property color keyColor: isHashKey ? "#7B7B7B" : "#E7E7E7"
 
                 width: grid.width
                 height: grid.rowHeight
@@ -63,9 +75,19 @@ Rectangle {
                     z: 1
                     width: isHashKey ? grid.keyWidth * 0.75 : grid.keyWidth
                     height: grid.rowHeight * (isHashKey ? 1 : isInMiddleOfHashKeys ? 2 : 1.5)
-                    color: isHashKey ? "#7B7B7B" : "#E7E7E7"
+                    color: keyColor
                     border.color: isHashKey ? color : "#7B7B7B"
                     border.width: 1
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onPressed: {
+                            key.color = Qt.darker(key.color, 1.2)
+                        }
+                        onReleased: {
+                            key.color = keyColor
+                        }
+                    }
 
                     Text {
                         anchors.verticalCenter: isInMiddleOfHashKeys ? parent.verticalCenter : isDownHashKey ? parent.TopRight : parent.verticalCenter

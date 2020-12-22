@@ -20,16 +20,28 @@ Rectangle {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.width
             z: 1
+
+            MouseArea {
+                height: parent.height
+                width: parent.width
+                onPositionChanged: {
+                    timelineBar.x = mouseX - (timelineBar.width / 2)
+                }
+                onPressed: {
+                    timelineBar.x = mouseX - (timelineBar.width / 2)
+                }
+            }
         }
 
         SequencerViewContentGrid {
-            Layout.preferredHeight: parent.height * 0.98
+            Layout.preferredHeight: parent.height * 0.96
             Layout.preferredWidth: parent.width
             headerFactor: headerFactor
         }
     }
 
     SequencerViewContentTimelineBar {
+        id: timelineBar
         x: parent.width * headerFactor + 200
         width: 25
         height: parent.height

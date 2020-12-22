@@ -14,6 +14,7 @@ RowLayout {
     }
     
     Rectangle {
+        id: timeline
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width
         color: "#C4C4C4"
@@ -23,8 +24,15 @@ RowLayout {
 
             Rectangle {
                 x: index * 200
+                height: timeline.height * 0.25
+                width: 2
+                color: "black"
+                anchors.bottom: timeline.bottom
+
                 Text {
                     text: index
+                    anchors.bottom: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
         }
