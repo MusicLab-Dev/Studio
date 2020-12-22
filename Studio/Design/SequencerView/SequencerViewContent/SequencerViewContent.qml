@@ -22,7 +22,7 @@ Rectangle {
             z: 1
         }
 
-        SequencerViewContentGrill {
+        SequencerViewContentGrid {
             Layout.preferredHeight: parent.height * 0.98
             Layout.preferredWidth: parent.width
             headerFactor: headerFactor

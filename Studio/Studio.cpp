@@ -11,6 +11,7 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Main);
     Q_INIT_RESOURCE(Default);
     Q_INIT_RESOURCE(ModulesView);
+    Q_INIT_RESOURCE(SequencerView);
 }
 
 void Studio::DestroyResources(void)
@@ -19,6 +20,7 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Main);
     Q_CLEANUP_RESOURCE(Default);
     Q_CLEANUP_RESOURCE(ModulesView);
+    Q_CLEANUP_RESOURCE(SequencerView);
 }
 
 static int DefaultArgc = 1;
