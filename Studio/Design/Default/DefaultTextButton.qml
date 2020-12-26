@@ -13,7 +13,7 @@ Button {
          opacity: control.pressed ? 1.0 : control.hovered ? 0.51 : control.enabled ? 0.71 : 0.44
          elide: Text.ElideRight
          verticalAlignment: Qt.AlignVCenter
-         horizontalAlignment: Qt.AlignHCenter
+         horizontalAlignment: Qt.AlignLeft
      }
 
     background: Item {}

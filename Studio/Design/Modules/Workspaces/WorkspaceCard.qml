@@ -72,6 +72,7 @@ Rectangle {
         width: parent.width
         anchors.top: cardHeader.bottom
         anchors.topMargin: workspaceCard.spacing
+        bottomPadding: parent.height * 0.05
         realPath: workspaceCard.realPath
     }
 }

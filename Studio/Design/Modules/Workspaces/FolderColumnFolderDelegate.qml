@@ -23,11 +23,13 @@ Item {
 
         DefaultFoldButton {
             id: foldButton
-            width: 20
-            height: 20
+            width: parent.height / 1.5
+            height: width
+            y: parent.height / 2 - height / 2
         }
 
         DefaultTextButton {
+            width: foldButton.x + foldButton.width > workspaceForeground.width - foldButton.x ? workspaceForeground.width - foldButton.x * 0.6 : parent.width * 0.6
             text: fileName
             height: parent.height
 

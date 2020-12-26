@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 Text {
     id: workspaceBackgroundTitle
-    text: workspaceForeground.actualPath
+    text: qsTr("Librairie")
     color: "lightgrey"
     font.pointSize: 34
 }
