@@ -15,7 +15,7 @@ Row {
     }
 
     DefaultTextButton {
-        width: image.x + image.width > workspaceForeground.width - image.x ? workspaceForeground.width - image.x * 0.6 : parent.width * 0.6
+        width: parent.width - image.width - parent.spacing
         text: fileName
         height: parent.height
     }

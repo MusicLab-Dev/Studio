@@ -18,8 +18,6 @@ Rectangle {
         }
 
         delegate: WorkspacesSquareComponent {
-            id: aaaa
-
             Image {
                 id: image
                 anchors.fill: parent
