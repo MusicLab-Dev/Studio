@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
+        <file>Assets/Checked.png</file>
+        <file>Assets/FoldButton.png</file>
+        <file>Assets/MenuButton.png</file>
+        <file>Assets/SettingsCategoryButton.png</file>
         <file>Fonts/Bungee-Regular.ttf</file>
     </qresource>
 </RCC>
