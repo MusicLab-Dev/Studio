@@ -1,8 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.15
-import "../Common"
 
 Rectangle {
+
     width: parent.width
     height: parent.width
     color: "#001E36"
@@ -14,17 +14,29 @@ Rectangle {
         Item {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.width * 0.333
+        }
 
-            ModSelector {
-                itemsPath: [
-                    "qrc:/Assets/EditMod.png",
-                    "qrc:/Assets/VelocityMod.png",
-                    "qrc:/Assets/TunningMod.png",
-                    "qrc:/Assets/AfterTouchMod.png",
-                ]
-                width: parent.width / 2
-                height: parent.height / 2
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.333
+
+            ColumnLayout {
                 anchors.centerIn: parent
+
+                Item {
+                    Layout.preferredHeight: parent.height * 0.5
+                    Layout.preferredWidth: parent.width
+
+                    Text {
+                        anchors.centerIn: parent
+                        color: "white"
+                        text: "Playlist"
+                    }
+                }
+                Text {
+                    color: "white"
+                    text: "Bring musical sequences together"
+                }
             }
         }
 
@@ -35,21 +47,8 @@ Rectangle {
             Text {
                 color: "white"
                 anchors.centerIn: parent
-                text: "play/pause/stop"
-            }
-
-        }
-
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
-
-            Text {
-                color: "white"
-                anchors.centerIn: parent
-                text: "Tempo selector"
+                text: "Arrow previous/next"
             }
         }
     }
 }
-

@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
+import "../../Default/"
 
 Rectangle {
     readonly property var keyNames: [
@@ -34,12 +35,19 @@ Rectangle {
 
     id: grid
     color: "#4A8693"
+
+    Rectangle {
+        width: 20
+        height: grid.height
+        color: "#001E36"
+    }
     
     ScrollView {
         anchors.fill: parent
         clip: true
         ScrollBar.vertical.policy: ScrollBar.AlwaysOn
         contentHeight: totalGridHeight
+
 
         Repeater {
             model: 12
@@ -71,9 +79,10 @@ Rectangle {
 
                 Rectangle {
                     id: key
+                    x: 20
                     y: isUpHashKey ? -grid.rowHeight / 2 : 0
                     z: 1
-                    width: isHashKey ? grid.keyWidth * 0.75 : grid.keyWidth
+                    width: (isHashKey ? grid.keyWidth * 0.75 : grid.keyWidth) - 20
                     height: grid.rowHeight * (isHashKey ? 1 : isInMiddleOfHashKeys ? 2 : 1.5)
                     color: keyColor
                     border.color: isHashKey ? color : "#7B7B7B"

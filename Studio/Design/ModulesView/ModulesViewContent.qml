@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 Item {
     property alias modules: modules
     property int componentSelected: 0
-
     id: grid
 
     Repeater {
@@ -19,9 +18,8 @@ Item {
                 height: parent.height * 0.05
                 width: parent.width * 0.05
                 x: index * parent.width * 0.05
-                border.width: 1
+                color: componentSelected === index ? "#001E36" : "#E7E7E7"
                 border.color: "black"
-                color: componentSelected === index ? "white" : "grey"
 
                 MouseArea {
                     anchors.fill: parent
@@ -33,6 +31,7 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     text: index
+                    color: componentSelected === index ? "white" : "black"
                 }
             }
 

@@ -5,5 +5,12 @@
         <file>Assets/MenuButton.png</file>
         <file>Assets/SettingsCategoryButton.png</file>
         <file>Fonts/Bungee-Regular.ttf</file>
+        <file>Assets/CutMod.png</file>
+        <file>Assets/NormalMod.png</file>
+        <file>Assets/SelectorMod.png</file>
+        <file>Assets/AfterTouchMod.png</file>
+        <file>Assets/EditMod.png</file>
+        <file>Assets/TunningMod.png</file>
+        <file>Assets/VelocityMod.png</file>
     </qresource>
 </RCC>

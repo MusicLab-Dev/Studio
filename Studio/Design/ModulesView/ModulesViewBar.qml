@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
 Rectangle {
-    property int id: 1
+    property bool tmp: true
 
     width: parent.width
     height: parent.width
@@ -20,8 +20,9 @@ Rectangle {
                 anchors.fill: parent
 
                 onReleased: {
-                    modulesViewContent.modules.append({path: "qrc:/SequencerView/SequencerView.qml", moduleZ: modulesViewContent.modules.count})
+                    modulesViewContent.modules.append({path: tmp ? "qrc:/SequencerView/SequencerView.qml" : "qrc:/PlaylistView/PlaylistView.qml", moduleZ: modulesViewContent.modules.count})
                     modulesViewContent.componentSelected = modulesViewContent.modules.count - 1
+                    tmp = !tmp
                 }
 
                 Rectangle {

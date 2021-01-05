@@ -1,8 +1,10 @@
 <RCC>
-    <qresource prefix="/Common/">
+    <qresource prefix="/Common">
         <file>AddPluginButton.qml</file>
         <file>AddPreviewButton.qml</file>
         <file>DefaultCheckBox.qml</file>
         <file>SettingsCategoryButton.qml</file>
+        <file>ModSelector.qml</file>
+        <file>TimelineCursor.qml</file>
     </qresource>
 </RCC>

@@ -15,7 +15,7 @@ Rectangle {
         height: parent.height
         spacing: 0
 
-        SequencerViewContentTimeline {
+        PlaylistViewContentTimeline {
             id: timeline
             headerFactor: headerFactor
             Layout.preferredHeight: parent.height
@@ -34,7 +34,7 @@ Rectangle {
             }
         }
 
-        SequencerViewContentGrid {
+        PlaylistViewContentGrid {
             Layout.preferredHeight: parent.height * 0.96
             Layout.preferredWidth: parent.width
             headerFactor: headerFactor

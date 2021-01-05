@@ -16,6 +16,7 @@ qt_add_resources(QtResources
     ${StudioDir}/Design/ModulesView/ModulesView.qrc
     ${StudioDir}/Design/SequencerView/SequencerView.qrc
     ${StudioDir}/Design/Common/Common.qrc
+    ${StudioDir}/Design/PlaylistView/PlaylistView.qrc
 )
 
 set(StudioSources

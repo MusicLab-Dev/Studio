@@ -1,5 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.15
+import "../Default/"
+import "../Common/"
 
 Rectangle {
 
@@ -13,23 +15,43 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.20
+            Layout.preferredWidth: parent.width * 0.333
 
-            Text {
-                color: "white"
-                anchors.centerIn: parent
-                text: "Sequence selector"
-            }
-        }
+            RowLayout {
+                anchors.fill: parent
+                spacing: 0
 
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.10
+                Item {
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: parent.width * 0.5
 
-            Text {
-                color: "white"
-                anchors.centerIn: parent
-                text: "Toolbox"
+                    DefaultComboBox {
+                        width: parent.width / 2
+                        height: parent.height / 2
+                        anchors.centerIn: parent
+                        model: [
+                            "Sequence1",
+                            "Sequence2",
+                            "Sequence3"
+                        ]
+                    }
+                }
+
+                Item {
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: parent.width * 0.5
+
+                    ModSelector {
+                        itemsPath: [
+                            "qrc:/Assets/NormalMod.png",
+                            "qrc:/Assets/SelectorMod.png",
+                            "qrc:/Assets/CutMod.png",
+                        ]
+                        width: parent.width / 2
+                        height: parent.height / 2
+                        anchors.centerIn: parent
+                    }
+                }
             }
         }
 
@@ -38,12 +60,18 @@ Rectangle {
             Layout.preferredWidth: parent.width * 0.333
 
 
-            Column {
+            ColumnLayout {
                 anchors.centerIn: parent
 
-                Text {
-                    color: "white"
-                    text: "Sequencer"
+                Item {
+                    Layout.preferredHeight: parent.height * 0.5
+                    Layout.preferredWidth: parent.width
+
+                    Text {
+                        anchors.centerIn: parent
+                        color: "white"
+                        text: "Sequencer"
+                    }
                 }
 
                 Text {
