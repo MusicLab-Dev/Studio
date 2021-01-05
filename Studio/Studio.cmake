@@ -22,6 +22,8 @@ qt_add_resources(QtResources
 set(StudioSources
     ${StudioDir}/Studio.hpp
     ${StudioDir}/Studio.cpp
+    ${StudioDir}/ThemeManager.hpp
+    ${StudioDir}/ThemeManager.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

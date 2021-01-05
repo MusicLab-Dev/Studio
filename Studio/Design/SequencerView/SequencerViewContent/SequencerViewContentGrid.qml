@@ -31,7 +31,7 @@ Rectangle {
     property real headerFactor: 0.1
     property real rowHeight: 50
     property real keyWidth: width * headerFactor
-    readonly property real totalGridHeight: grid.keys * rowHeight 
+    readonly property real totalGridHeight: grid.keys * rowHeight
 
     id: grid
     color: "#4A8693"
@@ -41,13 +41,16 @@ Rectangle {
         height: grid.height
         color: "#001E36"
     }
-    
+
     ScrollView {
+        id: scroll
         anchors.fill: parent
         clip: true
-        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
         contentHeight: totalGridHeight
 
+        // ScrollBar.vertical: DefaultScrollBar {
+        //     policy: ScrollBar.AlwaysOn
+        // }
 
         Repeater {
             model: 12
