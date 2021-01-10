@@ -26,7 +26,7 @@ Column {
         delegate: Loader {
             x: indentationSize
             source: "qrc:/Modules/Workspaces/" + (fileIsDir ? "FolderColumnFolderDelegate.qml" : "FolderColumnFileDelegate.qml")
-            width: folderColumnView.width
+            width: folderColumnView.width - x
         }
     }
 }
