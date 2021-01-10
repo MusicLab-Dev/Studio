@@ -13,11 +13,8 @@ Row {
         color: "#295F8B"
     }
 
-    DefaultComboBox {
+    DefaultCheckBox {
         width: Math.max(parent.width * 0.15, 150)
         height: parent.height / 1.5
-        model: range
-        currentIndex: indexOfValue(value)
     }
 }
-

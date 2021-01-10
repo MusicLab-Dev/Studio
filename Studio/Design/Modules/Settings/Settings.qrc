@@ -7,5 +7,6 @@
         <file>SettingsView.qml</file>
         <file>SettingsViewTitle.qml</file>
         <file>SettingsDelegates/ComboBoxDelegate.qml</file>
+        <file>SettingsDelegates/CheckBoxDelegate.qml</file>
     </qresource>
 </RCC>
