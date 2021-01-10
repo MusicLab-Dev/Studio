@@ -3,7 +3,13 @@
  * @ Description: Studio class
  */
 
+#include <QFont>
+#include <QFile>
+#include <QFontDatabase>
+
 #include "Studio.hpp"
+#include "SettingsListModel.hpp"
+#include "SettingsListModelProxy.hpp"
 
 void Studio::InitResources(void)
 {
@@ -15,6 +21,7 @@ void Studio::InitResources(void)
     /** Modules **/
     Q_INIT_RESOURCE(Plugins);
     Q_INIT_RESOURCE(Workspaces);
+    Q_INIT_RESOURCE(Settings);
 }
 
 void Studio::DestroyResources(void)
@@ -27,6 +34,7 @@ void Studio::DestroyResources(void)
     /** Modules **/
     Q_CLEANUP_RESOURCE(Plugins);
     Q_CLEANUP_RESOURCE(Workspaces);
+    Q_CLEANUP_RESOURCE(Settings);
 }
 
 static int DefaultArgc = 1;
@@ -39,6 +47,9 @@ Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
 
 Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
 {
+    qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "SettingsListModel");
+    qmlRegisterType<SettingsListModelProxy>("SettingsListModel", 1, 0, "SettingsListModelProxy");
+
     const QUrl url(QStringLiteral("qrc:/Main/Main.qml"));
 
     QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this,

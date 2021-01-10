@@ -1,8 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import "../Default"
+
 Button {
     property bool activated: false
+    property string iconSource: "qrc:/Assets/Settings/SettingsCategoryButton.png"
 
     id: control
     hoverEnabled: true
@@ -11,7 +14,7 @@ Button {
     background: Rectangle {
         width: control.width
         height: control.height
-        border.width: control.pressed ? (height / 10) : control.hovered ? (height / 12) : 0
+        border.width: control.pressed ? (height / 20) : control.hovered ? (height / 24) : 0
         border.color: control.pressed ? "#31A8FF" : control.hovered ? "#0D86CB" : ""
         color: control.activated ? "#31A8FF" : "#001E36"
         radius: width / 17
@@ -28,13 +31,12 @@ Button {
         elide: Text.ElideRight
     }
 
-
     indicator: DefaultColoredImage {
         width: control.width / 7
         height: control.height / 2
         x: control.width / 12
         y: (control.height - height) / 2
-        source: "qrc:/Assets/SettingCategoryButton.png"
+        source: iconSource
         color: control.activated ? "#001E36" : control.pressed || control.hovered ? "#0D86CB" : "#295F8B"
     }
 }

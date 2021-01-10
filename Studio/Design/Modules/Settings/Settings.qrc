@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/Modules/Settings">
+        <file>SettingsBackground.qml</file>
+        <file>SettingsForeground.qml</file>
+        <file>SettingsForegroundCard.qml</file>
+        <file>SettingsContentArea.qml</file>
+        <file>SettingsView.qml</file>
+        <file>SettingsViewTitle.qml</file>
+        <file>SettingsDelegates/ComboBoxDelegate.qml</file>
+    </qresource>
+</RCC>

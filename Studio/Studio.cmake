@@ -18,11 +18,15 @@ qt_add_resources(QtResources
     # Modules
     ${StudioDir}/Design/Modules/Plugins/Plugins.qrc
     ${StudioDir}/Design/Modules/Workspaces/Workspaces.qrc
+    ${StudioDir}/Design/Modules/Settings/Settings.qrc
 )
 
 set(StudioSources
     ${StudioDir}/Studio.hpp
     ${StudioDir}/Studio.cpp
+    ${StudioDir}/SettingsListModel.hpp
+    ${StudioDir}/SettingsListModel.cpp
+    ${StudioDir}/SettingsListModelProxy.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

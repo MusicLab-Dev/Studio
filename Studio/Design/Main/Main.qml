@@ -3,6 +3,7 @@ import QtQuick.Window 2.15
 
 import "../Modules/Plugins"
 import "../Modules/Workspaces"
+import "../Modules/Settings"
 
 Window {
     visible: true
@@ -10,11 +11,15 @@ Window {
     height: 1080
     title: qsTr("MusicLab")
 
-    // PluginsView {
-    //     anchors.fill: parent
-    // }
+    //PluginsView {
+    //    anchors.fill: parent
+    //}
 
-    WorkspacesView {
+//WorkspacesView {
+//    anchors.fill: parent
+//}
+
+    SettingsView {
         anchors.fill: parent
     }
 }
