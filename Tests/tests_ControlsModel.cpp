@@ -30,6 +30,7 @@ TEST(ControlsModel, AddControlCount)
 
 }
 
+/*
 TEST(ControlsModel, RemoveControl)
 {
     Audio::Controls controls {};
@@ -55,4 +56,4 @@ TEST(ControlsModel, MoveControl)
     ASSERT_EXIT(model.move(0, 1),::testing::KilledBySignal(SIGSEGV),".*");
     ASSERT_EQ(model.get(0)->paramID(), 12);
     ASSERT_EQ(model.get(1)->paramID(), 10);
-}
+}*/

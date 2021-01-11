@@ -56,7 +56,6 @@ public /* slots */:
     /** @brief Add a children to the list */
     Q_INVOKABLE void add(const Audio::BeatRange &range) noexcept_ndebug;
 
-
 private:
     Audio::Partitions *_data { nullptr };
     Core::Vector<Core::UniqueAlloc<PartitionModel>> _partitions;

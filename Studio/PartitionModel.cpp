@@ -71,8 +71,8 @@ void PartitionModel::addNote(const Audio::Note &note) noexcept
 
 void PartitionModel::removeNote(const int index) noexcept
 {
-    auto it = _data->notes().at(index);
-    _data->notes().erase(&it, 1);
+    auto it = _data->notes().begin() + index;
+    _data->notes().erase(it);
 }
 
 void PartitionModel::updateInternal(Audio::Partition *data)

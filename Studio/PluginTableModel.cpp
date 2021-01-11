@@ -52,6 +52,7 @@ Audio::IPluginFactory *PluginTableModel::get(const int index) const noexcept_nde
 int PluginTableModel::add(const QString &path)
 {
     /** TODO */
+    _data.factories().push()
     return 0;
 }
 

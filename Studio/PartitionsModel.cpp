@@ -45,14 +45,17 @@ const PartitionModel *PartitionsModel::get(const int index) const
 void PartitionsModel::add(const Audio::BeatRange &range) noexcept_ndebug
 {
     beginInsertRows(QModelIndex(), count(), count());
-    //_data->push();
+    _data->push();
     refreshControls();
     endInsertRows();
 }
 
 void PartitionsModel::remove(const int index)
 {
-    /** TODO */
+    beginResetModel();
+    _data->erase(_data->begin() + index);
+    refreshControls();
+    endInsertRows();
 }
 
 void PartitionsModel::move(const int from, const int to)

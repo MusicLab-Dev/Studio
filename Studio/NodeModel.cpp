@@ -49,7 +49,7 @@ bool NodeModel::setMuted(bool muted) noexcept
     if (_data->muted() == muted)
         return false;
     _data->setMuted(muted);
-    //emit mutedChanged();
+    emit mutedChanged();
     return true;
 }
 
@@ -58,13 +58,13 @@ bool NodeModel::setName(const QString &name) noexcept
     if (_data->name() == name.toStdString())
         return false;
     _data->setName(Core::FlatString(name.toStdString()));
-    //emit nameChanged();
+    emit nameChanged();
     return true;
 }
 
 bool NodeModel::setColor(const QColor &color) noexcept
 {
-    //if (_color == color)
+    //if (_data->color() == color)
     //    return false;
     //_data->setColor(color);
     //emit colorChanged();

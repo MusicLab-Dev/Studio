@@ -81,7 +81,7 @@ public slots:
 public /* slots */:
 
     /** @brief Remove a children from the list */
-    Q_INVOKABLE void remove(const int index) noexcept_ndebug;
+    Q_INVOKABLE void remove(const int index);
 
     /** @brief Move Control from to */
     Q_INVOKABLE void move(const int from, const int to) noexcept_ndebug;

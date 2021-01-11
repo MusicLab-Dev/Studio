@@ -9,7 +9,9 @@
 
 TEST(NodeModel, InitDestroy)
 {
+    PluginTable::Init();
     Audio::Node node {};
 
-    //ASSERT_NO_THROW(NodeModel tmp(&node));
+    ASSERT_NO_THROW(NodeModel tmp(&node));
+    PluginTable::Destroy();
 }
