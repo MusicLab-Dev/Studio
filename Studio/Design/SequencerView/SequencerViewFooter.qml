@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.15
 import "../Common"
+import "../Default"
 
 Rectangle {
     width: parent.width
@@ -13,7 +14,7 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width * 0.4
 
             ModSelector {
                 itemsPath: [
@@ -30,19 +31,14 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width * 0.2
 
-            Text {
-                color: "white"
-                anchors.centerIn: parent
-                text: "play/pause/stop"
-            }
-
+            Player {}
         }
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width * 0.4
 
             Text {
                 color: "white"

@@ -1,5 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.15
+import "../Common"
+import "../Default"
 
 Rectangle {
 
@@ -14,6 +16,17 @@ Rectangle {
         Item {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.width * 0.333
+
+            ModSelector {
+                itemsPath: [
+                    "qrc:/Assets/NormalMod.png",
+                    "qrc:/Assets/SelectorMod.png",
+                    "qrc:/Assets/CutMod.png",
+                ]
+                width: parent.width / 4
+                height: parent.height / 2
+                anchors.centerIn: parent
+            }
         }
 
         Item {
@@ -42,13 +55,19 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width * 0.15
+        }
 
-            Text {
-                color: "white"
-                anchors.centerIn: parent
-                text: "Arrow previous/next"
-            }
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.15
+
+            ArrowNextPrev {}
+        }
+
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width
         }
     }
 }

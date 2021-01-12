@@ -1,10 +1,10 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.15
+import ThemeManager 1.0
 import "../Default/"
 import "../Common/"
 
 Rectangle {
-
     width: parent.width
     height: parent.width
     color: "#001E36"
@@ -83,13 +83,19 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width * 0.15
+        }
 
-            Text {
-                color: "white"
-                anchors.centerIn: parent
-                text: "Arrow previous/next"
-            }
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.15
+
+            ArrowNextPrev {}
+        }
+
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width
         }
     }
 }

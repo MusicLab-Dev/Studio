@@ -23,13 +23,25 @@ Rectangle {
             z: 1
 
             MouseArea {
-                height: parent.height
-                width: parent.width
-                onPositionChanged: {
-                    timelineBar.x = mouseX - (timelineBar.width / 2)
+                function manageTimelineCursorPos() {
+                    timelineBar.x = Math.min(
+                                Math.max(
+                                    parent.width * headerFactor - timelineBar.width / 2,
+                                    mouseX - (timelineBar.width / 2) + parent.width * headerFactor
+                                    ),
+                                parent.width - timelineBar.width / 2
+                                )
                 }
+
+                x: parent.width * headerFactor
+                height: parent.height
+                width: parent.width - parent.width * headerFactor
+                onPositionChanged: {
+                    manageTimelineCursorPos()
+                }
+
                 onPressed: {
-                    timelineBar.x = mouseX - (timelineBar.width / 2)
+                    manageTimelineCursorPos()
                 }
             }
         }

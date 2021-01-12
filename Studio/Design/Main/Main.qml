@@ -6,6 +6,8 @@ import ThemeManager 1.0
 import "../ModulesView"
 
 Window {
+    property alias themeManager: themeManager
+
     visible: true
     width: 1280
     height: 720

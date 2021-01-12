@@ -16,19 +16,19 @@ struct ThemePack
 
 
 static const ThemePack ClassicThemePack {
-    background: "#4A8693",
-    foreground: "#001E36",
-    content: "#FFFFFF",
-    disabled: "#C4C4C4",
-    accent: "#31A8FF"
+    .background = "#4A8693",
+    .foreground = "#001E36",
+    .content = "#FFFFFF",
+    .disabled = "#C4C4C4",
+    .accent = "#31A8FF"
 };
 
 static const ThemePack DarkThemePack {
-    background: "#4A8693",
-    foreground: "#001E36",
-    content: "#FFFFFF",
-    disabled: "#C4C4C4",
-    accent: "#31A8FF"
+    .background = "#4A8693",
+    .foreground = "#001E36",
+    .content = "#FFFFFF",
+    .disabled = "#C4C4C4",
+    .accent = "#31A8FF"
 };
 
 bool ThemeManager::setTheme(const Theme theme)

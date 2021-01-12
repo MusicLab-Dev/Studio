@@ -12,5 +12,11 @@
         <file>Assets/EditMod.png</file>
         <file>Assets/TunningMod.png</file>
         <file>Assets/VelocityMod.png</file>
+        <file>Assets/Play.png</file>
+        <file>Assets/Replay.png</file>
+        <file>Assets/Stop.png</file>
+        <file>Assets/Next.png</file>
+        <file>Assets/Previous.png</file>
+        <file>Assets/Close.png</file>
     </qresource>
 </RCC>

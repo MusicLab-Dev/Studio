@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import "../Default"
 
 Item {
     property alias modules: modules
@@ -32,6 +33,20 @@ Item {
                     anchors.centerIn: parent
                     text: index
                     color: componentSelected === index ? "white" : "black"
+                }
+
+                DefaultImageButton {
+                    imgPath: "qrc:/Assets/Close.png"
+                    height: parent.height / 2
+                    width: parent.height / 2
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    colorDefault: "red"
+                    showBorder: false
+
+                    onClicked: {
+
+                    }
                 }
             }
 

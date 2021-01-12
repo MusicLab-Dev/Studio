@@ -1,5 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.15
+import "../Default"
+import "../Common"
 
 Rectangle {
     width: parent.width
@@ -12,24 +14,20 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width * 0.4
+        }
+
+
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.2
+
+            Player {}
         }
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
-
-            Text {
-                color: "white"
-                anchors.centerIn: parent
-                text: "play/pause/stop"
-            }
-
-        }
-
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width * 0.4
         }
     }
 }

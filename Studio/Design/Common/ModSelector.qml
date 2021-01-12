@@ -6,14 +6,15 @@ import "../Default"
 Item {
     property var itemsPath: []
     property int itemSelected: 0
-    readonly property real itemWidth: width / itemsPath.length
+
+    property real itemWidth: container.width / itemsPath.length
 
     id: container
 
     Rectangle {
         id: rowContainer
-        anchors.verticalCenter: container.verticalCenter
-        height: parent.height * 0.9
+        anchors.centerIn: parent
+        height: parent.height
         width: parent.width
         color: "transparent"
         border.color: "white"
@@ -21,15 +22,12 @@ Item {
 
         Repeater {
             anchors.centerIn: parent
-            height: parent.height * 0.9
-            width: parent.width
             model: itemsPath
 
             delegate: Rectangle {
-                anchors.verticalCenter: rowContainer.verticalCenter
                 x: itemWidth * index
                 height: container.height
-                width: itemWidth
+                width: container.height
                 color: index == itemSelected ? "#001E36" : "transparent"
                 border.color: index == itemSelected ? "white" : "transparent"
                 radius: 10

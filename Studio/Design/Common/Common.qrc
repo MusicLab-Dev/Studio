@@ -6,5 +6,7 @@
         <file>SettingsCategoryButton.qml</file>
         <file>ModSelector.qml</file>
         <file>TimelineCursor.qml</file>
+        <file>ArrowNextPrev.qml</file>
+        <file>Player.qml</file>
     </qresource>
 </RCC>
