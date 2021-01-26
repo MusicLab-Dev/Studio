@@ -20,13 +20,12 @@ TEST(ControlsModel, AddControlCount)
 
     ControlsModel model(&controls);
 
-    const int nb = 10;
+    const int nb = 100;
     for (int i = 0; i < nb; i++) {
         ASSERT_NO_THROW(model.add(i));
         ASSERT_EQ(model.get(i)->paramID(), i);
         ASSERT_EQ(model.count(), i + 1);
     }
-
 }
 
 TEST(ControlsModel, RemoveControl)

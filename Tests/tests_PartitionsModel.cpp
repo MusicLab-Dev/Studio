@@ -24,7 +24,7 @@ TEST(PartitionsModel, Add)
 
 }
 
-/*
+
 TEST(PartitionsModel, Remove)
 {
     Audio::Partitions partitions {};
@@ -35,4 +35,4 @@ TEST(PartitionsModel, Remove)
     model.remove(0);
     ASSERT_EQ(model.count(), 0);
 
-}*/
+}
