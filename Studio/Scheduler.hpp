@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-#include <Audio/Scheduler.hpp>
+#include <Audio/AScheduler.hpp>
 
 /**
  * @brief Scheduler class
@@ -57,4 +57,4 @@ signals:
 
 private:
     Audio::Scheduler *_data { nullptr };
-}
+};

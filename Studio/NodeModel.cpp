@@ -62,6 +62,17 @@ bool NodeModel::setName(const QString &name) noexcept
     return true;
 }
 
+int x = 12321;
+
+|R|G|B|A|
+
+R: x & 0xFF;
+G: (x >> 8) & 0xFF;
+B: (x >> 16) & 0xFF;
+A: (x >> 24) & 0xFF;
+
+QColor().setRed(
+
 bool NodeModel::setColor(const QColor &color) noexcept
 {
     //if (_data->color() == color)

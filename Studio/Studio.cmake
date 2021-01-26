@@ -35,6 +35,8 @@ set(StudioSources
     ${StudioDir}/PartitionsModel.cpp
     ${StudioDir}/NodeModel.hpp
     ${StudioDir}/NodeModel.cpp
+#${StudioDir}/Application.hpp
+#${StudioDir}/Application.cpp
 #${StudioDir}/Project.hpp
 #${StudioDir}/Project.cpp
 #${StudioDir}/Scheduler.hpp

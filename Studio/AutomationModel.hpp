@@ -50,8 +50,8 @@ public:
     [[nodiscard]] const Audio::Automation *internal(void) const noexcept { return _data; }
 
     /** @brief Get the instances */
-    [[nodiscard]] Core::UniqueAlloc<InstancesModel> &instances(void) noexcept { return _instances; }
-    [[nodiscard]] const Core::UniqueAlloc<InstancesModel> &instances(void) const noexcept { return _instances; }
+    [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
+    [[nodiscard]] const InstancesModel &instances(void) const noexcept { return *_instances; }
 
     /** @brief Update the internal data */
     void updateInternal(Audio::Automation *data);

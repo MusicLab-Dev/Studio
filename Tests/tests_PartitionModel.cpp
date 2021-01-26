@@ -56,10 +56,10 @@ TEST(PartitionModel, UpdateInternal)
     partition2.instances().push<Audio::BeatRange>({3, 4});
 
     PartitionModel model(&partition1);
-    ASSERT_EQ(model.instances().get()->get(0).from, 1);
-    ASSERT_EQ(model.instances().get()->get(0).to, 2);
+    ASSERT_EQ(model.instances().get(0).from, 1);
+    ASSERT_EQ(model.instances().get(0).to, 2);
 
     model.updateInternal(&partition2);
-    ASSERT_EQ(model.instances().get()->get(0).from, 3);
-    ASSERT_EQ(model.instances().get()->get(0).to, 4);
+    ASSERT_EQ(model.instances().get(0).from, 3);
+    ASSERT_EQ(model.instances().get(0).to, 4);
 }

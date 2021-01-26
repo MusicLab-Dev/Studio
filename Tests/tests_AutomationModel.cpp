@@ -22,8 +22,8 @@ TEST(AutomationModel, InitWithValueDestroy)
 
     AutomationModel tmp(&automation);
 
-    ASSERT_EQ(tmp.instances().get()->get(0).from, 1);
-    ASSERT_EQ(tmp.instances().get()->get(0).to, 2);
+    ASSERT_EQ(tmp.instances().get(0).from, 1);
+    ASSERT_EQ(tmp.instances().get(0).to, 2);
 }
 
 TEST(AutomationModel, UpdateInternal)
@@ -35,12 +35,12 @@ TEST(AutomationModel, UpdateInternal)
     automation2.instances().push<Audio::BeatRange>({3, 4});
 
     AutomationModel model(&automation1);
-    ASSERT_EQ(model.instances().get()->get(0).from, 1);
-    ASSERT_EQ(model.instances().get()->get(0).to, 2);
+    ASSERT_EQ(model.instances().get(0).from, 1);
+    ASSERT_EQ(model.instances().get(0).to, 2);
 
     model.updateInternal(&automation2);
-    ASSERT_EQ(model.instances().get()->get(0).from, 3);
-    ASSERT_EQ(model.instances().get()->get(0).to, 4);
+    ASSERT_EQ(model.instances().get(0).from, 3);
+    ASSERT_EQ(model.instances().get(0).to, 4);
 }
 
 TEST(AutomationModel, AddPoint)
@@ -89,6 +89,41 @@ TEST(AutomationModel, RemovePoint)
     model.remove(0);
 
     ASSERT_EQ(model.count(), 0);
+}
+
+TEST(AutomationModel, InstancesAddRemoveBasics)
+{
+    Audio::Automation automation {};
+
+    AutomationModel model(&automation);
+    auto &instances = model.instances();
+
+    instances.add(Audio::BeatRange { 1, 1 });
+    ASSERT_EQ(instances.get(0).from, 1); ASSERT_EQ(instances.get(0).to, 1);
+    ASSERT_EQ(instances.count(), 1);
+
+    instances.add(Audio::BeatRange { 2, 2 });
+    ASSERT_EQ(instances.get(0).from, 1); ASSERT_EQ(instances.get(0).to, 1);
+    ASSERT_EQ(instances.get(1).from, 2); ASSERT_EQ(instances.get(1).to, 2);
+    ASSERT_EQ(instances.count(), 2);
+
+    instances.add(Audio::BeatRange { 3, 3 });
+    ASSERT_EQ(instances.get(0).from, 1); ASSERT_EQ(instances.get(0).to, 1);
+    ASSERT_EQ(instances.get(1).from, 2); ASSERT_EQ(instances.get(1).to, 2);
+    ASSERT_EQ(instances.get(2).from, 3); ASSERT_EQ(instances.get(2).to, 3);
+    ASSERT_EQ(instances.count(), 3);
+
+    instances.remove(1);
+    ASSERT_EQ(instances.get(0).from, 1); ASSERT_EQ(instances.get(0).to, 1);
+    ASSERT_EQ(instances.get(1).from, 3); ASSERT_EQ(instances.get(1).to, 3);
+    ASSERT_EQ(instances.count(), 2);
+
+    instances.remove(1);
+    ASSERT_EQ(instances.get(0).from, 1); ASSERT_EQ(instances.get(0).to, 1);
+    ASSERT_EQ(instances.count(), 1);
+
+    instances.remove(0);
+    ASSERT_EQ(instances.count(), 0);
 }
 
 TEST(AutomationModel, SetPoint)

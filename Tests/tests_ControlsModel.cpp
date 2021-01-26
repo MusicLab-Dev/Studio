@@ -20,8 +20,7 @@ TEST(ControlsModel, AddControlCount)
 
     ControlsModel model(&controls);
 
-    const int nb = 5; /* > 5 ABORT */
-
+    const int nb = 10;
     for (int i = 0; i < nb; i++) {
         ASSERT_NO_THROW(model.add(i));
         ASSERT_EQ(model.get(i)->paramID(), i);
@@ -30,7 +29,6 @@ TEST(ControlsModel, AddControlCount)
 
 }
 
-/*
 TEST(ControlsModel, RemoveControl)
 {
     Audio::Controls controls {};
@@ -40,7 +38,7 @@ TEST(ControlsModel, RemoveControl)
     model.add(10);
 
     ASSERT_EQ(model.count(), 1);
-    ASSERT_EXIT(model.remove(0),::testing::KilledBySignal(SIGSEGV),".*");
+    model.remove(0);
     ASSERT_EQ(model.count(), 0);
 }
 
@@ -52,8 +50,8 @@ TEST(ControlsModel, MoveControl)
 
     model.add(10);
     model.add(12);
+    //model.move(0, 1);
 
-    ASSERT_EXIT(model.move(0, 1),::testing::KilledBySignal(SIGSEGV),".*");
     ASSERT_EQ(model.get(0)->paramID(), 12);
     ASSERT_EQ(model.get(1)->paramID(), 10);
-}*/
+}

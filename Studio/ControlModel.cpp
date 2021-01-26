@@ -81,6 +81,8 @@ void ControlModel::add(void)
 
 void ControlModel::remove(const int index)
 {
+    if (index >= count())
+        return;
     beginResetModel();
     auto it = _data->automations().begin() + index;
     if (it != _data->automations().end() && it != nullptr)

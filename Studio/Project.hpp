@@ -24,10 +24,9 @@ class Project : public QObject
 
 public:
     /** @brief The different types of playback mode */
-    enum class PlaybackMode : int
-    {
-        Production = Audio::Project::PlaybackMode::Production,
-        Live = Audio::Project::PlaybackMode::Live
+    enum class PlaybackMode {
+        Production = static_cast<int>(Audio::Project::PlaybackMode::Production),
+        Live = static_cast<int>(Audio::Project::PlaybackMode::Live)
     };
     Q_ENUM(PlaybackMode)
 
