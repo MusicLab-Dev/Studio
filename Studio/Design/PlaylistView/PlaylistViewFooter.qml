@@ -21,8 +21,6 @@ Rectangle {
         Item {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.width * 0.2
-
-            Player {}
         }
 
         Item {

@@ -8,5 +8,6 @@
         <file>TimelineCursor.qml</file>
         <file>ArrowNextPrev.qml</file>
         <file>Player.qml</file>
+        <file>Bpm.qml</file>
     </qresource>
 </RCC>

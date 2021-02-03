@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import "../Common"
 
 Rectangle {
     property bool tmp: true
@@ -14,32 +15,29 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.05
-
-            MouseArea {
-                anchors.fill: parent
-
-                onReleased: {
-                    modulesViewContent.modules.append({path: tmp ? "qrc:/SequencerView/SequencerView.qml" : "qrc:/PlaylistView/PlaylistView.qml", moduleZ: modulesViewContent.modules.count})
-                    modulesViewContent.componentSelected = modulesViewContent.modules.count - 1
-                    tmp = !tmp
-                }
-
-                Rectangle {
-                    anchors.fill: parent
-                    color: "green"
-                }
-            }
-        }
-
-        Item {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            Layout.preferredWidth: parent.width * 0.333
         }
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.05
+            Layout.preferredWidth: parent.width * 0.333
+
+            Player {
+                anchors.centerIn: parent
+                height: parent.height
+                width: 200
+            }
+        }
+
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.333
+
+            Bpm {
+                anchors.centerIn: parent
+                height: parent.height * 0.8
+                width: 200
+            }
         }
     }
 }

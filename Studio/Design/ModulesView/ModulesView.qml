@@ -12,14 +12,14 @@ Rectangle {
         spacing: 0
 
         ModulesViewBar {
-            Layout.preferredHeight: parent.height * 0.05
+            Layout.preferredHeight: parent.height * 0.075
             Layout.preferredWidth: parent.width
             // add min / max values
         }
 
         ModulesViewContent {
             id: modulesViewContent
-            Layout.preferredHeight: parent.height * 0.95
+            Layout.preferredHeight: parent.height * 0.925
             Layout.preferredWidth: parent.width
             // add min / max values
         }

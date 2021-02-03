@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/EmptyView">
+        <file>EmptyView.qml</file>
+    </qresource>
+</RCC>

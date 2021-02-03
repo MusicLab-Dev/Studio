@@ -4,7 +4,6 @@ import "../Common"
 import "../Default"
 
 RowLayout {
-    anchors.fill: parent
     spacing: 0
     
     Item {
