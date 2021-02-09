@@ -37,8 +37,8 @@ set(StudioSources
     ${StudioDir}/NodeModel.cpp
 #${StudioDir}/Application.hpp
 #${StudioDir}/Application.cpp
-#${StudioDir}/Project.hpp
-#${StudioDir}/Project.cpp
+${StudioDir}/Project.hpp
+${StudioDir}/Project.cpp
 #${StudioDir}/Scheduler.hpp
 #${StudioDir}/Scheduler.cpp
 #${StudioDir}/PluginTableModel.hpp

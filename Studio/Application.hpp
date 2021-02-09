@@ -31,10 +31,10 @@ public:
 
 
     /** @brief Get the project */
-    [[nodiscard]] ProjectModel *project(void) noexcept { return _project; }
+    [[nodiscard]] Project *project(void) noexcept { return _project; }
 
     /** @brief Get the audio device */
-    [[nodiscard]] DeviceModel *device(void) noexcept { return _device; }
+    [[nodiscard]] DeviceModel *devices(void) noexcept { return _devices; }
 
     /** @brief Get the list of plugins */
     [[nodiscard]] PluginTableModel *plugins(void) noexcept { return _plugins; }
@@ -68,8 +68,7 @@ private:
 
 private:
     std::unique_ptr<Project> _project { nullptr };
-    std::unique_ptr<DeviceModel> _device { nullptr };
+    std::unique_ptr<DeviceModel> _devices { nullptr };
     std::unique_ptr<PluginTableModel> _plugins { nullptr };
     std::unique_ptr<Scheduler> _scheduler { nullptr };
-    std::unique_ptr<Device> _outputDevice { nullptr };
 };

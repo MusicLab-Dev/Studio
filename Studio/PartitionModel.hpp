@@ -21,7 +21,7 @@ class PartitionModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
-    Q_PROPERTY(Channel channel READ channel WRITE setChannel NOTIFY channelChanged)
+    Q_PROPERTY(MidiChannels midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
 
 public:
     /** @brief Roles of each partition */
@@ -33,6 +33,10 @@ public:
         EventType,
         Key
     };
+
+    /** @brief Midi channels bitset */
+    using MidiChannels = Audio::MidiChannels;
+
 
     /** @brief Default constructor */
     explicit PartitionModel(Audio::Partition *partition, QObject *parent = nullptr) noexcept;
@@ -57,10 +61,10 @@ public:
     bool setMuted(bool muted) noexcept;
 
     /** @brief Return the channel of the partition */
-    [[nodiscard]] Audio::Channel channel(void) const noexcept { return _channel; }
+    [[nodiscard]] MidiChannels midiChannels(void) const noexcept { return static_cast<MidiChannels>(_data->midiChannels()); }
 
     /** @brief Set the channel of the partition */
-    bool setChannel(const Audio::Channel channel) noexcept;
+    bool setMidiChannels(const MidiChannels channel) noexcept;
 
     /** @brief Get the instances */
     [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
@@ -82,11 +86,9 @@ signals:
     void mutedChanged(void);
 
     /** @brief Notify that the channel has changed */
-    void channelChanged(void);
+    void midiChannelsChanged(void);
 
 private:
     Audio::Partition *_data { nullptr };
     Core::UniqueAlloc<InstancesModel> _instances {};
-
-    Audio::Channel _channel {} ;
 };

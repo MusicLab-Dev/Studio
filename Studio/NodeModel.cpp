@@ -8,6 +8,7 @@
 #include <QHash>
 #include <QQmlEngine>
 #include <QAbstractListModel>
+#include <QColor>
 
 #include "NodeModel.hpp"
 
@@ -75,9 +76,8 @@ QColor(R, G, B, A)
 
 bool NodeModel::setColor(const QColor &color) noexcept
 {
-    //if (_data->color() == color)
-    //    return false;
-    //_data->setColor(color);
-    //emit colorChanged();
+    if (!_data->setColor(static_cast<int>(color.rgba())))
+        return false;
+    emit colorChanged();
     return true;
 }

@@ -6,6 +6,7 @@
 #pragma once
 
 #include <QObject>
+#include <QColor>
 #include <QAbstractListModel>
 
 #include <Core/FlatVector.hpp>
@@ -24,7 +25,7 @@ class alignas(64) NodeModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
-    //Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(PartitionsModel *partitions READ partitions NOTIFY partitionsChanged)
     Q_PROPERTY(ControlsModel *controls READ controls NOTIFY controlsChanged)
@@ -76,7 +77,7 @@ public:
 
 
     /** @brief Get the node's color */
-    //[[nodiscard]] QColor color(void) const noexcept { return /*_data->color()*/QColor(Qt::GlobalColor::black); }
+    [[nodiscard]] QColor color(void) noexcept { return QColor(static_cast<QRgb>(_data->color())); }
 
     /** @brief Set the node's color */
     bool setColor(const QColor &color) noexcept;

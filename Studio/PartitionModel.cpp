@@ -48,19 +48,17 @@ QVariant PartitionModel::data(const QModelIndex &index, int role) const
 
 bool PartitionModel::setMuted(const bool muted) noexcept
 {
-    if (this->muted() == muted)
+    if (!_data->setMuted(muted))
         return false;
-    _data->setMuted(muted);
     emit mutedChanged();
     return true;
 }
 
-bool PartitionModel::setChannel(const Channel channel) noexcept
+bool PartitionModel::setMidiChannels(const MidiChannels channel) noexcept
 {
-    if (_channel == channel)
+    if (!_data->setMidiChannels(channel))
         return false;
-    _channel = channel;
-    emit channelChanged();
+    emit midiChannelsChanged();
     return true;
 }
 

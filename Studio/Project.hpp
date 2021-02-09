@@ -18,13 +18,13 @@ class Project : public QObject
     Q_OBJECT
 
     Q_PROPERTY(NodeModel *master READ master NOTIFY masterChanged)
-    Q_PROPERTY(Audio::Project::PlaybackMode playbackMode READ playbackMode WRITE setPlaybackMode NOTIFY playbackModeChanged)
+    Q_PROPERTY(PlaybackMode playbackMode READ playbackMode WRITE setPlaybackMode NOTIFY playbackModeChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 
 public:
     /** @brief The different types of playback mode */
-    enum class PlaybackMode {
+    enum class PlaybackMode : int {
         Production = static_cast<int>(Audio::Project::PlaybackMode::Production),
         Live = static_cast<int>(Audio::Project::PlaybackMode::Live)
     };
@@ -37,25 +37,28 @@ public:
 
     /** @brief Get the master node */
     [[nodiscard]] NodeModel *master(void) noexcept { return _master.get(); }
-    [[nodiscard]] NodeModel *master(void) const noexcept { return _master.get(); }
+    //[[nodiscard]] NodeModel *master(void) const noexcept { return _master.get(); }
 
 
     /** @brief Get the playback mode */
-    [[nodiscard]] Project::PlaybackMode playbackMode(void) const noexcept { return static_cast<Project::PlaybackMode>(_data->playbackMode()); };
+    [[nodiscard]] PlaybackMode playbackMode(void) const noexcept { return static_cast<Project::PlaybackMode>(_data->playbackMode()); }
 
     /** @brief Set the playback mode, return true and emit playbackModeChanged on change */
     bool setPlaybackMode(const PlaybackMode mode) noexcept;
 
 
     /** @brief Get the project name */
-    QString name(void) const noexcept { return _data->name().data(); }
+    [[nodiscard]] QString name(void) const noexcept { return _data->name().data(); }
 
     /** @brief Set the project name, return true and emit nameChanged on change */
     bool setName(const QString &name) noexcept;
 
 
     /** @brief Get the project path */
-    const QString &path(void) const noexcept { return _data->path(); }
+    [[nodiscard]] const QString &path(void) const noexcept { return _path; }
+
+    /** @brief Set the project path, return true and emit pathChanged on change */
+    bool setPath(const QString &path) noexcept;
 
 
     /** @brief Load a project file */
@@ -84,4 +87,5 @@ signals:
 private:
     Audio::Project *_data { nullptr };
     Core::UniqueAlloc<NodeModel> _master { nullptr };
+    QString _path {};
 };

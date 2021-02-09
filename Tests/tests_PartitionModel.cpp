@@ -26,6 +26,13 @@ TEST(PartitionModel, AddNote)
             1,
             10)
     );
+    model.addNote(
+        Audio::Note(
+            Audio::BeatRange {4, 6},
+            3,
+            20)
+    );
+    ASSERT_EQ(model.count(), 2);
 
 }
 
@@ -62,4 +69,8 @@ TEST(PartitionModel, UpdateInternal)
     model.updateInternal(&partition2);
     ASSERT_EQ(model.instances().get(0).from, 3);
     ASSERT_EQ(model.instances().get(0).to, 4);
+
+    model.updateInternal(&partition1);
+    ASSERT_EQ(model.instances().get(0).from, 1);
+    ASSERT_EQ(model.instances().get(0).to, 2);
 }

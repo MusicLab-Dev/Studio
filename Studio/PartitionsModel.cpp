@@ -54,8 +54,9 @@ void PartitionsModel::remove(const int index)
 {
     beginResetModel();
     _data->erase(_data->begin() + index);
+    _partitions.erase(_partitions.begin() + index);
     refreshControls();
-    endInsertRows();
+    endResetModel();
 }
 
 void PartitionsModel::move(const int from, const int to)

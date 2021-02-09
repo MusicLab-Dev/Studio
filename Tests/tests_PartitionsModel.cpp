@@ -20,10 +20,12 @@ TEST(PartitionsModel, Add)
 
     PartitionsModel model(&partitions);
 
-    model.add({2, 4});
+    for (unsigned int i = 0; i < 100; i++) {
+        model.add({i, i+1});
+        ASSERT_EQ(model.count(), i+1);
+    }
 
 }
-
 
 TEST(PartitionsModel, Remove)
 {
