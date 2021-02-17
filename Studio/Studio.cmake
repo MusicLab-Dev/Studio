@@ -19,6 +19,11 @@ qt_add_resources(QtResources
 set(StudioSources
     ${StudioDir}/Studio.hpp
     ${StudioDir}/Studio.cpp
+    ${StudioDir}/BoardManager.hpp
+    ${StudioDir}/BoardManager.cpp
+    ${StudioDir}/Net/Socket.hpp
+    ${StudioDir}/Net/Socket.cpp
+    ${StudioDir}/Net/Socket.ipp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
