@@ -43,12 +43,89 @@ public:
         Model {
             category: "Audio",
             subcategory: "Device",
-            name: "Output device",
+            name: "CheckBox Delegate",
+            description: "Select the used output hardware device",
+            tags: QStringList { "output" },
+            type: "CheckBox",
+            value: "0",
+            range: QVariantList { "-50", "50", "25", "false" }
+        },
+
+        Model {
+            category: "Audio",
+            subcategory: "Device",
+            name: "ComboBox Delegate",
             description: "Select the used output hardware device",
             tags: QStringList { "output" },
             type: "ComboBox",
-            value: "Default",
-            range: QVariantList { "Default", "Device1", "Device2" }
+            value: "0",
+            range: QVariantList { "-50", "50", "25", "false" }
+        },
+
+        Model {
+            category: "Audio",
+            subcategory: "Device",
+            name: "FloatingTextBox Delegate",
+            description: "Select the used output hardware device",
+            tags: QStringList { "output" },
+            type: "FloatingTextBox",
+            value: "0",
+            range: QVariantList { "-50", "50", "25", "false" }
+        },
+
+        Model {
+            category: "Audio",
+            subcategory: "Device",
+            name: "IntegerTextBox Delegate",
+            description: "Select the used output hardware device",
+            tags: QStringList { "output" },
+            type: "IntegerTextBox",
+            value: "0",
+            range: QVariantList { "-50", "50", "25", "false" }
+        },
+
+        Model {
+            category: "Audio",
+            subcategory: "Device",
+            name: "RadioButton Delegate",
+            description: "Select the used output hardware device",
+            tags: QStringList { "output" },
+            type: "RadioButton",
+            value: "0",
+            range: QVariantList { "-50", "50", "25", "false" }
+        },
+
+        Model {
+            category: "Audio",
+            subcategory: "Device",
+            name: "Slider Delegate",
+            description: "Select the used output hardware device",
+            tags: QStringList { "output" },
+            type: "Slider",
+            value: "0",
+            range: QVariantList { "-50", "50", "25", "false" }
+        },
+
+        Model {
+            category: "Audio",
+            subcategory: "Device",
+            name: "SpinBox Delegate",
+            description: "Select the used output hardware device",
+            tags: QStringList { "output" },
+            type: "SpinBox",
+            value: "0",
+            range: QVariantList { "-50", "50", "25", "false" }
+        },
+
+        Model {
+            category: "Audio",
+            subcategory: "Device2",
+            name: "TextBox Delegate",
+            description: "Select the used output hardware device",
+            tags: QStringList { "output" },
+            type: "TextBox",
+            value: "0",
+            range: QVariantList { "-50", "50", "25", "false" }
         }
     };
 

@@ -6,7 +6,14 @@
         <file>SettingsContentArea.qml</file>
         <file>SettingsView.qml</file>
         <file>SettingsViewTitle.qml</file>
+        <file>CategoryHeader.qml</file>
         <file>SettingsDelegates/ComboBoxDelegate.qml</file>
         <file>SettingsDelegates/CheckBoxDelegate.qml</file>
+        <file>SettingsDelegates/RadioButtonDelegate.qml</file>
+        <file>SettingsDelegates/SliderDelegate.qml</file>
+        <file>SettingsDelegates/TextBoxDelegate.qml</file>
+        <file>SettingsDelegates/IntegerTextBoxDelegate.qml</file>
+        <file>SettingsDelegates/FloatingTextBoxDelegate.qml</file>
+        <file>SettingsDelegates/SpinBoxDelegate.qml</file>
     </qresource>
 </RCC>
