@@ -12,25 +12,30 @@
 /**
  * @brief Scheduler class
  */
-class Scheduler : public QObject, Audio::AScheduler
+class Scheduler : public QObject, private Audio::AScheduler
 {
     Q_OBJECT
 
     Q_PROPERTY(Audio::Beat currentBeat READ currentBeat WRITE setCurrentBeat NOTIFY currentBeatChanged)
 
 public:
+    using Audio::AScheduler::addEvent;
+
+    /** @brief Get the global instance */
+    [[nodiscard]] static Scheduler *Get(void) noexcept { return _Instance; }
+
     /** @brief Default constructor */
-    explicit Scheduler(Audio::Scheduler *scheduler, QObject *parent = nullptr) noexcept;
+    explicit Scheduler(QObject *parent = nullptr);
 
     /** @brief Destruct the instance */
-    ~Scheduler(void) noexcept = default;
+    ~Scheduler(void) noexcept;
 
 
-    /** @brief Get the current beat */
-    Audio::Beat currentBeat(void) const noexcept { return _data->currentBeat(); }
+    [[nodiscard]] Audio::Beat currentBeat(void) const noexcept { return Audio::AScheduler::currentBeatRange().from; }
 
     /** @brief Set the current beat */
-    bool setCurrentBeat(const Audio::Beat &beat) noexcept;
+    bool setCurrentBeat(const Audio::Beat beat) noexcept;
+
 
     /** @brief Audio block generated event */
     void onAudioBlockGenerated(void) override final;
@@ -56,5 +61,5 @@ signals:
     void needToNotifyEvents(void);
 
 private:
-    Audio::Scheduler *_data { nullptr };
+    static inline Scheduler *_Instance { nullptr };
 };

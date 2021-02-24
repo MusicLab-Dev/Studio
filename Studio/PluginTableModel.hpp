@@ -49,10 +49,7 @@ public:
 
 public slots:
     /** @brief Add an new instance */
-    int add(const QString &path);
-
-    /** @brief Remove an current instance */
-    void remove(const int index);
+    void add(const QString &path);
 
 private:
     Audio::PluginTable &_data { Audio::PluginTable::Get() };

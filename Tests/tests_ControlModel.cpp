@@ -30,6 +30,16 @@ TEST(ControlModel, AddRemoveAutomation)
     }
 }
 
+TEST(ControlModel, MoveAutomation)
+{
+    Audio::Control control {1, 2.0};
+
+    ControlModel model(&control);
+    model.add();
+    model.add();
+    model.move(0, 1);
+}
+
 
 TEST(ControlModel, Muted)
 {

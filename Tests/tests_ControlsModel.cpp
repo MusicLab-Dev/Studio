@@ -14,7 +14,7 @@ TEST(ControlsModel, InitDestroy)
     ASSERT_NO_THROW(ControlsModel tmp(&controls));
 }
 
-TEST(ControlsModel, AddControlCount)
+TEST(ControlsModel, AddRemoveControlCount)
 {
     Audio::Controls controls {};
 
@@ -26,19 +26,10 @@ TEST(ControlsModel, AddControlCount)
         ASSERT_EQ(model.get(i)->paramID(), i);
         ASSERT_EQ(model.count(), i + 1);
     }
-}
-
-TEST(ControlsModel, RemoveControl)
-{
-    Audio::Controls controls {};
-
-    ControlsModel model(&controls);
-
-    model.add(10);
-
-    ASSERT_EQ(model.count(), 1);
-    model.remove(0);
-    ASSERT_EQ(model.count(), 0);
+    for (int i = 99; i >= 0; i--) {
+        ASSERT_NO_THROW(model.remove(0));
+        ASSERT_EQ(model.count(), i);
+    }
 }
 
 TEST(ControlsModel, MoveControl)

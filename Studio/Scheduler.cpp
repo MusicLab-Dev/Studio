@@ -7,37 +7,51 @@
 
 #include "Scheduler.hpp"
 
-Scheduler::Scheduler(Audio::Scheduler *scheduler, QObject *parent) noexcept
-    : QObject(parent), _data(scheduler)
+Scheduler::Scheduler(QObject *parent)
+    : QObject(parent), Audio::AScheduler()
 {
+    if (_Instance)
+        throw std::runtime_error("Scheduler::Scheduler: An instance of the scheduler already exists");
+    _Instance = this;
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
-bool Scheduler::setCurrentBeat(const Audio::Beat &beat) noexcept
+Scheduler::~Scheduler(void) noexcept
+{
+    _Instance = nullptr;
+}
+
+bool Scheduler::setCurrentBeat(const Audio::Beat beat) noexcept
 {
     if (currentBeat() == beat)
         return false;
-    _data->setCurrentBeat(beat);
+    auto range = Audio::AScheduler::currentBeatRange();
+    range.to = beat + 2048; // Change to settings getter: processing length
+    range.from = beat;
+    Audio::AScheduler::setBeatRange(range);
     emit currentBeatChanged();
     return true;
 }
 
-void Scheduler::onAudioBlockGenerated(void) override final
+void Scheduler::onAudioBlockGenerated(void)
 {
     /** TODO */
 }
 
 void Scheduler::play(void)
 {
-    /** TODO */
+    setState(Audio::AScheduler::State::Play);
 }
 
 void Scheduler::pause(void)
 {
-    /** TODO */
+    setState(Audio::AScheduler::State::Pause);
 }
 
 void Scheduler::stop(void)
 {
-    /** TODO */
+    setState(Audio::AScheduler::State::Pause);
+    Audio::AScheduler::addEvent([this] {
+        setCurrentBeat(0);
+    });
 }

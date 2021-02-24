@@ -70,6 +70,3 @@ signals:
 private:
     Audio::Device *_data { nullptr };
 };
-
-//static_assert(sizeof(Device) == 32, "Device must take 32 bytes");
-//static_assert(alignof(Device) == 32, "Device must be aligned to 32 bytes");

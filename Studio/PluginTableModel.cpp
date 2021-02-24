@@ -25,18 +25,19 @@ QHash<int, QByteArray> PluginTableModel::roleNames(void) const noexcept
     };
 }
 
+
 QVariant PluginTableModel::data(const QModelIndex &index, int role) const
 {
-    const auto *factory = get(index.row());
+    auto *factory = get(index.row());
     switch (static_cast<PluginTableModel::Roles>(role)) {
     case Roles::Name:
-        return factory->getName();
+        return QString(factory->getName().data());
     case Roles::Path:
-        return factory->getPath();
+        return QString(factory->getPath().data());
     case Roles::SDK:
-        return factory->getSDK();
+        return static_cast<std::uint32_t>(factory->getSDK());
     case Roles::Tags:
-        return factory->getTags();
+        return static_cast<std::uint32_t>(factory->getTags());
     default:
         return QVariant();
     }
@@ -49,14 +50,9 @@ Audio::IPluginFactory *PluginTableModel::get(const int index) const noexcept_nde
     return _data.factories()[index].get();
 }
 
-int PluginTableModel::add(const QString &path)
+void PluginTableModel::add(const QString &path)
 {
-    /** TODO */
-    _data.factories().push();
-    return 0;
-}
-
-void PluginTableModel::remove(const int index)
-{
-    /** TODO */
+    beginInsertRows(QModelIndex(), count(), count());
+    _data.registerFactory(path.toStdString());
+    endInsertRows();
 }

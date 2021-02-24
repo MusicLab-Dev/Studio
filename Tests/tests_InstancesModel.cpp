@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include <Studio/Scheduler.hpp>
 #include <Studio/InstancesModel.hpp>
 
 TEST(InstancesModel, InitDestroy)
@@ -15,6 +16,7 @@ TEST(InstancesModel, InitDestroy)
 
 TEST(InstancesModel, UpdateInternal)
 {
+    Scheduler scheduler;
     Audio::BeatRanges ranges1 { { 0, 1 }, { 1, 2 } };
     Audio::BeatRanges ranges2 { { 2, 3 }, { 3, 4 }, { 5, 6 } };
     Audio::BeatRanges ranges3 { { 7, 8 }, { 9, 10 }, {11, 12}, {13, 14} };
@@ -53,6 +55,7 @@ TEST(InstancesModel, UpdateInternal)
 
 TEST(InstancesModel, Add)
 {
+    Scheduler scheduler;
     Audio::BeatRanges ranges { };
 
     InstancesModel model(&ranges);
@@ -62,11 +65,13 @@ TEST(InstancesModel, Add)
         model.add(range);
         ASSERT_EQ(model.get(i).from, i);
         ASSERT_EQ(model.get(i).to, i+1);
+        ASSERT_EQ(model.count(), i + 1);
     }
 }
 
 TEST(InstancesModel, Remove)
 {
+    Scheduler scheduler;
     Audio::BeatRanges ranges { {1, 2}, {3, 4}, {5, 6}, {7, 8} };
 
     InstancesModel model(&ranges);
@@ -98,6 +103,8 @@ TEST(InstancesModel, Remove)
 
 TEST(InstancesModel, Move)
 {
+    Scheduler scheduler;
+
     Audio::BeatRanges ranges { {1, 2}, {3, 4}, {5, 6}, {7, 8} };
 
     InstancesModel model(&ranges);

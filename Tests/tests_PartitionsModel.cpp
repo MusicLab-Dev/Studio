@@ -14,7 +14,7 @@ TEST(PartitionsModel, InitDestroy)
     ASSERT_NO_THROW(PartitionsModel tmp(&partitions));
 }
 
-TEST(PartitionsModel, Add)
+TEST(PartitionsModel, AddRemove)
 {
     Audio::Partitions partitions {};
 
@@ -24,17 +24,8 @@ TEST(PartitionsModel, Add)
         model.add({i, i+1});
         ASSERT_EQ(model.count(), i+1);
     }
-
-}
-
-TEST(PartitionsModel, Remove)
-{
-    Audio::Partitions partitions {};
-
-    PartitionsModel model(&partitions);
-
-    model.add({2, 4});
-    model.remove(0);
-    ASSERT_EQ(model.count(), 0);
-
+    for (unsigned int i = 99; i > 0; i--) {
+        model.remove(0);
+        ASSERT_EQ(model.count(), i);
+    }
 }

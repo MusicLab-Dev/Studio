@@ -23,8 +23,34 @@ TEST(NodeModel, Color)
     Audio::Node node {};
 
     NodeModel model(&node);
-    model.setColor("red");
-    //ASSERT_EQ(model.color(), QColor::red);
+    model.setColor(Qt::red);
+    ASSERT_EQ(model.color(), Qt::red);
+
+    Audio::PluginTable::Destroy();
+}
+
+TEST(NodeModel, Muted)
+{
+    Audio::PluginTable::Init();
+    Audio::Node node {};
+
+    NodeModel model(&node);
+    model.setMuted(true);
+    ASSERT_EQ(model.muted(), true);
+    model.setMuted(false);
+    ASSERT_EQ(model.muted(), false);
+
+    Audio::PluginTable::Destroy();
+}
+
+TEST(NodeModel, Name)
+{
+    Audio::PluginTable::Init();
+    Audio::Node node {};
+
+    NodeModel model(&node);
+    model.setName("testnode");
+    ASSERT_EQ(model.name(), "testnode");
 
     Audio::PluginTable::Destroy();
 }

@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <Studio/AutomationModel.hpp>
+#include <Studio/Scheduler.hpp>
 #include <Studio/Point.hpp>
 
 TEST(AutomationModel, InitDestroy)
@@ -93,6 +94,8 @@ TEST(AutomationModel, RemovePoint)
 
 TEST(AutomationModel, InstancesAddRemoveBasics)
 {
+    Scheduler scheduler;
+
     Audio::Automation automation {};
 
     AutomationModel model(&automation);

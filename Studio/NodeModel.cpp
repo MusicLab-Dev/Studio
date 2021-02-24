@@ -15,6 +15,7 @@
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
 {
+    updateInternal();
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
@@ -44,6 +45,15 @@ const NodeModel *NodeModel::get(const int index) const
     return _children.at(index).get();
 }
 
+Node &NodeModel::add(void)
+{
+    auto index = static_cast<int>(_data->children.size());
+    beginInsertRows(QModelIndex(), index, index);
+    auto &node = _data->children().push();
+    _children.push(node);
+    endInsertRows();
+    return true;
+}
 
 bool NodeModel::setMuted(bool muted) noexcept
 {
@@ -62,17 +72,6 @@ bool NodeModel::setName(const QString &name) noexcept
     emit nameChanged();
     return true;
 }
-
-/*
-|R|G|B|A|
-
-R: x & 0xFF;
-G: (x >> 8) & 0xFF;
-B: (x >> 16) & 0xFF;
-A: (x >> 24) & 0xFF;
-
-QColor(R, G, B, A)
-*/
 
 bool NodeModel::setColor(const QColor &color) noexcept
 {

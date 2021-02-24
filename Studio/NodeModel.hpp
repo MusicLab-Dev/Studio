@@ -68,6 +68,8 @@ public:
 
     [[nodiscard]] const NodeModel *get(const int index) const;
 
+    /** @brief Add new nodes in children vector */
+    [[nodiscard]] Node &add(void);
 
     /** @brief Get if the node is muted */
     [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
