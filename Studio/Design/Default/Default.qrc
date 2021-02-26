@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/Default/">
+    <qresource prefix="/Default">
         <file>DefaultCheckBox.qml</file>
         <file>DefaultColoredImage.qml</file>
         <file>DefaultComboBox.qml</file>
@@ -7,7 +7,15 @@
         <file>DefaultMenuButton.qml</file>
         <file>DefaultOverlayedImage.qml</file>
         <file>DefaultScrollBar.qml</file>
+        <file>DefaultText.qml</file>
         <file>DefaultTextButton.qml</file>
         <file>DefaultTextInput.qml</file>
+        <file>DefaultImageButton.qml</file>
+        <file>DefaultRadioButton.qml</file>
+        <file>DefaultTextBox.qml</file>
+        <file>DefaultIntegerTextBox.qml</file>
+        <file>DefaultFloatingTextBox.qml</file>
+        <file>DefaultSlider.qml</file>
+        <file>DefaultSpinBox.qml</file>
     </qresource>
 </RCC>

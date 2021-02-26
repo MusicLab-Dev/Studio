@@ -14,16 +14,20 @@ qt_add_resources(QtResources
     ${StudioDir}/Design/Main/Main.qrc
     ${StudioDir}/Design/Default/Default.qrc
     ${StudioDir}/Design/Common/Common.qrc
+
+    # Modules
+    ${StudioDir}/Design/Modules/Plugins/Plugins.qrc
+    ${StudioDir}/Design/Modules/Workspaces/Workspaces.qrc
+    ${StudioDir}/Design/Modules/Settings/Settings.qrc
+    ${StudioDir}/Design/Modules/Board/Board.qrc
 )
 
 set(StudioSources
     ${StudioDir}/Studio.hpp
     ${StudioDir}/Studio.cpp
-    ${StudioDir}/BoardManager.hpp
-    ${StudioDir}/BoardManager.cpp
-    ${StudioDir}/Net/Socket.hpp
-    ${StudioDir}/Net/Socket.cpp
-    ${StudioDir}/Net/Socket.ipp
+    ${StudioDir}/SettingsListModel.hpp
+    ${StudioDir}/SettingsListModel.cpp
+    ${StudioDir}/SettingsListModelProxy.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/Modules/Board/">
+        <file>BoardView.qml</file>
+        <file>BoardViewTitle.qml</file>
+    </qresource>
+</RCC>

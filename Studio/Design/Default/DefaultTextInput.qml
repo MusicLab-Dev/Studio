@@ -4,7 +4,6 @@ import QtQuick.Controls 2.15
 TextField {
     id: control
     leftPadding: 0
-    placeholderText: "Chercher un plugin"
     placeholderTextColor: "lightgrey"
 
     background: Rectangle {
