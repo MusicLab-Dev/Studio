@@ -18,5 +18,6 @@
         <file>Assets/Next.png</file>
         <file>Assets/Previous.png</file>
         <file>Assets/Close.png</file>
+        <file>Assets/BrushMod.png</file>
     </qresource>
 </RCC>

@@ -6,5 +6,7 @@
         <file>SequencerViewContent/SequencerViewContent.qml</file>
         <file>SequencerViewContent/SequencerViewContentGrid.qml</file>
         <file>SequencerViewContent/SequencerViewContentTimeline.qml</file>
+        <file>SequencerViewContent/SequencerViewContentFlickable.qml</file>
+        <file>SequencerViewContent/SequencerViewContentPiano.qml</file>
     </qresource>
 </RCC>

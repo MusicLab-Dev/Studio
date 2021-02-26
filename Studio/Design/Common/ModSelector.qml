@@ -7,15 +7,13 @@ Item {
     property var itemsPath: []
     property int itemSelected: 0
 
-    property real itemWidth: container.width / itemsPath.length
-
     id: container
 
     Rectangle {
         id: rowContainer
         anchors.centerIn: parent
         height: parent.height
-        width: parent.width
+        width: parent.height * itemsPath.length
         color: "transparent"
         border.color: "white"
         radius: 10
@@ -25,9 +23,9 @@ Item {
             model: itemsPath
 
             delegate: Rectangle {
-                x: itemWidth * index
+                x: parent.height * index
                 height: container.height
-                width: container.height
+                width: parent.height
                 color: index == itemSelected ? "#001E36" : "transparent"
                 border.color: index == itemSelected ? "white" : "transparent"
                 radius: 10
@@ -45,7 +43,7 @@ Item {
                     width: parent.width / 2
                     anchors.centerIn: parent
                     source: itemsPath[index]
-                    color: index == itemSelected ? "blue" : "white"
+                    color: index == itemSelected ? themeManager.accentColor : "#FFFFFF"
                 }
             }
         }

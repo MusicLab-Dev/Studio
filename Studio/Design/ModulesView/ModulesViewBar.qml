@@ -12,32 +12,5 @@ Rectangle {
     RowLayout {
         anchors.fill: parent
         spacing: 0
-
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
-        }
-
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
-
-            Player {
-                anchors.centerIn: parent
-                height: parent.height
-                width: 200
-            }
-        }
-
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
-
-            Bpm {
-                anchors.centerIn: parent
-                height: parent.height * 0.8
-                width: 200
-            }
-        }
     }
 }

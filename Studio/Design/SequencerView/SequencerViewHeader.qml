@@ -5,8 +5,6 @@ import "../Default/"
 import "../Common/"
 
 Rectangle {
-    width: parent.width
-    height: parent.width
     color: "#001E36"
 
     RowLayout {
@@ -44,6 +42,7 @@ Rectangle {
                     ModSelector {
                         itemsPath: [
                             "qrc:/Assets/NormalMod.png",
+                            "qrc:/Assets/BrushMod.png",
                             "qrc:/Assets/SelectorMod.png",
                             "qrc:/Assets/CutMod.png",
                         ]
@@ -83,19 +82,16 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.15
+            Layout.preferredWidth: parent.width * 0.2
         }
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.15
+            Layout.preferredWidth: parent.width * 0.133
 
-            ArrowNextPrev {}
-        }
-
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width
+            ArrowNextPrev {
+                anchors.fill: parent
+            }
         }
     }
 }

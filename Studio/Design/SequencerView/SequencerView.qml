@@ -10,19 +10,25 @@ Rectangle {
         spacing: 0
 
         SequencerViewHeader {
-            Layout.preferredHeight: parent.height * 0.125
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             Layout.preferredWidth: parent.width
+            Layout.preferredHeight: parent.height * 0.1
             z: 1
         }
 
         SequencerViewContent {
-            Layout.preferredHeight: parent.height * 0.75
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             Layout.preferredWidth: parent.width
+            Layout.preferredHeight: parent.height * 0.8
         }
 
         SequencerViewFooter {
-            Layout.preferredHeight: parent.height * 0.125
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             Layout.preferredWidth: parent.width
+            Layout.preferredHeight: parent.height * 0.1
         }
     }
 }

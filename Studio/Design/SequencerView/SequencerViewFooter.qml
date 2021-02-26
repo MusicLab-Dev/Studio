@@ -14,7 +14,7 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.4
+            Layout.preferredWidth: parent.width * 0.333
 
             ModSelector {
                 itemsPath: [
@@ -31,17 +31,23 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.2
+            Layout.preferredWidth: parent.width * 0.333
+
+            Player {
+                anchors.centerIn: parent
+                height: parent.height
+                width: 200
+            }
         }
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.4
+            Layout.preferredWidth: parent.width * 0.333
 
-            Text {
-                color: "white"
+            Bpm {
                 anchors.centerIn: parent
-                text: "Tempo selector"
+                height: parent.height / 2
+                width: parent.width / 3
             }
         }
     }

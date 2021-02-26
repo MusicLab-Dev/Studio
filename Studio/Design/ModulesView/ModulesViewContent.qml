@@ -21,11 +21,12 @@ Item {
 
         delegate: Column {
             anchors.fill: grid
+            spacing: 1.0
 
             Rectangle {
                 height: parent.height * 0.05
-                width: parent.width * 0.05
-                x: (addButton ? modules.count - 1 : index - 1) * parent.width * 0.05
+                width: parent.width * (addButton ? 0.05 : 0.20)
+                x: (addButton ? modules.count - 1 : index - 1) * parent.width * 0.20
                 color: componentSelected === index ? "#001E36" : "#E7E7E7"
                 border.color: "black"
 
@@ -82,7 +83,7 @@ Item {
                     visible: !addButton
 
                     onClicked: {
-
+                        modules.remove(index)
                     }
                 }
             }
