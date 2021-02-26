@@ -22,28 +22,32 @@ Rectangle {
         radius: 13
 
         GridView {
+            id: gridView
+
             model: ListModel {
                 ListElement {
-                    size: Qt.size(12, 8)
-                }
-                ListElement {
-                    size: Qt.size(10, 6)
-                }
-                ListElement {
-                    size: Qt.size(10, 10)
-                }
-                ListElement {
-                    size: Qt.size(12, 8)
-                }
-                ListElement {
-                    size: Qt.size(10, 6)
-                }
-                ListElement {
-                    size: Qt.size(10, 10)
+                    boardWidth: 12
+                    boardHeight: 8
                 }
             }
 
+            /*ListModel {
+                ListElement {
+                    type: 0
+                    state: 0
+                    pos: Qt.point(1, 1)
+                }
+                ListElement {
+                    type: 0
+                    state: 1
+                    pos: Qt.point(2, 3)
+                }
+            }*/
+
             delegate: Rectangle {
+                width: gridView.width / 4
+                height: gridView.height / 4
+                color: "red"
             }
         }
     }
