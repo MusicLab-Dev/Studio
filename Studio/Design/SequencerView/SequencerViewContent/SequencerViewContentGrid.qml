@@ -9,14 +9,20 @@ Rectangle {
     id: grid
     color: "#4A8693"
 
-    Repeater {
-        model: displayedRowCount
+    Item {
+        width: parent.width
+        height: parent.height
+        y: yOffset
 
-        delegate: Rectangle {
-            y: yOffset + index * piano.rowHeight
-            width: parent.width
-            height: 1
-            color: "red"
+        Repeater {
+            model: displayedRowCount
+
+            delegate: Rectangle {
+                y: index * piano.rowHeight
+                width: parent.width
+                height: 1
+                color: "red"
+            }
         }
     }
 }
