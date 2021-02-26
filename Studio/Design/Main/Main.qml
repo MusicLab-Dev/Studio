@@ -17,13 +17,8 @@ Window {
     }
 
     Column {
-        anchors.centerIn: parent
-
-        Button {
-            text: "Click me"
-
-            onReleased: boardManager.foo()
-        }
+        id: settignsCol
+        anchors.left: parent.left
 
         Row {
             Text {
@@ -54,6 +49,42 @@ Window {
                 value: boardManager.discoverRate
 
                 onMoved: boardManager.discoverRate = value
+            }
+        }
+    }
+
+    Rectangle {
+        anchors.fill:parent
+        anchors.leftMargin: settignsCol.width
+        color: "transparent"
+        border.width: 1
+        border.color: "black"
+
+        ListView {
+            anchors.fill: parent
+            anchors.margins: 5
+
+            spacing: 10
+            model: boardManager
+
+            delegate: Rectangle {
+                color: "red"
+                width: 5 +  boardSize.width * 10
+                height: 5 + boardSize.height * 10
+
+                ListView {
+                    anchors.fill: parent
+                    anchors.margins: 5
+
+                    spacing: 2
+                    model: boardInstance
+
+                    delegate: Rectangle {
+                        width: 10
+                        height: 10
+                        color: "yellow"
+                    }
+                }
             }
         }
     }

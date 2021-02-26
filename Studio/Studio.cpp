@@ -6,10 +6,12 @@
 #include "Studio.hpp"
 
 #include "BoardManager.hpp"
+#include "Board.hpp"
 
 void Studio::InitResources(void)
 {
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
+    qmlRegisterType<Board>("BoardManager", 1, 0, "Board");
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
     Q_INIT_RESOURCE(Default);

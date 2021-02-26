@@ -21,6 +21,8 @@ set(StudioSources
     ${StudioDir}/Studio.cpp
     ${StudioDir}/BoardManager.hpp
     ${StudioDir}/BoardManager.cpp
+    ${StudioDir}/Board.hpp
+    ${StudioDir}/Board.cpp
     ${StudioDir}/Net/Socket.hpp
     ${StudioDir}/Net/Socket.cpp
     ${StudioDir}/Net/Socket.ipp
@@ -30,7 +32,12 @@ add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${StudioDir}/..)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Audio Qt::Core Qt::Quick Qt::Qml)
+target_link_libraries(${PROJECT_NAME}
+PUBLIC
+    Audio
+    Protocol
+    Qt::Core Qt::Quick Qt::Qml
+)
 
 if(CODE_COVERAGE)
     target_compile_options(${PROJECT_NAME} PUBLIC --coverage)

@@ -7,6 +7,7 @@ include(${StudioRoot}/CompileOptions/CompileOptions.cmake)
 project(Studio)
 
 add_submodule_directory(${StudioRoot}/Audio)
+include(${StudioRoot}/Protocol/Protocol/Protocol.cmake)
 
 include(${StudioRoot}/Studio/Studio.cmake)
 
