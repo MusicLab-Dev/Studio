@@ -19,5 +19,9 @@
         <file>Assets/Previous.png</file>
         <file>Assets/Close.png</file>
         <file>Assets/BrushMod.png</file>
+        <file>Assets/Board.png</file>
+        <file>Assets/Logo.png</file>
+        <file>Assets/Soundwave.png</file>
+        <file>Assets/Piano.png</file>
     </qresource>
 </RCC>

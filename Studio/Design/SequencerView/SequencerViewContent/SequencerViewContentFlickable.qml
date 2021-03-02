@@ -25,5 +25,13 @@ Item {
     SequencerViewContentGrid {
         anchors.fill: parent
         anchors.leftMargin: piano.keyWidth
+
+        Item {
+            focus: true
+            Keys.onPressed: {
+                Qt.quit()
+                event.accepted = true;
+            }
+        }
     }
 }

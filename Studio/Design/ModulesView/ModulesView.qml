@@ -5,18 +5,12 @@ Rectangle {
     property alias modulesViewContent: modulesViewContent
 
     id: modulesView
-    color: "#1F1F1F"
+    color: "#474747"
+
 
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
-
-        /*
-        ModulesViewBar {
-            Layout.preferredHeight: parent.height * 0.05
-            Layout.preferredWidth: parent.width
-            // add min / max values
-        }*/
 
         ModulesViewContent {
             id: modulesViewContent

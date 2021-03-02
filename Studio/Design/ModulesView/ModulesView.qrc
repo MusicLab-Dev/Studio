@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/ModulesView">
         <file>ModulesView.qml</file>
-        <file>ModulesViewBar.qml</file>
         <file>ModulesViewContent.qml</file>
+        <file>ModulesViewTab.qml</file>
     </qresource>
 </RCC>

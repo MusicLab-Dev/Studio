@@ -22,6 +22,8 @@ Rectangle {
         onPaint: {
             var ctx = getContext("2d");
             ctx.reset();
+            /*ctx.fillStyle = Qt.rgba(1, 0, 0, 1);
+            ctx.fillRect(0, 0, width, height)*/
             ctx.fillStyle = Qt.rgba(1, 0, 0, 1);
             for (var i = 0; i < displayedRowCount; ++i) {
                 ctx.fillRect(0, i * piano.rowHeight, width, 1);
@@ -37,9 +39,25 @@ Rectangle {
         }
     }
 
+    Shortcut {
+        sequence: StandardKey.ZoomIn
+        onActivated: {
+            if (piano.rowHeight < 100)
+                piano.rowHeight += 2
+        }
+    }
+
+    Shortcut {
+        sequence: StandardKey.ZoomOut
+        onActivated: {
+            if (piano.rowHeight > 20)
+                piano.rowHeight -= 2
+        }
+    }
+
     Slider {
         value: piano.rowHeight
-        from: 10
+        from: 20
         to: 100
 
         onMoved: {

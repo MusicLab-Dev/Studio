@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/EmptyView">
         <file>EmptyView.qml</file>
+        <file>ClickableCard.qml</file>
+        <file>EmptyViewHeader.qml</file>
+        <file>EmptyViewContent.qml</file>
     </qresource>
 </RCC>
