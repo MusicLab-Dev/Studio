@@ -24,7 +24,7 @@ Rectangle {
             ctx.reset();
             /*ctx.fillStyle = Qt.rgba(1, 0, 0, 1);
             ctx.fillRect(0, 0, width, height)*/
-            ctx.fillStyle = Qt.rgba(1, 0, 0, 1);
+            ctx.fillStyle = Qt.rgba(0, 0, 0, 1);
             for (var i = 0; i < displayedRowCount; ++i) {
                 ctx.fillRect(0, i * piano.rowHeight, width, 1);
             }
