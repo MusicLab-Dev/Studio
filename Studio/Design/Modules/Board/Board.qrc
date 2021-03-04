@@ -1,6 +1,7 @@
 <RCC>
-    <qresource prefix="/Modules/Board/">
+    <qresource prefix="/Modules/Board">
         <file>BoardView.qml</file>
         <file>BoardViewTitle.qml</file>
+        <file>BubblePopup.qml</file>
     </qresource>
 </RCC>
