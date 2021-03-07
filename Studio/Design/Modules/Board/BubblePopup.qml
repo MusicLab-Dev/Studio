@@ -93,6 +93,7 @@ Rectangle {
         }
 
         delegate: Rectangle {
+            id: delegate
             width: 75
             height: 75
             x: {
@@ -132,7 +133,7 @@ Rectangle {
                 //     (btn.y + btn.height / 2 - height / 2) + Math.sin(-180 * (index + 1)) * 400
             }
             radius: bubblePopup.width * 0.5
-            color: "#4A8693"
+            color: mouseArea.bubbleHovered ? "red" : "#4A8693"
 
             Image {
                 id: image
@@ -149,9 +150,21 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 x: image.x
                 y: image.y + image.height
-                text: index + " " + bubbleTitle
+                text: index + " " + bubbleTitle + " " + mouseArea.pressedButtons + " " + mouseArea.containsMouse + " " + mouseArea.bubbleHovered
                 color: "lightgrey"
                 font.pointSize: 12
+            }
+
+            MouseArea {
+                property bool bubbleHovered: (pressedButtons & Qt.LeftButton) && containsMouse
+
+                id: mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+
+                onReleased: {
+                    text.color = "orange"
+                }
             }
         }
     }
