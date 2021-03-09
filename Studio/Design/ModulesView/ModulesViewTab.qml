@@ -22,7 +22,7 @@ Rectangle {
 
         onPositionChanged: {
             moduleViewTab.x = mouseX + moduleViewTab.x - (moduleViewTab.width / 2)
-            modules.move(index,(moduleViewTab.x / moduleViewTab.width).toFixed(), 1)
+            modules.move(index, (moduleViewTab.x / moduleViewTab.width).toFixed(), 1)
             componentSelected = index
         }
 

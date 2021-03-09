@@ -10,55 +10,20 @@ Rectangle {
 
     color: "#001E36"
 
-    ColumnLayout {
+    Column {
+        id: contentColumn
         width: parent.width
         height: parent.height
         spacing: 0
 
-        // SequencerViewContentTimeline {
-        //     id: timeline
-        //     headerFactor: headerFactor
-        //     Layout.preferredHeight: parent.height
-        //     Layout.preferredWidth: parent.width
-        //     z: 1
+        // Add timeline here later
 
-        //     MouseArea {
-        //         function manageTimelineCursorPos() {
-        //             timelineBar.x = Math.min(
-        //                         Math.max(
-        //                             parent.width * headerFactor - timelineBar.width / 2,
-        //                             mouseX - (timelineBar.width / 2) + parent.width * headerFactor
-        //                             ),
-        //                         parent.width - timelineBar.width / 2
-        //                         )
-        //         }
-
-        //         x: parent.width * headerFactor
-        //         height: parent.height
-        //         width: parent.width - parent.width * headerFactor
-        //         onPositionChanged: {
-        //             manageTimelineCursorPos()
-        //         }
-
-        //         onPressed: {
-        //             manageTimelineCursorPos()
-        //         }
-        //     }
-        // }
-            
         SequencerViewContentFlickable {
             id: sequencerViewContentFlickable
-            Layout.preferredHeight: parent.height * 0.97
-            Layout.preferredWidth: parent.width
+            width: parent.width
+            height: parent.height// * 0.97
         }
     }
-
-    // TimelineCursor {
-    //     id: timelineBar
-    //     x: parent.width * headerFactor + 200
-    //     width: 25
-    //     height: parent.height
-    // }
 }
 
 

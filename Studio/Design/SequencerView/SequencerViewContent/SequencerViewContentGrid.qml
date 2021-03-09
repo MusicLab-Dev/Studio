@@ -4,17 +4,41 @@ import QtQuick.Controls 2.15
 Rectangle {
     property real xOffset: 0
     property real yOffset: (1 - ((flickable.contentY % piano.rowHeight) / piano.rowHeight)) * piano.rowHeight
-    property int displayedRowCount: height  / piano.rowHeight
+    property int displayedRowCount: height / piano.rowHeight
 
-    onDisplayedRowCountChanged: {
-        canvas.requestPaint()
+    // Input
+    property int barsPerLine: 5
+
+    property int beatsPerBar: 4
+    readonly property int barsPerLineThreshold: 4
+    readonly property int barsPerCellThreshold: 4
+    property int barsPerCell: {
+        if (barsPerLine <= barsPerLineThreshold)
+            return 1;
+        var divCount = Math.ceil(barsPerLine / barsPerCellThreshold);
+        if (divCount < barsPerCellThreshold)
+            return divCount;
+        else
+            return barsPerCellThreshold;
     }
+
+    property int cellsPerLine: barsPerCell === 1 ? barsPerLine : barsPerLine / barsPerCell
+    property int divisionsPerCell: barsPerCell === 1 ? beatsPerBar : barsPerCell
+
+    property real cellWidth: width / cellsPerLine
+    property real divisionWidth: cellWidth / divisionsPerCell
 
     id: grid
     color: "#4A8693"
 
+    onDisplayedRowCountChanged: {
+        canvasHorizontal.requestPaint()
+    }
+
+    onBarsPerLineChanged: canvasVertical.requestPaint()
+
     Canvas {
-        id: canvas
+        id: canvasHorizontal
         width: parent.width
         height: parent.height
         y: yOffset
@@ -22,46 +46,44 @@ Rectangle {
         onPaint: {
             var ctx = getContext("2d");
             ctx.reset();
-            /*ctx.fillStyle = Qt.rgba(1, 0, 0, 1);
-            ctx.fillRect(0, 0, width, height)*/
             ctx.fillStyle = Qt.rgba(0, 0, 0, 1);
             for (var i = 0; i < displayedRowCount; ++i) {
                 ctx.fillRect(0, i * piano.rowHeight, width, 1);
             }
         }
 
-        Connections {
-            target: piano
+    }
 
-            function onRowHeightChanged() {
-                canvas.requestPaint()
+    Canvas {
+        anchors.fill: parent
+
+        id: canvasVertical
+        width: parent.width
+        height: parent.height
+
+        onPaint: {
+            var ctx = getContext("2d");
+            ctx.reset();
+            var offset = xOffset
+            var i = 0
+            ctx.fillStyle = Qt.rgba(0, 0, 0, 0.5)
+            // Draw cells
+            for (; i < cellsPerLine; ++i) {
+                ctx.fillRect(offset, 0, 1, height)
+                offset += cellWidth
+            }
+            offset = xOffset
+            ctx.fillStyle = Qt.rgba(0, 0, 0, 0.25)
+            // Draw subcells
+            var divisionCount = divisionsPerCell - 1
+            for (i = 0; i < cellsPerLine; ++i) {
+                for (var j = 0; j < divisionCount; ++j) {
+                    offset += divisionWidth
+                    ctx.fillRect(offset, 0, 1, height)
+                }
+                offset += divisionWidth
             }
         }
     }
-
-    Shortcut {
-        sequence: StandardKey.ZoomIn
-        onActivated: {
-            if (piano.rowHeight < 100)
-                piano.rowHeight += 2
-        }
-    }
-
-    Shortcut {
-        sequence: StandardKey.ZoomOut
-        onActivated: {
-            if (piano.rowHeight > 20)
-                piano.rowHeight -= 2
-        }
-    }
-
-    Slider {
-        value: piano.rowHeight
-        from: 20
-        to: 100
-
-        onMoved: {
-            piano.rowHeight = value
-        }
-    }
 }
+

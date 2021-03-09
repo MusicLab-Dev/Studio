@@ -7,6 +7,7 @@
         <file>ModSelector.qml</file>
         <file>TimelineCursor.qml</file>
         <file>ArrowNextPrev.qml</file>
+        <file>GestureArea.qml</file>
         <file>Player.qml</file>
         <file>Bpm.qml</file>
     </qresource>

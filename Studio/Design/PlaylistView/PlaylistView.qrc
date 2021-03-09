@@ -6,5 +6,7 @@
         <file>PlaylistViewContent/PlaylistViewContent.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentGrid.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentTimeline.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentFlickable.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentHeader.qml</file>
     </qresource>
 </RCC>

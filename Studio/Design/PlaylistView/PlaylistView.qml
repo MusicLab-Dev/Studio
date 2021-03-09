@@ -11,18 +11,24 @@ Rectangle {
         spacing: 0
 
         PlaylistViewHeader {
-            Layout.preferredHeight: parent.height * 0.1
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             Layout.preferredWidth: parent.width
+            Layout.preferredHeight: parent.height * 0.1
             z: 1
         }
 
         PlaylistViewContent {
-            Layout.preferredHeight: parent.height * 0.85
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.preferredHeight: parent.height * 0.8
             Layout.preferredWidth: parent.width
         }
 
         PlaylistViewFooter {
-            Layout.preferredHeight: parent.height * 0.05
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.preferredHeight: parent.height * 0.1
             Layout.preferredWidth: parent.width
         }
     }

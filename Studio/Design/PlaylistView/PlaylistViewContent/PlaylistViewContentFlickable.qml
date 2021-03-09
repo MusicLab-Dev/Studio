@@ -5,28 +5,31 @@ import "../../Default"
 import "../../Common"
 
 Item {
-    property alias totalHeight: piano.totalGridHeight
+    id: playlistViewContentFlickable
+    property int rowHeight: 30
 
     Flickable {
         id: flickable
         anchors.fill: parent
         clip: true
-        contentHeight: totalHeight
+        contentHeight: height
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: DefaultScrollBar {
             policy: ScrollBar.AlwaysOn
         }
 
-        SequencerViewContentPiano {
-            id: piano
+        PlaylistViewContentHeader {
+            id: playlistViewContentHeader
+            height: parent.height
+            width: parent.width * 0.1
         }
     }
 
-    SequencerViewContentGrid {
-        id: sequencerViewContentGrid
+    PlaylistViewContentGrid {
+        id: playlistViewContentGrid
         anchors.fill: parent
-        anchors.leftMargin: piano.keyWidth
+        anchors.leftMargin: playlistViewContentHeader.width
     }
 
     GestureArea {
@@ -45,11 +48,11 @@ Item {
         focus: true
 
         onZoomXFactorChanged: {
-            sequencerViewContentGrid.barsPerLine = zoomXRange * zoomXFactor + zoomXFrom
+            playlistViewContentGrid.barsPerLine = zoomXRange * zoomXFactor + zoomXFrom
         }
 
         onZoomYFactorChanged: {
-            piano.rowHeight = zoomYRange * zoomYFactor + zoomYFrom
+            rowHeight = zoomYRange * zoomYFactor + zoomYFrom
         }
 
         onZoomed: {
