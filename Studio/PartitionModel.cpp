@@ -8,6 +8,7 @@
 #include <QHash>
 #include <QQmlEngine>
 
+#include "Scheduler.hpp"
 #include "PartitionModel.hpp"
 
 PartitionModel::PartitionModel(Audio::Partition *partition, QObject *parent) noexcept
@@ -64,23 +65,34 @@ bool PartitionModel::setMidiChannels(const MidiChannels channel) noexcept
 
 void PartitionModel::addNote(const Audio::Note &note) noexcept
 {
-    _data->notes().push(note);
+    Scheduler::Get()->addEvent(
+        [this, &note] {
+            _data->notes().push(note);
+        });
 }
 
 void PartitionModel::removeNote(const int index) noexcept
 {
-    auto it = _data->notes().begin() + index;
-    _data->notes().erase(it);
+    Scheduler::Get()->addEvent(
+        [this, &index] {
+            auto it = _data->notes().begin() + index;
+            _data->notes().erase(it);
+        });
 }
 
 void PartitionModel::updateInternal(Audio::Partition *data)
 {
     if (_data == data)
         return;
-    std::swap(_data, data);
-    if (_data->notes().data() != data->notes().data()) {
-        beginResetModel();
-        endResetModel();
-    }
-    _instances->updateInternal(&_data->instances());
+    Scheduler::Get()->addEvent(
+        [this, data] {
+            _data = data;
+            _instances->updateInternal(&_data->instances());
+        },
+        [this, data] {
+            if (_data->notes().data() != data->notes().data()) {
+                beginResetModel();
+                endResetModel();
+            }
+        });
 }

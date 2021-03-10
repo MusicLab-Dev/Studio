@@ -40,5 +40,7 @@ QVariant DeviceModel::data(const QModelIndex &index, int role) const
 
 DeviceModel::DevicePtr DeviceModel::instantiate(const QString &name)
 {
+    Audio::Device dev;
+    dev.
     /** TODO */
 }

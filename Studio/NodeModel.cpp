@@ -15,7 +15,7 @@
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
 {
-    updateInternal();
+    //updateInternal();
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
@@ -45,12 +45,11 @@ const NodeModel *NodeModel::get(const int index) const
     return _children.at(index).get();
 }
 
-Node &NodeModel::add(void)
+bool NodeModel::add(void)
 {
-    auto index = static_cast<int>(_data->children.size());
+    auto index = static_cast<int>(_data->children().size());
     beginInsertRows(QModelIndex(), index, index);
-    auto &node = _data->children().push();
-    _children.push(node);
+    _children.push(_data->children().push().get(), this);
     endInsertRows();
     return true;
 }

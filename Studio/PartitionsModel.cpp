@@ -9,6 +9,7 @@
 
 #include "Models.hpp"
 #include "PartitionsModel.hpp"
+#include "Scheduler.hpp"
 
 PartitionsModel::PartitionsModel(Audio::Partitions *partitions, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(partitions)
@@ -44,19 +45,29 @@ const PartitionModel *PartitionsModel::get(const int index) const
 
 void PartitionsModel::add(const Audio::BeatRange &range) noexcept_ndebug
 {
-    beginInsertRows(QModelIndex(), count(), count());
-    _data->push();
-    refreshControls();
-    endInsertRows();
+    Scheduler::Get()->addEvent(
+        [this, &range] {
+            _data->push();
+        },
+        [this] {
+            beginInsertRows(QModelIndex(), count(), count());
+            refreshControls();
+            endInsertRows();
+    });
 }
 
 void PartitionsModel::remove(const int index)
 {
-    beginResetModel();
-    _data->erase(_data->begin() + index);
-    _partitions.erase(_partitions.begin() + index);
-    refreshControls();
-    endResetModel();
+    Scheduler::Get()->addEvent(
+        [this, &index] {
+            _data->erase(_data->begin() + index);
+            _partitions.erase(_partitions.begin() + index);
+        },
+        [this] {
+            beginResetModel();
+            refreshControls();
+            endResetModel();
+        });
 }
 
 void PartitionsModel::move(const int from, const int to)

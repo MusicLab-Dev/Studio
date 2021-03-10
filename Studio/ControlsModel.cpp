@@ -8,15 +8,18 @@
 
 #include "Models.hpp"
 #include "ControlsModel.hpp"
+#include "Scheduler.hpp"
 
 ControlsModel::ControlsModel(Audio::Controls *controls, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(controls)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
-    _controls.reserve(_data->size());
-    for (auto &control : *_data)
-        _controls.push(&control);
+    Scheduler::Get()->addEvent([this] {
+        _controls.reserve(_data->size());
+        for (auto &control : *_data)
+            _controls.push(&control);
+    });
 }
 
 QHash<int, QByteArray> ControlsModel::roleNames(void) const noexcept
@@ -45,27 +48,42 @@ const ControlModel *ControlsModel::get(const int index) const noexcept_ndebug
 
 void ControlsModel::add(const Audio::ParamID paramID) noexcept_ndebug
 {
-    beginInsertRows(QModelIndex(), count(), count());
-    _data->push(paramID, 0.0);
-    refreshControls();
-    endInsertRows();
+    Scheduler::Get()->addEvent(
+    [this, paramID] {
+        _data->push(paramID, 0.0);
+    },
+    [this] {
+        beginInsertRows(QModelIndex(), count(), count());
+        refreshControls();
+        endInsertRows();
+    });
 }
 
 void ControlsModel::remove(const int index) noexcept_ndebug
 {
-    beginRemoveRows(QModelIndex(), index, index);
-    _data->erase(_data->begin() + index);
-    _controls.erase(_controls.begin() + index);
-    refreshControls();
-    endRemoveRows();
+    Scheduler::Get()->addEvent(
+        [this, index] {
+            _data->erase(_data->begin() + index);
+            _controls.erase(_controls.begin() + index);
+        },
+        [this, index] {
+            beginRemoveRows(QModelIndex(), index, index);
+            refreshControls();
+            endRemoveRows();
+        });
 }
 
 void ControlsModel::move(const int from, const int to)
 {
-    beginMoveRows(QModelIndex(), from, from, QModelIndex(), to);
-    //_data->at(from).swap(_data->at(to));
-    refreshControls();
-    endMoveRows();
+    Scheduler::Get()->addEvent(
+        [this, from, to] {
+            std::swap(_data->at(from), _data->at(to));
+        },
+        [this, from, to] {
+            beginMoveRows(index(from), from, from, index(to), to);
+            refreshControls();
+            endMoveRows();
+        });
 }
 
 void ControlsModel::refreshControls(void)

@@ -7,9 +7,11 @@
 #include <QColor>
 
 #include <Studio/NodeModel.hpp>
+#include <Studio/Scheduler.hpp>
 
 TEST(NodeModel, InitDestroy)
 {
+    Scheduler scheduler;
     Audio::PluginTable::Init();
     Audio::Node node {};
 
@@ -19,6 +21,7 @@ TEST(NodeModel, InitDestroy)
 
 TEST(NodeModel, Color)
 {
+    Scheduler scheduler;
     Audio::PluginTable::Init();
     Audio::Node node {};
 
@@ -31,6 +34,7 @@ TEST(NodeModel, Color)
 
 TEST(NodeModel, Muted)
 {
+    Scheduler scheduler;
     Audio::PluginTable::Init();
     Audio::Node node {};
 
@@ -45,12 +49,20 @@ TEST(NodeModel, Muted)
 
 TEST(NodeModel, Name)
 {
+    Scheduler scheduler;
     Audio::PluginTable::Init();
     Audio::Node node {};
 
     NodeModel model(&node);
     model.setName("testnode");
-    ASSERT_EQ(model.name(), "testnode");
+    ASSERT_EQ(model.name().toStdString(), "testnode");
 
     Audio::PluginTable::Destroy();
+}
+
+TEST(NodeModel, Add)
+{
+    Scheduler scheduler;
+    Audio::PluginTable::Init();
+    Audio::Node node {};
 }

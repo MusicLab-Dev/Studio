@@ -6,9 +6,11 @@
 #include <gtest/gtest.h>
 
 #include <Studio/ControlsModel.hpp>
+#include <Studio/Scheduler.hpp>
 
 TEST(ControlsModel, InitDestroy)
 {
+    Scheduler scheduler;
     Audio::Controls controls {};
 
     ASSERT_NO_THROW(ControlsModel tmp(&controls));
@@ -16,6 +18,7 @@ TEST(ControlsModel, InitDestroy)
 
 TEST(ControlsModel, AddRemoveControlCount)
 {
+    Scheduler scheduler;
     Audio::Controls controls {};
 
     ControlsModel model(&controls);
@@ -34,13 +37,14 @@ TEST(ControlsModel, AddRemoveControlCount)
 
 TEST(ControlsModel, MoveControl)
 {
+    Scheduler scheduler;
     Audio::Controls controls {};
 
     ControlsModel model(&controls);
 
     model.add(10);
     model.add(12);
-    //model.move(0, 1);
+    model.move(0, 1);
 
     ASSERT_EQ(model.get(0)->paramID(), 12);
     ASSERT_EQ(model.get(1)->paramID(), 10);

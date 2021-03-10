@@ -6,6 +6,8 @@
 #include <gtest/gtest.h>
 
 #include <Studio/PartitionsModel.hpp>
+#include <Studio/Scheduler.hpp>
+
 
 TEST(PartitionsModel, InitDestroy)
 {
@@ -16,6 +18,8 @@ TEST(PartitionsModel, InitDestroy)
 
 TEST(PartitionsModel, AddRemove)
 {
+    Scheduler scheduler;
+
     Audio::Partitions partitions {};
 
     PartitionsModel model(&partitions);

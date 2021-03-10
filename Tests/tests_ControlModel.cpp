@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <Studio/ControlModel.hpp>
+#include <Studio/Scheduler.hpp>
 
 TEST(ControlModel, InitDestroy)
 {
@@ -17,6 +18,8 @@ TEST(ControlModel, InitDestroy)
 
 TEST(ControlModel, AddRemoveAutomation)
 {
+    Scheduler scheduler;
+
     Audio::Control control {1, 2.0};
 
     ControlModel model(&control);
@@ -32,6 +35,8 @@ TEST(ControlModel, AddRemoveAutomation)
 
 TEST(ControlModel, MoveAutomation)
 {
+    Scheduler scheduler;
+
     Audio::Control control {1, 2.0};
 
     ControlModel model(&control);
@@ -43,6 +48,7 @@ TEST(ControlModel, MoveAutomation)
 
 TEST(ControlModel, Muted)
 {
+    Scheduler scheduler;
     Audio::Control control(1, 2.0);
 
     ControlModel model(&control);
@@ -57,6 +63,7 @@ TEST(ControlModel, Muted)
 
 TEST(ControlModel, ParamId)
 {
+    Scheduler scheduler;
     Audio::Control control1 {1, 2.0};
 
     ControlModel model(&control1);
@@ -66,6 +73,7 @@ TEST(ControlModel, ParamId)
 
 TEST(ControlModel, UpdateInternal)
 {
+    Scheduler scheduler;
     Audio::Control control1 {1, 2.0};
     Audio::Control control2 {2, 4.0};
 

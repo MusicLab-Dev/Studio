@@ -69,7 +69,7 @@ public:
     [[nodiscard]] const NodeModel *get(const int index) const;
 
     /** @brief Add new nodes in children vector */
-    [[nodiscard]] Node &add(void);
+    [[nodiscard]] bool add(void);
 
     /** @brief Get if the node is muted */
     [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
@@ -86,7 +86,7 @@ public:
 
 
     /** @brief Get the node's name */
-    [[nodiscard]] QString name(void) const noexcept { return _data->name().data(); }
+    [[nodiscard]] QString name(void) const noexcept { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
 
     /** @brief Set the node's name */
     bool setName(const QString &name) noexcept;

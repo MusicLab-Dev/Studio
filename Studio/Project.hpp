@@ -48,7 +48,7 @@ public:
 
 
     /** @brief Get the project name */
-    [[nodiscard]] QString name(void) const noexcept { return _data->name().data(); }
+    [[nodiscard]] QString name(void) const noexcept { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
 
     /** @brief Set the project name, return true and emit nameChanged on change */
     bool setName(const QString &name) noexcept;
@@ -86,6 +86,6 @@ signals:
 
 private:
     Audio::Project *_data { nullptr };
-    Core::UniqueAlloc<NodeModel> _master { nullptr };
+    Core::UniqueAlloc<NodeModel> _master {};
     QString _path {};
 };

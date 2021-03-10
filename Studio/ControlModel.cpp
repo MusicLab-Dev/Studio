@@ -8,6 +8,7 @@
 
 #include "Models.hpp"
 #include "ControlModel.hpp"
+#include "Scheduler.hpp"
 
 ControlModel::ControlModel(Audio::Control *control, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(control)
@@ -73,22 +74,32 @@ bool ControlModel::setAutomationMutedState(const int index, const bool state) no
 
 void ControlModel::add(void)
 {
-    beginResetModel();
-    _data->automations().push(Audio::Automation());
-    refreshAutomations();
-    endResetModel();
+    Scheduler::Get()->addEvent(
+        [this] {
+            _data->automations().push(Audio::Automation());
+        },
+        [this] {
+            beginResetModel();
+            refreshAutomations();
+            endResetModel();
+        });
 }
 
 void ControlModel::remove(const int index)
 {
     if (index >= count())
         return;
-    beginResetModel();
-    auto it = _data->automations().begin() + index;
-    if (it != _data->automations().end() && it != nullptr)
-        _data->automations().erase(it);
-    refreshAutomations();
-    endResetModel();
+    Scheduler::Get()->addEvent(
+        [this, index] {
+            auto it = _data->automations().begin() + index;
+            if (it != _data->automations().end() && it != nullptr)
+                _data->automations().erase(it);
+        }, [this] {
+            beginResetModel();
+            refreshAutomations();
+            endResetModel();
+        });
+
 }
 
 void ControlModel::move(const int from, const int to) noexcept_ndebug
@@ -112,11 +123,16 @@ void ControlModel::updateInternal(Audio::Control *data)
 {
     if (_data == data)
         return;
-    std::swap(_data, data);
-    // Check if the underlying instances have different data pointer than new one
-    if (_data->automations().data() != data->automations().data()) {
-        beginResetModel();
-        refreshAutomations();
-        endResetModel();
-    }
+    Scheduler::Get()->addEvent(
+        [this, data] {
+            _data = data;
+        },
+        [this, data] {
+            if (_data->automations().data() != data->automations().data()) {
+                beginResetModel();
+                refreshAutomations();
+                endResetModel();
+            }
+        });
+
 }

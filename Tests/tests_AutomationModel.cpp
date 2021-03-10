@@ -8,9 +8,11 @@
 #include <Studio/AutomationModel.hpp>
 #include <Studio/Scheduler.hpp>
 #include <Studio/Point.hpp>
+#include <Studio/Scheduler.hpp>
 
 TEST(AutomationModel, InitDestroy)
 {
+    Scheduler scheduler;
     Audio::Automation automation {};
 
     ASSERT_NO_THROW(AutomationModel tmp(&automation));
@@ -18,6 +20,7 @@ TEST(AutomationModel, InitDestroy)
 
 TEST(AutomationModel, InitWithValueDestroy)
 {
+    Scheduler scheduler;
     Audio::Automation automation {};
     automation.instances().push<Audio::BeatRange>({1, 2});
 
@@ -29,6 +32,7 @@ TEST(AutomationModel, InitWithValueDestroy)
 
 TEST(AutomationModel, UpdateInternal)
 {
+    Scheduler scheduler;
     Audio::Automation automation1 {};
     Audio::Automation automation2 {};
 
@@ -46,6 +50,7 @@ TEST(AutomationModel, UpdateInternal)
 
 TEST(AutomationModel, AddPoint)
 {
+    Scheduler scheduler;
     Audio::Automation automation {};
 
     AutomationModel model(&automation);
@@ -63,6 +68,7 @@ TEST(AutomationModel, AddPoint)
 
 TEST(AutomationModel, Count)
 {
+    Scheduler scheduler;
     Audio::Automation automation {};
 
     AutomationModel model(&automation);
@@ -80,6 +86,7 @@ TEST(AutomationModel, Count)
 
 TEST(AutomationModel, RemovePoint)
 {
+    Scheduler scheduler;
     Audio::Automation automation {};
 
     AutomationModel model(&automation);
@@ -131,6 +138,7 @@ TEST(AutomationModel, InstancesAddRemoveBasics)
 
 TEST(AutomationModel, SetPoint)
 {
+    Scheduler scheduler;
     Audio::Automation automation {};
 
     AutomationModel model(&automation);

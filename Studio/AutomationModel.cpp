@@ -8,6 +8,7 @@
 
 #include "Models.hpp"
 #include "AutomationModel.hpp"
+#include "Scheduler.hpp"
 
 AutomationModel::AutomationModel(Audio::Automation *automation, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(automation), _instances(&automation->instances(), this)
@@ -47,18 +48,29 @@ bool AutomationModel::setData(const QModelIndex &index, const QVariant &value, i
 
 void AutomationModel::add(const GPoint &point) noexcept
 {
-    beginResetModel();
-    _data->points().push(point);
-    endResetModel();
+    Scheduler::Get()->addEvent(
+        [this, &point] {
+            _data->points().push(point);
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+        });
 }
 
 void AutomationModel::remove(const int index) noexcept_ndebug
 {
     coreAssert(index >= 0 || index < count(),
         throw std::range_error("AutomationModel::remove: Given index is not in range"));
-    beginRemoveRows(QModelIndex(), index, index);
-    _data->points().erase(_data->points().begin() + index);
-    endRemoveRows();
+
+    Scheduler::Get()->addEvent(
+        [this, &index] {
+            _data->points().erase(_data->points().begin() + index);
+        },
+        [this, &index] {
+            beginRemoveRows(QModelIndex(), index, index);
+            endRemoveRows();
+        });
 }
 
 GPoint AutomationModel::get(const int index) const noexcept_ndebug
@@ -73,22 +85,34 @@ void AutomationModel::set(const int index, const GPoint &point) noexcept_ndebug
 {
     coreAssert(index >= 0 || index < count(),
         throw std::range_error("AutomationModel::remove: Given index is not in range"));
-    _data->points().at(index) = point;
-    // _data->points().sort()
-    beginResetModel();
-    endResetModel();
-    const auto modelIndex = QAbstractListModel::index(index, 0);
-    emit dataChanged(modelIndex, modelIndex, { static_cast<int>(Roles::Point) });
+
+    Scheduler::Get()->addEvent(
+        [this, &index, &point] {
+            _data->points().at(index) = point;
+            // _data->points().sort()
+        },
+        [this, &index] {
+            beginResetModel();
+            endResetModel();
+            const auto modelIndex = QAbstractListModel::index(index, 0);
+            emit dataChanged(modelIndex, modelIndex, { static_cast<int>(Roles::Point) });
+        });
+
 }
 
 void AutomationModel::updateInternal(Audio::Automation *data)
 {
     if (_data == data)
         return;
-    std::swap(_data, data);
-    if (_data->points().data() != data->points().data()) {
-        beginResetModel();
-        endResetModel();
-    }
-    _instances->updateInternal(&_data->instances());
+    Scheduler::Get()->addEvent(
+        [this, data] {
+            _data = data;
+            _instances->updateInternal(&_data->instances());
+        },
+        [this, data] {
+            if (_data->points().data() != data->points().data()) {
+                beginResetModel();
+                endResetModel();
+            }
+        });
 }
