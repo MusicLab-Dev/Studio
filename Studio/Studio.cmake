@@ -23,18 +23,18 @@ qt_add_resources(QtResources
 )
 
 set(StudioSources
-    ${StudioDir}/Application.cpp
-    ${StudioDir}/Application.hpp
+    # ${StudioDir}/Application.cpp
+    # ${StudioDir}/Application.hpp
     ${StudioDir}/AutomationModel.cpp
     ${StudioDir}/AutomationModel.hpp
     ${StudioDir}/ControlModel.cpp
     ${StudioDir}/ControlModel.hpp
     ${StudioDir}/ControlsModel.cpp
     ${StudioDir}/ControlsModel.hpp
-    ${StudioDir}/Device.cpp
-    ${StudioDir}/Device.hpp
-    ${StudioDir}/DeviceModel.cpp
-    ${StudioDir}/DeviceModel.hpp
+    # ${StudioDir}/Device.cpp
+    # ${StudioDir}/Device.hpp
+    # ${StudioDir}/DeviceModel.cpp
+    # ${StudioDir}/DeviceModel.hpp
     ${StudioDir}/InstancesModel.cpp
     ${StudioDir}/InstancesModel.hpp
     ${StudioDir}/Main.cpp
@@ -45,8 +45,8 @@ set(StudioSources
     ${StudioDir}/PartitionModel.hpp
     ${StudioDir}/PartitionsModel.cpp
     ${StudioDir}/PartitionsModel.hpp
-    ${StudioDir}/PluginTableModel.cpp
-    ${StudioDir}/PluginTableModel.hpp
+    # ${StudioDir}/PluginTableModel.cpp
+    # ${StudioDir}/PluginTableModel.hpp
     ${StudioDir}/Point.hpp
     ${StudioDir}/Point.ipp
     ${StudioDir}/Project.cpp
