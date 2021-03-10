@@ -3,10 +3,13 @@
  * @ Description: Studio class
  */
 
+#include <Audio/PluginTable.hpp>
+
 #include "Studio.hpp"
 
 void Studio::InitResources(void)
 {
+    Audio::PluginTable::Init();
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
     Q_INIT_RESOURCE(Default);
@@ -19,6 +22,7 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Main);
     Q_CLEANUP_RESOURCE(Default);
     Q_CLEANUP_RESOURCE(Common);
+    Audio::PluginTable::Destroy();
 }
 
 static int DefaultArgc = 1;
