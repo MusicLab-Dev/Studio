@@ -3,12 +3,16 @@
  * @ Description: Studio class
  */
 
+#include <Audio/PluginTable.hpp>
+
 #include "ThemeManager.hpp"
+
 #include "Studio.hpp"
 
 void Studio::InitResources(void)
 {
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
+    Audio::PluginTable::Init();
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
     Q_INIT_RESOURCE(Default);
@@ -31,6 +35,7 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(PlaylistView);
     Q_CLEANUP_RESOURCE(EmptyView);
     Q_CLEANUP_RESOURCE(BoardView);
+    Audio::PluginTable::Destroy();
 }
 
 static int DefaultArgc = 1;
