@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 
 import ThemeManager 1.0
+import Project 1.0
 
 import "../ModulesView"
 
@@ -15,6 +16,10 @@ Window {
 
     ModulesView {
         anchors.fill: parent
+    }
+
+    Project {
+        id: project
     }
 
     ThemeManager {

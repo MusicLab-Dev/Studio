@@ -8,7 +8,7 @@
 #include "Project.hpp"
 
 Project::Project(Audio::Project *project, QObject *parent)
-    : QObject(parent), _data(project)
+    : QObject(parent), _data(project), _master((_data->master() = std::make_unique<Audio::Node>()).get())
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
