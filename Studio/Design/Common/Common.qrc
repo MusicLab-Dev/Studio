@@ -10,5 +10,6 @@
         <file>GestureArea.qml</file>
         <file>Player.qml</file>
         <file>Bpm.qml</file>
+        <file>MuteButton.qml</file>
     </qresource>
 </RCC>

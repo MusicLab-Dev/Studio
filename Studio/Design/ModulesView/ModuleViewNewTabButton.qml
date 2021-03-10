@@ -6,10 +6,6 @@ Rectangle {
     property real barSize: width / 4
 
     id: newTabButton
-    visible: title === "+"
-    height: parent.height * 0.05
-    width: parent.height * 0.05
-    x: index * parent.width * 0.20
     color: "#001E36"
     border.color: "black"
     
@@ -18,9 +14,9 @@ Rectangle {
         onClicked: {
             modules.insert(
                         modulesViewContent.modules.count - 1,
-                        {title: "New component",
+                        {
+                            title: "New component",
                             path: "qrc:/EmptyView/EmptyView.qml",
-                            moduleZ: modulesViewContent.modules.count
                         })
             modulesViewContent.componentSelected = modulesViewContent.modules.count - 2
         }

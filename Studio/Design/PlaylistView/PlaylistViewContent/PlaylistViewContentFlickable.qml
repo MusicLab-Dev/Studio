@@ -5,14 +5,16 @@ import "../../Default"
 import "../../Common"
 
 Item {
+    property int rowHeight: 80
+    property alias totalHeight: playlistViewContentHeader.totalGridHeight
+
     id: playlistViewContentFlickable
-    property int rowHeight: 30
 
     Flickable {
         id: flickable
         anchors.fill: parent
         clip: true
-        contentHeight: height
+        contentHeight: totalHeight
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: DefaultScrollBar {
@@ -22,7 +24,7 @@ Item {
         PlaylistViewContentHeader {
             id: playlistViewContentHeader
             height: parent.height
-            width: parent.width * 0.1
+            width: parent.width * 0.2
         }
     }
 

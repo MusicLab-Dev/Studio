@@ -21,7 +21,6 @@ RowLayout {
                 modules.insert(index, {
                                    title: "Sequencer",
                                    path: "qrc:/SequencerView/SequencerView.qml",
-                                   moduleZ: modules.count
                                })
                 modules.remove(index)
             }
@@ -44,7 +43,6 @@ RowLayout {
                 modules.insert(index, {
                                    title: "Playlist",
                                    path: "qrc:/PlaylistView/PlaylistView.qml",
-                                   moduleZ: modules.count
                                })
                 modules.remove(index)
             }
@@ -67,7 +65,6 @@ RowLayout {
                 modules.insert(index, {
                                    title: "Board",
                                    path: "qrc:/BoardView/BoardView.qml",
-                                   moduleZ: modules.count
                                })
                 modules.remove(index)
             }

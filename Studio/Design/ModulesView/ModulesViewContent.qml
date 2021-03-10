@@ -5,8 +5,9 @@ import "../Default"
 Item {
     property alias modules: modules
     property int componentSelected: 0
-    property bool tmp: true
-    id: grid
+    property real tabWidth: width * 0.2
+
+    id: modulesViewContent
 
     Repeater {
         model: ListModel {
@@ -15,40 +16,41 @@ Item {
             ListElement {
                 title: "New component"
                 path: "qrc:/EmptyView/EmptyView.qml"
-                moduleZ: 0
             }
 
             ListElement {
                 title: "+"
                 path: ""
-                moduleZ: 0
             }
         }
 
         delegate: Column {
-            anchors.fill: grid
+            z: componentSelected === index ? 1 : 0
+            anchors.fill: modulesViewContent
             spacing: 1.0
 
-            ModulesViewTab {}
+            ModulesViewTab {
+                height: parent.height * 0.05
+                width: tabWidth
+                x: index * parent.width * 0.20
+                visible: index !== modules.count - 1
+            }
 
-            ModuleViewNewTabButton {}
-
-            /** Todo: improve the stability of loaded modules
-                            1st way : Make a setting to enable 1 loader per ModulesView
-                            2nd way : Dynamically unload unused tabs by time
-                            3nd way: Mix both 1st and 2nd
-                        */
+            ModuleViewNewTabButton {
+                height: parent.height * 0.05
+                width: parent.height * 0.05
+                x: index * parent.width * 0.20
+                visible: index === modules.count - 1
+            }
 
             Loader {
                 id: loadedComponent
                 height: parent.height * 0.95
                 width: parent.width
                 source: path
-                z: moduleZ
                 visible: componentSelected === index
                 focus: true
             }
         }
     }
-
 }
