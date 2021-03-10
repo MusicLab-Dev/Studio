@@ -1,15 +1,24 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 
-import "../Default"
+import ThemeManager 1.0
+
+import "../ModulesView"
 
 Window {
+    property alias themeManager: themeManager
+
     visible: true
-    width: 640
-    height: 480
+    width: 1280
+    height: 720
     title: qsTr("MusicLab")
 
-    DefaultCheckBox {
-        anchors.centerIn: parent
+    ModulesView {
+        anchors.fill: parent
+    }
+
+    ThemeManager {
+        id: themeManager
+        theme: ThemeManager.Classic
     }
 }

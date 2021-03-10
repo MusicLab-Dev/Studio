@@ -14,41 +14,49 @@ qt_add_resources(QtResources
     ${StudioDir}/Resources/Resources.qrc
     ${StudioDir}/Design/Main/Main.qrc
     ${StudioDir}/Design/Default/Default.qrc
+    ${StudioDir}/Design/ModulesView/ModulesView.qrc
+    ${StudioDir}/Design/SequencerView/SequencerView.qrc
     ${StudioDir}/Design/Common/Common.qrc
+    ${StudioDir}/Design/PlaylistView/PlaylistView.qrc
+    ${StudioDir}/Design/EmptyView/EmptyView.qrc
+    ${StudioDir}/Design/BoardView/BoardView.qrc
 )
 
 set(StudioSources
+    # ${StudioDir}/Application.cpp
+    # ${StudioDir}/Application.hpp
+    ${StudioDir}/AutomationModel.cpp
+    ${StudioDir}/AutomationModel.hpp
+    ${StudioDir}/ControlModel.cpp
+    ${StudioDir}/ControlModel.hpp
+    ${StudioDir}/ControlsModel.cpp
+    ${StudioDir}/ControlsModel.hpp
+    # ${StudioDir}/Device.cpp
+    # ${StudioDir}/Device.hpp
+    # ${StudioDir}/DeviceModel.cpp
+    # ${StudioDir}/DeviceModel.hpp
+    ${StudioDir}/InstancesModel.cpp
+    ${StudioDir}/InstancesModel.hpp
+    ${StudioDir}/Main.cpp
+    ${StudioDir}/Models.hpp
+    ${StudioDir}/NodeModel.cpp
+    ${StudioDir}/NodeModel.hpp
+    ${StudioDir}/PartitionModel.cpp
+    ${StudioDir}/PartitionModel.hpp
+    ${StudioDir}/PartitionsModel.cpp
+    ${StudioDir}/PartitionsModel.hpp
+    # ${StudioDir}/PluginTableModel.cpp
+    # ${StudioDir}/PluginTableModel.hpp
     ${StudioDir}/Point.hpp
     ${StudioDir}/Point.ipp
-    ${StudioDir}/Studio.hpp
-    ${StudioDir}/Studio.cpp
-    ${StudioDir}/InstancesModel.hpp
-    ${StudioDir}/InstancesModel.cpp
-    ${StudioDir}/AutomationModel.hpp
-    ${StudioDir}/AutomationModel.cpp
-    ${StudioDir}/ControlModel.hpp
-    ${StudioDir}/ControlModel.cpp
-    ${StudioDir}/ControlsModel.hpp
-    ${StudioDir}/ControlsModel.cpp
-    ${StudioDir}/PartitionModel.hpp
-    ${StudioDir}/PartitionModel.cpp
-    ${StudioDir}/PartitionsModel.hpp
-    ${StudioDir}/PartitionsModel.cpp
-    ${StudioDir}/NodeModel.hpp
-    ${StudioDir}/NodeModel.cpp
-#${StudioDir}/Application.hpp
-#${StudioDir}/Application.cpp
-    ${StudioDir}/Project.hpp
     ${StudioDir}/Project.cpp
-${StudioDir}/Scheduler.hpp
-${StudioDir}/Scheduler.cpp
-#${StudioDir}/PluginTableModel.hpp
-#${StudioDir}/PluginTableModel.cpp
-#${StudioDir}/DeviceModel.hpp
-#${StudioDir}/DeviceModel.cpp
-#${StudioDir}/Device.hpp
-#${StudioDir}/Device.cpp
-
+    ${StudioDir}/Project.hpp
+    ${StudioDir}/Scheduler.cpp
+    ${StudioDir}/Scheduler.hpp
+    ${StudioDir}/Studio.cpp
+    ${StudioDir}/Studio.hpp
+    ${StudioDir}/ThemeManager.cpp
+    ${StudioDir}/ThemeManager.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

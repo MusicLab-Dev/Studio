@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/BoardView">
+        <file>BoardView.qml</file>
+    </qresource>
+</RCC>

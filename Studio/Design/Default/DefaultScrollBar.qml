@@ -5,6 +5,7 @@ ScrollBar {
     id: control
     active: true
     hoverEnabled: true
+    implicitWidth: 12.5
 
     contentItem: Rectangle {
         width: control.width
