@@ -37,7 +37,6 @@ set(StudioSources
     # ${StudioDir}/DeviceModel.hpp
     ${StudioDir}/InstancesModel.cpp
     ${StudioDir}/InstancesModel.hpp
-    ${StudioDir}/Main.cpp
     ${StudioDir}/Models.hpp
     ${StudioDir}/NodeModel.cpp
     ${StudioDir}/NodeModel.hpp
