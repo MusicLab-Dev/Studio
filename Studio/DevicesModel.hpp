@@ -1,6 +1,6 @@
 /**
  * @ Author: Cédric Lucchese
- * @ Description: DeviceModel class
+ * @ Description: DevicesModel class
  */
 
 #pragma once
@@ -13,7 +13,7 @@
 #include "Device.hpp"
 
 /** @brief Device Model class */
-class DeviceModel : public QAbstractListModel
+class DevicesModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -25,10 +25,10 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit DeviceModel(QObject *parent = nullptr) noexcept;
+    explicit DevicesModel(QObject *parent = nullptr) noexcept;
 
     /** @brief Destruct the instance */
-    ~DeviceModel(void) noexcept = default;
+    ~DevicesModel(void) noexcept = default;
 
 
     /** @brief Get the list of all roles */

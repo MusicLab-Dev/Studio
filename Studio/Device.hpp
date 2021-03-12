@@ -14,45 +14,69 @@ class Device : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int sampleRate READ sampleRate WRITE setSampleRate NOTIFY recordChanged)
-    Q_PROPERTY(Audio::Device::Format format READ format WRITE setFormat NOTIFY formatChanged)
-    Q_PROPERTY(uint8 channels READ channels WRITE setChannels NOTIFY channelsChanged)
-    Q_PROPERTY(uint16 sample READ sample WRITE setSample NOTIFY sampleChanged)
+    Q_PROPERTY(quint32 sampleRate READ sampleRate WRITE setSampleRate NOTIFY recordChanged)
+    Q_PROPERTY(Format format READ format WRITE setFormat NOTIFY formatChanged)
+    Q_PROPERTY(ChannelArrangement channelArrangement READ channelArrangement WRITE setChannelArrangement NOTIFY channelArrangementChanged)
+    Q_PROPERTY(quint16 midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
+    Q_PROPERTY(quint16 blockSize READ blockSize WRITE setBlockSize NOTIFY blockSizeChanged)
 
 public:
+    enum class Format : int {
+        Unknown = static_cast<int>(Audio::Format::Unknown),
+        Fixed8 = static_cast<int>(Audio::Format::Fixed8),
+        Fixed16 = static_cast<int>(Audio::Format::Fixed16),
+        Fixed32 = static_cast<int>(Audio::Format::Fixed32),
+        Floating32 = static_cast<int>(Audio::Format::Floating32)
+    };
+    Q_ENUM(Format)
+
+    enum class ChannelArrangement : int {
+        Mono = static_cast<int>(Audio::ChannelArrangement::Mono),
+        Stereo = static_cast<int>(Audio::ChannelArrangement::Stereo)
+    };
+    Q_ENUM(ChannelArrangement)
+
+
     /** @brief Default constructor */
-    explicit Device(Audio::Device *device, const Audio::Device::Descriptor &descriptor, QObject *parent = nullptr);
+    explicit Device(const Audio::Device::Descriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent = nullptr);
 
     /** @brief Destruct the instance */
     ~Device(void) noexcept = default;
 
 
     /** @brief Get the sample rate */
-    [[nodiscard]] int sampleRate(void) const noexcept { return _data->sampleRate(); }
+    [[nodiscard]] quint32 sampleRate(void) const noexcept { return _data.sampleRate(); }
 
     /** @brief SET the sample rate */
-    bool setSampleRate(int sampleRate) noexcept;
+    bool setSampleRate(const quint32 sampleRate) noexcept;
 
 
     /** @brief Get the format */
-    [[nodiscard]] const Audio::Device::Format &format(void) const noexcept { return _data->format(); }
+    [[nodiscard]] Format format(void) const noexcept { return static_cast<Format>(_data.format()); }
 
     /** @brief Set the format */
-    bool setFormat(const Audio::Device::Format &format) noexcept;
+    bool setFormat(const Format format) noexcept;
 
 
     /** @brief Get the channels */
-    [[nodiscard]] uint8 channels(void) const noexcept { return _data->channels(); }
+    [[nodiscard]] ChannelArrangement channelArrangement(void) const noexcept { return static_cast<ChannelArrangement>(_data.channelArrangement()); }
 
     /** @brief Set the channels */
-    bool setChannels(uint8 channels) noexcept;
+    bool setChannelArrangement(const ChannelArrangement channels) noexcept;
 
 
     /** @brief Get the record */
-    [[nodiscard]] uin16 sample(void) const noexcept { return _data->sample(); }
+    [[nodiscard]] quint16 midiChannels(void) const noexcept { return _data.midiChannels(); }
 
     /** @brief Set the record */
-    bool setSample(uint16 sample) noexcept;
+    bool setMidiChannels(const quint16 midiChannels) noexcept;
+
+
+    /** @brief Get the record */
+    [[nodiscard]] quint16 blockSize(void) const noexcept { return _data.blockSize(); }
+
+    /** @brief Set the record */
+    bool setBlockSize(const quint16 blockSize) noexcept;
 
 signals:
     /** @brief Notify that sample rate property has changed */
@@ -61,12 +85,15 @@ signals:
     /** @brief Notify that format property has changed */
     void formatChanged(void);
 
-    /** @brief Notify that channels property has changed */
-    void channelsChanged(void);
+    /** @brief Notify that channel arrangement property has changed */
+    void channelArrangementChanged(void);
 
-    /** @brief Notify that sample property has changed */
-    void sampleChanged(void);
+    /** @brief Notify that midi channels property has changed */
+    void midiChannelsChanged(void);
+
+    /** @brief Notify that block sized property has changed */
+    void blockSizeChanged(void);
 
 private:
-    Audio::Device *_data { nullptr };
+    Audio::Device _data;
 };

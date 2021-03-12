@@ -3,15 +3,17 @@
  * @ Description: Studio class
  */
 
-#include <Audio/PluginTable.hpp>
+// #include <Audio/PluginTable.hpp>
 
 #include "ThemeManager.hpp"
+#include "Application.hpp"
 
 #include "Studio.hpp"
 
 void Studio::InitResources(void)
 {
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
+    qmlRegisterType<Application>("Application", 1, 0, "Application");
     Audio::PluginTable::Init();
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);

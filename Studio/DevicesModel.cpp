@@ -1,21 +1,21 @@
 /**
  * @ Author: Cédric Lucchese
- * @ Description: Device Model implementation
+ * @ Description: Devices Model implementation
  */
 
 #include <stdexcept>
 
 #include <QQmlEngine>
 
-#include "DeviceModel.hpp"
+#include "DevicesModel.hpp"
 
-DeviceModel::DeviceModel(QObject *parent) noexcept
+DevicesModel::DevicesModel(QObject *parent) noexcept
     : QAbstractListModel(parent)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
-QHash<int, QByteArray> DeviceModel::roleNames(void) const noexcept
+QHash<int, QByteArray> DevicesModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
         { static_cast<int>(Roles::Name), "name" },
@@ -23,12 +23,12 @@ QHash<int, QByteArray> DeviceModel::roleNames(void) const noexcept
     };
 }
 
-QVariant DeviceModel::data(const QModelIndex &index, int role) const
+QVariant DevicesModel::data(const QModelIndex &index, int role) const
 {
     coreAssert(index.row() < 0 || index.row() >= count(),
         throw std::range_error("InstancesModel::data: Given index is not in range"));
     const auto &child = (*_data)[index.row()];
-    switch (static_cast<DeviceModel::Roles>(role)) {
+    switch (static_cast<DevicesModel::Roles>(role)) {
     case Roles::Name:
         return child.name();
     case Roles::IsInput:
@@ -38,7 +38,7 @@ QVariant DeviceModel::data(const QModelIndex &index, int role) const
     }
 }
 
-DeviceModel::DevicePtr DeviceModel::instantiate(const QString &name)
+DevicesModel::DevicePtr DevicesModel::instantiate(const QString &name)
 {
     Audio::Device dev;
     dev.

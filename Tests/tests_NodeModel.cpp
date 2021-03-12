@@ -65,4 +65,6 @@ TEST(NodeModel, Add)
     Scheduler scheduler;
     Audio::PluginTable::Init();
     Audio::Node node {};
+
+    node.add("__internal__:/Mixer");
 }

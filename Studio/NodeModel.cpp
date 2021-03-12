@@ -5,10 +5,13 @@
 
 #include <stdexcept>
 
+#include <QDebug>
 #include <QHash>
 #include <QQmlEngine>
 #include <QAbstractListModel>
 #include <QColor>
+
+#include <Audio/PluginTable.hpp>
 
 #include "NodeModel.hpp"
 
@@ -45,13 +48,26 @@ const NodeModel *NodeModel::get(const int index) const
     return _children.at(index).get();
 }
 
-bool NodeModel::add(void)
+void NodeModel::add(const QString &pluginPath)
 {
+    std::string path = pluginPath.toStdString();
     auto index = static_cast<int>(_data->children().size());
+    auto factory = Audio::PluginTable::Get().find(path);
+    if (!factory) {
+        qCritical() << "NodeModel::add: Invalid plugin path " << pluginPath;
+        return;
+    }
+    auto plugin = factory->instantiate();
+    if (!plugin) {
+        qCritical() << "NodeModel::add: Couldn't intantiate plugin " << pluginPath;
+        return;
+    }
+    auto &backendChild = _data->children().push(std::make_unique<Audio::Node>(std::move(plugin)));
+    backendChild->setName(Core::FlatString(backendChild->name()));
+    // backendChild->prepareCache(specs);
     beginInsertRows(QModelIndex(), index, index);
-    _children.push(_data->children().push().get(), this);
+    _children.push(backendChild.get(), this);
     endInsertRows();
-    return true;
 }
 
 bool NodeModel::setMuted(bool muted) noexcept

@@ -7,7 +7,6 @@
 
 #include <Studio/Studio.hpp>
 
-
 int main(int argc, char *argv[])
 {
     Studio::InitResources();

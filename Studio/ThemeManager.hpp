@@ -3,6 +3,8 @@
  * @ Description: The theme manager
  */
 
+#pragma once
+
 /*
 COLORS:
 backgroundColor: "#4A8693"
@@ -48,7 +50,7 @@ public:
         Classic,
         Dark
     };
-    Q_ENUMS(Theme)
+    Q_ENUM(Theme)
 
     /** @brief Construct a theme manager */
     ThemeManager(QObject *parent = nullptr)

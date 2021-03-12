@@ -7,41 +7,40 @@
 
 #include "Device.hpp"
 
-Device::Device(Audio::Device *device, const Audio::Descriptor &descriptor, QObject *parent)
-    : QObject(parent) , _data(device)
+Device::Device(const Audio::Device::Descriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent)
+    : QObject(parent), _data(descriptor, std::move(callback))
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
-bool Device::setSampleRate(const int sampleRate) noexcept
+bool Device::setSampleRate(const quint32 sampleRate) noexcept
 {
-    if (!_data->setSampleRate(sampleRate))
+    if (!_data.setSampleRate(sampleRate))
         return false;
     emit sampleRateChanged();
     return true;
 }
 
-bool Device::setFormat(const Audio::Device::Format &format) noexcept
+bool Device::setFormat(const Format format) noexcept
 {
-    if (!_data->setFormat(format))
+    if (!_data.setFormat(static_cast<Audio::Format>(format)))
         return false;
     emit formatChanged();
     return true;
 }
 
-bool Device::setChannels(const uint8 channels) noexcept
+bool Device::setMidiChannels(const quint16 midiChannels) noexcept
 {
-    if (!_data->setChannels(channels))
+    if (!_data.setMidiChannels(midiChannels))
         return false;
-    emit channelsChanged();
+    emit midiChannelsChanged();
     return true;
 }
 
-bool Device::setSample(const uint16 sample) noexcept
+bool Device::setBlockSize(const quint16 blockSize) noexcept
 {
-    if (!_data->setSample(sample))
+    if (!_data.setBlockSize(blockSize))
         return false;
-    emit sampleChanged();
+    emit blockSizeChanged();
     return true;
 }
-

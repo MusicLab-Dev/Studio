@@ -56,3 +56,4 @@ void PluginTableModel::add(const QString &path)
     _data.registerFactory(path.toStdString());
     endInsertRows();
 }
+

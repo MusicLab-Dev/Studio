@@ -68,9 +68,6 @@ public:
 
     [[nodiscard]] const NodeModel *get(const int index) const;
 
-    /** @brief Add new nodes in children vector */
-    [[nodiscard]] bool add(void);
-
     /** @brief Get if the node is muted */
     [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
 
@@ -104,6 +101,10 @@ public:
 
     /** @brief Get the flags */
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
+
+public slots:
+    /** @brief Add a new node in children vector using a plugin path */
+    void add(const QString &pluginPath);
 
 signals:
     /** @brief Notify that muted property has changed */

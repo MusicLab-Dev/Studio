@@ -11,6 +11,7 @@ Project::Project(Audio::Project *project, QObject *parent)
     : QObject(parent), _data(project)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
+
 }
 
 bool Project::setPlaybackMode(const PlaybackMode mode) noexcept

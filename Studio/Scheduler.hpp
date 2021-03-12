@@ -9,6 +9,8 @@
 
 #include <Audio/AScheduler.hpp>
 
+#include "Device.hpp"
+
 /**
  * @brief Scheduler class
  */
@@ -19,7 +21,18 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(Audio::Beat currentBeat READ currentBeat WRITE setCurrentBeat NOTIFY currentBeatChanged)
 
 public:
+    static inline const Audio::Device::Descriptor DefaultDeviceDescription {
+        /*.name = */ "device-test",
+        /*.blockSize = */ 1024u,
+        /*.sampleRate = */ 44100,
+        /*.isInput = */ false,
+        /*.format = */ Audio::Format::Floating32,
+        /*.midiChannels = */ 2u,
+        /*.channelArrangement = */ Audio::ChannelArrangement::Mono
+    };
+
     using Audio::AScheduler::addEvent;
+    using Audio::AScheduler::setProject;
 
     /** @brief Get the global instance */
     [[nodiscard]] static Scheduler *Get(void) noexcept { return _Instance; }
@@ -39,6 +52,9 @@ public:
 
     /** @brief Audio block generated event */
     void onAudioBlockGenerated(void) override final;
+
+    /** @brief Audio block generated event */
+    void onAudioQueueBusy(void) override final;
 
 public slots:
     /** @brief Play the scheduler */
@@ -61,5 +77,7 @@ signals:
     void needToNotifyEvents(void);
 
 private:
+    Device outputDevice;
+
     static inline Scheduler *_Instance { nullptr };
 };
