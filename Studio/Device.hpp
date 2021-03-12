@@ -14,7 +14,7 @@ class Device : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(quint32 sampleRate READ sampleRate WRITE setSampleRate NOTIFY recordChanged)
+    Q_PROPERTY(quint32 sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(Format format READ format WRITE setFormat NOTIFY formatChanged)
     Q_PROPERTY(ChannelArrangement channelArrangement READ channelArrangement WRITE setChannelArrangement NOTIFY channelArrangementChanged)
     Q_PROPERTY(quint16 midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
@@ -77,6 +77,12 @@ public:
 
     /** @brief Set the record */
     bool setBlockSize(const quint16 blockSize) noexcept;
+
+    /** @brief Register the audio callback */
+    void start(void) { _data.start(); }
+
+    /** @brief Unregister the audio callback */
+    void stop(void) { _data.stop(); }
 
 signals:
     /** @brief Notify that sample rate property has changed */

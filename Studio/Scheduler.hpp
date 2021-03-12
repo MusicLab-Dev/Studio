@@ -77,7 +77,7 @@ signals:
     void needToNotifyEvents(void);
 
 private:
-    Device outputDevice;
+    Device _device;
 
     static inline Scheduler *_Instance { nullptr };
 };

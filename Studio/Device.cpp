@@ -29,6 +29,14 @@ bool Device::setFormat(const Format format) noexcept
     return true;
 }
 
+bool Device::setChannelArrangement(const ChannelArrangement channelArrangement) noexcept
+{
+    if (!_data.setChannelArrangement(static_cast<Audio::ChannelArrangement>(channelArrangement)))
+        return false;
+    emit channelArrangementChanged();
+    return true;
+}
+
 bool Device::setMidiChannels(const quint16 midiChannels) noexcept
 {
     if (!_data.setMidiChannels(midiChannels))
