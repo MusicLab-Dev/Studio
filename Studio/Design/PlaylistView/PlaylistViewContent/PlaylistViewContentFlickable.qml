@@ -5,33 +5,39 @@ import "../../Default"
 import "../../Common"
 
 Item {
-    property int rowHeight: 80
-    property alias totalHeight: playlistViewContentHeader.totalGridHeight
+    property alias rowHeight: playlistViewContentNodeView.rowHeight
+    // property alias totalHeight: playlistViewContentHeader.totalGridHeight
+    property alias totalHeight: playlistViewContentNodeView.totalHeight
 
     id: playlistViewContentFlickable
 
-    Flickable {
-        id: flickable
+    PlaylistViewContentNodeView {
+        id: playlistViewContentNodeView
         anchors.fill: parent
-        clip: true
-        contentHeight: totalHeight
-        boundsBehavior: Flickable.StopAtBounds
-
-        ScrollBar.vertical: DefaultScrollBar {
-            policy: ScrollBar.AlwaysOn
-        }
-
-        PlaylistViewContentHeader {
-            id: playlistViewContentHeader
-            height: parent.height
-            width: parent.width * 0.2
-        }
     }
+
+    // Flickable {
+    //     id: flickable
+    //     anchors.fill: parent
+    //     clip: true
+    //     contentHeight: totalHeight
+    //     boundsBehavior: Flickable.StopAtBounds
+
+    //     ScrollBar.vertical: DefaultScrollBar {
+    //         policy: ScrollBar.AlwaysOn
+    //     }
+
+    //     PlaylistViewContentHeader {
+    //         id: playlistViewContentHeader
+    //         height: parent.height
+    //         width: parent.width * 0.2
+    //     }
+    // }
 
     PlaylistViewContentGrid {
         id: playlistViewContentGrid
         anchors.fill: parent
-        anchors.leftMargin: playlistViewContentHeader.width
+        anchors.leftMargin: playlistViewContentNodeView.headerWidth
     }
 
     GestureArea {

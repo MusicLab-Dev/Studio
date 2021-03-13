@@ -53,14 +53,14 @@ bool ControlModel::setData(const QModelIndex &index, const QVariant &value, int 
 const AutomationModel *ControlModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("ControlModel::get: Given index is not in range"));
+        throw std::range_error("ControlModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     return _automations.at(index).get();
 }
 
 bool ControlModel::isAutomationMuted(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("ControlModel::isAutomationMuted: Given index is not in range"));
+        throw std::range_error("ControlModel::isAutomationMuted: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     return _data->isAutomationMuted(index);
 }
 
@@ -68,7 +68,7 @@ bool ControlModel::isAutomationMuted(const int index) const noexcept_ndebug
 bool ControlModel::setAutomationMutedState(const int index, const bool state) noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("ControlModel::isAutomationMuted: Given index is not in range"));
+        throw std::range_error("ControlModel::setAutomationMutedState: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     return _data->setAutomationMutedState(index, state);
 }
 

@@ -8,5 +8,7 @@
         <file>PlaylistViewContent/PlaylistViewContentTimeline.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentFlickable.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentHeader.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeDelegate.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeView.qml</file>
     </qresource>
 </RCC>

@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 Rectangle {
     property real xOffset: 0
-    property real yOffset: (1 - ((flickable.contentY % playlistViewContentFlickable.rowHeight) / playlistViewContentFlickable.rowHeight)) * playlistViewContentFlickable.rowHeight
+    property real yOffset: (1 - ((playlistViewContentNodeView.contentY % playlistViewContentFlickable.rowHeight) / playlistViewContentFlickable.rowHeight)) * playlistViewContentFlickable.rowHeight
     property int displayedRowCount: height / rowHeight
 
     // Input

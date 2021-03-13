@@ -60,8 +60,8 @@ void AutomationModel::add(const GPoint &point) noexcept
 
 void AutomationModel::remove(const int index) noexcept_ndebug
 {
-    coreAssert(index >= 0 || index < count(),
-        throw std::range_error("AutomationModel::remove: Given index is not in range"));
+    coreAssert(index >= 0 && index < count(),
+        throw std::range_error("AutomationModel::remove: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
 
     Scheduler::Get()->addEvent(
         [this, &index] {
@@ -76,15 +76,15 @@ void AutomationModel::remove(const int index) noexcept_ndebug
 GPoint AutomationModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("AutomationModel::get: Given index is not in range"));
+        throw std::range_error("AutomationModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
 
     return GPoint { _data->points().at(index) };
 }
 
 void AutomationModel::set(const int index, const GPoint &point) noexcept_ndebug
 {
-    coreAssert(index >= 0 || index < count(),
-        throw std::range_error("AutomationModel::remove: Given index is not in range"));
+    coreAssert(index >= 0 && index < count(),
+        throw std::range_error("AutomationModel::set: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
 
     Scheduler::Get()->addEvent(
         [this, &index, &point] {

@@ -16,6 +16,9 @@
 
 #include "AutomationModel.hpp"
 
+using ParamID = Audio::ParamID;
+Q_DECLARE_METATYPE(ParamID)
+
 /** @brief Exposes an audio control */
 class ControlModel : public QAbstractListModel
 {

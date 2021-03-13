@@ -31,8 +31,8 @@ QHash<int, QByteArray> PartitionModel::roleNames(void) const noexcept
 
 QVariant PartitionModel::data(const QModelIndex &index, int role) const
 {
-    coreAssert(index.row() < 0 || index.row() >= count(),
-        throw std::range_error("PartitionModel::data: Given index is not in range"));
+    coreAssert(index.row() >= 0 && index.row() < count(),
+        throw std::range_error("PartitionModel::data: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
     //const auto &child = (*_data)[index.row()];
     switch (static_cast<Roles>(role)) {
         case Roles::Range:

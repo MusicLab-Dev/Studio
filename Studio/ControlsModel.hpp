@@ -55,7 +55,7 @@ public slots:
 
 public /* slots */:
     /** @brief Add a children to the list */
-    Q_INVOKABLE void add(const Audio::ParamID paramID) noexcept_ndebug;
+    Q_INVOKABLE void add(const ParamID paramID) noexcept_ndebug;
 
     /** @brief Remove a children from the list */
     Q_INVOKABLE void remove(const int index) noexcept_ndebug;

@@ -46,7 +46,7 @@ QVariant PluginTableModel::data(const QModelIndex &index, int role) const
 Audio::IPluginFactory *PluginTableModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::out_of_range("PluginTableModel::get: Invalid index " + std::to_string(index)));
+        throw std::range_error("PluginTableModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     return _data.factories()[index].get();
 }
 

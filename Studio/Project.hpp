@@ -36,8 +36,8 @@ public:
 
 
     /** @brief Get the master node */
-    [[nodiscard]] NodeModel *master(void) noexcept { return _master.get(); }
-    //[[nodiscard]] NodeModel *master(void) const noexcept { return _master.get(); }
+    [[nodiscard]] NodeModel *master(void) noexcept { return &_master; }
+    // [[nodiscard]] const NodeModel *master(void) const noexcept { return &_master; }
 
 
     /** @brief Get the playback mode */
@@ -86,6 +86,11 @@ signals:
 
 private:
     Audio::Project *_data { nullptr };
-    Core::UniqueAlloc<NodeModel> _master {};
     QString _path {};
+    NodeModel _master;
+
+
+    /** @brief Instantiate the master node and return a pointer referencing to it */
+    [[nodiscard]] Audio::Node *createMasterMixer(void);
+
 };

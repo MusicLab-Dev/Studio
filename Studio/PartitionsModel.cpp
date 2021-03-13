@@ -26,8 +26,8 @@ QHash<int, QByteArray> PartitionsModel::roleNames(void) const noexcept
 
 QVariant PartitionsModel::data(const QModelIndex &index, int role) const
 {
-    coreAssert(index.row() < 0 || index.row() >= count(),
-        throw std::range_error("PartitionsModel::data: Given index is not in range"));
+    coreAssert(index.row() >= 0 && index.row() < count(),
+        throw std::range_error("PartitionsModel::get: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
     switch (static_cast<PartitionsModel::Roles>(role)) {
     case Roles::Partition:
         return get(index.row());
@@ -39,27 +39,27 @@ QVariant PartitionsModel::data(const QModelIndex &index, int role) const
 const PartitionModel *PartitionsModel::get(const int index) const
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("PartitionsModel::get: Given index is not in range"));
+        throw std::range_error("PartitionsModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     return _partitions.at(index).get();
 }
 
-void PartitionsModel::add(const Audio::BeatRange &range) noexcept_ndebug
+void PartitionsModel::add(void) noexcept_ndebug
 {
     Scheduler::Get()->addEvent(
-        [this, &range] {
+        [this] {
             _data->push();
         },
         [this] {
-            beginInsertRows(QModelIndex(), count(), count());
+            beginResetModel();
             refreshControls();
-            endInsertRows();
+            endResetModel();
     });
 }
 
 void PartitionsModel::remove(const int index)
 {
     Scheduler::Get()->addEvent(
-        [this, &index] {
+        [this, index] {
             _data->erase(_data->begin() + index);
             _partitions.erase(_partitions.begin() + index);
         },

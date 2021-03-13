@@ -48,7 +48,7 @@ void InstancesModel::updateInternal(Audio::BeatRanges *data)
 const Audio::BeatRange &InstancesModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("InstancesModel::get: Given index is not in range"));
+        throw std::range_error("InstancesModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     return (*_data)[static_cast<unsigned long>(index)];
 }
 
@@ -68,7 +68,7 @@ void InstancesModel::add(const Audio::BeatRange &range) noexcept
 void InstancesModel::remove(const int index) noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("InstancesModel::remove: Given index is not in range"));
+        throw std::range_error("InstancesModel::remove: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     Scheduler::Get()->addEvent(
         [this, index] {
             _data->erase(_data->begin() + index);
@@ -83,7 +83,7 @@ void InstancesModel::remove(const int index) noexcept_ndebug
 void InstancesModel::move(const int index, const Audio::BeatRange &range) noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("InstancesModel::move: Given index is not in range"));
+        throw std::range_error("InstancesModel::move: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     Scheduler::Get()->addEvent(
         [this, index, range] {
             _data->at(static_cast<unsigned long>(index)) = range;

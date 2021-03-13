@@ -7,7 +7,6 @@
 
 #include <QObject>
 #include <QColor>
-#include <QAbstractListModel>
 
 #include <Core/FlatVector.hpp>
 #include <Core/Utils.hpp>
@@ -20,10 +19,11 @@
 //#include "ConnectionsModel.hpp"
 
 /** @brief Abstraction of a project node */
-class alignas(64) NodeModel : public QAbstractListModel
+class alignas(64) NodeModel : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(quint32 count READ count NOTIFY countChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -44,10 +44,6 @@ public:
     /** @brief Pointer to connections model */
     //using ConnectionsPtr = Core::UniqueAlloc<ConnectionsModel>;
 
-    /** @brief Roles of each instance */
-    enum class Roles : int {
-        Node = Qt::UserRole + 1
-    };
 
     /** @brief Default constructor */
     explicit NodeModel(Audio::Node *node, QObject *parent = nullptr) noexcept;
@@ -56,17 +52,12 @@ public:
     ~NodeModel(void) noexcept = default;
 
 
-    /** @brief Get the list of all roles */
-    [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
-
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return 1; }
-    [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
+    [[nodiscard]] int count(void) const noexcept { return _children.size(); }
 
-    /** @brief Query a role from children */
-    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
-
+    /** @brief Get an element from the list */
     [[nodiscard]] const NodeModel *get(const int index) const;
+
 
     /** @brief Get if the node is muted */
     [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
@@ -106,7 +97,14 @@ public slots:
     /** @brief Add a new node in children vector using a plugin path */
     void add(const QString &pluginPath);
 
+    /** @brief Get an element from the list */
+    [[nodiscard]] NodeModel *get(const int index)
+        { return const_cast<NodeModel *>(const_cast<const NodeModel *>(this)->get(index)); }
+
 signals:
+    /** @brief Notify that count property has changed */
+    void countChanged(void);
+
     /** @brief Notify that muted property has changed */
     void mutedChanged(void);
 

@@ -46,20 +46,19 @@ public:
     [[nodiscard]] const PartitionModel *get(const int index) const;
 
 public slots:
+    /** @brief Add a children to the list */
+    void add(void);
+
     /** @brief Remove a children from the list */
     void remove(const int index);
 
     /** @brief Move beatrange at index */
     void move(const int from, const int to);
 
-public /* slots */:
-    /** @brief Add a children to the list */
-    Q_INVOKABLE void add(const Audio::BeatRange &range) noexcept_ndebug;
-
 private:
     Audio::Partitions *_data { nullptr };
     Core::Vector<Core::UniqueAlloc<PartitionModel>> _partitions;
 
     /** @brief Refresh internal models */
-    void refreshControls();
+    void refreshControls(void);
 };

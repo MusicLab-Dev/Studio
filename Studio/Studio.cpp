@@ -14,6 +14,13 @@ void Studio::InitResources(void)
 {
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
+    qmlRegisterUncreatableType<Project>("Project", 1, 0, "Project", "Cannot construct Project");
+    qmlRegisterUncreatableType<NodeModel>("NodeModel", 1, 0, "NodeModel", "Cannot construct NodeModel");
+    qmlRegisterUncreatableType<PartitionsModel>("PartitionsModel", 1, 0, "PartitionsModel", "Cannot construct PartitionsModel");
+    qmlRegisterUncreatableType<PartitionModel>("PartitionModel", 1, 0, "PartitionModel", "Cannot construct PartitionModel");
+    qmlRegisterUncreatableType<ControlsModel>("ControlsModel", 1, 0, "ControlsModel", "Cannot construct ControlsModel");
+    qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
+    qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
     Audio::PluginTable::Init();
     Audio::Device::InitDriver();
     Q_INIT_RESOURCE(Resources);

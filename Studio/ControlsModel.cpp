@@ -42,11 +42,11 @@ QVariant ControlsModel::data(const QModelIndex &index, int role) const
 const ControlModel *ControlsModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("ControlsModel::get: Given index is not in range"));
+        throw std::range_error("ControlsModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     return _controls.at(index).get();
 }
 
-void ControlsModel::add(const Audio::ParamID paramID) noexcept_ndebug
+void ControlsModel::add(const ParamID paramID) noexcept_ndebug
 {
     Scheduler::Get()->addEvent(
     [this, paramID] {

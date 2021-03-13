@@ -16,35 +16,15 @@
 #include "NodeModel.hpp"
 
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
-    : QAbstractListModel(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
+    : QObject(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
 {
-    //updateInternal();
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-}
-
-QHash<int, QByteArray> NodeModel::roleNames(void) const noexcept
-{
-    return QHash<int, QByteArray> {
-        { static_cast<int>(Roles::Node), "node" }
-    };
-}
-
-QVariant NodeModel::data(const QModelIndex &index, int role) const
-{
-    coreAssert(index.row() < 0 || index.row() >= count(),
-        throw std::range_error("InstancesModel::data: Given index is not in range"));
-    switch (static_cast<NodeModel::Roles>(role)) {
-    case Roles::Node:
-        return get(index.row());
-    default:
-        return QVariant();
-    }
 }
 
 const NodeModel *NodeModel::get(const int index) const
 {
     coreAssert(index >= 0 && index < count(),
-        throw std::range_error("PartitionsModel::get: Given index is not in range"));
+        throw std::range_error("NodeModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     return _children.at(index).get();
 }
 
@@ -57,17 +37,22 @@ void NodeModel::add(const QString &pluginPath)
         qCritical() << "NodeModel::add: Invalid plugin path " << pluginPath;
         return;
     }
-    auto plugin = factory->instantiate();
+    Audio::PluginPtr plugin = factory->instantiate();
     if (!plugin) {
         qCritical() << "NodeModel::add: Couldn't intantiate plugin " << pluginPath;
         return;
     }
+
+    // Scheduler::Get()->addEvent(
+    // [this, plugin = std::move(plugin)] {
+    // },
+    // [this] {
+    // });
     auto &backendChild = _data->children().push(std::make_unique<Audio::Node>(std::move(plugin)));
-    backendChild->setName(Core::FlatString(backendChild->name()));
+    backendChild->setName(Core::FlatString(factory->getName()));
     // backendChild->prepareCache(specs);
-    beginInsertRows(QModelIndex(), index, index);
     _children.push(backendChild.get(), this);
-    endInsertRows();
+    emit countChanged();
 }
 
 bool NodeModel::setMuted(bool muted) noexcept
