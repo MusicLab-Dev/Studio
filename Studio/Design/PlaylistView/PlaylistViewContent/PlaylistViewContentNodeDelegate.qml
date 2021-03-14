@@ -82,54 +82,26 @@ Column {
         Column {
             id: dataColumn
             x: nodeView.headerPluginWidth
-            width: nodeView.headerDataWidth
+            width: nodeView.width - nodeView.headerPluginWidth
 
-            Repeater {
+            PlaylistViewContentNodeDelegateControls {
                 model: delegate.node.controls
-
-                delegate: Rectangle {
-                    width: nodeView.headerDataWidth
-                    height: nodeView.rowHeight
-                    color: "red"
-                    border.color: "grey"
-                    border.width: 2
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Control"
-                        font.pointSize: 24
-                    }
-                }
             }
 
-            Repeater {
+            PlaylistViewContentNodeDelegatePartitions {
                 model: delegate.node.partitions
-
-                delegate: Rectangle {
-                    width: nodeView.headerDataWidth
-                    height: nodeView.rowHeight
-                    color: "red"
-                    border.color: "grey"
-                    border.width: 2
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Partition"
-                        font.pointSize: 24
-                    }
-                }
             }
         }
     }
 
     Repeater {
-        model: delegate.node.count
+        model: delegate.node
 
         delegate: Loader {
             source: "qrc:/PlaylistView/PlaylistViewContent/PlaylistViewContentNodeDelegate.qml"
 
             onLoaded: {
-                item.node = delegate.node.get(index)
+                item.node = nodeInstance.instance
                 item.recursionIndex = delegate.recursionIndex + 1
             }
         }

@@ -24,6 +24,8 @@ public:
     };
     Q_ENUM(CurveType)
 
+    using Audio::Point::Point;
+
     /** @brief Get / Set the internal curve type */
     [[nodiscard]] CurveType getType(void) const noexcept { return static_cast<GPoint::CurveType>(type); }
     bool setType(const CurveType type_) noexcept;

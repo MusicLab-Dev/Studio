@@ -27,8 +27,8 @@ public:
     /** @brief Default constructor */
     explicit DevicesModel(QObject *parent = nullptr) noexcept;
 
-    /** @brief Destruct the instance */
-    ~DevicesModel(void) noexcept = default;
+    /** @brief Virtual destructor */
+    ~DevicesModel(void) noexcept override = default;
 
 
     /** @brief Get the list of all roles */

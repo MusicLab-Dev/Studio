@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <QObject>
+#include <QAbstractListModel>
 #include <QColor>
 
 #include <Core/FlatVector.hpp>
@@ -18,8 +18,22 @@
 #include "ControlsModel.hpp"
 //#include "ConnectionsModel.hpp"
 
+class NodeModel;
+
+struct NodeWrapper
+{
+    Q_GADGET
+
+    Q_PROPERTY(NodeModel *instance MEMBER instance)
+public:
+
+    NodeModel *instance { nullptr };
+};
+
+Q_DECLARE_METATYPE(NodeWrapper)
+
 /** @brief Abstraction of a project node */
-class alignas(64) NodeModel : public QObject
+class NodeModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -44,18 +58,32 @@ public:
     /** @brief Pointer to connections model */
     //using ConnectionsPtr = Core::UniqueAlloc<ConnectionsModel>;
 
+    /** @brief Roles of each instance */
+    enum class Roles : int {
+        NodeInstance = Qt::UserRole + 1
+    };
 
     /** @brief Default constructor */
     explicit NodeModel(Audio::Node *node, QObject *parent = nullptr) noexcept;
 
-    /** @brief Destruct the instance */
-    ~NodeModel(void) noexcept = default;
+    /** @brief Virtual destructor */
+    ~NodeModel(void) noexcept override = default;
 
+
+    /** @brief Get the list of all roles */
+    [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return _children.size(); }
+    [[nodiscard]] int count(void) const noexcept { return  _children.size(); }
+    [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
+
+    /** @brief Query a role from children */
+    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
+
 
     /** @brief Get an element from the list */
+    [[nodiscard]] NodeModel *get(const int index)
+        { return const_cast<NodeModel *>(const_cast<const NodeModel *>(this)->get(index)); }
     [[nodiscard]] const NodeModel *get(const int index) const;
 
 
@@ -97,9 +125,8 @@ public slots:
     /** @brief Add a new node in children vector using a plugin path */
     void add(const QString &pluginPath);
 
-    /** @brief Get an element from the list */
-    [[nodiscard]] NodeModel *get(const int index)
-        { return const_cast<NodeModel *>(const_cast<const NodeModel *>(this)->get(index)); }
+    /** @brief Remove a children node */
+    void remove(const int index);
 
 signals:
     /** @brief Notify that count property has changed */

@@ -19,6 +19,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<PartitionsModel>("PartitionsModel", 1, 0, "PartitionsModel", "Cannot construct PartitionsModel");
     qmlRegisterUncreatableType<PartitionModel>("PartitionModel", 1, 0, "PartitionModel", "Cannot construct PartitionModel");
     qmlRegisterUncreatableType<ControlsModel>("ControlsModel", 1, 0, "ControlsModel", "Cannot construct ControlsModel");
+    qmlRegisterUncreatableType<ControlModel>("ControlModel", 1, 0, "ControlModel", "Cannot construct ControlModel");
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
     Audio::PluginTable::Init();

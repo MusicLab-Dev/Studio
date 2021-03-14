@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Rectangle {
+Item {
     property real xOffset: 0
     property real yOffset: (1 - ((playlistViewContentNodeView.contentY % playlistViewContentFlickable.rowHeight) / playlistViewContentFlickable.rowHeight)) * playlistViewContentFlickable.rowHeight
     property int displayedRowCount: height / rowHeight
@@ -29,7 +29,6 @@ Rectangle {
     property real divisionWidth: cellWidth / divisionsPerCell
 
     id: grid
-    color: "#4A8693"
 
     onDisplayedRowCountChanged: {
         canvasHorizontal.requestPaint()

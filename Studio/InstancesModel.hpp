@@ -27,6 +27,9 @@ public:
     /** @brief Default constructor */
     explicit InstancesModel(Audio::BeatRanges *beatRanges, QObject *parent = nullptr) noexcept;
 
+    /** @brief Virtual destructor */
+    ~InstancesModel(void) noexcept override = default;
+
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 

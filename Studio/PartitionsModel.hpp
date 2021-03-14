@@ -29,8 +29,8 @@ public:
     /** @brief Default constructor */
     explicit PartitionsModel(Audio::Partitions *partitions, QObject *parent = nullptr) noexcept;
 
-    /** @brief Destruct the Partitions */
-    ~PartitionsModel(void) noexcept = default;
+    /** @brief Virtual destructor */
+    ~PartitionsModel(void) noexcept override = default;
 
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;

@@ -36,20 +36,4 @@ Rectangle {
             Layout.preferredHeight: parent.height * 0.1
         }
     }
-
-     Shortcut {
-         sequence: StandardKey.ZoomIn
-         onActivated: {
-             if (piano.rowHeight < 100)
-                 piano.rowHeight += 2
-         }
-     }
-
-     Shortcut {
-        sequence: StandardKey.ZoomOut
-         onActivated: {
-             if (piano.rowHeight > 20)
-                piano.rowHeight -= 2
-         }
-     }
 }

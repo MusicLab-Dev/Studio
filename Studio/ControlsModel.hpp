@@ -31,8 +31,8 @@ public:
     /** @brief Default constructor */
     explicit ControlsModel(Audio::Controls *controls, QObject *parent = nullptr) noexcept;
 
-    /** @brief Destruct the ControlsModel */
-    ~ControlsModel(void) noexcept = default;
+    /** @brief Virtual destructor */
+    ~ControlsModel(void) noexcept override = default;
 
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
@@ -45,20 +45,19 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     /** @brief Get the index controlModel */
-    /*TODO [[nodiscard]] ControlModel *get(const int index) noexcept_ndebug { return const_cast<ControlModel *>(std::as_const(this)->get(index)); }
-    */
+    [[nodiscard]] ControlModel *get(const int index) noexcept_ndebug
+        { return const_cast<ControlModel *>(const_cast<const ControlsModel *>(this)->get(index)); }
     [[nodiscard]] const ControlModel *get(const int index) const noexcept_ndebug;
 
 public slots:
-    /** @brief Move Control from to */
-    void move(const int from, const int to);
-
-public /* slots */:
     /** @brief Add a children to the list */
-    Q_INVOKABLE void add(const ParamID paramID) noexcept_ndebug;
+    void add(const ParamID paramID);
 
     /** @brief Remove a children from the list */
-    Q_INVOKABLE void remove(const int index) noexcept_ndebug;
+    void remove(const int index);
+
+    /** @brief Move Control from to */
+    void move(const int from, const int to);
 
 private:
     Audio::Controls *_data { nullptr };

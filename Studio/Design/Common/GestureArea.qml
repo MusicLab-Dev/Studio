@@ -14,9 +14,11 @@ MouseArea {
     onPressAndHold: mouse.accepted = false
 
     onWheel: {
-        if (wheel.modifiers & Qt.ControlModifier) {
+        if (wheel.modifiers & Qt.ControlModifier)
             zoomed(wheel.angleDelta.x, wheel.angleDelta.y)
-        } else 
+        else if (wheel.modifiers & Qt.ShiftModifier)
+            zoomed(wheel.angleDelta.y, wheel.angleDelta.x)
+        else
             wheel.accepted = false
     }
 }

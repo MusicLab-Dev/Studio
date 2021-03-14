@@ -29,8 +29,8 @@ public:
     /** @brief Default constructor */
     explicit PluginTableModel(QObject *parent = nullptr) noexcept;
 
-    /** @brief Destruct the instance */
-    ~PluginTableModel(void) noexcept = default;
+    /** @brief Virtual destructor */
+    ~PluginTableModel(void) noexcept override = default;
 
 
     /** @brief Get the list of all roles */

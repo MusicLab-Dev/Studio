@@ -20,7 +20,7 @@ PartitionsModel::PartitionsModel(Audio::Partitions *partitions, QObject *parent)
 QHash<int, QByteArray> PartitionsModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(Roles::Partition), "partition" }
+        { static_cast<int>(Roles::Partition), "partitionInstance" }
     };
 }
 
@@ -30,7 +30,7 @@ QVariant PartitionsModel::data(const QModelIndex &index, int role) const
         throw std::range_error("PartitionsModel::get: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
     switch (static_cast<PartitionsModel::Roles>(role)) {
     case Roles::Partition:
-        return get(index.row());
+        return QVariant::fromValue(PartitionWrapper { const_cast<PartitionModel *>(get(index.row())) });
     default:
         return QVariant();
     }
@@ -43,7 +43,7 @@ const PartitionModel *PartitionsModel::get(const int index) const
     return _partitions.at(index).get();
 }
 
-void PartitionsModel::add(void) noexcept_ndebug
+void PartitionsModel::add(void)
 {
     Scheduler::Get()->addEvent(
         [this] {

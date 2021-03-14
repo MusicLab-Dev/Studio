@@ -15,6 +15,20 @@
 
 #include "InstancesModel.hpp"
 
+class PartitionModel;
+
+struct PartitionWrapper
+{
+    Q_GADGET
+
+    Q_PROPERTY(PartitionModel *instance MEMBER instance)
+public:
+
+    PartitionModel *instance { nullptr };
+};
+
+Q_DECLARE_METATYPE(PartitionWrapper)
+
 /** @brief Class that exposes a list of note in audio backend */
 class PartitionModel : public QAbstractListModel
 {
@@ -41,8 +55,8 @@ public:
     /** @brief Default constructor */
     explicit PartitionModel(Audio::Partition *partition, QObject *parent = nullptr) noexcept;
 
-    /** @brief Destruct the Partition */
-    ~PartitionModel(void) noexcept = default;
+    /** @brief Virtual destructor */
+    ~PartitionModel(void) noexcept override = default;
 
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
@@ -80,6 +94,9 @@ public slots:
 
     /** @brief Remove note at the index */
     void removeNote(const int index) noexcept;
+
+    /** @brief Get the internal list of instances */
+    [[nodiscard]] InstancesModel *getInstances(void) noexcept { return _instances.get(); }
 
 signals:
     /** @brief Notify that the muted property has changed */

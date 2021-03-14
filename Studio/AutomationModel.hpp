@@ -18,6 +18,20 @@
 #include "InstancesModel.hpp"
 #include "Point.hpp"
 
+class AutomationModel;
+
+struct AutomationWrapper
+{
+    Q_GADGET
+
+    Q_PROPERTY(AutomationModel *instance MEMBER instance)
+public:
+
+    AutomationModel *instance { nullptr };
+};
+
+Q_DECLARE_METATYPE(AutomationWrapper)
+
 /** @brief Exposes an audio automation */
 class AutomationModel : public QAbstractListModel
 {
@@ -31,6 +45,9 @@ public:
 
     /** @brief Default constructor */
     explicit AutomationModel(Audio::Automation *automation, QObject *parent = nullptr) noexcept;
+
+    /** @brief Virtual destructor */
+    ~AutomationModel(void) noexcept override = default;
 
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
@@ -60,18 +77,17 @@ public slots:
     /** @brief Insert point at index */
     void add(const GPoint &point) noexcept;
 
-    /** @brief Get the internal list of instances */
-    [[nodiscard]] InstancesModel *getInstances(void) noexcept { return _instances.get(); }
-
-public /* slots */:
     /** @brief Remove point at index */
-    Q_INVOKABLE void remove(const int index) noexcept_ndebug;
+    void remove(const int index);
 
     /** @brief Get point from index */
-    Q_INVOKABLE [[nodiscard]] GPoint get(const int index) const noexcept_ndebug;
+    const GPoint &get(const int index) const;
 
     /** @brief Set point index */
-    Q_INVOKABLE void set(const int index, const GPoint &point) noexcept_ndebug;
+    void set(const int index, const GPoint &point);
+
+    /** @brief Get the internal list of instances */
+    InstancesModel *getInstances(void) noexcept { return _instances.get(); }
 
 private:
     Audio::Automation *_data { nullptr };

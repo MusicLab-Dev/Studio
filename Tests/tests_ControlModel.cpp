@@ -45,22 +45,6 @@ TEST(ControlModel, MoveAutomation)
     model.move(0, 1);
 }
 
-
-TEST(ControlModel, Muted)
-{
-    Scheduler scheduler;
-    Audio::Control control(1, 2.0);
-
-    ControlModel model(&control);
-    model.add();
-
-    model.setAutomationMutedState(0, false);
-    ASSERT_EQ(model.isAutomationMuted(0), false);
-
-    model.setAutomationMutedState(0, true);
-    ASSERT_EQ(model.isAutomationMuted(0), true);
-}
-
 TEST(ControlModel, ParamId)
 {
     Scheduler scheduler;

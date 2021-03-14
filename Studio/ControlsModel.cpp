@@ -25,15 +25,17 @@ ControlsModel::ControlsModel(Audio::Controls *controls, QObject *parent) noexcep
 QHash<int, QByteArray> ControlsModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(ControlsModel::Roles::Control), "control" }
+        { static_cast<int>(ControlsModel::Roles::Control), "controlInstance" }
     };
 }
 
 QVariant ControlsModel::data(const QModelIndex &index, int role) const
 {
+    coreAssert(index.row() >= 0 && index.row() < count(),
+        throw std::range_error("ControlsModel::get: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
     switch (static_cast<ControlsModel::Roles>(role)) {
         case ControlsModel::Roles::Control:
-            return get(index.row());
+            return QVariant::fromValue(ControlWrapper { const_cast<ControlModel *>(get(index.row())) });
         default:
             return QVariant();
     }
@@ -46,7 +48,7 @@ const ControlModel *ControlsModel::get(const int index) const noexcept_ndebug
     return _controls.at(index).get();
 }
 
-void ControlsModel::add(const ParamID paramID) noexcept_ndebug
+void ControlsModel::add(const ParamID paramID)
 {
     Scheduler::Get()->addEvent(
     [this, paramID] {
@@ -59,7 +61,7 @@ void ControlsModel::add(const ParamID paramID) noexcept_ndebug
     });
 }
 
-void ControlsModel::remove(const int index) noexcept_ndebug
+void ControlsModel::remove(const int index)
 {
     Scheduler::Get()->addEvent(
         [this, index] {

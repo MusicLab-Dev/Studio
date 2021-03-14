@@ -11,6 +11,13 @@ Item {
 
     id: playlistViewContentFlickable
 
+    Rectangle {
+        x: playlistViewContentNodeView.headerWidth
+        width: parent.width - playlistViewContentNodeView.headerWidth
+        height: parent.height
+        color: "#4A8693"
+    }
+
     PlaylistViewContentNodeView {
         id: playlistViewContentNodeView
         anchors.fill: parent
@@ -64,8 +71,8 @@ Item {
         }
 
         onZoomed: {
-            zoomXFactor = Math.min(Math.max(zoomXFactor + zoomX / 10, 0), 1)
-            zoomYFactor = Math.min(Math.max(zoomYFactor + zoomY / 120, 0), 1)
+            zoomXFactor = Math.min(Math.max(zoomXFactor + zoomX / 500, 0), 1)
+            zoomYFactor = Math.min(Math.max(zoomYFactor + zoomY / 500, 0), 1)
         }
     }
 }

@@ -22,31 +22,19 @@ ControlModel::ControlModel(Audio::Control *control, QObject *parent) noexcept
 QHash<int, QByteArray> ControlModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(ControlModel::Roles::Automation), "automation"},
-        { static_cast<int>(ControlModel::Roles::Muted), "muted"}
+        { static_cast<int>(ControlModel::Roles::AutomationInstance), "automation"}
     };
 }
 
 QVariant ControlModel::data(const QModelIndex &index, int role) const
 {
+    coreAssert(index.row() >= 0 && index.row() < count(),
+        throw std::range_error("ControlModel::get: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
     switch (static_cast<ControlModel::Roles>(role)) {
-    case ControlModel::Roles::Automation:
-        return get(index.row());
-    case ControlModel::Roles::Muted:
-        return isAutomationMuted(index.row());
+    case ControlModel::Roles::AutomationInstance:
+        return QVariant::fromValue(AutomationWrapper { const_cast<AutomationModel *>(get(index.row())) });
     default:
         return QVariant();
-    }
-}
-
-bool ControlModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    switch (static_cast<ControlModel::Roles>(role)) {
-    case Roles::Muted:
-        setAutomationMutedState(index.row(), value.toBool());
-        return true;
-    default:
-        throw std::logic_error("ControlModel::setData: Couldn't change invalid role");
     }
 }
 
@@ -57,19 +45,59 @@ const AutomationModel *ControlModel::get(const int index) const noexcept_ndebug
     return _automations.at(index).get();
 }
 
-bool ControlModel::isAutomationMuted(const int index) const noexcept_ndebug
+bool ControlModel::setParamID(const ParamID paramID) noexcept
 {
-    coreAssert(index >= 0 && index < count(),
-        throw std::range_error("ControlModel::isAutomationMuted: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
-    return _data->isAutomationMuted(index);
+    if (!_data->setParamID(paramID))
+        return false;
+    emit paramIDChanged();
+    return true;
 }
 
-
-bool ControlModel::setAutomationMutedState(const int index, const bool state) noexcept_ndebug
+bool ControlModel::setMuted(const bool muted) noexcept
 {
-    coreAssert(index >= 0 && index < count(),
-        throw std::range_error("ControlModel::setAutomationMutedState: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
-    return _data->setAutomationMutedState(index, state);
+    if (!_data->setMuted(muted))
+        return false;
+    emit mutedChanged();
+    return true;
+}
+
+bool ControlModel::setManualMode(const bool manualMode) noexcept
+{
+    if (!_data->setManualMode(manualMode))
+        return false;
+    emit manualModeChanged();
+    return true;
+}
+
+bool ControlModel::setManualPoint(const GPoint &manualPoint) noexcept
+{
+    if (!_data->setManualPoint(manualPoint))
+        return false;
+    emit manualPointChanged();
+    return true;
+}
+
+void ControlModel::refreshAutomations(void)
+{
+    Models::RefreshModels(_automations, _data->automations(), this);
+}
+
+void ControlModel::updateInternal(Audio::Control *data)
+{
+    if (_data == data)
+        return;
+    Scheduler::Get()->addEvent(
+        [this, data] {
+            _data = data;
+        },
+        [this, data] {
+            if (_data->automations().data() != data->automations().data()) {
+                beginResetModel();
+                refreshAutomations();
+                endResetModel();
+            }
+        });
+
 }
 
 void ControlModel::add(void)
@@ -102,37 +130,6 @@ void ControlModel::remove(const int index)
 
 }
 
-void ControlModel::move(const int from, const int to) noexcept_ndebug
+void ControlModel::move(const int from, const int to)
 {
-}
-
-bool ControlModel::setMuted(const bool muted) noexcept
-{
-    if (!_data->setMuted(muted))
-        return false;
-    emit mutedChanged();
-    return true;
-}
-
-void ControlModel::refreshAutomations(void)
-{
-    Models::RefreshModels(_automations, _data->automations(), this);
-}
-
-void ControlModel::updateInternal(Audio::Control *data)
-{
-    if (_data == data)
-        return;
-    Scheduler::Get()->addEvent(
-        [this, data] {
-            _data = data;
-        },
-        [this, data] {
-            if (_data->automations().data() != data->automations().data()) {
-                beginResetModel();
-                refreshAutomations();
-                endResetModel();
-            }
-        });
-
 }
