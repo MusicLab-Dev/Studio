@@ -19,9 +19,15 @@ Window {
         id: app
     }
 
+<<<<<<< HEAD
    ModulesView {
        anchors.fill: parent
    }
+=======
+    Project {
+        id: project
+    }
+>>>>>>> 3ea0a8b7285c61a42bc1d56e44aee6b8355eee8f
 
     ThemeManager {
         id: themeManager
