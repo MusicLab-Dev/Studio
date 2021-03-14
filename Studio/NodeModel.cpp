@@ -15,10 +15,35 @@
 
 #include "NodeModel.hpp"
 
+static const QColor Colors[] = {
+    QColor(0x31A8FF),
+    QColor(0x00C5FF),
+    QColor(0x00DCE7),
+    QColor(0x00ECBA),
+    QColor(0x9EF78C),
+    QColor(0xFFD569),
+    QColor(0xFFB377),
+    QColor(0xFF978F),
+    QColor(0xFF85A8),
+    QColor(0xF382BB),
+    QColor(0xDF83CE),
+    QColor(0xC487DE),
+    QColor(0xAC90EC),
+    QColor(0x8E98F7),
+    QColor(0x69A1FD)
+};
+
+constexpr std::size_t ColorCount = sizeof(Colors) / sizeof(Colors[0]);
+
+static std::size_t CurrentColorIndex = 0u;
+
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
+    setColor(Colors[CurrentColorIndex]);
+    if (++CurrentColorIndex >= ColorCount)
+        CurrentColorIndex = 0u;
 }
 
 QHash<int, QByteArray> NodeModel::roleNames(void) const noexcept

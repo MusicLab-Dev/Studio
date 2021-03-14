@@ -6,10 +6,9 @@ import ThemeManager 1.0
 import Application 1.0
 
 import "../ModulesView"
+import "../Modules/Board"
 
 Window {
-    property alias themeManager: themeManager
-
     visible: true
     width: 1280
     height: 720
@@ -19,18 +18,12 @@ Window {
         id: app
     }
 
-<<<<<<< HEAD
-   ModulesView {
-       anchors.fill: parent
-   }
-=======
-    Project {
-        id: project
-    }
->>>>>>> 3ea0a8b7285c61a42bc1d56e44aee6b8355eee8f
-
     ThemeManager {
         id: themeManager
         theme: ThemeManager.Classic
+    }
+
+    ModulesView {
+        anchors.fill: parent
     }
 }

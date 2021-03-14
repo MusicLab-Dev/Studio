@@ -20,6 +20,12 @@ qt_add_resources(QtResources
     ${StudioDir}/Design/PlaylistView/PlaylistView.qrc
     ${StudioDir}/Design/EmptyView/EmptyView.qrc
     ${StudioDir}/Design/BoardView/BoardView.qrc
+
+    # Modules
+    ${StudioDir}/Design/Modules/Plugins/Plugins.qrc
+    ${StudioDir}/Design/Modules/Workspaces/Workspaces.qrc
+    ${StudioDir}/Design/Modules/Settings/Settings.qrc
+    ${StudioDir}/Design/Modules/Board/Board.qrc
 )
 
 set(StudioSources
@@ -56,6 +62,9 @@ set(StudioSources
     ${StudioDir}/Studio.hpp
     ${StudioDir}/ThemeManager.cpp
     ${StudioDir}/ThemeManager.hpp
+    ${StudioDir}/SettingsListModel.hpp
+    ${StudioDir}/SettingsListModel.cpp
+    ${StudioDir}/SettingsListModelProxy.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

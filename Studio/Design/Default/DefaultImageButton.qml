@@ -7,6 +7,7 @@ Button {
     property color colorHovered: "#338DCF"
     property color colorDefault: "#31A8FF"
     property bool showBorder: true
+    property real scaleFactor: 0.5
 
     id: control
     hoverEnabled: true
@@ -23,8 +24,8 @@ Button {
 
     indicator: DefaultColoredImage {
         anchors.centerIn: control
-        width: control.width * 0.5
-        height: control.height * 0.5
+        width: control.width * scaleFactor
+        height: control.height * scaleFactor
         source: imgPath
         color: control.pressed ? colorOnPressed : control.hovered ? colorHovered : colorDefault
     }

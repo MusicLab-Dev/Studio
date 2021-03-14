@@ -6,77 +6,28 @@ import NodeModel 1.0
 Column {
     property NodeModel node: null
     property int recursionIndex: 0
+    property int index: index
 
     id: delegate
     width: nodeView.width
 
     Item {
         width: nodeView.width
-        height: header.height
+        height: playlistViewContentNodeDelegatePlugin.height
 
         Rectangle {
-            x: delegate.recursionIndex * (nodeView.linkWidth + nodeView.linkSpacing)
+            x: nodeView.linkSpacing + delegate.recursionIndex * (nodeView.linkWidth + nodeView.linkSpacing)
+            y: playlistViewContentNodeDelegatePlugin.height - 12
             width: nodeView.linkWidth
-            height: delegate.height
-            visible: delegate.node.count
-            color: "lightgrey"
-
-            border.color: "grey"
-            border.width: 1
+            height: delegate.height - playlistViewContentNodeDelegatePlugin.height - 24
+            visible: delegate.node ? delegate.node.count : false
+            color: delegate.node ? delegate.node.color : "black"
         }
 
-        Item {
-            id: header
+        PlaylistViewContentNodeDelegatePlugin {
+            id: playlistViewContentNodeDelegatePlugin
             width: nodeView.headerPluginWidth
             height: Math.max(dataColumn.height, nodeView.rowHeight)
-
-            Rectangle {
-                x: 1
-                width: parent.width - 6
-                y: 3
-                height: parent.height - 6
-                radius: width / 16
-                color: "#00ECBA"
-
-                Button {
-                    id: addChild
-                    visible: header.height > 60
-                    y: 2
-                    x: parent.width - width - 2
-                    text: "+c"
-                    width: height
-                    height: 50
-
-                    onReleased: delegate.node.add("__internal__:/Mixer")
-                }
-
-                Button {
-                    id: addPartition
-                    visible: header.height > 60
-                    x: addChild.x - width - 2
-                    y: addChild.y
-                    text: "+p"
-                    width: addChild.width
-                    height: addChild.height
-
-                    onReleased: {
-                        delegate.node.partitions.add()
-                    }
-                }
-
-                Button {
-                    visible: header.height > 60
-                    x: addPartition.x - width - 2
-                    y: addPartition.y
-                    text: "+c"
-                    width: addChild.width
-                    height: addChild.height
-
-                    onReleased: {
-                        delegate.node.controls.add(1)
-                    }
-                }
-            }
         }
 
         Column {
@@ -85,11 +36,11 @@ Column {
             width: nodeView.width - nodeView.headerPluginWidth
 
             PlaylistViewContentNodeDelegateControls {
-                model: delegate.node.controls
+                model: delegate.node ? delegate.node.controls : null
             }
 
             PlaylistViewContentNodeDelegatePartitions {
-                model: delegate.node.partitions
+                model: delegate.node ? delegate.node.partitions : null
             }
         }
     }

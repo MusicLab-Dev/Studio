@@ -1,13 +1,15 @@
 <RCC>
     <qresource prefix="/">
+        <file>Fonts/Bungee-Regular.ttf</file>
+        <file>Fonts/Roboto-Light.ttf</file>
         <file>Assets/Checked.png</file>
         <file>Assets/FoldButton.png</file>
         <file>Assets/MenuButton.png</file>
-        <file>Assets/SettingsCategoryButton.png</file>
         <file>Fonts/Bungee-Regular.ttf</file>
         <file>Assets/CutMod.png</file>
         <file>Assets/NormalMod.png</file>
         <file>Assets/SelectorMod.png</file>
+        <file>Assets/Settings.png</file>
         <file>Assets/AfterTouchMod.png</file>
         <file>Assets/EditMod.png</file>
         <file>Assets/TunningMod.png</file>
@@ -27,5 +29,19 @@
         <file>Assets/Note.png</file>
         <file>Assets/Mute.png</file>
         <file>Assets/Disabled.png</file>
+        <file>Assets/TestImage1.png</file>
+        <file>Assets/TestImage2.png</file>
+        <file>Assets/EditWorkspaceName.png</file>
+        <file>Assets/TestImage3.png</file>
+        <file>Assets/TestImage4.png</file>
+        <file>Assets/Settings/SettingsCategoryButton.png</file>
+        <file>Assets/Settings/About.png</file>
+        <file>Assets/Settings/Audio.png</file>
+        <file>Assets/Settings/Debug.png</file>
+        <file>Assets/Settings/File.png</file>
+        <file>Assets/Settings/General.png</file>
+        <file>Assets/Settings/Info.png</file>
+        <file>Assets/Settings/Midi.png</file>
+        <file>Assets/Settings/Project.png</file>
     </qresource>
 </RCC>

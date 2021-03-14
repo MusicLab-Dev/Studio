@@ -37,6 +37,7 @@ class NodeModel : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(NodeModel *parentNode READ parentNode NOTIFY parentNodeChanged)
     Q_PROPERTY(quint32 count READ count NOTIFY countChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
@@ -68,6 +69,10 @@ public:
 
     /** @brief Virtual destructor */
     ~NodeModel(void) noexcept override = default;
+
+    /** @brief Get the parent node if it exists */
+    [[nodiscard]] NodeModel *parentNode(void) noexcept
+        { return qobject_cast<NodeModel *>(parent()); }
 
 
     /** @brief Get the list of all roles */
@@ -149,6 +154,9 @@ signals:
 
     /** @brief Notify that connections property has changed */
     void connectionsChanged(void);
+
+    /** @brief Notify that the parent node has changed */
+    void parentNodeChanged(void);
 
 private:
     Audio::Node *_data { nullptr };

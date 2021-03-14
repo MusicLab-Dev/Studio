@@ -8,8 +8,11 @@
         <file>PlaylistViewContent/PlaylistViewContentTimeline.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentFlickable.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentHeader.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentPluginAddMenu.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentPluginSettingsMenu.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentNodeView.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentNodeDelegate.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeDelegatePlugin.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentNodeDelegateControls.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentNodeDelegatePartitions.qml</file>
     </qresource>

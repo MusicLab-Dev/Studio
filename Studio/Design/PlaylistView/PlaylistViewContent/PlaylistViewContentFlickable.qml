@@ -47,6 +47,14 @@ Item {
         anchors.leftMargin: playlistViewContentNodeView.headerWidth
     }
 
+    PlaylistViewContentPluginAddMenu {
+        id: playlistViewContentPluginAddMenu
+    }
+
+    PlaylistViewContentPluginSettingsMenu {
+        id: playlistViewContentPluginSettingsMenu
+    }
+
     GestureArea {
         readonly property int zoomXFrom: 20
         readonly property int zoomXTo: 100

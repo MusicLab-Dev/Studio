@@ -82,7 +82,7 @@ Item {
                     anchors.bottom: parent.bottom
                     height: parent.height * 0.25
                     width: height
-                    color: nodePanel.color
+                    // color: nodePanel.color
                 }
             }
         }

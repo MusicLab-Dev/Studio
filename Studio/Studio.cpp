@@ -5,13 +5,23 @@
 
 // #include <Audio/PluginTable.hpp>
 
-#include "ThemeManager.hpp"
 #include "Application.hpp"
+#include <QFont>
+#include <QFile>
+#include <QFontDatabase>
 
+#include "ThemeManager.hpp"
 #include "Studio.hpp"
+#include "SettingsListModel.hpp"
+#include "SettingsListModelProxy.hpp"
+
+// #include "BoardManager.hpp"
 
 void Studio::InitResources(void)
 {
+    Audio::PluginTable::Init();
+    Audio::Device::InitDriver();
+
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
     qmlRegisterUncreatableType<Project>("Project", 1, 0, "Project", "Cannot construct Project");
@@ -22,8 +32,8 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<ControlModel>("ControlModel", 1, 0, "ControlModel", "Cannot construct ControlModel");
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
-    Audio::PluginTable::Init();
-    Audio::Device::InitDriver();
+    // qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
+
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
     Q_INIT_RESOURCE(Default);
@@ -33,6 +43,12 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(PlaylistView);
     Q_INIT_RESOURCE(EmptyView);
     Q_INIT_RESOURCE(BoardView);
+
+    /** Modules **/
+    Q_INIT_RESOURCE(Plugins);
+    Q_INIT_RESOURCE(Workspaces);
+    Q_INIT_RESOURCE(Settings);
+    Q_INIT_RESOURCE(Board);
 }
 
 void Studio::DestroyResources(void)
@@ -46,6 +62,13 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(PlaylistView);
     Q_CLEANUP_RESOURCE(EmptyView);
     Q_CLEANUP_RESOURCE(BoardView);
+
+    /** Modules **/
+    Q_CLEANUP_RESOURCE(Plugins);
+    Q_CLEANUP_RESOURCE(Workspaces);
+    Q_CLEANUP_RESOURCE(Settings);
+    Q_CLEANUP_RESOURCE(Board);
+
     Audio::PluginTable::Destroy();
     Audio::Device::ReleaseDriver();
 }
@@ -60,6 +83,9 @@ Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
 
 Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
 {
+    qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "SettingsListModel");
+    qmlRegisterType<SettingsListModelProxy>("SettingsListModel", 1, 0, "SettingsListModelProxy");
+
     const QUrl url(QStringLiteral("qrc:/Main/Main.qml"));
 
     QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this,
