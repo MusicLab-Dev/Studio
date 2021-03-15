@@ -46,7 +46,7 @@ ComboBox {
         anchors.fill: control
         border.width: control.pressed ? 4 : 2
         border.color: control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : "#295F8B"
-        color: control.pressed ? "#001E36" : "#001E36"
+        color: control.pressed ? themeManager.backgroundColor : themeManager.foregroundColor
     }
 
     popup: Popup {
@@ -86,7 +86,7 @@ ComboBox {
         }
 
         background: Rectangle {
-            color: parent.hovered ? "#295F8B": "#001E36"
+            color: parent.hovered ? themeManager.backgroundColor : themeManager.foregroundColor
         }
     }
 }

@@ -5,7 +5,7 @@ import "../Default/"
 import "../Common/"
 
 Rectangle {
-    color: "#001E36"
+    color: themeManager.foregroundColor
 
     RowLayout {
         anchors.fill: parent

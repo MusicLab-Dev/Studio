@@ -10,14 +10,14 @@ RowLayout {
     Rectangle {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * headerFactor
-        color: "#001E36"
+        color: themeManager.foregroundColor
     }
     
     Rectangle {
         id: timeline
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width
-        color: "#C4C4C4"
+        color: themeManager.disabledColor
 
         Repeater {
             model: 12

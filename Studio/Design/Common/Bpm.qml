@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Rectangle {
-    color: "#4A8693"
+    color: themeManager.backgroundColor
     border.color: "white"
     border.width: 2
     radius: 5

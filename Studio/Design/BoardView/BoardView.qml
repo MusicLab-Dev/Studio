@@ -2,7 +2,7 @@ import QtQuick 2.15
 
 Rectangle {
     id: boardView
-    color: "#001E36"
+    color: themeManager.foregroundColor
 
     Text {
         anchors.centerIn: parent

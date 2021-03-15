@@ -8,7 +8,7 @@ import "../../Common"
 Rectangle {
     property real headerFactor: 0.1
 
-    color: "#001E36"
+    color: themeManager.foregroundColor
 
     Column {
         id: contentColumn

@@ -4,7 +4,7 @@ import "../Default"
 
 Rectangle {
     id: moduleViewTab
-    color: componentSelected === index ? "#001E36" : "#E7E7E7"
+    color: componentSelected === index ? themeManager.foregroundColor : themeManager.backgroundColor
     border.color: "black"
 
 

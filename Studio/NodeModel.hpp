@@ -60,7 +60,7 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return 1; }
+    [[nodiscard]] int count(void) const noexcept { return _children.size(); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -68,8 +68,6 @@ public:
 
     [[nodiscard]] const NodeModel *get(const int index) const;
 
-    /** @brief Add new nodes in children vector */
-    [[nodiscard]] bool add(void);
 
     /** @brief Get if the node is muted */
     [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
@@ -101,9 +99,12 @@ public:
     /** @brief Get the connections model */
     //[[nodiscard]] ConnectionsModel *connections(void) const noexcept { return _connections; }
 
-
     /** @brief Get the flags */
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
+
+public slots:
+    /** @brief Add new nodes in children vector */
+    [[nodiscard]] bool add(void);
 
 signals:
     /** @brief Notify that muted property has changed */

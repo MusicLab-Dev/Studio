@@ -9,6 +9,8 @@
 
 #include <Audio/AScheduler.hpp>
 
+#include "Project.hpp"
+
 /**
  * @brief Scheduler class
  */

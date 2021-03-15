@@ -23,8 +23,8 @@ qt_add_resources(QtResources
 )
 
 set(StudioSources
-    # ${StudioDir}/Application.cpp
-    # ${StudioDir}/Application.hpp
+    ${StudioDir}/Application.cpp
+    ${StudioDir}/Application.hpp
     ${StudioDir}/AutomationModel.cpp
     ${StudioDir}/AutomationModel.hpp
     ${StudioDir}/ControlModel.cpp

@@ -6,12 +6,23 @@
 #include <Audio/PluginTable.hpp>
 
 #include "ThemeManager.hpp"
+#include "Application.hpp"
 
 #include "Studio.hpp"
 
 void Studio::InitResources(void)
 {
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
+    qmlRegisterType<Application>("Application", 1, 0, "Application");
+    // qmlRegisterUncreatableType<Scheduler>("Scheduler", 1, 0, "Scheduler", "Scheduler is not creatable");
+    // qmlRegisterUncreatableType<Project>("Project", 1, 0, "Project", "Project is not creatable");
+    // qmlRegisterType<NodeModel>("Project", 1, 0, "NodeModel");
+    // qmlRegisterType<ControlsModel>("Project", 1, 0, "ControlsModel");
+    // qmlRegisterType<ControlModel>("Project", 1, 0, "ControlModel");
+    // qmlRegisterType<AutomationModel>("Project", 1, 0, "AutomationModel");
+    // qmlRegisterType<PartitionsModel>("Project", 1, 0, "PartitionsModel");
+    // qmlRegisterType<PartitionModel>("Project", 1, 0, "PartitionModel");
+    // qmlRegisterType<InstancesModel>("Project", 1, 0, "InstancesModel");
     Audio::PluginTable::Init();
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);

@@ -87,6 +87,7 @@ private:
     QColor _contentColor {};
     QColor _disabledColor {};
     QColor _accentColor {};
+    QColor _lineColor {};
 
     /** @brief Update colors */
     void updateThemeColors(void);

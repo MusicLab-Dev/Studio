@@ -47,8 +47,8 @@ const NodeModel *NodeModel::get(const int index) const
 
 bool NodeModel::add(void)
 {
-    auto index = static_cast<int>(_data->children().size());
-    beginInsertRows(QModelIndex(), index, index);
+    auto idx = static_cast<int>(_data->children().size());
+    beginInsertRows(index(idx), idx, idx);
     _children.push(_data->children().push().get(), this);
     endInsertRows();
     return true;

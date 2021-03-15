@@ -6,7 +6,7 @@ Rectangle {
     property real barSize: width / 4
 
     id: newTabButton
-    color: "#001E36"
+    color: themeManager.foregroundColor
     border.color: "black"
     
     MouseArea {
