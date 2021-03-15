@@ -57,8 +57,8 @@ Item {
 
             Behavior on x {
                 SpringAnimation {
-                    spring: 2;
-                    damping: 0.2
+                    spring: 2
+                    damping: 0.3
                     duration: 400
                 }
             }

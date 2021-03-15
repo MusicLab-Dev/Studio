@@ -80,4 +80,21 @@ Rectangle {
             modules.remove(index)
         }
     }
+
+
+    Behavior on x {
+        SpringAnimation {
+            spring: 2
+            damping: 0.3
+            duration: 400
+        }
+    }
+
+    Behavior on y {
+        SpringAnimation {
+            spring: 2
+            damping: 0.3
+            duration: 400
+        }
+    }
 }
