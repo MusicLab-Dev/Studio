@@ -6,8 +6,7 @@ import "../Common"
 Button {
     property string imgPath: ""
     property color colorDefault: "#FD9D57"
-    property color colorOnPressed: Qt.tint(colorDefault, "#10FF0000")
-    property color colorHovered: Qt.tint(colorDefault, "#10FF0000")
+    property color colorHovered: Qt.tint(colorDefault, "#1FFFFFFF")
     property bool showBorder: true
     property string title: ""
     property string description: ""
@@ -18,7 +17,7 @@ Button {
     background: Rectangle {
         width: control.width
         height: control.height
-        color: colorDefault
+        color: control.hovered ? colorHovered : colorDefault
         border.width: 1
         border.color: "white"
         radius: 40
