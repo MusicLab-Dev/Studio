@@ -45,7 +45,7 @@ Rectangle {
         anchors.fill: parent
         drag.target: parent
 
-        onClicked: {
+        onPressed: {
             componentSelected = index
         }
     }
