@@ -29,6 +29,7 @@ qt_add_resources(QtResources
 )
 
 set(StudioSources
+    ${StudioDir}/Base.hpp
     ${StudioDir}/Application.cpp
     ${StudioDir}/Application.hpp
     ${StudioDir}/AutomationModel.cpp
@@ -52,6 +53,7 @@ set(StudioSources
     ${StudioDir}/PartitionsModel.hpp
     # ${StudioDir}/PluginTableModel.cpp
     # ${StudioDir}/PluginTableModel.hpp
+    ${StudioDir}/Note.hpp
     ${StudioDir}/Point.hpp
     ${StudioDir}/Point.ipp
     ${StudioDir}/Project.cpp

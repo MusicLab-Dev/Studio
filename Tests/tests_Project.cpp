@@ -12,17 +12,18 @@
 
 TEST(Project, InitDestroy)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::PluginTable::Init();
-    // F5 PLZ <3
     Audio::Project project(Core::FlatString("test"));
 
     ASSERT_NO_THROW(Project tmp(&project));
-    Audio::PluginTable::Destroy();
 }
 
 TEST(Project, name)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Project data(Core::FlatString("test"));
     Project project(&data);
@@ -36,6 +37,8 @@ TEST(Project, name)
 
 TEST(Project, path)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Project data(Core::FlatString("test"));
     Project project(&data);
@@ -50,6 +53,8 @@ TEST(Project, path)
 
 TEST(Project, playbackMode)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Project data(Core::FlatString("test"));
     Project project(&data);
@@ -58,9 +63,4 @@ TEST(Project, playbackMode)
     ASSERT_EQ(project.playbackMode(), Project::PlaybackMode::Live);
     project.setPlaybackMode(Project::PlaybackMode::Production);
     ASSERT_EQ(project.playbackMode(), Project::PlaybackMode::Production);
-}
-
-TEST(Project, Save)
-{
-
 }

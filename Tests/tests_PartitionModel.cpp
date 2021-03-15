@@ -17,19 +17,21 @@ TEST(PartitionModel, InitDestroy)
 
 TEST(PartitionModel, AddNote)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
     Audio::Partition partition {};
 
     PartitionModel model(&partition);
 
-    model.addNote(
+    model.add(
         Audio::Note(
             Audio::BeatRange {1, 2},
             1,
             10)
     );
-    model.addNote(
+    model.add(
         Audio::Note(
             Audio::BeatRange {4, 6},
             3,
@@ -41,26 +43,30 @@ TEST(PartitionModel, AddNote)
 
 TEST(PartitionModel, RemoveNote)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
     Audio::Partition partition {};
 
     PartitionModel model(&partition);
 
-    model.addNote(
+    model.add(
         Audio::Note(
             Audio::BeatRange {1, 2},
             1,
             10)
     );
 
-    model.removeNote(0);
+    model.remove(0);
     ASSERT_EQ(model.count(), 0);
 
 }
 
 TEST(PartitionModel, UpdateInternal)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
     Audio::Partition partition1 {};

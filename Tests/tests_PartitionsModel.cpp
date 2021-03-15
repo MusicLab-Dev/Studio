@@ -18,6 +18,8 @@ TEST(PartitionsModel, InitDestroy)
 
 TEST(PartitionsModel, AddRemove)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
     Audio::Partitions partitions {};
@@ -25,7 +27,7 @@ TEST(PartitionsModel, AddRemove)
     PartitionsModel model(&partitions);
 
     for (unsigned int i = 0; i < 100; i++) {
-        model.add({i, i+1});
+        model.add();
         ASSERT_EQ(model.count(), i+1);
     }
     for (unsigned int i = 99; i > 0; i--) {

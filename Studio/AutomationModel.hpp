@@ -7,12 +7,9 @@
 
 #include <vector>
 
-#include <QObject>
 #include <QAbstractListModel>
 
-#include <Core/Utils.hpp>
 #include <Core/UniqueAlloc.hpp>
-#include <Audio/Base.hpp>
 #include <Audio/Automation.hpp>
 
 #include "InstancesModel.hpp"
@@ -36,6 +33,9 @@ Q_DECLARE_METATYPE(AutomationWrapper)
 class AutomationModel : public QAbstractListModel
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 
 public:
     /** @brief Roles of each Control */
@@ -62,6 +62,7 @@ public:
     /** @brief Modify a role from children */
     [[nodiscard]] bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
+
     /** @brief Get the internal data pointer */
     [[nodiscard]] Audio::Automation *internal(void) noexcept { return _data; }
     [[nodiscard]] const Audio::Automation *internal(void) const noexcept { return _data; }
@@ -70,12 +71,28 @@ public:
     [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
     [[nodiscard]] const InstancesModel &instances(void) const noexcept { return *_instances; }
 
+
+    /** @brief Get the muted property */
+    [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
+
+    /** @brief Set the muted property */
+    void setMuted(const bool muted);
+
+
+    /** @brief Get the name property */
+    [[nodiscard]] QString name(void) const noexcept
+        { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
+
+    /** @brief Set the name property */
+    void setName(const QString &name);
+
+
     /** @brief Update the internal data */
     void updateInternal(Audio::Automation *data);
 
 public slots:
     /** @brief Insert point at index */
-    void add(const GPoint &point) noexcept;
+    void add(const GPoint &point);
 
     /** @brief Remove point at index */
     void remove(const int index);
@@ -88,6 +105,13 @@ public slots:
 
     /** @brief Get the internal list of instances */
     InstancesModel *getInstances(void) noexcept { return _instances.get(); }
+
+signals:
+    /** @brief Notify that the muted property has changed */
+    void mutedChanged(void);
+
+    /** @brief Notify that the name property has changed */
+    void nameChanged(void);
 
 private:
     Audio::Automation *_data { nullptr };

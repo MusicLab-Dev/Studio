@@ -8,7 +8,7 @@
 #include <QHash>
 #include <QQmlEngine>
 
-#include "Scheduler.hpp"
+#include "Models.hpp"
 #include "PartitionModel.hpp"
 
 PartitionModel::PartitionModel(Audio::Partition *partition, QObject *parent) noexcept
@@ -33,51 +33,86 @@ QVariant PartitionModel::data(const QModelIndex &index, int role) const
 {
     coreAssert(index.row() >= 0 && index.row() < count(),
         throw std::range_error("PartitionModel::data: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
-    //const auto &child = (*_data)[index.row()];
+    const auto &child = _data->notes().at(index.row());
     switch (static_cast<Roles>(role)) {
         case Roles::Range:
+            return QVariant::fromValue(reinterpret_cast<const BeatRange &>(child.range));
         case Roles::Velocity:
+            return child.velocity;
         case Roles::Tuning:
-        case Roles::NoteIndex:
-        case Roles::EventType:
+            return child.tuning;
         case Roles::Key:
-            return QVariant();
+            return child.key;
         default:
             return QVariant();
     }
 }
 
-bool PartitionModel::setMuted(const bool muted) noexcept
+void PartitionModel::setName(const QString &name)
 {
-    if (!_data->setMuted(muted))
-        return false;
-    emit mutedChanged();
-    return true;
+    Models::AddProtectedEvent(
+        [this, name = Core::FlatString(name.toStdString())](void) mutable { _data->setName(std::move(name)); },
+        [this, name = _data->name()] {
+            if (name != _data->name())
+                emit nameChanged();
+        }
+    );
 }
 
-bool PartitionModel::setMidiChannels(const MidiChannels channel) noexcept
+void PartitionModel::setMuted(const bool muted) noexcept
 {
-    if (!_data->setMidiChannels(channel))
-        return false;
-    emit midiChannelsChanged();
-    return true;
+    Models::AddProtectedEvent(
+        [this, muted] {
+            _data->setMuted(muted);
+        },
+        [this, muted = _data->muted()] {
+            if (muted != _data->muted())
+                emit mutedChanged();
+        }
+    );
 }
 
-void PartitionModel::addNote(const Audio::Note &note) noexcept
+void PartitionModel::setMidiChannels(const MidiChannels midiChannels)
 {
-    Scheduler::Get()->addEvent(
-        [this, &note] {
-            _data->notes().push(note);
-        });
+    Models::AddProtectedEvent(
+        [this, midiChannels] {
+            _data->setMidiChannels(midiChannels);
+        },
+        [this, midiChannels = _data->midiChannels()] {
+            if (midiChannels != _data->midiChannels())
+                emit midiChannelsChanged();
+        }
+    );
 }
 
-void PartitionModel::removeNote(const int index) noexcept
+void PartitionModel::add(const Note &note)
 {
-    Scheduler::Get()->addEvent(
-        [this, &index] {
-            auto it = _data->notes().begin() + index;
-            _data->notes().erase(it);
-        });
+    const auto idx = std::distance(_data->notes().begin(), _data->notes().findSortedPlacement(note));
+
+    Models::AddProtectedEvent(
+        [this, note] {
+            _data->notes().insert(note);
+        },
+        [this, idx] {
+            beginInsertRows(QModelIndex(), idx, idx);
+            endInsertRows();
+        }
+    );
+}
+
+void PartitionModel::remove(const int idx)
+{
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("PartitionModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+    Models::AddProtectedEvent(
+        [this, idx] {
+            _data->notes().erase(_data->notes().begin() + idx);
+        },
+        [this, idx] {
+            beginRemoveRows(QModelIndex(), idx, idx);
+            endRemoveRows();
+        }
+    );
 }
 
 void PartitionModel::updateInternal(Audio::Partition *data)

@@ -50,45 +50,62 @@ const ControlModel *ControlsModel::get(const int index) const noexcept_ndebug
 
 void ControlsModel::add(const ParamID paramID)
 {
-    Scheduler::Get()->addEvent(
-    [this, paramID] {
-        _data->push(paramID, 0.0);
-    },
-    [this] {
-        beginInsertRows(QModelIndex(), count(), count());
-        refreshControls();
-        endInsertRows();
-    });
+    Models::AddProtectedEvent(
+        [this, paramID] {
+            _data->push(paramID, 0.0);
+        },
+        [this] {
+            const auto controlsData = _controls.data();
+            const auto idx = _controls.size();
+            beginInsertRows(QModelIndex(), idx, idx);
+            _controls.push(&_data->at(idx), this);
+            endInsertRows();
+            if (_controls.data() != controlsData)
+                refreshControls();
+        }
+    );
 }
 
-void ControlsModel::remove(const int index)
+void ControlsModel::remove(const int idx)
 {
-    Scheduler::Get()->addEvent(
-        [this, index] {
-            _data->erase(_data->begin() + index);
-            _controls.erase(_controls.begin() + index);
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("ControlsModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+    Models::AddProtectedEvent(
+        [this, idx] {
+            _data->erase(_data->begin() + idx);
         },
-        [this, index] {
-            beginRemoveRows(QModelIndex(), index, index);
-            refreshControls();
+        [this, idx] {
+            beginRemoveRows(QModelIndex(), idx, idx);
+            _controls.erase(_controls.begin() + idx);
             endRemoveRows();
-        });
+            const auto count = _controls.size();
+            for (auto i = static_cast<std::size_t>(idx); i < count; ++i)
+                _controls.at(i)->updateInternal(&_data->at(i));
+        }
+    );
 }
 
 void ControlsModel::move(const int from, const int to)
 {
-    Scheduler::Get()->addEvent(
+    if (from == to)
+        return;
+    coreAssert(from >= 0 && from < count() && to >= 0 && to < count(),
+        throw std::range_error("ControlModel::move: Given index is not in range: [" + std::to_string(from) + ", " + std::to_string(to) + "[ out of [0, " + std::to_string(count()) + "["));
+    Models::AddProtectedEvent(
         [this, from, to] {
-            std::swap(_data->at(from), _data->at(to));
+            _data->move(from, from, to);
         },
         [this, from, to] {
-            beginMoveRows(index(from), from, from, index(to), to);
-            refreshControls();
+            beginMoveRows(QModelIndex(), from, from, QModelIndex(), to + 1);
+            _controls.move(from, from, to);
             endMoveRows();
-        });
+            _controls.at(from)->updateInternal(&_data->at(from));
+            _controls.at(to)->updateInternal(&_data->at(to));
+        }
+    );
 }
 
 void ControlsModel::refreshControls(void)
 {
-    Models::RefreshModels(_controls, *_data, this);
+    Models::RefreshModels(this, _controls, *_data, this);
 }

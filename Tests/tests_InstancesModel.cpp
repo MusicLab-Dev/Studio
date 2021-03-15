@@ -16,6 +16,8 @@ TEST(InstancesModel, InitDestroy)
 
 TEST(InstancesModel, UpdateInternal)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::BeatRanges ranges1 { { 0, 1 }, { 1, 2 } };
     Audio::BeatRanges ranges2 { { 2, 3 }, { 3, 4 }, { 5, 6 } };
@@ -55,6 +57,8 @@ TEST(InstancesModel, UpdateInternal)
 
 TEST(InstancesModel, Add)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::BeatRanges ranges { };
 
@@ -71,6 +75,8 @@ TEST(InstancesModel, Add)
 
 TEST(InstancesModel, Remove)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::BeatRanges ranges { {1, 2}, {3, 4}, {5, 6}, {7, 8} };
 
@@ -101,20 +107,24 @@ TEST(InstancesModel, Remove)
     ASSERT_EQ(model.count(), 0);
 }
 
-TEST(InstancesModel, Move)
+TEST(InstancesModel, Set)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
     Audio::BeatRanges ranges { {1, 2}, {3, 4}, {5, 6}, {7, 8} };
 
     InstancesModel model(&ranges);
 
-    model.move(0, {3, 4});
+    model.set(0, {4, 4});
+    model.set(2, {10, 100});
     ASSERT_EQ(model.get(0).from, 3);
     ASSERT_EQ(model.get(0).to, 4);
-
-    model.move(2, {10, 100});
-    ASSERT_EQ(model.get(2).from, 10);
-    ASSERT_EQ(model.get(2).to, 100);
-
+    ASSERT_EQ(model.get(1).from, 4);
+    ASSERT_EQ(model.get(1).to, 4);
+    ASSERT_EQ(model.get(2).from, 7);
+    ASSERT_EQ(model.get(2).to, 8);
+    ASSERT_EQ(model.get(3).from, 10);
+    ASSERT_EQ(model.get(3).to, 100);
 }

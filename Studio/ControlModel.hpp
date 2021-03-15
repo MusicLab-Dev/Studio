@@ -7,18 +7,12 @@
 
 #include <vector>
 
-#include <QObject>
 #include <QAbstractListModel>
 
-#include <Core/Utils.hpp>
-#include <Audio/Base.hpp>
 #include <Audio/Control.hpp>
 
 #include "Point.hpp"
 #include "AutomationModel.hpp"
-
-using ParamID = Audio::ParamID;
-Q_DECLARE_METATYPE(ParamID)
 
 class ControlModel;
 
@@ -77,21 +71,21 @@ public:
     [[nodiscard]] ParamID paramID(void) const noexcept { return _data->paramID(); }
 
     /** @brief Set the muted property */
-    bool setParamID(const ParamID paramID) noexcept;
+    void setParamID(const ParamID paramID);
 
 
     /** @brief Get the muted property */
     [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
 
     /** @brief Set the muted property */
-    bool setMuted(const bool muted) noexcept;
+    void setMuted(const bool muted);
 
 
     /** @brief Get manual mode property */
     [[nodiscard]] bool manualMode(void) const noexcept { return _data->manualMode(); }
 
     /** @brief Set the manual mode property */
-    bool setManualMode(const bool muted) noexcept;
+    void setManualMode(const bool muted);
 
 
     /** @brief Get manual point property */
@@ -99,7 +93,7 @@ public:
         { return reinterpret_cast<const GPoint &>(_data->manualPoint()); }
 
     /** @brief Set the manual point property */
-    bool setManualPoint(const GPoint &manualPoint) noexcept;
+    void setManualPoint(const GPoint &manualPoint);
 
 
     /** @brief Update the internal data */
@@ -128,9 +122,15 @@ signals:
     /** @brief Notify that muted property has changed */
     void manualPointChanged(void);
 
+public: // Allow external insert / remove
+    using QAbstractListModel::beginRemoveRows;
+    using QAbstractListModel::endRemoveRows;
+    using QAbstractListModel::beginInsertRows;
+    using QAbstractListModel::endInsertRows;
+
 private:
     Audio::Control *_data { nullptr };
-    Core::Vector<Core::UniqueAlloc<AutomationModel>> _automations {};
+    Core::TinyVector<Core::UniqueAlloc<AutomationModel>> _automations {};
 
     /** @brief Refresh children AutomationModel addresses */
     void refreshAutomations(void);

@@ -8,7 +8,6 @@
 
 #include "Models.hpp"
 #include "ControlModel.hpp"
-#include "Scheduler.hpp"
 
 ControlModel::ControlModel(Audio::Control *control, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(control)
@@ -22,7 +21,7 @@ ControlModel::ControlModel(Audio::Control *control, QObject *parent) noexcept
 QHash<int, QByteArray> ControlModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(ControlModel::Roles::AutomationInstance), "automation"}
+        { static_cast<int>(ControlModel::Roles::AutomationInstance), "automationInstance"}
     };
 }
 
@@ -45,91 +44,125 @@ const AutomationModel *ControlModel::get(const int index) const noexcept_ndebug
     return _automations.at(index).get();
 }
 
-bool ControlModel::setParamID(const ParamID paramID) noexcept
+void ControlModel::setParamID(const ParamID paramID)
 {
-    if (!_data->setParamID(paramID))
-        return false;
-    emit paramIDChanged();
-    return true;
+    Models::AddProtectedEvent(
+        [this, paramID] {
+            _data->setParamID(paramID);
+        },
+        [this, paramID = _data->paramID()] {
+            if (paramID != _data->paramID())
+                emit paramIDChanged();
+        }
+    );
 }
 
-bool ControlModel::setMuted(const bool muted) noexcept
+void ControlModel::setMuted(const bool muted)
 {
-    if (!_data->setMuted(muted))
-        return false;
-    emit mutedChanged();
-    return true;
+    Models::AddProtectedEvent(
+        [this, muted] {
+            _data->setMuted(muted);
+        },
+        [this, muted = _data->muted()] {
+            if (muted != _data->muted())
+                emit mutedChanged();
+        }
+    );
 }
 
-bool ControlModel::setManualMode(const bool manualMode) noexcept
+void ControlModel::setManualMode(const bool manualMode)
 {
-    if (!_data->setManualMode(manualMode))
-        return false;
-    emit manualModeChanged();
-    return true;
+    Models::AddProtectedEvent(
+        [this, manualMode] {
+            _data->setManualMode(manualMode);
+        },
+        [this, manualMode = _data->manualMode()] {
+            if (manualMode != _data->manualMode())
+                emit manualModeChanged();
+        }
+    );
 }
 
-bool ControlModel::setManualPoint(const GPoint &manualPoint) noexcept
+void ControlModel::setManualPoint(const GPoint &manualPoint)
 {
-    if (!_data->setManualPoint(manualPoint))
-        return false;
-    emit manualPointChanged();
-    return true;
+    Models::AddProtectedEvent(
+        [this, manualPoint] {
+            _data->setManualPoint(manualPoint);
+        },
+        [this, manualPoint = _data->manualPoint()] {
+            if (manualPoint != _data->manualPoint())
+                emit manualPointChanged();
+        }
+    );
 }
 
-void ControlModel::refreshAutomations(void)
+void ControlModel::add(void)
 {
-    Models::RefreshModels(_automations, _data->automations(), this);
+    Models::AddProtectedEvent(
+        [this] {
+            _data->automations().push();
+        },
+        [this] {
+            const auto automationsData = _automations.data();
+            const auto idx = _automations.size();
+            beginInsertRows(QModelIndex(), idx, idx);
+            _automations.push(&_data->automations().at(idx), this);
+            endInsertRows();
+            if (_automations.data() != automationsData)
+                refreshAutomations();
+        }
+    );
+}
+
+void ControlModel::remove(const int idx)
+{
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("ControlModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+    Models::AddProtectedEvent(
+        [this, idx] {
+            _data->automations().erase(_data->automations().begin() + idx);
+        },
+        [this, idx] {
+            beginRemoveRows(QModelIndex(), idx, idx);
+            _automations.erase(_automations.begin() + idx);
+            endRemoveRows();
+            const auto count = _automations.size();
+            for (auto i = idx + 1; i < count; ++i)
+                _automations.at(i)->updateInternal(&_data->automations().at(i));
+        }
+    );
+}
+
+void ControlModel::move(const int from, const int to)
+{
+    if (from == to)
+        return;
+    coreAssert(from >= 0 && from < count() && to >= 0 && to < count(),
+        throw std::range_error("ControlModel::move: Given index is not in range: [" + std::to_string(from) + ", " + std::to_string(to) + "[ out of [0, " + std::to_string(count()) + "["));
+    Models::AddProtectedEvent(
+        [this, from, to] {
+            _data->automations().move(from, from, to);
+        },
+        [this, from, to] {
+            beginMoveRows(QModelIndex(), from, from, QModelIndex(), to + 1);
+            _automations.move(from, from, to);
+            endMoveRows();
+            _automations.at(from)->updateInternal(&_data->automations().at(from));
+            _automations.at(to)->updateInternal(&_data->automations().at(to));
+        }
+    );
 }
 
 void ControlModel::updateInternal(Audio::Control *data)
 {
     if (_data == data)
         return;
-    Scheduler::Get()->addEvent(
-        [this, data] {
-            _data = data;
-        },
-        [this, data] {
-            if (_data->automations().data() != data->automations().data()) {
-                beginResetModel();
-                refreshAutomations();
-                endResetModel();
-            }
-        });
-
+    std::swap(_data, data);
+    if (_data->automations().data() != data->automations().data())
+        refreshAutomations();
 }
 
-void ControlModel::add(void)
+void ControlModel::refreshAutomations(void)
 {
-    Scheduler::Get()->addEvent(
-        [this] {
-            _data->automations().push(Audio::Automation());
-        },
-        [this] {
-            beginResetModel();
-            refreshAutomations();
-            endResetModel();
-        });
-}
-
-void ControlModel::remove(const int index)
-{
-    if (index >= count())
-        return;
-    Scheduler::Get()->addEvent(
-        [this, index] {
-            auto it = _data->automations().begin() + index;
-            if (it != _data->automations().end() && it != nullptr)
-                _data->automations().erase(it);
-        }, [this] {
-            beginResetModel();
-            refreshAutomations();
-            endResetModel();
-        });
-
-}
-
-void ControlModel::move(const int from, const int to)
-{
+    Models::RefreshModels(this, _automations, _data->automations(), this);
 }

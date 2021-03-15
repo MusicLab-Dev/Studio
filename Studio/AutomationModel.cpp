@@ -46,73 +46,98 @@ bool AutomationModel::setData(const QModelIndex &index, const QVariant &value, i
     }
 }
 
-void AutomationModel::add(const GPoint &point) noexcept
+void AutomationModel::setMuted(const bool muted)
 {
-    Scheduler::Get()->addEvent(
-        [this, &point] {
-            _data->points().push(point);
+    Models::AddProtectedEvent(
+        [this, muted] {
+            _data->setMuted(muted);
         },
-        [this] {
-            beginResetModel();
-            endResetModel();
-        });
+        [this, muted = _data->muted()] {
+            if (muted != _data->muted())
+                emit mutedChanged();
+        }
+    );
 }
 
-void AutomationModel::remove(const int index)
+void AutomationModel::setName(const QString &name)
 {
-    coreAssert(index >= 0 && index < count(),
-        throw std::range_error("AutomationModel::remove: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
+    Models::AddProtectedEvent(
+        [this, name = Core::FlatString(name.toStdString())](void) mutable { _data->setName(std::move(name)); },
+        [this, name = _data->name()] {
+            if (name != _data->name())
+                emit nameChanged();
+        }
+    );
+}
 
-    Scheduler::Get()->addEvent(
-        [this, &index] {
-            _data->points().erase(_data->points().begin() + index);
+void AutomationModel::add(const GPoint &point)
+{
+    const auto idx = std::distance(_data->points().begin(), _data->points().findSortedPlacement(point));
+
+    Models::AddProtectedEvent(
+        [this, point] {
+            _data->points().insert(point);
         },
-        [this, &index] {
-            beginRemoveRows(QModelIndex(), index, index);
+        [this, idx] {
+            beginInsertRows(QModelIndex(), idx, idx);
+            endInsertRows();
+        }
+    );
+}
+
+void AutomationModel::remove(const int idx)
+{
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("AutomationModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+    Models::AddProtectedEvent(
+        [this, idx] {
+            _data->points().erase(_data->points().begin() + idx);
+        },
+        [this, idx] {
+            beginRemoveRows(QModelIndex(), idx, idx);
             endRemoveRows();
-        });
+        }
+    );
 }
 
-const GPoint &AutomationModel::get(const int index) const
+const GPoint &AutomationModel::get(const int idx) const
 {
-    coreAssert(index >= 0 && index < count(),
-        throw std::range_error("AutomationModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("AutomationModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
 
-    return reinterpret_cast<const GPoint &>(_data->points().at(index));
+    return reinterpret_cast<const GPoint &>(_data->points().at(idx));
 }
 
-void AutomationModel::set(const int index, const GPoint &point)
+void AutomationModel::set(const int idx, const GPoint &point)
 {
-    coreAssert(index >= 0 && index < count(),
-        throw std::range_error("AutomationModel::set: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
+    auto newIdx = std::distance(_data->points().begin(), _data->points().findSortedPlacement(point));
 
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("AutomationModel::set: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     Scheduler::Get()->addEvent(
-        [this, &index, &point] {
-            _data->points().at(index) = point;
-            // _data->points().sort()
+        [this, point, idx] {
+            _data->points().assign(idx, point);
         },
-        [this, &index] {
-            beginResetModel();
-            endResetModel();
-            const auto modelIndex = QAbstractListModel::index(index, 0);
-            emit dataChanged(modelIndex, modelIndex, { static_cast<int>(Roles::Point) });
-        });
-
+        [this, idx, newIdx] {
+            if (idx != newIdx) {
+                beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newIdx + 1);
+                endMoveRows();
+            } else {
+                const auto modelIndex = index(idx);
+                emit dataChanged(modelIndex, modelIndex);
+            }
+        }
+    );
 }
 
 void AutomationModel::updateInternal(Audio::Automation *data)
 {
     if (_data == data)
         return;
-    Scheduler::Get()->addEvent(
-        [this, data] {
-            _data = data;
-            _instances->updateInternal(&_data->instances());
-        },
-        [this, data] {
-            if (_data->points().data() != data->points().data()) {
-                beginResetModel();
-                endResetModel();
-            }
-        });
+    std::swap(_data, data);
+    if (_data->points().data() != data->points().data()) {
+        beginResetModel();
+        endResetModel();
+    }
+    _instances->updateInternal(&_data->instances());
 }

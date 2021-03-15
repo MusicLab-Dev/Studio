@@ -10,6 +10,8 @@
 
 TEST(ControlsModel, InitDestroy)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Controls controls {};
 
@@ -18,6 +20,8 @@ TEST(ControlsModel, InitDestroy)
 
 TEST(ControlsModel, AddRemoveControlCount)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Controls controls {};
 
@@ -37,6 +41,8 @@ TEST(ControlsModel, AddRemoveControlCount)
 
 TEST(ControlsModel, MoveControl)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Controls controls {};
 

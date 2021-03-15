@@ -12,6 +12,8 @@
 
 TEST(AutomationModel, InitDestroy)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Automation automation {};
 
@@ -20,6 +22,8 @@ TEST(AutomationModel, InitDestroy)
 
 TEST(AutomationModel, InitWithValueDestroy)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Automation automation {};
     automation.instances().push<Audio::BeatRange>({1, 2});
@@ -32,6 +36,8 @@ TEST(AutomationModel, InitWithValueDestroy)
 
 TEST(AutomationModel, UpdateInternal)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Automation automation1 {};
     Audio::Automation automation2 {};
@@ -50,6 +56,8 @@ TEST(AutomationModel, UpdateInternal)
 
 TEST(AutomationModel, AddPoint)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Automation automation {};
 
@@ -68,6 +76,8 @@ TEST(AutomationModel, AddPoint)
 
 TEST(AutomationModel, Count)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Automation automation {};
 
@@ -86,6 +96,8 @@ TEST(AutomationModel, Count)
 
 TEST(AutomationModel, RemovePoint)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Automation automation {};
 
@@ -101,6 +113,8 @@ TEST(AutomationModel, RemovePoint)
 
 TEST(AutomationModel, InstancesAddRemoveBasics)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
     Audio::Automation automation {};
@@ -138,6 +152,8 @@ TEST(AutomationModel, InstancesAddRemoveBasics)
 
 TEST(AutomationModel, SetPoint)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Automation automation {};
 

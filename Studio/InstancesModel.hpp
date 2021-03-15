@@ -5,10 +5,8 @@
 
 #pragma once
 
-#include <QObject>
 #include <QAbstractListModel>
 
-#include <Core/Utils.hpp>
 #include <Audio/Base.hpp>
 
 /** @brief The studio is the instance running the application process */
@@ -17,7 +15,6 @@ class InstancesModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-
     /** @brief Roles of each instance */
     enum Roles {
         From = Qt::UserRole + 1,
@@ -47,18 +44,17 @@ public:
     void updateInternal(Audio::BeatRanges *data);
 
     /** @brief Get internal data pointer */
-    Audio::BeatRanges *internal(void) { return _data; }
+    [[nodiscard]] Audio::BeatRanges *internal(void) { return _data; }
 
 public slots:
     /** @brief Add a children to the list */
-    void add(const Audio::BeatRange &range) noexcept;
+    void add(const Audio::BeatRange &range);
 
-public /* slots */:
     /** @brief Remove a children from the list */
-    Q_INVOKABLE void remove(const int index) noexcept_ndebug;
+    void remove(const int index);
 
-    /** @brief Move beatrange at index */
-    Q_INVOKABLE void move(const int index, const Audio::BeatRange &range) noexcept_ndebug;
+    /** @brief Set beatrange at index */
+    void set(const int index, const Audio::BeatRange &range);
 
 private:
     Audio::BeatRanges *_data { nullptr };

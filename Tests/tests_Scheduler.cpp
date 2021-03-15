@@ -9,5 +9,7 @@
 
 TEST(Scheduler, InitDestroy)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     ASSERT_NO_THROW(Scheduler());
 }

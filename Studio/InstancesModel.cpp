@@ -45,53 +45,61 @@ void InstancesModel::updateInternal(Audio::BeatRanges *data)
     endResetModel();
 }
 
-const Audio::BeatRange &InstancesModel::get(const int index) const noexcept_ndebug
+const Audio::BeatRange &InstancesModel::get(const int idx) const noexcept_ndebug
 {
-    coreAssert(index >= 0 && index < count(),
-        throw std::range_error("InstancesModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
-    return (*_data)[static_cast<unsigned long>(index)];
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("InstancesModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+    return (*_data)[static_cast<unsigned long>(idx)];
 }
 
-void InstancesModel::add(const Audio::BeatRange &range) noexcept
+void InstancesModel::add(const Audio::BeatRange &range)
 {
+    const auto idx = std::distance(_data->begin(), _data->findSortedPlacement(range));
+
     Scheduler::Get()->addEvent(
         [this, range] {
-            _data->push(range);
+            _data->insert(range);
         },
-        [this] {
-            beginResetModel();
-            endResetModel();
+        [this, idx] {
+            beginInsertRows(QModelIndex(), idx, idx);
+            endInsertRows();
         }
     );
 }
 
-void InstancesModel::remove(const int index) noexcept_ndebug
+void InstancesModel::remove(const int idx)
 {
-    coreAssert(index >= 0 && index < count(),
-        throw std::range_error("InstancesModel::remove: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("InstancesModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     Scheduler::Get()->addEvent(
-        [this, index] {
-            _data->erase(_data->begin() + index);
+        [this, idx] {
+            _data->erase(_data->begin() + idx);
         },
-        [this, index] {
-            beginRemoveRows(QModelIndex(), index, index);
+        [this, idx] {
+            beginRemoveRows(QModelIndex(), idx, idx);
             endRemoveRows();
         }
     );
 }
 
-void InstancesModel::move(const int index, const Audio::BeatRange &range) noexcept_ndebug
+void InstancesModel::set(const int idx, const Audio::BeatRange &range)
 {
-    coreAssert(index >= 0 && index < count(),
-        throw std::range_error("InstancesModel::move: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
+    auto newIdx = std::distance(_data->begin(), _data->findSortedPlacement(range));
+
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("InstancesModel::move: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     Scheduler::Get()->addEvent(
-        [this, index, range] {
-            _data->at(static_cast<unsigned long>(index)) = range;
-            //_data->sort();
+        [this, range, idx] {
+            _data->assign(idx, range);
         },
-        [this, index] {
-            beginRemoveRows(QModelIndex(), index, index);
-            endRemoveRows();
+        [this, idx, newIdx] {
+            if (idx != newIdx) {
+                beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newIdx + 1);
+                endMoveRows();
+            } else {
+                const auto modelIndex = index(idx);
+                emit dataChanged(modelIndex, modelIndex);
+            }
         }
     );
 }

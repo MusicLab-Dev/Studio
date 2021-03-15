@@ -9,8 +9,6 @@
 
 #include <QAbstractListModel>
 #include <Core/UniqueAlloc.hpp>
-#include <Core/Utils.hpp>
-#include <Audio/Base.hpp>
 #include <Audio/Node.hpp>
 
 #include "PartitionModel.hpp"
@@ -32,6 +30,7 @@ public:
     /** @brief Virtual destructor */
     ~PartitionsModel(void) noexcept override = default;
 
+
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
@@ -45,6 +44,7 @@ public:
     /** @brief Get a beat range from internal list */
     [[nodiscard]] const PartitionModel *get(const int index) const;
 
+
 public slots:
     /** @brief Add a children to the list */
     void add(void);
@@ -55,10 +55,17 @@ public slots:
     /** @brief Move beatrange at index */
     void move(const int from, const int to);
 
+
+public: // Allow external insert / remove
+    using QAbstractListModel::beginRemoveRows;
+    using QAbstractListModel::endRemoveRows;
+    using QAbstractListModel::beginInsertRows;
+    using QAbstractListModel::endInsertRows;
+
 private:
     Audio::Partitions *_data { nullptr };
     Core::Vector<Core::UniqueAlloc<PartitionModel>> _partitions;
 
     /** @brief Refresh internal models */
-    void refreshControls(void);
+    void refreshPartitions(void);
 };

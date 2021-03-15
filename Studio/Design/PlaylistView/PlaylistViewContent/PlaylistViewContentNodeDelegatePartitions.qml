@@ -1,31 +1,39 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import PartitionModel 1.0
+
+import "../../Default"
+
 Repeater {
     delegate: Item {
+        property PartitionModel partition: partitionInstance.instance
+
+        id: partitionDelegate
         width: nodeView.width - nodeView.headerPluginWidth
         height: nodeView.rowHeight
 
         Rectangle {
             width: nodeView.headerDataWidth
             height: nodeView.rowHeight
-            color: "red"
-            border.color: "grey"
+            color: "transparent"
+            border.color: "white"
             border.width: 2
 
-            Text {
-                anchors.centerIn: parent
-                text: "Partition"
-                font.pointSize: 24
+            DefaultText {
+                text: partitionDelegate.partition.name
+                font.pointSize: 16
             }
         }
 
-        Rectangle {
+        Item {
             x: nodeView.headerDataWidth
             width: nodeView.width - nodeView.headerWidth
             height: nodeView.rowHeight
-            color: "pink"
-            opacity: 0.5
+
+            Repeater {
+                // model:
+            }
         }
     }
 }

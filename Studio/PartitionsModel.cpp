@@ -45,37 +45,62 @@ const PartitionModel *PartitionsModel::get(const int index) const
 
 void PartitionsModel::add(void)
 {
-    Scheduler::Get()->addEvent(
+    Models::AddProtectedEvent(
         [this] {
             _data->push();
         },
         [this] {
-            beginResetModel();
-            refreshControls();
-            endResetModel();
-    });
+            const auto partitionsData = _partitions.data();
+            const auto idx = _partitions.size();
+            beginInsertRows(QModelIndex(), idx, idx);
+            _partitions.push(&_data->at(idx), this);
+            endInsertRows();
+            if (_partitions.data() != partitionsData)
+                refreshPartitions();
+        }
+    );
 }
 
-void PartitionsModel::remove(const int index)
+void PartitionsModel::remove(const int idx)
 {
-    Scheduler::Get()->addEvent(
-        [this, index] {
-            _data->erase(_data->begin() + index);
-            _partitions.erase(_partitions.begin() + index);
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("ControlsModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+    Models::AddProtectedEvent(
+        [this, idx] {
+            _data->erase(_data->begin() + idx);
         },
-        [this] {
-            beginResetModel();
-            refreshControls();
-            endResetModel();
-        });
+        [this, idx] {
+            beginRemoveRows(QModelIndex(), idx, idx);
+            _partitions.erase(_partitions.begin() + idx);
+            endRemoveRows();
+            const auto count = _partitions.size();
+            for (auto i = static_cast<std::size_t>(idx); i < count; ++i)
+                _partitions.at(i)->updateInternal(&_data->at(i));
+        }
+    );
 }
 
 void PartitionsModel::move(const int from, const int to)
 {
-    /** TODO */
+    if (from == to)
+        return;
+    coreAssert(from >= 0 && from < count() && to >= 0 && to < count(),
+        throw std::range_error("ControlModel::move: Given index is not in range: [" + std::to_string(from) + ", " + std::to_string(to) + "[ out of [0, " + std::to_string(count()) + "["));
+    Models::AddProtectedEvent(
+        [this, from, to] {
+            _data->move(from, from, to);
+        },
+        [this, from, to] {
+            beginMoveRows(QModelIndex(), from, from, QModelIndex(), to + 1);
+            _partitions.move(from, from, to);
+            endMoveRows();
+            _partitions.at(from)->updateInternal(&_data->at(from));
+            _partitions.at(to)->updateInternal(&_data->at(to));
+        }
+    );
 }
 
-void PartitionsModel::refreshControls(void)
+void PartitionsModel::refreshPartitions(void)
 {
-    Models::RefreshModels(_partitions, *_data, this);
+    Models::RefreshModels(this, _partitions, *_data, this);
 }

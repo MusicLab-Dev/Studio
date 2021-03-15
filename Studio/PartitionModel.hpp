@@ -5,14 +5,12 @@
 
 #pragma once
 
-#include <QObject>
 #include <QAbstractListModel>
 
-#include <Core/Utils.hpp>
 #include <Core/UniqueAlloc.hpp>
 #include <Audio/Partition.hpp>
-#include <Audio/Base.hpp>
 
+#include "Note.hpp"
 #include "InstancesModel.hpp"
 
 class PartitionModel;
@@ -34,6 +32,7 @@ class PartitionModel : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString name READ muted WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(MidiChannels midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
 
@@ -58,6 +57,7 @@ public:
     /** @brief Virtual destructor */
     ~PartitionModel(void) noexcept override = default;
 
+
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
@@ -68,21 +68,32 @@ public:
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
+
+    /** @brief Get the instances */
+    [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
+    [[nodiscard]] const InstancesModel &instances(void) const noexcept { return *_instances; }
+
+
+    /** @brief Get the name property */
+    [[nodiscard]] QString name(void) const noexcept
+        { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
+
+    /** @brief Set the name property */
+    void setName(const QString &name);
+
+
     /** @brief Return true is the partition model is muted */
     [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
 
     /** @brief Set the muted propertie */
-    bool setMuted(bool muted) noexcept;
+    void setMuted(bool muted) noexcept;
+
 
     /** @brief Return the channel of the partition */
     [[nodiscard]] MidiChannels midiChannels(void) const noexcept { return static_cast<MidiChannels>(_data->midiChannels()); }
 
     /** @brief Set the channel of the partition */
-    bool setMidiChannels(const MidiChannels channel) noexcept;
-
-    /** @brief Get the instances */
-    [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
-    [[nodiscard]] const InstancesModel &instances(void) const noexcept { return *_instances; }
+    void setMidiChannels(const MidiChannels midiChannels);
 
 
     /** @brief Update internal data pointer if it changed */
@@ -90,15 +101,18 @@ public:
 
 public slots:
     /** @brief Add note */
-    void addNote(const Audio::Note &note) noexcept;
+    void add(const Note &note);
 
     /** @brief Remove note at the index */
-    void removeNote(const int index) noexcept;
+    void remove(const int index);
 
     /** @brief Get the internal list of instances */
     [[nodiscard]] InstancesModel *getInstances(void) noexcept { return _instances.get(); }
 
 signals:
+    /** @brief Notify that the channel has changed */
+    void nameChanged(void);
+
     /** @brief Notify that the muted property has changed */
     void mutedChanged(void);
 

@@ -22,6 +22,8 @@ void Studio::InitResources(void)
     Audio::PluginTable::Init();
     Audio::Device::InitDriver();
 
+    qmlRegisterUncreatableType<GPoint>("Point", 1, 0, "Point", "Cannot construct Point");
+    qmlRegisterUncreatableType<Note>("Note", 1, 0, "Note", "Cannot construct Note");
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
     qmlRegisterUncreatableType<Project>("Project", 1, 0, "Project", "Cannot construct Project");

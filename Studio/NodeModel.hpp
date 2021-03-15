@@ -9,7 +9,6 @@
 #include <QColor>
 
 #include <Core/FlatVector.hpp>
-#include <Core/Utils.hpp>
 #include <Core/UniqueAlloc.hpp>
 
 #include <Audio/Node.hpp>
@@ -64,6 +63,7 @@ public:
         NodeInstance = Qt::UserRole + 1
     };
 
+
     /** @brief Default constructor */
     explicit NodeModel(Audio::Node *node, QObject *parent = nullptr) noexcept;
 
@@ -85,7 +85,6 @@ public:
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
-
     /** @brief Get an element from the list */
     [[nodiscard]] NodeModel *get(const int index)
         { return const_cast<NodeModel *>(const_cast<const NodeModel *>(this)->get(index)); }
@@ -96,21 +95,22 @@ public:
     [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
 
     /** @brief Set if the node is muted */
-    bool setMuted(bool muted) noexcept;
+    void setMuted(const bool muted);
 
 
     /** @brief Get the node's color */
     [[nodiscard]] QColor color(void) noexcept { return QColor(static_cast<QRgb>(_data->color())); }
 
     /** @brief Set the node's color */
-    bool setColor(const QColor &color) noexcept;
+    void setColor(const QColor &color);
 
 
     /** @brief Get the node's name */
-    [[nodiscard]] QString name(void) const noexcept { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
+    [[nodiscard]] QString name(void) const noexcept
+        { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
 
     /** @brief Set the node's name */
-    bool setName(const QString &name) noexcept;
+    void setName(const QString &name);
 
 
     /** @brief Get the partitions model */
@@ -125,6 +125,7 @@ public:
 
     /** @brief Get the flags */
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
+
 
 public slots:
     /** @brief Add a new node in children vector using a plugin path */

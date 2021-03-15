@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <QObject>
 #include <QAbstractListModel>
 
 #include <Core/Assert.hpp>

@@ -8,11 +8,8 @@
 #include <vector>
 #include <utility>
 
-#include <QObject>
 #include <QAbstractListModel>
 
-#include <Core/Utils.hpp>
-#include <Audio/Base.hpp>
 #include <Audio/Control.hpp>
 
 #include "ControlModel.hpp"
@@ -49,6 +46,7 @@ public:
         { return const_cast<ControlModel *>(const_cast<const ControlsModel *>(this)->get(index)); }
     [[nodiscard]] const ControlModel *get(const int index) const noexcept_ndebug;
 
+
 public slots:
     /** @brief Add a children to the list */
     void add(const ParamID paramID);
@@ -58,6 +56,12 @@ public slots:
 
     /** @brief Move Control from to */
     void move(const int from, const int to);
+
+public: // Allow external insert / remove
+    using QAbstractListModel::beginRemoveRows;
+    using QAbstractListModel::endRemoveRows;
+    using QAbstractListModel::beginInsertRows;
+    using QAbstractListModel::endInsertRows;
 
 private:
     Audio::Controls *_data { nullptr };

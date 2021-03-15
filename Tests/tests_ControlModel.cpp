@@ -18,35 +18,45 @@ TEST(ControlModel, InitDestroy)
 
 TEST(ControlModel, AddRemoveAutomation)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
     Audio::Control control {1, 2.0};
 
     ControlModel model(&control);
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 100; ++i) {
         model.add();
         ASSERT_EQ(model.count(), i + 1);
     }
-    for (int i = 99; i > 0; i--) {
+    for (int i = 99; i > 0; --i) {
         model.remove(0);
         ASSERT_EQ(model.count(), i);
     }
 }
-
+#include <QDebug>
 TEST(ControlModel, MoveAutomation)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
     Audio::Control control {1, 2.0};
 
     ControlModel model(&control);
     model.add();
+    model.get(0)->setName("0");
     model.add();
+    model.get(1)->setName("1");
     model.move(0, 1);
+    ASSERT_EQ(model.get(0)->name(), "1");
+    ASSERT_EQ(model.get(1)->name(), "0");
 }
 
 TEST(ControlModel, ParamId)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Control control1 {1, 2.0};
 
@@ -57,6 +67,8 @@ TEST(ControlModel, ParamId)
 
 TEST(ControlModel, UpdateInternal)
 {
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
     Scheduler scheduler;
     Audio::Control control1 {1, 2.0};
     Audio::Control control2 {2, 4.0};

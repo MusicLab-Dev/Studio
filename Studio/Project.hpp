@@ -48,7 +48,8 @@ public:
 
 
     /** @brief Get the project name */
-    [[nodiscard]] QString name(void) const noexcept { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
+    [[nodiscard]] QString name(void) const noexcept
+        { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
 
     /** @brief Set the project name, return true and emit nameChanged on change */
     bool setName(const QString &name) noexcept;

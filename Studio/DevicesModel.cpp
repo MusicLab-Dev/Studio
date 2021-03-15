@@ -27,7 +27,7 @@ QVariant DevicesModel::data(const QModelIndex &index, int role) const
 {
     coreAssert(index.row() >= 0 || index.row() < count(),
         throw std::range_error("DevicesModel::data: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
-    const auto &child = (*_data)[index.row()];
+    const auto &child = _data->at(index.row());
     switch (static_cast<DevicesModel::Roles>(role)) {
     case Roles::Name:
         return child.name();

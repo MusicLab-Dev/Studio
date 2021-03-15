@@ -8,11 +8,11 @@
 #include <QDebug>
 #include <QHash>
 #include <QQmlEngine>
-#include <QAbstractListModel>
 #include <QColor>
 
 #include <Audio/PluginTable.hpp>
 
+#include "Models.hpp"
 #include "NodeModel.hpp"
 
 static const QColor Colors[] = {
@@ -41,7 +41,7 @@ NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    setColor(Colors[CurrentColorIndex]);
+    _data->setColor(static_cast<std::uint32_t>(Colors[CurrentColorIndex].rgba()));
     if (++CurrentColorIndex >= ColorCount)
         CurrentColorIndex = 0u;
 }
@@ -66,6 +66,43 @@ QVariant NodeModel::data(const QModelIndex &index, int role) const
     }
 }
 
+void NodeModel::setMuted(const bool muted)
+{
+    Models::AddProtectedEvent(
+        [this, muted] {
+            _data->setMuted(muted);
+        },
+        [this, muted = _data->muted()] {
+            if (muted != _data->muted())
+                emit mutedChanged();
+        }
+    );
+}
+
+void NodeModel::setName(const QString &name)
+{
+    Models::AddProtectedEvent(
+        [this, name = Core::FlatString(name.toStdString())](void) mutable { _data->setName(std::move(name)); },
+        [this, name = _data->name()] {
+            if (name != _data->name())
+                emit nameChanged();
+        }
+    );
+}
+
+void NodeModel::setColor(const QColor &color)
+{
+    Models::AddProtectedEvent(
+        [this, color = static_cast<std::uint32_t>(color.rgba())] {
+            _data->setColor(color);
+        },
+        [this, color = _data->color()] {
+            if (color != _data->color())
+                emit colorChanged();
+        }
+    );
+}
+
 const NodeModel *NodeModel::get(const int idx) const
 {
     coreAssert(idx >= 0 && idx < count(),
@@ -88,53 +125,35 @@ void NodeModel::add(const QString &pluginPath)
         return;
     }
 
-    // Scheduler::Get()->addEvent(
-    // [this, plugin = std::move(plugin)] {
-    // },
-    // [this] {
-    // });
-    auto &backendChild = _data->children().push(std::make_unique<Audio::Node>(std::move(plugin)));
-    backendChild->setName(Core::FlatString(factory->getName()));
-    // backendChild->prepareCache(specs);
-    beginInsertRows(QModelIndex(), idx, idx);
-    _children.push(backendChild.get(), this);
-    endInsertRows();
-    emit countChanged();
+    Models::AddProtectedEvent(
+        [this, factory, plugin = std::move(plugin)](void) mutable {
+            auto &backendChild = _data->children().push(std::make_unique<Audio::Node>(std::move(plugin)));
+            backendChild->setName(Core::FlatString(factory->getName()));
+            // backendChild->prepareCache(specs);
+        },
+        [this] {
+            const auto idx = _children.size();
+            beginInsertRows(QModelIndex(), idx, idx);
+            _children.push(_data->children().back().get(), this);
+            endInsertRows();
+            emit countChanged();
+        }
+    );
 }
 
 void NodeModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("NodeModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
-    beginRemoveRows(QModelIndex(), idx, idx);
-    _children.erase(_children.begin() + idx);
-    _data->children().erase(_data->children().begin());
-    endRemoveRows();
-    emit countChanged();
-}
-
-bool NodeModel::setMuted(bool muted) noexcept
-{
-    if (_data->muted() == muted)
-        return false;
-    _data->setMuted(muted);
-    emit mutedChanged();
-    return true;
-}
-
-bool NodeModel::setName(const QString &name) noexcept
-{
-    if (_data->name() == name.toStdString())
-        return false;
-    _data->setName(Core::FlatString(name.toStdString()));
-    emit nameChanged();
-    return true;
-}
-
-bool NodeModel::setColor(const QColor &color) noexcept
-{
-    if (!_data->setColor(static_cast<int>(color.rgba())))
-        return false;
-    emit colorChanged();
-    return true;
+    Models::AddProtectedEvent(
+        [this, idx] {
+            _data->children().erase(_data->children().begin() + idx);
+        },
+        [this, idx] {
+            beginRemoveRows(QModelIndex(), idx, idx);
+            _children.erase(_children.begin() + idx);
+            endRemoveRows();
+            emit countChanged();
+        }
+    );
 }

@@ -7,7 +7,6 @@
 
 #include <memory>
 
-#include <QObject>
 #include <QAbstractListModel>
 
 #include "Device.hpp"
