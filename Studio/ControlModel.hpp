@@ -55,7 +55,6 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return _automations.size(); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -100,6 +99,9 @@ public:
     void updateInternal(Audio::Control *data);
 
 public slots:
+    /** @brief Return the count of element in the model */
+    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_automations.size()); }
+
     /** @brief Add a children to the list */
     void add(void);
 

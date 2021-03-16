@@ -44,7 +44,7 @@ Menu {
         text: qsTr("Add partition")
 
         onTriggered: {
-            targetNode.partitions.add()
+            targetNode.partitions.add(qsTr("Partition ") + (targetNode.partitions.count() + 1))
             closeMenu()
         }
     }

@@ -1,8 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import "../../Default"
-import "../../Common"
+import "../../../Default"
+import "../../../Common"
 
 Item {
     id: header
@@ -14,14 +14,20 @@ Item {
         width: parent.width - 12
         height: parent.height - 12
         radius: width / 16
-        color: delegate.node ? delegate.node.color : "black"
+        color: nodeDelegate.node ? nodeDelegate.node.color : "black"
 
         DefaultText {
             id: nodeName
             x: 2
             y: 2
-            text: delegate.node ? delegate.node.name : ""
+            width: settingsMenuButton.x - 4
+            height: implicitHeight
+            text: nodeDelegate.node ? nodeDelegate.node.name : ""
+            visible: nodeView.rowHeight > height
+            color: "white"
             font.pointSize: 16
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignLeft
         }
 
         SettingsButton {
@@ -30,8 +36,9 @@ Item {
             y: 2
             width: nodeName.height
             height: width
+            visible: nodeName.visible
 
-            onReleased: playlistViewContentPluginSettingsMenu.openMenu(addMenuButton, delegate.node, delegate.index)
+            onReleased: playlistViewContentNodeViewPluginSettingsMenu.openMenu(addMenuButton, nodeDelegate.node, index)
         }
 
         AddButton {
@@ -40,8 +47,9 @@ Item {
             y: 2
             width: nodeName.height
             height: width
+            visible: nodeName.visible
 
-            onReleased: playlistViewContentPluginAddMenu.openMenu(addMenuButton, delegate.node)
+            onReleased: playlistViewContentNodeViewPluginAddMenu.openMenu(addMenuButton, nodeDelegate.node)
         }
     }
 }

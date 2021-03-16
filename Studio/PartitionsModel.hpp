@@ -35,7 +35,6 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  _data->size(); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -46,8 +45,11 @@ public:
 
 
 public slots:
+    /** @brief Return the count of element in the model */
+    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_data->size()); }
+
     /** @brief Add a children to the list */
-    void add(void);
+    void add(const QString &name);
 
     /** @brief Remove a children from the list */
     void remove(const int index);
@@ -64,7 +66,7 @@ public: // Allow external insert / remove
 
 private:
     Audio::Partitions *_data { nullptr };
-    Core::Vector<Core::UniqueAlloc<PartitionModel>> _partitions;
+    Core::TinyVector<Core::UniqueAlloc<PartitionModel>> _partitions;
 
     /** @brief Refresh internal models */
     void refreshPartitions(void);

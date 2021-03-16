@@ -37,7 +37,6 @@ class NodeModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(NodeModel *parentNode READ parentNode NOTIFY parentNodeChanged)
-    Q_PROPERTY(quint32 count READ count NOTIFY countChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -79,7 +78,6 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  _children.size(); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -128,6 +126,9 @@ public:
 
 
 public slots:
+    /** @brief Return the count of element in the model */
+    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_children.size()); }
+
     /** @brief Add a new node in children vector using a plugin path */
     void add(const QString &pluginPath);
 
@@ -135,9 +136,6 @@ public slots:
     void remove(const int index);
 
 signals:
-    /** @brief Notify that count property has changed */
-    void countChanged(void);
-
     /** @brief Notify that muted property has changed */
     void mutedChanged(void);
 
@@ -164,5 +162,7 @@ private:
     Core::FlatVector<NodePtr> _children {};
     PartitionsPtr _partitions { nullptr };
     ControlsPtr _controls { nullptr };
+    // PluginPtr _plugin { nullptr };
     //ConnectionsPtr _connections {};
+
 };

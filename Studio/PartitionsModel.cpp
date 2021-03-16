@@ -43,11 +43,11 @@ const PartitionModel *PartitionsModel::get(const int index) const
     return _partitions.at(index).get();
 }
 
-void PartitionsModel::add(void)
+void PartitionsModel::add(const QString &name)
 {
     Models::AddProtectedEvent(
-        [this] {
-            _data->push();
+        [this, name = Core::FlatString(name.toStdString())](void) mutable {
+            _data->push().setName(std::move(name));
         },
         [this] {
             const auto partitionsData = _partitions.data();

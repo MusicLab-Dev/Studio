@@ -114,7 +114,7 @@ void AutomationModel::set(const int idx, const GPoint &point)
 
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("AutomationModel::set: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
-    Scheduler::Get()->addEvent(
+    Models::AddProtectedEvent(
         [this, point, idx] {
             _data->points().assign(idx, point);
         },

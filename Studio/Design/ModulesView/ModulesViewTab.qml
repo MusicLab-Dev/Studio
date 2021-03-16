@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+
 import "../Default"
+import "../Common"
 
 Rectangle {
     id: moduleViewTab
@@ -28,23 +30,21 @@ Rectangle {
             moduleViewTab.x = index * moduleViewTab.width
         }
     }
-    
+
     Text {
         anchors.centerIn: parent
         text: title
         color: componentSelected === index ? "white" : "black"
     }
-    
-    DefaultImageButton {
-        imgPath: "qrc:/Assets/Close.png"
-        height: parent.height / 2
-        width: parent.height / 2
-        anchors.top: parent.top
+
+    CloseButton {
+        width: parent.height / 3
+        height: width
+        anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        colorDefault: "red"
-        showBorder: false
+        anchors.rightMargin: width / 2
         visible: !(modules.count === 2 && title === "New component")
-        
+
         onClicked: {
             if (componentSelected === modules.count - 2)
                 componentSelected = modules.count - 3

@@ -22,7 +22,7 @@ Flickable {
     contentHeight: totalHeight
     boundsBehavior: Flickable.StopAtBounds
 
-    PlaylistViewContentNodeDelegate {
+    PlaylistViewContentNodeViewDelegate {
         id: master
         node: app.project.master
         recursionIndex: 0

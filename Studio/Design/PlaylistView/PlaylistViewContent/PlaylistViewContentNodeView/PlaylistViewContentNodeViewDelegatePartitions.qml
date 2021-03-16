@@ -3,7 +3,8 @@ import QtQuick.Controls 2.15
 
 import PartitionModel 1.0
 
-import "../../Default"
+import "../../../Default"
+import "../../../Common"
 
 Repeater {
     delegate: Item {
@@ -21,8 +22,28 @@ Repeater {
             border.width: 2
 
             DefaultText {
-                text: partitionDelegate.partition.name
+                id: partitionName
+                x: 2
+                y: 2
+                width: removeButton.x - 4
+                height: implicitHeight
+                text: partitionDelegate.partition ? partitionDelegate.partition.name : ""
+                visible: nodeView.rowHeight > height
+                color: "white"
                 font.pointSize: 16
+                elide: Text.ElideRight
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            CloseButton {
+                id: removeButton
+                x: parent.width - width - 2
+                y: 2
+                width: partitionName.height
+                height: width
+                visible: partitionName.visible
+
+                onReleased: nodeDelegate.node.partitions.remove(index)
             }
         }
 

@@ -136,7 +136,6 @@ void NodeModel::add(const QString &pluginPath)
             beginInsertRows(QModelIndex(), idx, idx);
             _children.push(_data->children().back().get(), this);
             endInsertRows();
-            emit countChanged();
         }
     );
 }
@@ -153,7 +152,6 @@ void NodeModel::remove(const int idx)
             beginRemoveRows(QModelIndex(), idx, idx);
             _children.erase(_children.begin() + idx);
             endRemoveRows();
-            emit countChanged();
         }
     );
 }

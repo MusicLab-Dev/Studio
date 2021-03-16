@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import "../../Default"
 import "../../Common"
 
+import "./PlaylistViewContentNodeView"
+
 Item {
     property alias rowHeight: playlistViewContentNodeView.rowHeight
     // property alias totalHeight: playlistViewContentHeader.totalGridHeight
@@ -47,12 +49,12 @@ Item {
         anchors.leftMargin: playlistViewContentNodeView.headerWidth
     }
 
-    PlaylistViewContentPluginAddMenu {
-        id: playlistViewContentPluginAddMenu
+    PlaylistViewContentNodeViewPluginAddMenu {
+        id: playlistViewContentNodeViewPluginAddMenu
     }
 
-    PlaylistViewContentPluginSettingsMenu {
-        id: playlistViewContentPluginSettingsMenu
+    PlaylistViewContentNodeViewPluginSettingsMenu {
+        id: playlistViewContentNodeViewPluginSettingsMenu
     }
 
     GestureArea {

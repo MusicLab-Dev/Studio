@@ -35,7 +35,6 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  _controls.size(); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -48,6 +47,9 @@ public:
 
 
 public slots:
+    /** @brief Return the count of element in the model */
+    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_controls.size()); }
+
     /** @brief Add a children to the list */
     void add(const ParamID paramID);
 

@@ -32,7 +32,7 @@ class PartitionModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString name READ muted WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(MidiChannels midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
 
@@ -62,7 +62,6 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  _data->count(); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -100,6 +99,9 @@ public:
     void updateInternal(Audio::Partition *data);
 
 public slots:
+    /** @brief Return the count of element in the model */
+    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_data->notes().size()); }
+
     /** @brief Add note */
     void add(const Note &note);
 

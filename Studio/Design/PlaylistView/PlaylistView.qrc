@@ -8,12 +8,12 @@
         <file>PlaylistViewContent/PlaylistViewContentTimeline.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentFlickable.qml</file>
         <file>PlaylistViewContent/PlaylistViewContentHeader.qml</file>
-        <file>PlaylistViewContent/PlaylistViewContentPluginAddMenu.qml</file>
-        <file>PlaylistViewContent/PlaylistViewContentPluginSettingsMenu.qml</file>
-        <file>PlaylistViewContent/PlaylistViewContentNodeView.qml</file>
-        <file>PlaylistViewContent/PlaylistViewContentNodeDelegate.qml</file>
-        <file>PlaylistViewContent/PlaylistViewContentNodeDelegatePlugin.qml</file>
-        <file>PlaylistViewContent/PlaylistViewContentNodeDelegateControls.qml</file>
-        <file>PlaylistViewContent/PlaylistViewContentNodeDelegatePartitions.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeView/PlaylistViewContentNodeView.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeView/PlaylistViewContentNodeViewDelegate.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeView/PlaylistViewContentNodeViewDelegatePlugin.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeView/PlaylistViewContentNodeViewDelegateControls.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeView/PlaylistViewContentNodeViewDelegatePartitions.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeView/PlaylistViewContentNodeViewPluginAddMenu.qml</file>
+        <file>PlaylistViewContent/PlaylistViewContentNodeView/PlaylistViewContentNodeViewPluginSettingsMenu.qml</file>
     </qresource>
 </RCC>
