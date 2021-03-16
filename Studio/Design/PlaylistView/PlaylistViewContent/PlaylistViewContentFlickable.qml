@@ -17,7 +17,7 @@ Item {
         x: playlistViewContentNodeView.headerWidth
         width: parent.width - playlistViewContentNodeView.headerWidth
         height: parent.height
-        color: "#4A8693"
+        color: themeManager.backgroundColor
     }
 
     PlaylistViewContentNodeView {
