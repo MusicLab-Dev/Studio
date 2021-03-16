@@ -6,10 +6,11 @@ import "../Common"
 
 Rectangle {
     property bool dragActive: mouseArea.drag.active
-    property bool hoverDrop: false
 
     id: moduleViewTab
-    color: componentSelected === index || hoverDrop ? themeManager.foregroundColor : themeManager.backgroundColor
+    x: mouseArea.pressed ? x : index * tabWidth
+    y: mouseArea.pressed ? y : mouseArea.y
+    color: componentSelected === index ? themeManager.foregroundColor : themeManager.backgroundColor
     border.color: "black"
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
@@ -23,22 +24,17 @@ Rectangle {
 
 
     DropArea {
-        anchors.fill: parent
+        width: parent.width / 2
+        height: parent.height
+        anchors.centerIn: parent
         enabled: index !== componentSelected
 
         onEntered: {
-            hoverDrop = true
-        }
-
-        onExited: {
-            hoverDrop = false
-        }
-
-        onDropped: {
-            var indexTmp = index
-            modules.move(index, componentSelected, 1)
-            componentSelected = indexTmp
-            hoverDrop = false
+            if (!animationX.running) {
+                var indexTmp = index
+                modules.move(index, componentSelected, 1)
+                componentSelected = indexTmp
+            }
         }
     }
 
@@ -46,16 +42,26 @@ Rectangle {
         id: mouseArea
         anchors.fill: parent
         drag.target: parent
+        drag.minimumY: 0
+        drag.maximumY: 0
 
         onPressed: {
             componentSelected = index
         }
+
+        onReleased: {
+            moduleViewTab.y = 0
+        }
     }
 
     Text {
-        anchors.centerIn: parent
+        anchors.fill: parent
         text: title
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
         color: componentSelected === index ? "white" : "black"
+        elide: Text.ElideRight
+        clip: true
     }
 
     CloseButton {
@@ -84,14 +90,7 @@ Rectangle {
 
     Behavior on x {
         SpringAnimation {
-            spring: 2
-            damping: 0.3
-            duration: 400
-        }
-    }
-
-    Behavior on y {
-        SpringAnimation {
+            id: animationX
             spring: 2
             damping: 0.3
             duration: 400
