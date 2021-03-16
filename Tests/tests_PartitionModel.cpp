@@ -26,13 +26,13 @@ TEST(PartitionModel, AddNote)
     PartitionModel model(&partition);
 
     model.add(
-        Audio::Note(
+        Note(
             Audio::BeatRange {1, 2},
             1,
             10)
     );
     model.add(
-        Audio::Note(
+        Note(
             Audio::BeatRange {4, 6},
             3,
             20)
@@ -52,10 +52,11 @@ TEST(PartitionModel, RemoveNote)
     PartitionModel model(&partition);
 
     model.add(
-        Audio::Note(
+        Note(
             Audio::BeatRange {1, 2},
             1,
-            10)
+            10
+        )
     );
 
     model.remove(0);

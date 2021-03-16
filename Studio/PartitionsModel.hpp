@@ -49,7 +49,7 @@ public slots:
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_data->size()); }
 
     /** @brief Add a children to the list */
-    void add(const QString &name);
+    void add(const QString &name = QString());
 
     /** @brief Remove a children from the list */
     void remove(const int index);
