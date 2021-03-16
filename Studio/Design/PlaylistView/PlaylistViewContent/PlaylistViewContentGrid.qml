@@ -29,6 +29,7 @@ Item {
     property real divisionWidth: cellWidth / divisionsPerCell
 
     id: grid
+    color: themeManager.backgroundColor
 
     onDisplayedRowCountChanged: {
         canvasHorizontal.requestPaint()

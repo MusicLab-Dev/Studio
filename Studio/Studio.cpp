@@ -5,10 +5,15 @@
 
 // #include <Audio/PluginTable.hpp>
 
+<<<<<<< HEAD
 #include "Application.hpp"
 #include <QFont>
 #include <QFile>
 #include <QFontDatabase>
+=======
+#include "ThemeManager.hpp"
+#include "Application.hpp"
+>>>>>>> 1249e95c4f38593d88ce740736d9cd01420f9238
 
 #include "ThemeManager.hpp"
 #include "Studio.hpp"

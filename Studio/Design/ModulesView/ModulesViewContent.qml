@@ -33,6 +33,7 @@ Item {
                 height: parent.height * 0.05
                 width: tabWidth
                 x: index * parent.width * 0.20
+                z: 100
                 visible: index !== modules.count - 1
             }
 
@@ -40,6 +41,7 @@ Item {
                 height: parent.height * 0.05
                 width: parent.height * 0.05
                 x: index * parent.width * 0.20
+                z: 100
                 visible: index === modules.count - 1
             }
 

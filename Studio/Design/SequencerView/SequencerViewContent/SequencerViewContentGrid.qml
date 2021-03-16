@@ -29,7 +29,7 @@ Rectangle {
     property real divisionWidth: cellWidth / divisionsPerCell
 
     id: grid
-    color: "#4A8693"
+    color: themeManager.backgroundColor
 
     onDisplayedRowCountChanged: {
         canvasHorizontal.requestPaint()

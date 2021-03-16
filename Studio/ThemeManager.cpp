@@ -12,6 +12,7 @@ struct ThemePack
     QColor content {};
     QColor disabled {};
     QColor accent {};
+    QColor line {};
 };
 
 
@@ -20,15 +21,17 @@ static const ThemePack ClassicThemePack {
     .foreground = "#001E36",
     .content = "#FFFFFF",
     .disabled = "#C4C4C4",
-    .accent = "#31A8FF"
+    .accent = "#31A8FF",
+    .line = "#00000"
 };
 
 static const ThemePack DarkThemePack {
-    .background = "#4A8693",
-    .foreground = "#001E36",
+    .background = "#525252",
+    .foreground = "#242424",
     .content = "#FFFFFF",
     .disabled = "#C4C4C4",
-    .accent = "#31A8FF"
+    .accent = "#31A8FF",
+    .line = "#FFFFFF"
 };
 
 bool ThemeManager::setTheme(const Theme theme)
@@ -49,6 +52,7 @@ void ThemeManager::updateThemeColors(void)
         _contentColor = pack.content;
         _disabledColor = pack.disabled;
         _accentColor = pack.accent;
+        _lineColor = pack.line;
     };
 
     switch (theme()) {

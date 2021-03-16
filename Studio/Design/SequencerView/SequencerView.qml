@@ -36,4 +36,20 @@ Rectangle {
             Layout.preferredHeight: parent.height * 0.1
         }
     }
+
+     Shortcut {
+         sequence: StandardKey.ZoomIn
+         onActivated: {
+             if (sequencerViewContent.sequencerViewContentFlickable.piano.rowHeight < 100)
+                 sequencerViewContent.sequencerViewContentFlickable.piano.rowHeight += 2
+         }
+     }
+
+     Shortcut {
+        sequence: StandardKey.ZoomOut
+         onActivated: {
+             if (sequencerViewContent.sequencerViewContentFlickable.piano.rowHeight > 20)
+                sequencerViewContent.sequencerViewContentFlickable.piano.rowHeight -= 2
+         }
+     }
 }

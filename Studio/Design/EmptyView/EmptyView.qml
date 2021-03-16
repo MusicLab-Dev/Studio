@@ -5,7 +5,7 @@ import "../Common"
 
 Rectangle {
     id: emptyView
-    color: "#001E36"
+    color: themeManager.foregroundColor
 
     ColumnLayout {
         anchors.fill: parent

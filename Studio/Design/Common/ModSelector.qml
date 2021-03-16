@@ -22,13 +22,11 @@ Item {
             anchors.centerIn: parent
             model: itemsPath
 
-            delegate: Rectangle {
+            delegate: Item {
+                id: item
                 x: parent.height * index
                 height: container.height
                 width: parent.height
-                color: index == itemSelected ? "#001E36" : "transparent"
-                border.color: index == itemSelected ? "white" : "transparent"
-                radius: 10
 
                 MouseArea{
                     anchors.fill: parent
@@ -44,6 +42,24 @@ Item {
                     anchors.centerIn: parent
                     source: itemsPath[index]
                     color: index == itemSelected ? themeManager.accentColor : "#FFFFFF"
+                }
+            }
+        }
+
+        Rectangle {
+            id: cursor
+            x: itemSelected * width
+            height: container.height
+            width: parent.height
+            border.color: "white"
+            color: "transparent"
+            radius: 10
+
+            Behavior on x {
+                SpringAnimation {
+                    spring: 2
+                    damping: 0.3
+                    duration: 400
                 }
             }
         }

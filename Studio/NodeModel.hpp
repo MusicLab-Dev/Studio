@@ -120,7 +120,6 @@ public:
     /** @brief Get the connections model */
     //[[nodiscard]] ConnectionsModel *connections(void) const noexcept { return _connections; }
 
-
     /** @brief Get the flags */
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
 

@@ -8,9 +8,11 @@ Item {
 
     id: playlistViewContentHeader
 
+    // Component.onCompleted: app.project.master.add()
+
     Repeater {
 
-        model: nodesNb
+        model: nodesNb //app.project.master
 
         delegate: Row {
             id: node
