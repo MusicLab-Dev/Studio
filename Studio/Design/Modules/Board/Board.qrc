@@ -3,5 +3,7 @@
         <file>BoardView.qml</file>
         <file>BoardViewTitle.qml</file>
         <file>BubblePopup.qml</file>
+        <file>BoardContentArea.qml</file>
+        <file>BoardBackground.qml</file>
     </qresource>
 </RCC>

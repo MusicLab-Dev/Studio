@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.12
 
 import "../../Default"
 
@@ -14,6 +15,16 @@ Rectangle {
         TopRight,
         BottomLeft,
         BottomRight
+    }
+
+    function open() {
+        visible = true
+        enabled = true
+    }
+    
+    function close() {
+        visible = false
+        enabled = false
     }
 
     property real angleSpacing: 45
@@ -54,8 +65,14 @@ Rectangle {
     property alias model: repeater.model
 
     id: bubblePopup
-    // visible: false
-    color: "grey"
+    visible: false
+    color: "white"
+
+    MouseArea {
+        anchors.fill: parent
+
+        onReleased: bubblePopup.close()
+    }
 
     Repeater {
         id: repeater
@@ -92,7 +109,12 @@ Rectangle {
             }
         }
 
-        delegate: Rectangle {
+        delegate: Item {
+            width: 75
+            height: 75
+            clip: false
+
+            Rectangle {
             id: delegate
             width: 75
             height: 75
@@ -108,8 +130,8 @@ Rectangle {
                 }
                 var tmp = openPoint.x + radius * Math.cos((Math.PI / 180) * angle)
                 return tmp - width / 2
-                //x = a + R cos 
-                //y = b + R sin 
+                //x = a + R cos
+                //y = b + R sin
                 // if (index <= 3) {
                 //     (btn.x + btn.width / 2 - width / 2) + Math.cos(180 * (index + 1)) * 400
                 // } else
@@ -133,15 +155,17 @@ Rectangle {
                 //     (btn.y + btn.height / 2 - height / 2) + Math.sin(-180 * (index + 1)) * 400
             }
             radius: bubblePopup.width * 0.5
-            color: mouseArea.bubbleHovered ? "red" : "#4A8693"
+            color: mouseArea.delegateHovered ? "#24A3FF" : "#31A8FF"
 
-            Image {
+
+            DefaultColoredImage {
                 id: image
                 width: parent.width * 0.8
                 height: parent.height / 2
                 x: parent.width / 2 - width / 2
-                y: parent.width * 0.2
+                y: parent.height / 2 - height / 2
                 source: bubbleImage
+                color: mouseArea.delegateHovered ? "#163752" : "#1A6DAA"
             }
 
             Text {
@@ -149,23 +173,23 @@ Rectangle {
                 width: parent.width * 0.8
                 horizontalAlignment: Text.AlignHCenter
                 x: image.x
-                y: image.y + image.height
-                text: index + " " + bubbleTitle + " " + mouseArea.pressedButtons + " " + mouseArea.containsMouse + " " + mouseArea.bubbleHovered
-                color: "lightgrey"
+                y: delegate.height
+                text: index + " " + bubbleTitle
+                color: mouseArea.delegateHovered ? "#163752" : "#1A6DAA"
                 font.pointSize: 12
             }
 
             MouseArea {
-                property bool bubbleHovered: (pressedButtons & Qt.LeftButton) && containsMouse
-
+                property bool delegateHovered: false
                 id: mouseArea
                 anchors.fill: parent
                 hoverEnabled: true
 
-                onReleased: {
-                    text.color = "orange"
-                }
+                onEntered: delegateHovered = true
+
+                onExited: delegateHovered = false
             }
+        }
         }
     }
 }
