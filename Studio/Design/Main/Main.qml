@@ -4,6 +4,7 @@ import QtQuick.Window 2.15
 
 import ThemeManager 1.0
 import Application 1.0
+import BoardManager 1.0
 
 import "../ModulesView"
 import "../Modules/Board"
@@ -22,6 +23,10 @@ Window {
     ThemeManager {
         id: themeManager
         theme: ThemeManager.Dark
+    }
+
+    BoardManager {
+        id: boardManager
     }
 
     ModulesView {

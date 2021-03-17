@@ -50,7 +50,7 @@ Address Net::ToAddress(const char *addr) noexcept
     return ::inet_addr(addr);
 }
 
-void Socket::Initialize(void)
+void SocketBase::Initialize(void)
 {
 #ifdef _WIN32
     WSADATA wsa;
@@ -59,12 +59,83 @@ void Socket::Initialize(void)
 #endif
 }
 
-void Socket::Release(void)
+void SocketBase::Release(void)
 {
 #ifdef _WIN32
     WSACleanup();
 #endif
 }
+
+std::int32_t SocketBase::send(const void *buffer, const std::int32_t size, const bool sendAll) noexcept
+{
+    std::int32_t written = 0, sent = 0;
+
+    written = ::send(_sock, reinterpret_cast<const char *>(buffer), size, 0);
+    if (!sendAll || size == written)
+        return written;
+    while (written < size) {
+        if (sent = ::send(_sock, reinterpret_cast<const char *>(buffer) + written, size - written, 0); !sent)
+            break;
+        else
+            written += sent;
+    }
+    return written;
+}
+
+std::int32_t SocketBase::sendTo(const void *buffer, const std::int32_t size, const Address address, const Port port, const bool sendAll) noexcept
+{
+    auto sin = GetAddrIn(address, port);
+    std::int32_t written = 0, sent = 0;
+
+    written = ::sendto(_sock, reinterpret_cast<const char *>(buffer), size, 0, reinterpret_cast<SockAddr *>(&sin), sizeof(sin));
+    if (!sendAll || size == written)
+        return written;
+    while (written < size) {
+        if (sent = ::sendto(_sock, reinterpret_cast<const char *>(buffer) + written, size - written, 0, reinterpret_cast<SockAddr *>(&sin), sizeof(sin)); !sent)
+           break;
+        else
+           written += sent;
+    }
+    return written;
+}
+
+std::int32_t SocketBase::receive(void *buffer, const std::int32_t maxSize, const bool receiveAll) noexcept
+{
+    return ::recv(_sock, reinterpret_cast<char *>(buffer), maxSize, receiveAll ? MSG_WAITALL : 0);
+}
+
+std::int32_t SocketBase::receiveFrom(void *buffer, const std::int32_t maxSize, Address &address, Port &port, const bool receiveAll) noexcept
+{
+    SockAddrIn sin;
+    Socklen len = sizeof(&sin);
+    auto size = ::recvfrom(_sock, reinterpret_cast<char *>(buffer), maxSize, receiveAll ? MSG_WAITALL : 0, reinterpret_cast<SockAddr *>(&sin), &len);
+
+    address = htonl(sin.sin_addr.s_addr);
+    port = htons(sin.sin_port);
+    return size;
+}
+
+std::string SocketBase::getSocketError(const char *context, const std::string &msg, const bool useErrno) const noexcept
+{
+    auto str = std::string("Socket::") + context + ": " + msg;
+
+    if (!useErrno)
+        return str;
+#ifdef _WIN32
+    char err[96] { 0 };
+    FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                   nullptr, static_cast<DWORD>(WSAGetLastError()),
+                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                   err, sizeof(err), nullptr);
+    str += std::string("\n\t") + err;
+#else
+    str += "\n\t'";
+    str += ::strerror(errno);
+    str += '\'';
+#endif
+    return str;
+}
+
 
 bool Socket::connectTo(const Address address, const Port port, const Protocol protocol)
 {
@@ -138,74 +209,4 @@ void Socket::bind(const Address address, const Port port)
 
     if (::bind(_sock, reinterpret_cast<SockAddr *>(&sin), sizeof(sin)) == SocketError)
         throw std::runtime_error(getSocketError("listenAt", "Couldn't bind socket", true));
-}
-
-std::int32_t Socket::send(const void *buffer, const std::int32_t size, const bool sendAll) noexcept
-{
-    std::int32_t written = 0, sent = 0;
-
-    written = ::send(_sock, reinterpret_cast<const char *>(buffer), size, 0);
-    if (!sendAll || size == written)
-        return written;
-    while (written < size) {
-        if (sent = ::send(_sock, reinterpret_cast<const char *>(buffer) + written, size - written, 0); !sent)
-            break;
-        else
-            written += sent;
-    }
-    return written;
-}
-
-std::int32_t Socket::sendTo(const void *buffer, const std::int32_t size, const Address address, const Port port, const bool sendAll) noexcept
-{
-    auto sin = GetAddrIn(address, port);
-    std::int32_t written = 0, sent = 0;
-
-    written = ::sendto(_sock, reinterpret_cast<const char *>(buffer), size, 0, reinterpret_cast<SockAddr *>(&sin), sizeof(sin));
-    if (!sendAll || size == written)
-        return written;
-    while (written < size) {
-        if (sent = ::sendto(_sock, reinterpret_cast<const char *>(buffer) + written, size - written, 0, reinterpret_cast<SockAddr *>(&sin), sizeof(sin)); !sent)
-           break;
-        else
-           written += sent;
-    }
-    return written;
-}
-
-std::int32_t Socket::receive(void *buffer, const std::int32_t maxSize, const bool receiveAll) noexcept
-{
-    return ::recv(_sock, reinterpret_cast<char *>(buffer), maxSize, receiveAll ? MSG_WAITALL : 0);
-}
-
-std::int32_t Socket::receiveFrom(void *buffer, const std::int32_t maxSize, Address &address, Port &port, const bool receiveAll) noexcept
-{
-    SockAddrIn sin;
-    Socklen len = sizeof(&sin);
-    auto size = ::recvfrom(_sock, reinterpret_cast<char *>(buffer), maxSize, receiveAll ? MSG_WAITALL : 0, reinterpret_cast<SockAddr *>(&sin), &len);
-
-    address = htonl(sin.sin_addr.s_addr);
-    port = htons(sin.sin_port);
-    return size;
-}
-
-std::string Socket::getSocketError(const char *context, const std::string &msg, const bool useErrno) const noexcept
-{
-    auto str = std::string("Socket::") + context + ": " + msg;
-
-    if (!useErrno)
-        return str;
-#ifdef _WIN32
-    char err[96] { 0 };
-    FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                   nullptr, static_cast<DWORD>(WSAGetLastError()),
-                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                   err, sizeof(err), nullptr);
-    str += std::string("\n\t") + err;
-#else
-    str += "\n\t'";
-    str += ::strerror(errno);
-    str += '\'';
-#endif
-    return str;
 }

@@ -4,11 +4,11 @@ import QtQuick.Layouts 1.15
 import "../Common"
 
 RowLayout {
-    
+
     Item {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * 0.333
-        
+
         ClickableCard {
             title: "Sequencer"
             description: "create musical sequences"
@@ -30,7 +30,7 @@ RowLayout {
     Item {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * 0.333
-        
+
         ClickableCard {
             title: "Playlist"
             description: "Bring musical sequences to create your music"
@@ -52,7 +52,7 @@ RowLayout {
     Item {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * 0.333
-        
+
         ClickableCard {
             title: "Board"
             description: "Connect your Boards for a better experience"
@@ -64,7 +64,7 @@ RowLayout {
             onClicked: {
                 modules.insert(index, {
                                    title: "Board",
-                                   path: "qrc:/BoardView/BoardView.qml",
+                                   path: "qrc:/Modules/Board/BoardView.qml",
                                })
                 modules.remove(index)
             }

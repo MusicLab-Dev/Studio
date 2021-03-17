@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/Modules/Board">
         <file>BoardView.qml</file>
+        <file>BoardManagerView.qml</file>
+        <file>BoardControlsView.qml</file>
         <file>BoardViewTitle.qml</file>
         <file>BubblePopup.qml</file>
         <file>BoardContentArea.qml</file>

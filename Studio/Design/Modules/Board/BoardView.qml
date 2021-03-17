@@ -11,91 +11,113 @@ BoardBackground {
         width: parent.width
     }
 
-    Rectangle {
-            id: boardContentView
-            //color: "#4A8693"
-            color: "#4A8693"
-            anchors.top: boardViewTitle.bottom
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.margins: parent.width * 0.02
-            radius: 13
-
-            GridView {
-                id: boardGrid
-                width: parent.width
-                height: parent.height
-                cellWidth: boardContentView.width / 5
-                cellHeight: cellWidth / 3
-
-                model: 35
-                delegate: Item {
-                    width: boardGrid.cellWidth
-                    height: boardGrid.cellHeight
-
-                    Rectangle {
-                        x: index * width
-                        anchors.fill: parent
-                        anchors.margins: parent.width * 0.02
-                        color: "white"
-                        radius: 10
-                    }
-                }
-            }
-    }
-    /*Rectangle {
-        id: boardContentView
-        //color: "#4A8693"
-        color: "#001E36"
+    BoardManagerView {
+        id: boardManagerView
         anchors.top: boardViewTitle.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: parent.width * 0.02
-        radius: 13
+        visible: !boardControlsView.visible
+    }
 
-        GridView {
-            id: boardsPreview
-            width: parent.width
-            height: parent.height
-            cellWidth: boardContentView.width / 3
-            cellHeight: cellWidth / 2
+    BoardControlsView {
+        id: boardControlsView
+        anchors.top: boardViewTitle.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: parent.width * 0.02
+    }
 
-            model: 4
-            delegate: Item {
-                width: boardsPreview.cellWidth
-                height: boardsPreview.cellHeight
+    // Rectangle {
+    //     id: boardContentView
+    //     //color: "#4A8693"
+    //     color: "#4A8693"
+    //     anchors.top: boardViewTitle.bottom
+    //     anchors.bottom: parent.bottom
+    //     anchors.left: parent.left
+    //     anchors.right: parent.right
+    //     anchors.margins: parent.width * 0.02
+    //     radius: 13
 
-                Rectangle {
-                    property real boardWidth: 8
-                    property real boardHeight: 8
+    //     GridView {
+    //         id: boardGrid
+    //         anchors.fill: parent
+    //         anchors.margins: parent.radius
+    //         cellWidth: width / 5
+    //         cellHeight: cellWidth / 3
+    //         clip: true
 
-                    id: boardPreviewSlot
-                    x: index * width
-                    anchors.fill: parent
-                    anchors.margins: parent.width * 0.02
-                    color: "white"
-                    radius: 10
+    //         model: 35
 
-                    Rectangle {
-                        id: boardPreview
-                        width: (parent.width * 0.92) * (boardPreviewSlot.boardWidth / 8)
-                        height: (parent.height - (parent.width - parent.width * 0.92)) * (boardPreviewSlot.boardHeight / 8)
-                        x: parent.width / 2 - width / 2
-                        y: parent.height / 2 - height / 2
-                        anchors.margins: parent.width * 0.02
-                        color: "#4A8693"
-                        radius: 10
-                    }
+    //         delegate: Item {
+    //             width: boardGrid.cellWidth
+    //             height: boardGrid.cellHeight
 
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {}
-                    }
-                }
-            }
-        }*/
+    //             Rectangle {
+    //                 x: index * width
+    //                 anchors.fill: parent
+    //                 anchors.margins: parent.width * 0.02
+    //                 color: "white"
+    //                 radius: 10
+    //             }
+    //         }
+    //     }
+    // }
+    // Rectangle {
+    //     id: boardContentView
+    //     //color: "#4A8693"
+    //     color: "#001E36"
+    //     anchors.top: boardViewTitle.bottom
+    //     anchors.bottom: parent.bottom
+    //     anchors.left: parent.left
+    //     anchors.right: parent.right
+    //     anchors.margins: parent.width * 0.02
+    //     radius: 13
+
+    //     GridView {
+    //         id: boardsPreview
+    //         width: parent.width
+    //         height: parent.height
+    //         cellWidth: boardContentView.width / 3
+    //         cellHeight: cellWidth / 2
+
+    //         model: 4
+    //         delegate: Item {
+    //             width: boardsPreview.cellWidth
+    //             height: boardsPreview.cellHeight
+
+    //             Rectangle {
+    //                 property real boardWidth: 8
+    //                 property real boardHeight: 4
+
+    //                 id: boardPreviewSlot
+    //                 x: index * width
+    //                 anchors.fill: parent
+    //                 anchors.margins: parent.width * 0.02
+    //                 color: "white"
+    //                 radius: 10
+
+    //                 Rectangle {
+    //                     id: boardPreview
+    //                     width: (parent.width * 0.92) * (boardPreviewSlot.boardWidth / 8)
+    //                     height: (parent.height - (parent.width - parent.width * 0.92)) * (boardPreviewSlot.boardHeight / 8)
+    //                     x: parent.width / 2 - width / 2
+    //                     y: parent.height / 2 - height / 2
+    //                     anchors.margins: parent.width * 0.02
+    //                     color: "#4A8693"
+    //                     radius: 10
+    //                 }
+
+    //                 MouseArea {
+    //                     anchors.fill: parent
+    //                     onClicked: {}
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
         /*GridView {
             id: gridView
