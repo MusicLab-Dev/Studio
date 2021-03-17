@@ -7,6 +7,7 @@ import Application 1.0
 
 import "../ModulesView"
 import "../Modules/Board"
+import "../Modules/Settings"
 
 Window {
     visible: true
