@@ -53,5 +53,5 @@ Item {
                 focus: true
             }
         }
-    }
+    }    
 }
