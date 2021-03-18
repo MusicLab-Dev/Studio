@@ -80,6 +80,7 @@ Repeater {
                     width: 200
                     height: 100
                     color: "red"
+
                     Text {
                         text: from + " " + to
                     }
