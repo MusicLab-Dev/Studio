@@ -92,6 +92,8 @@ public:
     /** Received data and get its enpoint */
     [[nodiscard]] std::int32_t receiveFrom(void *buffer, const std::int32_t maxSize, Address &address, Port &port, const bool receiveAll = false) noexcept;
 
+    /** Get the socket file descriptor */
+    [[nodiscard]] Internal get(void) const noexcept { return _sock; }
 protected:
     Internal _sock { NullSock };
 

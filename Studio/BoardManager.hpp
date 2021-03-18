@@ -8,7 +8,16 @@
 #include <QObject>
 #include <QTimer>
 
+#include <iostream>
+#include <cstring>
+
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 #include <Core/Vector.hpp>
+#include <Protocol/Packet.hpp>
+#include <Protocol/Protocol.hpp>
 
 #include "Board.hpp"
 
@@ -26,7 +35,32 @@ public:
         Size
     };
 
+    static constexpr std::size_t NetworkBufferSize = 4096;
+
+    using Vector = Core::Vector<std::uint8_t, std::uint16_t>;
+
+    /** @brief Network buffer used to store direct client(s) inputs */
+    class NetworkBuffer : public Vector
+    {
+
+        public:
+
+            NetworkBuffer(std::size_t networkBufferSize) : Vector(networkBufferSize) {  }
+
+            void setTransferSize(std::size_t size) noexcept { this->setSize(size); }
+
+            void reset(void) noexcept
+            {
+                std::memset(data(), 0, capacity());
+                setSize(0);
+            }
+
+        private:
+
+    };
+
     BoardManager(void);
+    ~BoardManager(void);
 
     /** @brief Names of 'Board' roles */
     [[nodiscard]] virtual QHash<int, QByteArray> roleNames(void) const override;
@@ -64,6 +98,14 @@ private:
     QTimer _tickTimer {};
     QTimer _discoverTimer {};
 
+    int _udpBroadcastSocket { -1 };
+    int _tcpMasterSocket { -1 };
+
+    fd_set _readFds;
+    int _maxFd { 0 };
+
+    NetworkBuffer _networkBuffer;
+    std::size_t _writeIndex { 0 };
 
     /** @brief Callback when the tick rate changed */
     void onTickRateChanged(void);
@@ -77,4 +119,30 @@ private:
 
     /** @brief Perform the discover process */
     void discover(void);
+
+    /** @brief Init the UDP broadcast socket */
+    void initUdpBroadcastSocket(void);
+
+    /** @brief Init the TCP master socket */
+    void initTcpMasterSocket(void);
+
+    /** @brief Emit a DiscoveryPacket packet on the UDP broadcast address */
+    void discoveryEmit(void);
+
+    /** @brief Accept new incomming board connections & add them to the client list */
+    void processNewConnections(void);
+
+    /** @brief Prepare direct clients socket for the select() call */
+    void prepareSockets(void);
+
+    /** @brief Scan for a read operation available on every direct clients */
+    void processDirectClients(void);
+
+    /** @brief Read client's pending data and place it into the network buffer (& handle disconnection) */
+    void processClientInput(Net::Socket *clientSocket);
+
+    /** @brief Remove a board network branch starting from his rooter board */
+    void removeDirectClientNetwork(const Net::Socket &clientSocket);
+
+    // std::unique_ptr<Board> *getBoardFromSocket(const Net::Socket &clientSocket);
 };

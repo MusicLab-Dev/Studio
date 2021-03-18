@@ -83,6 +83,8 @@ public:
     [[nodiscard]] Controls &controls(void) noexcept { return _controls; }
     [[nodiscard]] const Controls &controls(void) const  noexcept { return _controls; }
 
+    [[nodiscard]] const Net::SocketView getRooter(void) const noexcept { return _rooter; }
+
 public slots:
 
 signals:
