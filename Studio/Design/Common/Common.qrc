@@ -12,6 +12,9 @@
         <file>GestureArea.qml</file>
         <file>Player.qml</file>
         <file>Bpm.qml</file>
+        <file>SurfaceContentGrid.qml</file>
+        <file>ContentTimeline.qml</file>
+        <file>ContentView.qml</file>
         <file>MuteButton.qml</file>
     </qresource>
 </RCC>

@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 Item {
     property real xOffset: 0
-    property real yOffset: (1 - ((playlistViewContentNodeView.contentY % playlistViewContentFlickable.rowHeight) / playlistViewContentFlickable.rowHeight)) * playlistViewContentFlickable.rowHeight
+    property real yOffset: (1 - ((nodeView.contentY % playlistViewContentFlickable.rowHeight) / playlistViewContentFlickable.rowHeight)) * playlistViewContentFlickable.rowHeight
     property int displayedRowCount: height / rowHeight
 
     // Input

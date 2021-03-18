@@ -6,6 +6,14 @@ import "../../Common"
 
 Item {
     property alias totalHeight: piano.totalGridHeight
+    property alias rowHeight: surfaceContentGrid.rowHeight
+
+    Rectangle {
+        x: piano.keyWidth
+        width: parent.width - piano.keyWidth
+        height: parent.height
+        color: themeManager.backgroundColor
+    }
 
     Flickable {
         id: flickable
@@ -23,8 +31,9 @@ Item {
         }
     }
 
-    SequencerViewContentGrid {
-        id: sequencerViewContentGrid
+    SurfaceContentGrid {
+        id: surfaceContentGrid
+        contentYOffset: flickable.contentY
         anchors.fill: parent
         anchors.leftMargin: piano.keyWidth
     }
@@ -45,11 +54,11 @@ Item {
         focus: true
 
         onZoomXFactorChanged: {
-            sequencerViewContentGrid.barsPerLine = zoomXRange * zoomXFactor + zoomXFrom
+            surfaceContentGrid.barsPerLine = zoomXRange * zoomXFactor + zoomXFrom
         }
 
         onZoomYFactorChanged: {
-            piano.rowHeight = zoomYRange * zoomYFactor + zoomYFrom
+            surfaceContentGrid.rowHeight = zoomYRange * zoomYFactor + zoomYFrom
         }
 
         onZoomed: {

@@ -12,7 +12,7 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.475
 
         DefaultImageButton {
-            imgPath: "qrc:/Assets/Previous.png"
+            source: "qrc:/Assets/Previous.png"
             height: parent.height / 1.5
             width: parent.height / 1.5
             anchors.verticalCenter: parent.verticalCenter
@@ -31,7 +31,7 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.475
 
         DefaultImageButton {
-            imgPath: "qrc:/Assets/Next.png"
+            source: "qrc:/Assets/Next.png"
             height: parent.height / 1.5
             width: parent.height / 1.5
             anchors.verticalCenter: parent.verticalCenter

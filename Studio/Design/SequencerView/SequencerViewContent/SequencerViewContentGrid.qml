@@ -1,10 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Rectangle {
+Item {
+    property real rowHeight: 30
     property real xOffset: 0
-    property real yOffset: (1 - ((flickable.contentY % piano.rowHeight) / piano.rowHeight)) * piano.rowHeight
-    property int displayedRowCount: height / piano.rowHeight
+    property real yOffset: (1 - ((nodeView.contentY % rowHeight) / rowHeight)) * rowHeight
+    property int displayedRowCount: height / rowHeight
 
     // Input
     property int barsPerLine: 5
@@ -29,7 +30,6 @@ Rectangle {
     property real divisionWidth: cellWidth / divisionsPerCell
 
     id: grid
-    color: themeManager.backgroundColor
 
     onDisplayedRowCountChanged: {
         canvasHorizontal.requestPaint()
@@ -48,10 +48,9 @@ Rectangle {
             ctx.reset();
             ctx.fillStyle = Qt.rgba(0, 0, 0, 1);
             for (var i = 0; i < displayedRowCount; ++i) {
-                ctx.fillRect(0, i * piano.rowHeight, width, 1);
+                ctx.fillRect(0, i * rowHeight, width, 1);
             }
         }
-
     }
 
     Canvas {

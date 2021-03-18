@@ -13,6 +13,8 @@ Window {
     width: 1280
     height: 720
     title: qsTr("MusicLab")
+    minimumWidth: 800
+    minimumHeight: 600
 
     Application {
         id: app

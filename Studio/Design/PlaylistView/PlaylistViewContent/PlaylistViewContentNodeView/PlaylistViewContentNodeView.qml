@@ -3,7 +3,13 @@ import QtQuick.Controls 2.15
 
 import NodeModel 1.0
 
-Flickable {
+Item {
+    property real minContentX: 500
+    property real maxContentX: 0
+    property real minContentY: totalHeight - rowHeight
+    property real maxContentY: 0
+    property real contentX: 0
+    property real contentY: 0
     property real rowHeight: 150
     property real emptyRowHeight: 50
 
@@ -19,12 +25,13 @@ Flickable {
 
     id: nodeView
     clip: true
-    contentHeight: totalHeight
-    boundsBehavior: Flickable.StopAtBounds
+    // contentHeight: totalHeight
+    // boundsBehavior: Flickable.StopAtBounds
 
     PlaylistViewContentNodeViewDelegate {
         id: master
         node: app.project.master
         recursionIndex: 0
+        y: -contentY
     }
 }

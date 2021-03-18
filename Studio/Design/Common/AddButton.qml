@@ -3,7 +3,7 @@ import QtQuick 2.15
 import "../Default"
 
 DefaultImageButton {
-    imgPath: "qrc:/Assets/Plus.png"
+    source: "qrc:/Assets/Plus.png"
     showBorder: false
     scaleFactor: 1
     colorDefault: "white"
