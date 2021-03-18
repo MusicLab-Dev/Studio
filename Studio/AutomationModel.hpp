@@ -36,6 +36,7 @@ class AutomationModel : public QAbstractListModel
 
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(InstancesModel *instances READ getInstances NOTIFY instancesChanged)
 
 public:
     /** @brief Roles of each Control */
@@ -59,17 +60,10 @@ public:
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
-    /** @brief Modify a role from children */
-    [[nodiscard]] bool setData(const QModelIndex &index, const QVariant &value, int role) override;
-
-
-    /** @brief Get the internal data pointer */
-    [[nodiscard]] Audio::Automation *internal(void) noexcept { return _data; }
-    [[nodiscard]] const Audio::Automation *internal(void) const noexcept { return _data; }
-
     /** @brief Get the instances */
     [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
     [[nodiscard]] const InstancesModel &instances(void) const noexcept { return *_instances; }
+    [[nodiscard]] InstancesModel *getInstances(void) noexcept { return _instances.get(); }
 
 
     /** @brief Get the muted property */
@@ -91,20 +85,17 @@ public:
     void updateInternal(Audio::Automation *data);
 
 public slots:
-    /** @brief Insert point at index */
+    /** @brief Add point */
     void add(const GPoint &point);
 
     /** @brief Remove point at index */
     void remove(const int index);
 
-    /** @brief Get point from index */
+    /** @brief Get point at index */
     const GPoint &get(const int index) const;
 
-    /** @brief Set point index */
+    /** @brief Set point at index */
     void set(const int index, const GPoint &point);
-
-    /** @brief Get the internal list of instances */
-    InstancesModel *getInstances(void) noexcept { return _instances.get(); }
 
 signals:
     /** @brief Notify that the muted property has changed */
@@ -112,6 +103,9 @@ signals:
 
     /** @brief Notify that the name property has changed */
     void nameChanged(void);
+
+    /** @brief Notify that the instances model has changed */
+    void instancesChanged(void);
 
 private:
     Audio::Automation *_data { nullptr };

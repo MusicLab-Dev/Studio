@@ -36,7 +36,7 @@ QVariant PartitionModel::data(const QModelIndex &index, int role) const
     const auto &child = _data->notes().at(index.row());
     switch (static_cast<Roles>(role)) {
         case Roles::Range:
-            return QVariant::fromValue(reinterpret_cast<const BeatRange &>(child.range));
+            return QVariant::fromValue(reinterpret_cast<const Note &>(child.range));
         case Roles::Velocity:
             return child.velocity;
         case Roles::Tuning:
@@ -114,6 +114,37 @@ void PartitionModel::remove(const int idx)
         }
     );
 }
+
+const Note &PartitionModel::get(const int idx) const
+{
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("PartitionModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+
+    return reinterpret_cast<const Note &>(_data->notes().at(idx));
+}
+
+void PartitionModel::set(const int idx, const Note &range)
+{
+    auto newIdx = std::distance(_data->notes().begin(), _data->notes().findSortedPlacement(range));
+
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("PartitionModel::move: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+    Scheduler::Get()->addEvent(
+        [this, range, idx] {
+            _data->notes().assign(idx, range);
+        },
+        [this, idx, newIdx] {
+            if (idx != newIdx) {
+                beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newIdx + 1);
+                endMoveRows();
+            } else {
+                const auto modelIndex = index(idx);
+                emit dataChanged(modelIndex, modelIndex);
+            }
+        }
+    );
+}
+
 
 void PartitionModel::updateInternal(Audio::Partition *data)
 {

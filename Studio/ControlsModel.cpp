@@ -52,7 +52,7 @@ void ControlsModel::add(const ParamID paramID)
 {
     Models::AddProtectedEvent(
         [this, paramID] {
-            _data->push(paramID, 0.0);
+            _data->push(paramID);
         },
         [this] {
             const auto controlsData = _controls.data();

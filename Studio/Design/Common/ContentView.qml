@@ -94,7 +94,6 @@ Item {
         anchors.fill: parent
 
         onScrolled: {
-            console.log(xOffset + xScrollFactor * scrollX, xOffsetMin)
             xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), xOffsetMax)
             yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), yOffsetMax)
         }

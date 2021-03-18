@@ -16,4 +16,8 @@ ContentView {
     PlaylistContentPluginSettingsMenu {
         id: pluginSettingsMenu
     }
+
+    PlaylistContentPartitionSettingsMenu {
+        id: partitionSettingsMenu
+    }
 }

@@ -27,11 +27,30 @@ Item {
     readonly property real pluginHeaderSettingsButtonX: pluginHeaderDisplayWidth - pluginHeaderNameHeight - pluginHeaderSpacing
     readonly property real pluginHeaderMuteButtonX: pluginHeaderSettingsButtonX - pluginHeaderNameHeight - pluginHeaderSpacing
 
-    // Data header
+    // Data header layout
     readonly property real dataHeaderWidth: contentView.rowHeaderWidth - pluginHeaderWidth
+    readonly property real dataHeaderDisplayWidth: nodeView.dataHeaderWidth - nodeView.dataHeaderHorizontalPadding
+    readonly property real dataHeaderRadius: 0
     readonly property real dataHeaderAndContentWidth: width - pluginHeaderWidth
+    readonly property real dataContentWidth: dataHeaderAndContentWidth - dataHeaderWidth
+    readonly property real dataHeaderHorizontalPadding: dataHeaderLeftPadding + dataHeaderRightPadding
+    readonly property real dataHeaderVerticalPadding: dataHeaderTopPadding + dataHeaderBottomPadding
+    readonly property real dataHeaderBorderWidth: 2
+    property real dataHeaderLeftPadding: 0
+    property real dataHeaderRightPadding: 0
+    property real dataHeaderTopPadding: 0
+    property real dataHeaderBottomPadding: 0
 
-    property real totalHeight: master.height
+    // Data header content
+    readonly property real dataHeaderSpacing: 2
+    readonly property real dataHeaderNameWidth: dataHeaderDisplayWidth - dataHeaderNameHeight * 2 - dataHeaderSpacing * 4
+    readonly property real dataHeaderNameHeight: Math.min(30, (rowHeight - dataHeaderVerticalPadding - dataHeaderSpacing * 2))
+    readonly property real dataHeaderNamePointSize: dataHeaderNameHeight * 0.6
+    readonly property real dataHeaderSettingsButtonX: dataHeaderDisplayWidth - dataHeaderNameHeight - dataHeaderSpacing
+    readonly property real dataHeaderMuteButtonX: dataHeaderSettingsButtonX - dataHeaderNameHeight - dataHeaderSpacing
+
+    // External properties
+    property alias totalHeight: master.height
 
     id: nodeView
     clip: true

@@ -65,7 +65,7 @@ TEST(InstancesModel, Add)
     InstancesModel model(&ranges);
 
     for (unsigned int i = 0; i < 100; i++) {
-        Audio::BeatRange range { i, i+1 };
+        BeatRange range { i, i+1 };
         model.add(range);
         ASSERT_EQ(model.get(i).from, i);
         ASSERT_EQ(model.get(i).to, i+1);

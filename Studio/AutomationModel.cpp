@@ -29,20 +29,9 @@ QVariant AutomationModel::data(const QModelIndex &index, int role) const
 
     switch (static_cast<Roles>(role)) {
     case Roles::Point:
-        return child.beat;
+        return QVariant::fromValue(reinterpret_cast<const GPoint &>(child));
     default:
         return QVariant();
-    }
-}
-
-bool AutomationModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    switch (static_cast<Roles>(role)) {
-    case Roles::Point:
-        set(index.row(), value.value<GPoint>());
-        return true;
-    default:
-        throw std::logic_error("ControlModel::setData: Couldn't change invalid role");
     }
 }
 

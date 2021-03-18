@@ -19,6 +19,7 @@ Menu {
     function closeMenu() {
         targetItem = null
         targetNode = null
+        targetNodeIndex = 0
         close()
     }
 

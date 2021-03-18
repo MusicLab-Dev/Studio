@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QFontDatabase>
 
+#include "AudioAPI.hpp"
 #include "Application.hpp"
 #include "ThemeManager.hpp"
 #include "Studio.hpp"
@@ -22,8 +23,11 @@ void Studio::InitResources(void)
     Audio::PluginTable::Init();
     Audio::Device::InitDriver();
 
-    qmlRegisterUncreatableType<GPoint>("Point", 1, 0, "Point", "Cannot construct Point");
-    qmlRegisterUncreatableType<Note>("Note", 1, 0, "Note", "Cannot construct Note");
+    qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
+    qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
+    qmlRegisterUncreatableType<Note>("AudioAPI", 1, 0, "Note", "Cannot construct Note");
+    qmlRegisterUncreatableType<NoteEvent>("AudioAPI", 1, 0, "NoteEvent", "Cannot construct NoteEvent");
+    qmlRegisterUncreatableType<GPoint>("AudioAPI", 1, 0, "Point", "Cannot construct Point");
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
     qmlRegisterUncreatableType<Project>("Project", 1, 0, "Project", "Cannot construct Project");
