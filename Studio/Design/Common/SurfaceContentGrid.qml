@@ -37,10 +37,6 @@ Item {
     readonly property real cellWidth: width / cellsPerRow
     readonly property real divisionWidth: cellWidth / divisionsPerCell
 
-    // Final relative ratios
-    readonly property real pixelsPerBeat: cellWidth / barsPerCell / beatsPerBar
-    readonly property real pixelsPerBeatPrecision: pixelsPerBeat / 128
-
     clip: true
 
     onRowHeightChanged: canvasRows.requestPaint()

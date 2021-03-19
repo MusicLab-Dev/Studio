@@ -89,7 +89,7 @@ void AutomationModel::remove(const int idx)
     );
 }
 
-const GPoint &AutomationModel::get(const int idx) const
+const GPoint &AutomationModel::get(const int idx) const noexcept_ndebug
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("AutomationModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));

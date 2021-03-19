@@ -115,7 +115,7 @@ void PartitionModel::remove(const int idx)
     );
 }
 
-const Note &PartitionModel::get(const int idx) const
+const Note &PartitionModel::get(const int idx) const noexcept_ndebug
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("PartitionModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));

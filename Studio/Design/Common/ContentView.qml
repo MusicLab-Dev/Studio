@@ -50,6 +50,25 @@ Item {
 
     // Global access data
     property alias surfaceContentGrid: surfaceContentGrid
+    property alias placementRectangle: placementRectangle
+
+    // Placement ratios
+    readonly property real beatPrecision: 128
+    readonly property real pixelsPerBeat: surfaceContentGrid.cellWidth / surfaceContentGrid.barsPerCell / beatsPerBar
+    readonly property real pixelsPerBeatPrecision: pixelsPerBeat / beatPrecision
+
+    // Placement states in beat precision (128 unit = 1 beat)
+    readonly property real placementBeatPrecisionWidth: placementBeatPrecisionTo - placementBeatPrecisionFrom
+    property real placementBeatPrecisionDefaultWidth: beatPrecision
+    property real placementBeatPrecisionFrom: 0
+    property real placementBeatPrecisionTo: 0
+    property real placementBeatPrecisionMouseOffset: 0
+
+    // Placement states in pixel precision
+    readonly property real placementPixelFrom: xOffset + pixelsPerBeatPrecision * placementBeatPrecisionFrom
+    readonly property real placementPixelTo: xOffset + pixelsPerBeatPrecision * placementBeatPrecisionTo
+    readonly property real placementPixelWidth: pixelsPerBeatPrecision * placementBeatPrecisionWidth
+
 
     id: contentView
 
@@ -89,18 +108,36 @@ Item {
     }
 
     // Handle all mouse / touch gestures
-    // GestureArea {
-    //     id: gestureArea
-    //     anchors.fill: parent
+    GestureArea {
+        id: gestureArea
+        anchors.fill: parent
 
-    //     onScrolled: {
-    //         xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), xOffsetMax)
-    //         yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), yOffsetMax)
-    //     }
+        onScrolled: {
+            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), xOffsetMax)
+            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), yOffsetMax)
+        }
 
-    //     onZoomed: {
-    //         xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoomX, 0), 1)
-    //         yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoomY, 0), 1)
-    //     }
-    // }
+        onZoomed: {
+            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoomX, 0), 1)
+            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoomY, 0), 1)
+        }
+    }
+
+    Rectangle {
+        function attach(newParent, newColor) {
+            parent = newParent
+            color = Qt.lighter(newColor)
+            visible = true
+        }
+        function detach(newParent) {
+            parent = contentView
+            visible = false
+        }
+
+        id: placementRectangle
+        x: contentView.placementPixelFrom
+        width: contentView.placementPixelWidth
+        height: contentView.rowHeight
+        visible: false
+    }
 }

@@ -60,6 +60,11 @@ public:
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
+
+    /** @brief Get point at index */
+    [[nodiscard]] const GPoint &get(const int index) const noexcept_ndebug;
+
+
     /** @brief Get the instances */
     [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
     [[nodiscard]] const InstancesModel &instances(void) const noexcept { return *_instances; }
@@ -92,7 +97,7 @@ public slots:
     void remove(const int index);
 
     /** @brief Get point at index */
-    const GPoint &get(const int index) const;
+    QVariant getPoint(const int index) const { return QVariant::fromValue(get(index)); }
 
     /** @brief Set point at index */
     void set(const int index, const GPoint &point);

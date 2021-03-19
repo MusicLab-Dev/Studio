@@ -69,6 +69,10 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
 
+    /** @brief Get note at index */
+    [[nodiscard]] const Note &get(const int idx) const noexcept_ndebug;
+
+
     /** @brief Get the list of instances */
     [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
     [[nodiscard]] const InstancesModel &instances(void) const noexcept { return *_instances; }
@@ -111,7 +115,7 @@ public slots:
     void remove(const int index);
 
     /** @brief Get note at index */
-    const Note &get(const int idx) const;
+    QVariant getNote(const int index) const { return QVariant::fromValue(get(index)); }
 
     /** @brief Set note at index */
     void set(const int idx, const Note &range);

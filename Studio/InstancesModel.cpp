@@ -60,6 +60,20 @@ void InstancesModel::add(const BeatRange &range)
     );
 }
 
+int InstancesModel::find(const Beat beat) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &range : *_data) {
+        if (beat < range.from || beat > range.to) {
+            ++idx;
+            continue;
+        }
+        return idx;
+    }
+    return -1;
+}
+
 void InstancesModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
@@ -75,7 +89,7 @@ void InstancesModel::remove(const int idx)
     );
 }
 
-const BeatRange &InstancesModel::get(const int idx) const
+const BeatRange &InstancesModel::get(const int idx) const noexcept_ndebug
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("InstancesModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));

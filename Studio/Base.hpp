@@ -20,8 +20,8 @@ struct BeatRange : public Audio::BeatRange
 {
     Q_GADGET
 
-    Q_PROPERTY(Beat from MEMBER from)
-    Q_PROPERTY(Beat to MEMBER to)
+    Q_PROPERTY(quint32 from MEMBER from)
+    Q_PROPERTY(quint32 to MEMBER to)
 
 public:
     using Audio::BeatRange::BeatRange;

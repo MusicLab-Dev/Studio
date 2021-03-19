@@ -47,11 +47,9 @@ Repeater {
                 height: nodeView.dataHeaderNameHeight
                 muted: partitionDelegate.partition ? partitionDelegate.partition.muted : false
 
-                property int tmp: 0
                 onMutedChanged: {
                     if (partitionDelegate.partition)
                         partitionDelegate.partition.muted = muted
-                    partitionDelegate.partition.instances.add(AudioAPI.beatRange(tmp * 128, ++tmp * 128))
                 }
             }
 
@@ -68,44 +66,22 @@ Repeater {
             }
         }
 
-        MouseArea {
-            property int notePlacementBeatPrecision: -1
-
+        ContentPlacementArea {
             id: placementArea
             x: nodeView.dataHeaderWidth
             width: nodeView.dataContentWidth
             height: contentView.rowHeight
-
-            onPressed: {
-                notePlacementBeatPrecision =
-            }
-
-            onReleased: {
-                console.log("Released")
-            }
-
-            onPositionChanged: {
-                console.log("PositionChanged")
-            }
+            instances: partitionDelegate.partition.instances
 
             Repeater {
                 model: partitionDelegate.partition.instances
 
                 delegate: Rectangle {
-                    x: contentView.surfaceContentGrid.xOffset + contentView.surfaceContentGrid.pixelsPerBeatPrecision * from
-                    width: contentView.surfaceContentGrid.pixelsPerBeatPrecision * (to - from)
+                    x: contentView.xOffset + contentView.pixelsPerBeatPrecision * from
+                    width: contentView.pixelsPerBeatPrecision * (to - from)
                     height: contentView.rowHeight
                     color: nodeDelegate.node.color
-                    border.color: Qt.lighter(nodeDelegate.node.color)
                 }
-            }
-
-            Rectangle {
-                x: contentView.surfaceContentGrid.xOffset + contentView.surfaceContentGrid.pixelsPerBeatPrecision * placementArea.notePlacementBeatPrecision
-                width: contentView.surfaceContentGrid.pixelsPerBeat
-                height: contentView.rowHeight
-                visible: placementArea.notePlacementBeatPrecision !== -1
-                color: Qt.lighter(nodeDelegate.node.color)
             }
         }
     }
