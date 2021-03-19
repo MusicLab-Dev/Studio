@@ -51,7 +51,7 @@ Repeater {
                 onMutedChanged: {
                     if (partitionDelegate.partition)
                         partitionDelegate.partition.muted = muted
-                    partitionDelegate.partition.instances.add(AudioAPI.beatRange(++tmp, ++tmp))
+                    partitionDelegate.partition.instances.add(AudioAPI.beatRange(tmp * 128, ++tmp * 128))
                 }
             }
 
@@ -68,23 +68,44 @@ Repeater {
             }
         }
 
-        Row {
+        MouseArea {
+            property int notePlacementBeatPrecision: -1
+
+            id: placementArea
             x: nodeView.dataHeaderWidth
-            width: nodeView.dataWidth
+            width: nodeView.dataContentWidth
             height: contentView.rowHeight
+
+            onPressed: {
+                notePlacementBeatPrecision =
+            }
+
+            onReleased: {
+                console.log("Released")
+            }
+
+            onPositionChanged: {
+                console.log("PositionChanged")
+            }
 
             Repeater {
                 model: partitionDelegate.partition.instances
 
                 delegate: Rectangle {
-                    width: 200
-                    height: 100
-                    color: "red"
-
-                    Text {
-                        text: from + " " + to
-                    }
+                    x: contentView.surfaceContentGrid.xOffset + contentView.surfaceContentGrid.pixelsPerBeatPrecision * from
+                    width: contentView.surfaceContentGrid.pixelsPerBeatPrecision * (to - from)
+                    height: contentView.rowHeight
+                    color: nodeDelegate.node.color
+                    border.color: Qt.lighter(nodeDelegate.node.color)
                 }
+            }
+
+            Rectangle {
+                x: contentView.surfaceContentGrid.xOffset + contentView.surfaceContentGrid.pixelsPerBeatPrecision * placementArea.notePlacementBeatPrecision
+                width: contentView.surfaceContentGrid.pixelsPerBeat
+                height: contentView.rowHeight
+                visible: placementArea.notePlacementBeatPrecision !== -1
+                color: Qt.lighter(nodeDelegate.node.color)
             }
         }
     }

@@ -39,6 +39,7 @@ Item {
 
     // Final relative ratios
     readonly property real pixelsPerBeat: cellWidth / barsPerCell / beatsPerBar
+    readonly property real pixelsPerBeatPrecision: pixelsPerBeat / 128
 
     clip: true
 
