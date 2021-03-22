@@ -67,6 +67,8 @@ set(StudioSources
     ${StudioDir}/SettingsListModel.hpp
     ${StudioDir}/SettingsListModel.cpp
     ${StudioDir}/SettingsListModelProxy.hpp
+    ${StudioDir}/PluginModel.cpp
+    ${StudioDir}/PluginModel.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

@@ -57,7 +57,7 @@ TEST(NodeModel, Name)
     ASSERT_EQ(model.name().toStdString(), "testnode");
 }
 
-TEST(NodeModel, Add)
+TEST(NodeModel, AddRemove)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
@@ -66,4 +66,7 @@ TEST(NodeModel, Add)
     NodeModel model(&node);
 
     model.add("__internal__:/Mixer");
+    ASSERT_EQ(model.count(), 1);
+    model.remove(0);
+    ASSERT_EQ(model.count(), 0);
 }

@@ -7,6 +7,7 @@
 
 #include <Studio/ControlModel.hpp>
 #include <Studio/Scheduler.hpp>
+#include <Studio/Point.hpp>
 
 TEST(ControlModel, InitDestroy)
 {
@@ -51,6 +52,9 @@ TEST(ControlModel, MoveAutomation)
     model.move(0, 1);
     ASSERT_EQ(model.get(0)->name(), "1");
     ASSERT_EQ(model.get(1)->name(), "0");
+    model.move(0, 0);
+    ASSERT_EQ(model.get(0)->name(), "1");
+    ASSERT_EQ(model.get(1)->name(), "0");
 }
 
 TEST(ControlModel, ParamId)
@@ -63,6 +67,8 @@ TEST(ControlModel, ParamId)
     ControlModel model(&control1);
 
     ASSERT_EQ(model.paramID(), 1);
+    model.setParamID(3);
+    ASSERT_EQ(model.paramID(), 3);
 }
 
 TEST(ControlModel, UpdateInternal)
@@ -79,4 +85,50 @@ TEST(ControlModel, UpdateInternal)
     ASSERT_EQ(model.paramID(), 2);
     model.updateInternal(&control1);
     ASSERT_EQ(model.paramID(), 1);
+}
+
+TEST(ControlModel, Muted)
+{
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
+    Scheduler scheduler;
+    Audio::Control control1 {1, 2.0};
+
+    ControlModel model(&control1);
+    model.setMuted(false);
+    ASSERT_EQ(model.muted(), false);
+    model.setMuted(true);
+    ASSERT_EQ(model.muted(), true);
+}
+
+TEST(ControlModel, ManualMode)
+{
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
+    Scheduler scheduler;
+    Audio::Control control1 {1, 2.0};
+
+    ControlModel model(&control1);
+    model.setManualMode(false);
+    ASSERT_EQ(model.manualMode(), false);
+    model.setManualMode(true);
+    ASSERT_EQ(model.manualMode(), true);
+}
+
+TEST(ControlModel, ManualPoint)
+{
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
+    Scheduler scheduler;
+    Audio::Control control {1, 2.0};
+
+    ControlModel model(&control);
+
+    GPoint point;
+    point.beat = 4;
+    point.curveRate = 2;
+
+    model.setManualPoint(point);
+    ASSERT_EQ(model.manualPoint().beat, point.beat);
+    ASSERT_EQ(model.manualPoint().curveRate, point.curveRate);
 }

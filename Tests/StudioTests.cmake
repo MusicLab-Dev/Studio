@@ -20,6 +20,7 @@ set(StudioTestsSources
     #${StudioTestsDir}/tests_PluginTableModel.cpp
     #${StudioTestsDir}/tests_Device.cpp
     #${StudioTestsDir}/tests_DevicesModel.cpp
+    ${StudioTestsDir}/tests_PluginModel.cpp
 )
 
 add_executable(${PROJECT_NAME} ${StudioTestsSources})

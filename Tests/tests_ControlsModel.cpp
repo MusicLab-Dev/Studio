@@ -54,4 +54,9 @@ TEST(ControlsModel, MoveControl)
 
     ASSERT_EQ(model.get(0)->paramID(), 12);
     ASSERT_EQ(model.get(1)->paramID(), 10);
+
+    model.move(0, 0);
+
+    ASSERT_EQ(model.get(0)->paramID(), 12);
+    ASSERT_EQ(model.get(1)->paramID(), 10);
 }

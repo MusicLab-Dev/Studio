@@ -88,3 +88,47 @@ TEST(PartitionModel, UpdateInternal)
     ASSERT_EQ(model.instances().get(0).from, 1);
     ASSERT_EQ(model.instances().get(0).to, 2);
 }
+
+TEST(PartitionModel, Name)
+{
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
+    Scheduler scheduler;
+
+    Audio::Partition partition {};
+
+    PartitionModel model(&partition);
+
+    model.setName("hello");
+    ASSERT_EQ(model.name(), "hello");
+}
+
+TEST(PartitionModel, Muted)
+{
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
+    Scheduler scheduler;
+
+    Audio::Partition partition {};
+
+    PartitionModel model(&partition);
+
+    model.setMuted(false);
+    ASSERT_EQ(model.muted(), false);
+    model.setMuted(true);
+    ASSERT_EQ(model.muted(), true);
+}
+
+TEST(PartitionModel, MidiChannels)
+{
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
+    Scheduler scheduler;
+
+    Audio::Partition partition {};
+
+    PartitionModel model(&partition);
+
+    model.setMidiChannels(10);
+    ASSERT_EQ(model.midiChannels(), 10);
+}

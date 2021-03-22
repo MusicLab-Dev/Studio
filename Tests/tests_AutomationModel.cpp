@@ -173,3 +173,18 @@ TEST(AutomationModel, SetPoint)
     ASSERT_EQ(model.get(0).beat, 6);
     ASSERT_EQ(model.get(0).curveRate, 7);
 }
+
+TEST(AutomationModel, Muted)
+{
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
+    Scheduler scheduler;
+    Audio::Automation automation {};
+
+    AutomationModel model(&automation);
+
+    model.setMuted(false);
+    ASSERT_EQ(model.muted(), false);
+    model.setMuted(true);
+    ASSERT_EQ(model.muted(), true);
+}

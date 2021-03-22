@@ -35,3 +35,21 @@ TEST(PartitionsModel, AddRemove)
         ASSERT_EQ(model.count(), i);
     }
 }
+
+TEST(PartitionsModel, MovePartitions)
+{
+    Audio::Device::DriverInstance driver;
+    Audio::PluginTable::Instance instance;
+    Scheduler scheduler;
+
+    Audio::Partitions partitions {};
+
+    PartitionsModel model(&partitions);
+
+    model.add("first");
+    model.add("second");
+    model.move(0, 1);
+
+    ASSERT_EQ(model.get(0)->name(), "second");
+    ASSERT_EQ(model.get(1)->name(), "first");
+}
