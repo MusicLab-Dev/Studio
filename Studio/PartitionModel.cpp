@@ -9,9 +9,9 @@
 #include <QQmlEngine>
 
 #include "Models.hpp"
-#include "PartitionModel.hpp"
+#include "PartitionsModel.hpp"
 
-PartitionModel::PartitionModel(Audio::Partition *partition, QObject *parent) noexcept
+PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *parent) noexcept
     : QAbstractListModel(parent), _data(partition), _instances(&partition->instances(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);

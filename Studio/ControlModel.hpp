@@ -15,6 +15,7 @@
 #include "AutomationModel.hpp"
 
 class ControlModel;
+class ControlsModel;
 
 struct ControlWrapper
 {
@@ -37,6 +38,7 @@ class ControlModel : public QAbstractListModel
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(bool manualMode READ manualMode WRITE setManualMode NOTIFY manualModeChanged)
     Q_PROPERTY(GPoint manualPoint READ manualPoint WRITE setManualPoint NOTIFY manualPointChanged)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 
 public:
     /** @brief Roles of each Control */
@@ -45,10 +47,14 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit ControlModel(Audio::Control *control, QObject *parent = nullptr) noexcept;
+    explicit ControlModel(Audio::Control *control, ControlsModel *parent = nullptr) noexcept;
 
     /** @brief Virtual destructor */
     ~ControlModel(void) noexcept override = default;
+
+    /** @brief Get the parent controls if it exists */
+    [[nodiscard]] ControlsModel *parentControls(void) noexcept
+        { return reinterpret_cast<ControlsModel *>(parent()); }
 
 
     /** @brief Get the list of all roles */
@@ -98,6 +104,13 @@ public:
     /** @brief Update the internal data */
     void updateInternal(Audio::Control *data);
 
+
+    /** @brief Get name property */
+    [[nodiscard]] const QString &name(void) const noexcept { return _name; }
+
+    /** @brief Set name property */
+    void setName(const QString &name);
+
 public slots:
     /** @brief Return the count of element in the model */
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_automations.size()); }
@@ -124,6 +137,9 @@ signals:
     /** @brief Notify that muted property has changed */
     void manualPointChanged(void);
 
+    /** @brief Notify that name property has changed */
+    void nameChanged(void);
+
 public: // Allow external insert / remove
     using QAbstractListModel::beginRemoveRows;
     using QAbstractListModel::endRemoveRows;
@@ -133,6 +149,7 @@ public: // Allow external insert / remove
 private:
     Audio::Control *_data { nullptr };
     Core::TinyVector<Core::UniqueAlloc<AutomationModel>> _automations {};
+    QString _name {};
 
     /** @brief Refresh children AutomationModel addresses */
     void refreshAutomations(void);

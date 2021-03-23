@@ -27,7 +27,7 @@ Repeater {
             border.width: nodeView.dataHeaderBorderWidth
 
             DefaultText {
-                id: nodeName
+                id: partitionName
                 x: nodeView.dataHeaderSpacing
                 y: nodeView.dataHeaderSpacing
                 width: nodeView.dataHeaderNameWidth

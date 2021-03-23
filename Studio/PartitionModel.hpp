@@ -14,6 +14,7 @@
 #include "InstancesModel.hpp"
 
 class PartitionModel;
+class PartitionsModel;
 
 struct PartitionWrapper
 {
@@ -53,10 +54,14 @@ public:
 
 
     /** @brief Default constructor */
-    explicit PartitionModel(Audio::Partition *partition, QObject *parent = nullptr) noexcept;
+    explicit PartitionModel(Audio::Partition *partition, PartitionsModel *parent = nullptr) noexcept;
 
     /** @brief Virtual destructor */
     ~PartitionModel(void) noexcept override = default;
+
+    /** @brief Get the parent partitions if it exists */
+    [[nodiscard]] PartitionsModel *parentPartitions(void) noexcept
+        { return reinterpret_cast<PartitionsModel *>(parent()); }
 
 
     /** @brief Get the list of all roles */

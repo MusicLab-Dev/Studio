@@ -7,10 +7,9 @@
 #include <QHash>
 
 #include "Models.hpp"
-#include "ControlsModel.hpp"
-#include "Scheduler.hpp"
+#include "NodeModel.hpp"
 
-ControlsModel::ControlsModel(Audio::Controls *controls, QObject *parent) noexcept
+ControlsModel::ControlsModel(Audio::Controls *controls, NodeModel *parent) noexcept
     : QAbstractListModel(parent), _data(controls)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
@@ -50,15 +49,17 @@ const ControlModel *ControlsModel::get(const int index) const noexcept_ndebug
 
 void ControlsModel::add(const ParamID paramID)
 {
+    QString name = "Control " + QString::number(paramID);
+
     Models::AddProtectedEvent(
         [this, paramID] {
             _data->push(paramID);
         },
-        [this] {
+        [this, name] {
             const auto controlsData = _controls.data();
             const auto idx = _controls.size();
             beginInsertRows(QModelIndex(), idx, idx);
-            _controls.push(&_data->at(idx), this);
+            _controls.push(&_data->at(idx), this)->setName(name);
             endInsertRows();
             if (_controls.data() != controlsData)
                 refreshControls();
