@@ -32,6 +32,9 @@ public:
     /** @brief Construct a new application */
     explicit Application(QObject *parent = nullptr);
 
+    /** @brief Destructor */
+    ~Application(void) override = default;
+
 
     /** @brief Get the project */
     [[nodiscard]] Project *project(void) noexcept { return &_project; }

@@ -6,13 +6,13 @@ RowLayout {
     property real headerFactor: 0.1
 
     spacing: 0
-    
+
     Rectangle {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * headerFactor
         color: themeManager.foregroundColor
     }
-    
+
     Rectangle {
         id: timeline
         Layout.preferredHeight: parent.height

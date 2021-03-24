@@ -35,4 +35,13 @@ Rectangle {
         anchors.centerIn: parent
         radius: 20
     }
+
+    Behavior on x {
+        SpringAnimation {
+            id: animationX
+            spring: 4
+            damping: 0.3
+            duration: 400
+        }
+    }
 }

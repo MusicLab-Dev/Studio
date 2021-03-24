@@ -14,6 +14,7 @@
 #include "InstancesModel.hpp"
 
 class PartitionModel;
+class PartitionsModel;
 
 struct PartitionWrapper
 {
@@ -35,6 +36,7 @@ class PartitionModel : public QAbstractListModel
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(MidiChannels midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
+    Q_PROPERTY(InstancesModel *instances READ getInstances NOTIFY instancesChanged)
 
 public:
     /** @brief Roles of each partition */
@@ -52,10 +54,14 @@ public:
 
 
     /** @brief Default constructor */
-    explicit PartitionModel(Audio::Partition *partition, QObject *parent = nullptr) noexcept;
+    explicit PartitionModel(Audio::Partition *partition, PartitionsModel *parent = nullptr) noexcept;
 
     /** @brief Virtual destructor */
     ~PartitionModel(void) noexcept override = default;
+
+    /** @brief Get the parent partitions if it exists */
+    [[nodiscard]] PartitionsModel *parentPartitions(void) noexcept
+        { return reinterpret_cast<PartitionsModel *>(parent()); }
 
 
     /** @brief Get the list of all roles */
@@ -68,9 +74,14 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
 
-    /** @brief Get the instances */
+    /** @brief Get note at index */
+    [[nodiscard]] const Note &get(const int idx) const noexcept_ndebug;
+
+
+    /** @brief Get the list of instances */
     [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
     [[nodiscard]] const InstancesModel &instances(void) const noexcept { return *_instances; }
+    [[nodiscard]] InstancesModel *getInstances(void) noexcept { return _instances.get(); }
 
 
     /** @brief Get the name property */
@@ -100,16 +111,19 @@ public:
 
 public slots:
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_data->notes().size()); }
+    int count(void) const noexcept { return static_cast<int>(_data->notes().size()); }
 
-    /** @brief Add note */
+    /** @brief Add node */
     void add(const Note &note);
 
-    /** @brief Remove note at the index */
+    /** @brief Remove note at index */
     void remove(const int index);
 
-    /** @brief Get the internal list of instances */
-    [[nodiscard]] InstancesModel *getInstances(void) noexcept { return _instances.get(); }
+    /** @brief Get note at index */
+    QVariant getNote(const int index) const { return QVariant::fromValue(get(index)); }
+
+    /** @brief Set note at index */
+    void set(const int idx, const Note &range);
 
 signals:
     /** @brief Notify that the channel has changed */
@@ -120,6 +134,9 @@ signals:
 
     /** @brief Notify that the channel has changed */
     void midiChannelsChanged(void);
+
+    /** @brief Notify that the instances model has changed */
+    void instancesChanged(void);
 
 private:
     Audio::Partition *_data { nullptr };

@@ -11,7 +11,7 @@
 
 TEST(ControlModel, InitDestroy)
 {
-    Audio::Control control {1, 2.0};
+    Audio::Control control { 1 };
 
     ASSERT_NO_THROW(ControlModel tmp(&control));
 }
@@ -23,7 +23,7 @@ TEST(ControlModel, AddRemoveAutomation)
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
-    Audio::Control control {1, 2.0};
+    Audio::Control control { 1 };
 
     ControlModel model(&control);
     for (int i = 0; i < 100; ++i) {
@@ -42,7 +42,7 @@ TEST(ControlModel, MoveAutomation)
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
-    Audio::Control control {1, 2.0};
+    Audio::Control control { 1 };
 
     ControlModel model(&control);
     model.add();
@@ -62,7 +62,7 @@ TEST(ControlModel, ParamId)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Control control1 {1, 2.0};
+    Audio::Control control1 { 1 };
 
     ControlModel model(&control1);
 
@@ -76,8 +76,8 @@ TEST(ControlModel, UpdateInternal)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Control control1 {1, 2.0};
-    Audio::Control control2 {2, 4.0};
+    Audio::Control control1 { 1 };
+    Audio::Control control2 { 2 };
 
     ControlModel model(&control1);
 

@@ -4,16 +4,16 @@ import QtQuick.Layouts 1.15
 import "../Common"
 
 Button {
-    property string imgPath: ""
+    property string source: ""
     property color colorDefault: "#FD9D57"
     property color colorHovered: Qt.tint(colorDefault, "#1FFFFFFF")
     property bool showBorder: true
     property string title: ""
     property string description: ""
-    
+
     id: control
     hoverEnabled: true
-    
+
     background: Rectangle {
         width: control.width
         height: control.height
@@ -23,7 +23,7 @@ Button {
         radius: 40
         visible: showBorder
     }
-    
+
     indicator: ColumnLayout {
         anchors.centerIn: control
         height: control.height * 0.8
@@ -37,7 +37,7 @@ Button {
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: parent.width / 2
                 width: parent.width / 2
-                source: imgPath
+                source: control.source
             }
         }
 

@@ -29,20 +29,9 @@ QVariant AutomationModel::data(const QModelIndex &index, int role) const
 
     switch (static_cast<Roles>(role)) {
     case Roles::Point:
-        return child.beat;
+        return QVariant::fromValue(reinterpret_cast<const GPoint &>(child));
     default:
         return QVariant();
-    }
-}
-
-bool AutomationModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    switch (static_cast<Roles>(role)) {
-    case Roles::Point:
-        set(index.row(), value.value<GPoint>());
-        return true;
-    default:
-        throw std::logic_error("ControlModel::setData: Couldn't change invalid role");
     }
 }
 
@@ -100,7 +89,7 @@ void AutomationModel::remove(const int idx)
     );
 }
 
-const GPoint &AutomationModel::get(const int idx) const
+const GPoint &AutomationModel::get(const int idx) const noexcept_ndebug
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("AutomationModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));

@@ -30,6 +30,7 @@ qt_add_resources(QtResources
 
 set(StudioSources
     ${StudioDir}/Base.hpp
+    ${StudioDir}/AudioAPI.hpp
     ${StudioDir}/Application.cpp
     ${StudioDir}/Application.hpp
     ${StudioDir}/AutomationModel.cpp

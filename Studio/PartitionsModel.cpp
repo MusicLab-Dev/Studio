@@ -8,10 +8,9 @@
 #include <QHash>
 
 #include "Models.hpp"
-#include "PartitionsModel.hpp"
-#include "Scheduler.hpp"
+#include "NodeModel.hpp"
 
-PartitionsModel::PartitionsModel(Audio::Partitions *partitions, QObject *parent) noexcept
+PartitionsModel::PartitionsModel(Audio::Partitions *partitions, NodeModel *parent) noexcept
     : QAbstractListModel(parent), _data(partitions)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
@@ -43,10 +42,30 @@ const PartitionModel *PartitionsModel::get(const int index) const
     return _partitions.at(index).get();
 }
 
-void PartitionsModel::add(const QString &name)
+void PartitionsModel::add(void)
 {
+    // Get a unique name for this partition
+    std::string name = [this] {
+        std::string name;
+        auto size = _partitions.size();
+        while (true) {
+            bool unique = true;
+            name = "Partition " + std::to_string(size);
+            for (auto &partition : *_data) {
+                if (partition.name() == name) {
+                    unique = false;
+                    break;
+                }
+            }
+            if (unique)
+                break;
+            ++size;
+        }
+        return name;
+    }();
+
     Models::AddProtectedEvent(
-        [this, name = Core::FlatString(name.toStdString())](void) mutable {
+        [this, name = Core::FlatString(std::move(name))](void) mutable {
             _data->push().setName(std::move(name));
         },
         [this] {

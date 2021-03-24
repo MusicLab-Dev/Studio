@@ -13,6 +13,8 @@
 
 #include "PartitionModel.hpp"
 
+class NodeModel;
+
 /** @brief class that contaign a list of partitionModel */
 class PartitionsModel : public QAbstractListModel
 {
@@ -25,10 +27,14 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit PartitionsModel(Audio::Partitions *partitions, QObject *parent = nullptr) noexcept;
+    explicit PartitionsModel(Audio::Partitions *partitions, NodeModel *parent = nullptr) noexcept;
 
     /** @brief Virtual destructor */
     ~PartitionsModel(void) noexcept override = default;
+
+    /** @brief Get the parent node if it exists */
+    [[nodiscard]] NodeModel *parentNode(void) noexcept
+        { return reinterpret_cast<NodeModel *>(parent()); }
 
 
     /** @brief Get the list of all roles */
@@ -49,7 +55,7 @@ public slots:
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_data->size()); }
 
     /** @brief Add a children to the list */
-    void add(const QString &name = QString());
+    void add(void);
 
     /** @brief Remove a children from the list */
     void remove(const int index);

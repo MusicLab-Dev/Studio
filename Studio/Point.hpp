@@ -15,9 +15,10 @@ struct GPoint : public Audio::Point
 {
     Q_GADGET
 
-    Q_PROPERTY(Beat beat MEMBER beat)
-    Q_PROPERTY(CurveType type READ getType WRITE setType)
-    Q_PROPERTY(std::int16_t curveRate MEMBER curveRate)
+    Q_PROPERTY(quint32 beat MEMBER beat)
+    Q_PROPERTY(CurveType curveType READ getType WRITE setType)
+    Q_PROPERTY(qint16 curveRate MEMBER curveRate)
+    Q_PROPERTY(double value MEMBER value)
 
 public:
     /** @brief Describe the interpolation type between points */
@@ -28,8 +29,13 @@ public:
     };
     Q_ENUM(CurveType)
 
+    using CurveRate = Audio::Point::CurveRate;
+
     using Audio::Point::Point;
     using Audio::Point::operator=;
+
+    template<typename ...Args>
+    GPoint(Args &&...args) noexcept : Audio::Point({ std::forward<Args>(args)... }) {}
 
     /** @brief Get / Set the internal curve type */
     [[nodiscard]] CurveType getType(void) const noexcept { return static_cast<GPoint::CurveType>(type); }

@@ -7,7 +7,7 @@
 
 #include <QAbstractListModel>
 
-#include <Audio/Base.hpp>
+#include "Base.hpp"
 
 /** @brief The studio is the instance running the application process */
 class InstancesModel : public QAbstractListModel
@@ -37,24 +37,28 @@ public:
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
-    /** @brief Get a beat range from internal list */
-    [[nodiscard]] const Audio::BeatRange &get(const int index) const noexcept_ndebug;
+
+    /** @brief Get instance at index */
+    [[nodiscard]] const BeatRange &get(const int idx) const noexcept_ndebug;
 
     /** @brief Update internal data pointer if it changed */
     void updateInternal(Audio::BeatRanges *data);
 
-    /** @brief Get internal data pointer */
-    [[nodiscard]] Audio::BeatRanges *internal(void) { return _data; }
-
 public slots:
-    /** @brief Add a children to the list */
-    void add(const Audio::BeatRange &range);
+    /** @brief Add instance */
+    void add(const BeatRange &range);
 
-    /** @brief Remove a children from the list */
+    /** @brief Find an instance in the list using a single beat point */
+    int find(const quint32 beat) const noexcept;
+
+    /** @brief Remove instance at index */
     void remove(const int index);
 
-    /** @brief Set beatrange at index */
-    void set(const int index, const Audio::BeatRange &range);
+    /** @brief Get instance at index */
+    QVariant getInstance(const int index) const { return QVariant::fromValue(get(index)); }
+
+    /** @brief Set instance at index */
+    void set(const int index, const BeatRange &range);
 
 private:
     Audio::BeatRanges *_data { nullptr };
