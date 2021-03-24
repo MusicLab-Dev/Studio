@@ -19,9 +19,9 @@ TEST(InstancesModel, UpdateInternal)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::BeatRanges ranges1 { { 0, 1 }, { 1, 2 } };
-    Audio::BeatRanges ranges2 { { 2, 3 }, { 3, 4 }, { 5, 6 } };
-    Audio::BeatRanges ranges3 { { 7, 8 }, { 9, 10 }, {11, 12}, {13, 14} };
+    Audio::BeatRanges ranges1 { { 0u, 1u }, { 1u, 2u } };
+    Audio::BeatRanges ranges2 { { 2u, 3u }, { 3u, 4u }, { 5u, 6u } };
+    Audio::BeatRanges ranges3 { { 7u, 8u }, { 9u, 10u }, {11u, 12u}, {13u, 14u} };
 
     InstancesModel model(&ranges1);
     ASSERT_EQ(model.get(0).from, 0);
@@ -78,7 +78,7 @@ TEST(InstancesModel, Remove)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::BeatRanges ranges { {1, 2}, {3, 4}, {5, 6}, {7, 8} };
+    Audio::BeatRanges ranges { {1u, 2u}, {3u, 4u}, {5u, 6u}, {7u, 8u} };
 
     InstancesModel model(&ranges);
 
@@ -113,12 +113,12 @@ TEST(InstancesModel, Set)
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
 
-    Audio::BeatRanges ranges { {1, 2}, {3, 4}, {5, 6}, {7, 8} };
+    Audio::BeatRanges ranges { {1u, 2u}, {3u, 4u}, {5u, 6u}, {7u, 8u} };
 
     InstancesModel model(&ranges);
 
-    model.set(0, {4, 4});
-    model.set(2, {10, 100});
+    model.set(0, Audio::BeatRange {4u, 4u});
+    model.set(2, Audio::BeatRange {10u, 100u});
     ASSERT_EQ(model.get(0).from, 3);
     ASSERT_EQ(model.get(0).to, 4);
     ASSERT_EQ(model.get(1).from, 4);

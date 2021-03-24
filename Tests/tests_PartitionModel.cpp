@@ -27,15 +27,15 @@ TEST(PartitionModel, AddNote)
 
     model.add(
         Note(
-            Audio::BeatRange {1, 2},
-            1,
-            10)
+            Audio::BeatRange {1u, 2u},
+            1u,
+            10u)
     );
     model.add(
         Note(
-            Audio::BeatRange {4, 6},
-            3,
-            20)
+            Audio::BeatRange {4u, 6u},
+            3u,
+            20u)
     );
     ASSERT_EQ(model.count(), 2);
 
@@ -53,9 +53,9 @@ TEST(PartitionModel, RemoveNote)
 
     model.add(
         Note(
-            Audio::BeatRange {1, 2},
-            1,
-            10
+            Audio::BeatRange {1u, 2u},
+            1u,
+            10u
         )
     );
 
@@ -73,8 +73,8 @@ TEST(PartitionModel, UpdateInternal)
     Audio::Partition partition1 {};
     Audio::Partition partition2 {};
 
-    partition1.instances().push<Audio::BeatRange>({1, 2});
-    partition2.instances().push<Audio::BeatRange>({3, 4});
+    partition1.instances().push<Audio::BeatRange>({1u, 2u});
+    partition2.instances().push<Audio::BeatRange>({3u, 4u});
 
     PartitionModel model(&partition1);
     ASSERT_EQ(model.instances().get(0).from, 1);

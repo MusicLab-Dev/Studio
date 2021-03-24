@@ -35,7 +35,7 @@ TEST(ControlModel, AddRemoveAutomation)
         ASSERT_EQ(model.count(), i);
     }
 }
-#include <QDebug>
+
 TEST(ControlModel, MoveAutomation)
 {
     Audio::Device::DriverInstance driver;
@@ -76,8 +76,8 @@ TEST(ControlModel, UpdateInternal)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Control control1 { 1 };
-    Audio::Control control2 { 2 };
+    Audio::Control control1 { 1u };
+    Audio::Control control2 { 2u };
 
     ControlModel model(&control1);
 
@@ -92,7 +92,7 @@ TEST(ControlModel, Muted)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Control control1 {1};
+    Audio::Control control1 {1u};
 
     ControlModel model(&control1);
     model.setMuted(false);
@@ -120,7 +120,7 @@ TEST(ControlModel, ManualPoint)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Control control {1};
+    Audio::Control control {1u};
 
     ControlModel model(&control);
 

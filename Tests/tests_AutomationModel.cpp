@@ -122,16 +122,16 @@ TEST(AutomationModel, InstancesAddRemoveBasics)
     AutomationModel model(&automation);
     auto &instances = model.instances();
 
-    instances.add(BeatRange(1, 1));
+    instances.add(BeatRange(1u, 1u));
     ASSERT_EQ(instances.get(0).from, 1); ASSERT_EQ(instances.get(0).to, 1);
     ASSERT_EQ(instances.count(), 1);
 
-    instances.add(BeatRange(2, 2));
+    instances.add(BeatRange(2u, 2u));
     ASSERT_EQ(instances.get(0).from, 1); ASSERT_EQ(instances.get(0).to, 1);
     ASSERT_EQ(instances.get(1).from, 2); ASSERT_EQ(instances.get(1).to, 2);
     ASSERT_EQ(instances.count(), 2);
 
-    instances.add(BeatRange(3, 3));
+    instances.add(BeatRange(3u, 3u));
     ASSERT_EQ(instances.get(0).from, 1); ASSERT_EQ(instances.get(0).to, 1);
     ASSERT_EQ(instances.get(1).from, 2); ASSERT_EQ(instances.get(1).to, 2);
     ASSERT_EQ(instances.get(2).from, 3); ASSERT_EQ(instances.get(2).to, 3);
