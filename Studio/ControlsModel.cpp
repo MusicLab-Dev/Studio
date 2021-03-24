@@ -59,7 +59,7 @@ void ControlsModel::add(const ParamID paramID)
             const auto controlsData = _controls.data();
             const auto idx = _controls.size();
             beginInsertRows(QModelIndex(), idx, idx);
-            _controls.push(&_data->at(idx), this)->setName(name);
+            _controls.push(&_data->at(idx), this, name);
             endInsertRows();
             if (_controls.data() != controlsData)
                 refreshControls();
@@ -97,7 +97,7 @@ void ControlsModel::move(const int from, const int to)
             _data->move(from, from, to);
         },
         [this, from, to] {
-            beginMoveRows(QModelIndex(), from, from, QModelIndex(), to + 1);
+            beginMoveRows(QModelIndex(), from, from, QModelIndex(), to ? to + 1 : 0);
             _controls.move(from, from, to);
             endMoveRows();
             _controls.at(from)->updateInternal(&_data->at(from));

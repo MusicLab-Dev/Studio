@@ -47,8 +47,9 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
     /** @brief Get a beat range from internal list */
-    [[nodiscard]] const PartitionModel *get(const int index) const;
-
+    [[nodiscard]] const PartitionModel *get(const int index) const noexcept_ndebug;
+    [[nodiscard]] PartitionModel *get(const int idx) noexcept_ndebug
+        { return const_cast<PartitionModel *>(const_cast<const PartitionsModel *>(this)->get(idx)); }
 
 public slots:
     /** @brief Return the count of element in the model */

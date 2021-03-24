@@ -109,7 +109,7 @@ void InstancesModel::set(const int idx, const BeatRange &range)
         },
         [this, idx, newIdx] {
             if (idx != newIdx) {
-                beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newIdx + 1);
+                beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newIdx ? newIdx + 1 : 0);
                 endMoveRows();
             } else {
                 const auto modelIndex = index(idx);

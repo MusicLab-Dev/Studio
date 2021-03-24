@@ -9,8 +9,8 @@
 #include "Models.hpp"
 #include "ControlsModel.hpp"
 
-ControlModel::ControlModel(Audio::Control *control, ControlsModel *parent) noexcept
-    : QAbstractListModel(parent), _data(control)
+ControlModel::ControlModel(Audio::Control *control, ControlsModel *parent, const QString &name) noexcept
+    : QAbstractListModel(parent), _data(control), _name(name)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
     _automations.reserve(_data->automations().size());
@@ -157,7 +157,7 @@ void ControlModel::move(const int from, const int to)
             _data->automations().move(from, from, to);
         },
         [this, from, to] {
-            beginMoveRows(QModelIndex(), from, from, QModelIndex(), to + 1);
+            beginMoveRows(QModelIndex(), from, from, QModelIndex(), to ? to + 1 : 0);
             _automations.move(from, from, to);
             endMoveRows();
             _automations.at(from)->updateInternal(&_data->automations().at(from));

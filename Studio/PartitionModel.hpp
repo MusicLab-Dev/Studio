@@ -76,6 +76,8 @@ public:
 
     /** @brief Get note at index */
     [[nodiscard]] const Note &get(const int idx) const noexcept_ndebug;
+    [[nodiscard]] Note &get(const int idx) noexcept_ndebug
+        { return const_cast<Note &>(const_cast<const PartitionModel *>(this)->get(idx)); }
 
 
     /** @brief Get the list of instances */

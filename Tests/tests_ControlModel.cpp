@@ -92,7 +92,7 @@ TEST(ControlModel, Muted)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Control control1 {1, 2.0};
+    Audio::Control control1 {1};
 
     ControlModel model(&control1);
     model.setMuted(false);
@@ -106,7 +106,7 @@ TEST(ControlModel, ManualMode)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Control control1 {1, 2.0};
+    Audio::Control control1 {1};
 
     ControlModel model(&control1);
     model.setManualMode(false);
@@ -120,7 +120,7 @@ TEST(ControlModel, ManualPoint)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Control control {1, 2.0};
+    Audio::Control control {1};
 
     ControlModel model(&control);
 

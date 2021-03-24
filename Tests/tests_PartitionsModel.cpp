@@ -46,10 +46,16 @@ TEST(PartitionsModel, MovePartitions)
 
     PartitionsModel model(&partitions);
 
-    model.add("first");
-    model.add("second");
-    model.move(0, 1);
+    model.add();
+    model.add();
+    model.get(0)->setName("first");
+    model.get(1)->setName("second");
 
+    model.move(0, 1);
     ASSERT_EQ(model.get(0)->name(), "second");
     ASSERT_EQ(model.get(1)->name(), "first");
+
+    model.move(1, 0);
+    ASSERT_EQ(model.get(0)->name(), "first");
+    ASSERT_EQ(model.get(1)->name(), "second");
 }

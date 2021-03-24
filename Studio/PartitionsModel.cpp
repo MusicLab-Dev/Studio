@@ -35,7 +35,7 @@ QVariant PartitionsModel::data(const QModelIndex &index, int role) const
     }
 }
 
-const PartitionModel *PartitionsModel::get(const int index) const
+const PartitionModel *PartitionsModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),
         throw std::range_error("PartitionsModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
@@ -110,7 +110,7 @@ void PartitionsModel::move(const int from, const int to)
             _data->move(from, from, to);
         },
         [this, from, to] {
-            beginMoveRows(QModelIndex(), from, from, QModelIndex(), to + 1);
+            beginMoveRows(QModelIndex(), from, from, QModelIndex(), to ? to + 1 : 0);
             _partitions.move(from, from, to);
             endMoveRows();
             _partitions.at(from)->updateInternal(&_data->at(from));

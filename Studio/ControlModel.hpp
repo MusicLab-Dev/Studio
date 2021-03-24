@@ -47,7 +47,7 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit ControlModel(Audio::Control *control, ControlsModel *parent = nullptr) noexcept;
+    explicit ControlModel(Audio::Control *control, ControlsModel *parent = nullptr, const QString &name = QString()) noexcept;
 
     /** @brief Virtual destructor */
     ~ControlModel(void) noexcept override = default;
