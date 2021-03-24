@@ -16,9 +16,9 @@ PluginModel::PluginModel(Audio::IPlugin *plugin, QObject *parent) noexcept
 QHash<int, QByteArray> PluginModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(Roles::Value), "value"},
-        { static_cast<int>(Roles::Title), "Title"},
-        { static_cast<int>(Roles::Description), "Description"},
+        { static_cast<int>(Roles::Value), "controlValue"},
+        { static_cast<int>(Roles::Title), "controlTitle"},
+        { static_cast<int>(Roles::Description), "controlDescription"},
     };
 }
 
@@ -28,8 +28,8 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
         throw std::range_error("PartitionModel::data: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
     auto child = _data->getControl(index.row());
     const auto &meta = _data->getMetaData().controls[index.row()].translations;
-    const QString &title = QString::fromLocal8Bit(meta.names[0].text.data(), meta.names[0].text.size());
-    const QString &description = QString::fromLocal8Bit(meta.descriptions[0].text.data(), meta.descriptions[0].text.size());
+    const QString title = QString::fromLocal8Bit(meta.names[0].text.data(), meta.names[0].text.size());
+    const QString description = QString::fromLocal8Bit(meta.descriptions[0].text.data(), meta.descriptions[0].text.size());
     switch (static_cast<Roles>(role)) {
         case Roles::Value:
             return child;
