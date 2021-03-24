@@ -40,16 +40,16 @@ Rectangle {
      Shortcut {
          sequence: StandardKey.ZoomIn
          onActivated: {
-             if (sequencerViewContent.sequencerViewContentFlickable.piano.rowHeight < 100)
-                 sequencerViewContent.sequencerViewContentFlickable.piano.rowHeight += 2
+             if (sequencerViewContent.sequencerViewContentFlickable.rowHeight < 100)
+                 sequencerViewContent.sequencerViewContentFlickable.rowHeight += 2
          }
      }
 
      Shortcut {
         sequence: StandardKey.ZoomOut
          onActivated: {
-             if (sequencerViewContent.sequencerViewContentFlickable.piano.rowHeight > 20)
-                sequencerViewContent.sequencerViewContentFlickable.piano.rowHeight -= 2
+             if (sequencerViewContent.sequencerViewContentFlickable.rowHeight > 20)
+                sequencerViewContent.sequencerViewContentFlickable.rowHeight -= 2
          }
      }
 }

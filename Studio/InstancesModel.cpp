@@ -45,14 +45,7 @@ void InstancesModel::updateInternal(Audio::BeatRanges *data)
     endResetModel();
 }
 
-const Audio::BeatRange &InstancesModel::get(const int idx) const noexcept_ndebug
-{
-    coreAssert(idx >= 0 && idx < count(),
-        throw std::range_error("InstancesModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
-    return (*_data)[static_cast<unsigned long>(idx)];
-}
-
-void InstancesModel::add(const Audio::BeatRange &range)
+void InstancesModel::add(const BeatRange &range)
 {
     const auto idx = std::distance(_data->begin(), _data->findSortedPlacement(range));
 
@@ -65,6 +58,20 @@ void InstancesModel::add(const Audio::BeatRange &range)
             endInsertRows();
         }
     );
+}
+
+int InstancesModel::find(const Beat beat) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &range : *_data) {
+        if (beat < range.from || beat > range.to) {
+            ++idx;
+            continue;
+        }
+        return idx;
+    }
+    return -1;
 }
 
 void InstancesModel::remove(const int idx)
@@ -82,7 +89,15 @@ void InstancesModel::remove(const int idx)
     );
 }
 
-void InstancesModel::set(const int idx, const Audio::BeatRange &range)
+const BeatRange &InstancesModel::get(const int idx) const noexcept_ndebug
+{
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("InstancesModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+
+    return reinterpret_cast<const BeatRange &>(_data->at(idx));
+}
+
+void InstancesModel::set(const int idx, const BeatRange &range)
 {
     auto newIdx = std::distance(_data->begin(), _data->findSortedPlacement(range));
 

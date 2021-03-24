@@ -11,7 +11,7 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.333
 
         DefaultImageButton {
-            imgPath: "qrc:/Assets/Replay.png"
+            source: "qrc:/Assets/Replay.png"
             height: parent.height / 2
             width: parent.height / 2
             anchors.verticalCenter: parent.verticalCenter
@@ -24,7 +24,7 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.333
 
         DefaultImageButton {
-            imgPath: "qrc:/Assets/Play.png"
+            source: "qrc:/Assets/Play.png"
             height: parent.height / 1.5
             width: parent.height / 1.5
             anchors.centerIn: parent
@@ -36,7 +36,7 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.333
 
         DefaultImageButton {
-            imgPath: "qrc:/Assets/Stop.png"
+            source: "qrc:/Assets/Stop.png"
             height: parent.height / 2
             width: parent.height / 2
             anchors.verticalCenter: parent.verticalCenter

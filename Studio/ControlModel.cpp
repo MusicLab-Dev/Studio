@@ -7,9 +7,9 @@
 #include <QHash>
 
 #include "Models.hpp"
-#include "ControlModel.hpp"
+#include "ControlsModel.hpp"
 
-ControlModel::ControlModel(Audio::Control *control, QObject *parent) noexcept
+ControlModel::ControlModel(Audio::Control *control, ControlsModel *parent) noexcept
     : QAbstractListModel(parent), _data(control)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
@@ -92,6 +92,19 @@ void ControlModel::setManualPoint(const GPoint &manualPoint)
         [this, manualPoint = _data->manualPoint()] {
             if (manualPoint != _data->manualPoint())
                 emit manualPointChanged();
+        }
+    );
+}
+
+void ControlModel::setName(const QString &name)
+{
+    Models::AddProtectedEvent(
+        [this, name] {
+            this->setName(name);
+        },
+        [this, name = this->name()] {
+            if (name != this->name())
+                emit nameChanged();
         }
     );
 }

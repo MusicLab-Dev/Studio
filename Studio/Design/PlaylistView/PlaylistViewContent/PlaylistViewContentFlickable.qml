@@ -7,46 +7,28 @@ import "../../Common"
 import "./PlaylistViewContentNodeView"
 
 Item {
-    property alias rowHeight: playlistViewContentNodeView.rowHeight
-    // property alias totalHeight: playlistViewContentHeader.totalGridHeight
-    property alias totalHeight: playlistViewContentNodeView.totalHeight
+    property alias rowHeight: surfaceContentGrid.rowHeight
+    property alias totalHeight: nodeView.totalHeight
 
     id: playlistViewContentFlickable
 
     Rectangle {
-        x: playlistViewContentNodeView.headerWidth
-        width: parent.width - playlistViewContentNodeView.headerWidth
+        x: nodeView.headerWidth
+        width: parent.width - nodeView.headerWidth
         height: parent.height
         color: themeManager.backgroundColor
     }
 
     PlaylistViewContentNodeView {
-        id: playlistViewContentNodeView
+        id: nodeView
         anchors.fill: parent
     }
 
-    // Flickable {
-    //     id: flickable
-    //     anchors.fill: parent
-    //     clip: true
-    //     contentHeight: totalHeight
-    //     boundsBehavior: Flickable.StopAtBounds
-
-    //     ScrollBar.vertical: DefaultScrollBar {
-    //         policy: ScrollBar.AlwaysOn
-    //     }
-
-    //     PlaylistViewContentHeader {
-    //         id: playlistViewContentHeader
-    //         height: parent.height
-    //         width: parent.width * 0.2
-    //     }
-    // }
-
-    PlaylistViewContentGrid {
-        id: playlistViewContentGrid
+    SurfaceContentGrid {
+        id: surfaceContentGrid
+        contentYOffset: nodeView.contentY
         anchors.fill: parent
-        anchors.leftMargin: playlistViewContentNodeView.headerWidth
+        anchors.leftMargin: nodeView.headerWidth
     }
 
     PlaylistViewContentNodeViewPluginAddMenu {
@@ -68,21 +50,40 @@ Item {
         readonly property int zoomYRange: zoomYTo - zoomYFrom
         property real zoomYFactor: 0.5
 
+        readonly property int scrollXRange: nodeView.maxContentX - nodeView.minContentX
+        property real scrollXFactor: 0
+
+        readonly property int scrollYRange: nodeView.maxContentY - nodeView.minContentY
+        property real scrollYFactor: 0
+
         id: gestureArea
         anchors.fill: parent
         focus: true
 
         onZoomXFactorChanged: {
-            playlistViewContentGrid.barsPerLine = zoomXRange * zoomXFactor + zoomXFrom
+            surfaceContentGrid.barsPerLine = zoomXRange * zoomXFactor + zoomXFrom
         }
 
         onZoomYFactorChanged: {
             rowHeight = zoomYRange * zoomYFactor + zoomYFrom
         }
 
+        onScrollXFactorChanged: {
+            nodeView.contentX = scrollXRange * scrollXFactor + nodeView.minContentX
+        }
+
+        onScrollYFactorChanged: {
+            nodeView.contentY = scrollYRange * scrollYFactor + nodeView.minContentY
+        }
+
         onZoomed: {
-            zoomXFactor = Math.min(Math.max(zoomXFactor + zoomX / 500, 0), 1)
-            zoomYFactor = Math.min(Math.max(zoomYFactor + zoomY / 500, 0), 1)
+            zoomXFactor = Math.min(Math.max(zoomXFactor + zoomX / 360, 0), 1)
+            zoomYFactor = Math.min(Math.max(zoomYFactor + zoomY / 360, 0), 1)
+        }
+
+        onScrolled: {
+            scrollXFactor = Math.min(Math.max(scrollXFactor + scrollX / 360, 0), 1)
+            scrollYFactor = Math.min(Math.max(scrollYFactor + scrollY / 360, 0), 1)
         }
     }
 }

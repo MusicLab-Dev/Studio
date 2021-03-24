@@ -5,7 +5,7 @@ import "../Default"
 Item {
     property alias modules: modules
     property int componentSelected: 0
-    property real tabWidth: width * 0.2
+    property real tabWidth: width / Math.max(modules.count, 5)
 
     id: modulesViewContent
 
@@ -32,7 +32,6 @@ Item {
             ModulesViewTab {
                 height: parent.height * 0.05
                 width: tabWidth
-                x: index * parent.width * 0.20
                 z: 100
                 visible: index !== modules.count - 1
             }
@@ -40,7 +39,7 @@ Item {
             ModuleViewNewTabButton {
                 height: parent.height * 0.05
                 width: parent.height * 0.05
-                x: index * parent.width * 0.20
+                x: index * tabWidth
                 z: 100
                 visible: index === modules.count - 1
             }
@@ -54,5 +53,5 @@ Item {
                 focus: true
             }
         }
-    }
+    }    
 }

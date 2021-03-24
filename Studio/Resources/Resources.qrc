@@ -26,7 +26,8 @@
         <file>Assets/Soundwave.png</file>
         <file>Assets/Piano.png</file>
         <file>Assets/Note.png</file>
-        <file>Assets/Mute.png</file>
+        <file>Assets/Muted.png</file>
+        <file>Assets/Unmuted.png</file>
         <file>Assets/Disabled.png</file>
         <file>Assets/TestImage1.png</file>
         <file>Assets/TestImage2.png</file>

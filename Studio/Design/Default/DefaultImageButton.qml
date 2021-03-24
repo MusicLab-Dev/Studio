@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Button {
-    property string imgPath: ""
+    property alias source: image.source
     property color colorOnPressed: "#1A6DAA"
     property color colorHovered: "#338DCF"
     property color colorDefault: "#31A8FF"
@@ -23,10 +23,11 @@ Button {
     }
 
     indicator: DefaultColoredImage {
+        id: image
         anchors.centerIn: control
         width: control.width * scaleFactor
         height: control.height * scaleFactor
-        source: imgPath
+        source: control.source
         color: control.pressed ? colorOnPressed : control.hovered ? colorHovered : colorDefault
     }
 }

@@ -14,6 +14,8 @@
 
 #include "ControlModel.hpp"
 
+class NodeModel;
+
 /** @brief Exposes a list of audio controls */
 class ControlsModel : public QAbstractListModel
 {
@@ -26,10 +28,15 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit ControlsModel(Audio::Controls *controls, QObject *parent = nullptr) noexcept;
+    explicit ControlsModel(Audio::Controls *controls, NodeModel *parent = nullptr) noexcept;
 
     /** @brief Virtual destructor */
     ~ControlsModel(void) noexcept override = default;
+
+    /** @brief Get the parent node if it exists */
+    [[nodiscard]] NodeModel *parentNode(void) noexcept
+        { return reinterpret_cast<NodeModel *>(parent()); }
+
 
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
@@ -51,7 +58,7 @@ public slots:
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_controls.size()); }
 
     /** @brief Add a children to the list */
-    void add(const ParamID paramID);
+    void add(const quint32 paramID);
 
     /** @brief Remove a children from the list */
     void remove(const int index);
