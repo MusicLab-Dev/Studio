@@ -28,14 +28,18 @@ TEST(PartitionModel, AddNote)
     model.add(
         Note(
             Audio::BeatRange {1u, 2u},
-            1u,
-            10u)
+            static_cast<Key>(1),
+            static_cast<Velocity>(10),
+            static_cast<Tuning>(0)
+        )
     );
     model.add(
         Note(
             Audio::BeatRange {4u, 6u},
-            3u,
-            20u)
+            static_cast<Key>(3),
+            static_cast<Velocity>(20),
+            static_cast<Tuning>(0)
+        )
     );
     ASSERT_EQ(model.count(), 2);
 
