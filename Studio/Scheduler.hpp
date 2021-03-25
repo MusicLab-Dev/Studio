@@ -21,7 +21,7 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(Audio::Beat currentBeat READ currentBeat WRITE setCurrentBeat NOTIFY currentBeatChanged)
 
 public:
-    static inline const Audio::Device::Descriptor DefaultDeviceDescription {
+    static inline const Audio::Device::SDLDescriptor DefaultDeviceDescription {
         /*.name = */ "device-test",
         /*.blockSize = */ 1024u,
         /*.sampleRate = */ 44100,

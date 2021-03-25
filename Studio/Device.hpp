@@ -38,7 +38,7 @@ public:
 
 
     /** @brief Default constructor */
-    explicit Device(const Audio::Device::Descriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent = nullptr);
+    explicit Device(const Audio::Device::SDLDescriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent = nullptr);
 
     /** @brief Destruct the instance */
     ~Device(void) noexcept = default;

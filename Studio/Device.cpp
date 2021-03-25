@@ -7,7 +7,7 @@
 
 #include "Device.hpp"
 
-Device::Device(const Audio::Device::Descriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent)
+Device::Device(const Audio::Device::SDLDescriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent)
     : QObject(parent), _data(descriptor, std::move(callback))
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
