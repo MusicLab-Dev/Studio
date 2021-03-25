@@ -20,10 +20,39 @@ public:
     /** @brief Roles of each instance */
     enum class Roles : int {
         Name = Qt::UserRole + 1,
+        Description,
         Path,
         SDK,
         Tags
     };
+
+    /** @brief Factory tags */
+    enum class Tags {
+        Effect          = 1,
+        Analyzer        = 1 << 1,
+        Delay           = 1 << 2,
+        Distortion      = 1 << 3,
+        Dynamics        = 1 << 4,
+        EQ              = 1 << 5,
+        Filter          = 1 << 6,
+        Spatial         = 1 << 7,
+        Generator       = 1 << 8,
+        Mastering       = 1 << 9,
+        Modulation      = 1 << 10,
+        PitchShift      = 1 << 11,
+        Restoration     = 1 << 12,
+        Reverb          = 1 << 13,
+        Surround        = 1 << 14,
+        Tools           = 1 << 15,
+        Network         = 1 << 16,
+        Drum            = 1 << 17,
+        Instrument      = 1 << 18,
+        Piano           = 1 << 20,
+        Sampler         = 1 << 21,
+        Synth           = 1 << 22,
+        External        = 1 << 23
+    };
+    Q_ENUM(Tags)
 
     /** @brief Default constructor */
     explicit PluginTableModel(QObject *parent = nullptr) noexcept;

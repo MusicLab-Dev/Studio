@@ -6,5 +6,5 @@ Rectangle {
     height: 161
     border.color: "black"
     border.width: 1
-    visible: !pluginsView.currentFilter || pluginsView.currentFilter & modelData[1]
+    visible: !pluginsView.currentFilter || pluginsView.currentFilter & factoryTags
 }

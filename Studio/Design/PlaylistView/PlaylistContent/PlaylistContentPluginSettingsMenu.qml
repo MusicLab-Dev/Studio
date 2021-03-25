@@ -38,8 +38,15 @@ Menu {
         text: qsTr("Add child")
 
         onTriggered: {
-            targetNode.add("__internal__:/Mixer")
-            closeMenu()
+            pluginsView.open(
+                function() {
+                    targetNode.add(pluginsView.selectedPath)
+                    closeMenu()
+                },
+                function() {
+                    closeMenu()
+                }
+            )
         }
     }
 

@@ -68,7 +68,6 @@ MouseArea {
             break
         case ContentPlacementArea.Mode.Move:
             var beatPrecision = mouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
-            console.log(mouseBeatPrecision, beatPrecision, contentView.placementBeatPrecisionWidth)
             contentView.placementBeatPrecisionTo = beatPrecision + contentView.placementBeatPrecisionWidth
             contentView.placementBeatPrecisionFrom = beatPrecision
             break
