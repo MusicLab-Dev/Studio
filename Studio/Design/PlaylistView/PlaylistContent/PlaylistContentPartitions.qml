@@ -40,7 +40,6 @@ Repeater {
             }
 
             MuteButton {
-                id: muteMenuButton
                 x: nodeView.dataHeaderMuteButtonX
                 y: nodeView.dataHeaderSpacing
                 width: nodeView.dataHeaderNameHeight
@@ -54,14 +53,14 @@ Repeater {
             }
 
             SettingsButton {
-                id: settingsMenuButton
+                id: partitionSettingsMenuButton
                 x: nodeView.dataHeaderSettingsButtonX
                 y: nodeView.dataHeaderSpacing
                 width: nodeView.dataHeaderNameHeight
                 height: nodeView.dataHeaderNameHeight
 
                 onReleased: {
-                    partitionSettingsMenu.openMenu(settingsMenuButton, nodeDelegate.node, partitionDelegate.partition, index)
+                    partitionSettingsMenu.openMenu(partitionSettingsMenuButton, nodeDelegate.node, partitionDelegate.partition, index)
                 }
             }
         }
@@ -71,10 +70,10 @@ Repeater {
             x: nodeView.dataHeaderWidth
             width: nodeView.dataContentWidth
             height: contentView.rowHeight
-            instances: partitionDelegate.partition.instances
+            instances: partitionDelegate.partition ? partitionDelegate.partition.instances : null
 
             Repeater {
-                model: partitionDelegate.partition.instances
+                model: placementArea.instances
 
                 delegate: Rectangle {
                     x: contentView.xOffset + contentView.pixelsPerBeatPrecision * from

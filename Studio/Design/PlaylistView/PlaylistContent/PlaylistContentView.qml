@@ -20,4 +20,12 @@ ContentView {
     PlaylistContentPartitionSettingsMenu {
         id: partitionSettingsMenu
     }
+
+    PlaylistContentControlSettingsMenu {
+        id: controlSettingsMenu
+    }
+
+    PlaylistContentAutomationSettingsMenu {
+        id: automationSettingsMenu
+    }
 }

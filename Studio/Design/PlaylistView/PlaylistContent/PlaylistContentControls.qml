@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import ControlModel 1.0
+import AutomationModel 1.0
 import AudioAPI 1.0
 
 import "../../Default"
@@ -13,7 +14,7 @@ Repeater {
 
         id: controlDelegate
         width: nodeView.dataHeaderAndContentWidth
-        height: contentView.rowHeight
+        height: Math.max(automationColumn.height, contentView.rowHeight)
 
         Rectangle {
             id: dataBackground
@@ -25,6 +26,12 @@ Repeater {
             color: "transparent"
             border.color: nodeDelegate.node ? nodeDelegate.node.color : "white"
             border.width: nodeView.dataHeaderBorderWidth
+
+            Rectangle {
+                width: nodeView.dataHeaderControlRectangleWidth
+                height: nodeView.dataHeaderControlRectangleHeight
+                color: dataBackground.border.color
+            }
 
             DefaultText {
                 id: controlName
@@ -40,7 +47,6 @@ Repeater {
             }
 
             MuteButton {
-                id: muteMenuButton
                 x: nodeView.dataHeaderMuteButtonX
                 y: nodeView.dataHeaderSpacing
                 width: nodeView.dataHeaderNameHeight
@@ -54,33 +60,87 @@ Repeater {
             }
 
             SettingsButton {
-                id: settingsMenuButton
+                id: controlSettingsMenuButton
                 x: nodeView.dataHeaderSettingsButtonX
                 y: nodeView.dataHeaderSpacing
                 width: nodeView.dataHeaderNameHeight
                 height: nodeView.dataHeaderNameHeight
 
-                onReleased: {
-                    controlSettingsMenu.openMenu(settingsMenuButton, nodeDelegate.node, controlDelegate.control, index)
-                }
+                onReleased: controlSettingsMenu.openMenu(controlSettingsMenuButton, nodeDelegate.node, controlDelegate.control, index)
             }
         }
 
-        ContentPlacementArea {
-            id: placementArea
-            x: nodeView.dataHeaderWidth
-            width: nodeView.dataContentWidth
-            height: contentView.rowHeight
-            instances: controlDelegate.control.instances
+        Column {
+            id: automationColumn
+            width: nodeView.dataHeaderAndContentWidth
 
             Repeater {
-                model: controlDelegate.control.instances
+                model: controlDelegate.control
 
-                delegate: Rectangle {
-                    x: contentView.xOffset + contentView.pixelsPerBeatPrecision * from
-                    width: contentView.pixelsPerBeatPrecision * (to - from)
+                delegate: Item {
+                    property AutomationModel automation: automationInstance.instance
+
+                    id: automationDelegate
+                    width: nodeView.dataHeaderAndContentWidth
                     height: contentView.rowHeight
-                    color: nodeDelegate.node.color
+
+                    DefaultText {
+                        id: automationName
+                        visible: index !== 0 || nodeView.dataFirstAutomationVisible
+                        x: nodeView.dataHeaderSpacing
+                        y: index !== 0 ? nodeView.dataHeaderSpacing : nodeView.dataFirstAutomationNameY
+                        width: nodeView.dataHeaderNameWidth
+                        height: nodeView.dataHeaderNameHeight
+                        horizontalAlignment: Text.AlignLeft
+                        text: automationDelegate.automation ? automationDelegate.automation.name : ""
+                        color: "white"
+                        elide: Text.ElideRight
+                        font.pointSize: nodeView.dataHeaderNamePointSize
+                    }
+
+                    MuteButton {
+                        visible: index !== 0 || nodeView.dataFirstAutomationVisible
+                        x: nodeView.dataHeaderMuteButtonX
+                        y: automationName.y
+                        width: nodeView.dataHeaderNameHeight
+                        height: nodeView.dataHeaderNameHeight
+                        muted: automationDelegate.automation ? automationDelegate.automation.muted : false
+
+                        onMutedChanged: {
+                            if (automationDelegate.automation)
+                                automationDelegate.automation.muted = muted
+                        }
+                    }
+
+                    SettingsButton {
+                        id: automationSettingsMenuButton
+                        visible: index !== 0 || nodeView.dataFirstAutomationVisible
+                        x: nodeView.dataHeaderSettingsButtonX
+                        y: automationName.y
+                        width: nodeView.dataHeaderNameHeight
+                        height: nodeView.dataHeaderNameHeight
+
+                        onReleased: automationSettingsMenu.openMenu(automationSettingsMenuButton, controlDelegate.control, automationDelegate.automation, index)
+                    }
+
+                    ContentPlacementArea {
+                        id: placementArea
+                        x: nodeView.dataHeaderWidth
+                        width: nodeView.dataContentWidth
+                        height: contentView.rowHeight
+                        instances: automationDelegate.automation ? automationDelegate.automation.instances : null
+
+                        Repeater {
+                            model: placementArea.instances
+
+                            delegate: Rectangle {
+                                x: contentView.xOffset + contentView.pixelsPerBeatPrecision * from
+                                width: contentView.pixelsPerBeatPrecision * (to - from)
+                                height: contentView.rowHeight
+                                color: nodeDelegate.node.color
+                            }
+                        }
+                    }
                 }
             }
         }

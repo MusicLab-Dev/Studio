@@ -48,6 +48,10 @@ Item {
     readonly property real dataHeaderNamePointSize: dataHeaderNameHeight * 0.6
     readonly property real dataHeaderSettingsButtonX: dataHeaderDisplayWidth - dataHeaderNameHeight - dataHeaderSpacing
     readonly property real dataHeaderMuteButtonX: dataHeaderSettingsButtonX - dataHeaderNameHeight - dataHeaderSpacing
+    readonly property real dataFirstAutomationNameY: dataHeaderNameHeight + dataHeaderSpacing * 2
+    readonly property bool dataFirstAutomationVisible: rowHeight >= (dataFirstAutomationNameY + dataHeaderNameHeight)
+    readonly property real dataHeaderControlRectangleWidth: dataHeaderDisplayWidth
+    readonly property real dataHeaderControlRectangleHeight: dataHeaderNameHeight + dataHeaderSpacing * 2
 
     // External properties
     property alias totalHeight: master.height

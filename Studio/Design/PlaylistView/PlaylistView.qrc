@@ -12,5 +12,7 @@
         <file>PlaylistContent/PlaylistContentControls.qml</file>
         <file>PlaylistContent/PlaylistContentPartitions.qml</file>
         <file>PlaylistContent/PlaylistContentPartitionSettingsMenu.qml</file>
+        <file>PlaylistContent/PlaylistContentControlSettingsMenu.qml</file>
+        <file>PlaylistContent/PlaylistContentAutomationSettingsMenu.qml</file>
     </qresource>
 </RCC>
