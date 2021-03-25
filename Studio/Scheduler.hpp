@@ -22,7 +22,7 @@ class Scheduler : public QObject, private Audio::AScheduler
 
 public:
     static inline const Audio::Device::SDLDescriptor DefaultDeviceDescription {
-        /*.name = */ "device-test",
+        /*.name = */ std::string(),
         /*.blockSize = */ 1024u,
         /*.sampleRate = */ 44100,
         /*.isInput = */ false,

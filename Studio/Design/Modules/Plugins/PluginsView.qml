@@ -23,7 +23,7 @@ PluginsBackground {
     property var acceptedCallback: function() {}
     property var canceledCallback: function() {}
 
-    property int currentFilter: PluginsView.None
+    property int currentFilter: 0
     property string selectedPath: ""
 
     id: pluginsView
