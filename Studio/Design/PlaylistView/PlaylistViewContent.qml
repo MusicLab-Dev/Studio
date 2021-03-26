@@ -7,6 +7,8 @@ import "../Common"
 import "./PlaylistContent"
 
 Column {
+    property alias contentView: contentView
+
     id: playlistViewContent
     spacing: 0
 
