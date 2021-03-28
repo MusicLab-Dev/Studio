@@ -5,7 +5,7 @@
 
 #include <QQmlEngine>
 
-#include "Scheduler.hpp"
+#include "Models.hpp"
 
 Scheduler::Scheduler(QObject *parent)
     : QObject(parent), Audio::AScheduler(), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this)
@@ -21,16 +21,21 @@ Scheduler::~Scheduler(void) noexcept
     _Instance = nullptr;
 }
 
-bool Scheduler::setCurrentBeat(const Audio::Beat beat) noexcept
+void Scheduler::setCurrentBeat(const Audio::Beat beat)
 {
     if (currentBeat() == beat)
-        return false;
-    auto range = Audio::AScheduler::currentBeatRange();
-    range.to = beat + 2048; // Change to settings getter: processing length
-    range.from = beat;
-    Audio::AScheduler::setBeatRange(range);
-    emit currentBeatChanged();
-    return true;
+        return;
+    Models::AddProtectedEvent(
+        [this, beat] {
+            auto range = Audio::AScheduler::currentBeatRange();
+            range.to = beat + Audio::AScheduler::processBeatSize(); // Change to settings getter: processing length
+            range.from = beat;
+            Audio::AScheduler::setBeatRange(range);
+        },
+        [this] {
+            emit currentBeatChanged();
+        }
+    );
 }
 
 void Scheduler::onAudioBlockGenerated(void)
@@ -59,7 +64,5 @@ void Scheduler::stop(void)
 {
     if (!setState(Audio::AScheduler::State::Pause))
         _device.stop();
-    Audio::AScheduler::addEvent([this] {
-        setCurrentBeat(0);
-    });
+    setCurrentBeat(0);
 }

@@ -21,7 +21,7 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(Audio::Beat currentBeat READ currentBeat WRITE setCurrentBeat NOTIFY currentBeatChanged)
 
 public:
-    static inline const Audio::Device::SDLDescriptor DefaultDeviceDescription {
+    static inline const Audio::Device::LogicalDescriptor DefaultDeviceDescription {
         /*.name = */ std::string(),
         /*.blockSize = */ 1024u,
         /*.sampleRate = */ 44100,
@@ -47,7 +47,7 @@ public:
     [[nodiscard]] Audio::Beat currentBeat(void) const noexcept { return Audio::AScheduler::currentBeatRange().from; }
 
     /** @brief Set the current beat */
-    bool setCurrentBeat(const Audio::Beat beat) noexcept;
+    void setCurrentBeat(const Audio::Beat beat);
 
 
     /** @brief Audio block generated event */

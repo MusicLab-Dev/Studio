@@ -27,17 +27,15 @@ Item {
     property int octaveOffset: 1
     readonly property int keys: keysPerOctave * octaves
     property real headerFactor: 0.1
-    property real rowHeight: 30
     property real keyWidth: parent.width * headerFactor
-    readonly property real totalGridHeight: keys * rowHeight
+    readonly property real totalHeight: keys * rowHeight
 
-    id: piano
+    id: pianoView
     width: keyWidth
-    height: totalGridHeight
+    height: totalHeight
 
     Repeater {
-
-        model: piano.keys
+        model: pianoView.keys
 
         delegate: Item {
             readonly property int currentOctave: octaveOffset + index / keysPerOctave
@@ -49,18 +47,17 @@ Item {
             readonly property color keyColor: isHashKey ? "#7B7B7B" : "#E7E7E7"
 
             id: key
-            width: piano.keyWidth
-            height: piano.rowHeight
-            y: index * piano.rowHeight
+            width: pianoView.keyWidth
+            height: contentView.rowHeight
+            y: index * contentView.rowHeight
             z: isHashKey ? 100 : 1
 
             Rectangle {
                 id: keyBackground
-                x: 20
-                y: key.isUpHashKey ? -piano.rowHeight / 2 : 0
+                y: key.isUpHashKey ? -contentView.rowHeight / 2 : 0
                 z: 1
-                width: (key.isHashKey ? piano.keyWidth * 0.75 : piano.keyWidth) - x
-                height: piano.rowHeight * (key.isHashKey ? 1 : key.isInMiddleOfHashKeys ? 2 : 1.5)
+                width: (key.isHashKey ? pianoView.keyWidth * 0.75 : pianoView.keyWidth) - x
+                height: contentView.rowHeight * (key.isHashKey ? 1 : key.isInMiddleOfHashKeys ? 2 : 1.5)
                 color: key.keyColor
                 border.color: key.isHashKey ? color : "#7B7B7B"
                 border.width: 1
@@ -78,11 +75,19 @@ Item {
                 Text {
                     anchors.verticalCenter: key.isInMiddleOfHashKeys ? parent.verticalCenter : key.isDownHashKey ? parent.TopRight : parent.verticalCenter
                     anchors.right: parent.right
-                    text: piano.keyNames[key.keyIndex] + key.currentOctave
+                    text: pianoView.keyNames[key.keyIndex] + key.currentOctave
                     color: !key.isHashKey ? "#7B7B7B" : "#E7E7E7"
                     z: 1
                 }
             }
+        }
+    }
+
+    Repeater {
+        model: sequencerView.partition
+
+        delegate: Rectangle {
+            y: key * contentView.rowHeight
         }
     }
 }
