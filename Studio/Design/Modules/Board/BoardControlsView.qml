@@ -60,16 +60,12 @@ Rectangle {
         Repeater {
             model: board
 
-            delegate: Rectangle {
+            delegate: DefaultImageButton {
                 x: controlPos.x * boardGrid.cellWidth
                 y: controlPos.y * boardGrid.cellHeight
                 width: boardGrid.cellWidth
                 height: boardGrid.cellHeight
-                color: controlType === Board.ControlType.Button ? "pink" : controlType === Board.ControlType.Potentiometer ? "purple" : "black"
-
-                DefaultText {
-                    text: controlData
-                }
+                imgPath: controlType === Board.ControlType.Button ? "qrc:/Assets/BoardButton.png" : controlType === Board.ControlType.Potentiometer ? "qrc:/Assets/BoardPotentiometer.png" : ""
             }
         }
     }

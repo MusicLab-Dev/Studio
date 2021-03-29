@@ -42,5 +42,7 @@
         <file>Assets/Settings/Info.png</file>
         <file>Assets/Settings/Midi.png</file>
         <file>Assets/Settings/Project.png</file>
+        <file>Assets/BoardButton.png</file>
+        <file>Assets/BoardPotentiometer.png</file>
     </qresource>
 </RCC>
