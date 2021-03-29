@@ -44,6 +44,7 @@ Rectangle {
         drag.target: parent
         drag.minimumY: 0
         drag.maximumY: 0
+        hoverEnabled: true
 
         onPressed: {
             componentSelected = index
@@ -59,7 +60,7 @@ Rectangle {
         text: title
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        color: componentSelected === index ? "white" : "black"
+        color: componentSelected === index ? "white" : mouseArea.containsMouse ? "black" : themeManager.disabledColor
         elide: Text.ElideRight
         clip: true
     }
