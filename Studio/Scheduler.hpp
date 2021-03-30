@@ -77,6 +77,10 @@ public:
     void setOnTheFlyCurrentBeat(const Beat beat);
 
 
+    /** @brief Get device specs */
+    [[nodiscard]] const Audio::AudioSpecs &audioSpecs(void) const noexcept { return _audioSpecs; }
+
+
     /** @brief Audio block generated event */
     void onAudioBlockGenerated(void) override final;
 
@@ -115,8 +119,18 @@ signals:
     /** @brief Events which Notify to need to notify */
     void needToNotifyEvents(void);
 
+    /** @brief Events which notify main thread the audio thread has been locked */
+    void audioThreadLocked(void);
+
 private:
     Device _device;
+    Audio::AudioSpecs _audioSpecs;
 
     static inline Scheduler *_Instance { nullptr };
+
+    /** @brief Called when the audio thread has been locked */
+    void onAudioThreadLocked(void);
+
+    /** @brief Called when the audio thread has been released */
+    void onAudioThreadReleased(void);
 };

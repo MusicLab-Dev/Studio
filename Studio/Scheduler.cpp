@@ -8,12 +8,20 @@
 #include "Models.hpp"
 
 Scheduler::Scheduler(QObject *parent)
-    : QObject(parent), Audio::AScheduler(), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this)
+    : QObject(parent), Audio::AScheduler(), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this), _audioSpecs(Audio::AudioSpecs {
+        _device.sampleRate(),
+        static_cast<Audio::ChannelArrangement>(_device.channelArrangement()),
+        static_cast<Audio::Format>(_device.format()),
+        processBlockSize()
+    })
 {
     if (_Instance)
         throw std::runtime_error("Scheduler::Scheduler: An instance of the scheduler already exists");
     _Instance = this;
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
+
+    connect(this, &Scheduler::audioThreadLocked, this, &Scheduler::onAudioThreadLocked, Qt::BlockingQueuedConnection);
+    connect(this, &Scheduler::audioThreadLocked, this, &Scheduler::onAudioThreadReleased, Qt::QueuedConnection);
 }
 
 Scheduler::~Scheduler(void) noexcept
@@ -112,7 +120,8 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
 
 void Scheduler::onAudioBlockGenerated(void)
 {
-    /** TODO */
+    // Currently in a worker thread, we must notify the main thread and block until events are processed
+    emit onAudioThreadLocked();
 }
 
 void Scheduler::onAudioQueueBusy(void)
@@ -146,4 +155,16 @@ void Scheduler::stop(void)
     case PlaybackMode::OnTheFly:
         return setOnTheFlyCurrentBeat(0u);
     }
+}
+
+void Scheduler::onAudioThreadLocked(void)
+{
+    qDebug() << "onAudioThreadLocked";
+    AScheduler::dispatchApplyEvents();
+}
+
+void Scheduler::onAudioThreadReleased(void)
+{
+    qDebug() << "onAudioThreadReleased";
+    AScheduler::dispatchNotifyEvents();
 }

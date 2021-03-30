@@ -80,6 +80,7 @@ public:
     /** @brief Set the record */
     void setBlockSize(const quint16 blockSize) noexcept;
 
+
     /** @brief Register the audio callback */
     void start(void) { _data.start(); }
 
