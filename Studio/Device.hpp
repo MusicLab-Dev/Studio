@@ -9,6 +9,8 @@
 
 #include <Audio/Device.hpp>
 
+#include "Base.hpp"
+
 /** @brief Device class */
 class Device : public QObject
 {
@@ -38,7 +40,7 @@ public:
 
 
     /** @brief Default constructor */
-    explicit Device(const Audio::Device::Descriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent = nullptr);
+    explicit Device(const Audio::Device::LogicalDescriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent = nullptr);
 
     /** @brief Destruct the instance */
     ~Device(void) noexcept = default;
@@ -48,35 +50,35 @@ public:
     [[nodiscard]] quint32 sampleRate(void) const noexcept { return _data.sampleRate(); }
 
     /** @brief SET the sample rate */
-    bool setSampleRate(const quint32 sampleRate) noexcept;
+    void setSampleRate(const quint32 sampleRate) noexcept;
 
 
     /** @brief Get the format */
     [[nodiscard]] Format format(void) const noexcept { return static_cast<Format>(_data.format()); }
 
     /** @brief Set the format */
-    bool setFormat(const Format format) noexcept;
+    void setFormat(const Format format) noexcept;
 
 
     /** @brief Get the channels */
     [[nodiscard]] ChannelArrangement channelArrangement(void) const noexcept { return static_cast<ChannelArrangement>(_data.channelArrangement()); }
 
     /** @brief Set the channels */
-    bool setChannelArrangement(const ChannelArrangement channels) noexcept;
+    void setChannelArrangement(const ChannelArrangement channels) noexcept;
 
 
     /** @brief Get the record */
     [[nodiscard]] quint16 midiChannels(void) const noexcept { return _data.midiChannels(); }
 
     /** @brief Set the record */
-    bool setMidiChannels(const quint16 midiChannels) noexcept;
+    void setMidiChannels(const quint16 midiChannels) noexcept;
 
 
     /** @brief Get the record */
     [[nodiscard]] quint16 blockSize(void) const noexcept { return _data.blockSize(); }
 
     /** @brief Set the record */
-    bool setBlockSize(const quint16 blockSize) noexcept;
+    void setBlockSize(const quint16 blockSize) noexcept;
 
     /** @brief Register the audio callback */
     void start(void) { _data.start(); }

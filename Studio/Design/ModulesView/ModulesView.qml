@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import "../Modules/Plugins"
+
 Rectangle {
     property alias modulesViewContent: modulesViewContent
     property alias modules: modulesViewContent.modules
@@ -22,6 +24,12 @@ Rectangle {
         }
     }
 
+    PluginsView {
+        id: pluginsView
+        width: parent.width * 0.9
+        height: parent.height * 0.9
+        anchors.centerIn: parent
+    }
 
     Shortcut {
         sequence: "Ctrl+T"

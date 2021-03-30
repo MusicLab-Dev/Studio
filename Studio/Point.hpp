@@ -39,9 +39,7 @@ public:
 
     /** @brief Get / Set the internal curve type */
     [[nodiscard]] CurveType getType(void) const noexcept { return static_cast<GPoint::CurveType>(type); }
-    bool setType(const CurveType type_) noexcept;
+    void setType(const CurveType type_) noexcept { type = static_cast<Audio::Point::CurveType>(type_); }
 };
 
 Q_DECLARE_METATYPE(GPoint)
-
-#include "Point.ipp"

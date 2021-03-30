@@ -5,7 +5,7 @@
 
 #include <QQmlEngine>
 
-#include "Scheduler.hpp"
+#include "Models.hpp"
 
 Scheduler::Scheduler(QObject *parent)
     : QObject(parent), Audio::AScheduler(), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this)
@@ -21,16 +21,93 @@ Scheduler::~Scheduler(void) noexcept
     _Instance = nullptr;
 }
 
-bool Scheduler::setCurrentBeat(const Audio::Beat beat) noexcept
+void Scheduler::setPlaybackMode(const PlaybackMode mode) noexcept
 {
-    if (currentBeat() == beat)
-        return false;
-    auto range = Audio::AScheduler::currentBeatRange();
-    range.to = beat + 2048; // Change to settings getter: processing length
-    range.from = beat;
-    Audio::AScheduler::setBeatRange(range);
-    emit currentBeatChanged();
-    return true;
+    Models::AddProtectedEvent(
+        [this, mode] {
+            Audio::AScheduler::setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
+        },
+        [this, mode = playbackMode()] {
+            if (mode != playbackMode())
+                emit playbackModeChanged();
+        }
+    );
+}
+
+void Scheduler::setProductionCurrentBeat(const Beat beat)
+{
+    const auto currentBeat = productionCurrentBeat();
+
+    if (currentBeat == beat)
+        return;
+    Models::AddProtectedEvent(
+        [this, beat] {
+            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Production>();
+            range.to = beat + Audio::AScheduler::processBeatSize();
+            range.from = beat;
+        },
+        [this, currentBeat] {
+            if (currentBeat != productionCurrentBeat())
+                emit productionCurrentBeatChanged();
+        }
+    );
+}
+
+void Scheduler::setLiveCurrentBeat(const Beat beat)
+{
+    const auto currentBeat = liveCurrentBeat();
+
+    if (currentBeat == beat)
+        return;
+    Models::AddProtectedEvent(
+        [this, beat] {
+            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Live>();
+            range.to = beat + Audio::AScheduler::processBeatSize();
+            range.from = beat;
+        },
+        [this, currentBeat] {
+            if (currentBeat != liveCurrentBeat())
+                emit liveCurrentBeatChanged();
+        }
+    );
+}
+
+void Scheduler::setPartitionCurrentBeat(const Beat beat)
+{
+    const auto currentBeat = partitionCurrentBeat();
+
+    if (currentBeat == beat)
+        return;
+    Models::AddProtectedEvent(
+        [this, beat] {
+            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Partition>();
+            range.to = beat + Audio::AScheduler::processBeatSize();
+            range.from = beat;
+        },
+        [this, currentBeat] {
+            if (currentBeat != partitionCurrentBeat())
+                emit partitionCurrentBeatChanged();
+        }
+    );
+}
+
+void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
+{
+    const auto currentBeat = onTheFlyCurrentBeat();
+
+    if (currentBeat == beat)
+        return;
+    Models::AddProtectedEvent(
+        [this, beat] {
+            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::OnTheFly>();
+            range.to = beat + Audio::AScheduler::processBeatSize();
+            range.from = beat;
+        },
+        [this, currentBeat] {
+            if (currentBeat != onTheFlyCurrentBeat())
+                emit onTheFlyCurrentBeatChanged();
+        }
+    );
 }
 
 void Scheduler::onAudioBlockGenerated(void)
@@ -59,7 +136,14 @@ void Scheduler::stop(void)
 {
     if (!setState(Audio::AScheduler::State::Pause))
         _device.stop();
-    Audio::AScheduler::addEvent([this] {
-        setCurrentBeat(0);
-    });
+    switch (playbackMode()) {
+    case PlaybackMode::Production:
+        return setProductionCurrentBeat(0u);
+    case PlaybackMode::Live:
+        return setLiveCurrentBeat(0u);
+    case PlaybackMode::Partition:
+        return setPartitionCurrentBeat(0u);
+    case PlaybackMode::OnTheFly:
+        return setOnTheFlyCurrentBeat(0u);
+    }
 }

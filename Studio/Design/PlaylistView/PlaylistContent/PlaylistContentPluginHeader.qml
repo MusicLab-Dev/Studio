@@ -30,7 +30,6 @@ Item {
         }
 
         MuteButton {
-            id: muteMenuButton
             x: nodeView.pluginHeaderMuteButtonX
             y: nodeView.pluginHeaderSpacing
             width: nodeView.pluginHeaderNameHeight
@@ -44,13 +43,13 @@ Item {
         }
 
         SettingsButton {
-            id: settingsMenuButton
+            id: pluginSettingsMenuButton
             x: nodeView.pluginHeaderSettingsButtonX
             y: nodeView.pluginHeaderSpacing
             width: nodeView.pluginHeaderNameHeight
             height: nodeView.pluginHeaderNameHeight
 
-            onReleased: pluginSettingsMenu.openMenu(settingsMenuButton, nodeDelegate.node, index)
+            onReleased: pluginSettingsMenu.openMenu(pluginSettingsMenuButton, nodeDelegate.node, index)
         }
     }
 }

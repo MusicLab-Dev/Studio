@@ -22,7 +22,7 @@ Item {
     // Plugin header content
     readonly property real pluginHeaderSpacing: 2
     readonly property real pluginHeaderNameWidth: pluginHeaderDisplayWidth - pluginHeaderNameHeight * 2 - pluginHeaderSpacing * 4
-    readonly property real pluginHeaderNameHeight: Math.min(30, (rowHeight - pluginHeaderVerticalPadding - pluginHeaderSpacing * 2))
+    readonly property real pluginHeaderNameHeight: Math.min(30, (contentView.rowHeight - pluginHeaderVerticalPadding - pluginHeaderSpacing * 2))
     readonly property real pluginHeaderNamePointSize: pluginHeaderNameHeight * 0.6
     readonly property real pluginHeaderSettingsButtonX: pluginHeaderDisplayWidth - pluginHeaderNameHeight - pluginHeaderSpacing
     readonly property real pluginHeaderMuteButtonX: pluginHeaderSettingsButtonX - pluginHeaderNameHeight - pluginHeaderSpacing
@@ -44,10 +44,14 @@ Item {
     // Data header content
     readonly property real dataHeaderSpacing: 2
     readonly property real dataHeaderNameWidth: dataHeaderDisplayWidth - dataHeaderNameHeight * 2 - dataHeaderSpacing * 4
-    readonly property real dataHeaderNameHeight: Math.min(30, (rowHeight - dataHeaderVerticalPadding - dataHeaderSpacing * 2))
+    readonly property real dataHeaderNameHeight: Math.min(30, (contentView.rowHeight - dataHeaderVerticalPadding - dataHeaderSpacing * 2))
     readonly property real dataHeaderNamePointSize: dataHeaderNameHeight * 0.6
     readonly property real dataHeaderSettingsButtonX: dataHeaderDisplayWidth - dataHeaderNameHeight - dataHeaderSpacing
     readonly property real dataHeaderMuteButtonX: dataHeaderSettingsButtonX - dataHeaderNameHeight - dataHeaderSpacing
+    readonly property real dataFirstAutomationNameY: dataHeaderNameHeight + dataHeaderSpacing * 2
+    readonly property bool dataFirstAutomationVisible: contentView.rowHeight >= (dataFirstAutomationNameY + dataHeaderNameHeight)
+    readonly property real dataHeaderControlRectangleWidth: dataHeaderDisplayWidth
+    readonly property real dataHeaderControlRectangleHeight: dataHeaderNameHeight + dataHeaderSpacing * 2
 
     // External properties
     property alias totalHeight: master.height

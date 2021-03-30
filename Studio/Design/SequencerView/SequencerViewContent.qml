@@ -4,12 +4,12 @@ import QtQuick.Controls 2.15
 
 import "../Default/"
 import "../Common"
-import "./PlaylistContent"
+import "./SequencerContent"
 
 Column {
     property alias contentView: contentView
 
-    id: playlistViewContent
+    id: sequencerViewContent
     spacing: 0
 
     ContentTimeline {
@@ -74,7 +74,7 @@ Column {
         }
     }
 
-    PlaylistContentView {
+    SequencerContentView {
         id: contentView
         width: parent.width
         height: parent.height - timeline.height

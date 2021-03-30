@@ -59,7 +59,8 @@ Item {
 
     // Placement states in beat precision (128 unit = 1 beat)
     readonly property real placementBeatPrecisionWidth: placementBeatPrecisionTo - placementBeatPrecisionFrom
-    property real placementBeatPrecisionDefaultWidth: beatPrecision
+    property real placementBeatPrecisionDefaultWidth: placementBeatPrecisionScale !== 0 ? placementBeatPrecisionScale : beatPrecision
+    property real placementKey: 0 // Only used for notes
     property real placementBeatPrecisionFrom: 0
     property real placementBeatPrecisionTo: 0
     property real placementBeatPrecisionMouseOffset: 0
@@ -68,7 +69,11 @@ Item {
     readonly property real placementPixelFrom: xOffset + pixelsPerBeatPrecision * placementBeatPrecisionFrom
     readonly property real placementPixelTo: xOffset + pixelsPerBeatPrecision * placementBeatPrecisionTo
     readonly property real placementPixelWidth: pixelsPerBeatPrecision * placementBeatPrecisionWidth
+    readonly property real placementPixelY: height - placementKey * rowHeight
+    readonly property real placementResizeMaxPixelThreshold: 20
 
+    // Scale used to perfectly fit placements in beat
+    property int placementBeatPrecisionScale: 0
 
     id: contentView
 
@@ -136,6 +141,7 @@ Item {
 
         id: placementRectangle
         x: contentView.placementPixelFrom
+        y: contentView.placementPixelY
         width: contentView.placementPixelWidth
         height: contentView.rowHeight
         visible: false

@@ -118,6 +118,9 @@ public slots:
     /** @brief Add node */
     void add(const Note &note);
 
+    /** @brief Find an instance in the list using a single beat point */
+    int find(const quint8 key, const quint32 beat) const noexcept;
+
     /** @brief Remove note at index */
     void remove(const int index);
 

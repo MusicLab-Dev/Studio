@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import PluginTableModel 1.0
+
 import "../../Default"
 
 Rectangle {
@@ -69,29 +71,29 @@ Rectangle {
             spacing: parent.height * 0.04
 
             model: [
-                PluginsView.Effect,
-                PluginsView.Analyzer,
-                PluginsView.Delay,
-                PluginsView.Distortion,
-                PluginsView.Dynamics,
-                PluginsView.EQ,
-                PluginsView.Filter,
-                PluginsView.Spatial,
-                PluginsView.Generator,
-                PluginsView.Mastering,
-                PluginsView.Modulation,
-                PluginsView.PitchShift,
-                PluginsView.Restoration,
-                PluginsView.Reverb,
-                PluginsView.Surround,
-                PluginsView.Tools,
-                PluginsView.Network,
-                PluginsView.Drum,
-                PluginsView.Instrument,
-                PluginsView.Piano,
-                PluginsView.Sampler,
-                PluginsView.Synth,
-                PluginsView.External
+                PluginTableModel.Tags.Effect,
+                PluginTableModel.Tags.Analyzer,
+                PluginTableModel.Tags.Delay,
+                PluginTableModel.Tags.Distortion,
+                PluginTableModel.Tags.Dynamics,
+                PluginTableModel.Tags.EQ,
+                PluginTableModel.Tags.Filter,
+                PluginTableModel.Tags.Spatial,
+                PluginTableModel.Tags.Generator,
+                PluginTableModel.Tags.Mastering,
+                PluginTableModel.Tags.Modulation,
+                PluginTableModel.Tags.PitchShift,
+                PluginTableModel.Tags.Restoration,
+                PluginTableModel.Tags.Reverb,
+                PluginTableModel.Tags.Surround,
+                PluginTableModel.Tags.Tools,
+                PluginTableModel.Tags.Network,
+                PluginTableModel.Tags.Drum,
+                PluginTableModel.Tags.Instrument,
+                PluginTableModel.Tags.Piano,
+                PluginTableModel.Tags.Sampler,
+                PluginTableModel.Tags.Synth,
+                PluginTableModel.Tags.External
             ]
 
             delegate: Row {

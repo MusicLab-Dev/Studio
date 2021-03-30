@@ -18,16 +18,29 @@ class Scheduler : public QObject, private Audio::AScheduler
 {
     Q_OBJECT
 
-    Q_PROPERTY(Audio::Beat currentBeat READ currentBeat WRITE setCurrentBeat NOTIFY currentBeatChanged)
+    Q_PROPERTY(PlaybackMode playbackMode READ playbackMode WRITE setPlaybackMode NOTIFY playbackModeChanged)
+    Q_PROPERTY(quint32 productionCurrentBeat READ productionCurrentBeat WRITE setProductionCurrentBeat NOTIFY productionCurrentBeatChanged)
+    Q_PROPERTY(quint32 liveCurrentBeat READ liveCurrentBeat WRITE setLiveCurrentBeat NOTIFY liveCurrentBeatChanged)
+    Q_PROPERTY(quint32 partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat NOTIFY partitionCurrentBeatChanged)
+    Q_PROPERTY(quint32 onTheFlyCurrentBeat READ onTheFlyCurrentBeat WRITE setOnTheFlyCurrentBeat NOTIFY onTheFlyCurrentBeatChanged)
 
 public:
-    static inline const Audio::Device::Descriptor DefaultDeviceDescription {
-        /*.name = */ "device-test",
-        /*.blockSize = */ 1024u,
-        /*.sampleRate = */ 44100,
-        /*.isInput = */ false,
-        /*.format = */ Audio::Format::Floating32,
-        /*.midiChannels = */ 2u,
+    /** @brief The different types of playback mode */
+    enum class PlaybackMode : int {
+        Production = static_cast<int>(Audio::PlaybackMode::Production),
+        Live = static_cast<int>(Audio::PlaybackMode::Live),
+        Partition = static_cast<int>(Audio::PlaybackMode::Partition),
+        OnTheFly = static_cast<int>(Audio::PlaybackMode::OnTheFly)
+    };
+    Q_ENUM(PlaybackMode)
+
+    static inline const Audio::Device::LogicalDescriptor DefaultDeviceDescription {
+        /*.name =               */ {},
+        /*.blockSize =          */ 1024u,
+        /*.sampleRate =         */ 44100,
+        /*.isInput =            */ false,
+        /*.format =             */ Audio::Format::Floating32,
+        /*.midiChannels =       */ 2u,
         /*.channelArrangement = */ Audio::ChannelArrangement::Mono
     };
 
@@ -44,10 +57,24 @@ public:
     ~Scheduler(void) noexcept;
 
 
-    [[nodiscard]] Audio::Beat currentBeat(void) const noexcept { return Audio::AScheduler::currentBeatRange().from; }
+    /** @brief Get the playback mode */
+    [[nodiscard]] PlaybackMode playbackMode(void) const noexcept { return static_cast<PlaybackMode>(Audio::AScheduler::playbackMode()); }
+
+    /** @brief Set the playback mode, return true and emit playbackModeChanged on change */
+    void setPlaybackMode(const PlaybackMode playbackMode) noexcept;
+
+
+    /** @brief Get the current beat */
+    [[nodiscard]] Beat productionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Production>().from; }
+    [[nodiscard]] Beat liveCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Live>().from; }
+    [[nodiscard]] Beat partitionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Partition>().from; }
+    [[nodiscard]] Beat onTheFlyCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::OnTheFly>().from; }
 
     /** @brief Set the current beat */
-    bool setCurrentBeat(const Audio::Beat beat) noexcept;
+    void setProductionCurrentBeat(const Beat beat);
+    void setLiveCurrentBeat(const Beat beat);
+    void setPartitionCurrentBeat(const Beat beat);
+    void setOnTheFlyCurrentBeat(const Beat beat);
 
 
     /** @brief Audio block generated event */
@@ -67,8 +94,20 @@ public slots:
     void stop(void);
 
 signals:
-    /** @brief Notify that current beat property has changed */
-    void currentBeatChanged(void);
+    /** @brief Notify when playback mode changed */
+    void playbackModeChanged(void);
+
+    /** @brief Notify that production current beat property has changed */
+    void productionCurrentBeatChanged(void);
+
+    /** @brief Notify that live current beat property has changed */
+    void liveCurrentBeatChanged(void);
+
+    /** @brief Notify that partition current beat property has changed */
+    void partitionCurrentBeatChanged(void);
+
+    /** @brief Notify that on the fly current beat property has changed */
+    void onTheFlyCurrentBeatChanged(void);
 
     /** @brief Events which Notify to need to apply */
     void needToApplyEvents(void);

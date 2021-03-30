@@ -2,23 +2,28 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import NodeModel 1.0
+import ControlModel 1.0
 
 Menu {
     property var rootParent: null
     property var targetItem: null
     property NodeModel targetNode: null
-    property int targetNodeIndex: 0
+    property ControlModel targetControl: null
+    property int targetControlIndex: 0
 
-    function openMenu(newParent, node, nodeIndex) {
+    function openMenu(newParent, node, control, controlIndex) {
         targetItem = newParent
         targetNode = node
-        targetNodeIndex = nodeIndex
+        targetControl = control
+        targetControlIndex = controlIndex
         open()
     }
 
     function closeMenu() {
         targetItem = null
         targetNode = null
+        targetControl = null
+        targetControlIndex = 0
         close()
     }
 
@@ -31,15 +36,22 @@ Menu {
             parent = rootParent
     }
 
-    id: pluginAddMenu
+    id: controlAddMenu
+
+    Action {
+        text: qsTr("Add automation")
+
+        onTriggered: {
+            targetControl.add()
+            closeMenu()
+        }
+    }
 
     Action {
         text: qsTr("Remove")
 
-        enabled: targetNode ? targetNode.parentNode : true
-
         onTriggered: {
-            targetNode.parentNode.remove(targetNodeIndex)
+            targetNode.controls.remove(targetControlIndex)
             closeMenu()
         }
     }

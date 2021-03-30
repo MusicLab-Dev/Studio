@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import "../../Default"
+
 Rectangle {
     id: pluginsContentArea
     color: parent.color
@@ -11,27 +13,28 @@ Rectangle {
         cellHeight: 250
 
 
-        model: [
-            ["Equalizer", PluginsView.Effect | PluginsView.EQ],
-            ["Classic piano", PluginsView.Instrument | PluginsView.Piano]
-        ]
+        model: pluginTable
 
         delegate: PluginsSquareComponent {
 
-            Image {
+            DefaultImageButton {
                 anchors.fill: parent
-                source: modelData[0] === "Equalizer" ? "qrc:/Assets/TestImage1.png" : "qrc:/Assets/TestImage2.png"
+                source: "qrc:/Assets/TestImage1.png"
+
+                onReleased: {
+                    pluginsView.acceptAndClose(factoryPath)
+                }
             }
 
             PluginsSquareComponentTitle {
                 id: title
-                text: modelData[0]
+                text: factoryName
             }
 
             Text {
                 x: parent.width - width
                 y: title.y + title.height
-                text: qsTr("voir plus...")
+                text: factoryDescription
                 color: "#FFFFFF"
                 opacity: 0.42
                 font.pointSize: 11

@@ -11,11 +11,11 @@ Menu {
     property PartitionModel targetPartition: null
     property int targetPartitionIndex: 0
 
-    function openMenu(newParent, node, partition, nodeIndex) {
+    function openMenu(newParent, node, partition, partitionIndex) {
         targetItem = newParent
         targetNode = node
         targetPartition = partition
-        targetPartitionIndex = nodeIndex
+        targetPartitionIndex = partitionIndex
         open()
     }
 

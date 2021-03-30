@@ -14,7 +14,7 @@ TEST(NodeModel, InitDestroy)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Node node {};
+    Audio::Node node { nullptr };
 
     ASSERT_NO_THROW(NodeModel tmp(&node));
 }
@@ -24,7 +24,7 @@ TEST(NodeModel, Color)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Node node {};
+    Audio::Node node { nullptr };
 
     NodeModel model(&node);
     model.setColor(Qt::red);
@@ -36,7 +36,7 @@ TEST(NodeModel, Muted)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Node node {};
+    Audio::Node node { nullptr };
 
     NodeModel model(&node);
     model.setMuted(true);
@@ -50,7 +50,7 @@ TEST(NodeModel, Name)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Node node {};
+    Audio::Node node { nullptr };
 
     NodeModel model(&node);
     model.setName("testnode");
@@ -62,7 +62,7 @@ TEST(NodeModel, AddRemove)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Node node {};
+    Audio::Node node { nullptr };
     NodeModel model(&node);
 
     model.add("__internal__:/Mixer");

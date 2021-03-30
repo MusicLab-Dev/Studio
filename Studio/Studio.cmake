@@ -52,11 +52,10 @@ set(StudioSources
     ${StudioDir}/PartitionModel.hpp
     ${StudioDir}/PartitionsModel.cpp
     ${StudioDir}/PartitionsModel.hpp
-    # ${StudioDir}/PluginTableModel.cpp
-    # ${StudioDir}/PluginTableModel.hpp
+    ${StudioDir}/PluginTableModel.cpp
+    ${StudioDir}/PluginTableModel.hpp
     ${StudioDir}/Note.hpp
     ${StudioDir}/Point.hpp
-    ${StudioDir}/Point.ipp
     ${StudioDir}/Project.cpp
     ${StudioDir}/Project.hpp
     ${StudioDir}/Scheduler.cpp

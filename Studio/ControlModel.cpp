@@ -111,9 +111,29 @@ void ControlModel::setName(const QString &name)
 
 void ControlModel::add(void)
 {
+    // Get a unique name for this automation
+    std::string name = [this] {
+        std::string name;
+        auto size = _automations.size();
+        while (true) {
+            bool unique = true;
+            name = "Curve " + std::to_string(size);
+            for (auto &automation : _data->automations()) {
+                if (automation.name() == name) {
+                    unique = false;
+                    break;
+                }
+            }
+            if (unique)
+                break;
+            ++size;
+        }
+        return name;
+    }();
+
     Models::AddProtectedEvent(
-        [this] {
-            _data->automations().push();
+        [this, name = Core::FlatString(std::move(name))](void) mutable {
+            _data->automations().push().setName(std::move(name));
         },
         [this] {
             const auto automationsData = _automations.data();

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 
 import ThemeManager 1.0
+import PluginTableModel 1.0
 import Application 1.0
 
 import "../ModulesView"
@@ -27,5 +28,9 @@ Window {
 
     ModulesView {
         anchors.fill: parent
+    }
+
+    PluginTableModel {
+        id: pluginTable
     }
 }

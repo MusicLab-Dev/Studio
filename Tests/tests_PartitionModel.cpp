@@ -58,8 +58,9 @@ TEST(PartitionModel, RemoveNote)
     model.add(
         Note(
             Audio::BeatRange {1u, 2u},
-            1u,
-            10u
+            static_cast<Key>(1),
+            static_cast<Velocity>(10),
+            static_cast<Tuning>(0)
         )
     );
 

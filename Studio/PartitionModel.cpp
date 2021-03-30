@@ -20,12 +20,12 @@ PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *par
 QHash<int, QByteArray> PartitionModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(Roles::Range), "range"},
-        { static_cast<int>(Roles::Velocity), "velocity"},
-        { static_cast<int>(Roles::Tuning), "tuning"},
-        { static_cast<int>(Roles::NoteIndex), "noteIndex"},
-        { static_cast<int>(Roles::EventType), "eventType"},
-        { static_cast<int>(Roles::Key), "key"}
+        { static_cast<int>(Roles::Range),       "range" },
+        { static_cast<int>(Roles::Velocity),    "velocity" },
+        { static_cast<int>(Roles::Tuning),      "tuning" },
+        { static_cast<int>(Roles::NoteIndex),   "noteIndex" },
+        { static_cast<int>(Roles::EventType),   "eventType" },
+        { static_cast<int>(Roles::Key),         "key" }
     };
 }
 
@@ -98,6 +98,20 @@ void PartitionModel::add(const Note &note)
             endInsertRows();
         }
     );
+}
+
+int PartitionModel::find(const quint8 key, const quint32 beat) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &note : _data->notes()) {
+        if (note.key != key || beat < note.range.from || beat > note.range.to) {
+            ++idx;
+            continue;
+        }
+        return idx;
+    }
+    return -1;
 }
 
 void PartitionModel::remove(const int idx)
