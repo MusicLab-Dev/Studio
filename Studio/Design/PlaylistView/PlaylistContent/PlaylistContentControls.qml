@@ -123,7 +123,7 @@ Repeater {
                         onReleased: automationSettingsMenu.openMenu(automationSettingsMenuButton, controlDelegate.control, automationDelegate.automation, index)
                     }
 
-                    ContentPlacementArea {
+                    InstancesPlacementArea {
                         id: placementArea
                         x: nodeView.dataHeaderWidth
                         width: nodeView.dataContentWidth

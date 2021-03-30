@@ -14,36 +14,16 @@
 
 #include "Models.hpp"
 #include "NodeModel.hpp"
+#include "ThemeManager.hpp"
 
-static const QColor Colors[] = {
-    QColor(0x31A8FF),
-    QColor(0x00C5FF),
-    QColor(0x00DCE7),
-    QColor(0x00ECBA),
-    QColor(0x9EF78C),
-    QColor(0xFFD569),
-    QColor(0xFFB377),
-    QColor(0xFF978F),
-    QColor(0xFF85A8),
-    QColor(0xF382BB),
-    QColor(0xDF83CE),
-    QColor(0xC487DE),
-    QColor(0xAC90EC),
-    QColor(0x8E98F7),
-    QColor(0x69A1FD)
-};
-
-constexpr std::size_t ColorCount = sizeof(Colors) / sizeof(Colors[0]);
-
-static std::size_t CurrentColorIndex = 0u;
+// Current color index from color chain
+static quint32 CurrentColorIndex = 0u;
 
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    _data->setColor(static_cast<std::uint32_t>(Colors[CurrentColorIndex].rgba()));
-    if (++CurrentColorIndex >= ColorCount)
-        CurrentColorIndex = 0u;
+    _data->setColor(ThemeManager::GetColorFromChain(CurrentColorIndex++).rgba());
 }
 
 QHash<int, QByteArray> NodeModel::roleNames(void) const noexcept
@@ -127,7 +107,7 @@ void NodeModel::add(const QString &pluginPath)
 
     Models::AddProtectedEvent(
         [this, factory, plugin = std::move(plugin)](void) mutable {
-            auto &backendChild = _data->children().push(std::make_unique<Audio::Node>(std::move(plugin)));
+            auto &backendChild = _data->children().push(std::make_unique<Audio::Node>(_data, std::move(plugin)));
             backendChild->setName(Core::FlatString(factory->getName()));
             // backendChild->prepareCache(specs);
         },

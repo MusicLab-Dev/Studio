@@ -65,7 +65,7 @@ Repeater {
             }
         }
 
-        ContentPlacementArea {
+        InstancesPlacementArea {
             id: placementArea
             x: nodeView.dataHeaderWidth
             width: nodeView.dataContentWidth

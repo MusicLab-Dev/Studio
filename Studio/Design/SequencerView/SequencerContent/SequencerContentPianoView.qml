@@ -31,7 +31,7 @@ Item {
     readonly property real totalHeight: keys * rowHeight
 
     id: pianoView
-    width: keyWidth
+    width: contentView.width
     height: totalHeight
 
     Repeater {
@@ -83,11 +83,24 @@ Item {
         }
     }
 
-    Repeater {
-        model: sequencerView.partition
+    NotesPlacementArea {
+        x: contentView.rowHeaderWidth
+        width: contentView.rowDataWidth
+        height: pianoView.totalHeight
+        partition: sequencerView.partition
 
-        delegate: Rectangle {
-            y: key * contentView.rowHeight
+        Repeater {
+            model: sequencerView.partition
+
+            delegate: Rectangle {
+                readonly property var beatRange: range
+
+                y: key * contentView.rowHeight
+                x: beatRange.from * contentView.pixelsPerBeatPrecision
+                width: (beatRange.to - beatRange.from) * contentView.pixelsPerBeatPrecision
+                height: contentView.rowHeight
+                color: themeManager.getColorFromChain(key)
+            }
         }
     }
 }

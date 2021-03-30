@@ -21,19 +21,91 @@ Scheduler::~Scheduler(void) noexcept
     _Instance = nullptr;
 }
 
-void Scheduler::setCurrentBeat(const Audio::Beat beat)
+void Scheduler::setPlaybackMode(const PlaybackMode mode) noexcept
 {
-    if (currentBeat() == beat)
+    Models::AddProtectedEvent(
+        [this, mode] {
+            Audio::AScheduler::setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
+        },
+        [this, mode = playbackMode()] {
+            if (mode != playbackMode())
+                emit playbackModeChanged();
+        }
+    );
+}
+
+void Scheduler::setProductionCurrentBeat(const Beat beat)
+{
+    const auto currentBeat = productionCurrentBeat();
+
+    if (currentBeat == beat)
         return;
     Models::AddProtectedEvent(
         [this, beat] {
-            auto range = Audio::AScheduler::currentBeatRange();
-            range.to = beat + Audio::AScheduler::processBeatSize(); // Change to settings getter: processing length
+            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Production>();
+            range.to = beat + Audio::AScheduler::processBeatSize();
             range.from = beat;
-            Audio::AScheduler::setBeatRange(range);
         },
-        [this] {
-            emit currentBeatChanged();
+        [this, currentBeat] {
+            if (currentBeat != productionCurrentBeat())
+                emit productionCurrentBeatChanged();
+        }
+    );
+}
+
+void Scheduler::setLiveCurrentBeat(const Beat beat)
+{
+    const auto currentBeat = liveCurrentBeat();
+
+    if (currentBeat == beat)
+        return;
+    Models::AddProtectedEvent(
+        [this, beat] {
+            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Live>();
+            range.to = beat + Audio::AScheduler::processBeatSize();
+            range.from = beat;
+        },
+        [this, currentBeat] {
+            if (currentBeat != liveCurrentBeat())
+                emit liveCurrentBeatChanged();
+        }
+    );
+}
+
+void Scheduler::setPartitionCurrentBeat(const Beat beat)
+{
+    const auto currentBeat = partitionCurrentBeat();
+
+    if (currentBeat == beat)
+        return;
+    Models::AddProtectedEvent(
+        [this, beat] {
+            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Partition>();
+            range.to = beat + Audio::AScheduler::processBeatSize();
+            range.from = beat;
+        },
+        [this, currentBeat] {
+            if (currentBeat != partitionCurrentBeat())
+                emit partitionCurrentBeatChanged();
+        }
+    );
+}
+
+void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
+{
+    const auto currentBeat = onTheFlyCurrentBeat();
+
+    if (currentBeat == beat)
+        return;
+    Models::AddProtectedEvent(
+        [this, beat] {
+            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::OnTheFly>();
+            range.to = beat + Audio::AScheduler::processBeatSize();
+            range.from = beat;
+        },
+        [this, currentBeat] {
+            if (currentBeat != onTheFlyCurrentBeat())
+                emit onTheFlyCurrentBeatChanged();
         }
     );
 }
@@ -64,5 +136,14 @@ void Scheduler::stop(void)
 {
     if (!setState(Audio::AScheduler::State::Pause))
         _device.stop();
-    setCurrentBeat(0);
+    switch (playbackMode()) {
+    case PlaybackMode::Production:
+        return setProductionCurrentBeat(0u);
+    case PlaybackMode::Live:
+        return setLiveCurrentBeat(0u);
+    case PlaybackMode::Partition:
+        return setPartitionCurrentBeat(0u);
+    case PlaybackMode::OnTheFly:
+        return setOnTheFlyCurrentBeat(0u);
+    }
 }

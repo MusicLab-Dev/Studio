@@ -1,9 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import NodeModel 1.0
 import PartitionModel 1.0
 
 ColumnLayout {
+    property NodeModel node: null
     property PartitionModel partition: null
 
     id: sequencerView

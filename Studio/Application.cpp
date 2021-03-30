@@ -8,7 +8,7 @@
 #include "Application.hpp"
 
 Application::Application(QObject *parent)
-    :   _backendProject(std::make_shared<Audio::Project>(Core::FlatString(DefaultProjectName), DefaultPlaybackMode)),
+    :   _backendProject(std::make_shared<Audio::Project>(Core::FlatString(DefaultProjectName))),
         _scheduler(this),
         _project(_backendProject.get(), this)
 {

@@ -18,20 +18,10 @@ class Project : public QObject
     Q_OBJECT
 
     Q_PROPERTY(NodeModel *master READ master NOTIFY masterChanged)
-    Q_PROPERTY(PlaybackMode playbackMode READ playbackMode WRITE setPlaybackMode NOTIFY playbackModeChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 
 public:
-    /** @brief The different types of playback mode */
-    enum class PlaybackMode : int {
-        Production = static_cast<int>(Audio::Project::PlaybackMode::Production),
-        Live = static_cast<int>(Audio::Project::PlaybackMode::Live),
-        Partition = static_cast<int>(Audio::Project::PlaybackMode::Partition)
-    };
-    Q_ENUM(PlaybackMode)
-
-
     /** @brief Construct a new project instance */
     explicit Project(Audio::Project *project, QObject *parent = nullptr);
 
@@ -43,13 +33,6 @@ public:
     /** @brief Get the dummy node */
     [[nodiscard]] NodeModel *dummyNode(void) noexcept { return &_master; }
     [[nodiscard]] const NodeModel *dummyNode(void) const noexcept { return &_master; }
-
-
-    /** @brief Get the playback mode */
-    [[nodiscard]] PlaybackMode playbackMode(void) const noexcept { return static_cast<Project::PlaybackMode>(_data->playbackMode()); }
-
-    /** @brief Set the playback mode, return true and emit playbackModeChanged on change */
-    void setPlaybackMode(const PlaybackMode playbackMode) noexcept;
 
 
     /** @brief Get the project name */
@@ -80,12 +63,6 @@ public:
 signals:
     /** @brief Notify when master node changed */
     void masterChanged(void);
-
-    /** @brief Notify when dummy node changed */
-    void dummyNodeChanged(void);
-
-    /** @brief Notify when playback mode changed */
-    void playbackModeChanged(void);
 
     /** @brief Notify when project name changed */
     void nameChanged(void);

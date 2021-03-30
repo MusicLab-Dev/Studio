@@ -14,5 +14,6 @@
         <file>PlaylistContent/PlaylistContentPartitionSettingsMenu.qml</file>
         <file>PlaylistContent/PlaylistContentControlSettingsMenu.qml</file>
         <file>PlaylistContent/PlaylistContentAutomationSettingsMenu.qml</file>
+        <file>PlaylistContent/InstancesPlacementArea.qml</file>
     </qresource>
 </RCC>

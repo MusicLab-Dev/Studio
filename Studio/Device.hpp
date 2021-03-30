@@ -9,6 +9,8 @@
 
 #include <Audio/Device.hpp>
 
+#include "Base.hpp"
+
 /** @brief Device class */
 class Device : public QObject
 {
