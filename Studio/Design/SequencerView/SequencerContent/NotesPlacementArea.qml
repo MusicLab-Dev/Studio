@@ -22,7 +22,7 @@ MouseArea {
 
     onPressed: {
         var realMouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
-        var mouseKey = (height - mouse.y) / contentView.rowHeight
+        var mouseKey = Math.ceil((height - mouse.y) / contentView.rowHeight)
         var mouseBeatPrecision = realMouseBeatPrecision
         var noteIndex = partition.find(mouseKey, mouseBeatPrecision)
         if (mouse.buttons & Qt.RightButton) { // Right click on note -> delete
@@ -33,14 +33,14 @@ MouseArea {
         }
         if (contentView.placementBeatPrecisionScale !== 0)
             mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
-        contentView.placementRectangle.attach(contentPlacementArea, nodeDelegate.node.color)
+        contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
         if (noteIndex === -1) { // Left click not on note -> insert
             mode = NotesPlacementArea.Mode.Move
             contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionDefaultWidth
             contentView.placementBeatPrecisionFrom = mouseBeatPrecision
             contentView.placementKey = mouseKey
         } else { // Left click on note -> edit
-            var beatPrecisionRange = partition.getNote(noteIndex)
+            var beatPrecisionRange = partition.getNote(noteIndex).range
             var noteWidth = (beatPrecisionRange.to - beatPrecisionRange.from) * contentView.pixelsPerBeatPrecision
             var resizeThreshold = Math.min(noteWidth * 0.2, contentView.placementResizeMaxPixelThreshold)
             if ((realMouseBeatPrecision - beatPrecisionRange.from) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
@@ -83,7 +83,7 @@ MouseArea {
 
     onPositionChanged: {
         var mouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
-        var mouseKey = (height - mouse.y) / contentView.rowHeight
+        var mouseKey = Math.ceil((height - mouse.y) / contentView.rowHeight)
         if (contentView.placementBeatPrecisionScale !== 0)
             mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
         switch (mode) {
@@ -96,6 +96,8 @@ MouseArea {
             var beatPrecision = mouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
             contentView.placementBeatPrecisionTo = beatPrecision + contentView.placementBeatPrecisionWidth
             contentView.placementBeatPrecisionFrom = beatPrecision
+            if (contentView.placementKey != mouseKey)
+                contentView.placementRectangle.targetColor = themeManager.getColorFromChain(mouseKey)
             contentView.placementKey = mouseKey
             break
         case NotesPlacementArea.Mode.LeftResize:

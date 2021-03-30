@@ -9,6 +9,7 @@ ContentView {
     yOffsetMin: pianoView.totalHeight > height ? height - pianoView.totalHeight : 0
     rowHeaderWidth: pianoView.keyWidth
     clip: true
+    placementKeyCount: pianoView.keys
 
     SequencerContentPianoView {
         id: pianoView

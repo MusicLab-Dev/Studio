@@ -95,8 +95,8 @@ Item {
             delegate: Rectangle {
                 readonly property var beatRange: range
 
-                y: key * contentView.rowHeight
-                x: beatRange.from * contentView.pixelsPerBeatPrecision
+                y: (pianoView.keys - key) * contentView.rowHeight
+                x: contentView.xOffset + beatRange.from * contentView.pixelsPerBeatPrecision
                 width: (beatRange.to - beatRange.from) * contentView.pixelsPerBeatPrecision
                 height: contentView.rowHeight
                 color: themeManager.getColorFromChain(key)

@@ -53,6 +53,7 @@ Item {
     property alias placementRectangle: placementRectangle
 
     // Placement ratios
+    property real placementKeyCount: 0
     readonly property real beatPrecision: 128
     readonly property real pixelsPerBeat: surfaceContentGrid.cellWidth / surfaceContentGrid.barsPerCell / beatsPerBar
     readonly property real pixelsPerBeatPrecision: pixelsPerBeat / beatPrecision
@@ -69,7 +70,7 @@ Item {
     readonly property real placementPixelFrom: xOffset + pixelsPerBeatPrecision * placementBeatPrecisionFrom
     readonly property real placementPixelTo: xOffset + pixelsPerBeatPrecision * placementBeatPrecisionTo
     readonly property real placementPixelWidth: pixelsPerBeatPrecision * placementBeatPrecisionWidth
-    readonly property real placementPixelY: height - placementKey * rowHeight
+    readonly property real placementPixelY: (placementKeyCount - placementKey) * rowHeight
     readonly property real placementResizeMaxPixelThreshold: 20
 
     // Scale used to perfectly fit placements in beat
@@ -129,9 +130,11 @@ Item {
     }
 
     Rectangle {
+        property color targetColor: "white"
+
         function attach(newParent, newColor) {
             parent = newParent
-            color = Qt.lighter(newColor)
+            targetColor = newColor
             visible = true
         }
         function detach(newParent) {
@@ -145,5 +148,6 @@ Item {
         width: contentView.placementPixelWidth
         height: contentView.rowHeight
         visible: false
+        color: Qt.lighter(targetColor, 1.3)
     }
 }

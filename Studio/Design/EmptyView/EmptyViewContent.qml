@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 import "../Common"
 
 RowLayout {
-
     Item {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * 0.333
@@ -19,9 +18,10 @@ RowLayout {
             width: parent.width / 1.5
             onClicked: {
                 modules.insert(index, {
-                                   title: "Sequencer",
-                                   path: "qrc:/SequencerView/SequencerView.qml",
-                               })
+                    title: "Sequencer",
+                    path: "qrc:/SequencerView/SequencerView.qml",
+                    callback: modulesViewContent.sequencerNewPartitionNodeCallback
+                })
                 modules.remove(index)
             }
         }
@@ -43,6 +43,7 @@ RowLayout {
                 modules.insert(index, {
                                    title: "Playlist",
                                    path: "qrc:/PlaylistView/PlaylistView.qml",
+                                   callback: modulesViewContent.nullCallback
                                })
                 modules.remove(index)
             }
@@ -65,6 +66,7 @@ RowLayout {
                 modules.insert(index, {
                                    title: "Board",
                                    path: "qrc:/BoardView/BoardView.qml",
+                                   callback: modulesViewContent.nullCallback
                                })
                 modules.remove(index)
             }

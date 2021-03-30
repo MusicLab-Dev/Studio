@@ -63,7 +63,7 @@ namespace Models
     {
         if (!EventGuard::Dirty) {
             EventGuard::Dirty = true;
-            Scheduler::Get()->addEvent(std::forward<Event>(event), [notify = std::forward<Notify>(notify)] {
+            Scheduler::Get()->addEvent(std::forward<Event>(event), [notify = std::forward<Notify>(notify)](void) mutable {
                 notify();
                 EventGuard::Dirty = false;
             });

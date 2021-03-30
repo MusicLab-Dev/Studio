@@ -1,27 +1,72 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+
 import "../Default"
 
 Item {
     property alias modules: modules
     property int componentSelected: 0
     property real tabWidth: width / Math.max(modules.count, 5)
+    property alias nullCallback: nullCallback
+    property alias sequencerPartitionNodeCallback: sequencerPartitionNodeCallback
+    property alias sequencerNewPartitionNodeCallback: sequencerNewPartitionNodeCallback
 
     id: modulesViewContent
+
+    Action {
+        property var target: null
+
+        id: nullCallback
+    }
+
+    Action {
+        property var target: null
+
+        id: sequencerPartitionNodeCallback
+
+        onTriggered: {
+            target.loadPartitionNode()
+        }
+    }
+
+    Action {
+        property var target: null
+
+        id: sequencerNewPartitionNodeCallback
+
+        onTriggered: {
+            target.loadNewPartitionNode()
+        }
+    }
 
     Repeater {
         model: ListModel {
             id: modules
 
-            ListElement {
-                title: "New component"
-                path: "qrc:/EmptyView/EmptyView.qml"
+            Component.onCompleted: {
+                modules.append({
+                    title: "New component",
+                    path: "qrc:/EmptyView/EmptyView.qml",
+                    callback: nullCallback
+                })
+                modules.append({
+                    title: "+",
+                    path: "",
+                    callback: nullCallback
+                })
+            }
+        }
+
+        onCountChanged: {
+            if (count === 1 && modules.get(0).path === "") {
+                modules.append({
+                    title: "New component",
+                    path: "qrc:/EmptyView/EmptyView.qml",
+                    callback: nullCallback
+                })
             }
 
-            ListElement {
-                title: "+"
-                path: ""
-            }
         }
 
         delegate: Column {
@@ -51,7 +96,15 @@ Item {
                 source: path
                 visible: componentSelected === index
                 focus: true
+
+                onLoaded: {
+                    if (path === "")
+                        return
+                    loadedComponent.item.moduleIndex = index
+                    callback.target = loadedComponent.item
+                    callback.trigger()
+                }
             }
         }
-    }    
+    }
 }

@@ -129,10 +129,28 @@ public slots:
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_children.size()); }
 
     /** @brief Add a new node in children vector using a plugin path */
-    void add(const QString &pluginPath);
+    NodeModel *add(const QString &pluginPath)
+        { return addNodeImpl(pluginPath, false); }
+
+    /** @brief Add a new node in children vector using a plugin path
+     *  Also add an empty partition to this node */
+    NodeModel *addPartitionNode(const QString &pluginPath)
+        { return addNodeImpl(pluginPath, true); }
 
     /** @brief Remove a children node */
     void remove(const int index);
+
+
+    /** @todo Move this in pluginmodel */
+    bool needSingleExternalInput(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::SingleExternalInput); }
+    bool needMultipleExternalInputs(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::MultipleExternalInputs); }
+    void loadExternalInputs(const QVariantList &paths)
+    {
+        Audio::ExternalPaths res;
+        for (auto &path : paths)
+            res.push(path.toString().toStdString());
+        _data->plugin()->setExternalPaths(res);
+    }
 
 signals:
     /** @brief Notify that muted property has changed */
@@ -162,6 +180,7 @@ private:
     PartitionsPtr _partitions { nullptr };
     ControlsPtr _controls { nullptr };
     // PluginPtr _plugin { nullptr };
-    //ConnectionsPtr _connections {};
 
+    /** @brief Create a node */
+    [[nodiscard]] NodeModel *addNodeImpl(const QString &pluginPath, const bool addPartition);
 };

@@ -64,6 +64,9 @@ public slots:
     /** @brief Move beatrange at index */
     void move(const int from, const int to);
 
+    /** @brief Get a single partition model */
+    PartitionModel *getPartition(const int index) { return get(index); }
+
 
 public: // Allow external insert / remove
     using QAbstractListModel::beginRemoveRows;

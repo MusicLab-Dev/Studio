@@ -36,7 +36,7 @@ QVariant PartitionModel::data(const QModelIndex &index, int role) const
     const auto &child = _data->notes().at(index.row());
     switch (static_cast<Roles>(role)) {
         case Roles::Range:
-            return QVariant::fromValue(reinterpret_cast<const Note &>(child.range));
+            return QVariant::fromValue(reinterpret_cast<const BeatRange &>(child.range));
         case Roles::Velocity:
             return child.velocity;
         case Roles::Tuning:
