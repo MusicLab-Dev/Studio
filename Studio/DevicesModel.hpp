@@ -34,7 +34,7 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return  _data->size(); }
+    [[nodiscard]] int count(void) const noexcept { return _descriptors.size(); }
     [[nodiscard]] int rowCount(const QModelIndex &) const noexcept override { return count(); }
 
     /** @brief Query a role from children */
@@ -42,8 +42,9 @@ public:
 
 public slots:
     /** @brief Create a new DevicePtr instance */
-    DevicePtr instantiate(const QString &name);
+    //DevicePtr instantiate(const QString &name);
 
 private:
-    Audio::DeviceCapabilities _devices {};
+    //Audio::DeviceCapabilities _devices {};
+    Audio::Device::Descriptors _descriptors;
 };

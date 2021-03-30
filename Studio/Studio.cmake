@@ -41,8 +41,8 @@ set(StudioSources
     ${StudioDir}/ControlsModel.hpp
     ${StudioDir}/Device.cpp
     ${StudioDir}/Device.hpp
-    # ${StudioDir}/DevicesModel.cpp
-    # ${StudioDir}/DevicesModel.hpp
+    ${StudioDir}/DevicesModel.cpp
+    ${StudioDir}/DevicesModel.hpp
     ${StudioDir}/InstancesModel.cpp
     ${StudioDir}/InstancesModel.hpp
     ${StudioDir}/Models.hpp
