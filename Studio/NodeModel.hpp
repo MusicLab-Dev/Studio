@@ -71,7 +71,7 @@ public:
 
     /** @brief Get the parent node if it exists */
     [[nodiscard]] NodeModel *parentNode(void) noexcept
-        { return reinterpret_cast<NodeModel *>(parent()); }
+        { return qobject_cast<NodeModel *>(parent()); }
 
 
     /** @brief Get the list of all roles */
@@ -116,9 +116,6 @@ public:
 
     /** @brief Get the controls model */
     [[nodiscard]] ControlsModel *controls(void) noexcept { return _controls.get(); }
-
-    /** @brief Get the connections model */
-    //[[nodiscard]] ConnectionsModel *connections(void) const noexcept { return _connections; }
 
     /** @brief Get the flags */
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
