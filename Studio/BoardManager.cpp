@@ -20,14 +20,17 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     connect(&_tickTimer, &QTimer::timeout, this, &BoardManager::tick);
     connect(&_discoverTimer, &QTimer::timeout, this, &BoardManager::discover);
 
-    _boards.push(std::make_unique<Board>())->setSize(QSize(10, 10));
-    _boards.push(std::make_unique<Board>())->setSize(QSize(12, 8));
-    _boards.push(std::make_unique<Board>())->setSize(QSize(8, 8));
+    // _boards.push(std::make_unique<Board>())->setSize(QSize(10, 10));
+    // _boards.push(std::make_unique<Board>())->setSize(QSize(12, 8));
+    // _boards.push(std::make_unique<Board>())->setSize(QSize(8, 8));
 
     _networkBuffer.reset();
 
     initUdpBroadcastSocket();
     initTcpMasterSocket();
+
+    _identifierTable = new bool[256];
+    std::memset(_identifierTable, 0, 256);
 }
 
 BoardManager::~BoardManager(void)
@@ -96,7 +99,8 @@ void BoardManager::onDiscoverRateChanged(void)
 
 void BoardManager::tick(void)
 {
-    qDebug() << "Tick";
+    // qDebug() << "Tick";
+
     // Prepare clients sockets for future operations
     prepareSockets();
     // Process connected clients inputs using select()
@@ -105,7 +109,7 @@ void BoardManager::tick(void)
 
 void BoardManager::discover(void)
 {
-    qDebug() << "Discover";
+    // qDebug() << "Discover";
 
     // Emit a discovery packet
     discoveryEmit();
@@ -113,126 +117,8 @@ void BoardManager::discover(void)
     processNewConnections();
 }
 
-void BoardManager::prepareSockets(void)
-{
-    std::cout << "BoardManager::prepareSockets" << std::endl;
-
-    FD_ZERO(&_readFds);
-    FD_SET(_tcpMasterSocket, &_readFds);
-    _maxFd = _tcpMasterSocket;
-
-    if (_clients.empty())
-        return;
-    for (const auto &clientSocket : _clients) {
-        const auto fd = clientSocket.get();
-        if (fd > 0) {
-            FD_SET(fd, &_readFds);
-            if(fd > _maxFd)
-                _maxFd = fd;
-        }
-    }
-}
-
-void BoardManager::processNewConnections(void)
-{
-    std::cout << "BoardManager::processNewConnections" << std::endl;
-
-    sockaddr_in clientAddress { 0 };
-    socklen_t clientAddressLen = sizeof(clientAddress);
-
-    while (1) {
-        const auto clientSocket = ::accept(
-            _tcpMasterSocket,
-            reinterpret_cast<sockaddr *>(&clientAddress),
-            &clientAddressLen
-        );
-        // Loop end condition, until all pending connection(s) are proccessed
-        if (clientSocket < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-            std::cout << "BoardManager::processNewConnections: No new client connection to proccess" << std::endl;
-            return;
-        } else if (clientSocket < 0)
-            throw std::runtime_error(std::strerror(errno));
-        // Push the newly connected client to the client list
-        std::cout << "New connection from [" << inet_ntoa(clientAddress.sin_addr) << ':' << clientAddress.sin_port << ']' << std::endl;
-        _clients.push(clientSocket);
-    }
-}
-
-// std::unique_ptr<Board> *BoardManager::getBoardFromSocket(const Net::Socket &clientSocket)
-// {
-//     const auto clientFd = clientSocket.get();
-//     for (auto &boardUniquePtr: _boards) {
-//         const auto socketView = boardUniquePtr.get()->getRooter();
-//         if (socketView.get() == clientFd) {
-//             return &boardUniquePtr;
-//         }
-//     }
-//     return nullptr;
-// }
-
-void BoardManager::removeDirectClientNetwork(const Net::Socket &rootClientSocket)
-{
-    const auto rootClientFd = rootClientSocket.get();
-    for (auto &boardUniquePtr: _boards) {
-        const auto socketView = boardUniquePtr.get()->getRooter();
-        if (socketView.get() == rootClientFd) {
-            _boards.erase(&boardUniquePtr);
-        }
-    }
-}
-
-void BoardManager::processClientInput(Net::Socket *clientSocket)
-{
-    std::cout << "BoardManager::processClientInput" << std::endl;
-
-    std::uint8_t *bufferPtr = _networkBuffer.data() + _writeIndex;
-
-    const auto inputSize = ::recv(clientSocket->get(), bufferPtr, NetworkBufferSize, 0);
-    if (inputSize == 0) {
-        std::cout << "BoardManager::processClientInput: Disconnection detected" << std::endl;
-        removeDirectClientNetwork(*clientSocket);
-        _clients.erase(clientSocket);
-        return;
-    }
-    std::cout << inputSize << " received from client" << std::endl;
-    _writeIndex += inputSize;
-}
-
-void BoardManager::processDirectClients(void)
-{
-    std::cout << "BoardManager::processDirectInputs" << std::endl;
-
-    struct timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = 0;
-
-    _writeIndex = 0;
-    _networkBuffer.reset();
-
-    auto activity = ::select(_maxFd + 1, &_readFds, NULL, NULL, &tv);
-
-    if ((activity < 0) && (errno != EINTR)) {
-        std::cout << "BoardManager::processDirectInputs::select: " << std::strerror(errno) << std::endl;
-        return;
-    } else if (activity == 0) {
-        std::cout << "BoardManager::processDirectInputs: No activity from any of the clients" << std::endl;
-        return;
-    }
-
-    for (auto client = _clients.begin(); client != _clients.end(); ) {
-
-        if (FD_ISSET(client->get(), &_readFds)) {
-            processClientInput(client);
-        }
-        if (client != _clients.end())
-            client++;
-    }
-}
-
 void BoardManager::discoveryEmit(void)
 {
-    std::cout << "BoardManager::discoveryEmit" << std::endl;
-
     Protocol::DiscoveryPacket packet;
     std::memset(&packet, 0, sizeof(Protocol::DiscoveryPacket));
     packet.magicKey = Protocol::SpecialLabMagicKey;
@@ -323,5 +209,160 @@ void BoardManager::initTcpMasterSocket(void)
     if (ret < 0) {
         close(_tcpMasterSocket);
         throw std::runtime_error(std::strerror(errno));
+    }
+}
+
+void BoardManager::prepareSockets(void)
+{
+    FD_ZERO(&_readFds);
+    FD_SET(_tcpMasterSocket, &_readFds);
+    _maxFd = _tcpMasterSocket;
+
+    if (_clients.empty())
+        return;
+    for (const auto &clientSocket : _clients) {
+        const auto fd = clientSocket.get();
+        if (fd > 0) {
+            FD_SET(fd, &_readFds);
+            if(fd > _maxFd)
+                _maxFd = fd;
+        }
+    }
+}
+
+void BoardManager::setSocketKeepAlive(const int socket)
+{
+    int enable = 1;
+    int idle = 3;
+    int interval = 3;
+    int maxpkt = 1;
+
+    setsockopt(socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int));
+    setsockopt(socket, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int));
+    setsockopt(socket, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int));
+    setsockopt(socket, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int));
+}
+
+void BoardManager::processNewConnections(void)
+{
+    sockaddr_in clientAddress { 0 };
+    socklen_t clientAddressLen = sizeof(clientAddress);
+
+    while (1) {
+        const auto clientSocket = ::accept(
+            _tcpMasterSocket,
+            reinterpret_cast<sockaddr *>(&clientAddress),
+            &clientAddressLen
+        );
+        // Loop end condition, until all pending connection(s) are proccessed
+        if (clientSocket < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
+            std::cout << "BoardManager::processNewConnections: No new client connection to proccess" << std::endl;
+            return;
+        } else if (clientSocket < 0)
+            throw std::runtime_error(std::strerror(errno));
+        // Set keepalive on socket
+        setSocketKeepAlive(clientSocket);
+        // Push the newly connected client to the client list
+        std::cout << "New connection from [" << inet_ntoa(clientAddress.sin_addr) << ':' << clientAddress.sin_port << ']' << std::endl;
+        _clients.push(clientSocket);
+    }
+}
+
+void BoardManager::removeDirectClientNetwork(const Net::Socket &rootClientSocket)
+{
+    const auto rootClientFd = rootClientSocket.get();
+    std::cout << "Board list size in: " << _boards.size() << std::endl;
+    for (auto &boardUniquePtr: _boards) {
+        const auto socketView = boardUniquePtr.get()->getRooter();
+        if (socketView.get() == rootClientFd) {
+            _boards.erase(&boardUniquePtr);
+        }
+    }
+    std::cout << "Board list size out: " << _boards.size() << std::endl;
+}
+
+BoardID BoardManager::aquireIdentifier(void) noexcept
+{
+    int i = 1;
+
+    while (i < 256) {
+        if (_identifierTable[i] == false) {
+            _identifierTable[i] = true;
+            return i;
+        }
+        i++;
+    }
+    return 0;
+}
+
+void BoardManager::processClientInput(Net::Socket *clientSocket)
+{
+    std::uint8_t *bufferPtr = _networkBuffer.data() + _writeIndex;
+
+    const auto inputSize = ::recv(clientSocket->get(), bufferPtr, NetworkBufferSize, 0);
+    if (inputSize == 0 || (inputSize < 0 && errno == ETIMEDOUT)) { // Disconnection || Connection timed out, broken...
+        std::cout << "BoardManager::processClientInput: Disconnection detected" << std::endl;
+        removeDirectClientNetwork(*clientSocket);
+        _clients.erase(clientSocket);
+        return;
+    }
+    std::cout << inputSize << " byte(s) received from client" << std::endl;
+    Protocol::ReadablePacket packet(bufferPtr, bufferPtr + inputSize);
+    if (packet.protocolType() == Protocol::ProtocolType::Connection &&
+            packet.commandAs<Protocol::ConnectionCommand>() == Protocol::ConnectionCommand::IDAssignment &&
+            packet.footprintStackSize() == 0) {
+
+        std::cout << "Direct client ID request !" << std::endl;
+        BoardID newID = aquireIdentifier();
+        if (newID == 0) {
+            std::cout << "aquireIdentifier ERROR" << std::endl;
+            /* handle out of identifier error here */
+            return;
+        }
+        char buffer[sizeof(WritablePacket::Header) + sizeof(BoardID)];
+        WritablePacket response(std::begin(buffer), std::end(buffer));
+        response.prepare(ProtocolType::Connection, ConnectionCommand::IDAssignment);
+        response << newID;
+        const auto ret = ::send(clientSocket->get(), &buffer, response.totalSize(), 0);
+        if (ret < 0) {
+            std::cout << "BoardManager::processClientInput::send failed: " << std::strerror(errno) << std::endl;
+            return;
+        }
+        Net::Socket::Internal clientFD = clientSocket->get();
+        _boards.push(std::make_unique<Board>(newID, clientFD));
+    }
+
+    _writeIndex += inputSize;
+}
+
+void BoardManager::processDirectClients(void)
+{
+    if (_clients.empty()) {
+        std::cout << "BoardManager::processDirectInputs: No client connected, return" << std::endl;
+        return;
+    }
+
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+
+    _writeIndex = 0;
+    _networkBuffer.reset();
+
+    auto activity = ::select(_maxFd + 1, &_readFds, NULL, NULL, &tv);
+
+    if ((activity < 0) && (errno != EINTR)) {
+        std::cout << "BoardManager::processDirectInputs::select: " << std::strerror(errno) << std::endl;
+        return;
+    } else if (activity == 0) {
+        std::cout << "BoardManager::processDirectInputs: No activity from any of the clients" << std::endl;
+        return;
+    }
+    for (auto client = _clients.begin(); client != _clients.end(); ) {
+        if (FD_ISSET(client->get(), &_readFds)) {
+            processClientInput(client);
+        }
+        if (client != _clients.end())
+            client++;
     }
 }

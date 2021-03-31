@@ -11,7 +11,7 @@
 void Studio::InitResources(void)
 {
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
-    qmlRegisterType<Board>("BoardManager", 1, 0, "Board");
+    qmlRegisterUncreatableType<Board>("BoardManager", 1, 0, "Board", "BOARD QML MESSAGE");
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
     Q_INIT_RESOURCE(Default);

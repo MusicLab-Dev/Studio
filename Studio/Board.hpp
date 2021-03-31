@@ -44,8 +44,11 @@ public:
         Data
     };
 
-    Board(void)
+    Board(const Protocol::BoardID identifier, const Net::Socket::Internal boardFD)
     {
+        _boardID = identifier;
+        _rooter = boardFD;
+
         _controls = Controls {
             Control {
                 .type = ControlType::Button,
@@ -95,8 +98,8 @@ private:
     Core::Vector<Protocol::BoardID, int> _parentStack {};
     Controls _controls {};
     QSize _size {};
-    Net::SocketView _rooter {};
-    Protocol::BoardID _boardID {};
+    Net::SocketView _rooter { -1 };
+    Protocol::BoardID _boardID { 0 };
 };
 
 static_assert_fit_cacheline(Board);

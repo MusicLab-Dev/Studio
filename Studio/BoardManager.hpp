@@ -14,10 +14,12 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <netinet/tcp.h>
 
 #include <Core/Vector.hpp>
 #include <Protocol/Packet.hpp>
 #include <Protocol/Protocol.hpp>
+#include <Protocol/ConnectionProtocol.hpp>
 
 #include "Board.hpp"
 
@@ -107,6 +109,8 @@ private:
     NetworkBuffer _networkBuffer;
     std::size_t _writeIndex { 0 };
 
+    bool *_identifierTable { nullptr };
+
     /** @brief Callback when the tick rate changed */
     void onTickRateChanged(void);
 
@@ -120,29 +124,40 @@ private:
     /** @brief Perform the discover process */
     void discover(void);
 
+
+    /** @brief Emit a DiscoveryPacket packet on the UDP broadcast address */
+    void discoveryEmit(void);
+
     /** @brief Init the UDP broadcast socket */
     void initUdpBroadcastSocket(void);
 
     /** @brief Init the TCP master socket */
     void initTcpMasterSocket(void);
 
-    /** @brief Emit a DiscoveryPacket packet on the UDP broadcast address */
-    void discoveryEmit(void);
-
-    /** @brief Accept new incomming board connections & add them to the client list */
-    void processNewConnections(void);
 
     /** @brief Prepare direct clients socket for the select() call */
     void prepareSockets(void);
 
-    /** @brief Scan for a read operation available on every direct clients */
-    void processDirectClients(void);
+    /** @brief Set keepalive option on socket */
+    void setSocketKeepAlive(const int socket);
 
-    /** @brief Read client's pending data and place it into the network buffer (& handle disconnection) */
-    void processClientInput(Net::Socket *clientSocket);
+    /** @brief Accept new incomming board connections & add them to the client list */
+    void processNewConnections(void);
 
     /** @brief Remove a board network branch starting from his rooter board */
     void removeDirectClientNetwork(const Net::Socket &clientSocket);
 
-    // std::unique_ptr<Board> *getBoardFromSocket(const Net::Socket &clientSocket);
+
+    /** @brief Read client's pending data and place it into the network buffer (& handle disconnection) */
+    void processClientInput(Net::Socket *clientSocket);
+
+    /** @brief Scan for a read operation available on every direct clients */
+    void processDirectClients(void);
+
+
+    /** @brief Acquire a free identifier for a newly connected board */
+    [[nodiscard]] BoardID aquireIdentifier(void) noexcept;
+
+    /** @brief Release an acquired identifier, it will be assignable again */
+    void releaseIdentifier(const BoardID identifier) noexcept { _identifierTable[identifier] = false; };
 };
