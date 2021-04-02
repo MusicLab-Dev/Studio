@@ -151,7 +151,7 @@ void Scheduler::stop(void)
 {
     if (setState(Audio::AScheduler::State::Pause))
         _device.stop();
-    AScheduler::getCurrentGraph().wait();
+    // AScheduler::getCurrentGraph().wait();
     switch (playbackMode()) {
     case PlaybackMode::Production:
         return setProductionCurrentBeat(0u);
