@@ -66,6 +66,9 @@ public slots:
     /** @brief Move Control from to */
     void move(const int from, const int to);
 
+    /** @brief Get a single control model */
+    ControlModel *getControl(const int index) { return get(index); }
+
 public: // Allow external insert / remove
     using QAbstractListModel::beginRemoveRows;
     using QAbstractListModel::endRemoveRows;

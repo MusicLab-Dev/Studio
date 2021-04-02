@@ -14,18 +14,18 @@ MouseArea {
     }
 
     property InstancesModel instances: null
-    property int mode: ContentPlacementArea.Mode.None
+    property int mode: InstancesPlacementArea.Mode.None
 
     id: contentPlacementArea
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     clip: true
 
     onPressed: {
-        var realMouseBeatPrecision = (contentView.xOffset + mouse.x) / contentView.pixelsPerBeatPrecision
+        var realMouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
         var mouseBeatPrecision = realMouseBeatPrecision
         var instanceIndex = instances.find(mouseBeatPrecision)
         if (mouse.buttons & Qt.RightButton) { // Right click on instance -> delete
-            mode = ContentPlacementArea.Mode.Remove
+            mode = InstancesPlacementArea.Mode.Remove
             if (instanceIndex !== -1)
                 instances.remove(instanceIndex)
             return
@@ -34,7 +34,7 @@ MouseArea {
             mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
         contentView.placementRectangle.attach(contentPlacementArea, nodeDelegate.node.color)
         if (instanceIndex === -1) { // Left click not on instance -> insert
-            mode = ContentPlacementArea.Mode.Move
+            mode = InstancesPlacementArea.Mode.Move
             contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionDefaultWidth
             contentView.placementBeatPrecisionFrom = mouseBeatPrecision
         } else { // Left click on instance -> edit
@@ -42,11 +42,11 @@ MouseArea {
             var noteWidth = (beatPrecisionRange.to - beatPrecisionRange.from) * contentView.pixelsPerBeatPrecision
             var resizeThreshold = Math.min(noteWidth * 0.2, contentView.placementResizeMaxPixelThreshold)
             if ((realMouseBeatPrecision - beatPrecisionRange.from) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
-                mode = ContentPlacementArea.Mode.LeftResize
+                mode = InstancesPlacementArea.Mode.LeftResize
             else if ((beatPrecisionRange.to - realMouseBeatPrecision) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
-                mode = ContentPlacementArea.Mode.RightResize
+                mode = InstancesPlacementArea.Mode.RightResize
             else
-                mode = ContentPlacementArea.Mode.Move
+                mode = InstancesPlacementArea.Mode.Move
             instances.remove(instanceIndex)
             contentView.placementBeatPrecisionFrom = beatPrecisionRange.from
             contentView.placementBeatPrecisionTo = beatPrecisionRange.to
@@ -56,9 +56,9 @@ MouseArea {
 
     onReleased: {
         switch (mode) {
-        case ContentPlacementArea.Mode.Move:
-        case ContentPlacementArea.Mode.LeftResize:
-        case ContentPlacementArea.Mode.RightResize:
+        case InstancesPlacementArea.Mode.Move:
+        case InstancesPlacementArea.Mode.LeftResize:
+        case InstancesPlacementArea.Mode.RightResize:
             if (contentView.placementBeatPrecisionFrom < 0)
                 contentView.placementBeatPrecisionFrom = 0
             instances.add(AudioAPI.beatRange(contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo))
@@ -68,35 +68,35 @@ MouseArea {
             break;
         }
         contentView.placementRectangle.detach()
-        mode = ContentPlacementArea.Mode.None
+        mode = InstancesPlacementArea.Mode.None
     }
 
     onPositionChanged: {
-        var mouseBeatPrecision = (contentView.xOffset + mouse.x) / contentView.pixelsPerBeatPrecision
+        var mouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
         if (contentView.placementBeatPrecisionScale !== 0)
             mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
         switch (mode) {
-        case ContentPlacementArea.Mode.Remove:
+        case InstancesPlacementArea.Mode.Remove:
             var instanceIndex = instances.find(mouseBeatPrecision)
             if (instanceIndex !== -1)
                 instances.remove(instanceIndex)
             break
-        case ContentPlacementArea.Mode.Move:
+        case InstancesPlacementArea.Mode.Move:
             var beatPrecision = mouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
             contentView.placementBeatPrecisionTo = beatPrecision + contentView.placementBeatPrecisionWidth
             contentView.placementBeatPrecisionFrom = beatPrecision
             break
-        case ContentPlacementArea.Mode.LeftResize:
+        case InstancesPlacementArea.Mode.LeftResize:
             if (contentView.placementBeatPrecisionTo > mouseBeatPrecision)
                 contentView.placementBeatPrecisionFrom = mouseBeatPrecision
             else
-                mode = ContentPlacementArea.Mode.RightResize
+                mode = InstancesPlacementArea.Mode.RightResize
             break
-        case ContentPlacementArea.Mode.RightResize:
+        case InstancesPlacementArea.Mode.RightResize:
             if (contentView.placementBeatPrecisionFrom < mouseBeatPrecision)
                 contentView.placementBeatPrecisionTo = mouseBeatPrecision
             else
-                mode = ContentPlacementArea.Mode.LeftResize
+                mode = InstancesPlacementArea.Mode.LeftResize
             break
         default:
             break

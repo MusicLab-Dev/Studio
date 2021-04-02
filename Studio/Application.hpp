@@ -26,7 +26,7 @@ class Application : public QObject
 
 public:
     static constexpr std::string_view DefaultProjectName = "My Project";
-    static constexpr auto DefaultPlaybackMode = Audio::Project::PlaybackMode::Production;
+    static constexpr auto DefaultPlaybackMode = Audio::PlaybackMode::Production;
 
 
     /** @brief Construct a new application */

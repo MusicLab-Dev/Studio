@@ -1,55 +1,75 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
-import "qrc:/SequencerView/SequencerViewContent"
+import NodeModel 1.0
+import PartitionModel 1.0
 
-Rectangle {
-    id: sequencerView
-    focus: true
+ColumnLayout {
+    property int moduleIndex: -1
+    property NodeModel node: null
+    property PartitionModel partition: null
 
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: 0
-
-        SequencerViewHeader {
-            id: sequencerViewHeader
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width
-            Layout.preferredHeight: parent.height * 0.1
-            z: 1
-        }
-
-        SequencerViewContent {
-            id: sequencerViewContent
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width
-            Layout.preferredHeight: parent.height * 0.8
-        }
-
-        SequencerViewFooter {
-            id: sequencerViewFooter
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width
-            Layout.preferredHeight: parent.height * 0.1
-        }
+    function loadNewPartitionNode() {
+        pluginsView.open(
+            function() {
+                node = app.project.master.addPartitionNode(pluginsView.selectedPath)
+                if (node === null) {
+                    modules.remove(moduleIndex)
+                    return
+                }
+                if (node.needSingleExternalInput() || node.needMultipleExternalInputs()) {
+                    filePicker.openDialog(node.needMultipleExternalInputs(),
+                        function() {
+                            node.loadExternalInputs(filePicker.fileUrls)
+                            app.scheduler.partitionNode = node
+                            app.scheduler.partitionIndex = 0
+                            partition = node.partitions.getPartition(0)
+                            sequencerView.enabled = true
+                        },
+                        function() {
+                            app.project.master.remove(app.project.master.count - 1)
+                            modules.remove(moduleIndex)
+                        }
+                    )
+                }
+            },
+            function() {
+                modules.remove(moduleIndex)
+            }
+        )
     }
 
-     Shortcut {
-         sequence: StandardKey.ZoomIn
-         onActivated: {
-             if (sequencerViewContent.sequencerViewContentFlickable.rowHeight < 100)
-                 sequencerViewContent.sequencerViewContentFlickable.rowHeight += 2
-         }
-     }
+    function loadPartitionNode() {
+        node = app.scheduler.partitionNode
+        partition = app.scheduler.partitionNode.partitions.getPartition(app.scheduler.partitionIndex)
+    }
 
-     Shortcut {
-        sequence: StandardKey.ZoomOut
-         onActivated: {
-             if (sequencerViewContent.sequencerViewContentFlickable.rowHeight > 20)
-                sequencerViewContent.sequencerViewContentFlickable.rowHeight -= 2
-         }
-     }
+    id: sequencerView
+    spacing: 0
+    enabled: false
+
+    SequencerViewHeader {
+        id: sequencerViewHeader
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredWidth: parent.width
+        Layout.preferredHeight: parent.height * 0.1
+        z: 1
+    }
+
+    SequencerViewContent {
+        id: sequencerViewContent
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredHeight: parent.height * 0.8
+        Layout.preferredWidth: parent.width
+    }
+
+    SequencerViewFooter {
+        id: sequencerViewFooter
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredHeight: parent.height * 0.1
+        Layout.preferredWidth: parent.width
+    }
 }

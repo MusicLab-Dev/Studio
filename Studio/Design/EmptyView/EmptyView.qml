@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.15
 import "../Common"
 
 Rectangle {
+    property int moduleIndex: -1
+
     id: emptyView
     color: themeManager.foregroundColor
 

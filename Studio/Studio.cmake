@@ -56,7 +56,6 @@ set(StudioSources
     ${StudioDir}/PluginTableModel.hpp
     ${StudioDir}/Note.hpp
     ${StudioDir}/Point.hpp
-    ${StudioDir}/Point.ipp
     ${StudioDir}/Project.cpp
     ${StudioDir}/Project.hpp
     ${StudioDir}/Scheduler.cpp

@@ -20,12 +20,12 @@ PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *par
 QHash<int, QByteArray> PartitionModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(Roles::Range), "range"},
-        { static_cast<int>(Roles::Velocity), "velocity"},
-        { static_cast<int>(Roles::Tuning), "tuning"},
-        { static_cast<int>(Roles::NoteIndex), "noteIndex"},
-        { static_cast<int>(Roles::EventType), "eventType"},
-        { static_cast<int>(Roles::Key), "key"}
+        { static_cast<int>(Roles::Range),       "range" },
+        { static_cast<int>(Roles::Velocity),    "velocity" },
+        { static_cast<int>(Roles::Tuning),      "tuning" },
+        { static_cast<int>(Roles::NoteIndex),   "noteIndex" },
+        { static_cast<int>(Roles::EventType),   "eventType" },
+        { static_cast<int>(Roles::Key),         "key" }
     };
 }
 
@@ -36,7 +36,7 @@ QVariant PartitionModel::data(const QModelIndex &index, int role) const
     const auto &child = _data->notes().at(index.row());
     switch (static_cast<Roles>(role)) {
         case Roles::Range:
-            return QVariant::fromValue(reinterpret_cast<const Note &>(child.range));
+            return QVariant::fromValue(reinterpret_cast<const BeatRange &>(child.range));
         case Roles::Velocity:
             return child.velocity;
         case Roles::Tuning:
@@ -98,6 +98,20 @@ void PartitionModel::add(const Note &note)
             endInsertRows();
         }
     );
+}
+
+int PartitionModel::find(const quint8 key, const quint32 beat) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &note : _data->notes()) {
+        if (note.key != key || beat < note.range.from || beat > note.range.to) {
+            ++idx;
+            continue;
+        }
+        return idx;
+    }
+    return -1;
 }
 
 void PartitionModel::remove(const int idx)

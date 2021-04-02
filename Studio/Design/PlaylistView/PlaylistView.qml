@@ -1,9 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
-// import "qrc:/PlaylistView/PlaylistViewContent"
-
 ColumnLayout {
+    property int moduleIndex: -1
+
     id: playlistView
     spacing: 0
 

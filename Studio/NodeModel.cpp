@@ -14,36 +14,16 @@
 
 #include "Models.hpp"
 #include "NodeModel.hpp"
+#include "ThemeManager.hpp"
 
-static const QColor Colors[] = {
-    QColor(0x31A8FF),
-    QColor(0x00C5FF),
-    QColor(0x00DCE7),
-    QColor(0x00ECBA),
-    QColor(0x9EF78C),
-    QColor(0xFFD569),
-    QColor(0xFFB377),
-    QColor(0xFF978F),
-    QColor(0xFF85A8),
-    QColor(0xF382BB),
-    QColor(0xDF83CE),
-    QColor(0xC487DE),
-    QColor(0xAC90EC),
-    QColor(0x8E98F7),
-    QColor(0x69A1FD)
-};
-
-constexpr std::size_t ColorCount = sizeof(Colors) / sizeof(Colors[0]);
-
-static std::size_t CurrentColorIndex = 0u;
+// Current color index from color chain
+static quint32 CurrentColorIndex = 0u;
 
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    _data->setColor(static_cast<std::uint32_t>(Colors[CurrentColorIndex].rgba()));
-    if (++CurrentColorIndex >= ColorCount)
-        CurrentColorIndex = 0u;
+    _data->setColor(ThemeManager::GetColorFromChain(CurrentColorIndex++).rgba());
 }
 
 QHash<int, QByteArray> NodeModel::roleNames(void) const noexcept
@@ -110,34 +90,43 @@ const NodeModel *NodeModel::get(const int idx) const
     return _children.at(idx).get();
 }
 
-void NodeModel::add(const QString &pluginPath)
+NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addPartition)
 {
-    std::string path = pluginPath.toStdString();
-    auto idx = static_cast<int>(_data->children().size());
-    auto factory = Audio::PluginTable::Get().find(path);
+    const std::string path = pluginPath.toStdString();
+    const auto factory = Audio::PluginTable::Get().find(path);
     if (!factory) {
         qCritical() << "NodeModel::add: Invalid plugin path " << pluginPath;
-        return;
+        return nullptr;
     }
     Audio::PluginPtr plugin = factory->instantiate();
     if (!plugin) {
         qCritical() << "NodeModel::add: Couldn't intantiate plugin " << pluginPath;
-        return;
+        return nullptr;
     }
 
+    auto audioNode = std::make_unique<Audio::Node>(_data, std::move(plugin));
+
+    audioNode->setName(Core::FlatString(factory->getName()));
+    // audioNode->prepareCache(specs);
+
+    NodePtr node(audioNode.get(), this);
+    auto nodePtr = node.get();
+
+    if (addPartition)
+        node->partitions()->add();
+
     Models::AddProtectedEvent(
-        [this, factory, plugin = std::move(plugin)](void) mutable {
-            auto &backendChild = _data->children().push(std::make_unique<Audio::Node>(std::move(plugin)));
-            backendChild->setName(Core::FlatString(factory->getName()));
-            // backendChild->prepareCache(specs);
+        [this, audioNode = std::move(audioNode)](void) mutable {
+            _data->children().push(std::move(audioNode));
         },
-        [this] {
+        [this, node = std::move(node)](void) mutable {
             const auto idx = _children.size();
             beginInsertRows(QModelIndex(), idx, idx);
-            _children.push(_data->children().back().get(), this);
+            _children.push(std::move(node));
             endInsertRows();
         }
     );
+    return nodePtr;
 }
 
 void NodeModel::remove(const int idx)

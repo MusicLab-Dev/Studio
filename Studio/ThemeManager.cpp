@@ -15,7 +15,6 @@ struct ThemePack
     QColor line {};
 };
 
-
 static const ThemePack ClassicThemePack {
     .background = "#3E4756",
     .foreground = "#001E36",
@@ -34,14 +33,13 @@ static const ThemePack DarkThemePack {
     .line = "#FFFFFF"
 };
 
-bool ThemeManager::setTheme(const Theme theme)
+void ThemeManager::setTheme(const Theme theme)
 {
     if (_theme == theme)
-        return false;
+        return;
     _theme = theme;
     emit themeChanged();
     updateThemeColors();
-    return true;
 }
 
 void ThemeManager::updateThemeColors(void)
@@ -71,4 +69,29 @@ void ThemeManager::updateThemeColors(void)
     emit contentColorChanged();
     emit disabledColorChanged();
     emit accentColorChanged();
+}
+
+static const QColor ColorChain[] = {
+    QColor(0x31A8FF),
+    QColor(0x00C5FF),
+    QColor(0x00DCE7),
+    QColor(0x00ECBA),
+    QColor(0x9EF78C),
+    QColor(0xFFD569),
+    QColor(0xFFB377),
+    QColor(0xFF978F),
+    QColor(0xFF85A8),
+    QColor(0xF382BB),
+    QColor(0xDF83CE),
+    QColor(0xC487DE),
+    QColor(0xAC90EC),
+    QColor(0x8E98F7),
+    QColor(0x69A1FD)
+};
+
+constexpr quint32 ColorChainCount = sizeof(ColorChain) / sizeof(ColorChain[0]);
+
+QColor ThemeManager::GetColorFromChain(const quint32 index) noexcept
+{
+    return ColorChain[index % ColorChainCount];
 }

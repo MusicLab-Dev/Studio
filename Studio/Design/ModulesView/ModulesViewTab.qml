@@ -77,11 +77,11 @@ Rectangle {
             if (componentSelected === modules.count - 2)
                 componentSelected = modules.count - 3
             if (modules.count === 2) {
-                modules.insert(1,
-                               {
-                                   title: "New component",
-                                   path: "qrc:/EmptyView/EmptyView.qml",
-                               })
+                modules.insert(1, {
+                    title: "New component",
+                    path: "qrc:/EmptyView/EmptyView.qml",
+                    callback: modulesViewContent.nullCallback
+                })
                 componentSelected = 0
             }
             modules.remove(index)

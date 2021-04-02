@@ -7,6 +7,7 @@ Menu {
     property var rootParent: null
     property var targetItem: null
     property NodeModel targetNode: null
+    property NodeModel cachedNode: null
     property int targetNodeIndex: 0
 
     function openMenu(newParent, node, nodeIndex) {
@@ -19,6 +20,7 @@ Menu {
     function closeMenu() {
         targetItem = null
         targetNode = null
+        cachedNode = null
         targetNodeIndex = 0
         close()
     }
@@ -40,8 +42,20 @@ Menu {
         onTriggered: {
             pluginsView.open(
                 function() {
-                    targetNode.add(pluginsView.selectedPath)
-                    closeMenu()
+                    cachedNode = targetNode.add(pluginsView.selectedPath)
+                    if (cachedNode.needSingleExternalInput() || cachedNode.needMultipleExternalInputs()) {
+                        filePicker.openDialog(cachedNode.needMultipleExternalInputs(),
+                            function() {
+                                cachedNode.loadExternalInputs(filePicker.fileUrls)
+                                closeMenu()
+                            },
+                            function() {
+                                app.project.master.remove(app.project.master.count - 1)
+                                modules.remove(moduleIndex)
+                                closeMenu()
+                            }
+                        )
+                    }
                 },
                 function() {
                     closeMenu()
@@ -71,7 +85,7 @@ Menu {
     Action {
         text: qsTr("Remove")
 
-        enabled: targetNode ? targetNode.parentNode : true
+        enabled: targetNode ? targetNode.parentNode !== null : true
 
         onTriggered: {
             targetNode.parentNode.remove(targetNodeIndex)

@@ -5,50 +5,81 @@
 
 #include <QQmlEngine>
 
+#include "Models.hpp"
 #include "Device.hpp"
 
-Device::Device(const Audio::Device::SDLDescriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent)
+Device::Device(const Audio::Device::LogicalDescriptor &descriptor, Audio::AudioCallback &&callback, QObject *parent)
     : QObject(parent), _data(descriptor, std::move(callback))
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
-bool Device::setSampleRate(const quint32 sampleRate) noexcept
+void Device::setSampleRate(const quint32 sampleRate) noexcept
 {
-    if (!_data.setSampleRate(sampleRate))
-        return false;
-    emit sampleRateChanged();
-    return true;
+    if (this->sampleRate() == sampleRate)
+        return;
+    Models::AddProtectedEvent(
+        [this, sampleRate] {
+            _data.setSampleRate(static_cast<Audio::SampleRate>(sampleRate));
+        },
+        [this] {
+            emit sampleRateChanged();
+        }
+    );
 }
 
-bool Device::setFormat(const Format format) noexcept
+void Device::setFormat(const Format format) noexcept
 {
-    if (!_data.setFormat(static_cast<Audio::Format>(format)))
-        return false;
-    emit formatChanged();
-    return true;
+    if (this->format() == format)
+        return;
+    Models::AddProtectedEvent(
+        [this, format] {
+            _data.setFormat(static_cast<Audio::Format>(format));
+        },
+        [this] {
+            emit formatChanged();
+        }
+    );
 }
 
-bool Device::setChannelArrangement(const ChannelArrangement channelArrangement) noexcept
+void Device::setChannelArrangement(const ChannelArrangement channelArrangement) noexcept
 {
-    if (!_data.setChannelArrangement(static_cast<Audio::ChannelArrangement>(channelArrangement)))
-        return false;
-    emit channelArrangementChanged();
-    return true;
+    if (this->channelArrangement() == channelArrangement)
+        return;
+    Models::AddProtectedEvent(
+        [this, channelArrangement] {
+            _data.setChannelArrangement(static_cast<Audio::ChannelArrangement>(channelArrangement));
+        },
+        [this] {
+            emit channelArrangementChanged();
+        }
+    );
 }
 
-bool Device::setMidiChannels(const quint16 midiChannels) noexcept
+void Device::setMidiChannels(const quint16 midiChannels) noexcept
 {
-    if (!_data.setMidiChannels(midiChannels))
-        return false;
-    emit midiChannelsChanged();
-    return true;
+    if (this->midiChannels() == midiChannels)
+        return;
+    Models::AddProtectedEvent(
+        [this, midiChannels] {
+            _data.setMidiChannels(midiChannels);
+        },
+        [this] {
+            emit midiChannelsChanged();
+        }
+    );
 }
 
-bool Device::setBlockSize(const quint16 blockSize) noexcept
+void Device::setBlockSize(const quint16 blockSize) noexcept
 {
-    if (!_data.setBlockSize(blockSize))
-        return false;
-    emit blockSizeChanged();
-    return true;
+    if (this->blockSize() == blockSize)
+        return;
+    Models::AddProtectedEvent(
+        [this, blockSize] {
+            _data.setBlockSize(blockSize);
+        },
+        [this] {
+            emit blockSizeChanged();
+        }
+    );
 }

@@ -18,33 +18,21 @@ class Project : public QObject
     Q_OBJECT
 
     Q_PROPERTY(NodeModel *master READ master NOTIFY masterChanged)
-    Q_PROPERTY(PlaybackMode playbackMode READ playbackMode WRITE setPlaybackMode NOTIFY playbackModeChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 
 public:
-    /** @brief The different types of playback mode */
-    enum class PlaybackMode : int {
-        Production = static_cast<int>(Audio::Project::PlaybackMode::Production),
-        Live = static_cast<int>(Audio::Project::PlaybackMode::Live)
-    };
-    Q_ENUM(PlaybackMode)
-
-
     /** @brief Construct a new project instance */
     explicit Project(Audio::Project *project, QObject *parent = nullptr);
 
 
     /** @brief Get the master node */
     [[nodiscard]] NodeModel *master(void) noexcept { return &_master; }
-    // [[nodiscard]] const NodeModel *master(void) const noexcept { return &_master; }
+    [[nodiscard]] const NodeModel *master(void) const noexcept { return &_master; }
 
-
-    /** @brief Get the playback mode */
-    [[nodiscard]] PlaybackMode playbackMode(void) const noexcept { return static_cast<Project::PlaybackMode>(_data->playbackMode()); }
-
-    /** @brief Set the playback mode, return true and emit playbackModeChanged on change */
-    bool setPlaybackMode(const PlaybackMode mode) noexcept;
+    /** @brief Get the dummy node */
+    [[nodiscard]] NodeModel *dummyNode(void) noexcept { return &_master; }
+    [[nodiscard]] const NodeModel *dummyNode(void) const noexcept { return &_master; }
 
 
     /** @brief Get the project name */
@@ -52,14 +40,14 @@ public:
         { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
 
     /** @brief Set the project name, return true and emit nameChanged on change */
-    bool setName(const QString &name) noexcept;
+    void setName(const QString &name) noexcept { _data->name() = name.toStdString(); }
 
 
     /** @brief Get the project path */
     [[nodiscard]] const QString &path(void) const noexcept { return _path; }
 
     /** @brief Set the project path, return true and emit pathChanged on change */
-    bool setPath(const QString &path) noexcept;
+    void setPath(const QString &path) noexcept { _path = path; }
 
 
     /** @brief Load a project file */
@@ -76,9 +64,6 @@ signals:
     /** @brief Notify when master node changed */
     void masterChanged(void);
 
-    /** @brief Notify when playback mode changed */
-    void playbackModeChanged(void);
-
     /** @brief Notify when project name changed */
     void nameChanged(void);
 
@@ -93,5 +78,4 @@ private:
 
     /** @brief Instantiate the master node and return a pointer referencing to it */
     [[nodiscard]] Audio::Node *createMasterMixer(void);
-
 };
