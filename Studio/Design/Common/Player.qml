@@ -8,7 +8,7 @@ RowLayout {
 
     Item {
         Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.333
+        Layout.preferredWidth: parent.width * 0.250
 
         DefaultImageButton {
             source: "qrc:/Assets/Replay.png"
@@ -19,9 +19,15 @@ RowLayout {
             colorDefault: "white"
         }
     }
+
     Item {
         Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.333
+        Layout.preferredWidth: parent.width * 0.125
+    }
+
+    Item {
+        Layout.preferredHeight: parent.height
+        Layout.preferredWidth: parent.width * 0.250
 
         DefaultImageButton {
             source: "qrc:/Assets/Play.png"
@@ -31,9 +37,15 @@ RowLayout {
             colorDefault: "white"
         }
     }
+
     Item {
         Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.333
+        Layout.preferredWidth: parent.width * 0.125
+    }
+
+    Item {
+        Layout.preferredHeight: parent.height
+        Layout.preferredWidth: parent.width * 0.250
 
         DefaultImageButton {
             source: "qrc:/Assets/Stop.png"
