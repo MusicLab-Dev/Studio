@@ -3,8 +3,8 @@ import QtQuick.Controls 2.15
 
 Item {
     readonly property var keyNames: [
-        qsTr("B"), qsTr("A#"), qsTr("A"), qsTr("G#"), qsTr("G"), qsTr("F#"),
-        qsTr("F"), qsTr("E"), qsTr("D#"), qsTr("D"), qsTr("C#"), qsTr("C")
+        qsTr("C"), qsTr("C#"), qsTr("D"), qsTr("D#"), qsTr("E"), qsTr("F"),
+        qsTr("F#"), qsTr("G"), qsTr("G#"), qsTr("A"), qsTr("A#"), qsTr("B"),
     ]
     readonly property var hashKeyStates: [
         false, true, false, true, false, true,

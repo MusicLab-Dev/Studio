@@ -16,23 +16,5 @@ Row {
         id: timeline
         width: parent.width - headerRect.width
         color: themeManager.disabledColor
-
-        // Repeater {
-        //     model: 12
-
-        //     Rectangle {
-        //         x: index * 200
-        //         height: timeline.height * 0.25
-        //         width: 2
-        //         color: "black"
-        //         anchors.bottom: parent.bottom
-
-        //         Text {
-        //             text: index
-        //             anchors.bottom: parent.top
-        //             anchors.horizontalCenter: parent.horizontalCenter
-        //         }
-        //     }
-        // }
     }
 }
