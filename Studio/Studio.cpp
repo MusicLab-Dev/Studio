@@ -8,6 +8,7 @@
 #include <QFont>
 #include <QFile>
 #include <QFontDatabase>
+#include <QQuickStyle>
 
 #include "AudioAPI.hpp"
 #include "Application.hpp"
@@ -87,6 +88,7 @@ static char *DefaultArgv[] = { DefaultArg, nullptr };
 
 Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
 {
+    QQuickStyle::setStyle("Default");
 }
 
 Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
@@ -113,4 +115,14 @@ Studio::~Studio(void)
 int Studio::run(void)
 {
     return QGuiApplication::exec();
+}
+
+bool Studio::notify(QObject *receiver, QEvent *e)
+{
+    try {
+        return QGuiApplication::notify(receiver, e);
+    } catch (const std::exception &e) {
+        qCritical() << e.what();
+        return true;
+    }
 }

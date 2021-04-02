@@ -7,12 +7,12 @@
 
 #include "Models.hpp"
 
-Scheduler::Scheduler(QObject *parent)
-    : QObject(parent), Audio::AScheduler(), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this), _audioSpecs(Audio::AudioSpecs {
+Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
+    : QObject(parent), Audio::AScheduler(std::move(project)), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this), _audioSpecs(Audio::AudioSpecs {
         _device.sampleRate(),
         static_cast<Audio::ChannelArrangement>(_device.channelArrangement()),
         static_cast<Audio::Format>(_device.format()),
-        processBlockSize()
+        0
     })
 {
     if (_Instance)
@@ -22,6 +22,10 @@ Scheduler::Scheduler(QObject *parent)
 
     connect(this, &Scheduler::audioThreadLocked, this, &Scheduler::onAudioThreadLocked, Qt::BlockingQueuedConnection);
     connect(this, &Scheduler::audioThreadLocked, this, &Scheduler::onAudioThreadReleased, Qt::QueuedConnection);
+
+    setProcessParamByBlockSize(2048, _audioSpecs.sampleRate);
+    _audioSpecs.processBlockSize = processBlockSize();
+    // connect(&_device, &Device::sampleRateChanged, this, &Scheduler::refreshAudioSpecs);
 }
 
 Scheduler::~Scheduler(void) noexcept
@@ -120,13 +124,15 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
 
 void Scheduler::onAudioBlockGenerated(void)
 {
+    // qDebug() << "onAudioBlockGenerated";
     // Currently in a worker thread, we must notify the main thread and block until events are processed
     emit onAudioThreadLocked();
 }
 
 void Scheduler::onAudioQueueBusy(void)
 {
-    /** TODO */
+    // qDebug() << "onAudioQueueBusy";
+    emit onAudioThreadLocked();
 }
 
 void Scheduler::play(void)
@@ -143,8 +149,9 @@ void Scheduler::pause(void)
 
 void Scheduler::stop(void)
 {
-    if (!setState(Audio::AScheduler::State::Pause))
+    if (setState(Audio::AScheduler::State::Pause))
         _device.stop();
+    AScheduler::getCurrentGraph().wait();
     switch (playbackMode()) {
     case PlaybackMode::Production:
         return setProductionCurrentBeat(0u);
@@ -159,12 +166,12 @@ void Scheduler::stop(void)
 
 void Scheduler::onAudioThreadLocked(void)
 {
-    qDebug() << "onAudioThreadLocked";
+    // qDebug() << "onAudioThreadLocked";
     AScheduler::dispatchApplyEvents();
 }
 
 void Scheduler::onAudioThreadReleased(void)
 {
-    qDebug() << "onAudioThreadReleased";
+    // qDebug() << "onAudioThreadReleased";
     AScheduler::dispatchNotifyEvents();
 }

@@ -20,7 +20,9 @@ ColumnLayout {
                 if (node.needSingleExternalInput() || node.needMultipleExternalInputs()) {
                     filePicker.openDialog(node.needMultipleExternalInputs(),
                         function() {
-                            node.loadExternalInputs(filePicker.fileUrls)
+                            var str = filePicker.fileUrl.toString().slice(7)
+                            console.log(str)
+                            node.loadExternalInputs(str)
                             app.scheduler.partitionNode = node
                             app.scheduler.partitionIndex = 0
                             partition = node.partitions.getPartition(0)

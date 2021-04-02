@@ -17,6 +17,10 @@ RowLayout {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             colorDefault: "white"
+
+            onReleased: {
+                app.scheduler.pause()
+            }
         }
     }
     Item {
@@ -29,6 +33,10 @@ RowLayout {
             width: parent.height / 1.5
             anchors.centerIn: parent
             colorDefault: "white"
+
+            onReleased: {
+                app.scheduler.play()
+            }
         }
     }
     Item {
@@ -42,6 +50,10 @@ RowLayout {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             colorDefault: "white"
+
+            onReleased: {
+                app.scheduler.stop()
+            }
         }
     }
 }

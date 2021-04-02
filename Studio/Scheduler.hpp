@@ -46,12 +46,13 @@ public:
 
     using Audio::AScheduler::addEvent;
     using Audio::AScheduler::setProject;
+    using Audio::AScheduler::invalidateCurrentGraph;
 
     /** @brief Get the global instance */
     [[nodiscard]] static Scheduler *Get(void) noexcept { return _Instance; }
 
     /** @brief Default constructor */
-    explicit Scheduler(QObject *parent = nullptr);
+    explicit Scheduler(Audio::ProjectPtr &&project, QObject *parent = nullptr);
 
     /** @brief Destruct the instance */
     ~Scheduler(void) noexcept;

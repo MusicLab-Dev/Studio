@@ -107,7 +107,7 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
     auto audioNode = std::make_unique<Audio::Node>(_data, std::move(plugin));
 
     audioNode->setName(Core::FlatString(factory->getName()));
-    // audioNode->prepareCache(specs);
+    audioNode->prepareCache(Scheduler::Get()->audioSpecs());
 
     NodePtr node(audioNode.get(), this);
     auto nodePtr = node.get();
@@ -118,6 +118,7 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
     Models::AddProtectedEvent(
         [this, audioNode = std::move(audioNode)](void) mutable {
             _data->children().push(std::move(audioNode));
+            Scheduler::Get()->invalidateCurrentGraph();
         },
         [this, node = std::move(node)](void) mutable {
             const auto idx = _children.size();

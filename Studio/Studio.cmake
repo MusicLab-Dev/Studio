@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt5 COMPONENTS Core Quick Qml REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml REQUIRED)
 find_package(Threads)
 
 qt_add_resources(QtResources
@@ -75,7 +75,7 @@ add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${StudioDir}/..)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Audio Qt::Core Qt::Quick Qt::Qml Threads::Threads)
+target_link_libraries(${PROJECT_NAME} PUBLIC Audio Qt::Core Qt::Quick Qt::QuickControls2 Qt::Qml Threads::Threads)
 
 if(CODE_COVERAGE)
     target_compile_options(${PROJECT_NAME} PUBLIC --coverage)

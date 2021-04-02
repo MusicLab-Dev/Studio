@@ -17,7 +17,7 @@ Audio::Node *Project::createMasterMixer(void)
     auto &backendChild = _data->master();
     backendChild = std::make_unique<Audio::Node>(nullptr, std::move(plugin));
     backendChild->setName(Core::FlatString("Master"));
-    // backendChild->prepareCache(specs);
+    backendChild->prepareCache(Scheduler::Get()->audioSpecs());
     return backendChild.get();
 }
 

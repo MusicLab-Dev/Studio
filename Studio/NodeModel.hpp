@@ -7,6 +7,7 @@
 
 #include <QAbstractListModel>
 #include <QColor>
+#include <QUrl>
 
 #include <Core/FlatVector.hpp>
 #include <Core/UniqueAlloc.hpp>
@@ -141,11 +142,12 @@ public slots:
     /** @todo Move this in pluginmodel */
     bool needSingleExternalInput(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::SingleExternalInput); }
     bool needMultipleExternalInputs(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::MultipleExternalInputs); }
-    void loadExternalInputs(const QVariantList &paths)
+    void loadExternalInputs(const QString &path)
     {
         Audio::ExternalPaths res;
-        for (auto &path : paths)
-            res.push(path.toString().toStdString());
+        // for (auto &path : paths)
+        //     res.push(path.());
+        res.push(path.toStdString());
         _data->plugin()->setExternalPaths(res);
     }
 

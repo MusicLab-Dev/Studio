@@ -27,6 +27,9 @@ public:
     /** @brief Run the studio application */
     [[nodiscard]] int run(void);
 
+    /** @brief On notify */
+    virtual bool notify(QObject *receiver, QEvent *e) override;
+
 private:
     QQmlApplicationEngine _engine;
 };
