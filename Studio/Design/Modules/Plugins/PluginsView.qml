@@ -33,18 +33,18 @@ PluginsBackground {
         console.log("Filter changed to: ", currentFilter);
     }
 
-    Button {
-        text: "CLOSE"
-        onReleased: {
-            cancelAndClose()
-        }
-    }
-
     PluginsViewTitle {
         id: pluginsViewTitle
         x: (pluginsForeground.width + (parent.width - pluginsForeground.width) / 2) - width / 2
         y: height
     }
+
+    PluginsViewCloseButton {
+        id: pluginsViewCloseButton
+        x: pluginsView.width - width - height
+        y: height
+    }
+
 
     PluginsForeground {
         id: pluginsForeground

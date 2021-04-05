@@ -43,5 +43,8 @@
         <file>Assets/Settings/Info.png</file>
         <file>Assets/Settings/Midi.png</file>
         <file>Assets/Settings/Project.png</file>
+        <file>Assets/Plugins/Mixer.png</file>
+        <file>Assets/Plugins/Sampler.png</file>
+        <file>Assets/Plugins/Default.png</file>
     </qresource>
 </RCC>
