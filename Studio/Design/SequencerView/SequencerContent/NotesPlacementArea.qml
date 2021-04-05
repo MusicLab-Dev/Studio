@@ -64,6 +64,8 @@ MouseArea {
         case NotesPlacementArea.Mode.RightResize:
             if (contentView.placementBeatPrecisionFrom < 0)
                 contentView.placementBeatPrecisionFrom = 0
+            var aze = contentView.placementKey.toString()
+            console.log(aze)
             partition.add(
                 AudioAPI.note(
             /* Range    */  AudioAPI.beatRange(contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo),

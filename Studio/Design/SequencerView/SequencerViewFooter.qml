@@ -5,6 +5,7 @@ import "../Common"
 import "../Default"
 
 import Scheduler 1.0
+import NodeModel 1.0
 
 Rectangle {
     width: parent.width
@@ -41,6 +42,9 @@ Rectangle {
                 height: parent.height
                 width: 200
                 targetPlaybackMode: Scheduler.Partition
+                isPartitionPlayer: true
+                targetNode: sequencerView.node
+                targetPartitionIndex: sequencerView.partitionIndex
             }
         }
 

@@ -102,7 +102,7 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
     Models::AddProtectedEvent(
         [this, beat] {
             auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::OnTheFly>();
-            range.to = beat + Audio::AScheduler::processBeatSize();
+            range.to = beat + processBeatSize();
             range.from = beat;
         },
         [this, currentBeat] {
@@ -115,35 +115,57 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
 bool Scheduler::onAudioBlockGenerated(void)
 {
     _blockGenerated = true;
-    while (_blockGenerated)
+    while (_blockGenerated) {
         std::this_thread::yield();
+    }
     return _exitGraph;
 }
 
 bool Scheduler::onAudioQueueBusy(void)
 {
     _blockGenerated = true;
-    while (_blockGenerated)
+    while (_blockGenerated) {
         std::this_thread::yield();
+    }
     return _exitGraph;
 }
 
 void Scheduler::play(const Scheduler::PlaybackMode mode)
 {
-    if (playbackMode() == mode) {
-        playImpl();
-    } else {
-        pauseImpl();
-        addEvent(
-            [this, mode] {
-                Audio::AScheduler::setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
-            },
-            [this] {
-                playImpl();
+    pauseImpl();
+    Models::AddProtectedEvent(
+        [this, mode] {
+            setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
+        },
+        [this, mode = Audio::AScheduler::playbackMode()] {
+            getCurrentGraph().wait();
+            playImpl();
+            if (mode != Audio::AScheduler::playbackMode())
                 emit playbackModeChanged();
-            }
-        );
-    }
+        }
+    );
+}
+
+void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *node, const quint32 partition)
+{
+    const bool partitionNodeChanged = partitionNode() != node->audioNode();
+
+    pauseImpl();
+    Models::AddProtectedEvent(
+        [this, mode, node, partition] {
+            setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
+            setPartitionNode(node->audioNode());
+            setPartitionIndex(partition);
+        },
+        [this, mode = Audio::AScheduler::playbackMode(), partitionNodeChanged] {
+            getCurrentGraph().wait();
+            // if (partitionNodeChanged)
+            invalidateCurrentGraph();
+            playImpl();
+            if (mode != Audio::AScheduler::playbackMode())
+                emit playbackModeChanged();
+        }
+    );
 }
 
 void Scheduler::pause(const Scheduler::PlaybackMode)
@@ -175,7 +197,7 @@ void Scheduler::stop(const Scheduler::PlaybackMode mode)
 void Scheduler::replay(const Scheduler::PlaybackMode mode)
 {
     pauseImpl();
-    addEvent(
+    Models::AddProtectedEvent(
         [this, mode] {
             Audio::AScheduler::setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
             auto &range = Audio::AScheduler::getCurrentBeatRange();
@@ -205,21 +227,60 @@ void Scheduler::replay(const Scheduler::PlaybackMode mode)
     );
 }
 
-void Scheduler::setupPartitionNode(NodeModel * const node, const quint32 partitionIndex)
+void Scheduler::replayPartition(const Scheduler::PlaybackMode mode, NodeModel *node, const quint32 partition)
 {
-    if (playbackMode() == Audio::PlaybackMode::Partition) {
-        pauseImpl();
-        addEvent(
-            [] {
-                setPartitionNode(node->audioNode());
-                setPartitionIndex(partitionIndex);
+    const bool partitionNodeChanged = partitionNode() != node->audioNode();
+
+    pauseImpl();
+    Models::AddProtectedEvent(
+        [this, mode, node, partition] {
+            setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
+            auto &range = Audio::AScheduler::getCurrentBeatRange();
+            range.from = 0;
+            range.to = Audio::AScheduler::processBeatSize();
+            setPartitionNode(node->audioNode());
+            setPartitionIndex(partition);
+        },
+        [this, mode = Audio::AScheduler::playbackMode(), partitionNodeChanged] {
+            getCurrentGraph().wait();
+            // if (partitionNodeChanged)
+            invalidateCurrentGraph();
+            playImpl();
+            if (mode != Audio::AScheduler::playbackMode())
+                emit playbackModeChanged();
+            switch (mode) {
+            case Audio::PlaybackMode::Production:
+                emit productionCurrentBeatChanged();
+                break;
+            case Audio::PlaybackMode::Live:
+                emit liveCurrentBeatChanged();
+                break;
+            case Audio::PlaybackMode::Partition:
+                emit partitionCurrentBeatChanged();
+                break;
+            case Audio::PlaybackMode::OnTheFly:
+                emit onTheFlyCurrentBeatChanged();
+                break;
             }
-        );
-    } else {
-        setPartitionNode(node->audioNode());
-        setPartitionIndex(partitionIndex);
-    }
+        }
+    );
 }
+
+// void Scheduler::setupPartitionNode(NodeModel *node, const quint32 partitionIndex)
+// {
+//     if (playbackMode() == Audio::PlaybackMode::Partition) {
+//         pauseImpl();
+//         addEvent(
+//             [] {
+//                 setPartitionNode(node->audioNode());
+//                 setPartitionIndex(partitionIndex);
+//             }
+//         );
+//     } else {
+//         setPartitionNode(node->audioNode());
+//         setPartitionIndex(partitionIndex);
+//     }
+// }
 
 void Scheduler::playImpl(void)
 {

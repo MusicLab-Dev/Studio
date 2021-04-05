@@ -11,6 +11,7 @@
 #include <Audio/AScheduler.hpp>
 
 #include "Device.hpp"
+#include "NodeModel.hpp"
 
 /**
  * @brief Scheduler class
@@ -94,6 +95,9 @@ public slots:
     /** @brief Play the scheduler */
     void play(const Scheduler::PlaybackMode mode);
 
+    /** @brief Play the scheduler setting up a partition */
+    void playPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex);
+
     /** @brief Pause the scheduler */
     void pause(const Scheduler::PlaybackMode mode);
 
@@ -103,8 +107,8 @@ public slots:
     /** @brief Replay the scheduler (stop + play) */
     void replay(const Scheduler::PlaybackMode mode);
 
-    /** @brief Setup the partition node for playback in partition mode */
-    void setupPartitionNode(NodeModel * const node, const quint32 partitionIndex);
+    /** @brief Replay the scheduler setting up a partition (stop + play) */
+    void replayPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex);
 
 signals:
     /** @brief Notify when playback mode changed */

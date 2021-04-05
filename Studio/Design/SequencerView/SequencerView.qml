@@ -8,11 +8,13 @@ ColumnLayout {
     property int moduleIndex: -1
     property NodeModel node: null
     property PartitionModel partition: null
+    property int partitionIndex: 0
 
     function loadNewPartitionNode() {
         pluginsView.open(
             function() {
                 node = app.project.master.addPartitionNode(pluginsView.selectedPath)
+                partitionIndex = 0
                 if (node === null) {
                     modules.remove(moduleIndex)
                     return
@@ -22,11 +24,7 @@ ColumnLayout {
                         function() {
                             var str = filePicker.fileUrl.toString().slice(7)
                             node.loadExternalInputs(str)
-                            console.log(app.scheduler.partitionNode)
-                            app.scheduler.partitionNode = node
-                            console.log(app.scheduler.partitionNode)
-                            app.scheduler.partitionIndex = 0
-                            partition = node.partitions.getPartition(0)
+                            partition = node.partitions.getPartition(partitionIndex)
                             sequencerView.enabled = true
                         },
                         function() {
@@ -35,9 +33,7 @@ ColumnLayout {
                         }
                     )
                 } else {
-                    app.scheduler.partitionNode = node
-                    app.scheduler.partitionIndex = 0
-                    partition = node.partitions.getPartition(0)
+                    partition = node.partitions.getPartition(partitionIndex)
                     sequencerView.enabled = true
                 }
             },
@@ -48,8 +44,11 @@ ColumnLayout {
     }
 
     function loadPartitionNode() {
-        node = app.scheduler.partitionNode
-        partition = app.scheduler.partitionNode.partitions.getPartition(app.scheduler.partitionIndex)
+        node = app.partitionNodeCache
+        partitionIndex = app.partitionIndexCache
+        partition = app.partitionNodeCache.partitions.getPartition(app.partitionIndexCache)
+        app.partitionNodeCache = null
+        app.partitionIndexCache = -1
     }
 
     id: sequencerView

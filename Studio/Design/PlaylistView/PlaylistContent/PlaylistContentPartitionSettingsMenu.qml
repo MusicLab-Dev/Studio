@@ -42,8 +42,8 @@ Menu {
         text: qsTr("Edit")
 
         onTriggered: {
-            app.scheduler.partitionNode = targetNode
-            app.scheduler.partitionIndex = targetPartitionIndex
+            app.partitionNodeCache = targetNode
+            app.partitionIndexCache = targetPartitionIndex
             modules.insert(modules.count - 1, {
                 title: "Sequencer",
                 path: "qrc:/SequencerView/SequencerView.qml",
