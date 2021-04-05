@@ -43,5 +43,17 @@
         <file>Assets/Settings/Info.png</file>
         <file>Assets/Settings/Midi.png</file>
         <file>Assets/Settings/Project.png</file>
+        <file>Assets/Free.png</file>
+        <file>Assets/1on1.png</file>
+        <file>Assets/1on2.png</file>
+        <file>Assets/1on3.png</file>
+        <file>Assets/1on4.png</file>
+        <file>Assets/1on6.png</file>
+        <file>Assets/2on1.png</file>
+        <file>Assets/3on1.png</file>
+        <file>Assets/4on1.png</file>
+        <file>Assets/6on1.png</file>
+        <file>Assets/8on1.png</file>
+        <file>Assets/1on8.png</file>
     </qresource>
 </RCC>

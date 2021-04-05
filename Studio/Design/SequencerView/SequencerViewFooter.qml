@@ -26,6 +26,9 @@ Rectangle {
                 width: parent.width / 2
                 height: parent.height / 2
                 anchors.centerIn: parent
+                onItemSelectedChanged:  {
+
+                }
             }
         }
 
