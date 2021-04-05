@@ -1,7 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+
 import "../Common"
 import "../Default"
+
+import Scheduler 1.0
 
 Rectangle {
     width: parent.width
@@ -37,6 +40,7 @@ Rectangle {
                 anchors.centerIn: parent
                 height: parent.height
                 width: 200
+                targetPlaybackMode: Scheduler.Partition
             }
         }
 

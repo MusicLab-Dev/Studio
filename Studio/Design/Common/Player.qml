@@ -1,9 +1,14 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+
 import "../Common"
 import "../Default"
 
+import Scheduler 1.0
+
 RowLayout {
+    property int targetPlaybackMode: Scheduler.Production
+
     spacing: 0
 
     Item {
@@ -19,7 +24,7 @@ RowLayout {
             colorDefault: "white"
 
             onReleased: {
-                app.scheduler.pause()
+                app.scheduler.replay(targetPlaybackMode)
             }
         }
     }
@@ -28,14 +33,19 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.333
 
         DefaultImageButton {
-            source: "qrc:/Assets/Play.png"
+            property bool playing: app.scheduler.playbackMode === targetPlaybackMode && app.scheduler.running
+
+            source: playing ? "qrc:/Assets/Pause.png" : "qrc:/Assets/Play.png"
             height: parent.height / 1.5
             width: parent.height / 1.5
             anchors.centerIn: parent
             colorDefault: "white"
 
             onReleased: {
-                app.scheduler.play()
+                if (playing)
+                    app.scheduler.pause(targetPlaybackMode)
+                else
+                    app.scheduler.play(targetPlaybackMode)
             }
         }
     }
@@ -52,7 +62,7 @@ RowLayout {
             colorDefault: "white"
 
             onReleased: {
-                app.scheduler.stop()
+                app.scheduler.stop(targetPlaybackMode)
             }
         }
     }

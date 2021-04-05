@@ -1,6 +1,6 @@
 /**
  * @ Author: Cédric Lucchese
- * @ Description: Node Model class
+ * @ Description: Scheduler
  */
 
 #pragma once
@@ -19,7 +19,8 @@ class Scheduler : public QObject, private Audio::AScheduler
 {
     Q_OBJECT
 
-    Q_PROPERTY(PlaybackMode playbackMode READ playbackMode WRITE setPlaybackMode NOTIFY playbackModeChanged)
+    Q_PROPERTY(PlaybackMode playbackMode READ playbackMode NOTIFY playbackModeChanged)
+    Q_PROPERTY(bool running READ running NOTIFY runningChanged)
     Q_PROPERTY(quint32 productionCurrentBeat READ productionCurrentBeat WRITE setProductionCurrentBeat NOTIFY productionCurrentBeatChanged)
     Q_PROPERTY(quint32 liveCurrentBeat READ liveCurrentBeat WRITE setLiveCurrentBeat NOTIFY liveCurrentBeatChanged)
     Q_PROPERTY(quint32 partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat NOTIFY partitionCurrentBeatChanged)
@@ -62,8 +63,8 @@ public:
     /** @brief Get the playback mode */
     [[nodiscard]] PlaybackMode playbackMode(void) const noexcept { return static_cast<PlaybackMode>(Audio::AScheduler::playbackMode()); }
 
-    /** @brief Set the playback mode, return true and emit playbackModeChanged on change */
-    void setPlaybackMode(const PlaybackMode playbackMode) noexcept;
+    /** @brief Get running state */
+    [[nodiscard]] bool running(void) const noexcept { return AScheduler::state() == AScheduler::State::Play; }
 
 
     /** @brief Get the current beat */
@@ -84,20 +85,26 @@ public:
 
 
     /** @brief Audio block generated event */
-    void onAudioBlockGenerated(void) override final;
+    [[nodiscard]] bool onAudioBlockGenerated(void) override final;
 
     /** @brief Audio block generated event */
-    void onAudioQueueBusy(void) override final;
+    [[nodiscard]] bool onAudioQueueBusy(void) override final;
 
 public slots:
     /** @brief Play the scheduler */
-    void play(void);
+    void play(const Scheduler::PlaybackMode mode);
 
     /** @brief Pause the scheduler */
-    void pause(void);
+    void pause(const Scheduler::PlaybackMode mode);
 
-    /** @brief Stop the scheduler */
-    void stop(void);
+    /** @brief Stop the scheduler (pause + reset beat) */
+    void stop(const Scheduler::PlaybackMode mode);
+
+    /** @brief Replay the scheduler (stop + play) */
+    void replay(const Scheduler::PlaybackMode mode);
+
+    /** @brief Setup the partition node for playback in partition mode */
+    void setupPartitionNode(NodeModel * const node, const quint32 partitionIndex);
 
 signals:
     /** @brief Notify when playback mode changed */
@@ -115,20 +122,28 @@ signals:
     /** @brief Notify that on the fly current beat property has changed */
     void onTheFlyCurrentBeatChanged(void);
 
-    /** @brief Events which Notify to need to apply */
-    void needToApplyEvents(void);
-
-    /** @brief Events which Notify to need to notify */
-    void needToNotifyEvents(void);
+    /** @brief Notify that the running state has changed */
+    void runningChanged(void);
 
 private:
     Device _device;
     QTimer _timer;
     Audio::AudioSpecs _audioSpecs;
     std::atomic<bool> _blockGenerated { false };
+    bool _exitGraph { false };
 
     static inline Scheduler *_Instance { nullptr };
 
     /** @brief Try to intercept the audio thread lock */
     void onCatchingAudioThread(void);
+
+    /** @brief Play the scheduler without checking playback mode */
+    void playImpl(void);
+
+    /** @brief Pause the scheduler without checking playback mode */
+    void pauseImpl(void);
+
+    /** @brief Change the current beat of a given playback mode */
+    template<Audio::PlaybackMode Playback>
+    void setCurrentBeatImpl(const Beat beat);
 };

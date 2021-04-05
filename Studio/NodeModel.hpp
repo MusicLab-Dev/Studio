@@ -122,6 +122,11 @@ public:
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
 
 
+    /** @brief Get the backend data */
+    [[nodiscard]] Audio::Node *audioNode(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::Node *audioNode(void) const noexcept { return _data; }
+
+
 public slots:
     /** @brief Return the count of element in the model */
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_children.size()); }

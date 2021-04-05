@@ -21,9 +21,10 @@ ColumnLayout {
                     filePicker.openDialog(node.needMultipleExternalInputs(),
                         function() {
                             var str = filePicker.fileUrl.toString().slice(7)
-                            console.log(str)
                             node.loadExternalInputs(str)
+                            console.log(app.scheduler.partitionNode)
                             app.scheduler.partitionNode = node
+                            console.log(app.scheduler.partitionNode)
                             app.scheduler.partitionIndex = 0
                             partition = node.partitions.getPartition(0)
                             sequencerView.enabled = true

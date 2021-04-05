@@ -25,6 +25,7 @@ Rectangle {
                 anchors.centerIn: parent
                 height: parent.height
                 width: 200
+                targetPlaybackMode: Scheduler.Production
             }
         }
 
