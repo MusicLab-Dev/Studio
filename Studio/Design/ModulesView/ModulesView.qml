@@ -74,6 +74,20 @@ Rectangle {
     }
 
     Shortcut {
+        sequence: "Ctrl+O"
+        onActivated: {
+            app.scheduler.play()
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+P"
+        onActivated: {
+            app.scheduler.stop()
+        }
+    }
+
+    Shortcut {
         sequence: "Ctrl+W"
         onActivated: {
             if (pluginsView.visible)

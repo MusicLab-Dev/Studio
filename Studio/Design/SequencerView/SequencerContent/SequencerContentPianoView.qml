@@ -23,8 +23,9 @@ Item {
         false, true, false, true, false, false
     ]
     readonly property int keysPerOctave: keyNames.length
-    property int octaves: 10
-    property int octaveOffset: 1
+    property int octaves: 6
+    property int octaveOffset: 2
+    readonly property int keyOffset: octaveOffset * keysPerOctave
     readonly property int keys: keysPerOctave * octaves
     property real headerFactor: 0.1
     property real keyWidth: parent.width * headerFactor
@@ -38,7 +39,7 @@ Item {
         model: pianoView.keys
 
         delegate: Item {
-            readonly property int currentOctave: octaveOffset + index / keysPerOctave
+            readonly property int currentOctave: octaveOffset + (pianoView.keys - index) / keysPerOctave
             readonly property int keyIndex: index % keysPerOctave
             readonly property bool isHashKey: hashKeyStates[keyIndex]
             readonly property bool isInMiddleOfHashKeys: middleHashKeysStates[keyIndex]
@@ -75,7 +76,7 @@ Item {
                 Text {
                     anchors.verticalCenter: key.isInMiddleOfHashKeys ? parent.verticalCenter : key.isDownHashKey ? parent.TopRight : parent.verticalCenter
                     anchors.right: parent.right
-                    text: pianoView.keyNames[key.keyIndex] + key.currentOctave
+                    text: pianoView.keyNames[key.keyIndex] + (key.currentOctave - 1)
                     color: !key.isHashKey ? "#7B7B7B" : "#E7E7E7"
                     z: 1
                 }
@@ -95,7 +96,7 @@ Item {
             delegate: Rectangle {
                 readonly property var beatRange: range
 
-                y: (pianoView.keys - key) * contentView.rowHeight
+                y: (pianoView.keys - 1 - (key - pianoView.keyOffset)) * contentView.rowHeight
                 x: contentView.xOffset + beatRange.from * contentView.pixelsPerBeatPrecision
                 width: (beatRange.to - beatRange.from) * contentView.pixelsPerBeatPrecision
                 height: contentView.rowHeight

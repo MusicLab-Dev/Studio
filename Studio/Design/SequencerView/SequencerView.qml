@@ -33,6 +33,11 @@ ColumnLayout {
                             modules.remove(moduleIndex)
                         }
                     )
+                } else {
+                    app.scheduler.partitionNode = node
+                    app.scheduler.partitionIndex = 0
+                    partition = node.partitions.getPartition(0)
+                    sequencerView.enabled = true
                 }
             },
             function() {

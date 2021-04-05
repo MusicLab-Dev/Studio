@@ -8,24 +8,27 @@
 #include "Models.hpp"
 
 Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
-    : QObject(parent), Audio::AScheduler(std::move(project)), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this), _audioSpecs(Audio::AudioSpecs {
-        _device.sampleRate(),
-        static_cast<Audio::ChannelArrangement>(_device.channelArrangement()),
-        static_cast<Audio::Format>(_device.format()),
-        0
-    })
+    :   QObject(parent),
+        Audio::AScheduler(std::move(project)), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this),
+        _timer(this),
+        _audioSpecs(Audio::AudioSpecs {
+            _device.sampleRate(),
+            static_cast<Audio::ChannelArrangement>(_device.channelArrangement()),
+            static_cast<Audio::Format>(_device.format()),
+            0
+        }
+    )
 {
     if (_Instance)
         throw std::runtime_error("Scheduler::Scheduler: An instance of the scheduler already exists");
     _Instance = this;
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
-    connect(this, &Scheduler::audioThreadLocked, this, &Scheduler::onAudioThreadLocked, Qt::BlockingQueuedConnection);
-    connect(this, &Scheduler::audioThreadLocked, this, &Scheduler::onAudioThreadReleased, Qt::QueuedConnection);
-
     setProcessParamByBlockSize(2048, _audioSpecs.sampleRate);
     _audioSpecs.processBlockSize = processBlockSize();
     // connect(&_device, &Device::sampleRateChanged, this, &Scheduler::refreshAudioSpecs);
+    _timer.setTimerType(Qt::PreciseTimer);
+    connect(&_timer, &QTimer::timeout, this, &Scheduler::onCatchingAudioThread);
 }
 
 Scheduler::~Scheduler(void) noexcept
@@ -54,11 +57,13 @@ void Scheduler::setProductionCurrentBeat(const Beat beat)
         return;
     Models::AddProtectedEvent(
         [this, beat] {
+            std::cout << "setProductionCurrentBeat " << beat << std::endl;
             auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Production>();
             range.to = beat + Audio::AScheduler::processBeatSize();
             range.from = beat;
         },
         [this, currentBeat] {
+            std::cout << "setProductionCurrentBeat2 " << currentBeat << std::endl;
             if (currentBeat != productionCurrentBeat())
                 emit productionCurrentBeatChanged();
         }
@@ -124,21 +129,30 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
 
 void Scheduler::onAudioBlockGenerated(void)
 {
-    // qDebug() << "onAudioBlockGenerated";
-    // Currently in a worker thread, we must notify the main thread and block until events are processed
-    emit onAudioThreadLocked();
+    std::cout << "onAudioBlockGenerated wait" << std::endl;
+    _blockGenerated = true;
+    while (_blockGenerated)
+        std::this_thread::yield();
+    // __cxx_atomic_wait(reinterpret_cast<bool *>(&_blockGenerated), true, std::memory_order::memory_order_relaxed);
+    std::cout << "onAudioBlockGenerated released" << std::endl;
 }
 
 void Scheduler::onAudioQueueBusy(void)
 {
-    // qDebug() << "onAudioQueueBusy";
-    emit onAudioThreadLocked();
+    std::cout << "onAudioQueueBusy wait" << std::endl;
+    _blockGenerated = true;
+    while (_blockGenerated)
+        std::this_thread::yield();
+    // __cxx_atomic_wait(reinterpret_cast<bool *>(&_blockGenerated), true, std::memory_order::memory_order_relaxed);
+    std::cout << "onAudioQueueBusy released" << std::endl;
 }
 
 void Scheduler::play(void)
 {
-    if (setState(Audio::AScheduler::State::Play))
+    if (setState(Audio::AScheduler::State::Play)) {
         _device.start();
+        _timer.start();
+    }
 }
 
 void Scheduler::pause(void)
@@ -151,7 +165,6 @@ void Scheduler::stop(void)
 {
     if (setState(Audio::AScheduler::State::Pause))
         _device.stop();
-    // AScheduler::getCurrentGraph().wait();
     switch (playbackMode()) {
     case PlaybackMode::Production:
         return setProductionCurrentBeat(0u);
@@ -164,14 +177,15 @@ void Scheduler::stop(void)
     }
 }
 
-void Scheduler::onAudioThreadLocked(void)
+void Scheduler::onCatchingAudioThread(void)
 {
-    // qDebug() << "onAudioThreadLocked";
+    if (!_blockGenerated)
+        return;
+    std::cout << "Dispatch events" << std::endl;
     AScheduler::dispatchApplyEvents();
-}
-
-void Scheduler::onAudioThreadReleased(void)
-{
-    // qDebug() << "onAudioThreadReleased";
+    std::cout << "Dispatch notify" << std::endl;
     AScheduler::dispatchNotifyEvents();
+    _blockGenerated = false;
+    // if (state() == Scheduler::State::Pause)
+    //     _timer.stop();
 }

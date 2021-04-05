@@ -22,7 +22,7 @@ MouseArea {
 
     onPressed: {
         var realMouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
-        var mouseKey = Math.ceil((height - mouse.y) / contentView.rowHeight)
+        var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
         var mouseBeatPrecision = realMouseBeatPrecision
         var noteIndex = partition.find(mouseKey, mouseBeatPrecision)
         if (mouse.buttons & Qt.RightButton) { // Right click on note -> delete
@@ -83,7 +83,7 @@ MouseArea {
 
     onPositionChanged: {
         var mouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
-        var mouseKey = Math.ceil((height - mouse.y) / contentView.rowHeight)
+        var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
         if (contentView.placementBeatPrecisionScale !== 0)
             mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
         switch (mode) {

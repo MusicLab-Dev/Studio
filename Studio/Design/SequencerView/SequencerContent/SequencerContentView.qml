@@ -10,6 +10,7 @@ ContentView {
     rowHeaderWidth: pianoView.keyWidth
     clip: true
     placementKeyCount: pianoView.keys
+    placementKeyOffset: pianoView.keyOffset
 
     SequencerContentPianoView {
         id: pianoView

@@ -6,6 +6,7 @@
 #pragma once
 
 #include <QObject>
+#include <QTimer>
 
 #include <Audio/AScheduler.hpp>
 
@@ -120,18 +121,14 @@ signals:
     /** @brief Events which Notify to need to notify */
     void needToNotifyEvents(void);
 
-    /** @brief Events which notify main thread the audio thread has been locked */
-    void audioThreadLocked(void);
-
 private:
     Device _device;
+    QTimer _timer;
     Audio::AudioSpecs _audioSpecs;
+    std::atomic<bool> _blockGenerated { false };
 
     static inline Scheduler *_Instance { nullptr };
 
-    /** @brief Called when the audio thread has been locked */
-    void onAudioThreadLocked(void);
-
-    /** @brief Called when the audio thread has been released */
-    void onAudioThreadReleased(void);
+    /** @brief Try to intercept the audio thread lock */
+    void onCatchingAudioThread(void);
 };
