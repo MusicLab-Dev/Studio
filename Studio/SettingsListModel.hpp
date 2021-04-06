@@ -7,6 +7,32 @@
 
 #include <QAbstractListModel>
 
+/*
+
+// SettingsModel.json
+{
+    "Audio": {
+        "Device": {
+            "currentDevice": {
+                "name": "Current device",
+                "description": "Choose your device",
+                "tags": ["Device", "Output"],
+                "type": "DeviceComboBox",
+                "range": []
+            }
+        }
+    },
+}
+
+// SettingsValues.json
+{
+    "currentDevice": {
+        "value": "MyDevice"
+    }
+}
+
+*/
+
 /** @brief Settings list model */
 class SettingsListModel : public QAbstractListModel
 {
