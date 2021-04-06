@@ -5,11 +5,55 @@ import NodeModel 1.0
 import PartitionModel 1.0
 
 ColumnLayout {
+    property int moduleIndex: -1
     property NodeModel node: null
     property PartitionModel partition: null
+    property int partitionIndex: 0
+
+    function loadNewPartitionNode() {
+        pluginsView.open(
+            function() {
+                node = app.project.master.addPartitionNode(pluginsView.selectedPath)
+                partitionIndex = 0
+                if (node === null) {
+                    modules.remove(moduleIndex)
+                    return
+                }
+                if (node.needSingleExternalInput() || node.needMultipleExternalInputs()) {
+                    filePicker.openDialog(node.needMultipleExternalInputs(),
+                        function() {
+                            var str = filePicker.fileUrl.toString().slice(7)
+                            node.loadExternalInputs(str)
+                            partition = node.partitions.getPartition(partitionIndex)
+                            sequencerView.enabled = true
+                        },
+                        function() {
+                            app.project.master.remove(app.project.master.count - 1)
+                            modules.remove(moduleIndex)
+                        }
+                    )
+                } else {
+                    partition = node.partitions.getPartition(partitionIndex)
+                    sequencerView.enabled = true
+                }
+            },
+            function() {
+                modules.remove(moduleIndex)
+            }
+        )
+    }
+
+    function loadPartitionNode() {
+        node = app.partitionNodeCache
+        partitionIndex = app.partitionIndexCache
+        partition = app.partitionNodeCache.partitions.getPartition(app.partitionIndexCache)
+        app.partitionNodeCache = null
+        app.partitionIndexCache = -1
+    }
 
     id: sequencerView
     spacing: 0
+    enabled: false
 
     SequencerViewHeader {
         id: sequencerViewHeader

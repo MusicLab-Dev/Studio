@@ -90,34 +90,44 @@ const NodeModel *NodeModel::get(const int idx) const
     return _children.at(idx).get();
 }
 
-void NodeModel::add(const QString &pluginPath)
+NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addPartition)
 {
-    std::string path = pluginPath.toStdString();
-    auto idx = static_cast<int>(_data->children().size());
-    auto factory = Audio::PluginTable::Get().find(path);
+    const std::string path = pluginPath.toStdString();
+    const auto factory = Audio::PluginTable::Get().find(path);
     if (!factory) {
         qCritical() << "NodeModel::add: Invalid plugin path " << pluginPath;
-        return;
+        return nullptr;
     }
     Audio::PluginPtr plugin = factory->instantiate();
     if (!plugin) {
         qCritical() << "NodeModel::add: Couldn't intantiate plugin " << pluginPath;
-        return;
+        return nullptr;
     }
 
+    auto audioNode = std::make_unique<Audio::Node>(_data, std::move(plugin));
+
+    audioNode->setName(Core::FlatString(factory->getName()));
+    audioNode->prepareCache(Scheduler::Get()->audioSpecs());
+
+    NodePtr node(audioNode.get(), this);
+    auto nodePtr = node.get();
+
+    if (addPartition)
+        node->partitions()->add();
+
     Models::AddProtectedEvent(
-        [this, factory, plugin = std::move(plugin)](void) mutable {
-            auto &backendChild = _data->children().push(std::make_unique<Audio::Node>(_data, std::move(plugin)));
-            backendChild->setName(Core::FlatString(factory->getName()));
-            // backendChild->prepareCache(specs);
+        [this, audioNode = std::move(audioNode)](void) mutable {
+            _data->children().push(std::move(audioNode));
+            Scheduler::Get()->invalidateCurrentGraph();
         },
-        [this] {
+        [this, node = std::move(node)](void) mutable {
             const auto idx = _children.size();
             beginInsertRows(QModelIndex(), idx, idx);
-            _children.push(_data->children().back().get(), this);
+            _children.push(std::move(node));
             endInsertRows();
         }
     );
+    return nodePtr;
 }
 
 void NodeModel::remove(const int idx)

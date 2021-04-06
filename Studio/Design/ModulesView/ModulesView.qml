@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Dialogs 1.3
 
 import "../Modules/Plugins"
 
@@ -31,31 +32,85 @@ Rectangle {
         anchors.centerIn: parent
     }
 
+    FileDialog {
+        property var acceptedCallback: null
+        property var canceledCallback: null
+
+        function openDialog(multiple, accepted, canceled) {
+            acceptedCallback = accepted
+            canceledCallback = canceled
+            selectMultiple = multiple
+            open()
+        }
+
+        function acceptAndClose() {
+            acceptedCallback()
+            close()
+        }
+
+        function cancelAndClose() {
+            canceledCallback()
+            close()
+        }
+
+        id: filePicker
+        selectFolder: false
+
+        onAccepted: acceptAndClose()
+        onRejected: cancelAndClose()
+
+    }
+
     Shortcut {
         sequence: "Ctrl+T"
         onActivated: {
-            modules.insert(
-                        modules.count - 1,
-                        {
-                            title: "New component",
-                            path: "qrc:/EmptyView/EmptyView.qml",
-                        })
+            modules.insert(modules.count - 1, {
+                title: "New component",
+                path: "qrc:/EmptyView/EmptyView.qml",
+                callback: modulesViewContent.nullCallback
+            })
             componentSelected = modules.count - 2
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+I"
+        onActivated: {
+            if (app.scheduler.running)
+                app.scheduler.pause(app.scheduler.playbackMode)
+            else
+                app.scheduler.play(app.scheduler.playbackMode)
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+O"
+        onActivated: {
+            app.scheduler.stop(app.scheduler.playbackMode)
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+P"
+        onActivated: {
+            app.scheduler.replay(app.scheduler.playbackMode)
         }
     }
 
     Shortcut {
         sequence: "Ctrl+W"
         onActivated: {
+            if (pluginsView.visible)
+                pluginsView.cancelAndClose()
             var moduleSelectedTmp = componentSelected
             if (componentSelected === modules.count - 2)
                 componentSelected = modules.count - 3
             if (modules.count === 2) {
-                modules.insert(1,
-                               {
-                                   title: "New component",
-                                   path: "qrc:/EmptyView/EmptyView.qml",
-                               })
+                modules.insert(1, {
+                    title: "New component",
+                    path: "qrc:/EmptyView/EmptyView.qml",
+                    callback: modulesViewContent.nullCallback
+                })
                 componentSelected = 0
             }
             modules.remove(moduleSelectedTmp)

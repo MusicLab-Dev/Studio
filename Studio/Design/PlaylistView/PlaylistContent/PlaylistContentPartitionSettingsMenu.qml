@@ -39,7 +39,23 @@ Menu {
     id: partitionAddMenu
 
     Action {
+        text: qsTr("Edit")
+
+        onTriggered: {
+            app.partitionNodeCache = targetNode
+            app.partitionIndexCache = targetPartitionIndex
+            modules.insert(modules.count - 1, {
+                title: "Sequencer",
+                path: "qrc:/SequencerView/SequencerView.qml",
+                callback: modulesViewContent.sequencerPartitionNodeCallback
+            })
+            closeMenu()
+        }
+    }
+
+    Action {
         text: qsTr("Remove")
+        enabled: app.scheduler.partitionNode != targetNode || app.scheduler.partitionIndex != targetPartitionIndex
 
         onTriggered: {
             targetNode.partitions.remove(targetPartitionIndex)

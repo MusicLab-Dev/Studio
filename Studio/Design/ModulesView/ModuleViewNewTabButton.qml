@@ -8,27 +8,26 @@ Rectangle {
     id: newTabButton
     color: themeManager.foregroundColor
     border.color: "black"
-    
+
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            modules.insert(
-                        modulesViewContent.modules.count - 1,
-                        {
-                            title: "New component",
-                            path: "qrc:/EmptyView/EmptyView.qml",
-                        })
+            modules.insert(modulesViewContent.modules.count - 1, {
+                title: "New component",
+                path: "qrc:/EmptyView/EmptyView.qml",
+                callback: modulesViewContent.nullCallback
+            })
             modulesViewContent.componentSelected = modulesViewContent.modules.count - 2
         }
     }
-    
+
     Rectangle {
         width: barSize
         height: barSize / 8
         anchors.centerIn: parent
         radius: 20
     }
-    
+
     Rectangle {
         width: barSize / 8
         height: barSize

@@ -8,6 +8,7 @@
 #include <QFont>
 #include <QFile>
 #include <QFontDatabase>
+#include <QQuickStyle>
 
 #include "AudioAPI.hpp"
 #include "Application.hpp"
@@ -32,6 +33,7 @@ void Studio::InitResources(void)
     qmlRegisterType<PluginTableModel>("PluginTableModel", 1, 0, "PluginTableModel");
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
+    qmlRegisterUncreatableType<Scheduler>("Scheduler", 1, 0, "Scheduler", "Cannot construct Scheduler");
     qmlRegisterUncreatableType<Project>("Project", 1, 0, "Project", "Cannot construct Project");
     qmlRegisterUncreatableType<NodeModel>("NodeModel", 1, 0, "NodeModel", "Cannot construct NodeModel");
     qmlRegisterUncreatableType<PartitionsModel>("PartitionsModel", 1, 0, "PartitionsModel", "Cannot construct PartitionsModel");
@@ -87,6 +89,7 @@ static char *DefaultArgv[] = { DefaultArg, nullptr };
 
 Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
 {
+    QQuickStyle::setStyle("Default");
 }
 
 Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
@@ -113,4 +116,14 @@ Studio::~Studio(void)
 int Studio::run(void)
 {
     return QGuiApplication::exec();
+}
+
+bool Studio::notify(QObject *receiver, QEvent *e)
+{
+    try {
+        return QGuiApplication::notify(receiver, e);
+    } catch (const std::exception &e) {
+        qCritical() << e.what();
+        return true;
+    }
 }
