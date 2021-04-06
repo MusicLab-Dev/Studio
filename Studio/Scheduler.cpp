@@ -34,6 +34,12 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
 
 Scheduler::~Scheduler(void) noexcept
 {
+    if (pauseImpl()) {
+        __cxx_atomic_wait(reinterpret_cast<bool *>(&_blockGenerated), false, std::memory_order::memory_order_relaxed);
+        onCatchingAudioThread();
+        getCurrentGraph().wait();
+    }
+
     _Instance = nullptr;
 }
 
@@ -299,6 +305,8 @@ Beat Scheduler::getCurrentBeatOfMode(const Scheduler::PlaybackMode mode) const n
         return partitionCurrentBeat();
     case PlaybackMode::OnTheFly:
         return onTheFlyCurrentBeat();
+    default:
+        return Beat();
     }
 }
 

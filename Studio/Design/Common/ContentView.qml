@@ -82,6 +82,7 @@ Item {
 
     // Timeline bar
     property real timelineBeatPrecision: 0
+    property real audioProcessBeatPrecision: 0
 
     id: contentView
 
@@ -124,6 +125,13 @@ Item {
             height: surfaceContentGrid.height
             x: xOffset + timelineBeatPrecision * pixelsPerBeatPrecision
             color: "red"
+        }
+
+        Rectangle {
+            width: 4
+            height: surfaceContentGrid.height
+            x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
+            color: "blue"
         }
     }
 

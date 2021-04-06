@@ -27,7 +27,6 @@ RowLayout {
         function onCurrentPlayerChanged() {
             if (app.currentPlayer != player)
                 timer.stop()
-            console.log("onCurrentPlayerChanged", app.currentPlayer)
         }
     }
 

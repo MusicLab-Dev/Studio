@@ -73,30 +73,6 @@ Rectangle {
     }
 
     Shortcut {
-        sequence: "Ctrl+I"
-        onActivated: {
-            if (app.scheduler.running)
-                app.scheduler.pause(app.scheduler.playbackMode)
-            else
-                app.scheduler.play(app.scheduler.playbackMode)
-        }
-    }
-
-    Shortcut {
-        sequence: "Ctrl+O"
-        onActivated: {
-            app.scheduler.stop(app.scheduler.playbackMode)
-        }
-    }
-
-    Shortcut {
-        sequence: "Ctrl+P"
-        onActivated: {
-            app.scheduler.replay(app.scheduler.playbackMode)
-        }
-    }
-
-    Shortcut {
         sequence: "Ctrl+W"
         onActivated: {
             if (pluginsView.visible)
