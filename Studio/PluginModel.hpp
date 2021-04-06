@@ -12,6 +12,8 @@
 
 #include <Audio/IPlugin.hpp>
 
+class NodeModel;
+
 /** @brief class that contaign plugin's controls */
 class PluginModel : public QAbstractListModel
 {
@@ -37,7 +39,7 @@ public:
 
     /** @brief Get the parent node if it exists */
     [[nodiscard]] NodeModel *parentNode(void) noexcept
-        { return qobject_cast<NodeModel *>(parent()); }
+        { return reinterpret_cast<NodeModel *>(parent()); }
 
 
     /** @brief Get the list of all roles */

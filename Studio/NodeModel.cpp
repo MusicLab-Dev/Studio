@@ -20,7 +20,11 @@
 static quint32 CurrentColorIndex = 0u;
 
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
-    : QAbstractListModel(parent), _data(node), _partitions(&node->partitions(), this), _controls(&node->controls(), this)
+    :   QAbstractListModel(parent),
+        _data(node),
+        _partitions(&node->partitions(), this),
+        _controls(&node->controls(), this),
+        _plugin(node->plugin(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
     _data->setColor(ThemeManager::GetColorFromChain(CurrentColorIndex++).rgba());

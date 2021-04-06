@@ -16,7 +16,7 @@
 
 #include "PartitionsModel.hpp"
 #include "ControlsModel.hpp"
-//#include "ConnectionsModel.hpp"
+#include "PluginModel.hpp"
 
 class NodeModel;
 
@@ -55,8 +55,9 @@ public:
     /** @brief Pointer to a controls model */
     using ControlsPtr = Core::UniqueAlloc<ControlsModel>;
 
-    /** @brief Pointer to connections model */
-    //using ConnectionsPtr = Core::UniqueAlloc<ConnectionsModel>;
+    /** @brief Pointer to a plugin model */
+    using PluginPtr = Core::UniqueAlloc<PluginModel>;
+
 
     /** @brief Roles of each instance */
     enum class Roles : int {
@@ -183,7 +184,7 @@ private:
     Core::FlatVector<NodePtr> _children {};
     PartitionsPtr _partitions { nullptr };
     ControlsPtr _controls { nullptr };
-    // PluginPtr _plugin { nullptr };
+    PluginPtr _plugin { nullptr };
 
     /** @brief Create a node */
     [[nodiscard]] NodeModel *addNodeImpl(const QString &pluginPath, const bool addPartition);
