@@ -16,7 +16,7 @@ struct ThemePack
 };
 
 static const ThemePack ClassicThemePack {
-    .background = "#4A8693",
+    .background = "#3E4756",
     .foreground = "#001E36",
     .content = "#FFFFFF",
     .disabled = "#C4C4C4",
