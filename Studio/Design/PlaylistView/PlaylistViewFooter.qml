@@ -7,6 +7,8 @@ import "../Default"
 import Scheduler 1.0
 
 Rectangle {
+    property alias player: player
+
     width: parent.width
     height: parent.width
     color: themeManager.foregroundColor
@@ -25,6 +27,7 @@ Rectangle {
             Layout.preferredWidth: parent.width * 0.333
 
             Player {
+                id: player
                 anchors.centerIn: parent
                 height: parent.height
                 width: 200

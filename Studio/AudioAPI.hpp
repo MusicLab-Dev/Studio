@@ -16,6 +16,7 @@ class AudioAPI : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(quint32 beatPrecision READ beatPrecision CONSTANT)
     Q_PROPERTY(quint16 velocityMax READ velocityMax CONSTANT)
 
 public:
@@ -27,6 +28,9 @@ public:
 
     /** @brief Maximum velocity property */
     [[nodiscard]] Velocity velocityMax(void) const noexcept { return std::numeric_limits<Velocity>::max(); }
+
+    /** @brief Beat precision property */
+    [[nodiscard]] quint32 beatPrecision(void) const noexcept { return Audio::BeatPrecision; }
 
 public slots:
     /** @brief Create an audio beat range */

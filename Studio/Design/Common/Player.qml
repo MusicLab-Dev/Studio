@@ -6,14 +6,43 @@ import "../Default"
 
 import Scheduler 1.0
 import NodeModel 1.0
+import AudioAPI 1.0
 
 RowLayout {
     property int targetPlaybackMode: Scheduler.Production
     property bool isPartitionPlayer: false
     property NodeModel targetNode: null
     property int targetPartitionIndex: 0
+    property real currentPlaybackBeat: 0
+    property real beginPlaybackBeat: 0
+    property real playTimestamp: 0
+    property real currentTimestamp: 0
 
+    id: player
     spacing: 0
+
+    Connections {
+        target: app
+
+        function onCurrentPlayerChanged() {
+            if (app.currentPlayer != player)
+                timer.stop()
+            console.log("onCurrentPlayerChanged", app.currentPlayer)
+        }
+    }
+
+    Timer {
+        id: timer
+        interval: 16
+        repeat: true
+        triggeredOnStart: true
+
+        onTriggered: {
+            currentTimestamp = new Date().getTime()
+            var elapsedMs = (currentTimestamp - playTimestamp)
+            currentPlaybackBeat = beginPlaybackBeat + elapsedMs * (app.project.bpm / 60000) * AudioAPI.beatPrecision
+        }
+    }
 
     Item {
         Layout.preferredHeight: parent.height
@@ -32,7 +61,10 @@ RowLayout {
                     app.scheduler.replayPartition(targetPlaybackMode, targetNode, targetPartitionIndex)
                 else
                     app.scheduler.replay(targetPlaybackMode)
-
+                app.currentPlayer = player
+                beginPlaybackBeat = 0
+                playTimestamp = new Date().getTime()
+                timer.start()
             }
         }
     }
@@ -56,14 +88,19 @@ RowLayout {
             colorDefault: "white"
 
             onReleased: {
-                if (playing)
+                if (playing) {
                     app.scheduler.pause(targetPlaybackMode)
-                else {
+                    timer.stop()
+                } else {
                     if (isPartitionPlayer)
                         app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex)
                     else
                         app.scheduler.play(targetPlaybackMode)
+                    timer.start()
                 }
+                app.currentPlayer = player
+                beginPlaybackBeat = app.scheduler.getCurrentBeatOfMode(targetPlaybackMode)
+                playTimestamp = new Date().getTime()
             }
         }
     }
@@ -87,6 +124,10 @@ RowLayout {
 
             onReleased: {
                 app.scheduler.stop(targetPlaybackMode)
+                app.currentPlayer = player
+                beginPlaybackBeat = 0
+                currentPlaybackBeat = 0
+                timer.stop()
             }
         }
     }

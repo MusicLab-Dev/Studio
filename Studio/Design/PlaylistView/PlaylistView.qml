@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.15
 
 ColumnLayout {
     property int moduleIndex: -1
+    property alias player: playlistViewFooter.player
 
     id: playlistView
     spacing: 0

@@ -26,3 +26,35 @@ Project::Project(Audio::Project *project, QObject *parent)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
+
+void Project::setName(const QString &name) noexcept
+{
+    auto str = name.toStdString();
+
+    if (_data->name() == str)
+        return;
+    _data->name() = str;
+    emit nameChanged();
+}
+
+void Project::setPath(const QString &path) noexcept
+{
+    if (_path == path)
+        return;
+    _path = path;
+    emit pathChanged();
+}
+
+void Project::setBPM(const BPM bpm) noexcept
+{
+    if (_data->bpm() == bpm)
+        return;
+    Scheduler::Get()->addEvent(
+        [this, bpm] {
+            _data->setBPM(bpm);
+        },
+        [this] {
+            emit bpmChanged();
+        }
+    );
+}

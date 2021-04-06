@@ -10,12 +10,7 @@
 Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     :   QObject(parent),
         Audio::AScheduler(std::move(project)),
-        _device(DefaultDeviceDescription,
-            [this](std::uint8_t *data, const std::size_t size) {
-                onConsumeAudioData(data, size);
-            },
-            this
-        ),
+        _device(DefaultDeviceDescription, &Audio::AScheduler::ConsumeAudioData, this),
         _timer(this),
         _audioSpecs(Audio::AudioSpecs {
             _device.sampleRate(),
@@ -272,26 +267,9 @@ void Scheduler::replayPartition(const Scheduler::PlaybackMode mode, NodeModel *n
     );
 }
 
-// void Scheduler::setupPartitionNode(NodeModel *node, const quint32 partitionIndex)
-// {
-//     if (playbackMode() == Audio::PlaybackMode::Partition) {
-//         pauseImpl();
-//         addEvent(
-//             [] {
-//                 setPartitionNode(node->audioNode());
-//                 setPartitionIndex(partitionIndex);
-//             }
-//         );
-//     } else {
-//         setPartitionNode(node->audioNode());
-//         setPartitionIndex(partitionIndex);
-//     }
-// }
-
 bool Scheduler::playImpl(void)
 {
     if (setState(Audio::AScheduler::State::Play)) {
-        _playbackBeat = getCurrentBeatRange().from;
         _device.start();
         _timer.start();
         emit runningChanged();
@@ -310,6 +288,20 @@ bool Scheduler::pauseImpl(void)
         return false;
 }
 
+Beat Scheduler::getCurrentBeatOfMode(const Scheduler::PlaybackMode mode) const noexcept
+{
+    switch (mode) {
+    case PlaybackMode::Production:
+        return productionCurrentBeat();
+    case PlaybackMode::Live:
+        return liveCurrentBeat();
+    case PlaybackMode::Partition:
+        return partitionCurrentBeat();
+    case PlaybackMode::OnTheFly:
+        return onTheFlyCurrentBeat();
+    }
+}
+
 void Scheduler::onCatchingAudioThread(void)
 {
     if (!_blockGenerated)
@@ -322,24 +314,16 @@ void Scheduler::onCatchingAudioThread(void)
     AScheduler::dispatchNotifyEvents();
     switch (playbackMode()) {
     case PlaybackMode::Production:
-        _playbackBeats[static_cast<std::size_t>(PlaybackMode::Production)] = _playbackBeat;
         emit productionCurrentBeatChanged();
-        emit productionPlaybackBeatChanged();
         break;
     case PlaybackMode::Live:
-        _playbackBeats[static_cast<std::size_t>(PlaybackMode::Live)] = _playbackBeat;
         emit liveCurrentBeatChanged();
-        emit livePlaybackBeatChanged();
         break;
     case PlaybackMode::Partition:
-        _playbackBeats[static_cast<std::size_t>(PlaybackMode::Partition)] = _playbackBeat;
         emit partitionCurrentBeatChanged();
-        emit partitionPlaybackBeatChanged();
         break;
     case PlaybackMode::OnTheFly:
-        _playbackBeats[static_cast<std::size_t>(PlaybackMode::OnTheFly)] = _playbackBeat;
         emit onTheFlyCurrentBeatChanged();
-        emit onTheFlyPlaybackBeatChanged();
         break;
     }
 }

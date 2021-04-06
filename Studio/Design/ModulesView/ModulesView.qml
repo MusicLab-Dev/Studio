@@ -12,7 +12,6 @@ Rectangle {
     id: modulesView
     color: "#474747"
 
-
     ColumnLayout {
         anchors.fill: parent
         spacing: 0

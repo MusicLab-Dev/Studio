@@ -25,6 +25,14 @@ void Studio::InitResources(void)
     Audio::PluginTable::Init();
     Audio::Device::InitDriver();
 
+    qRegisterMetaType<ParamID>("ParamID");
+    qRegisterMetaType<ParamValue>("ParamValue");
+    qRegisterMetaType<Beat>("Beat");
+    qRegisterMetaType<Key>("Key");
+    qRegisterMetaType<Velocity>("Velocity");
+    qRegisterMetaType<Tuning>("Tuning");
+    qRegisterMetaType<BPM>("BPM");
+
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
     qmlRegisterUncreatableType<Note>("AudioAPI", 1, 0, "Note", "Cannot construct Note");
