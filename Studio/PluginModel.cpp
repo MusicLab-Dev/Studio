@@ -28,8 +28,8 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
         throw std::range_error("PartitionModel::data: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
     auto child = _data->getControl(index.row());
     const auto &meta = _data->getMetaData().controls[index.row()].translations;
-    const QString title = QString::fromLocal8Bit(meta.names[0].text.data(), meta.names[0].text.size());
-    const QString description = QString::fromLocal8Bit(meta.descriptions[0].text.data(), meta.descriptions[0].text.size());
+    const QString title = QString::fromLocal8Bit(meta.getName(Audio::English).data(), meta.getName(Audio::English).size());
+    const QString description = QString::fromLocal8Bit(meta.getDescription(Audio::English).data(), meta.getDescription(Audio::English).size());
     switch (static_cast<Roles>(role)) {
         case Roles::Value:
             return child;
@@ -41,3 +41,4 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
             return QVariant();
     }
 }
+

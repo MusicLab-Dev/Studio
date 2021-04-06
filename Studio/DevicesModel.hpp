@@ -47,6 +47,5 @@ public slots:
     //DevicePtr instantiate(const QString &name);
 
 private:
-    //Audio::DeviceCapabilities _devices {};
     Audio::Device::PhysicalDescriptors _descriptors;
 };

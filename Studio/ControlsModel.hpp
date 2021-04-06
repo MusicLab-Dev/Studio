@@ -11,6 +11,7 @@
 #include <QAbstractListModel>
 
 #include <Audio/Control.hpp>
+#include <Audio/Controls.hpp>
 
 #include "ControlModel.hpp"
 

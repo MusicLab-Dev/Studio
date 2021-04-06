@@ -13,7 +13,7 @@ TEST(ControlsModel, InitDestroy)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Controls controls {};
+    Audio::Controls controls;
 
     ASSERT_NO_THROW(ControlsModel tmp(&controls));
 }
@@ -23,7 +23,7 @@ TEST(ControlsModel, AddRemoveControlCount)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Controls controls {};
+    Audio::Controls controls;
 
     ControlsModel model(&controls);
 
@@ -44,7 +44,7 @@ TEST(ControlsModel, MoveControl)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler;
-    Audio::Controls controls {};
+    Audio::Controls controls;
 
     ControlsModel model(&controls);
 

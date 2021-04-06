@@ -50,17 +50,3 @@ TEST(Project, path)
     project.setPath(str2);
     ASSERT_EQ(project.path(), str2);
 }
-
-TEST(Project, playbackMode)
-{
-    Audio::Device::DriverInstance driver;
-    Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
-    Audio::Project data(Core::FlatString("test"));
-    Project project(&data);
-
-    project.setPlaybackMode(Project::PlaybackMode::Live);
-    ASSERT_EQ(project.playbackMode(), Project::PlaybackMode::Live);
-    project.setPlaybackMode(Project::PlaybackMode::Production);
-    ASSERT_EQ(project.playbackMode(), Project::PlaybackMode::Production);
-}

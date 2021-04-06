@@ -35,6 +35,11 @@ public:
     ~PluginModel(void) noexcept override = default;
 
 
+    /** @brief Get the parent node if it exists */
+    [[nodiscard]] NodeModel *parentNode(void) noexcept
+        { return qobject_cast<NodeModel *>(parent()); }
+
+
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
@@ -50,11 +55,11 @@ public:
 
         /** @brief Get the title property */
     [[nodiscard]] QString title(void) const noexcept
-        { return QString::fromLocal8Bit(_data->getMetaData().translations.names[0].text.data(), _data->getMetaData().translations.names[0].text.size()); }
+        { return QString::fromLocal8Bit(_data->getMetaData().translations.getName(Audio::English).data(), _data->getMetaData().translations.getName(Audio::English).size()); }
 
         /** @brief Get the description property */
     [[nodiscard]] QString description(void) const noexcept
-        { return QString::fromLocal8Bit(_data->getMetaData().translations.descriptions[0].text.data(), _data->getMetaData().translations.descriptions[0].text.size()); }
+        { return QString::fromLocal8Bit(_data->getMetaData().translations.getDescription(Audio::English).data(), _data->getMetaData().translations.getDescription(Audio::English).size()); }
 
 signals:
     /** @brief Notify that the title has changed */
@@ -64,5 +69,8 @@ signals:
     void descriptionChanged(void);
 
 private:
+
+    const int language(void) const noexcept;
+
     Audio::IPlugin *_data { nullptr };
 };

@@ -16,3 +16,13 @@ TEST(PluginModel, InitDestroy)
 
     ASSERT_NO_THROW(PluginModel tmp(plugin.get()));
 }
+
+TEST(PluginModel, Mixer)
+{
+    std::shared_ptr<Audio::IPlugin> plugin = std::make_shared<Audio::Mixer>();
+
+    PluginModel mixer(plugin.get());
+
+    ASSERT_EQ(mixer.title(), "Mixer");
+    ASSERT_EQ(mixer.description(), "Mixer allow to mix multiple audio source");
+}
