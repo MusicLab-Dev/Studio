@@ -1,26 +1,25 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
 Item {
     readonly property var keyNames: [
         qsTr("C"), qsTr("C#"), qsTr("D"), qsTr("D#"), qsTr("E"), qsTr("F"),
         qsTr("F#"), qsTr("G"), qsTr("G#"), qsTr("A"), qsTr("A#"), qsTr("B"),
     ]
     readonly property var hashKeyStates: [
-        false, true, false, true, false, true,
-        false, false, true, false, true, false
+        false, true, false, true, false, false,
+        true, false, true, false, true, false
     ]
     readonly property var middleHashKeysStates: [
-        false, false, true, false, true, false,
-        false, false, false, true, false, false
+        false, false, true, false, false, false,
+        false, true, false, true, false, false
     ]
     readonly property var upHashKeyStates: [
-        false, false, true, false, true, false,
-        true, false, false, true, false, true
+        true, false, true, false, false, true,
+        false, true, false, true, false, false
     ]
     readonly property var downHashKeyStates: [
-        true, false, true, false, true, false,
-        false, true, false, true, false, false
+        false, false, true, false, true, false,
+        false, true, false, true, false, true
     ]
     readonly property int keysPerOctave: keyNames.length
     property int octaves: 6
@@ -39,8 +38,8 @@ Item {
         model: pianoView.keys
 
         delegate: Item {
-            readonly property int currentOctave: octaveOffset + (pianoView.keys - index) / keysPerOctave
-            readonly property int keyIndex: index % keysPerOctave
+            readonly property int currentOctave: octaveOffset + (pianoView.keys - 1 - index) / keysPerOctave
+            readonly property int keyIndex: (pianoView.keys - 1 - index) % keysPerOctave
             readonly property bool isHashKey: hashKeyStates[keyIndex]
             readonly property bool isInMiddleOfHashKeys: middleHashKeysStates[keyIndex]
             readonly property bool isUpHashKey: upHashKeyStates[keyIndex]

@@ -27,6 +27,12 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(quint32 partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat NOTIFY partitionCurrentBeatChanged)
     Q_PROPERTY(quint32 onTheFlyCurrentBeat READ onTheFlyCurrentBeat WRITE setOnTheFlyCurrentBeat NOTIFY onTheFlyCurrentBeatChanged)
 
+    Q_PROPERTY(quint32 productionPlaybackBeat READ productionPlaybackBeat NOTIFY productionPlaybackBeatChanged)
+    Q_PROPERTY(quint32 livePlaybackBeat READ livePlaybackBeat NOTIFY livePlaybackBeatChanged)
+    Q_PROPERTY(quint32 partitionPlaybackBeat READ partitionPlaybackBeat NOTIFY partitionPlaybackBeatChanged)
+    Q_PROPERTY(quint32 onTheFlyPlaybackBeat READ onTheFlyPlaybackBeat NOTIFY onTheFlyPlaybackBeatChanged)
+
+
 public:
     /** @brief The different types of playback mode */
     enum class PlaybackMode : int {
@@ -50,6 +56,7 @@ public:
     using Audio::AScheduler::addEvent;
     using Audio::AScheduler::setProject;
     using Audio::AScheduler::invalidateCurrentGraph;
+    using Audio::AScheduler::getCurrentGraph;
 
     /** @brief Get the global instance */
     [[nodiscard]] static Scheduler *Get(void) noexcept { return _Instance; }
@@ -68,28 +75,29 @@ public:
     [[nodiscard]] bool running(void) const noexcept { return AScheduler::state() == AScheduler::State::Play; }
 
 
-    /** @brief Get the current beat */
+    /** @brief Get the current beat of a given mode */
     [[nodiscard]] Beat productionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Production>().from; }
     [[nodiscard]] Beat liveCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Live>().from; }
     [[nodiscard]] Beat partitionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Partition>().from; }
     [[nodiscard]] Beat onTheFlyCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::OnTheFly>().from; }
 
-    /** @brief Set the current beat */
+    /** @brief Set the current beat of a given mode */
     void setProductionCurrentBeat(const Beat beat);
     void setLiveCurrentBeat(const Beat beat);
     void setPartitionCurrentBeat(const Beat beat);
     void setOnTheFlyCurrentBeat(const Beat beat);
 
+    /** @brief Get the playback beat of a given mode */
+    [[nodiscard]] Beat productionPlaybackBeat(void) const noexcept { return _playbackBeats[static_cast<std::size_t>(Audio::PlaybackMode::Production)]; }
+    [[nodiscard]] Beat livePlaybackBeat(void) const noexcept { return _playbackBeats[static_cast<std::size_t>(Audio::PlaybackMode::Live)]; }
+    [[nodiscard]] Beat partitionPlaybackBeat(void) const noexcept { return _playbackBeats[static_cast<std::size_t>(Audio::PlaybackMode::Partition)]; }
+    [[nodiscard]] Beat onTheFlyPlaybackBeat(void) const noexcept { return _playbackBeats[static_cast<std::size_t>(Audio::PlaybackMode::OnTheFly)]; }
+
+    /** @brief Get current playback beat */
+    [[nodiscard]] Beat getCurrentPlaybackBeat(void) const noexcept;
 
     /** @brief Get device specs */
     [[nodiscard]] const Audio::AudioSpecs &audioSpecs(void) const noexcept { return _audioSpecs; }
-
-
-    /** @brief Audio block generated event */
-    [[nodiscard]] bool onAudioBlockGenerated(void) override final;
-
-    /** @brief Audio block generated event */
-    [[nodiscard]] bool onAudioQueueBusy(void) override final;
 
 public slots:
     /** @brief Play the scheduler */
@@ -114,6 +122,7 @@ signals:
     /** @brief Notify when playback mode changed */
     void playbackModeChanged(void);
 
+
     /** @brief Notify that production current beat property has changed */
     void productionCurrentBeatChanged(void);
 
@@ -126,28 +135,60 @@ signals:
     /** @brief Notify that on the fly current beat property has changed */
     void onTheFlyCurrentBeatChanged(void);
 
+
+    /** @brief Notify that production current beat property has changed */
+    void productionPlaybackBeatChanged(void);
+
+    /** @brief Notify that live current beat property has changed */
+    void livePlaybackBeatChanged(void);
+
+    /** @brief Notify that partition current beat property has changed */
+    void partitionPlaybackBeatChanged(void);
+
+    /** @brief Notify that on the fly current beat property has changed */
+    void onTheFlyPlaybackBeatChanged(void);
+
+
     /** @brief Notify that the running state has changed */
     void runningChanged(void);
+
+// Harmful functions, do not use
+public:
+    /** @brief Play the scheduler without checking playback mode */
+    bool playImpl(void);
+
+    /** @brief Pause the scheduler without checking playback mode */
+    bool pauseImpl(void);
 
 private:
     Device _device;
     QTimer _timer;
     Audio::AudioSpecs _audioSpecs;
+    std::array<Beat, Audio::PlaybackModeCount> _playbackBeats {};
+    std::atomic<Beat> _playbackBeat { 0u };
     std::atomic<bool> _blockGenerated { false };
     bool _exitGraph { false };
 
     static inline Scheduler *_Instance { nullptr };
 
-    /** @brief Try to intercept the audio thread lock */
-    void onCatchingAudioThread(void);
-
-    /** @brief Play the scheduler without checking playback mode */
-    void playImpl(void);
-
-    /** @brief Pause the scheduler without checking playback mode */
-    void pauseImpl(void);
 
     /** @brief Change the current beat of a given playback mode */
     template<Audio::PlaybackMode Playback>
     void setCurrentBeatImpl(const Beat beat);
+
+    /** @brief Try to intercept the audio thread lock */
+    void onCatchingAudioThread(void);
+
+
+    /** @brief Audio block generated event */
+    [[nodiscard]] bool onAudioBlockGenerated(void) override final;
+
+    /** @brief Audio block generated event */
+    [[nodiscard]] bool onAudioQueueBusy(void) override final;
+
+
+    /** @brief Audio callback on device thread */
+    void onConsumeAudioData(std::uint8_t *data, const std::size_t size) noexcept;
 };
+
+#include "Scheduler.ipp"

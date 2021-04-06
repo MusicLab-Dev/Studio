@@ -9,7 +9,13 @@
 
 Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     :   QObject(parent),
-        Audio::AScheduler(std::move(project)), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this),
+        Audio::AScheduler(std::move(project)),
+        _device(DefaultDeviceDescription,
+            [this](std::uint8_t *data, const std::size_t size) {
+                onConsumeAudioData(data, size);
+            },
+            this
+        ),
         _timer(this),
         _audioSpecs(Audio::AudioSpecs {
             _device.sampleRate(),
@@ -282,21 +288,26 @@ void Scheduler::replayPartition(const Scheduler::PlaybackMode mode, NodeModel *n
 //     }
 // }
 
-void Scheduler::playImpl(void)
+bool Scheduler::playImpl(void)
 {
     if (setState(Audio::AScheduler::State::Play)) {
+        _playbackBeat = getCurrentBeatRange().from;
         _device.start();
         _timer.start();
         emit runningChanged();
-    }
+        return true;
+    } else
+        return false;
 }
 
-void Scheduler::pauseImpl(void)
+bool Scheduler::pauseImpl(void)
 {
     if (setState(Audio::AScheduler::State::Pause)) {
         _device.stop();
         emit runningChanged();
-    }
+        return true;
+    } else
+        return false;
 }
 
 void Scheduler::onCatchingAudioThread(void)
@@ -311,16 +322,24 @@ void Scheduler::onCatchingAudioThread(void)
     AScheduler::dispatchNotifyEvents();
     switch (playbackMode()) {
     case PlaybackMode::Production:
+        _playbackBeats[static_cast<std::size_t>(PlaybackMode::Production)] = _playbackBeat;
         emit productionCurrentBeatChanged();
+        emit productionPlaybackBeatChanged();
         break;
     case PlaybackMode::Live:
+        _playbackBeats[static_cast<std::size_t>(PlaybackMode::Live)] = _playbackBeat;
         emit liveCurrentBeatChanged();
+        emit livePlaybackBeatChanged();
         break;
     case PlaybackMode::Partition:
+        _playbackBeats[static_cast<std::size_t>(PlaybackMode::Partition)] = _playbackBeat;
         emit partitionCurrentBeatChanged();
+        emit partitionPlaybackBeatChanged();
         break;
     case PlaybackMode::OnTheFly:
+        _playbackBeats[static_cast<std::size_t>(PlaybackMode::OnTheFly)] = _playbackBeat;
         emit onTheFlyCurrentBeatChanged();
+        emit onTheFlyPlaybackBeatChanged();
         break;
     }
 }
