@@ -11,6 +11,7 @@
 
 #include "Device.hpp"
 
+
 /** @brief Device Model class */
 class DevicesModel : public QAbstractListModel
 {
@@ -20,7 +21,8 @@ public:
     /** @brief Roles of each instance */
     enum class Roles : int {
         Name = Qt::UserRole + 1,
-        IsInput
+        HasInput,
+        HasOutput
     };
 
     /** @brief Default constructor */
@@ -46,5 +48,5 @@ public slots:
 
 private:
     //Audio::DeviceCapabilities _devices {};
-    Audio::Device::Descriptors _descriptors;
+    Audio::Device::PhysicalDescriptors _descriptors;
 };
