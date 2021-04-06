@@ -17,7 +17,7 @@ RowLayout {
 
     Item {
         Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.333
+        Layout.preferredWidth: parent.width * 0.250
 
         DefaultImageButton {
             source: "qrc:/Assets/Replay.png"
@@ -36,9 +36,15 @@ RowLayout {
             }
         }
     }
+
     Item {
         Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.333
+        Layout.preferredWidth: parent.width * 0.125
+    }
+
+    Item {
+        Layout.preferredHeight: parent.height
+        Layout.preferredWidth: parent.width * 0.250
 
         DefaultImageButton {
             property bool playing: app.scheduler.playbackMode === targetPlaybackMode && app.scheduler.running
@@ -61,9 +67,15 @@ RowLayout {
             }
         }
     }
+
     Item {
         Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.333
+        Layout.preferredWidth: parent.width * 0.125
+    }
+
+    Item {
+        Layout.preferredHeight: parent.height
+        Layout.preferredWidth: parent.width * 0.250
 
         DefaultImageButton {
             source: "qrc:/Assets/Stop.png"
