@@ -309,4 +309,18 @@ void Scheduler::onCatchingAudioThread(void)
     if (_exitGraph)
         _timer.stop();
     AScheduler::dispatchNotifyEvents();
+    switch (playbackMode()) {
+    case PlaybackMode::Production:
+        emit productionCurrentBeatChanged();
+        break;
+    case PlaybackMode::Live:
+        emit liveCurrentBeatChanged();
+        break;
+    case PlaybackMode::Partition:
+        emit partitionCurrentBeatChanged();
+        break;
+    case PlaybackMode::OnTheFly:
+        emit onTheFlyCurrentBeatChanged();
+        break;
+    }
 }

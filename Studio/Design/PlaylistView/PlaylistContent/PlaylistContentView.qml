@@ -7,6 +7,7 @@ ContentView {
     id: contentView
     xOffsetMin: -5000
     yOffsetMin: nodeView.totalHeight > height ? height - nodeView.totalHeight : 0
+    timelineBeatPrecision: app.scheduler.productionCurrentBeat
 
     PlaylistContentNodeView {
         id: nodeView
