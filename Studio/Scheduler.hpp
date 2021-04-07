@@ -53,6 +53,9 @@ public:
     using Audio::AScheduler::invalidateCurrentGraph;
     using Audio::AScheduler::getCurrentGraph;
 
+    /** @brief Number of miss allowed before the graph 'OnTheFly' should stop */
+    static constexpr std::uint32_t OnTheFlyMissThreshold = 25;
+
     /** @brief Get the global instance */
     [[nodiscard]] static Scheduler *Get(void) noexcept { return _Instance; }
 
@@ -152,9 +155,9 @@ private:
     Audio::AudioSpecs _audioSpecs;
     std::atomic<bool> _blockGenerated { false };
     bool _exitGraph { false };
+    std::uint32_t _onTheFlyMissCount { 0 };
 
     static inline Scheduler *_Instance { nullptr };
-
 
     /** @brief Change the current beat of a given playback mode */
     template<Audio::PlaybackMode Playback>

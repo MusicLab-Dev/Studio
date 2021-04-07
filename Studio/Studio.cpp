@@ -32,6 +32,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<Velocity>("Velocity");
     qRegisterMetaType<Tuning>("Tuning");
     qRegisterMetaType<BPM>("BPM");
+    qRegisterMetaType<NoteEvent::EventType>("NoteEvent::EventType");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");

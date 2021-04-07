@@ -276,6 +276,7 @@ void Scheduler::replayPartition(const Scheduler::PlaybackMode mode, NodeModel *n
 bool Scheduler::playImpl(void)
 {
     if (setState(Audio::AScheduler::State::Play)) {
+        _onTheFlyMissCount = 0u;
         _device.start();
         _timer.start();
         emit runningChanged();
@@ -316,6 +317,17 @@ void Scheduler::onCatchingAudioThread(void)
         return;
     AScheduler::dispatchApplyEvents();
     _exitGraph = state() == Scheduler::State::Pause;
+
+    // Check if we should stop on the fly graph
+
+
+    if (playbackMode() == PlaybackMode::OnTheFly && project()->master()->cache().isZero() && ++_onTheFlyMissCount > OnTheFlyMissThreshold) {
+        std::cout << "Missed" << std::endl;
+        _onTheFlyMissCount = 0u;
+        pauseImpl();
+        _exitGraph = true;
+    }
+
     _blockGenerated = false;
     if (_exitGraph)
         _timer.stop();

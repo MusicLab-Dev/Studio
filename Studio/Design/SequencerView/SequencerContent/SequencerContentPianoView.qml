@@ -1,5 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+
+import AudioAPI 1.0
+
 Item {
     readonly property var keyNames: [
         qsTr("C"), qsTr("C#"), qsTr("D"), qsTr("D#"), qsTr("E"), qsTr("F"),
@@ -38,12 +41,13 @@ Item {
         model: pianoView.keys
 
         delegate: Item {
-            readonly property int currentOctave: octaveOffset + (pianoView.keys - 1 - index) / keysPerOctave
-            readonly property int keyIndex: (pianoView.keys - 1 - index) % keysPerOctave
-            readonly property bool isHashKey: hashKeyStates[keyIndex]
-            readonly property bool isInMiddleOfHashKeys: middleHashKeysStates[keyIndex]
-            readonly property bool isUpHashKey: upHashKeyStates[keyIndex]
-            readonly property bool isDownHashKey: downHashKeyStates[keyIndex]
+            readonly property int keyIndex: pianoView.keyOffset + (pianoView.keys - 1 - index)
+            readonly property int keyOctaveIndex: keyIndex % keysPerOctave
+            readonly property int currentOctave: keyIndex / keysPerOctave
+            readonly property bool isHashKey: hashKeyStates[keyOctaveIndex]
+            readonly property bool isInMiddleOfHashKeys: middleHashKeysStates[keyOctaveIndex]
+            readonly property bool isUpHashKey: upHashKeyStates[keyOctaveIndex]
+            readonly property bool isDownHashKey: downHashKeyStates[keyOctaveIndex]
             readonly property color keyColor: isHashKey ? "#7B7B7B" : "#E7E7E7"
 
             id: key
@@ -58,24 +62,32 @@ Item {
                 z: 1
                 width: (key.isHashKey ? pianoView.keyWidth * 0.75 : pianoView.keyWidth) - x
                 height: contentView.rowHeight * (key.isHashKey ? 1 : key.isInMiddleOfHashKeys ? 2 : 1.5)
-                color: key.keyColor
+                color: keyMouseArea.pressed ? Qt.darker(key.keyColor, 1.2) : key.keyColor
                 border.color: key.isHashKey ? color : "#7B7B7B"
                 border.width: 1
 
                 MouseArea {
+                    id: keyMouseArea
                     anchors.fill: parent
-                    onPressed: {
-                        keyBackground.color = Qt.darker(keyBackground.color, 1.2)
-                    }
-                    onReleased: {
-                        keyBackground.color = keyColor
+
+                    onPressedChanged: {
+                        sequencerView.node.partitions.addOnTheFly(
+                            AudioAPI.noteEvent(
+                                pressed ? NoteEvent.On : NoteEvent.Off,
+                                key.keyIndex,
+                                AudioAPI.velocityMax,
+                                0
+                            ),
+                            sequencerView.node,
+                            sequencerView.partitionIndex
+                        )
                     }
                 }
 
                 Text {
                     anchors.verticalCenter: key.isInMiddleOfHashKeys ? parent.verticalCenter : key.isDownHashKey ? parent.TopRight : parent.verticalCenter
                     anchors.right: parent.right
-                    text: pianoView.keyNames[key.keyIndex] + (key.currentOctave - 1)
+                    text: pianoView.keyNames[key.keyOctaveIndex] + (key.currentOctave - 1)
                     color: !key.isHashKey ? "#7B7B7B" : "#E7E7E7"
                     z: 1
                 }
