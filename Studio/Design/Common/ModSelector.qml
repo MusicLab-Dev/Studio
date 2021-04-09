@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import "../Default"
 
 Item {
+    property bool smallVersion: false
     property var itemsPath: []
     property int itemSelected: 0
 
@@ -11,6 +12,7 @@ Item {
 
     Rectangle {
         id: rowContainer
+        visible: !smallVersion
         anchors.centerIn: parent
         height: parent.height
         width: parent.height * itemsPath.length
@@ -62,6 +64,33 @@ Item {
                     duration: 400
                 }
             }
+        }
+    }
+
+    Rectangle {
+        visible: smallVersion
+        height: parent.height
+        width: parent.width
+        color: "transparent"
+        border.color: "white"
+
+        MouseArea{
+            anchors.fill: parent
+
+            onReleased: {
+                if (itemSelected === itemsPath.length - 1)
+                    itemSelected = 0
+                else
+                    itemSelected += 1
+            }
+        }
+
+        DefaultColoredImage {
+            height: parent.height / 2
+            width: height
+            anchors.centerIn: parent
+            source: itemsPath[itemSelected]
+            color: "#FFFFFF"
         }
     }
 }

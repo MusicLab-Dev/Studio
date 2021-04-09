@@ -13,6 +13,7 @@ Button {
 
     id: control
     hoverEnabled: true
+    scale: control.hovered ? 1.05 : 1.0
 
     background: Rectangle {
         width: control.width
@@ -76,6 +77,14 @@ Button {
                 color: "white"
                 width: parent.width
             }
+        }
+    }
+
+    Behavior on scale {
+        SpringAnimation {
+            spring: 5
+            damping: 0.3
+            duration: 400
         }
     }
 }

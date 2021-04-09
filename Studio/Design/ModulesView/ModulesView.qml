@@ -12,7 +12,6 @@ Rectangle {
     id: modulesView
     color: "#474747"
 
-
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
@@ -70,30 +69,6 @@ Rectangle {
                 callback: modulesViewContent.nullCallback
             })
             componentSelected = modules.count - 2
-        }
-    }
-
-    Shortcut {
-        sequence: "Ctrl+I"
-        onActivated: {
-            if (app.scheduler.running)
-                app.scheduler.pause(app.scheduler.playbackMode)
-            else
-                app.scheduler.play(app.scheduler.playbackMode)
-        }
-    }
-
-    Shortcut {
-        sequence: "Ctrl+O"
-        onActivated: {
-            app.scheduler.stop(app.scheduler.playbackMode)
-        }
-    }
-
-    Shortcut {
-        sequence: "Ctrl+P"
-        onActivated: {
-            app.scheduler.replay(app.scheduler.playbackMode)
         }
     }
 

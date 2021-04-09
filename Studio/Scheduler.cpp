@@ -9,7 +9,8 @@
 
 Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     :   QObject(parent),
-        Audio::AScheduler(std::move(project)), _device(DefaultDeviceDescription, &AScheduler::ConsumeAudioData, this),
+        Audio::AScheduler(std::move(project)),
+        _device(DefaultDeviceDescription, &Audio::AScheduler::ConsumeAudioData, this),
         _timer(this),
         _audioSpecs(Audio::AudioSpecs {
             _device.sampleRate(),
@@ -33,6 +34,12 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
 
 Scheduler::~Scheduler(void) noexcept
 {
+    if (pauseImpl()) {
+        __cxx_atomic_wait(reinterpret_cast<bool *>(&_blockGenerated), false, std::memory_order::memory_order_relaxed);
+        onCatchingAudioThread();
+        getCurrentGraph().wait();
+    }
+
     _Instance = nullptr;
 }
 
@@ -266,36 +273,41 @@ void Scheduler::replayPartition(const Scheduler::PlaybackMode mode, NodeModel *n
     );
 }
 
-// void Scheduler::setupPartitionNode(NodeModel *node, const quint32 partitionIndex)
-// {
-//     if (playbackMode() == Audio::PlaybackMode::Partition) {
-//         pauseImpl();
-//         addEvent(
-//             [] {
-//                 setPartitionNode(node->audioNode());
-//                 setPartitionIndex(partitionIndex);
-//             }
-//         );
-//     } else {
-//         setPartitionNode(node->audioNode());
-//         setPartitionIndex(partitionIndex);
-//     }
-// }
-
-void Scheduler::playImpl(void)
+bool Scheduler::playImpl(void)
 {
     if (setState(Audio::AScheduler::State::Play)) {
+        _onTheFlyMissCount = 0u;
         _device.start();
         _timer.start();
         emit runningChanged();
-    }
+        return true;
+    } else
+        return false;
 }
 
-void Scheduler::pauseImpl(void)
+bool Scheduler::pauseImpl(void)
 {
     if (setState(Audio::AScheduler::State::Pause)) {
         _device.stop();
         emit runningChanged();
+        return true;
+    } else
+        return false;
+}
+
+Beat Scheduler::getCurrentBeatOfMode(const Scheduler::PlaybackMode mode) const noexcept
+{
+    switch (mode) {
+    case PlaybackMode::Production:
+        return productionCurrentBeat();
+    case PlaybackMode::Live:
+        return liveCurrentBeat();
+    case PlaybackMode::Partition:
+        return partitionCurrentBeat();
+    case PlaybackMode::OnTheFly:
+        return onTheFlyCurrentBeat();
+    default:
+        return Beat();
     }
 }
 
@@ -305,8 +317,33 @@ void Scheduler::onCatchingAudioThread(void)
         return;
     AScheduler::dispatchApplyEvents();
     _exitGraph = state() == Scheduler::State::Pause;
+
+    // Check if we should stop on the fly graph
+
+
+    if (playbackMode() == PlaybackMode::OnTheFly && project()->master()->cache().isZero() && ++_onTheFlyMissCount > OnTheFlyMissThreshold) {
+        std::cout << "Missed" << std::endl;
+        _onTheFlyMissCount = 0u;
+        pauseImpl();
+        _exitGraph = true;
+    }
+
     _blockGenerated = false;
     if (_exitGraph)
         _timer.stop();
     AScheduler::dispatchNotifyEvents();
+    switch (playbackMode()) {
+    case PlaybackMode::Production:
+        emit productionCurrentBeatChanged();
+        break;
+    case PlaybackMode::Live:
+        emit liveCurrentBeatChanged();
+        break;
+    case PlaybackMode::Partition:
+        emit partitionCurrentBeatChanged();
+        break;
+    case PlaybackMode::OnTheFly:
+        emit onTheFlyCurrentBeatChanged();
+        break;
+    }
 }

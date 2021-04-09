@@ -20,6 +20,7 @@ class Project : public QObject
     Q_PROPERTY(NodeModel *master READ master NOTIFY masterChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+    Q_PROPERTY(float bpm READ bpm WRITE setBPM NOTIFY bpmChanged)
 
 public:
     /** @brief Construct a new project instance */
@@ -30,24 +31,27 @@ public:
     [[nodiscard]] NodeModel *master(void) noexcept { return &_master; }
     [[nodiscard]] const NodeModel *master(void) const noexcept { return &_master; }
 
-    /** @brief Get the dummy node */
-    [[nodiscard]] NodeModel *dummyNode(void) noexcept { return &_master; }
-    [[nodiscard]] const NodeModel *dummyNode(void) const noexcept { return &_master; }
-
 
     /** @brief Get the project name */
     [[nodiscard]] QString name(void) const noexcept
         { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
 
     /** @brief Set the project name, return true and emit nameChanged on change */
-    void setName(const QString &name) noexcept { _data->name() = name.toStdString(); }
+    void setName(const QString &name) noexcept;
+
+
+    /** @brief Get the project bpm */
+    [[nodiscard]] BPM bpm(void) const noexcept { return _data->bpm(); }
+
+    /** @brief Set the project bpm, return true and emit bpmChanged on change */
+    void setBPM(const BPM bpm) noexcept;
 
 
     /** @brief Get the project path */
     [[nodiscard]] const QString &path(void) const noexcept { return _path; }
 
     /** @brief Set the project path, return true and emit pathChanged on change */
-    void setPath(const QString &path) noexcept { _path = path; }
+    void setPath(const QString &path) noexcept;
 
 
     /** @brief Load a project file */
@@ -69,6 +73,9 @@ signals:
 
     /** @brief Notify when project path changed */
     void pathChanged(void);
+
+    /** @brief Notify when project bpm changed */
+    void bpmChanged(void);
 
 private:
     Audio::Project *_data { nullptr };

@@ -67,6 +67,9 @@ public slots:
     /** @brief Get a single partition model */
     PartitionModel *getPartition(const int index) { return get(index); }
 
+    /** @brief Adds ad note event on the fly */
+    void addOnTheFly(const NoteEvent &note, NodeModel *node, const quint32 partitionIndex);
+
 
 public: // Allow external insert / remove
     using QAbstractListModel::beginRemoveRows;

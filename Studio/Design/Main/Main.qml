@@ -21,6 +21,7 @@ Window {
     Application {
         property NodeModel partitionNodeCache: null
         property int partitionIndexCache: -1
+        property var currentPlayer: null
 
         id: app
     }

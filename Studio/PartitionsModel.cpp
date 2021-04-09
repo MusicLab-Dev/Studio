@@ -119,6 +119,21 @@ void PartitionsModel::move(const int from, const int to)
     );
 }
 
+void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const quint32 partitionIndex)
+{
+    Scheduler::Get()->addEvent(
+        [this, note] {
+            _data->headerCustomType().push(note);
+        },
+        [this, node, partitionIndex] {
+            const auto scheduler = Scheduler::Get();
+            if (!scheduler->running()) {
+                scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, partitionIndex);
+            }
+        }
+    );
+}
+
 void PartitionsModel::refreshPartitions(void)
 {
     Models::RefreshModels(this, _partitions, *_data, this);

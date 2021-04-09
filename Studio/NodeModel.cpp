@@ -119,16 +119,23 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
     if (addPartition)
         node->partitions()->add();
 
+    const bool hasPaused = Scheduler::Get()->pauseImpl();
+
     Models::AddProtectedEvent(
         [this, audioNode = std::move(audioNode)](void) mutable {
             _data->children().push(std::move(audioNode));
-            Scheduler::Get()->invalidateCurrentGraph();
         },
-        [this, node = std::move(node)](void) mutable {
+        [this, node = std::move(node), hasPaused](void) mutable {
             const auto idx = _children.size();
             beginInsertRows(QModelIndex(), idx, idx);
             _children.push(std::move(node));
             endInsertRows();
+            if (hasPaused) {
+                Scheduler::Get()->getCurrentGraph().wait();
+                Scheduler::Get()->invalidateCurrentGraph();
+                Scheduler::Get()->playImpl();
+            } else
+                Scheduler::Get()->invalidateCurrentGraph();
         }
     );
     return nodePtr;
@@ -138,14 +145,21 @@ void NodeModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("NodeModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+    const bool hasPaused = Scheduler::Get()->pauseImpl();
     Models::AddProtectedEvent(
         [this, idx] {
             _data->children().erase(_data->children().begin() + idx);
         },
-        [this, idx] {
+        [this, idx, hasPaused] {
             beginRemoveRows(QModelIndex(), idx, idx);
             _children.erase(_children.begin() + idx);
             endRemoveRows();
+            if (hasPaused) {
+                Scheduler::Get()->getCurrentGraph().wait();
+                Scheduler::Get()->invalidateCurrentGraph();
+                Scheduler::Get()->playImpl();
+            } else
+                Scheduler::Get()->invalidateCurrentGraph();
         }
     );
 }

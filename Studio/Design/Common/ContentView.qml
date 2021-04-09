@@ -80,6 +80,10 @@ Item {
     // Scale used to perfectly fit placements in beat
     property int placementBeatPrecisionScale: 0
 
+    // Timeline bar
+    property real timelineBeatPrecision: 0
+    property real audioProcessBeatPrecision: 0
+
     id: contentView
 
     onXOffsetMinChanged: {
@@ -115,6 +119,20 @@ Item {
         rowHeight: contentView.rowHeight
         barsPerRow: contentView.barsPerRow
         anchors.fill: contentDataBackground
+
+        Rectangle {
+            width: 4
+            height: surfaceContentGrid.height
+            x: xOffset + timelineBeatPrecision * pixelsPerBeatPrecision
+            color: "red"
+        }
+
+        Rectangle {
+            width: 4
+            height: surfaceContentGrid.height
+            x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
+            color: "blue"
+        }
     }
 
     // Handle all mouse / touch gestures

@@ -9,6 +9,7 @@ ColumnLayout {
     property NodeModel node: null
     property PartitionModel partition: null
     property int partitionIndex: 0
+    property alias player: sequencerViewFooter.player
 
     function loadNewPartitionNode() {
         pluginsView.open(

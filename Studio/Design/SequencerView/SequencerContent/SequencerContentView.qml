@@ -11,6 +11,8 @@ ContentView {
     clip: true
     placementKeyCount: pianoView.keys
     placementKeyOffset: pianoView.keyOffset
+    timelineBeatPrecision: sequencerView.player.currentPlaybackBeat
+    audioProcessBeatPrecision: app.scheduler.partitionCurrentBeat
 
     SequencerContentPianoView {
         id: pianoView
