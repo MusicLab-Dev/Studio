@@ -97,6 +97,12 @@ Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
     qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "SettingsListModel");
     qmlRegisterType<SettingsListModelProxy>("SettingsListModel", 1, 0, "SettingsListModelProxy");
 
+    /** DEBUG */
+    SettingsListModel list("test.json", "values.json", nullptr);
+    list.load();
+    list.saveValues();
+    /* --- */
+
     const QUrl url(QStringLiteral("qrc:/Main/Main.qml"));
 
     QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this,

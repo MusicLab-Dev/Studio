@@ -7,31 +7,9 @@
 
 #include <QAbstractListModel>
 
-/*
-
-// SettingsModel.json
-{
-    "Audio": {
-        "Device": {
-            "currentDevice": {
-                "name": "Current device",
-                "description": "Choose your device",
-                "tags": ["Device", "Output"],
-                "type": "DeviceComboBox",
-                "range": []
-            }
-        }
-    },
-}
-
-// SettingsValues.json
-{
-    "currentDevice": {
-        "value": "MyDevice"
-    }
-}
-
-*/
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFile>
 
 /** @brief Settings list model */
 class SettingsListModel : public QAbstractListModel
@@ -41,123 +19,35 @@ public:
     /** @brief Settings model roles */
     enum Role {
         Category = Qt::UserRole + 1,
-        Subcategory,
+        ID,
         Name,
-        Description,
+        Help,
         Tags,
         Type,
-        Value,
-        Range
+        CurrentValue,
+        Values
     };
 
     /** @brief Settings model */
     struct Model
     {
         QString category;
-        QString subcategory;
+        QString id;
         QString name;
-        QString description;
-        QStringList tags;
+        QString help;
+        QVariantList tags;
         QString type;
-        QVariant value;
-        QVariantList range;
+        QVariant start;
+        QVariant currentValue;
+        QVariantList values;
     };
-
-
-    /** @brief Data used to test the model without JSON */
-    static inline const QVector<Model> DefaultData = {
-        Model {
-            category: "Audio",
-            subcategory: "Device",
-            name: "CheckBox Delegate",
-            description: "Select the used output hardware device",
-            tags: QStringList { "output" },
-            type: "CheckBox",
-            value: "0",
-            range: QVariantList { "-50", "50", "25", "false" }
-        },
-
-        Model {
-            category: "Audio",
-            subcategory: "Device",
-            name: "ComboBox Delegate",
-            description: "Select the used output hardware device",
-            tags: QStringList { "output" },
-            type: "ComboBox",
-            value: "0",
-            range: QVariantList { "-50", "50", "25", "false" }
-        },
-
-        Model {
-            category: "Audio",
-            subcategory: "Device",
-            name: "FloatingTextBox Delegate",
-            description: "Select the used output hardware device",
-            tags: QStringList { "output" },
-            type: "FloatingTextBox",
-            value: "0",
-            range: QVariantList { "-50", "50", "25", "false" }
-        },
-
-        Model {
-            category: "Audio",
-            subcategory: "Device",
-            name: "IntegerTextBox Delegate",
-            description: "Select the used output hardware device",
-            tags: QStringList { "output" },
-            type: "IntegerTextBox",
-            value: "0",
-            range: QVariantList { "-50", "50", "25", "false" }
-        },
-
-        Model {
-            category: "Audio",
-            subcategory: "Device",
-            name: "RadioButton Delegate",
-            description: "Select the used output hardware device",
-            tags: QStringList { "output" },
-            type: "RadioButton",
-            value: "0",
-            range: QVariantList { "-50", "50", "25", "false" }
-        },
-
-        Model {
-            category: "Audio",
-            subcategory: "Device",
-            name: "Slider Delegate",
-            description: "Select the used output hardware device",
-            tags: QStringList { "output" },
-            type: "Slider",
-            value: "0",
-            range: QVariantList { "-50", "50", "25", "false" }
-        },
-
-        Model {
-            category: "Audio",
-            subcategory: "Device",
-            name: "SpinBox Delegate",
-            description: "Select the used output hardware device",
-            tags: QStringList { "output" },
-            type: "SpinBox",
-            value: "0",
-            range: QVariantList { "-50", "50", "25", "false" }
-        },
-
-        Model {
-            category: "Audio",
-            subcategory: "Device2",
-            name: "TextBox Delegate",
-            description: "Select the used output hardware device",
-            tags: QStringList { "output" },
-            type: "TextBox",
-            value: "0",
-            range: QVariantList { "-50", "50", "25", "false" }
-        }
-    };
-
 
     /** @brief Constructor */
     explicit SettingsListModel(QObject *parent = nullptr) : QAbstractListModel(parent) {}
+
+    /** @brief Constructor */
+    explicit SettingsListModel(const QString &settings, const QString &values, QObject *parent = nullptr) :
+        QAbstractListModel(parent) { read(settings, values); }
 
     /** @brief Destructor */
     virtual ~SettingsListModel(void) override = default;
@@ -172,6 +62,26 @@ public:
     /** @brief Get role data */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
+    /** @brief Set current value data */
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+
+public slots:
+    /** @brief Read the settings and values files into Strings.
+     * If Settings file doesn't exist, throw an exception.
+     */
+    bool read(const QString &settings, const QString &values);
+
+    /** @brief Load settings from Strings into models */
+    bool load() noexcept;
+
+    /** @brief Save values from models into Values json file */
+    bool saveValues() noexcept;
+
 private:
-    QVector<Model> _models = DefaultData;
+    /** @brief Recursive function. Used into load() function */
+    void parse(const QJsonObject &objSettings, QJsonObject &objValues, QString path);
+
+    QFile jsonSettingsFile, jsonValuesFile;
+    QString jsonSettingsStr, jsonValuesStr;
+    QVector<Model> _models {};
 };
