@@ -9,12 +9,21 @@
 #include <QTimer>
 
 #include <iostream>
+#include <string>
 #include <cstring>
+#include <unordered_map>
+#include <fstream>
+#include <sstream>
 
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <netinet/tcp.h>
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <netdb.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
 
 #include <Core/Vector.hpp>
 #include <Protocol/Packet.hpp>
@@ -121,15 +130,28 @@ private:
     /** @brief Perform the tick process */
     void tick(void);
 
+
     /** @brief Perform the discover process */
     void discover(void);
 
+    /** @brief Get routing tables index and name */
+    std::unordered_map<int, std::string> getRoutingTables(void);
 
-    /** @brief Emit a DiscoveryPacket packet on the UDP broadcast address */
-    void discoveryEmit(void);
+    /** @brief Write specified tables to routing tables configuration file */
+    void writeRoutingTables(const std::unordered_map<int, std::string> &tables);
 
-    /** @brief Init the UDP broadcast socket */
-    void initUdpBroadcastSocket(void);
+    /** @brief Add routes in the OS for a specific interface */
+    void addEthernetRoute(struct ifaddrs *ifa);
+
+    /** @brief List available network interfaces with their broadcast address */
+    std::vector<std::pair<std::string, std::string>> listNetworkInterfaces(void);
+
+    /** @brief Create an UDP broadcast socket based on a network interface name */
+    int createBroadcastSocket(const std::string &interfaceName);
+
+    /** @brief Emit a DiscoveryPacket packet on every interface broadcast address in the list */
+    void discoveryEmit(const std::vector<std::pair<std::string, std::string>> &interfaces);
+
 
     /** @brief Init the TCP master socket */
     void initTcpMasterSocket(void);

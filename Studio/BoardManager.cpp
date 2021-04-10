@@ -26,7 +26,6 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
 
     _networkBuffer.reset();
 
-    initUdpBroadcastSocket();
     initTcpMasterSocket();
 
     _identifierTable = new bool[256];
@@ -111,13 +110,153 @@ void BoardManager::discover(void)
 {
     // qDebug() << "Discover";
 
-    // Emit a discovery packet
-    discoveryEmit();
+    const auto interfaces = listNetworkInterfaces();
+
+    discoveryEmit(interfaces);
+
     // Scan for new incomming connection(s)
     processNewConnections();
 }
 
-void BoardManager::discoveryEmit(void)
+std::unordered_map<int, std::string> BoardManager::getRoutingTables(void)
+{
+    std::ifstream rt_tables;
+    std::unordered_map<int, std::string> tables {};
+
+    rt_tables.open("/etc/iproute2/rt_tables", std::istream::in);
+    if (rt_tables.is_open() == false)
+        throw std::runtime_error("Cannot open routing table configuration file");
+    std::string line;
+    while (std::getline(rt_tables, line)) {
+        std::istringstream iss(line);
+        int tableIndex;
+        std::string tableName;
+        if (line[0] == '#') {
+            std::cout << "Commented line..." << std::endl;
+            continue;
+        }
+        if (!(iss >> tableIndex >> tableName)) { // ERROR
+            std::cout << "PARSING ERROR" << std::endl;
+            continue;
+        }
+        tables.insert({tableIndex, tableName});
+    }
+    rt_tables.close();
+    return tables;
+}
+
+void BoardManager::writeRoutingTables(const std::unordered_map<int, std::string> &tables)
+{
+    std::ofstream rt_tables;
+
+    rt_tables.open("/etc/iproute2/rt_tables", std::ofstream::out | std::ofstream::trunc);
+    if (rt_tables.is_open() == false)
+        throw std::runtime_error("Cannot open routing table configuration file");
+    for (const auto &table: tables) {
+        rt_tables << table.first << '\t' << table.second << '\n';
+    }
+    rt_tables.close();
+}
+
+void BoardManager::addEthernetRoute(struct ifaddrs *ifa)
+{
+    std::string interface_name(ifa->ifa_name);
+    sockaddr_in *ifaceaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_addr);
+    std::string iface_address(::inet_ntoa(ifaceaddr->sin_addr));
+    int netmask = reinterpret_cast<sockaddr_in *>(ifa->ifa_netmask)->sin_addr.s_addr;
+    int length = 0;
+    in_addr networkId;
+
+    while (netmask > 0) {
+        netmask = netmask >> 1;
+        length++;
+    }
+    auto tables = getRoutingTables();
+    int tableIndex = -1;
+    for (const auto &table: tables) {
+        if (table.second == interface_name) {
+            tableIndex = table.first;
+            break;
+        }
+    }
+    if (tableIndex < 0) {
+        tableIndex = 1;
+        while (tableIndex < 255) {
+            if (tables.find(tableIndex) == tables.end())
+                break;
+            tableIndex++;
+        }
+        tables.insert({tableIndex, interface_name});
+    }
+    writeRoutingTables(tables);
+    networkId.s_addr = ifaceaddr->sin_addr.s_addr & ((struct sockaddr_in *)(ifa->ifa_netmask))->sin_addr.s_addr;
+    const std::string command1("ip route add " + std::string(::inet_ntoa(networkId)) + '/' + std::to_string(length) + " dev " + interface_name + " table " + interface_name);
+    const std::string command2("ip rule add from " + iface_address + " lookup " + interface_name);
+    system(command1.c_str());
+    system(command2.c_str());
+}
+
+std::vector<std::pair<std::string, std::string>> BoardManager::listNetworkInterfaces(void)
+{
+    struct ifaddrs *ifaddr;
+    int family;
+    int i = 0;
+    std::vector<std::pair<std::string, std::string>> interfaces {};
+
+    std::cout << '\n';
+
+    auto ret = ::getifaddrs(&ifaddr);
+    if (ret < 0)
+        throw std::runtime_error(std::strerror(errno));
+    for (struct ifaddrs *ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+        if (ifa->ifa_addr == nullptr)
+            continue;
+        family = ifa->ifa_addr->sa_family;
+
+        if (family == AF_INET && (ifa->ifa_flags & IFF_BROADCAST) && ifa->ifa_ifu.ifu_broadaddr != nullptr) {
+
+            sockaddr_in *broadaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_ifu.ifu_broadaddr);
+
+            std::string interface_name(ifa->ifa_name);
+            std::string broad_address(::inet_ntoa(broadaddr->sin_addr));
+
+            std::cout << "interface: " << interface_name << std::endl;
+            std::cout << "broadcast: " << broad_address << '\n' << std::endl;
+
+            addEthernetRoute(ifa);
+
+            interfaces.push_back({interface_name, broad_address});
+            i++;
+        }
+    }
+
+    ::freeifaddrs(ifaddr);
+    return interfaces;
+}
+
+int BoardManager::createBroadcastSocket(const std::string &interfaceName)
+{
+    int socket { -1 };
+    int broadcast { 1 };
+    const char *iface = interfaceName.c_str();
+    struct ifreq ifr;
+
+    socket = ::socket(AF_INET, SOCK_DGRAM, 0);
+    if (socket < 0)
+        throw std::runtime_error(std::strerror(errno));
+    auto ret = ::setsockopt(socket, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast));
+    if (ret < 0)
+        throw std::runtime_error(std::strerror(errno));
+    ::memset(&ifr, 0, sizeof(struct ifreq));
+    ::snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), iface);
+    ::ioctl(socket, SIOCGIFINDEX, &ifr);
+    ret = ::setsockopt(socket, SOL_SOCKET, SO_BINDTODEVICE, (void*)&ifr, sizeof(struct ifreq));
+    if (ret < 0)
+        throw std::runtime_error(std::strerror(errno));
+    return socket;
+}
+
+void BoardManager::discoveryEmit(const std::vector<std::pair<std::string, std::string>> &interfaces)
 {
     Protocol::DiscoveryPacket packet;
     std::memset(&packet, 0, sizeof(Protocol::DiscoveryPacket));
@@ -126,47 +265,30 @@ void BoardManager::discoveryEmit(void)
     packet.connectionType = Protocol::ConnectionType::USB;
     packet.distance = 0;
 
-    sockaddr_in udpBroadcastAddress {
-        .sin_family = AF_INET,
-        .sin_port = ::htons(420),
-        .sin_addr = {
-            .s_addr = ::inet_addr("169.254.255.255")
-        },
-        .sin_zero = { 0 }
-    };
+    for (const auto &interfaceDetails : interfaces) {
 
-    const auto ret = ::sendto(
-        _udpBroadcastSocket,
-        &packet,
-        sizeof(Protocol::DiscoveryPacket),
-        0,
-        reinterpret_cast<const sockaddr *>(&udpBroadcastAddress),
-        sizeof(udpBroadcastAddress)
-    );
-    if (ret < 0) {
-        std::cout << "BoardManager::discoveryEmit::sendto failed: " << std::strerror(errno) << std::endl;
-        std::cout << "ERRNO code: " << errno << std::endl;
+        sockaddr_in udpBroadcastAddress {
+            .sin_family = AF_INET,
+            .sin_port = ::htons(420),
+            .sin_addr = {
+                .s_addr = ::inet_addr(interfaceDetails.second.c_str())
+            },
+            .sin_zero = { 0 }
+        };
+        int socket = createBroadcastSocket(interfaceDetails.first);
+        const auto ret = ::sendto(
+            socket,
+            &packet,
+            sizeof(Protocol::DiscoveryPacket),
+            0,
+            reinterpret_cast<const sockaddr *>(&udpBroadcastAddress),
+            sizeof(udpBroadcastAddress)
+        );
+        if (ret < 0) {
+            std::cout << "BoardManager::discoveryEmit::sendto failed: " << std::strerror(errno) << std::endl;
+        }
+        close(socket);
     }
-}
-
-void BoardManager::initUdpBroadcastSocket(void)
-{
-    std::cout << "BoardManager::initUdpBroadcastSocket" << std::endl;
-
-    // Open UDP broadcast socket
-    int broadcast = 1;
-    _udpBroadcastSocket = ::socket(AF_INET, SOCK_DGRAM, 0);
-    if (_udpBroadcastSocket < 0)
-        throw std::runtime_error(std::strerror(errno));
-    auto ret = ::setsockopt(
-        _udpBroadcastSocket,
-        SOL_SOCKET,
-        SO_BROADCAST,
-        &broadcast,
-        sizeof(broadcast)
-    );
-    if (ret < 0)
-        throw std::runtime_error(std::strerror(errno));
 }
 
 void BoardManager::initTcpMasterSocket(void)
