@@ -13,7 +13,7 @@ ColumnLayout {
         Layout.alignment: Qt.AlignCenter
 
         ShapePath {
-            fillColor: "#00A3FF"
+            fillColor: themeManager.foregroundColor
             strokeColor: "black"
             strokeWidth: 2
             strokeStyle: ShapePath.SolidLine
