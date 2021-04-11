@@ -4,8 +4,6 @@ import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 
 ColumnLayout {
-    height: parent.height
-    width: parent.width
     spacing: 0
 
     Shape {
@@ -38,5 +36,13 @@ ColumnLayout {
         Layout.alignment: Qt.AlignCenter
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * 0.05
+    }
+
+
+    Behavior on x {
+        SpringAnimation {
+            spring: 2
+            damping: 0.2
+        }
     }
 }

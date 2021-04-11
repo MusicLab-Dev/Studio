@@ -120,11 +120,10 @@ Item {
         barsPerRow: contentView.barsPerRow
         anchors.fill: contentDataBackground
 
-        Rectangle {
-            width: 4
+        ContentViewTimeline {
+            width: 20
             height: surfaceContentGrid.height
-            x: xOffset + timelineBeatPrecision * pixelsPerBeatPrecision
-            color: "red"
+            x: xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
         }
 
         Rectangle {
