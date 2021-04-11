@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Controls.Styles 1.4
 import "../Default"
 
 Item {
@@ -67,30 +68,44 @@ Item {
         }
     }
 
-    Rectangle {
-        visible: smallVersion
+    ComboBox {
         height: parent.height
         width: parent.width
-        color: "transparent"
-        border.color: "white"
+        visible: smallVersion
+        model: itemsPath
 
-        MouseArea{
-            anchors.fill: parent
-
-            onReleased: {
-                if (itemSelected === itemsPath.length - 1)
-                    itemSelected = 0
-                else
-                    itemSelected += 1
-            }
+        onActivated: {
+            itemSelected = index
         }
 
-        DefaultColoredImage {
-            height: parent.height / 2
-            width: height
-            anchors.centerIn: parent
-            source: itemsPath[itemSelected]
-            color: "#FFFFFF"
+        delegate: ItemDelegate {
+
+            height: container.height
+            width: container.width
+
+            contentItem: Item {
+
+                height: container.height
+                width: container.width
+
+                DefaultColoredImage {
+                    visible: itemsPath[index].search("qrc:") !== -1
+                    height: parent.height / 2
+                    width: height
+                    anchors.centerIn: parent
+                    source: itemsPath[index]
+                    color: "#FFFFFF"
+                }
+
+                Text {
+                    visible: itemsPath[index].search("qrc:") === -1
+                    height: parent.height / 2
+                    width: height
+                    anchors.centerIn: parent
+                    text: itemsPath[index]
+                    color: "#000000"
+                }
+            }
         }
     }
 }
