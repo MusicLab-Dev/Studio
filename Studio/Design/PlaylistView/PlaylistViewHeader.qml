@@ -25,23 +25,4 @@ Rectangle {
                 playlistViewContent.contentView.placementBeatPrecisionScale = Math.pow(2, index - 1)
         }
     }
-
-    ColumnLayout {
-        anchors.centerIn: parent
-
-        Item {
-            Layout.preferredHeight: parent.height * 0.5
-            Layout.preferredWidth: parent.width
-
-            Text {
-                anchors.centerIn: parent
-                color: "white"
-                text: "Playlist"
-            }
-        }
-        Text {
-            color: "white"
-            text: "Bring musical sequences together"
-        }
-    }
 }

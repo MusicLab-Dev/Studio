@@ -62,27 +62,6 @@ Rectangle {
         Item {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.width * 0.333
-
-
-            ColumnLayout {
-                anchors.centerIn: parent
-
-                Item {
-                    Layout.preferredHeight: parent.height * 0.5
-                    Layout.preferredWidth: parent.width
-
-                    Text {
-                        anchors.centerIn: parent
-                        color: "white"
-                        text: "Sequencer"
-                    }
-                }
-
-                Text {
-                    color: "white"
-                    text: "Creating sequence with Woble.wav"
-                }
-            }
         }
 
         Item {
