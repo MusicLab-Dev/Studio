@@ -3,6 +3,10 @@ import QtQuick 2.15
 Rectangle {
     property int moduleIndex: -1
 
+    function onNodeDeleted(targetNode) {}
+
+    function onNodePartitionDeleted(targetNode, targetPartitionIndex) {}
+
     id: boardView
     color: themeManager.foregroundColor
 

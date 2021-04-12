@@ -62,7 +62,7 @@ Item {
     readonly property real placementBeatPrecisionWidth: placementBeatPrecisionTo - placementBeatPrecisionFrom
     property real placementBeatPrecisionDefaultWidth: placementBeatPrecisionScale !== 0 ? placementBeatPrecisionScale : beatPrecision
     property real placementKeyOffset: 0 // Only used for notes
-    property real placementKey: 0 // Only used for notes
+    property real placementKey: -1 // Only used for notes
     property real placementBeatPrecisionFrom: 0
     property real placementBeatPrecisionTo: 0
     property real placementBeatPrecisionMouseOffset: 0
@@ -72,8 +72,7 @@ Item {
     readonly property real placementPixelTo: xOffset + pixelsPerBeatPrecision * placementBeatPrecisionTo
     readonly property real placementPixelWidth: pixelsPerBeatPrecision * placementBeatPrecisionWidth
     property real placementPixelY: {
-        console.log(placementKeyCount, placementKey, placementKeyOffset)
-        return (placementKeyCount - 1 - (placementKey - placementKeyOffset)) * rowHeight
+        return placementKey === -1 ? 0 : (placementKeyCount - 1 - (placementKey - placementKeyOffset)) * rowHeight
     }
     readonly property real placementResizeMaxPixelThreshold: 20
 

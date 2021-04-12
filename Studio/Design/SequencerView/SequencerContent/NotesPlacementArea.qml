@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import Scheduler 1.0
 import PartitionModel 1.0
 import AudioAPI 1.0
 
@@ -35,6 +36,20 @@ MouseArea {
         if (contentView.placementBeatPrecisionScale !== 0)
             mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
         contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
+
+        if (!sequencerView.player.isPlaying) {
+            sequencerView.node.partitions.addOnTheFly(
+                AudioAPI.noteEvent(
+                    NoteEvent.On,
+                    mouseKey,
+                    AudioAPI.velocityMax,
+                    0
+                ),
+                sequencerView.node,
+                sequencerView.partitionIndex
+            )
+        }
+
         if (noteIndex === -1) { // Left click not on note -> insert
             mode = NotesPlacementArea.Mode.Move
             contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionDefaultWidth
@@ -67,10 +82,10 @@ MouseArea {
                 contentView.placementBeatPrecisionFrom = 0
             partition.add(
                 AudioAPI.note(
-            /* Range    */  AudioAPI.beatRange(contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo),
-            /* Key      */  contentView.placementKey,
-            /* Velocity */  AudioAPI.velocityMax,
-            /* Tuning   */  0
+                    AudioAPI.beatRange(contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo),
+                    contentView.placementKey,
+                    AudioAPI.velocityMax,
+                    0
                 )
             )
             contentView.placementBeatPrecisionMouseOffset = 0
@@ -97,8 +112,21 @@ MouseArea {
             var beatPrecision = mouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
             contentView.placementBeatPrecisionTo = beatPrecision + contentView.placementBeatPrecisionWidth
             contentView.placementBeatPrecisionFrom = beatPrecision
-            if (contentView.placementKey != mouseKey)
+            if (contentView.placementKey != mouseKey) {
                 contentView.placementRectangle.targetColor = themeManager.getColorFromChain(mouseKey)
+                if (!sequencerView.player.isPlaying) {
+                    sequencerView.node.partitions.addOnTheFly(
+                        AudioAPI.noteEvent(
+                            NoteEvent.On,
+                            mouseKey,
+                            AudioAPI.velocityMax,
+                            0
+                        ),
+                        sequencerView.node,
+                        sequencerView.partitionIndex
+                    )
+                }
+            }
             contentView.placementKey = mouseKey
             break
         case NotesPlacementArea.Mode.LeftResize:

@@ -9,6 +9,18 @@ Rectangle {
     property alias modules: modulesViewContent.modules
     property alias componentSelected: modulesViewContent.componentSelected
 
+    function onNodeDeleted(targetNode) {
+        for (var i = 0; i < modules.count; ++i) {
+            modulesViewContent.getModule(i).onNodeDeleted(targetNode)
+        }
+    }
+
+    function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
+        for (var i = 0; i < modules.count; ++i) {
+            modulesViewContent.getModule(i).onNodePartitionDeleted(targetNode, targetPartitionIndex)
+        }
+    }
+
     id: modulesView
     color: "#474747"
 

@@ -12,6 +12,10 @@ Item {
     property alias sequencerPartitionNodeCallback: sequencerPartitionNodeCallback
     property alias sequencerNewPartitionNodeCallback: sequencerNewPartitionNodeCallback
 
+    function getModule(index) {
+        return moduleRepeater.itemAt(index).moduleItem
+    }
+
     id: modulesViewContent
 
     Action {
@@ -41,6 +45,7 @@ Item {
     }
 
     Repeater {
+        id: moduleRepeater
         model: ListModel {
             id: modules
 
@@ -70,6 +75,8 @@ Item {
         }
 
         delegate: Column {
+            property var moduleItem: loadedComponent.item
+
             z: componentSelected === index ? 1 : 0
             anchors.fill: modulesViewContent
             spacing: 1.0

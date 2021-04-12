@@ -148,12 +148,11 @@ public slots:
     /** @todo Move this in pluginmodel */
     bool needSingleExternalInput(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::SingleExternalInput); }
     bool needMultipleExternalInputs(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::MultipleExternalInputs); }
-    void loadExternalInputs(const QString &path)
+    void loadExternalInputs(const QStringList &paths)
     {
         Audio::ExternalPaths res;
-        // for (auto &path : paths)
-        //     res.push(path.());
-        res.push(path.toStdString());
+        for (auto &path : paths)
+            res.push(path.toStdString());
         _data->plugin()->setExternalPaths(res);
     }
 

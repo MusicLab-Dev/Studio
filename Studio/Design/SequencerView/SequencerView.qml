@@ -11,9 +11,20 @@ ColumnLayout {
     property int partitionIndex: 0
     property alias player: sequencerViewFooter.player
 
+    function onNodeDeleted(targetNode) {
+        if (node == targetNode)
+            modules.remove(moduleIndex)
+    }
+
+    function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
+        if (node == targetNode && partitionIndex == targetPartitionIndex)
+            modules.remove(moduleIndex)
+    }
+
     function loadNewPartitionNode() {
         pluginsView.open(
             function() {
+                // @todo add loadExternalInputs into 'add'
                 node = app.project.master.addPartitionNode(pluginsView.selectedPath)
                 partitionIndex = 0
                 if (node === null) {
@@ -23,8 +34,10 @@ ColumnLayout {
                 if (node.needSingleExternalInput() || node.needMultipleExternalInputs()) {
                     filePicker.openDialog(node.needMultipleExternalInputs(),
                         function() {
-                            var str = filePicker.fileUrl.toString().slice(7)
-                            node.loadExternalInputs(str)
+                            var list = []
+                            for (var i = 0; i < filePicker.fileUrls.length; ++i)
+                                list[i] = filePicker.fileUrls[i].toString().slice(7)
+                            node.loadExternalInputs(list)
                             partition = node.partitions.getPartition(partitionIndex)
                             sequencerView.enabled = true
                         },
@@ -50,6 +63,8 @@ ColumnLayout {
         partition = app.partitionNodeCache.partitions.getPartition(app.partitionIndexCache)
         app.partitionNodeCache = null
         app.partitionIndexCache = -1
+        modulesView.componentSelected = moduleIndex
+        sequencerView.enabled = true
     }
 
     id: sequencerView
