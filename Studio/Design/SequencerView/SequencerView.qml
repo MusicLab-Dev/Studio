@@ -43,7 +43,8 @@ ColumnLayout {
                         },
                         function() {
                             app.project.master.remove(app.project.master.count - 1)
-                            modules.remove(moduleIndex)
+                            modulesView.componentSelected = moduleIndex
+                            modulesView.removeComponent()
                         }
                     )
                 } else {
@@ -52,7 +53,8 @@ ColumnLayout {
                 }
             },
             function() {
-                modules.remove(moduleIndex)
+                modulesView.componentSelected = moduleIndex
+                modulesView.removeComponent()
             }
         )
     }
