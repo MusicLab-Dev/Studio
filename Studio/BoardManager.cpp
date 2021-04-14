@@ -147,12 +147,15 @@ void BoardManager::discoveryEmit(void)
             len
         );
         if (ret < 0) {
-            /*
-                sendto() has failed because the network interface is not valid anymore,
-                so checking to remove the associated network.
-            */
             if (errno == ENODEV) {
+                /*
+                    sendto() has failed because the network interface is not valid anymore,
+                    so checking to remove the associated network.
+                */
+                std::cout << "INTERFACE DISCONNECTED" << std::endl;
+                removeInterfaceNetwork(); // To implement...
 
+                // TO DO: Remove the disconnected interface from the interface list
             }
             else {
                 throw std::runtime_error(std::strerror(errno));
@@ -334,13 +337,10 @@ std::vector<std::tuple<std::string, std::string, std::string>> BoardManager::get
             std::cout << "address  : " << localAddress << '\n';
             std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
 
-            // addEthernetRoute(ifa);
-
             interfaces.push_back({ interfaceName, localAddress, broadcastAddress });
             i++;
         }
     }
-
     ::freeifaddrs(ifaddr);
     return interfaces;
 }
@@ -404,7 +404,7 @@ void BoardManager::processNewConnections(void)
     }
 }
 
-void BoardManager::processClientInput(const Socket clientSocket)
+void BoardManager::processClientInput(Socket &clientSocket)
 {
     std::uint8_t *bufferPtr = _networkBuffer.data() + _writeIndex;
 
@@ -412,6 +412,10 @@ void BoardManager::processClientInput(const Socket clientSocket)
 
     if (inputSize == 0 || (inputSize < 0 && errno == ETIMEDOUT)) { // Disconnection || Connection timed out, broken...
         std::cout << "BoardManager::processClientInput: Direct client disconnection detected" << std::endl;
+
+        removeDirectClientNetwork(clientSocket);
+        close(clientSocket);
+        clientSocket = -1;
 
         return;
     }
@@ -473,12 +477,19 @@ void BoardManager::processDirectClients(void)
         return;
     }
 
-    // Loop through direct clients and retrieve available data
-    for (DirectClient &directClient : _clients) {
-        if (FD_ISSET(directClient.socket, &_readFds)) {
-            processClientInput(directClient.socket);
-        }
+    // Loop through direct clients and retrieve available data or remove them if disconnected
+    std::cout << "client list size IN: " << _clients.size() << std::endl;
+    for(auto it = _clients.begin(); it != _clients.end();) {
+        if (FD_ISSET(it->socket, &_readFds)) {
+            processClientInput(it->socket);
+            if (it->socket == -1) {
+                _clients.erase(it);
+            } else
+                ++it;
+        } else
+            ++it;
     }
+    std::cout << "client list size OUT: " << _clients.size() << std::endl;
 }
 
 BoardID BoardManager::aquireIdentifier(void) noexcept
@@ -506,4 +517,57 @@ void BoardManager::setSocketKeepAlive(const Socket socket)
     ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int));
     ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int));
     ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int));
+}
+
+void BoardManager::removeNetworkFrom(const BoardID senderId, const BoardID targetId)
+{
+    if (_boards.empty())
+        return;
+    // Find and mark all disconnected board
+    for (auto &board : _boards) {
+        if (board.get()->getIdentifier() == senderId) {
+
+            // Get the sender pointer
+            Board *sender = board.get();
+            // Get the target pointer
+            Board *target = sender->getSlave(targetId);
+
+            if (target == nullptr) {
+                throw std::runtime_error("Cannot find disconnected board !");
+            }
+            // Mark all the network behind target as disconnected
+            target->markSlavesOff();
+            // Mark target as disconnected
+            target->setStatus(false);
+            // Detach target from sender
+            sender->detachSlave(targetId);
+            break;
+        }
+    }
+    // Remove all disconnected board from main board vector
+    for (auto &board : _boards) {
+        if (board->getStatus() == false) {
+            board.reset();
+            _boards.erase(&board);
+        }
+    }
+}
+
+void BoardManager::removeDirectClientNetwork(const Socket directClientSocket)
+{
+    std::cout << "BoardManager::removeDirectClientNetwork" << std::endl;
+
+    std::cout << "board list size IN: " << _boards.size() << std::endl;
+    for (auto it = _boards.begin(); it != _boards.end();) {
+        if (it->get()->getRootSocket() == directClientSocket)
+            _boards.erase(it);
+        else
+            ++it;
+    }
+    std::cout << "board list size OUT: " << _boards.size() << std::endl;
+}
+
+void BoardManager::removeInterfaceNetwork(void) // TO DO
+{
+    std::cout << "BoardManager::removeInterfaceNetwork" << std::endl;
 }

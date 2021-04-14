@@ -44,9 +44,10 @@ public:
         Data
     };
 
-    Board(const Protocol::BoardID identifier, const Socket socket)
+    Board(const Protocol::BoardID identifier, const Socket rootSocket)
     {
         _boardID = identifier;
+        _rootSocket = rootSocket;
 
         _controls = Controls {
             Control {
@@ -66,6 +67,8 @@ public:
             }
         };
     }
+
+    ~Board() = default;
 
     /** @brief Names of 'Control' roles */
     [[nodiscard]] virtual QHash<int, QByteArray> roleNames(void) const override;
@@ -89,6 +92,8 @@ public:
 
     void setStatus(const bool status) noexcept { _status = status; }
     [[nodiscard]] const bool getStatus(void) const noexcept { return _status; }
+
+    [[nodiscard]] const Socket getRootSocket(void) const noexcept { return _rootSocket; }
 
     [[nodiscard]] Board *getSlave(const Protocol::BoardID slaveId) const noexcept
     {
@@ -131,6 +136,7 @@ signals:
 private:
     Board *_master = nullptr;
     Core::Vector<std::shared_ptr<Board>, int> _slaves {};
+    Socket _rootSocket { -1 };
 
     Controls _controls {};
     QSize _size {};

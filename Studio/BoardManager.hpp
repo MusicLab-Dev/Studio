@@ -124,47 +124,6 @@ private:
 
     bool *_identifierTable { nullptr };
 
-    /** @brief Remove the board network starting from the specified board ID */
-    void removeNetworkFrom(const BoardID senderId, const BoardID targetId)
-    {
-        if (_boards.empty())
-            return;
-        // Find and mark all disconnected board
-        for (auto &board : _boards) {
-            if (board.get()->getIdentifier() == senderId) {
-
-                // Get the sender pointer
-                Board *sender = board.get();
-                // Get the target pointer
-                Board *target = sender->getSlave(targetId);
-
-                if (target == nullptr) {
-                    throw std::runtime_error("Cannot find disconnected board !");
-                }
-                // Mark all the network behind target as disconnected
-                target->markSlavesOff();
-                // Mark target as disconnected
-                target->setStatus(false);
-                // Detach target from sender
-                sender->detachSlave(targetId);
-                break;
-            }
-        }
-        // Remove all disconnected board from main board vector
-        for (auto &board : _boards) {
-            if (board->getStatus() == false) {
-                board.reset();
-                _boards.erase(&board);
-            }
-        }
-    }
-
-    /** @brief Remove a board network branch starting from his rooter board */
-    void removeDirectClientNetwork(const Socket clientSocket)
-    {
-        // TO DO
-    }
-
     /** @brief Callback when the tick rate changed */
     void onTickRateChanged(void);
 
@@ -179,6 +138,17 @@ private:
 
     /** @brief Emit a DiscoveryPacket packet on every interface broadcast address */
     void discoveryEmit(void);
+
+    // Board network utils
+
+    /** @brief Remove a network branch starting from a specific board */
+    void removeNetworkFrom(const BoardID senderId, const BoardID targetId);
+
+    /** @brief Remove a network branch starting from his direct client (root board) */
+    void removeDirectClientNetwork(const Socket directClientSocket);
+
+    /** @brief Remove direct clients & their network branch(s) attached to the specified interface */
+    void removeInterfaceNetwork(void);
 
     // Interfaces utils
 
@@ -203,7 +173,7 @@ private:
     void processNewConnections(void);
 
     /** @brief Read client's pending data and place it into the network buffer (& handle disconnection) */
-    void processClientInput(const Socket clientSocket);
+    void processClientInput(Socket &clientSocket);
 
     /** @brief Scan for a read operation available on every direct clients */
     void processDirectClients(void);
