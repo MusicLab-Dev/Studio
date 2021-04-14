@@ -25,11 +25,11 @@ Rectangle {
     property alias componentSelected: modulesViewContent.componentSelected
 
     function onNodeDeleted(targetNode) {
+        app.scheduler.onNodeDeleted(targetNode)
         for (var i = 0; i < (modules.count - 1);) {
             if (!modulesViewContent.getModule(i).onNodeDeleted(targetNode))
                 ++i
-            else if (i <= componentSelected) {
-                console.log("SSS: ", i, componentSelected)
+            else if (i < componentSelected) {
                 if (i === 0)
                     componentSelected = 0
                 else
@@ -39,11 +39,11 @@ Rectangle {
     }
 
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
-        for (var i = 0; i < (modules.count - 1); ++i) {
+        app.scheduler.onNodePartitionDeleted(targetNode, targetPartitionIndex)
+        for (var i = 0; i < (modules.count - 1);) {
             if (!modulesViewContent.getModule(i).onNodePartitionDeleted(targetNode, targetPartitionIndex))
                 ++i
-            else if (i <= componentSelected) {
-                console.log("SSS: ", i, componentSelected)
+            else if (i < componentSelected) {
                 if (i === 0)
                     componentSelected = 0
                 else

@@ -311,6 +311,36 @@ Beat Scheduler::getCurrentBeatOfMode(const Scheduler::PlaybackMode mode) const n
     }
 }
 
+void Scheduler::onNodeDeleted(NodeModel *targetNode)
+{
+    if (partitionNode() == targetNode->audioNode()) {
+        if (playbackMode() == PlaybackMode::Partition || playbackMode() == PlaybackMode::OnTheFly) {
+            pauseImpl();
+            setPlaybackMode(Audio::PlaybackMode::Production);
+            emit playbackModeChanged();
+        }
+        addEvent([this] {
+            setPartitionNode(nullptr);
+            setPartitionIndex(0);
+        });
+    }
+}
+
+void Scheduler::onNodePartitionDeleted(NodeModel *targetNode, int partition)
+{
+    if (partitionNode() == targetNode->audioNode() && partition == partitionIndex()) {
+        if (playbackMode() == PlaybackMode::Partition || playbackMode() == PlaybackMode::OnTheFly) {
+            pauseImpl();
+            setPlaybackMode(Audio::PlaybackMode::Production);
+            emit playbackModeChanged();
+        }
+        addEvent([this] {
+            setPartitionNode(nullptr);
+            setPartitionIndex(0);
+        });
+    }
+}
+
 void Scheduler::onCatchingAudioThread(void)
 {
     if (!_blockGenerated)

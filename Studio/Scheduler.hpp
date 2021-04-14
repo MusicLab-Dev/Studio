@@ -116,6 +116,12 @@ public slots:
     /** @brief Get a beat range */
     Beat getCurrentBeatOfMode(const Scheduler::PlaybackMode mode) const noexcept;
 
+    /** @brief Callback that must be called after a node has been deleted */
+    void onNodeDeleted(NodeModel *targetNode);
+
+    /** @brief Callback that must be called after a partition has been deleted */
+    void onNodePartitionDeleted(NodeModel *targetNode, int partition);
+
 signals:
     /** @brief Notify when playback mode changed */
     void playbackModeChanged(void);
