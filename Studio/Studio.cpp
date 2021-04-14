@@ -13,6 +13,7 @@
 #include "AudioAPI.hpp"
 #include "Application.hpp"
 #include "PluginTableModel.hpp"
+#include "PluginTableModelProxy.hpp"
 #include "ThemeManager.hpp"
 #include "Studio.hpp"
 #include "SettingsListModel.hpp"
@@ -40,6 +41,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<NoteEvent>("AudioAPI", 1, 0, "NoteEvent", "Cannot construct NoteEvent");
     qmlRegisterUncreatableType<GPoint>("AudioAPI", 1, 0, "Point", "Cannot construct Point");
     qmlRegisterType<PluginTableModel>("PluginTableModel", 1, 0, "PluginTableModel");
+    qmlRegisterType<PluginTableModelProxy>("PluginTableModel", 1, 0, "PluginTableModelProxy");
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
     qmlRegisterUncreatableType<Scheduler>("Scheduler", 1, 0, "Scheduler", "Cannot construct Scheduler");

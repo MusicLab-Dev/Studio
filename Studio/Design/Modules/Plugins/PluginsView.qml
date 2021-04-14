@@ -29,10 +29,6 @@ PluginsBackground {
     id: pluginsView
     visible: false
 
-    onCurrentFilterChanged: {
-        console.log("Filter changed to: ", currentFilter);
-    }
-
     PluginsViewTitle {
         id: pluginsViewTitle
         x: (pluginsForeground.width + (parent.width - pluginsForeground.width) / 2) - width / 2
@@ -44,7 +40,6 @@ PluginsBackground {
         x: pluginsView.width - width - height
         y: height
     }
-
 
     PluginsForeground {
         id: pluginsForeground

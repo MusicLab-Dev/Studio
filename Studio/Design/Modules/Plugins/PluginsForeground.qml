@@ -31,6 +31,7 @@ Rectangle {
         qsTr("Synth"),
         qsTr("External")
     ]
+    property alias currentSearchText: searchText.text
 
     id: pluginsForeground
     color: "#0D2D47"
@@ -51,6 +52,7 @@ Rectangle {
         y: (parent.height - height) / 7
 
         DefaultTextInput {
+            id: searchText
             anchors.fill: parent
             color: "white"
             opacity: 0.42
@@ -118,13 +120,13 @@ Rectangle {
                     }
                 }
 
-                Text {
-                    x: parent.width
-                    text: "0"
-                    color: foregroundCheckBox.hovered ? "#00A3FF" : "#FFFFFF"
-                    opacity: foregroundCheckBox.hovered ? 1.0 :  0.42
-                    font.weight: Font.Thin
-                }
+                // Text {
+                //     x: parent.width
+                //     text: "0"
+                //     color: foregroundCheckBox.hovered ? "#00A3FF" : "#FFFFFF"
+                //     opacity: foregroundCheckBox.hovered ? 1.0 :  0.42
+                //     font.weight: Font.Thin
+                // }
             }
         }
 

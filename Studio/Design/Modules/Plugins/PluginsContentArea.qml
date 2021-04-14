@@ -3,21 +3,29 @@ import QtQuick.Controls 2.15
 
 import "../../Default"
 
-Rectangle {
-    id: pluginsContentArea
-    color: parent.color
+import PluginTableModel 1.0
 
-    GridView {
-        anchors.fill: parent
-        cellWidth: Math.min(160, parent.width / 6) === 160 ? 250 : 200
-        cellHeight: cellWidth
+GridView {
+    id: pluginsGrid
+    cellWidth: pluginsContentArea.width / 6
+    cellHeight: cellWidth
 
-        model: pluginTable
+    model: PluginTableModelProxy {
+        sourceModel: pluginTable
+        tagsFilter: pluginsView.currentFilter
+        nameFilter: pluginsForeground.currentSearchText
+    }
 
-        delegate: PluginsSquareComponent {
-            property bool pluginsSquareComponentHovered: false
+    delegate: Item {
+        property bool pluginsSquareComponentHovered: false
 
-            id: delegate
+        id: componentDelegate
+        width: pluginsGrid.cellWidth
+        height: pluginsGrid.cellHeight
+
+        PluginsSquareComponent {
+            anchors.fill: parent
+            anchors.margins: 5
 
             Image {
                 width: parent.width / 1.5
@@ -35,6 +43,10 @@ Rectangle {
             PluginsSquareComponentDescription {
                 id: description
                 text: factoryDescription
+                width: parent.width
+                height: parent.height / 2
+                x: parent.width / 2 - width / 2
+                y: title.y * 1.2
 
                 ToolTip {
                     id: toolTip

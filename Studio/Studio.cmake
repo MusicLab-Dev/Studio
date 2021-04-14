@@ -54,6 +54,7 @@ set(StudioSources
     ${StudioDir}/PartitionsModel.hpp
     ${StudioDir}/PluginTableModel.cpp
     ${StudioDir}/PluginTableModel.hpp
+    ${StudioDir}/PluginTableModelProxy.hpp
     ${StudioDir}/Note.hpp
     ${StudioDir}/Point.hpp
     ${StudioDir}/Project.cpp
