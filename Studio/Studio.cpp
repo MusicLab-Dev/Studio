@@ -18,6 +18,7 @@
 #include "Studio.hpp"
 #include "SettingsListModel.hpp"
 #include "SettingsListModelProxy.hpp"
+#include "BoardManager.hpp"
 
 // #include "BoardManager.hpp"
 
@@ -54,7 +55,8 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<ControlModel>("ControlModel", 1, 0, "ControlModel", "Cannot construct ControlModel");
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
-    // qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
+    qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
+    qmlRegisterType<Board>("Board", 1, 0, "Board");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
@@ -70,7 +72,6 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Plugins);
     Q_INIT_RESOURCE(Workspaces);
     Q_INIT_RESOURCE(Settings);
-    Q_INIT_RESOURCE(Board);
 }
 
 void Studio::DestroyResources(void)
@@ -89,7 +90,6 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Plugins);
     Q_CLEANUP_RESOURCE(Workspaces);
     Q_CLEANUP_RESOURCE(Settings);
-    Q_CLEANUP_RESOURCE(Board);
 
     Audio::PluginTable::Destroy();
     Audio::Device::ReleaseDriver();

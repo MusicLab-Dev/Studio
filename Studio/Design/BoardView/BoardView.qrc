@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/BoardView">
         <file>BoardView.qml</file>
+        <file>BoardManagerView.qml</file>
+        <file>BoardControlsView.qml</file>
+        <file>BoardViewTitle.qml</file>
+        <file>BoardContentArea.qml</file>
+        <file>BoardBackground.qml</file>
     </qresource>
 </RCC>
