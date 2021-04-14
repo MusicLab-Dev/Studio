@@ -12,13 +12,19 @@ ColumnLayout {
     property alias player: sequencerViewFooter.player
 
     function onNodeDeleted(targetNode) {
-        if (node == targetNode)
-            modules.remove(moduleIndex)
+        if (node == targetNode || node.isAParent(targetNode)) {
+            modules.removeModule(moduleIndex)
+            return true
+        }
+        return false
     }
 
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
-        if (node == targetNode && partitionIndex == targetPartitionIndex)
-            modules.remove(moduleIndex)
+        if (node == targetNode && partitionIndex == targetPartitionIndex) {
+            modules.removeModule(moduleIndex)
+            return true
+        }
+        return false
     }
 
     function loadNewPartitionNode() {
@@ -28,7 +34,7 @@ ColumnLayout {
                 node = app.project.master.addPartitionNode(pluginsView.selectedPath)
                 partitionIndex = 0
                 if (node === null) {
-                    modules.remove(moduleIndex)
+                    modules.removeModule(moduleIndex)
                     return
                 }
                 if (node.needSingleExternalInput() || node.needMultipleExternalInputs()) {

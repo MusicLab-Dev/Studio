@@ -74,6 +74,8 @@ public:
     /** @brief Get the parent node if it exists */
     [[nodiscard]] NodeModel *parentNode(void) noexcept
         { return qobject_cast<NodeModel *>(parent()); }
+    [[nodiscard]] const NodeModel *parentNode(void) const noexcept
+        { return qobject_cast<NodeModel *>(parent()); }
 
 
     /** @brief Get the list of all roles */
@@ -155,6 +157,9 @@ public slots:
             res.push(path.toStdString());
         _data->plugin()->setExternalPaths(res);
     }
+
+    /** @brief Check if a given node is a parent of this */
+    bool isAParent(NodeModel *node) const noexcept;
 
 signals:
     /** @brief Notify that muted property has changed */

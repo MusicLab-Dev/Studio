@@ -17,7 +17,7 @@ Rectangle {
             })
             componentSelected = 0
         }
-        modules.remove(moduleSelectedTmp)
+        modules.removeModule(moduleSelectedTmp)
     }
 
     property alias modulesViewContent: modulesViewContent
@@ -25,14 +25,30 @@ Rectangle {
     property alias componentSelected: modulesViewContent.componentSelected
 
     function onNodeDeleted(targetNode) {
-        for (var i = 0; i < modules.count; ++i) {
-            modulesViewContent.getModule(i).onNodeDeleted(targetNode)
+        for (var i = 0; i < (modules.count - 1);) {
+            if (!modulesViewContent.getModule(i).onNodeDeleted(targetNode))
+                ++i
+            else if (i <= componentSelected) {
+                console.log("SSS: ", i, componentSelected)
+                if (i === 0)
+                    componentSelected = 0
+                else
+                    componentSelected = i - 1
+            }
         }
     }
 
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
-        for (var i = 0; i < modules.count; ++i) {
-            modulesViewContent.getModule(i).onNodePartitionDeleted(targetNode, targetPartitionIndex)
+        for (var i = 0; i < (modules.count - 1); ++i) {
+            if (!modulesViewContent.getModule(i).onNodePartitionDeleted(targetNode, targetPartitionIndex))
+                ++i
+            else if (i <= componentSelected) {
+                console.log("SSS: ", i, componentSelected)
+                if (i === 0)
+                    componentSelected = 0
+                else
+                    componentSelected = i - 1
+            }
         }
     }
 
