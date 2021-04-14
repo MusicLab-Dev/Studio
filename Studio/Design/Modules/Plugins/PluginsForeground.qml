@@ -48,7 +48,7 @@ Rectangle {
         width: parent.width * 0.8
         height : parent.height * 0.05
         x: (parent.width - width) / 2
-        y: (parent.height - height) / 3
+        y: (parent.height - height) / 7
 
         DefaultTextInput {
             anchors.fill: parent
@@ -60,8 +60,8 @@ Rectangle {
 
     Item {
         id: pluginsCheckBoxes
-        width: parent.width * 0.8
-        height: parent.height * 0.5
+        width: parent.width * 0.9
+        height: parent.height - (parent.height / 7) * 2
         x: (parent.width - width) / 2
         y: pluginsResearchTextInput.y + pluginsResearchTextInput.height * 2
 
@@ -69,6 +69,10 @@ Rectangle {
             id: listView
             anchors.fill: parent
             spacing: parent.height * 0.04
+            ScrollBar.vertical: DefaultScrollBar {
+                color: "#31A8FF"
+                opacity: 0.3
+            }
 
             model: [
                 PluginTableModel.Tags.Effect,
@@ -103,7 +107,7 @@ Rectangle {
                     id: foregroundCheckBox
                     text: pluginsForeground.filterNames[index]
                     checked: false
-                    width: 80
+                    width: parent.width * 0.85
                     height: 20
                     font.weight: Font.Light
                     onCheckedChanged: {
@@ -115,7 +119,7 @@ Rectangle {
                 }
 
                 Text {
-                    x: parent.width - width
+                    x: parent.width
                     text: "0"
                     color: foregroundCheckBox.hovered ? "#00A3FF" : "#FFFFFF"
                     opacity: foregroundCheckBox.hovered ? 1.0 :  0.42

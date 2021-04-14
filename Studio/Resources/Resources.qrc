@@ -56,5 +56,8 @@
         <file>Assets/6on1.png</file>
         <file>Assets/8on1.png</file>
         <file>Assets/1on8.png</file>
+        <file>Assets/Plugins/Mixer.png</file>
+        <file>Assets/Plugins/Sampler.png</file>
+        <file>Assets/Plugins/Default.png</file>
     </qresource>
 </RCC>

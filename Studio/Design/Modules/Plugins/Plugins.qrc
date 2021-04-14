@@ -7,5 +7,7 @@
         <file>PluginsSquareComponentTitle.qml</file>
         <file>PluginsView.qml</file>
         <file>PluginsViewTitle.qml</file>
+        <file>PluginsSquareComponentDescription.qml</file>
+        <file>PluginsViewCloseButton.qml</file>
     </qresource>
 </RCC>

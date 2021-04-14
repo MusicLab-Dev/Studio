@@ -9,21 +9,22 @@ Rectangle {
 
     GridView {
         anchors.fill: parent
-        cellWidth: 250
-        cellHeight: 250
-
+        cellWidth: Math.min(160, parent.width / 6) === 160 ? 250 : 200
+        cellHeight: cellWidth
 
         model: pluginTable
 
         delegate: PluginsSquareComponent {
+            property bool pluginsSquareComponentHovered: false
 
-            DefaultImageButton {
-                anchors.fill: parent
-                source: "qrc:/Assets/TestImage1.png"
+            id: delegate
 
-                onReleased: {
-                    pluginsView.acceptAndClose(factoryPath)
-                }
+            Image {
+                width: parent.width / 1.5
+                height: width
+                x: parent.width / 2 - width / 2
+                y: parent.height / 2 - height / 2
+                source: factoryName ? "qrc:/Assets/Plugins/" + factoryName + ".png" : "qrc:/Assets/Plugins/Default.png"
             }
 
             PluginsSquareComponentTitle {
@@ -31,15 +32,35 @@ Rectangle {
                 text: factoryName
             }
 
-            Text {
-                x: parent.width - width
-                y: title.y + title.height
+            PluginsSquareComponentDescription {
+                id: description
                 text: factoryDescription
-                color: "#FFFFFF"
-                opacity: 0.42
-                font.pointSize: 11
-                font.weight: Font.Thin
 
+                ToolTip {
+                    id: toolTip
+                    text: factoryDescription
+                    visible: false
+                }
+            }
+
+            MouseArea {
+                width: parent.width
+                height: parent.height + title.height + description.height
+                hoverEnabled: true
+
+                onEntered: {
+                    pluginsSquareComponentHovered = true
+                    toolTip.visible = description.truncated ? true : false
+                }
+
+                onExited: {
+                    pluginsSquareComponentHovered = false
+                    toolTip.visible = false
+                }
+
+                onReleased: {
+                    pluginsView.acceptAndClose(factoryPath)
+                }
             }
         }
     }
