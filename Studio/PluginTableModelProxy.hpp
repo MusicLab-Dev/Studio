@@ -48,6 +48,25 @@ public:
         invalidateFilter();
     }
 
+public slots:
+    /** @brief Get the number of plugins that match a category */
+    int getPluginsCount(PluginTableModel::Tags tags) const noexcept
+    {
+        auto *table = reinterpret_cast<const PluginTableModel *>(sourceModel());
+        int count = 0;
+
+        if (!table)
+            return 0;
+        for (auto i = 0, end = rowCount(); i < end; ++i) {
+            QModelIndex proxyIdx = index(i, 0);
+            QModelIndex sourceIdx = mapToSource(proxyIdx);
+            if (static_cast<quint32>(table->get(sourceIdx.row())->getTags()) & static_cast<quint32>(tags))
+                ++count;
+        }
+        return count;
+    }
+
+
 signals:
     /** @brief Notify that the tags filter property has changed */
     void tagsFilterChanged(void);
@@ -63,6 +82,9 @@ private:
     [[nodiscard]] bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override
     {
         auto *table = reinterpret_cast<const PluginTableModel *>(sourceModel());
+        if (!table)
+            return false;
+
         auto factory = table->get(sourceRow);
 
         if (!factory)

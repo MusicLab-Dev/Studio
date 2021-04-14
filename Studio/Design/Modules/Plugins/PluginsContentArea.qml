@@ -6,11 +6,14 @@ import "../../Default"
 import PluginTableModel 1.0
 
 GridView {
+    property alias pluginTableProxy: pluginTableProxy
+
     id: pluginsGrid
     cellWidth: pluginsContentArea.width / 6
     cellHeight: cellWidth
 
     model: PluginTableModelProxy {
+        id: pluginTableProxy
         sourceModel: pluginTable
         tagsFilter: pluginsView.currentFilter
         nameFilter: pluginsForeground.currentSearchText

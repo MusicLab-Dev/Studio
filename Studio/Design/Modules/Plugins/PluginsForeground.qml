@@ -120,13 +120,16 @@ Rectangle {
                     }
                 }
 
-                // Text {
-                //     x: parent.width
-                //     text: "0"
-                //     color: foregroundCheckBox.hovered ? "#00A3FF" : "#FFFFFF"
-                //     opacity: foregroundCheckBox.hovered ? 1.0 :  0.42
-                //     font.weight: Font.Thin
-                // }
+                Text {
+                    x: parent.width
+                    text: {
+                        pluginsContentArea.count
+                        pluginsContentArea.pluginTableProxy.getPluginsCount(modelData)
+                    }
+                    color: foregroundCheckBox.hovered ? "#00A3FF" : "#FFFFFF"
+                    opacity: foregroundCheckBox.hovered ? 1.0 :  0.42
+                    font.weight: Font.Thin
+                }
             }
         }
 
