@@ -23,9 +23,7 @@ set(StudioSources
     ${StudioDir}/BoardManager.cpp
     ${StudioDir}/Board.hpp
     ${StudioDir}/Board.cpp
-    ${StudioDir}/Net/Socket.hpp
-    ${StudioDir}/Net/Socket.cpp
-    ${StudioDir}/Net/Socket.ipp
+    ${StudioDir}/Socket.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

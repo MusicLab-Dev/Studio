@@ -12,7 +12,7 @@
 #include <Core/Vector.hpp>
 #include <Protocol/Protocol.hpp>
 
-#include "Net/Socket.hpp"
+#include "Socket.hpp"
 
 class alignas_cacheline Board : public QAbstractListModel
 {
@@ -44,10 +44,9 @@ public:
         Data
     };
 
-    Board(const Protocol::BoardID identifier, const Net::Socket::Internal boardFD)
+    Board(const Protocol::BoardID identifier, const Socket socket)
     {
         _boardID = identifier;
-        _rooter = boardFD;
 
         _controls = Controls {
             Control {
@@ -86,7 +85,42 @@ public:
     [[nodiscard]] Controls &controls(void) noexcept { return _controls; }
     [[nodiscard]] const Controls &controls(void) const  noexcept { return _controls; }
 
-    [[nodiscard]] const Net::SocketView getRooter(void) const noexcept { return _rooter; }
+    [[nodiscard]] const Protocol::BoardID getIdentifier(void) const noexcept { return _boardID; }
+
+    void setStatus(const bool status) noexcept { _status = status; }
+    [[nodiscard]] const bool getStatus(void) const noexcept { return _status; }
+
+    [[nodiscard]] Board *getSlave(const Protocol::BoardID slaveId) const noexcept
+    {
+        for (const auto &slave : _slaves) {
+            if (slave.get()->getIdentifier() == slaveId) {
+                return slave.get();
+            }
+        }
+        return nullptr;
+    }
+
+    void detachSlave(const Protocol::BoardID slaveId)
+    {
+        for (auto &slave : _slaves) {
+            if (slave.get()->getIdentifier() == slaveId) {
+                slave.reset();
+                _slaves.erase(&slave);
+                return;
+            }
+        }
+    }
+
+    void markSlavesOff(void)
+    {
+        if (_slaves.empty()) {
+            return;
+        }
+        for (auto &slave : _slaves) {
+            slave->markSlavesOff();
+            slave->setStatus(false);
+        }
+    }
 
 public slots:
 
@@ -95,11 +129,13 @@ signals:
     void sizeChanged(void);
 
 private:
-    Core::Vector<Protocol::BoardID, int> _parentStack {};
+    Board *_master = nullptr;
+    Core::Vector<std::shared_ptr<Board>, int> _slaves {};
+
     Controls _controls {};
     QSize _size {};
-    Net::SocketView _rooter { -1 };
     Protocol::BoardID _boardID { 0 };
+    bool _status { true };
 };
 
-static_assert_fit_cacheline(Board);
+// static_assert_fit_cacheline(Board);
