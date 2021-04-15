@@ -78,7 +78,7 @@ Rectangle {
                         sequencerViewContent.contentView.placementBeatPrecisionScale = 0
                     else
                         sequencerViewContent.contentView.placementBeatPrecisionScale = Math.pow(2, index - 1)
-                    console.info(sequencerViewContent.contentView.placementBeatPrecisionScale)
+                    sequencerViewContent.contentView.placementBeatPrecisionLastWidth = 0
                 }
             }
         }

@@ -23,6 +23,7 @@ Rectangle {
                 playlistViewContent.contentView.placementBeatPrecisionScale = 0
             else
                 playlistViewContent.contentView.placementBeatPrecisionScale = Math.pow(2, index - 1)
+            playlistViewContent.contentView.placementBeatPrecisionLastWidth = 0
         }
     }
 }

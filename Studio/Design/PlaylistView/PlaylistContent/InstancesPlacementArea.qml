@@ -34,13 +34,17 @@ MouseArea {
             mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
         contentView.placementRectangle.attach(contentPlacementArea, nodeDelegate.node.color)
         if (instanceIndex === -1) { // Left click not on instance -> insert
+            if (contentView.placementBeatPrecisionLastWidth === 0)
+                contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionDefaultWidth
             mode = InstancesPlacementArea.Mode.Move
-            contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionDefaultWidth
+            contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
             contentView.placementBeatPrecisionFrom = mouseBeatPrecision
         } else { // Left click on instance -> edit
             var beatPrecisionRange = instances.getInstance(instanceIndex)
-            var noteWidth = (beatPrecisionRange.to - beatPrecisionRange.from) * contentView.pixelsPerBeatPrecision
+            var noteWidthBeatPrecision = beatPrecisionRange.to - beatPrecisionRange.from
+            var noteWidth = noteWidthBeatPrecision * contentView.pixelsPerBeatPrecision
             var resizeThreshold = Math.min(noteWidth * 0.2, contentView.placementResizeMaxPixelThreshold)
+            contentView.placementBeatPrecisionLastWidth = noteWidthBeatPrecision
             if ((realMouseBeatPrecision - beatPrecisionRange.from) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
                 mode = InstancesPlacementArea.Mode.LeftResize
             else if ((beatPrecisionRange.to - realMouseBeatPrecision) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
@@ -61,6 +65,7 @@ MouseArea {
         case InstancesPlacementArea.Mode.RightResize:
             if (contentView.placementBeatPrecisionFrom < 0)
                 contentView.placementBeatPrecisionFrom = 0
+            contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionWidth
             instances.add(AudioAPI.beatRange(contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo))
             contentView.placementBeatPrecisionMouseOffset = 0
             break;

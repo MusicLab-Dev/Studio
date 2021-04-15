@@ -61,6 +61,7 @@ Item {
     // Placement states in beat precision (128 unit = 1 beat)
     readonly property real placementBeatPrecisionWidth: placementBeatPrecisionTo - placementBeatPrecisionFrom
     property real placementBeatPrecisionDefaultWidth: placementBeatPrecisionScale !== 0 ? placementBeatPrecisionScale : beatPrecision
+    property real placementBeatPrecisionLastWidth: 0
     property real placementKeyOffset: 0 // Only used for notes
     property real placementKey: -1 // Only used for notes
     property real placementBeatPrecisionFrom: 0

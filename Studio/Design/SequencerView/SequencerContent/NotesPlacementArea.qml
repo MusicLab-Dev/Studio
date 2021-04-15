@@ -51,14 +51,18 @@ MouseArea {
         }
 
         if (noteIndex === -1) { // Left click not on note -> insert
+            if (contentView.placementBeatPrecisionLastWidth === 0)
+                contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionDefaultWidth
             mode = NotesPlacementArea.Mode.Move
-            contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionDefaultWidth
+            contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
             contentView.placementBeatPrecisionFrom = mouseBeatPrecision
             contentView.placementKey = mouseKey
         } else { // Left click on note -> edit
             var beatPrecisionRange = partition.getNote(noteIndex).range
-            var noteWidth = (beatPrecisionRange.to - beatPrecisionRange.from) * contentView.pixelsPerBeatPrecision
+            var noteWidthBeatPrecision = (beatPrecisionRange.to - beatPrecisionRange.from)
+            var noteWidth = noteWidthBeatPrecision * contentView.pixelsPerBeatPrecision
             var resizeThreshold = Math.min(noteWidth * 0.2, contentView.placementResizeMaxPixelThreshold)
+            contentView.placementBeatPrecisionLastWidth = noteWidthBeatPrecision
             if ((realMouseBeatPrecision - beatPrecisionRange.from) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
                 mode = NotesPlacementArea.Mode.LeftResize
             else if ((beatPrecisionRange.to - realMouseBeatPrecision) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
@@ -80,6 +84,7 @@ MouseArea {
         case NotesPlacementArea.Mode.RightResize:
             if (contentView.placementBeatPrecisionFrom < 0)
                 contentView.placementBeatPrecisionFrom = 0
+            contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionWidth
             partition.add(
                 AudioAPI.note(
                     AudioAPI.beatRange(contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo),
