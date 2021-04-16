@@ -26,7 +26,7 @@ Row {
                 width: 10
                 height: 10
                 text: modelData
-                down: value === modelData
+                down: roleValue === modelData
             }
         }
     }

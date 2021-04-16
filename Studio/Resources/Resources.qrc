@@ -56,5 +56,7 @@
         <file>Assets/6on1.png</file>
         <file>Assets/8on1.png</file>
         <file>Assets/1on8.png</file>
+        <file>Templates/SettingsTest.json</file>
+        <file>Resources.qrc</file>
     </qresource>
 </RCC>

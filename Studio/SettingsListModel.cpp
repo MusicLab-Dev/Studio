@@ -8,6 +8,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDebug>
+#include <QDir>
+#include <QStandardPaths>
 
 #include "SettingsListModel.hpp"
 
@@ -20,8 +22,8 @@ QHash<int, QByteArray> SettingsListModel::roleNames(void) const
         { static_cast<int>(Role::Help), "help" },
         { static_cast<int>(Role::Tags), "tags" },
         { static_cast<int>(Role::Type), "type" },
-        { static_cast<int>(Role::CurrentValue), "currentValue" },
-        { static_cast<int>(Role::Values), "values" }
+        { static_cast<int>(Role::CurrentValue), "roleValue" },
+        { static_cast<int>(Role::Values), "range" }
     };
 }
 
@@ -72,29 +74,34 @@ bool SettingsListModel::setData(const QModelIndex &index, const QVariant &value,
 
 bool SettingsListModel::read(const QString &settings, const QString &values)
 {
-    jsonSettingsFile.setFileName(settings);
-    jsonValuesFile.setFileName(values);
+    _jsonSettingsFile.setFileName(settings);
+    _jsonValuesFile.setFileName(values);
 
-    jsonSettingsFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    if (!jsonSettingsFile.exists())
+    _jsonSettingsFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    if (!_jsonSettingsFile.exists())
         throw std::logic_error("SettingsListModel::read: No settings file");
-    jsonSettingsStr = jsonSettingsFile.readAll();
-    jsonSettingsFile.close();
+    _jsonSettingsStr = _jsonSettingsFile.readAll();
+    _jsonSettingsFile.close();
 
-    jsonValuesFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    if (jsonValuesFile.exists())
-        jsonValuesStr = jsonValuesFile.readAll();
-    jsonValuesFile.close();
+    auto path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    if (path.isEmpty()) qFatal("SettingsListModel::read: Cannot determine settings storage location");
+    QDir d{path};
+    if (d.mkpath(d.absolutePath()) && QDir::setCurrent(d.absolutePath())) {
+        _jsonValuesFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        if (_jsonValuesFile.exists())
+            _jsonValuesStr = _jsonValuesFile.readAll();
+        _jsonValuesFile.close();
+    } else return false;
     return true;
 }
 
-bool SettingsListModel::load() noexcept
+bool SettingsListModel::load(const QString &settings, const QString &values) noexcept
 {
-    if (jsonSettingsStr.isEmpty())
+    if (!read(settings, values) || _jsonSettingsStr.isEmpty())
         return false;
 
-    QJsonDocument docSettings = QJsonDocument::fromJson(jsonSettingsStr.toUtf8());
-    QJsonDocument docValues = QJsonDocument::fromJson(jsonValuesStr.toUtf8());
+    QJsonDocument docSettings = QJsonDocument::fromJson(_jsonSettingsStr.toUtf8());
+    QJsonDocument docValues = QJsonDocument::fromJson(_jsonValuesStr.toUtf8());
     QJsonObject objSettings = docSettings.object();
     QJsonObject objValues = docValues.object();
 
@@ -102,6 +109,8 @@ bool SettingsListModel::load() noexcept
     _models.clear();
     parse(objSettings, objValues, "");
     endResetModel();
+    _jsonSettingsStr.clear();
+    _jsonValuesStr.clear();
     return true;
 }
 
@@ -118,6 +127,7 @@ void SettingsListModel::parse(const QJsonObject &objSettings, QJsonObject &objVa
             for (auto it = array.begin(); it != array.end(); it++) {
                 auto obj = it->toObject();
 
+                /** Create new fields in values */
                 if (!objValues.contains(obj["id"].toString())) {
                     if (!obj["start"].isNull())
                         objValues.insert(obj["id"].toString(), obj["start"]);
@@ -140,14 +150,14 @@ void SettingsListModel::parse(const QJsonObject &objSettings, QJsonObject &objVa
     }
 }
 
-bool SettingsListModel::saveValues() noexcept
+bool SettingsListModel::saveValues(void) noexcept
 {
-    jsonValuesFile.open(QIODevice::WriteOnly | QFile::Truncate);
+    _jsonValuesFile.open(QIODevice::WriteOnly | QFile::Truncate);
     QVariantMap map;
     for (auto it = _models.begin(); it != _models.end(); it++)
         map.insert(it->id, it->currentValue);
     QJsonDocument doc(QJsonDocument::fromVariant(map));
-    jsonValuesFile.write(doc.toJson(QJsonDocument::Indented));
-    jsonValuesFile.close();
+    _jsonValuesFile.write(doc.toJson(QJsonDocument::Indented));
+    _jsonValuesFile.close();
     return true;
 }

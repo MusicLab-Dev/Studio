@@ -67,6 +67,7 @@ set(StudioSources
     ${StudioDir}/SettingsListModel.hpp
     ${StudioDir}/SettingsListModel.cpp
     ${StudioDir}/SettingsListModelProxy.hpp
+    ${StudioDir}/SettingsListModelProxy.cpp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
 )

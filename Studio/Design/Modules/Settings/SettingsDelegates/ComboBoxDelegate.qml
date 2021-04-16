@@ -17,7 +17,9 @@ Row {
         width: Math.max(parent.width * 0.15, 150)
         height: parent.height / 1.5
         model: range
-        currentIndex: indexOfValue(value)
+        currentIndex: indexOfValue(roleValue)
+        onCurrentIndexChanged: roleValue = range[currentIndex]
+        Component.onCompleted: currentIndex = indexOfValue(roleValue)
     }
 }
 

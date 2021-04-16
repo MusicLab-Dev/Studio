@@ -66,22 +66,22 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
 public slots:
-    /** @brief Read the settings and values files into Strings.
-     * If Settings file doesn't exist, throw an exception.
-     */
-    bool read(const QString &settings, const QString &values);
 
     /** @brief Load settings from Strings into models */
-    bool load() noexcept;
+    bool load(const QString &settings, const QString &values) noexcept;
 
     /** @brief Save values from models into Values json file */
-    bool saveValues() noexcept;
+    bool saveValues(void) noexcept;
 
 private:
+    QFile _jsonSettingsFile, _jsonValuesFile;
+    QString _jsonSettingsStr, _jsonValuesStr;
+    QVector<Model> _models {};
+
     /** @brief Recursive function. Used into load() function */
     void parse(const QJsonObject &objSettings, QJsonObject &objValues, QString path);
 
-    QFile jsonSettingsFile, jsonValuesFile;
-    QString jsonSettingsStr, jsonValuesStr;
-    QVector<Model> _models {};
+    /** @brief Read the settings and values files into Strings.
+     * If Settings file doesn't exist, throw an exception. */
+    bool read(const QString &settings, const QString &values);
 };

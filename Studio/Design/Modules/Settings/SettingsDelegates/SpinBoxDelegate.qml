@@ -20,7 +20,8 @@ Row {
         to: range[1]
         stepSize: range[2]
         editable: range[3]
-        value: value
+        value: roleValue
+        onValueChanged: roleValue = value
     }
 }
 

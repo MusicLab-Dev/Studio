@@ -16,7 +16,8 @@ Row {
     DefaultTextBox {
         width: Math.max(parent.width * 0.15, 150)
         height: parent.height / 1.5
-        text: value
+        text: roleValue
+        onTextChanged: roleValue = text
     }
 }
 

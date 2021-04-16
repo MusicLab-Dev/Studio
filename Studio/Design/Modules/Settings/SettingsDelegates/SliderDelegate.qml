@@ -28,7 +28,8 @@ Row {
         from: range[0]
         to: range[1]
         stepSize: range[2]
-        value: value
+        value: roleValue
+        onValueChanged: roleValue = value
         snapMode: Slider.SnapAlways
     }
 

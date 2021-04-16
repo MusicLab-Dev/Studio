@@ -71,7 +71,6 @@ signals:
     void descriptionChanged(void);
 
 private:
-
     const int language(void) const noexcept;
 
     Audio::IPlugin *_data { nullptr };

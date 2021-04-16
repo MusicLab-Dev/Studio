@@ -42,6 +42,8 @@ void Studio::InitResources(void)
     qmlRegisterType<PluginTableModel>("PluginTableModel", 1, 0, "PluginTableModel");
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
+    qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "Application");
+    qmlRegisterType<SettingsListModelProxy>("SettingsListModelProxy", 1, 0, "Application");
     qmlRegisterUncreatableType<Scheduler>("Scheduler", 1, 0, "Scheduler", "Cannot construct Scheduler");
     qmlRegisterUncreatableType<Project>("Project", 1, 0, "Project", "Cannot construct Project");
     qmlRegisterUncreatableType<NodeModel>("NodeModel", 1, 0, "NodeModel", "Cannot construct NodeModel");
@@ -107,9 +109,9 @@ Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
     qmlRegisterType<SettingsListModelProxy>("SettingsListModel", 1, 0, "SettingsListModelProxy");
 
     /** DEBUG */
-    SettingsListModel list("test.json", "values.json", nullptr);
-    list.load();
-    list.saveValues();
+    //SettingsListModel list("test.json", "values.json", nullptr);
+    //list.load();
+    //list.saveValues();
     /* --- */
 
     const QUrl url(QStringLiteral("qrc:/Main/Main.qml"));

@@ -18,7 +18,8 @@ Row {
         height: parent.height / 1.5
         bottomRange: range[0]
         topRange: range[1]
-        text: value
+        text: roleValue
+        onTextChanged: roleValue = text
     }
 }
 

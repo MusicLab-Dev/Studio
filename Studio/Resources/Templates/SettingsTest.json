@@ -1,0 +1,34 @@
+{
+    "Sound": {
+        "General": [
+            {
+                "id": "volume",
+                "name": "Volume",
+                "help": "Set the volume",
+                "tags": ["Volume"],
+                "type": "Slider",
+                "start": 50,
+                "values": [0, 100, 1]
+            },
+            {
+                "id": "sampleRate",
+                "name": "Sample Rate (Hz)",
+                "tags": ["Sample", "Rate", "Hz"],
+                "type": "ComboBox",
+                "values": [22050, 44100, 48000, 88200, 96000, 192000],
+                "start": 44100
+            }
+        ]
+    },
+    "Ergonomy": {
+        "Controls": [
+            {
+                "name": "Zoom",
+                "id": "zoom",
+                "type": "Slider",
+                "tags": ["zoom"],
+                "values": [1, 2, 0.1]
+            }
+        ]
+    }
+}
