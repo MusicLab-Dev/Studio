@@ -41,3 +41,5 @@ coverage.info
 *.exe
 *.out
 *.app
+
+CMakeLists.txt.user

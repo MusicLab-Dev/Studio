@@ -58,6 +58,8 @@ set(StudioSources
     ${StudioDir}/Point.hpp
     ${StudioDir}/Project.cpp
     ${StudioDir}/Project.hpp
+    ${StudioDir}/ProjectSave.cpp
+    ${StudioDir}/ProjectSave.hpp
     ${StudioDir}/Scheduler.cpp
     ${StudioDir}/Scheduler.hpp
     ${StudioDir}/Studio.cpp

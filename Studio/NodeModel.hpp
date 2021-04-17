@@ -119,6 +119,12 @@ public:
     /** @brief Get the controls model */
     [[nodiscard]] ControlsModel *controls(void) noexcept { return _controls.get(); }
 
+    /** @brief Get the controls model */
+    [[nodiscard]] PluginModel *plugin(void) noexcept { return _plugin.get(); }
+
+    /** @brief Get the controls model */
+    [[nodiscard]] Core::FlatVector<NodePtr> &nchildren(void) noexcept { return _children; }
+
     /** @brief Get the flags */
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
 

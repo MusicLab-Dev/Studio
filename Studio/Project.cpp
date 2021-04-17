@@ -7,6 +7,7 @@
 
 #include "Models.hpp"
 #include "Project.hpp"
+#include "ProjectSave.hpp"
 
 Audio::Node *Project::createMasterMixer(void)
 {
@@ -57,4 +58,23 @@ void Project::setBPM(const BPM bpm) noexcept
             emit bpmChanged();
         }
     );
+}
+
+void Project::save()
+{
+    ProjectSave psave(this);
+
+    /** debug */
+    setPath("save.json");
+    psave.save();
+}
+
+void Project::saveAs(const QString &path)
+{
+
+}
+
+void Project::load()
+{
+
 }
