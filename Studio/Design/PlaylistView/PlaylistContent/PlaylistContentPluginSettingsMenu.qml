@@ -47,7 +47,7 @@ Menu {
                     if (cachedNode === null)
                         closeMenu();
                     else if (cachedNode.needSingleExternalInput() || cachedNode.needMultipleExternalInputs()) {
-                        filePicker.openDialog(cachedNode.needMultipleExternalInputs(),
+                        filePicker.open(cachedNode.needMultipleExternalInputs(),
                             function() {
                                 var list = []
                                 for (var i = 0; i < filePicker.fileUrls.length; ++i)

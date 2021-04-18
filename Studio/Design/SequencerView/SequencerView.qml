@@ -38,7 +38,7 @@ ColumnLayout {
                     return
                 }
                 if (node.needSingleExternalInput() || node.needMultipleExternalInputs()) {
-                    filePicker.openDialog(node.needMultipleExternalInputs(),
+                    filePicker.open(node.needMultipleExternalInputs(),
                         function() {
                             var list = []
                             for (var i = 0; i < filePicker.fileUrls.length; ++i)

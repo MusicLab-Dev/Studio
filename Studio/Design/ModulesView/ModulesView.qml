@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Dialogs 1.3
 
 import "../Modules/Plugins"
+import "../Modules/Workspaces"
 
 Rectangle {
     function removeComponent() {
@@ -74,33 +75,8 @@ Rectangle {
         anchors.centerIn: parent
     }
 
-    FileDialog {
-        property var acceptedCallback: null
-        property var canceledCallback: null
-
-        function openDialog(multiple, accepted, canceled) {
-            acceptedCallback = accepted
-            canceledCallback = canceled
-            selectMultiple = multiple
-            open()
-        }
-
-        function acceptAndClose() {
-            acceptedCallback()
-            close()
-        }
-
-        function cancelAndClose() {
-            canceledCallback()
-            close()
-        }
-
+    WorkspacesView {
         id: filePicker
-        selectFolder: false
-
-        onAccepted: acceptAndClose()
-        onRejected: cancelAndClose()
-
     }
 
     Shortcut {
@@ -124,10 +100,9 @@ Rectangle {
         }
     }
 
-
     Shortcut {
         sequence: "Ctrl+Tab"
-        onActivated: {
+        onActivated: {                                                s
             if (modules.count != 2) {
                 if (componentSelected == modules.count - 2)
                     componentSelected = 0

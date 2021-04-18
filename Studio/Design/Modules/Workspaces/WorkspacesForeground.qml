@@ -8,6 +8,7 @@ import "../../Default"
 Rectangle {
     property var workspacesModel
     property string actualPath: ""
+    property int parentDepth: 0
 
     id: workspaceForeground
     color: "#0D2D47"
@@ -38,7 +39,7 @@ Rectangle {
     ColumnLayout {
         id: workspaceForegroundContent
         width: parent.width * 0.8
-        height: parent.height * 0.7
+        height: parent.height * 0.75
         x: (parent.width - width) / 2
         y: workspaceResearchTextInput.y + workspaceResearchTextInput.height * 2
 
@@ -48,14 +49,22 @@ Rectangle {
             model: workspacesModel
             Layout.fillWidth: true
             Layout.fillHeight: true
+            clip: true
 
+            ScrollBar.vertical: DefaultScrollBar {
+                id: scrollBar
+                color: "#31A8FF"
+                opacity: 0.3
+                visible: workspacesForegroundListView.contentHeight > workspacesForegroundListView.height
+            }
 
             delegate: WorkspaceCard {
-                width: workspacesForegroundListView.width
+                width: workspacesForegroundListView.width - scrollBar.width * 1.5
 
                 Component.onCompleted: {
-                    if (index === 0)
+                    if (index === 0) {
                         workspaceForeground.actualPath = realPath
+                    }
                 }
             }
         }

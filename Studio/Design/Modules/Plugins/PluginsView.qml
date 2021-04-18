@@ -35,11 +35,22 @@ PluginsBackground {
         y: height
     }
 
-    PluginsViewCloseButton {
+    Rectangle {
         id: pluginsViewCloseButton
+        width: 70
+        height: 30
         x: pluginsView.width - width - height
         y: height
+        color: "transparent"
+        radius: 5
+        border.color: pluginsViewCloseButtonText.closeButtonHovered ? "#31A8FF" : "#1E6FB0"
+        border.width: 1
+
+        PluginsViewCloseButton {
+            id: pluginsViewCloseButtonText
+        }
     }
+
 
     PluginsForeground {
         id: pluginsForeground

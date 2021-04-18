@@ -34,8 +34,10 @@ Item {
             height: parent.height
 
             onReleased: {
-                if (fileIsDir)
+                if (fileIsDir) {
                     workspaceForeground.actualPath = fileUrl
+                    workspacesForeground.parentDepth += 1
+                }
             }
         }
     }
