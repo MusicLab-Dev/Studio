@@ -10,7 +10,7 @@
 Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     :   QObject(parent),
         Audio::AScheduler(std::move(project)),
-        _device(DefaultDeviceDescription, &Audio::AScheduler::ConsumeAudioData, this),
+        _device(DefaultDeviceDescription, [this](std::uint8_t *data, const std::size_t size) { consumeAudioData(data, size); }, this),
         _timer(this),
         _audioSpecs(Audio::AudioSpecs {
             _device.sampleRate(),
@@ -121,6 +121,7 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
 
 bool Scheduler::onAudioBlockGenerated(void)
 {
+    _busy = false;
     _blockGenerated = true;
     while (_blockGenerated) {
         std::this_thread::yield();
@@ -130,6 +131,7 @@ bool Scheduler::onAudioBlockGenerated(void)
 
 bool Scheduler::onAudioQueueBusy(void)
 {
+    _busy = true;
     _blockGenerated = true;
     while (_blockGenerated) {
         std::this_thread::yield();
@@ -277,6 +279,7 @@ bool Scheduler::playImpl(void)
 {
     if (setState(Audio::AScheduler::State::Play)) {
         _onTheFlyMissCount = 0u;
+        _isOnTheFlyMode = playbackMode() == PlaybackMode::OnTheFly;
         _device.start();
         _timer.start();
         emit runningChanged();
@@ -349,9 +352,7 @@ void Scheduler::onCatchingAudioThread(void)
     _exitGraph = state() == Scheduler::State::Pause;
 
     // Check if we should stop on the fly graph
-
-
-    if (playbackMode() == PlaybackMode::OnTheFly && project()->master()->cache().isZero() && ++_onTheFlyMissCount > OnTheFlyMissThreshold) {
+    if (playbackMode() == PlaybackMode::OnTheFly && _onTheFlyMissCount > OnTheFlyMissThreshold) {
         std::cout << "Missed" << std::endl;
         _onTheFlyMissCount = 0u;
         pauseImpl();
@@ -376,4 +377,15 @@ void Scheduler::onCatchingAudioThread(void)
         emit onTheFlyCurrentBeatChanged();
         break;
     }
+}
+
+void Scheduler::consumeAudioData(std::uint8_t *data, const std::size_t size) noexcept
+{
+    if (_isOnTheFlyMode) {
+        if (std::all_of(data, data + size, [](const auto x) { return x == 0; }))
+            ++_onTheFlyMissCount;
+        else
+            _onTheFlyMissCount = 0u;
+    }
+    Audio::AScheduler::ConsumeAudioData(data, size);
 }

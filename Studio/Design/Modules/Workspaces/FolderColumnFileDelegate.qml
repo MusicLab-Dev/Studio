@@ -20,5 +20,10 @@ Row {
         width: parent.width - image.width - parent.spacing
         text: fileName
         height: parent.height
+
+        onReleased: {
+            workspaceView.fileUrl = fileUrl
+            workspaceView.acceptAndClose()
+        }
     }
 }

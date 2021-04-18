@@ -13,8 +13,7 @@ WorkspacesBackground {
         visible = true
     }
 
-    function acceptAndClose(path) {
-        fileUrl = path
+    function acceptAndClose() {
         visible = false
         acceptedCallback()
     }
@@ -31,7 +30,7 @@ WorkspacesBackground {
     property var fileUrls: [fileUrl]
 
     id: workspaceView
-    visible: true
+    visible: false
 
     WorkspacesViewTitle {
         id: workspaceViewTitle
