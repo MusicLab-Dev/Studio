@@ -95,14 +95,14 @@ QVariantList ProjectSave::getPartitionsInVariantList(PartitionsModel &partitions
 
         QVariantList listNotes;
         for (unsigned int y = 0; y < partition->count(); y++) {
-            QVariantMap notes;
+            QVariantMap mapNote;
             Note note = partition->get(y);
 
-            notes.insert("range", QVariantList({note.range.from, note.range.to}));
-            notes.insert("key", note.key);
-            notes.insert("velocity", note.velocity);
-            notes.insert("tuning", note.tuning);
-            listNotes.push_back(notes);
+            mapNote.insert("range", QVariantList({note.range.from, note.range.to}));
+            mapNote.insert("key", note.key);
+            mapNote.insert("velocity", note.velocity);
+            mapNote.insert("tuning", note.tuning);
+            listNotes.push_back(mapNote);
         }
         data.insert("notes", listNotes);
 
@@ -121,7 +121,54 @@ QVariantList ProjectSave::getPartitionsInVariantList(PartitionsModel &partitions
 
 QVariantList ProjectSave::getControlsInVariantList(ControlsModel &controls) noexcept
 {
-    return QVariantList();
+    QVariantList list;
+
+    for (unsigned int i = 0; i < controls.count(); i++) {
+        ControlModel *control = controls.get(i);
+        QVariantMap data;
+
+        data.insert("name", control->name());
+        data.insert("paramID", control->paramID());
+        data.insert("muted", control->muted());
+
+        QVariantList listAutomations;
+        for (unsigned int y = 0; y < control->count(); y++) {
+            QVariantMap mapAutomation;
+            AutomationModel *automation = control->get(y);
+
+            mapAutomation.insert("name", automation->name());
+            mapAutomation.insert("muted", automation->muted());
+
+            QVariantList listPoints;
+            for (unsigned p = 0; p < automation->count(); p++) {
+                QVariantMap mapPoint;
+                GPoint point = automation->get(p);
+
+                mapPoint.insert("beat", point.beat);
+                mapPoint.insert("curveType", QVariant::fromValue(point.getType()).toJsonValue());
+                mapPoint.insert("curveRate", point.curveRate);
+                mapPoint.insert("value", point.value);
+
+                listPoints.push_back(mapPoint);
+            }
+            mapAutomation.insert("points", listPoints);
+
+            auto &instances = automation->instances();
+            QVariantList listInstances;
+            for (unsigned p = 0; p < instances.count(); p++) {
+                auto &instance = instances.get(p);
+                listInstances.push_back(QVariantList({instance.from, instance.to}));
+            }
+            mapAutomation.insert("instances", listInstances);
+
+            listAutomations.push_back(mapAutomation);
+        }
+        data.insert("automations", listAutomations);
+
+        list.push_back(data);
+    }
+
+    return list;
 }
 
 QVariantMap ProjectSave::getPluginInVariantMap(PluginModel &plugin) noexcept
