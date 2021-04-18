@@ -11,12 +11,20 @@ GridView {
     id: pluginsGrid
     cellWidth: pluginsContentArea.width / 6
     cellHeight: cellWidth
+    clip: true
 
     model: PluginTableModelProxy {
         id: pluginTableProxy
         sourceModel: pluginTable
         tagsFilter: pluginsView.currentFilter
         nameFilter: pluginsForeground.currentSearchText
+    }
+
+    ScrollBar.vertical: DefaultScrollBar {
+        id: scrollBar
+        color: "#31A8FF"
+        opacity: 0.3
+        visible: parent.contentHeight > parent.height
     }
 
     delegate: Item {

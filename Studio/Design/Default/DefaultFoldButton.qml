@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 Button {
     property bool activated: false
+    property alias source: image.source
 
     id: control
     hoverEnabled: true
@@ -16,6 +17,7 @@ Button {
     }
 
     indicator: DefaultColoredImage {
+        id: image
         width: control.width
         height: control.height
         source: "qrc:/Assets/FoldButton.png"

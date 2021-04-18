@@ -27,7 +27,10 @@ Rectangle {
 
         MouseArea {
             anchors.fill: parent
-            onPressed: workspaceForeground.actualPath = realPath
+            onPressed: {
+                workspaceForeground.actualPath = realPath
+                parentDepth = 0
+            }
         }
 
         DefaultFoldButton {
@@ -37,6 +40,8 @@ Rectangle {
             x: parent.x + width / 3
             y: parent.height / 2 - height / 2
         }
+
+        Component.onCompleted: workspaceFoldButton.activated = index === 0
 
         TextField {
             id: workspaceName

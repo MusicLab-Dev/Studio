@@ -74,6 +74,7 @@ Rectangle {
             ScrollBar.vertical: DefaultScrollBar {
                 color: "#31A8FF"
                 opacity: 0.3
+                visible: parent.contentHeight > parent.height
             }
 
             model: [

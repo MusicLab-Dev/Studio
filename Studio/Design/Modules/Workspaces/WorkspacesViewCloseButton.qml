@@ -20,6 +20,6 @@ Text {
 
         onExited: { closeButtonHovered = false }
 
-        onReleased: { pluginsView.cancelAndClose() }
+        onReleased: { workspaceView.cancelAndClose() }
     }
 }

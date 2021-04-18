@@ -9,6 +9,7 @@ import NodeModel 1.0
 import BoardManager 1.0
 
 import "../ModulesView"
+import "../Modules/Workspaces"
 
 Window {
     visible: true
