@@ -10,6 +10,11 @@ Rectangle {
     property string actualPath: ""
     property int parentDepth: 0
 
+    onActualPathChanged: {
+        workspaceContentArea.selectedIndex = -1
+        workspaceContentArea.hoveredIndex = -1
+    }
+
     id: workspaceForeground
     color: "#0D2D47"
     radius: 30

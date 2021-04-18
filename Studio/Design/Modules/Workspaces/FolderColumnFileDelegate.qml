@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import "../../Default"
 
 Row {
+    property int depth: 0
+
     height: 20
     spacing: 4
 
