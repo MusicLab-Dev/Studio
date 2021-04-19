@@ -73,7 +73,7 @@ public:
     struct DirectClient
     {
         Socket socket { -1 };
-        Interface *iface { nullptr };
+        std::string interfaceName {};
     };
 
     BoardManager(void);
@@ -148,7 +148,7 @@ private:
     void removeDirectClientNetwork(const Socket directClientSocket);
 
     /** @brief Remove direct clients & their network branch(s) attached to the specified interface */
-    void removeInterfaceNetwork(void);
+    void removeInterfaceNetwork(const std::string &interfaceName);
 
     // Interfaces utils
 
@@ -193,4 +193,9 @@ private:
 
     /** @brief Set keepalive option on socket */
     void setSocketKeepAlive(const Socket socket);
+
+    // Packet processing
+
+    /** @brief to complete */
+    bool handleIdentifierRequest(const Protocol::ReadablePacket &packet, const Socket &clientSocket);
 };

@@ -153,9 +153,7 @@ void BoardManager::discoveryEmit(void)
                     so checking to remove the associated network.
                 */
                 std::cout << "INTERFACE DISCONNECTED" << std::endl;
-                removeInterfaceNetwork(); // To implement...
-
-                // TO DO: Remove the disconnected interface from the interface list
+                removeInterfaceNetwork(interface.first);
             }
             else {
                 throw std::runtime_error(std::strerror(errno));
@@ -397,11 +395,43 @@ void BoardManager::processNewConnections(void)
 
         DirectClient directClient = {
             .socket = clientSocket,
-            .iface = const_cast<Interface *>(&interface.second)
+            .interfaceName = interface.first
         };
 
         _clients.push(directClient);
     }
+}
+
+bool BoardManager::handleIdentifierRequest(const Protocol::ReadablePacket &packet, const Socket &clientSocket)
+{
+    using namespace Protocol;
+
+    if (packet.protocolType() == ProtocolType::Connection &&
+        packet.commandAs<ConnectionCommand>() == ConnectionCommand::IDAssignment &&
+        packet.footprintStackSize() == 0) {
+
+        std::cout << "Identifier request from a direct client received." << std::endl;
+
+        BoardID newID = aquireIdentifier();
+        if (newID == 0) {
+            std::cout << "BoardManager::aquireIdentifier: OUT OF IDENTIFIER" << std::endl;
+            /* handle out of identifier error here */
+            throw std::runtime_error("OUT OF IDENTIFIER");
+        }
+        // Return the identifier to the direct client
+        char buffer[sizeof(WritablePacket::Header) + sizeof(BoardID)];
+        WritablePacket response(std::begin(buffer), std::end(buffer));
+        response.prepare(ProtocolType::Connection, ConnectionCommand::IDAssignment);
+        response << newID;
+        // Send the identifier response to the client
+        const auto ret = ::send(clientSocket, &buffer, response.totalSize(), 0);
+        if (ret < 0)
+            throw std::runtime_error(std::strerror(errno));
+        // Add the new board the studio list
+        _boards.push(std::make_shared<Board>(newID, clientSocket));
+        return true;
+    }
+    return false;
 }
 
 void BoardManager::processClientInput(Socket &clientSocket)
@@ -410,13 +440,15 @@ void BoardManager::processClientInput(Socket &clientSocket)
 
     const auto inputSize = ::recv(clientSocket, bufferPtr, NetworkBufferSize, 0);
 
-    if (inputSize == 0 || (inputSize < 0 && errno == ETIMEDOUT)) { // Disconnection || Connection timed out, broken...
+    if (inputSize == 0 || (inputSize < 0 && errno == ETIMEDOUT)) {
+        /*
+            recv() detected that the connection has been closed by the peer or
+            the keepalive option detected that the peer has timed out.
+        */
         std::cout << "BoardManager::processClientInput: Direct client disconnection detected" << std::endl;
-
         removeDirectClientNetwork(clientSocket);
         close(clientSocket);
         clientSocket = -1;
-
         return;
     }
     else if (inputSize < 0) {
@@ -427,30 +459,15 @@ void BoardManager::processClientInput(Socket &clientSocket)
 
     Protocol::ReadablePacket packet(bufferPtr, bufferPtr + inputSize);
 
-    if (packet.protocolType() == Protocol::ProtocolType::Connection &&
-        packet.commandAs<Protocol::ConnectionCommand>() == Protocol::ConnectionCommand::IDAssignment &&
-        packet.footprintStackSize() == 0) {
-
-        std::cout << "Direct client ID request !" << std::endl;
-
-        BoardID newID = aquireIdentifier();
-        if (newID == 0) {
-            std::cout << "aquireIdentifier ERROR" << std::endl;
-            /* handle out of identifier error here */
-            return;
-        }
-        char buffer[sizeof(WritablePacket::Header) + sizeof(BoardID)];
-        WritablePacket response(std::begin(buffer), std::end(buffer));
-        response.prepare(ProtocolType::Connection, ConnectionCommand::IDAssignment);
-        response << newID;
-        const auto ret = ::send(clientSocket, &buffer, response.totalSize(), 0);
-        if (ret < 0) {
-            std::cout << "BoardManager::processClientInput::send failed: " << std::strerror(errno) << std::endl;
-            return;
-        }
-        _boards.push(std::make_shared<Board>(newID, clientSocket));
+    // Check if the received packet is a identifier request, must be processed now
+    if (handleIdentifierRequest(packet, clientSocket) == true) {
+        std::memset(bufferPtr, 0, inputSize);
+        return;
     }
 
+    // Process other type of packets here...
+
+    // Increment network buffer by the size of the received data
     _writeIndex += inputSize;
 }
 
@@ -567,7 +584,23 @@ void BoardManager::removeDirectClientNetwork(const Socket directClientSocket)
     std::cout << "board list size OUT: " << _boards.size() << std::endl;
 }
 
-void BoardManager::removeInterfaceNetwork(void) // TO DO
+void BoardManager::removeInterfaceNetwork(const std::string &interfaceName)
 {
     std::cout << "BoardManager::removeInterfaceNetwork" << std::endl;
+
+    std::cout << "Removing interface network for: " << interfaceName << std::endl;
+
+    for (auto &directClient : _clients) {
+        if (directClient.interfaceName == interfaceName) {
+            removeDirectClientNetwork(directClient.socket);
+            close(directClient.socket);
+            directClient.socket = -1;
+        }
+    }
+    for (auto it = _clients.begin(); it != _clients.end();) {
+        if (it->socket == -1)
+            _clients.erase(it);
+        else
+            ++it;
+    }
 }
