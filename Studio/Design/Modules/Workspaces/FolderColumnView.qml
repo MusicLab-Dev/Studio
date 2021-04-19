@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import Qt.labs.folderlistmodel 2.15
 
 Column {
+    property int depth: 0
     property alias model: repeater.model
     property string realPath
     readonly property real indentationSize: 20
@@ -27,6 +28,8 @@ Column {
             x: indentationSize
             source: "qrc:/Modules/Workspaces/" + (fileIsDir ? "FolderColumnFolderDelegate.qml" : "FolderColumnFileDelegate.qml")
             width: folderColumnView.width - x
+
+            onLoaded: item.depth = depth + 1
         }
     }
 }

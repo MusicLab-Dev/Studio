@@ -11,11 +11,9 @@
 
 ProjectSave::ProjectSave(Project *project)
     : _project(project)
-{
-}
-
-ProjectSave::~ProjectSave()
 {}
+
+/** -- SAVE PART -- */
 
 bool ProjectSave::save(void)
 {
@@ -23,16 +21,11 @@ bool ProjectSave::save(void)
 
     map.insert("name", _project->name());
     map.insert("bpm", _project->bpm());
-    map.insert("master", getNodeInVariantMap(*_project->master()));
+    map.insert("master", transformNodeInVariantMap(*_project->master()));
 
     QJsonDocument doc(QJsonDocument::fromVariant(map));
     write(doc.toJson(QJsonDocument::Indented));
-    qDebug() << "save success";
-    return true;
-}
-
-bool ProjectSave::load(void)
-{
+    qDebug() << "Save Success";
     return true;
 }
 
@@ -57,32 +50,29 @@ void ProjectSave::write(const QString &json)
     file.close();
 }
 
-QVariantMap ProjectSave::getNodeInVariantMap(NodeModel &node)
+QVariantMap ProjectSave::transformNodeInVariantMap(NodeModel &node)
 {
     if (!_project)
-        throw std::runtime_error("ProjectSave::getNodeInVariantMap: pointer exception");
-
+        throw std::runtime_error("ProjectSave::transformNodeInVariantMap: pointer exception");
     QVariantMap map;
+    QVariantList children;
 
     map.insert("name", node.name());
     map.insert("color", node.color());
     map.insert("muted", node.muted());
-
-    map.insert("partitions", getPartitionsInVariantList(*node.partitions()));
-    map.insert("controls", getControlsInVariantList(*node.controls()));
-    map.insert("plugin", getPluginInVariantMap(*node.plugin()));
-
-    QVariantList children;
+    map.insert("partitions", transformPartitionsInVariantList(*node.partitions()));
+    map.insert("controls", transformControlsInVariantList(*node.controls()));
+    map.insert("plugin", transformPluginInVariantMap(*node.plugin()));
 
     for (auto it = node.nchildren().begin(); it != node.nchildren().end(); ++it) {
-        children.push_back(getNodeInVariantMap(*it->get()));
+        children.push_back(transformNodeInVariantMap(*it->get()));
     }
     map.insert("children", children);
 
     return map;
 }
 
-QVariantList ProjectSave::getPartitionsInVariantList(PartitionsModel &partitions) noexcept
+QVariantList ProjectSave::transformPartitionsInVariantList(PartitionsModel &partitions) noexcept
 {
     QVariantList list;
 
@@ -97,7 +87,6 @@ QVariantList ProjectSave::getPartitionsInVariantList(PartitionsModel &partitions
         for (unsigned int y = 0; y < partition->count(); y++) {
             QVariantMap mapNote;
             Note note = partition->get(y);
-
             mapNote.insert("range", QVariantList({note.range.from, note.range.to}));
             mapNote.insert("key", note.key);
             mapNote.insert("velocity", note.velocity);
@@ -119,7 +108,7 @@ QVariantList ProjectSave::getPartitionsInVariantList(PartitionsModel &partitions
     return list;
 }
 
-QVariantList ProjectSave::getControlsInVariantList(ControlsModel &controls) noexcept
+QVariantList ProjectSave::transformControlsInVariantList(ControlsModel &controls) noexcept
 {
     QVariantList list;
 
@@ -148,7 +137,6 @@ QVariantList ProjectSave::getControlsInVariantList(ControlsModel &controls) noex
                 mapPoint.insert("curveType", QVariant::fromValue(point.getType()).toJsonValue());
                 mapPoint.insert("curveRate", point.curveRate);
                 mapPoint.insert("value", point.value);
-
                 listPoints.push_back(mapPoint);
             }
             mapAutomation.insert("points", listPoints);
@@ -171,9 +159,96 @@ QVariantList ProjectSave::getControlsInVariantList(ControlsModel &controls) noex
     return list;
 }
 
-QVariantMap ProjectSave::getPluginInVariantMap(PluginModel &plugin) noexcept
+QVariantMap ProjectSave::transformPluginInVariantMap(PluginModel &plugin) noexcept
 {
-    return QVariantMap();
+    QVariantMap map;
+
+    //todo
+    //map.insert("factory", plugin.)
+
+    return map;
 }
 
+/** -- LOAD PART -- */
 
+bool ProjectSave::load(void)
+{
+    for (unsigned int i = 0; i < _project->master()->count(); i++)
+        _project->master()->remove(i);
+
+    QString jsonStr = read();
+    if (jsonStr.isEmpty())
+        return false;
+    QJsonDocument doc = QJsonDocument::fromJson(jsonStr.toUtf8());
+    QJsonObject obj = doc.object();
+
+    _project->setName(obj["name"].toString());
+    _project->setBPM(obj["bpm"].toDouble());
+    initNode(_project->master(), obj["master"].toObject());
+
+    qDebug("Load success");
+    return true;
+}
+
+bool ProjectSave::initNode(NodeModel *node, const QJsonObject &obj)
+{
+    if (!node)
+        return false;
+
+    node->setName(obj["name"].toString());
+    node->setColor(obj["color"].toString());
+    node->setMuted(obj["muted"].toBool());
+    initPlugin(node->plugin(), obj["plugin"].toObject());
+    initPartitions(node->partitions(), obj["partitions"].toArray());
+    initControls(node->controls(), obj["controls"].toArray());
+
+    for (unsigned int i = 0 ; i < obj["children"].toArray().size(); i++) {
+        initNode(
+            node->add("__internal__:/Mixer"/*obj["plugin"]["factory"].toString()*/),
+            obj["children"][i].toObject());
+    }
+
+    return true;
+}
+
+bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &array)
+{
+    for (unsigned int i = 0; i < array.size(); i++) {
+        partitions->add();
+        PartitionModel *partition = partitions->get(i);
+        QJsonObject partitionObj = array[i].toObject();
+
+        partition->setName(partitionObj["name"].toString());
+        partition->setMuted(partitionObj["muted"].toBool());
+
+        for (unsigned int y = 0; y < partitionObj["notes"].toArray().size(); y++) {
+            QJsonObject noteObj = partitionObj["notes"].toArray()[y].toObject();
+            Note note;
+
+            note.range.from = noteObj["range"].toArray()[0].toInt();
+            note.range.to = noteObj["range"].toArray()[1].toInt();
+            note.key = noteObj["key"].toInt();
+            note.velocity = noteObj["velocity"].toInt();
+            note.tuning = noteObj["tuning"].toInt();
+            partition->add(note);
+        }
+
+        for (unsigned int y = 0; y < partitionObj["instances"].toArray().size(); y++) {
+            QJsonArray instance = partitionObj["instances"].toArray()[y].toArray();
+            unsigned int from = instance[0].toInt();
+            unsigned int to = instance[1].toInt();
+            partition->instances().add(BeatRange({from, to}));
+        }
+    }
+    return true;
+}
+
+bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
+{
+    return true;
+}
+
+bool ProjectSave::initPlugin(PluginModel *plugin, const QJsonObject &obj)
+{
+    return true;
+}

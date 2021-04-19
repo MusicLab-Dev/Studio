@@ -3,27 +3,47 @@ import QtQuick.Controls 2.15
 
 import "../../Default"
 
-Rectangle {
-    id: pluginsContentArea
-    color: parent.color
+import PluginTableModel 1.0
 
-    GridView {
-        anchors.fill: parent
-        cellWidth: 250
-        cellHeight: 250
+GridView {
+    property alias pluginTableProxy: pluginTableProxy
 
+    id: pluginsGrid
+    cellWidth: pluginsContentArea.width / 6
+    cellHeight: cellWidth
+    clip: true
 
-        model: pluginTable
+    model: PluginTableModelProxy {
+        id: pluginTableProxy
+        sourceModel: pluginTable
+        tagsFilter: pluginsView.currentFilter
+        nameFilter: pluginsForeground.currentSearchText
+    }
 
-        delegate: PluginsSquareComponent {
+    ScrollBar.vertical: DefaultScrollBar {
+        id: scrollBar
+        color: "#31A8FF"
+        opacity: 0.3
+        visible: parent.contentHeight > parent.height
+    }
 
-            DefaultImageButton {
-                anchors.fill: parent
-                source: "qrc:/Assets/TestImage1.png"
+    delegate: Item {
+        property bool pluginsSquareComponentHovered: false
 
-                onReleased: {
-                    pluginsView.acceptAndClose(factoryPath)
-                }
+        id: componentDelegate
+        width: pluginsGrid.cellWidth
+        height: pluginsGrid.cellHeight
+
+        PluginsSquareComponent {
+            anchors.fill: parent
+            anchors.margins: 5
+
+            Image {
+                width: parent.width / 1.5
+                height: width
+                x: parent.width / 2 - width / 2
+                y: parent.height / 2 - height / 2
+                source: factoryName ? "qrc:/Assets/Plugins/" + factoryName + ".png" : "qrc:/Assets/Plugins/Default.png"
             }
 
             PluginsSquareComponentTitle {
@@ -31,15 +51,39 @@ Rectangle {
                 text: factoryName
             }
 
-            Text {
-                x: parent.width - width
-                y: title.y + title.height
+            PluginsSquareComponentDescription {
+                id: description
                 text: factoryDescription
-                color: "#FFFFFF"
-                opacity: 0.42
-                font.pointSize: 11
-                font.weight: Font.Thin
+                width: parent.width
+                height: parent.height / 2
+                x: parent.width / 2 - width / 2
+                y: title.y * 1.2
 
+                ToolTip {
+                    id: toolTip
+                    text: factoryDescription
+                    visible: false
+                }
+            }
+
+            MouseArea {
+                width: parent.width
+                height: parent.height + title.height + description.height
+                hoverEnabled: true
+
+                onEntered: {
+                    pluginsSquareComponentHovered = true
+                    toolTip.visible = description.truncated ? true : false
+                }
+
+                onExited: {
+                    pluginsSquareComponentHovered = false
+                    toolTip.visible = false
+                }
+
+                onReleased: {
+                    pluginsView.acceptAndClose(factoryPath)
+                }
             }
         }
     }

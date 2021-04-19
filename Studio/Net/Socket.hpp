@@ -14,7 +14,9 @@ namespace Net
         UDP
     };
 
+    class SocketBase;
     class Socket;
+    class SocketView;
 
     /** @brief Guard initializer */
     struct Initializer;
@@ -26,7 +28,7 @@ namespace Net
     [[nodiscard]] Address ToAddress(const char *addr) noexcept;
 }
 
-class Net::Socket
+class Net::SocketBase
 {
 public:
 #ifdef WIN32
@@ -46,6 +48,60 @@ public:
     /** @brief Release backend library */
     static void Release(void);
 
+
+    /** @brief Construct a new null socket */
+    SocketBase(void) noexcept = default;
+
+    /** @brief Copy constructor */
+    SocketBase(const SocketBase &other) = default;
+
+    /** @brief Move construct a socketBase */
+    SocketBase(SocketBase &&other) noexcept { swap(other); }
+
+    /** @brief Take ownership of given socketBase */
+    SocketBase(const Internal sock) noexcept : _sock(sock) {}
+
+    /** @brief Destroys the socketBase */
+    ~SocketBase(void) noexcept = default;
+
+    /** @brief Move assignment */
+    SocketBase &operator=(const SocketBase &other) noexcept = default;
+
+    /** @brief Move assignment */
+    SocketBase &operator=(SocketBase &&other) noexcept { swap(other); return *this; }
+
+    /** @brief Swap two sockets */
+    void swap(SocketBase &other) noexcept { std::swap(_sock, other._sock); }
+
+    /** @brief Check if socket is opened */
+    operator bool(void) const noexcept { return isOpened(); }
+
+    /** @brief Check if socket is opened */
+    [[nodiscard]] bool isOpened(void) const noexcept { return _sock != NullSock; }
+
+
+    /** @brief Send a packet to connected endpoint */
+    [[nodiscard]] std::int32_t send(const void *buffer, const std::int32_t size, const bool sendAll = false) noexcept;
+
+    /** Send a packet to given endpoint */
+    [[nodiscard]] std::int32_t sendTo(const void *buffer, const std::int32_t size, const Address address, const Port port, const bool sendAll = false) noexcept;
+
+    /** Received data from connected enpoint */
+    [[nodiscard]] std::int32_t receive(void *buffer, const std::int32_t maxSize, const bool receiveAll = false) noexcept;
+
+    /** Received data and get its enpoint */
+    [[nodiscard]] std::int32_t receiveFrom(void *buffer, const std::int32_t maxSize, Address &address, Port &port, const bool receiveAll = false) noexcept;
+
+protected:
+    Internal _sock { NullSock };
+
+    /** @brief Gets an internal well formated error message */
+    [[nodiscard]] std::string getSocketError(const char *context, const std::string &msg, const bool useErrno = false) const noexcept;
+};
+
+class Net::Socket : public SocketBase
+{
+public:
     /** @brief Construct a new null socket */
     Socket(void) noexcept = default;
 
@@ -53,13 +109,17 @@ public:
     Socket(const Socket &other) = delete;
 
     /** @brief Move construct a socket */
-    Socket(Socket &&other) noexcept { std::swap(_sock, other._sock); }
+    Socket(Socket &&other) noexcept = default;
 
     /** @brief Take ownership of given socket */
-    Socket(Internal sock) noexcept : _sock(sock) {}
+    Socket(const Internal sock) noexcept : SocketBase(sock) {}
 
     /** @brief Destroys the socket */
     ~Socket(void) noexcept { close(); }
+
+    /** @brief Move assignment */
+    Socket &operator=(Socket &&other) noexcept = default;
+
 
     /** @brief Tries to connect socket to given endpoint */
     [[nodiscard]] bool connectTo(const Address address, const Port port, const Protocol protocol = Protocol::TCP);
@@ -87,30 +147,35 @@ public:
 
     /** @brief Bind an opened socket to a specific address */
     void bind(const Address address, const Port port);
+};
 
-    /** @brief Send a packet to connected endpoint */
-    [[nodiscard]] std::int32_t send(const void *buffer, const std::int32_t size, const bool sendAll = false) noexcept;
 
-    /** Send a packet to given endpoint */
-    [[nodiscard]] std::int32_t sendTo(const void *buffer, const std::int32_t size, const Address address, const Port port, const bool sendAll = false) noexcept;
+class Net::SocketView : public SocketBase
+{
+public:
+    /** @brief Construct a new null socket */
+    SocketView(void) noexcept = default;
 
-    /** Received data from connected enpoint */
-    [[nodiscard]] std::int32_t receive(void *buffer, const std::int32_t maxSize, const bool receiveAll = false) noexcept;
+    /** @brief Construct a new null socket */
+    SocketView(const Socket &source) noexcept : SocketBase(source) {}
 
-    /** Received data and get its enpoint */
-    [[nodiscard]] std::int32_t receiveFrom(void *buffer, const std::int32_t maxSize, Address &address, Port &port, const bool receiveAll = false) noexcept;
+    /** @brief Copy construct is disabled */
+    SocketView(const SocketView &other) = default;
 
-    /** @brief Check if socket is opened */
-    operator bool(void) const noexcept { return isOpened(); }
+    /** @brief Move construct a SocketView */
+    SocketView(SocketView &&other) noexcept = default;
 
-    /** @brief Check if socket is opened */
-    [[nodiscard]] bool isOpened(void) const noexcept { return _sock != NullSock; }
+    /** @brief Take ownership of given socket */
+    SocketView(const Internal sock) noexcept : SocketBase(sock) {}
 
-private:
-    Internal _sock { NullSock };
+    /** @brief Destroys the SocketView */
+    ~SocketView(void) noexcept = default;
 
-    /** @brief Gets an internal well formated error message */
-    [[nodiscard]] std::string getSocketError(const char *context, const std::string &msg, const bool useErrno = false) const noexcept;
+    /** @brief Copy assignment */
+    SocketView &operator=(const SocketView &other) noexcept = default;
+
+    /** @brief Move assignment */
+    SocketView &operator=(SocketView &&other) noexcept = default;
 };
 
 struct Net::Initializer

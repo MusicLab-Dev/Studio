@@ -53,7 +53,6 @@ public:
     /** @brief Set the project path, return true and emit pathChanged on change */
     void setPath(const QString &path) noexcept;
 
-
 public slots:
     /** @brief Load a project file */
     void load();

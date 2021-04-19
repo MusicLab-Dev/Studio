@@ -30,6 +30,7 @@ Row {
         ]
         onItemSelectedChanged: {
             contentView.placementBeatPrecisionScale = metricValues[itemSelected]
+            contentView.placementBeatPrecisionLastWidth = 0
         }
     }
 

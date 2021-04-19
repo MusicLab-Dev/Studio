@@ -8,6 +8,10 @@ ColumnLayout {
     id: playlistView
     spacing: 0
 
+    function onNodeDeleted(targetNode) { return false; }
+
+    function onNodePartitionDeleted(targetNode, targetPartitionIndex) { return false }
+
     PlaylistViewHeader {
         id: playlistViewHeader
         Layout.fillWidth: true

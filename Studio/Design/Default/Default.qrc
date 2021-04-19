@@ -17,5 +17,6 @@
         <file>DefaultFloatingTextBox.qml</file>
         <file>DefaultSlider.qml</file>
         <file>DefaultSpinBox.qml</file>
+        <file>DefaultImageButtonDefaultColor.qml</file>
     </qresource>
 </RCC>

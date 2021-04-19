@@ -22,7 +22,7 @@ RowLayout {
                     path: "qrc:/SequencerView/SequencerView.qml",
                     callback: modulesViewContent.sequencerNewPartitionNodeCallback
                 })
-                modules.remove(index)
+                modules.removeModule(index)
             }
         }
     }
@@ -45,7 +45,7 @@ RowLayout {
                                    path: "qrc:/PlaylistView/PlaylistView.qml",
                                    callback: modulesViewContent.nullCallback
                                })
-                modules.remove(index)
+                modules.removeModule(index)
             }
         }
     }
@@ -68,7 +68,7 @@ RowLayout {
                                    path: "qrc:/BoardView/BoardView.qml",
                                    callback: modulesViewContent.nullCallback
                                })
-                modules.remove(index)
+                modules.removeModule(index)
             }
         }
     }

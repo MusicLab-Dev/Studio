@@ -6,9 +6,10 @@ import ThemeManager 1.0
 import PluginTableModel 1.0
 import Application 1.0
 import NodeModel 1.0
+import BoardManager 1.0
 
 import "../ModulesView"
-import "../Modules/Board"
+import "../Modules/Workspaces"
 
 Window {
     visible: true
@@ -29,6 +30,10 @@ Window {
     ThemeManager {
         id: themeManager
         theme: ThemeManager.Dark
+    }
+
+    BoardManager {
+        id: boardManager
     }
 
     ModulesView {

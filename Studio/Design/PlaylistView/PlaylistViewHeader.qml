@@ -14,14 +14,24 @@ Rectangle {
     color: themeManager.foregroundColor
 
     /** Debug */
-    Button {
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        width: 80
-        height: 40
-        onPressed: app.project.save()
-        text: "save"
+    Row {
+        anchors.fill: parent
+        Button {
+            anchors.verticalCenter: parent.verticalCenter
+            width: 50
+            height: 40
+            onPressed: app.project.save()
+            text: "save"
 
+        }
+        Button {
+            anchors.verticalCenter: parent.verticalCenter
+            width: 50
+            height: 40
+            onPressed: app.project.load()
+            text: "load"
+
+        }
     }
     /** ---- */
 
@@ -37,25 +47,7 @@ Rectangle {
                 playlistViewContent.contentView.placementBeatPrecisionScale = 0
             else
                 playlistViewContent.contentView.placementBeatPrecisionScale = Math.pow(2, index - 1)
-        }
-    }
-
-    ColumnLayout {
-        anchors.centerIn: parent
-
-        Item {
-            Layout.preferredHeight: parent.height * 0.5
-            Layout.preferredWidth: parent.width
-
-            Text {
-                anchors.centerIn: parent
-                color: "white"
-                text: "Playlist"
-            }
-        }
-        Text {
-            color: "white"
-            text: "Bring musical sequences together"
+            playlistViewContent.contentView.placementBeatPrecisionLastWidth = 0
         }
     }
 }

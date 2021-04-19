@@ -13,10 +13,12 @@
 #include "AudioAPI.hpp"
 #include "Application.hpp"
 #include "PluginTableModel.hpp"
+#include "PluginTableModelProxy.hpp"
 #include "ThemeManager.hpp"
 #include "Studio.hpp"
 #include "SettingsListModel.hpp"
 #include "SettingsListModelProxy.hpp"
+#include "BoardManager.hpp"
 
 // #include "BoardManager.hpp"
 
@@ -33,6 +35,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<Tuning>("Tuning");
     qRegisterMetaType<BPM>("BPM");
     qRegisterMetaType<NoteEvent::EventType>("NoteEvent::EventType");
+    qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
@@ -40,6 +43,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<NoteEvent>("AudioAPI", 1, 0, "NoteEvent", "Cannot construct NoteEvent");
     qmlRegisterUncreatableType<GPoint>("AudioAPI", 1, 0, "Point", "Cannot construct Point");
     qmlRegisterType<PluginTableModel>("PluginTableModel", 1, 0, "PluginTableModel");
+    qmlRegisterType<PluginTableModelProxy>("PluginTableModel", 1, 0, "PluginTableModelProxy");
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
     qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "Application");
@@ -53,7 +57,8 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<ControlModel>("ControlModel", 1, 0, "ControlModel", "Cannot construct ControlModel");
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
-    // qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
+    qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
+    qmlRegisterType<Board>("Board", 1, 0, "Board");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
@@ -69,7 +74,6 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Plugins);
     Q_INIT_RESOURCE(Workspaces);
     Q_INIT_RESOURCE(Settings);
-    Q_INIT_RESOURCE(Board);
 }
 
 void Studio::DestroyResources(void)
@@ -88,7 +92,6 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Plugins);
     Q_CLEANUP_RESOURCE(Workspaces);
     Q_CLEANUP_RESOURCE(Settings);
-    Q_CLEANUP_RESOURCE(Board);
 
     Audio::PluginTable::Destroy();
     Audio::Device::ReleaseDriver();

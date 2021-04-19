@@ -66,6 +66,8 @@ void Project::save()
 
     /** debug */
     setPath("save.json");
+    /* -- */
+
     psave.save();
 }
 
@@ -76,5 +78,11 @@ void Project::saveAs(const QString &path)
 
 void Project::load()
 {
+    ProjectSave psave(this);
 
+    /** debug */
+    setPath("save.json");
+    /* -- */
+
+    psave.load();
 }

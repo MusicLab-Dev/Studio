@@ -6,6 +6,7 @@ import "../../Default"
 Item {
     property bool expanded: foldButton.activated
     property real spacing: 4
+    property int depth: 0
 
     id: folderColumnFolderDelegate
     height: folderRow.height + (expanded ? folderColumnView.height + spacing : 0)
@@ -34,8 +35,10 @@ Item {
             height: parent.height
 
             onReleased: {
-                if (fileIsDir)
+                if (fileIsDir) {
                     workspaceForeground.actualPath = fileUrl
+                    workspaceForeground.parentDepth = depth
+                }
             }
         }
     }
@@ -47,6 +50,7 @@ Item {
         anchors.top: folderRow.bottom
         anchors.topMargin: folderColumnFolderDelegate.spacing
         realPath: fileUrl
+        depth: folderColumnFolderDelegate.depth
     }
 }
 

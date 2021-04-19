@@ -84,7 +84,7 @@ Rectangle {
                 })
                 componentSelected = 0
             }
-            modules.remove(index)
+            modules.removeModule(index)
         }
     }
 

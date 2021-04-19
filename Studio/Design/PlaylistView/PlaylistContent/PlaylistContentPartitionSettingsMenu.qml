@@ -58,6 +58,7 @@ Menu {
         enabled: app.scheduler.partitionNode != targetNode || app.scheduler.partitionIndex != targetPartitionIndex
 
         onTriggered: {
+            modulesView.onNodePartitionDeleted(targetNode, targetPartitionIndex)
             targetNode.partitions.remove(targetPartitionIndex)
             closeMenu()
         }
