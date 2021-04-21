@@ -26,7 +26,7 @@ RowLayout {
         target: app
 
         function onCurrentPlayerChanged() {
-            if (app.currentPlayer != player)
+            if (app.currentPlayer !== player)
                 timer.stop()
         }
     }

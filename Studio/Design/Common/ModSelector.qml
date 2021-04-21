@@ -5,7 +5,6 @@ import QtQuick.Controls.Styles 1.4
 import "../Default"
 
 Item {
-    property bool smallVersion: false
     property var itemsPath: []
     property int itemSelected: 0
 
@@ -13,7 +12,6 @@ Item {
 
     Rectangle {
         id: rowContainer
-        visible: !smallVersion
         anchors.centerIn: parent
         height: parent.height
         width: parent.height * itemsPath.length
@@ -63,47 +61,6 @@ Item {
                     spring: 2
                     damping: 0.3
                     duration: 400
-                }
-            }
-        }
-    }
-
-    ComboBox {
-        height: parent.height
-        width: parent.width
-        visible: smallVersion
-        model: itemsPath
-
-        onActivated: {
-            itemSelected = index
-        }
-
-        delegate: ItemDelegate {
-
-            height: container.height
-            width: container.width
-
-            contentItem: Item {
-
-                height: container.height
-                width: container.width
-
-                DefaultColoredImage {
-                    visible: itemsPath[index].search("qrc:") !== -1
-                    height: parent.height / 2
-                    width: height
-                    anchors.centerIn: parent
-                    source: itemsPath[index]
-                    color: "#FFFFFF"
-                }
-
-                Text {
-                    visible: itemsPath[index].search("qrc:") === -1
-                    height: parent.height / 2
-                    width: height
-                    anchors.centerIn: parent
-                    text: itemsPath[index]
-                    color: "#000000"
                 }
             }
         }

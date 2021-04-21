@@ -99,14 +99,17 @@ Item {
             yOffset = yOffsetMin
     }
 
-    Column {
+    // Content view data
+    Item {
+        id: placeholder
+        anchors.fill: parent
+    }
 
+    Column {
         ContentViewTimeline {
             height: timelineHeight
-            width: contentView.rowDataWidth
-            x: contentView.rowHeaderWidth
-            xOffset: contentView.xOffset
-            barsPerRow: contentView.barsPerRow
+            width: contentView.width
+            z: 1
         }
 
         // Data background
@@ -116,6 +119,7 @@ Item {
             width: contentView.rowDataWidth
             height: contentView.height
             color: themeManager.backgroundColor
+            z: 0
 
             // Data grid overlay
             SurfaceContentGrid {
@@ -127,6 +131,22 @@ Item {
                 anchors.fill: parent
             }
         }
+    }
+
+    ContentViewTimelineBar {
+        id: timeline
+        visible: x >= rowHeaderWidth
+        width: 20
+        height: surfaceContentGrid.height
+        x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
+    }
+
+    Rectangle {
+        visible: x >= rowHeaderWidth
+        width: 4
+        height: surfaceContentGrid.height
+        x: rowHeaderWidth + xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
+        color: "blue"
     }
 
     // Handle all mouse / touch gestures
@@ -168,24 +188,10 @@ Item {
         color: Qt.lighter(targetColor, 1.3)
     }
 
+    Shortcut {
+        sequence: "Space"
+        onActivated: {
 
-    ContentViewTimelineBar {
-        id: timeline
-        width: 20
-        height: surfaceContentGrid.height
-        x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
-    }
-
-    Rectangle {
-        width: 4
-        height: surfaceContentGrid.height
-        x: rowHeaderWidth + xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
-        color: "blue"
-    }
-
-    // Content view data
-    Item {
-        id: placeholder
-        anchors.fill: parent
+        }
     }
 }
