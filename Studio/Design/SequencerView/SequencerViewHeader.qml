@@ -67,20 +67,6 @@ Rectangle {
         Item {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.width * 0.2
-
-            ComboBox {
-                id: sequencerBeatScaleList
-                model: ["Free", "1:128", "1:64", "1:32", "1:16", "1:8", "1:4", "1:2", "1:1", "2:1", "4:1", "8:1", "16:1", "32:1", "64:1", "128:1"]
-                currentIndex: sequencerViewContent.contentView.placementBeatPrecisionScale !== 0 ? Math.log2(sequencerViewContent.contentView.placementBeatPrecisionScale) + 1 : 0
-
-                onActivated: {
-                    if (!index)
-                        sequencerViewContent.contentView.placementBeatPrecisionScale = 0
-                    else
-                        sequencerViewContent.contentView.placementBeatPrecisionScale = Math.pow(2, index - 1)
-                    sequencerViewContent.contentView.placementBeatPrecisionLastWidth = 0
-                }
-            }
         }
 
         Item {

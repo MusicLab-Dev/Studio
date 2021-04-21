@@ -84,6 +84,9 @@ Item {
     property real timelineBeatPrecision: 0
     property real audioProcessBeatPrecision: 0
 
+    // Timeline
+    readonly property int timelineHeight: 25
+
     id: contentView
 
     onXOffsetMinChanged: {
@@ -96,41 +99,33 @@ Item {
             yOffset = yOffsetMin
     }
 
-    // Data background
-    Rectangle {
-        id: contentDataBackground
-        x: contentView.rowHeaderWidth
-        width: contentView.rowDataWidth
-        height: contentView.height
-        color: themeManager.backgroundColor
-    }
-
-    // Content view data
-    Item {
-        id: placeholder
-        anchors.fill: parent
-    }
-
-    // Data grid overlay
-    SurfaceContentGrid {
-        id: surfaceContentGrid
-        xOffset: contentView.xOffset
-        yOffset: contentView.yOffset
-        rowHeight: contentView.rowHeight
-        barsPerRow: contentView.barsPerRow
-        anchors.fill: contentDataBackground
+    Column {
 
         ContentViewTimeline {
-            width: 20
-            height: surfaceContentGrid.height
-            x: xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
+            height: timelineHeight
+            width: contentView.rowDataWidth
+            x: contentView.rowHeaderWidth
+            xOffset: contentView.xOffset
+            barsPerRow: contentView.barsPerRow
         }
 
+        // Data background
         Rectangle {
-            width: 4
-            height: surfaceContentGrid.height
-            x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
-            color: "blue"
+            id: contentDataBackground
+            x: contentView.rowHeaderWidth
+            width: contentView.rowDataWidth
+            height: contentView.height
+            color: themeManager.backgroundColor
+
+            // Data grid overlay
+            SurfaceContentGrid {
+                id: surfaceContentGrid
+                xOffset: contentView.xOffset
+                yOffset: contentView.yOffset
+                rowHeight: contentView.rowHeight
+                barsPerRow: contentView.barsPerRow
+                anchors.fill: parent
+            }
         }
     }
 
@@ -158,6 +153,7 @@ Item {
             targetColor = newColor
             visible = true
         }
+
         function detach(newParent) {
             parent = contentView
             visible = false
@@ -170,5 +166,26 @@ Item {
         height: contentView.rowHeight
         visible: false
         color: Qt.lighter(targetColor, 1.3)
+    }
+
+
+    ContentViewTimelineBar {
+        id: timeline
+        width: 20
+        height: surfaceContentGrid.height
+        x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
+    }
+
+    Rectangle {
+        width: 4
+        height: surfaceContentGrid.height
+        x: rowHeaderWidth + xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
+        color: "blue"
+    }
+
+    // Content view data
+    Item {
+        id: placeholder
+        anchors.fill: parent
     }
 }

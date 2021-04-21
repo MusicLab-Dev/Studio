@@ -16,7 +16,7 @@ ContentView {
 
     SequencerContentPianoView {
         id: pianoView
-        y: contentView.yOffset
+        y: contentView.yOffset + timelineHeight
         width: parent.width
         height: parent.height
     }

@@ -117,7 +117,7 @@ MouseArea {
             var beatPrecision = mouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
             contentView.placementBeatPrecisionTo = beatPrecision + contentView.placementBeatPrecisionWidth
             contentView.placementBeatPrecisionFrom = beatPrecision
-            if (contentView.placementKey != mouseKey) {
+            if (contentView.placementKey !== mouseKey) {
                 contentView.placementRectangle.targetColor = themeManager.getColorFromChain(mouseKey)
                 if (!sequencerView.player.isPlaying) {
                     sequencerView.node.partitions.addOnTheFly(

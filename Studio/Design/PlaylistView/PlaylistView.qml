@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import "./PlaylistContent"
+
 ColumnLayout {
     property int moduleIndex: -1
     property alias player: playlistViewFooter.player
@@ -21,7 +23,7 @@ ColumnLayout {
         z: 1
     }
 
-    PlaylistViewContent {
+    PlaylistContentView {
         id: playlistViewContent
         Layout.fillWidth: true
         Layout.fillHeight: true
