@@ -124,7 +124,7 @@ Item {
                 yOffset: contentView.yOffset
                 rowHeight: contentView.rowHeight
                 barsPerRow: contentView.barsPerRow
-                anchors.fill: contentDataBackground
+                anchors.fill: parent
             }
         }
     }
@@ -161,7 +161,7 @@ Item {
 
         id: placementRectangle
         x: contentView.placementPixelFrom
-        y: contentView.placementPixelY + timelineHeight
+        y: contentView.placementPixelY
         width: contentView.placementPixelWidth
         height: contentView.rowHeight
         visible: false
