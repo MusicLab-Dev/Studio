@@ -13,17 +13,17 @@ Item {
         itemSelected: 0
         itemsPath: [
             "qrc:/Assets/Free.png",
-            "qrc:/Assets/8on1.png",
-            "qrc:/Assets/6on1.png",
-            "qrc:/Assets/4on1.png",
-            "qrc:/Assets/3on1.png",
-            "qrc:/Assets/2on1.png",
-            "qrc:/Assets/1on1.png",
-            "qrc:/Assets/1on2.png",
-            "qrc:/Assets/1on3.png",
-            "qrc:/Assets/1on4.png",
-            "qrc:/Assets/1on6.png",
-            "qrc:/Assets/1on8.png",
+            "1/8",
+            "1/6",
+            "1/4",
+            "1/3",
+            "1/2",
+            "1/1",
+            "2/1",
+            "3/1",
+            "4/1",
+            "6/1",
+            "8/1",
         ]
         onItemSelectedChanged: {
             contentView.placementBeatPrecisionScale = metricValues[itemSelected]
