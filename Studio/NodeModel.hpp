@@ -74,6 +74,8 @@ public:
     /** @brief Get the parent node if it exists */
     [[nodiscard]] NodeModel *parentNode(void) noexcept
         { return qobject_cast<NodeModel *>(parent()); }
+    [[nodiscard]] const NodeModel *parentNode(void) const noexcept
+        { return qobject_cast<NodeModel *>(parent()); }
 
 
     /** @brief Get the list of all roles */
@@ -148,14 +150,16 @@ public slots:
     /** @todo Move this in pluginmodel */
     bool needSingleExternalInput(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::SingleExternalInput); }
     bool needMultipleExternalInputs(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::MultipleExternalInputs); }
-    void loadExternalInputs(const QString &path)
+    void loadExternalInputs(const QStringList &paths)
     {
         Audio::ExternalPaths res;
-        // for (auto &path : paths)
-        //     res.push(path.());
-        res.push(path.toStdString());
+        for (auto &path : paths)
+            res.push(path.toStdString());
         _data->plugin()->setExternalPaths(res);
     }
+
+    /** @brief Check if a given node is a parent of this */
+    bool isAParent(NodeModel *node) const noexcept;
 
 signals:
     /** @brief Notify that muted property has changed */

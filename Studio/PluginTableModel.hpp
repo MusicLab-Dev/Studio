@@ -27,7 +27,7 @@ public:
     };
 
     /** @brief Factory tags */
-    enum class Tags {
+    enum class Tags : std::uint32_t {
         Effect          = 1,
         Analyzer        = 1 << 1,
         Delay           = 1 << 2,

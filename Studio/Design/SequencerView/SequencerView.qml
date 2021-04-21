@@ -11,26 +11,46 @@ ColumnLayout {
     property int partitionIndex: 0
     property alias player: sequencerViewFooter.player
 
+    function onNodeDeleted(targetNode) {
+        if (node == targetNode || node.isAParent(targetNode)) {
+            modules.removeModule(moduleIndex)
+            return true
+        }
+        return false
+    }
+
+    function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
+        if (node == targetNode && partitionIndex == targetPartitionIndex) {
+            modules.removeModule(moduleIndex)
+            return true
+        }
+        return false
+    }
+
     function loadNewPartitionNode() {
         pluginsView.open(
             function() {
+                // @todo add loadExternalInputs into 'add'
                 node = app.project.master.addPartitionNode(pluginsView.selectedPath)
                 partitionIndex = 0
                 if (node === null) {
-                    modules.remove(moduleIndex)
+                    modules.removeModule(moduleIndex)
                     return
                 }
                 if (node.needSingleExternalInput() || node.needMultipleExternalInputs()) {
-                    filePicker.openDialog(node.needMultipleExternalInputs(),
+                    filePicker.open(node.needMultipleExternalInputs(),
                         function() {
-                            var str = filePicker.fileUrl.toString().slice(7)
-                            node.loadExternalInputs(str)
+                            var list = []
+                            for (var i = 0; i < filePicker.fileUrls.length; ++i)
+                                list[i] = filePicker.fileUrls[i].toString().slice(7)
+                            node.loadExternalInputs(list)
                             partition = node.partitions.getPartition(partitionIndex)
                             sequencerView.enabled = true
                         },
                         function() {
                             app.project.master.remove(app.project.master.count - 1)
-                            modules.remove(moduleIndex)
+                            modulesView.componentSelected = moduleIndex
+                            modulesView.removeComponent()
                         }
                     )
                 } else {
@@ -39,7 +59,8 @@ ColumnLayout {
                 }
             },
             function() {
-                modules.remove(moduleIndex)
+                modulesView.componentSelected = moduleIndex
+                modulesView.removeComponent()
             }
         )
     }
@@ -50,6 +71,8 @@ ColumnLayout {
         partition = app.partitionNodeCache.partitions.getPartition(app.partitionIndexCache)
         app.partitionNodeCache = null
         app.partitionIndexCache = -1
+        modulesView.componentSelected = moduleIndex
+        sequencerView.enabled = true
     }
 
     id: sequencerView

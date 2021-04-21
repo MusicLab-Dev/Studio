@@ -17,6 +17,7 @@ RowLayout {
     property real beginPlaybackBeat: 0
     property real playTimestamp: 0
     property real currentTimestamp: 0
+    property real isPlaying: timer.running
 
     id: player
     spacing: 0

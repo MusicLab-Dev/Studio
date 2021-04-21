@@ -7,7 +7,6 @@
         <file>SettingsButton.qml</file>
         <file>SettingsCategoryButton.qml</file>
         <file>ModSelector.qml</file>
-        <file>TimelineCursor.qml</file>
         <file>ArrowNextPrev.qml</file>
         <file>GestureArea.qml</file>
         <file>Player.qml</file>
@@ -16,5 +15,6 @@
         <file>ContentTimeline.qml</file>
         <file>ContentView.qml</file>
         <file>MuteButton.qml</file>
+        <file>ContentViewTimeline.qml</file>
     </qresource>
 </RCC>

@@ -1,6 +1,6 @@
 /**
  * @ Author: Paul Creze
- * @ Description: Studio entry point
+ * @ Description: Board
  */
 
 #pragma once
@@ -10,9 +10,9 @@
 
 #include <Core/Vector.hpp>
 
-#include "Net/Socket.hpp"
+#include "Board.hpp"
 
-class BoardManager : public QObject
+class BoardManager : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -20,7 +20,23 @@ class BoardManager : public QObject
     Q_PROPERTY(int discoverRate READ discoverRate WRITE setDiscoverRate NOTIFY discoverRateChanged)
 
 public:
+    /** @brief Enumeration of 'Board' roles */
+    enum class Role {
+        Instance = Qt::UserRole + 1,
+        Size
+    };
+
     BoardManager(void);
+
+    /** @brief Names of 'Board' roles */
+    [[nodiscard]] virtual QHash<int, QByteArray> roleNames(void) const override;
+
+    /** @brief Get the number of connected boards */
+    [[nodiscard]] virtual int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+
+    /** @brief Query data from the board list */
+    [[nodiscard]] virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
 
     /** @brief Get / Set the tick rate property */
     [[nodiscard]] int tickRate(void) const noexcept { return _tickRate; }
@@ -40,12 +56,14 @@ signals:
     void discoverRateChanged(void);
 
 private:
-    QTimer _tickTimer {};
-    QTimer _discoverTimer {};
+    Core::Vector<std::unique_ptr<Board>, int> _boards {}; // TODO: Add allocator to _boards
     Core::TinyVector<Net::Socket> _clients {};
     Net::Socket _listenSocket {};
     int _tickRate { 1000 };
     int _discoverRate { 1000 };
+    QTimer _tickTimer {};
+    QTimer _discoverTimer {};
+
 
     /** @brief Callback when the tick rate changed */
     void onTickRateChanged(void);

@@ -25,7 +25,6 @@ qt_add_resources(QtResources
     ${StudioDir}/Design/Modules/Plugins/Plugins.qrc
     ${StudioDir}/Design/Modules/Workspaces/Workspaces.qrc
     ${StudioDir}/Design/Modules/Settings/Settings.qrc
-    ${StudioDir}/Design/Modules/Board/Board.qrc
 )
 
 set(StudioSources
@@ -54,6 +53,7 @@ set(StudioSources
     ${StudioDir}/PartitionsModel.hpp
     ${StudioDir}/PluginTableModel.cpp
     ${StudioDir}/PluginTableModel.hpp
+    ${StudioDir}/PluginTableModelProxy.hpp
     ${StudioDir}/Note.hpp
     ${StudioDir}/Point.hpp
     ${StudioDir}/Project.cpp
@@ -69,13 +69,26 @@ set(StudioSources
     ${StudioDir}/SettingsListModelProxy.hpp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
+    ${StudioDir}/BoardManager.hpp
+    ${StudioDir}/BoardManager.cpp
+    ${StudioDir}/Board.hpp
+    ${StudioDir}/Board.cpp
+    ${StudioDir}/Net/Socket.hpp
+    ${StudioDir}/Net/Socket.cpp
+    ${StudioDir}/Net/Socket.ipp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${StudioDir}/..)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Audio Qt::Core Qt::Quick Qt::QuickControls2 Qt::Qml Threads::Threads)
+target_link_libraries(${PROJECT_NAME}
+PUBLIC
+    Audio
+    Protocol
+    Qt::Core Qt::Quick Qt::Qml Qt::QuickControls2
+    Threads::Threads
+)
 
 if(CODE_COVERAGE)
     target_compile_options(${PROJECT_NAME} PUBLIC --coverage)

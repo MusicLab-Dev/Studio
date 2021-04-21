@@ -163,3 +163,15 @@ void NodeModel::remove(const int idx)
         }
     );
 }
+
+bool NodeModel::isAParent(NodeModel *node) const noexcept
+{
+    auto *p = parentNode();
+
+    while (p) {
+        if (p == node)
+            return true;
+        p = p->parentNode();
+    }
+    return false;
+}

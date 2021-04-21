@@ -42,16 +42,21 @@ Menu {
         onTriggered: {
             pluginsView.open(
                 function() {
+                    // @todo add loadExternalInputs into 'add'
                     cachedNode = targetNode.add(pluginsView.selectedPath)
-                    if (cachedNode.needSingleExternalInput() || cachedNode.needMultipleExternalInputs()) {
-                        filePicker.openDialog(cachedNode.needMultipleExternalInputs(),
+                    if (cachedNode === null)
+                        closeMenu();
+                    else if (cachedNode.needSingleExternalInput() || cachedNode.needMultipleExternalInputs()) {
+                        filePicker.open(cachedNode.needMultipleExternalInputs(),
                             function() {
-                                cachedNode.loadExternalInputs(filePicker.fileUrls)
+                                var list = []
+                                for (var i = 0; i < filePicker.fileUrls.length; ++i)
+                                    list[i] = filePicker.fileUrls[i].toString().slice(7)
+                                cachedNode.loadExternalInputs(list)
                                 closeMenu()
                             },
                             function() {
-                                app.project.master.remove(app.project.master.count - 1)
-                                modules.remove(moduleIndex)
+                                targetNode.remove(targetNode.count - 1)
                                 closeMenu()
                             }
                         )
@@ -88,6 +93,7 @@ Menu {
         enabled: targetNode ? targetNode.parentNode !== null : true
 
         onTriggered: {
+            modulesView.onNodeDeleted(targetNode)
             targetNode.parentNode.remove(targetNodeIndex)
             closeMenu()
         }

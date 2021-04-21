@@ -29,22 +29,28 @@ PluginsBackground {
     id: pluginsView
     visible: false
 
-    onCurrentFilterChanged: {
-        console.log("Filter changed to: ", currentFilter);
-    }
-
-    Button {
-        text: "CLOSE"
-        onReleased: {
-            cancelAndClose()
-        }
-    }
-
     PluginsViewTitle {
         id: pluginsViewTitle
         x: (pluginsForeground.width + (parent.width - pluginsForeground.width) / 2) - width / 2
         y: height
     }
+
+    Rectangle {
+        id: pluginsViewCloseButton
+        width: 70
+        height: 30
+        x: pluginsView.width - width - height
+        y: height
+        color: "transparent"
+        radius: 5
+        border.color: pluginsViewCloseButtonText.closeButtonHovered ? "#31A8FF" : "#1E6FB0"
+        border.width: 1
+
+        PluginsViewCloseButton {
+            id: pluginsViewCloseButtonText
+        }
+    }
+
 
     PluginsForeground {
         id: pluginsForeground

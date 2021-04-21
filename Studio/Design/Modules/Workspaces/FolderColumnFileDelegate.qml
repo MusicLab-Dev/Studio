@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import "../../Default"
 
 Row {
+    property int depth: 0
+
     height: 20
     spacing: 4
 
@@ -18,5 +20,10 @@ Row {
         width: parent.width - image.width - parent.spacing
         text: fileName
         height: parent.height
+
+        onReleased: {
+            workspaceView.fileUrl = fileUrl
+            workspaceView.acceptAndClose()
+        }
     }
 }
