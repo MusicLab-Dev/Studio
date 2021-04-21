@@ -12,9 +12,10 @@
         <file>Player.qml</file>
         <file>Bpm.qml</file>
         <file>SurfaceContentGrid.qml</file>
-        <file>ContentTimeline.qml</file>
         <file>ContentView.qml</file>
         <file>MuteButton.qml</file>
+        <file>ContentViewTimelineBar.qml</file>
+        <file>Snapper.qml</file>
         <file>ContentViewTimeline.qml</file>
     </qresource>
 </RCC>

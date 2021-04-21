@@ -1,17 +1,14 @@
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
-import QtQuick.Controls 2.15
-import "../Default"
+import QtQuick 2.0
 
-Row {
-    property alias headerWidth: itemDropModSelector.width
-    property variant metricValues: [
+Item {
+    readonly property variant metricValues: [
         0, 16, 128 / 6, 32, 128 / 3, 64, 128, 256, 384, 512, 768, 1024
     ]
 
     ModSelector {
         id: itemDropModSelector
         height: parent.height
+        width: parent.width
         smallVersion: true
         itemSelected: 0
         itemsPath: [
@@ -32,11 +29,5 @@ Row {
             contentView.placementBeatPrecisionScale = metricValues[itemSelected]
             contentView.placementBeatPrecisionLastWidth = 0
         }
-    }
-
-    Rectangle {
-        id: timeline
-        width: parent.width - headerWidth
-        color: themeManager.disabledColor
     }
 }

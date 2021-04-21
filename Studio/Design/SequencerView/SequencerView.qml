@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.15
 import NodeModel 1.0
 import PartitionModel 1.0
 
+import "./SequencerContent/"
+
 ColumnLayout {
     property int moduleIndex: -1
     property NodeModel node: null
@@ -12,7 +14,7 @@ ColumnLayout {
     property alias player: sequencerViewFooter.player
 
     function onNodeDeleted(targetNode) {
-        if (node == targetNode || node.isAParent(targetNode)) {
+        if (node === targetNode || node.isAParent(targetNode)) {
             modules.removeModule(moduleIndex)
             return true
         }
@@ -20,7 +22,7 @@ ColumnLayout {
     }
 
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
-        if (node == targetNode && partitionIndex == targetPartitionIndex) {
+        if (node === targetNode && partitionIndex === targetPartitionIndex) {
             modules.removeModule(moduleIndex)
             return true
         }
@@ -88,8 +90,8 @@ ColumnLayout {
         z: 1
     }
 
-    SequencerViewContent {
-        id: sequencerViewContent
+    SequencerContentView {
+        id: contentView
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredHeight: parent.height * 0.8
