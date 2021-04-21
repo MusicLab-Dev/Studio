@@ -48,15 +48,17 @@ Rectangle {
 
             onPressed: {
                 app.scheduler.pause(app.scheduler.playbackMode)
+                contentView.timelineBeatPrecision = (Math.abs(xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
             }
 
             onPositionChanged: {
                 if (!containsPress)
                     return
+                contentView.timelineBeatPrecision = (Math.abs(xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
             }
 
             onReleased: {
-
+                // app.scheduler.setCurrentBeatPrecision(contentView.timelineBeatPrecision)
             }
         }
     }

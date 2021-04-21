@@ -91,15 +91,16 @@ RowLayout {
                 if (playing) {
                     app.scheduler.pause(targetPlaybackMode)
                     timer.stop()
+                    beginPlaybackBeat = currentPlaybackBeat
                 } else {
                     if (isPartitionPlayer)
-                        app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex)
+                        app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat)
                     else
                         app.scheduler.play(targetPlaybackMode)
                     timer.start()
                 }
                 app.currentPlayer = player
-                beginPlaybackBeat = app.scheduler.getCurrentBeatOfMode(targetPlaybackMode)
+                // beginPlaybackBeat = app.scheduler.getCurrentBeatOfMode(targetPlaybackMode)
                 playTimestamp = new Date().getTime()
             }
         }

@@ -128,7 +128,7 @@ void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const 
         [this, node, partitionIndex] {
             const auto scheduler = Scheduler::Get();
             if (!scheduler->running()) {
-                scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, partitionIndex);
+                scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, partitionIndex, 0);
             }
         }
     );
