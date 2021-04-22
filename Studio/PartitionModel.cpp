@@ -85,11 +85,11 @@ void PartitionModel::setMidiChannels(const MidiChannels midiChannels)
     );
 }
 
-void PartitionModel::add(const Note &note)
+bool PartitionModel::add(const Note &note)
 {
     const auto idx = std::distance(_data->notes().begin(), _data->notes().findSortedPlacement(note));
 
-    Models::AddProtectedEvent(
+    return Models::AddProtectedEvent(
         [this, note] {
             _data->notes().insert(note);
         },
@@ -114,11 +114,11 @@ int PartitionModel::find(const quint8 key, const quint32 beat) const noexcept
     return -1;
 }
 
-void PartitionModel::remove(const int idx)
+bool PartitionModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("PartitionModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
-    Models::AddProtectedEvent(
+    return Models::AddProtectedEvent(
         [this, idx] {
             _data->notes().erase(_data->notes().begin() + idx);
         },

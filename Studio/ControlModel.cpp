@@ -109,7 +109,7 @@ void ControlModel::setName(const QString &name)
     );
 }
 
-void ControlModel::add(void)
+bool ControlModel::add(void)
 {
     // Get a unique name for this automation
     std::string name = [this] {
@@ -131,7 +131,7 @@ void ControlModel::add(void)
         return name;
     }();
 
-    Models::AddProtectedEvent(
+    return Models::AddProtectedEvent(
         [this, name = Core::FlatString(std::move(name))](void) mutable {
             _data->automations().push().setName(std::move(name));
         },
@@ -147,11 +147,11 @@ void ControlModel::add(void)
     );
 }
 
-void ControlModel::remove(const int idx)
+bool ControlModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("ControlModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
-    Models::AddProtectedEvent(
+    return Models::AddProtectedEvent(
         [this, idx] {
             _data->automations().erase(_data->automations().begin() + idx);
         },
@@ -166,13 +166,13 @@ void ControlModel::remove(const int idx)
     );
 }
 
-void ControlModel::move(const int from, const int to)
+bool ControlModel::move(const int from, const int to)
 {
     if (from == to)
-        return;
+        return false;
     coreAssert(from >= 0 && from < count() && to >= 0 && to < count(),
         throw std::range_error("ControlModel::move: Given index is not in range: [" + std::to_string(from) + ", " + std::to_string(to) + "[ out of [0, " + std::to_string(count()) + "["));
-    Models::AddProtectedEvent(
+    return Models::AddProtectedEvent(
         [this, from, to] {
             _data->automations().move(from, from, to);
         },

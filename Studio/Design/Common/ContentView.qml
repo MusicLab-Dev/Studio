@@ -99,6 +99,16 @@ Item {
             yOffset = yOffsetMin
     }
 
+    // Content background
+    Rectangle {
+        id: contentDataBackground
+        x: contentView.rowHeaderWidth
+        y: contentViewTimeline.height
+        width: contentView.rowDataWidth
+        height: contentView.height - contentViewTimeline.height
+        color: themeManager.backgroundColor
+    }
+
     // Content view data
     Item {
         id: placeholder
@@ -107,29 +117,23 @@ Item {
 
     Column {
         ContentViewTimeline {
+            id: contentViewTimeline
             height: timelineHeight
             width: contentView.width
             z: 1
         }
 
-        // Data background
-        Rectangle {
-            id: contentDataBackground
+        // Data grid overlay
+        SurfaceContentGrid {
+            id: surfaceContentGrid
             x: contentView.rowHeaderWidth
             width: contentView.rowDataWidth
             height: contentView.height
-            color: themeManager.backgroundColor
+            xOffset: contentView.xOffset
+            yOffset: contentView.yOffset
+            rowHeight: contentView.rowHeight
+            barsPerRow: contentView.barsPerRow
             z: 0
-
-            // Data grid overlay
-            SurfaceContentGrid {
-                id: surfaceContentGrid
-                xOffset: contentView.xOffset
-                yOffset: contentView.yOffset
-                rowHeight: contentView.rowHeight
-                barsPerRow: contentView.barsPerRow
-                anchors.fill: parent
-            }
         }
     }
 

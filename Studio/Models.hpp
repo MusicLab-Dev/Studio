@@ -59,7 +59,7 @@ namespace Models
 
     /** @brief Register an protected event */
     template<typename Event, typename Notify>
-    inline void AddProtectedEvent(Event &&event, Notify &&notify)
+    inline bool AddProtectedEvent(Event &&event, Notify &&notify)
     {
         if (!EventGuard::Dirty) {
             EventGuard::Dirty = true;
@@ -67,7 +67,10 @@ namespace Models
                 notify();
                 EventGuard::Dirty = false;
             });
-        } else
+            return true;
+        } else {
             qWarning() << "Models::AddProtectedEvent: A protected event is already registered for this generation !";
+            return false;
+        }
     }
 }

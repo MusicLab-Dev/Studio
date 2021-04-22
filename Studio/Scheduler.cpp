@@ -166,7 +166,7 @@ void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *nod
             setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
             setPartitionNode(node->audioNode());
             setPartitionIndex(partition);
-            
+
             auto &range = Audio::AScheduler::getCurrentBeatRange();
             range.to = startingBeat + Audio::AScheduler::processBeatSize();
             range.from = startingBeat;

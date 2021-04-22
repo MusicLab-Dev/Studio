@@ -116,13 +116,13 @@ public slots:
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_automations.size()); }
 
     /** @brief Add a children to the list */
-    void add(void);
+    bool add(void);
 
     /** @brief Remove a children from the list */
-    void remove(const int index);
+    bool remove(const int index);
 
     /** @brief Move Control from to */
-    void move(const int from, const int to);
+    bool move(const int from, const int to);
 
 signals:
     /** @brief Notify that muted property has changed */

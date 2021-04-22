@@ -116,13 +116,13 @@ public slots:
     int count(void) const noexcept { return static_cast<int>(_data->notes().size()); }
 
     /** @brief Add node */
-    void add(const Note &note);
+    bool add(const Note &note);
 
     /** @brief Find an instance in the list using a single beat point */
     int find(const quint8 key, const quint32 beat) const noexcept;
 
     /** @brief Remove note at index */
-    void remove(const int index);
+    bool remove(const int index);
 
     /** @brief Get note at index */
     QVariant getNote(const int index) const { return QVariant::fromValue(get(index)); }

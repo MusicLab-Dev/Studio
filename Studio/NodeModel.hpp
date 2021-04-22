@@ -144,7 +144,7 @@ public slots:
         { return addNodeImpl(pluginPath, true); }
 
     /** @brief Remove a children node */
-    void remove(const int index);
+    bool remove(const int index);
 
 
     /** @todo Move this in pluginmodel */

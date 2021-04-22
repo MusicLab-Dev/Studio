@@ -42,7 +42,7 @@ const PartitionModel *PartitionsModel::get(const int index) const noexcept_ndebu
     return _partitions.at(index).get();
 }
 
-void PartitionsModel::add(void)
+bool PartitionsModel::add(void)
 {
     // Get a unique name for this partition
     std::string name = [this] {
@@ -64,7 +64,7 @@ void PartitionsModel::add(void)
         return name;
     }();
 
-    Models::AddProtectedEvent(
+    return Models::AddProtectedEvent(
         [this, name = Core::FlatString(std::move(name))](void) mutable {
             _data->push().setName(std::move(name));
         },
@@ -80,11 +80,11 @@ void PartitionsModel::add(void)
     );
 }
 
-void PartitionsModel::remove(const int idx)
+bool PartitionsModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("ControlsModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
-    Models::AddProtectedEvent(
+    return Models::AddProtectedEvent(
         [this, idx] {
             _data->erase(_data->begin() + idx);
         },
@@ -99,13 +99,13 @@ void PartitionsModel::remove(const int idx)
     );
 }
 
-void PartitionsModel::move(const int from, const int to)
+bool PartitionsModel::move(const int from, const int to)
 {
     if (from == to)
-        return;
+        return false;
     coreAssert(from >= 0 && from < count() && to >= 0 && to < count(),
         throw std::range_error("ControlModel::move: Given index is not in range: [" + std::to_string(from) + ", " + std::to_string(to) + "[ out of [0, " + std::to_string(count()) + "["));
-    Models::AddProtectedEvent(
+    return Models::AddProtectedEvent(
         [this, from, to] {
             _data->move(from, from, to);
         },
