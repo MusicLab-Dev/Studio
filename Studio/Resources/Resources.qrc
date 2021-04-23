@@ -58,11 +58,11 @@
         <file>Assets/1on8.png</file>
         <file>Templates/SettingsTest.json</file>
         <file>Resources.qrc</file>
+        <file>Assets/BoardButton.png</file>
+        <file>Assets/BoardPotentiometer.png</file>
+        <file>Assets/Plugins/Default.png</file>
         <file>Assets/Plugins/Mixer.png</file>
         <file>Assets/Plugins/Oscillator.png</file>
         <file>Assets/Plugins/Sampler.png</file>
-        <file>Assets/Plugins/Default.png</file>
-        <file>Assets/BoardButton.png</file>
-        <file>Assets/BoardPotentiometer.png</file>
     </qresource>
 </RCC>

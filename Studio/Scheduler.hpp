@@ -100,7 +100,7 @@ public slots:
     void play(const Scheduler::PlaybackMode mode);
 
     /** @brief Play the scheduler setting up a partition */
-    void playPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex);
+    void playPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex, const Beat startingBeat);
 
     /** @brief Pause the scheduler */
     void pause(const Scheduler::PlaybackMode mode);
@@ -168,9 +168,6 @@ private:
 
     static inline Scheduler *_Instance { nullptr };
 
-    /** @brief Change the current beat of a given playback mode */
-    template<Audio::PlaybackMode Playback>
-    void setCurrentBeatImpl(const Beat beat);
 
     /** @brief Try to intercept the audio thread lock */
     void onCatchingAudioThread(void);

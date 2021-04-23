@@ -91,16 +91,16 @@ public:
 
 public slots:
     /** @brief Add point */
-    void add(const GPoint &point);
+    bool add(const GPoint &point);
 
     /** @brief Remove point at index */
-    void remove(const int index);
+    bool remove(const int index);
 
     /** @brief Get point at index */
     QVariant getPoint(const int index) const { return QVariant::fromValue(get(index)); }
 
     /** @brief Set point at index */
-    void set(const int index, const GPoint &point);
+    bool set(const int index, const GPoint &point);
 
 signals:
     /** @brief Notify that the muted property has changed */

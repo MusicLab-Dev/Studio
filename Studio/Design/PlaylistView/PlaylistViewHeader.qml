@@ -8,7 +8,6 @@ import "../Common"
 import "../Default"
 
 Rectangle {
-
     width: parent.width
     height: parent.width
     color: themeManager.foregroundColor

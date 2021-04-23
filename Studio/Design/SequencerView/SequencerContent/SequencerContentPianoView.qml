@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "../../Common"
 
 import AudioAPI 1.0
 
@@ -32,10 +33,14 @@ Item {
     property real headerFactor: 0.1
     property real keyWidth: parent.width * headerFactor
     readonly property real totalHeight: keys * rowHeight
+    readonly property real snapperHeight: 30
+
+    // Values for snap widget
 
     id: pianoView
     width: contentView.width
     height: totalHeight
+
 
     Repeater {
         model: pianoView.keys
@@ -72,15 +77,15 @@ Item {
 
                     onPressedChanged: {
                         sequencerView.node.partitions.addOnTheFly(
-                            AudioAPI.noteEvent(
-                                pressed ? NoteEvent.On : NoteEvent.Off,
-                                key.keyIndex,
-                                AudioAPI.velocityMax,
-                                0
-                            ),
-                            sequencerView.node,
-                            sequencerView.partitionIndex
-                        )
+                                    AudioAPI.noteEvent(
+                                        pressed ? NoteEvent.On : NoteEvent.Off,
+                                        key.keyIndex,
+                                        AudioAPI.velocityMax,
+                                        0
+                                        ),
+                                    sequencerView.node,
+                                    sequencerView.partitionIndex
+                                    )
                     }
                 }
 

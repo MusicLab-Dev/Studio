@@ -26,12 +26,17 @@ RowLayout {
         target: app
 
         function onCurrentPlayerChanged() {
-            if (app.currentPlayer != player)
-                timer.stop()
+            if (app.currentPlayer !== player && timer.running)
+                timer.stopAndRecordPlaybackBeat()
         }
     }
 
     Timer {
+        function stopAndRecordPlaybackBeat() {
+            timer.stop()
+            beginPlaybackBeat = currentPlaybackBeat
+        }
+
         id: timer
         interval: 16
         repeat: true
@@ -90,16 +95,16 @@ RowLayout {
             onReleased: {
                 if (playing) {
                     app.scheduler.pause(targetPlaybackMode)
-                    timer.stop()
+                    timer.stopAndRecordPlaybackBeat()
                 } else {
                     if (isPartitionPlayer)
-                        app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex)
+                        app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat)
                     else
-                        app.scheduler.play(targetPlaybackMode)
+                        app.scheduler.play(targetPlaybackMode, currentPlaybackBeat)
                     timer.start()
                 }
                 app.currentPlayer = player
-                beginPlaybackBeat = app.scheduler.getCurrentBeatOfMode(targetPlaybackMode)
+                // beginPlaybackBeat = app.scheduler.getCurrentBeatOfMode(targetPlaybackMode)
                 playTimestamp = new Date().getTime()
             }
         }
@@ -125,9 +130,9 @@ RowLayout {
             onReleased: {
                 app.scheduler.stop(targetPlaybackMode)
                 app.currentPlayer = player
+                timer.stop()
                 beginPlaybackBeat = 0
                 currentPlaybackBeat = 0
-                timer.stop()
             }
         }
     }

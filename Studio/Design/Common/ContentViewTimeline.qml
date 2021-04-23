@@ -1,48 +1,65 @@
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
-import QtQuick.Shapes 1.15
 
-ColumnLayout {
-    spacing: 0
+Rectangle {
+    property int lastHiddenIndex: Math.ceil(Math.abs(xOffset) / (contentView.beatsPerBar * surfaceContentGrid.barsPerCell * contentView.pixelsPerBeat))
 
-    Shape {
-        id: shape
-        Layout.preferredHeight: parent.height * 0.05
-        Layout.preferredWidth: parent.height * 0.05
-        Layout.alignment: Qt.AlignCenter
+    id: timeline
+    color: themeManager.disabledColor
 
-        ShapePath {
-            fillColor: themeManager.foregroundColor
-            strokeColor: "black"
-            strokeWidth: 2
-            strokeStyle: ShapePath.SolidLine
-             PathLine {
-                 x: shape.x
-                 y: 0
-             }
-             PathLine {
-                 x: shape.width
-                 y: 0
-             }
-             PathLine {
-                 x: shape.width / 2
-                 y: shape.height
-             }
-         }
-     }
-
-    Rectangle {
-        Layout.alignment: Qt.AlignCenter
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.05
+    Snapper {
+        id: snapper
+        width: contentView.rowHeaderWidth
+        height: parent.height
     }
 
+    Item {
+        anchors.top: parent.top
+        anchors.left: snapper.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        clip: true
 
-    Behavior on x {
-        SpringAnimation {
-            spring: 2
-            damping: 0.2
+        Repeater {
+            width: parent.width
+            height: parent.height
+            model: surfaceContentGrid.cellsPerRow
+
+            delegate: Column {
+                property int beat: (lastHiddenIndex + index) * contentView.beatsPerBar * surfaceContentGrid.barsPerCell
+
+                x: contentView.xOffset + beat * contentView.pixelsPerBeat
+
+                Text {
+                    text: beat
+                    color: "black"
+                }
+
+                Rectangle {
+                    height: timeline.height / 3
+                    width: 1
+                    color: themeManager.foregroundColor
+                }
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+
+            onPressed: {
+                app.scheduler.pause(app.scheduler.playbackMode)
+                contentView.timelineBeatPrecision = (Math.abs(xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
+            }
+
+            onPositionChanged: {
+                if (!containsPress)
+                    return
+                contentView.timelineBeatPrecision = (Math.abs(xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
+            }
+
+            onReleased: {
+                // app.scheduler.setCurrentBeatPrecision(contentView.timelineBeatPrecision)
+            }
         }
     }
 }

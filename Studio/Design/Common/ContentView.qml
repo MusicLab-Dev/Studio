@@ -84,6 +84,9 @@ Item {
     property real timelineBeatPrecision: 0
     property real audioProcessBeatPrecision: 0
 
+    // Timeline
+    readonly property int timelineHeight: 25
+
     id: contentView
 
     onXOffsetMinChanged: {
@@ -96,12 +99,13 @@ Item {
             yOffset = yOffsetMin
     }
 
-    // Data background
+    // Content background
     Rectangle {
         id: contentDataBackground
         x: contentView.rowHeaderWidth
+        y: contentViewTimeline.height
         width: contentView.rowDataWidth
-        height: contentView.height
+        height: contentView.height - contentViewTimeline.height
         color: themeManager.backgroundColor
     }
 
@@ -111,27 +115,65 @@ Item {
         anchors.fill: parent
     }
 
-    // Data grid overlay
-    SurfaceContentGrid {
-        id: surfaceContentGrid
-        xOffset: contentView.xOffset
-        yOffset: contentView.yOffset
-        rowHeight: contentView.rowHeight
-        barsPerRow: contentView.barsPerRow
-        anchors.fill: contentDataBackground
-
+    Column {
         ContentViewTimeline {
-            width: 20
-            height: surfaceContentGrid.height
-            x: xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
+            id: contentViewTimeline
+            height: timelineHeight
+            width: contentView.width
+            z: 1
         }
 
-        Rectangle {
-            width: 4
-            height: surfaceContentGrid.height
-            x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
-            color: "blue"
+        // Data grid overlay
+        SurfaceContentGrid {
+            id: surfaceContentGrid
+            x: contentView.rowHeaderWidth
+            width: contentView.rowDataWidth
+            height: contentView.height
+            xOffset: contentView.xOffset
+            yOffset: contentView.yOffset
+            rowHeight: contentView.rowHeight
+            barsPerRow: contentView.barsPerRow
+            z: 0
         }
+    }
+
+    ContentViewTimelineBar {
+        id: timeline
+        visible: x >= rowHeaderWidth
+        width: 20
+        height: surfaceContentGrid.height
+        x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
+    }
+
+    Rectangle {
+        visible: x >= rowHeaderWidth
+        width: 4
+        height: surfaceContentGrid.height
+        x: rowHeaderWidth + xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
+        color: "blue"
+    }
+
+    Rectangle {
+        property color targetColor: "white"
+
+        function attach(newParent, newColor) {
+            parent = newParent
+            targetColor = newColor
+            visible = true
+        }
+
+        function detach(newParent) {
+            parent = contentView
+            visible = false
+        }
+
+        id: placementRectangle
+        x: contentView.placementPixelFrom
+        y: contentView.placementPixelY
+        width: contentView.placementPixelWidth
+        height: contentView.rowHeight
+        visible: false
+        color: Qt.lighter(targetColor, 1.3)
     }
 
     // Handle all mouse / touch gestures
@@ -150,25 +192,11 @@ Item {
         }
     }
 
-    Rectangle {
-        property color targetColor: "white"
 
-        function attach(newParent, newColor) {
-            parent = newParent
-            targetColor = newColor
-            visible = true
-        }
-        function detach(newParent) {
-            parent = contentView
-            visible = false
-        }
+    Shortcut {
+        sequence: "Space"
+        onActivated: {
 
-        id: placementRectangle
-        x: contentView.placementPixelFrom
-        y: contentView.placementPixelY
-        width: contentView.placementPixelWidth
-        height: contentView.rowHeight
-        visible: false
-        color: Qt.lighter(targetColor, 1.3)
+        }
     }
 }

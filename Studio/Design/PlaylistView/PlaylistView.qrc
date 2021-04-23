@@ -3,7 +3,6 @@
         <file>PlaylistView.qml</file>
         <file>PlaylistViewFooter.qml</file>
         <file>PlaylistViewHeader.qml</file>
-        <file>PlaylistViewContent.qml</file>
         <file>PlaylistContent/PlaylistContentView.qml</file>
         <file>PlaylistContent/PlaylistContentNodeView.qml</file>
         <file>PlaylistContent/PlaylistContentNodeDelegate.qml</file>

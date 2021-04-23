@@ -2,7 +2,6 @@
     <qresource prefix="/SequencerView">
         <file>SequencerView.qml</file>
         <file>SequencerViewHeader.qml</file>
-        <file>SequencerViewContent.qml</file>
         <file>SequencerViewFooter.qml</file>
         <file>SequencerContent/SequencerContentView.qml</file>
         <file>SequencerContent/SequencerContentPianoView.qml</file>

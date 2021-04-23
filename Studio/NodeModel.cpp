@@ -121,32 +121,33 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
 
     const bool hasPaused = Scheduler::Get()->pauseImpl();
 
-    Models::AddProtectedEvent(
-        [this, audioNode = std::move(audioNode)](void) mutable {
-            _data->children().push(std::move(audioNode));
-        },
-        [this, node = std::move(node), hasPaused](void) mutable {
-            const auto idx = _children.size();
-            beginInsertRows(QModelIndex(), idx, idx);
-            _children.push(std::move(node));
-            endInsertRows();
-            if (hasPaused) {
-                Scheduler::Get()->getCurrentGraph().wait();
-                Scheduler::Get()->invalidateCurrentGraph();
-                Scheduler::Get()->playImpl();
-            } else
-                Scheduler::Get()->invalidateCurrentGraph();
-        }
-    );
+    if (!Models::AddProtectedEvent(
+            [this, audioNode = std::move(audioNode)](void) mutable {
+                _data->children().push(std::move(audioNode));
+            },
+            [this, node = std::move(node), hasPaused](void) mutable {
+                const auto idx = _children.size();
+                beginInsertRows(QModelIndex(), idx, idx);
+                _children.push(std::move(node));
+                endInsertRows();
+                if (hasPaused) {
+                    Scheduler::Get()->getCurrentGraph().wait();
+                    Scheduler::Get()->invalidateCurrentGraph();
+                    Scheduler::Get()->playImpl();
+                } else
+                    Scheduler::Get()->invalidateCurrentGraph();
+            }
+        ))
+        return nullptr;
     return nodePtr;
 }
 
-void NodeModel::remove(const int idx)
+bool NodeModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("NodeModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     const bool hasPaused = Scheduler::Get()->pauseImpl();
-    Models::AddProtectedEvent(
+    return Models::AddProtectedEvent(
         [this, idx] {
             _data->children().erase(_data->children().begin() + idx);
         },

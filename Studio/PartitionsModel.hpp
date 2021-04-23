@@ -56,13 +56,13 @@ public slots:
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_data->size()); }
 
     /** @brief Add a children to the list */
-    void add(void);
+    bool add(void);
 
     /** @brief Remove a children from the list */
-    void remove(const int index);
+    bool remove(const int index);
 
     /** @brief Move beatrange at index */
-    void move(const int from, const int to);
+    bool move(const int from, const int to);
 
     /** @brief Get a single partition model */
     PartitionModel *getPartition(const int index) { return get(index); }
