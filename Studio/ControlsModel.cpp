@@ -13,12 +13,9 @@ ControlsModel::ControlsModel(Audio::Controls *controls, NodeModel *parent) noexc
     : QAbstractListModel(parent), _data(controls)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-
-    Scheduler::Get()->addEvent([this] {
-        _controls.reserve(_data->size());
-        for (auto &control : *_data)
-            _controls.push(&control);
-    });
+    _controls.reserve(_data->size());
+    for (auto &control : *_data)
+        _controls.push(&control, this);
 }
 
 QHash<int, QByteArray> ControlsModel::roleNames(void) const noexcept

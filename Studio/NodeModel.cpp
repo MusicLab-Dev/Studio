@@ -112,12 +112,10 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
 
     audioNode->setName(Core::FlatString(factory->getName()));
     audioNode->prepareCache(Scheduler::Get()->audioSpecs());
+    audioNode->partitions().push().setName("Partition 0");
 
     NodePtr node(audioNode.get(), this);
     auto nodePtr = node.get();
-
-    if (addPartition)
-        node->partitions()->add();
 
     const bool hasPaused = Scheduler::Get()->pauseImpl();
 

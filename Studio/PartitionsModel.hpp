@@ -83,4 +83,7 @@ private:
 
     /** @brief Refresh internal models */
     void refreshPartitions(void);
+
+    /** @brief Get an available name for a partition */
+    [[nodiscard]] Core::FlatString getAvailablePartitionName(void) const noexcept;
 };

@@ -62,7 +62,7 @@ namespace Models
     inline bool AddProtectedEvent(Event &&event, Notify &&notify)
     {
         if (!EventGuard::Dirty) {
-            EventGuard::Dirty = true;
+            // EventGuard::Dirty = true;
             Scheduler::Get()->addEvent(std::forward<Event>(event), [notify = std::forward<Notify>(notify)](void) mutable {
                 notify();
                 EventGuard::Dirty = false;

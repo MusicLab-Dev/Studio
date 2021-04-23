@@ -16,6 +16,38 @@ MouseArea {
 
     property PartitionModel partition: null
     property int mode: NotesPlacementArea.Mode.None
+    property int onTheFlyKey: -1
+
+    function addOnTheFly(targetKey) {
+        if (onTheFlyKey === targetKey)
+            return;
+        removeOnTheFly(onTheFlyKey)
+        onTheFlyKey = targetKey
+        sequencerView.node.partitions.addOnTheFly(
+            AudioAPI.noteEvent(
+                NoteEvent.On,
+                targetKey,
+                AudioAPI.velocityMax,
+                0
+            ),
+            sequencerView.node,
+            sequencerView.partitionIndex
+        )
+    }
+
+    function removeOnTheFly(targetKey) {
+        sequencerView.node.partitions.addOnTheFly(
+            AudioAPI.noteEvent(
+                NoteEvent.Off,
+                targetKey,
+                AudioAPI.velocityMax,
+                0
+            ),
+            sequencerView.node,
+            sequencerView.partitionIndex
+        )
+        onTheFlyKey = -1
+    }
 
     id: contentPlacementArea
     acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -37,18 +69,9 @@ MouseArea {
             mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
         contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
 
-        if (!sequencerView.player.isPlaying) {
-            sequencerView.node.partitions.addOnTheFly(
-                AudioAPI.noteEvent(
-                    NoteEvent.On,
-                    mouseKey,
-                    AudioAPI.velocityMax,
-                    0
-                ),
-                sequencerView.node,
-                sequencerView.partitionIndex
-            )
-        }
+        // Add an on the fly note if the sequencer isn't playing
+        if (!sequencerView.player.isPlaying)
+            addOnTheFly(mouseKey)
 
         if (noteIndex === -1) { // Left click not on note -> insert
             if (contentView.placementBeatPrecisionLastWidth === 0)
@@ -100,6 +123,8 @@ MouseArea {
         }
         contentView.placementRectangle.detach()
         mode = NotesPlacementArea.Mode.None
+        if (onTheFlyKey !== -1)
+            removeOnTheFly(onTheFlyKey)
     }
 
     onPositionChanged: {
@@ -119,18 +144,8 @@ MouseArea {
             contentView.placementBeatPrecisionFrom = beatPrecision
             if (contentView.placementKey !== mouseKey) {
                 contentView.placementRectangle.targetColor = themeManager.getColorFromChain(mouseKey)
-                if (!sequencerView.player.isPlaying) {
-                    sequencerView.node.partitions.addOnTheFly(
-                        AudioAPI.noteEvent(
-                            NoteEvent.On,
-                            mouseKey,
-                            AudioAPI.velocityMax,
-                            0
-                        ),
-                        sequencerView.node,
-                        sequencerView.partitionIndex
-                    )
-                }
+                if (!sequencerView.player.isPlaying)
+                    addOnTheFly(mouseKey)
             }
             contentView.placementKey = mouseKey
             break

@@ -33,6 +33,7 @@ ColumnLayout {
         pluginsView.open(
             function() {
                 // @todo add loadExternalInputs into 'add'
+                console.log("addPartitionNode")
                 node = app.project.master.addPartitionNode(pluginsView.selectedPath)
                 partitionIndex = 0
                 if (node === null) {
@@ -40,13 +41,16 @@ ColumnLayout {
                     return
                 }
                 if (node.needSingleExternalInput() || node.needMultipleExternalInputs()) {
+                    console.log("needSingleExternalInput >> yes")
                     filePicker.open(node.needMultipleExternalInputs(),
                         function() {
                             var list = []
                             for (var i = 0; i < filePicker.fileUrls.length; ++i)
                                 list[i] = filePicker.fileUrls[i].toString().slice(7)
+                            console.log("loadExternalInputs", list)
                             node.loadExternalInputs(list)
                             partition = node.partitions.getPartition(partitionIndex)
+                            console.log("getPartition")
                             sequencerView.enabled = true
                         },
                         function() {
