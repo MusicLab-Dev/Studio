@@ -49,6 +49,7 @@ public:
     };
 
     using Audio::AScheduler::addEvent;
+    using Audio::AScheduler::project;
     using Audio::AScheduler::setProject;
     using Audio::AScheduler::invalidateCurrentGraph;
     using Audio::AScheduler::getCurrentGraph;

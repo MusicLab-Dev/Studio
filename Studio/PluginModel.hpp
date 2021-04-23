@@ -55,13 +55,18 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
 
-        /** @brief Get the title property */
+    /** @brief Get the title property */
     [[nodiscard]] QString title(void) const noexcept
         { return QString::fromLocal8Bit(_data->getMetaData().translations.getName(Audio::English).data(), _data->getMetaData().translations.getName(Audio::English).size()); }
 
-        /** @brief Get the description property */
+    /** @brief Get the description property */
     [[nodiscard]] QString description(void) const noexcept
         { return QString::fromLocal8Bit(_data->getMetaData().translations.getDescription(Audio::English).data(), _data->getMetaData().translations.getDescription(Audio::English).size()); }
+
+
+    /** @brief Get underlying audio plugin */
+    [[nodiscard]] Audio::IPlugin *audioPlugin(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::IPlugin *audioPlugin(void) const noexcept { return _data; }
 
 signals:
     /** @brief Notify that the title has changed */

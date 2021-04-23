@@ -5,9 +5,11 @@
 
 #include <QVariantMap>
 #include <QVariantList>
+#include <QMetaEnum>
 
 #include "ProjectSave.hpp"
 #include "Note.hpp"
+#include "Point.hpp"
 
 ProjectSave::ProjectSave(Project *project)
     : _project(project)
@@ -175,6 +177,7 @@ bool ProjectSave::load(void)
 {
     for (unsigned int i = 0; i < _project->master()->count(); i++)
         _project->master()->remove(i);
+    /** TODO: have to remove all informations in the master node */
 
     QString jsonStr = read();
     if (jsonStr.isEmpty())
@@ -215,8 +218,10 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
 {
     for (unsigned int i = 0; i < array.size(); i++) {
         partitions->add();
-        PartitionModel *partition = partitions->get(i);
         QJsonObject partitionObj = array[i].toObject();
+        PartitionModel *partition = partitions->get(i);
+        if (!partition)
+            continue;
 
         partition->setName(partitionObj["name"].toString());
         partition->setMuted(partitionObj["muted"].toBool());
@@ -237,6 +242,7 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
             QJsonArray instance = partitionObj["instances"].toArray()[y].toArray();
             unsigned int from = instance[0].toInt();
             unsigned int to = instance[1].toInt();
+
             partition->instances().add(BeatRange({from, to}));
         }
     }
@@ -245,10 +251,57 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
 
 bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
 {
+    for (unsigned int i = 0; i < array.size(); i++) {
+        QJsonObject controlObj = array[i].toObject();
+        controls->add(controlObj["paramID"].toInt());
+
+        ControlModel *control = controls->get(i);
+        if (!control)
+            continue;
+
+        control->setMuted(controlObj["muted"].toBool());
+
+        for (unsigned int y = 0; y < controlObj["automations"].toArray().size(); y++) {
+            QJsonObject automationObj = controlObj["automations"].toArray()[y].toObject();
+
+            control->add();
+            AutomationModel *automation = control->get(y);
+            if (!automation)
+                continue;
+
+            automation->setName(automationObj["name"].toString());
+            automation->setMuted(automationObj["muted"].toBool());
+
+            for (unsigned p = 0; p < automationObj["points"].toArray().size(); p++) {
+                QJsonObject pointObj = automationObj["points"].toArray()[p].toObject();
+
+                GPoint point;
+                point.beat = pointObj["beat"].toInt();
+                point.setType(static_cast<GPoint::CurveType>(QMetaEnum::fromType<GPoint::CurveType>().keyToValue(pointObj["beat"].toString().toStdString().c_str())));
+                point.curveRate = pointObj["curveRate"].toInt();
+                point.value = pointObj["value"].toDouble();
+                automation->add(point);
+            }
+
+            for (unsigned p = 0; p < automationObj["instances"].toArray().size(); p++) {
+                QJsonArray instance = automationObj["instances"].toArray()[p].toArray();
+                unsigned int from = instance[0].toInt();
+                unsigned int to = instance[1].toInt();
+
+                automation->instances().add(BeatRange({from, to}));
+            }
+        }
+    }
     return true;
 }
 
 bool ProjectSave::initPlugin(PluginModel *plugin, const QJsonObject &obj)
 {
+    const auto audioPlugin = plugin->audioPlugin();
+    const auto &ep = audioPlugin->getExternalPaths();
+    auto path = audioPlugin->factory()->getPath();
+
+    if (ep && path.length())
+        return true;
     return true;
 }

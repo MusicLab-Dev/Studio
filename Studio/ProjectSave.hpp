@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <gtest/gtest.h>
 #include <QVariantMap>
 #include <QFile>
 #include <QJsonDocument>
@@ -57,9 +58,17 @@ private:
     /** @brief return partition in QVariantList */
     QVariantMap transformPluginInVariantMap(PluginModel &plugin) noexcept;
 
+    /** @brief Init a node model by a QJsonObject */
     bool initNode(NodeModel *node, const QJsonObject &obj);
+
+    /** @brief Init a partitions model model by a QJsonArray */
     bool initPartitions(PartitionsModel *partitions, const QJsonArray &obj);
+
+    /** @brief Init a controls model model by a QJsonArray */
     bool initControls(ControlsModel *controls, const QJsonArray &obj);
+
+    /** @brief Init a plugin model model by a QJsonObject */
     bool initPlugin(PluginModel *plugin, const QJsonObject &obj);
 
+    FRIEND_TEST(ProjectSave, transformPartitionsInVariantList);
 };
