@@ -7,6 +7,7 @@ import '../../Default'
 
 Rectangle {
     property int selectedIndex: -1
+    property string selectedPath: ""
     property bool selectedIndexIsDir: true
     property int hoveredIndex: -1
 
@@ -58,13 +59,16 @@ Rectangle {
                     if (fileIsDir) {
                         workspaceForeground.actualPath = fileUrl
                         workspaceForeground.parentDepth += 1
-                    } else
-                        workspaceView.acceptAndClose(fileUrl)
+                    } else {
+                        workspaceView.fileUrl = fileUrl
+                        workspaceView.acceptAndClose()
+                    }
                     workspacesViewBackButton.visible = true
                 }
 
                 onClicked: {
                     selectedIndex = index
+                    selectedPath = fileUrl
                     selectedIndexIsDir = fileIsDir
                 }
 

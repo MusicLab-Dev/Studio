@@ -160,9 +160,11 @@ private:
     Device _device;
     QTimer _timer;
     Audio::AudioSpecs _audioSpecs;
-    std::atomic<bool> _blockGenerated { false };
     bool _exitGraph { false };
-    std::uint32_t _onTheFlyMissCount { 0 };
+    bool _busy { false };
+    alignas_cacheline std::atomic<bool> _blockGenerated { false };
+    alignas_cacheline std::atomic<std::size_t> _onTheFlyMissCount { false };
+    bool _isOnTheFlyMode { false };
 
     static inline Scheduler *_Instance { nullptr };
 
@@ -179,4 +181,7 @@ private:
 
     /** @brief Audio block generated event */
     [[nodiscard]] bool onAudioQueueBusy(void) override final;
+
+    /** @brief Audio callback */
+    void consumeAudioData(std::uint8_t *data, const std::size_t size) noexcept;
 };

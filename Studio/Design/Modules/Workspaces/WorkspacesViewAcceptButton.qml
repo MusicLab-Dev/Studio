@@ -22,6 +22,9 @@ Text {
 
         onExited: { acceptButtonHovered = false }
 
-        onReleased: { workspaceView.cancelAndaccept() }
+        onReleased: {
+            workspaceView.fileUrl = workspaceContentArea.selectedPath
+            workspaceView.acceptAndClose()
+        }
     }
 }
