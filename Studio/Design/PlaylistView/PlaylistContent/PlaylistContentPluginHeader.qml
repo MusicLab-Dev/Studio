@@ -26,7 +26,8 @@ Item {
             text: nodeDelegate.node ? nodeDelegate.node.name : ""
             color: "white"
             elide: Text.ElideRight
-            font.pointSize: nodeView.pluginHeaderNamePointSize
+            fontSizeMode: Text.HorizontalFit
+            font.pixelSize: nodeView.pluginHeaderNamePixelSize
         }
 
         MuteButton {
