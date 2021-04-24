@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.15
 
 import NodeModel 1.0
 import PartitionModel 1.0
+import PluginTableModel 1.0
 
 import "./SequencerContent/"
 
@@ -31,39 +32,48 @@ ColumnLayout {
 
     function loadNewPartitionNode() {
         pluginsView.open(
+            // On plugin selection accepted
             function() {
-                // @todo add loadExternalInputs into 'add'
-                console.log("addPartitionNode")
-                node = app.project.master.addPartitionNode(pluginsView.selectedPath)
-                partitionIndex = 0
-                if (node === null) {
-                    modules.removeModule(moduleIndex)
-                    return
-                }
-                if (node.needSingleExternalInput() || node.needMultipleExternalInputs()) {
-                    console.log("needSingleExternalInput >> yes")
-                    filePicker.open(node.needMultipleExternalInputs(),
+                var externalInputType = pluginTable.getExternalInputType(pluginsView.selectedPath)
+                if (externalInputType === PluginTableModel.None) {
+                    // Add the node with a partition
+                    node = app.project.master.addPartitionNode(pluginsView.selectedPath)
+                    partitionIndex = 0
+                    if (node === null) {
+                        modulesView.componentSelected = moduleIndex
+                        modulesView.removeComponent()
+                    } else {
+                        partition = node.partitions.getPartition(partitionIndex)
+                        sequencerView.enabled = true
+                    }
+                } else {
+                    filePicker.open(externalInputType === PluginTableModel.Multiple,
+                        // On external inputs selection accepted
                         function() {
+                            // Format the external input list
                             var list = []
                             for (var i = 0; i < filePicker.fileUrls.length; ++i)
                                 list[i] = filePicker.fileUrls[i].toString().slice(7)
-                            console.log("loadExternalInputs", list)
-                            node.loadExternalInputs(list)
-                            partition = node.partitions.getPartition(partitionIndex)
-                            console.log("getPartition")
-                            sequencerView.enabled = true
+                            // Add the node with a partition and external inputs
+                            node = app.project.master.addPartitionNodeExternalInputs(pluginsView.selectedPath, list)
+                            partitionIndex = 0
+                            if (node === null) {
+                                modulesView.componentSelected = moduleIndex
+                                modulesView.removeComponent()
+                            } else {
+                                partition = node.partitions.getPartition(partitionIndex)
+                                sequencerView.enabled = true
+                            }
                         },
+                        // On external inputs selection canceled
                         function() {
-                            app.project.master.remove(app.project.master.count - 1)
                             modulesView.componentSelected = moduleIndex
                             modulesView.removeComponent()
                         }
                     )
-                } else {
-                    partition = node.partitions.getPartition(partitionIndex)
-                    sequencerView.enabled = true
                 }
             },
+            // On plugin selection canceled
             function() {
                 modulesView.componentSelected = moduleIndex
                 modulesView.removeComponent()

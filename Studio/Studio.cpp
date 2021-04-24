@@ -36,8 +36,9 @@ void Studio::InitResources(void)
     qRegisterMetaType<BPM>("BPM");
     qRegisterMetaType<NoteEvent::EventType>("NoteEvent::EventType");
     qRegisterMetaType<GPoint::CurveRate>("GPoint::CurveRate");
-    qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
     qRegisterMetaType<PluginModel::ParamType>("PluginModel::ParamType");
+    qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
+    qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");

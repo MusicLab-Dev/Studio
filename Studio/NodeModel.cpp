@@ -94,7 +94,7 @@ const NodeModel *NodeModel::get(const int idx) const
     return _children.at(idx).get();
 }
 
-NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addPartition)
+NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths)
 {
     const std::string path = pluginPath.toStdString();
     const auto factory = Audio::PluginTable::Get().find(path);
@@ -112,12 +112,16 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
 
     audioNode->setName(Core::FlatString(factory->getName()));
     audioNode->prepareCache(Scheduler::Get()->audioSpecs());
-    audioNode->partitions().push().setName("Partition 0");
+
+    if (addPartition)
+        audioNode->partitions().push().setName("Partition 0");
 
     NodePtr node(audioNode.get(), this);
     auto nodePtr = node.get();
-
     const bool hasPaused = Scheduler::Get()->pauseImpl();
+
+    if (!paths.isEmpty())
+        nodePtr->loadExternalInputs(paths);
 
     if (!Models::AddProtectedEvent(
             [this, audioNode = std::move(audioNode)](void) mutable {

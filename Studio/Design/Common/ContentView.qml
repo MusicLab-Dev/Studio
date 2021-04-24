@@ -109,18 +109,22 @@ Item {
         color: themeManager.backgroundColor
     }
 
-    // Content view data
-    Item {
-        id: placeholder
-        anchors.fill: parent
+    ContentViewTimeline {
+        id: contentViewTimeline
+        height: timelineHeight
+        width: contentView.width
+        z: 1
     }
 
-    Column {
-        ContentViewTimeline {
-            id: contentViewTimeline
-            height: timelineHeight
-            width: contentView.width
-            z: 1
+    Item {
+        width: parent.width
+        height: contentView.height - contentViewTimeline.height
+        y: contentViewTimeline.height
+
+        // Content view data
+        Item {
+            id: placeholder
+            anchors.fill: parent
         }
 
         // Data grid overlay
@@ -128,12 +132,20 @@ Item {
             id: surfaceContentGrid
             x: contentView.rowHeaderWidth
             width: contentView.rowDataWidth
-            height: contentView.height
+            height: parent.height
             xOffset: contentView.xOffset
             yOffset: contentView.yOffset
             rowHeight: contentView.rowHeight
             barsPerRow: contentView.barsPerRow
             z: 0
+
+            Rectangle {
+                visible: x >= rowHeaderWidth
+                width: 4
+                height: surfaceContentGrid.height
+                x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
+                color: "blue"
+            }
         }
     }
 
@@ -143,14 +155,6 @@ Item {
         width: 20
         height: surfaceContentGrid.height
         x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
-    }
-
-    Rectangle {
-        visible: x >= rowHeaderWidth
-        width: 4
-        height: surfaceContentGrid.height
-        x: rowHeaderWidth + xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
-        color: "blue"
     }
 
     Rectangle {

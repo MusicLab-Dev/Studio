@@ -69,3 +69,16 @@ void PluginTableModel::add(const QString &path)
     // endInsertRows();
 }
 
+PluginTableModel::ExternalInputType PluginTableModel::getExternalInputType(const QString &path) const noexcept
+{
+    auto factory = _data.find(path.toStdString());
+    if (factory) {
+        const auto flags = static_cast<std::uint16_t>(factory->getFlags());
+        if (flags & static_cast<std::uint16_t>(Audio::IPluginFactory::Flags::MultipleExternalInputs))
+            return ExternalInputType::Multiple;
+        else if (flags & static_cast<std::uint16_t>(Audio::IPluginFactory::Flags::SingleExternalInput))
+            return ExternalInputType::Single;
+    }
+    return ExternalInputType::None;
+}
+

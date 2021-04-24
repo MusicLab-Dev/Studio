@@ -56,31 +56,39 @@ MouseArea {
     onPressed: {
         var realMouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
-        console.log("Pressed", mouseKey, "|", pianoView.keyOffset, " - " , mouse.y, height, contentView.rowHeight)
-        var mouseBeatPrecision = realMouseBeatPrecision
-        var noteIndex = partition.find(mouseKey, mouseBeatPrecision)
-        if (mouse.buttons & Qt.RightButton) { // Right click on note -> delete
+        var noteIndex = partition.find(mouseKey, realMouseBeatPrecision)
+
+        // Right click on note -> delete
+        if (mouse.buttons & Qt.RightButton) {
             mode = NotesPlacementArea.Mode.Remove
             if (noteIndex !== -1)
                 partition.remove(noteIndex)
             return
         }
-        if (contentView.placementBeatPrecisionScale !== 0)
-            mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
+
+        // Attach the preview
         contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
 
         // Add an on the fly note if the sequencer isn't playing
         if (!sequencerView.player.isPlaying)
             addOnTheFly(mouseKey)
 
-        if (noteIndex === -1) { // Left click not on note -> insert
+        var mouseBeatPrecision = realMouseBeatPrecision
+        if (contentView.placementBeatPrecisionScale >= AudioAPI.beatPrecision)
+            mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % AudioAPI.beatPrecision)
+        else if (contentView.placementBeatPrecisionScale !== 0)
+            mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
+
+        // Left click not on note -> insert
+        if (noteIndex === -1) {
             if (contentView.placementBeatPrecisionLastWidth === 0)
                 contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionDefaultWidth
             mode = NotesPlacementArea.Mode.Move
             contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
             contentView.placementBeatPrecisionFrom = mouseBeatPrecision
             contentView.placementKey = mouseKey
-        } else { // Left click on note -> edit
+        // Left click on note -> edit
+        } else {
             var beatPrecisionRange = partition.getNote(noteIndex).range
             var noteWidthBeatPrecision = (beatPrecisionRange.to - beatPrecisionRange.from)
             var noteWidth = noteWidthBeatPrecision * contentView.pixelsPerBeatPrecision
@@ -128,34 +136,42 @@ MouseArea {
     }
 
     onPositionChanged: {
-        var mouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
+        var realMouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
-        if (contentView.placementBeatPrecisionScale !== 0)
-            mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
         switch (mode) {
         case NotesPlacementArea.Mode.Remove:
-            var noteIndex = partition.find(mouseKey, mouseBeatPrecision)
+            var noteIndex = partition.find(mouseKey, realMouseBeatPrecision)
             if (noteIndex !== -1)
                 partition.remove(noteIndex)
             break
         case NotesPlacementArea.Mode.Move:
-            var beatPrecision = mouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
-            contentView.placementBeatPrecisionTo = beatPrecision + contentView.placementBeatPrecisionWidth
-            contentView.placementBeatPrecisionFrom = beatPrecision
+            var mouseBeatPrecision = realMouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
+            if (contentView.placementBeatPrecisionScale >= AudioAPI.beatPrecision)
+                mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % AudioAPI.beatPrecision)
+            else if (contentView.placementBeatPrecisionScale !== 0)
+                mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)
+            contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionWidth
+            contentView.placementBeatPrecisionFrom = mouseBeatPrecision
             if (contentView.placementKey !== mouseKey) {
                 contentView.placementRectangle.targetColor = themeManager.getColorFromChain(mouseKey)
                 if (!sequencerView.player.isPlaying)
                     addOnTheFly(mouseKey)
+                contentView.placementKey = mouseKey
             }
-            contentView.placementKey = mouseKey
             break
         case NotesPlacementArea.Mode.LeftResize:
+            var mouseBeatPrecision = realMouseBeatPrecision
+            if (contentView.placementBeatPrecisionScale !== 0)
+                mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale) + (contentView.placementBeatPrecisionFrom % contentView.placementBeatPrecisionScale)
             if (contentView.placementBeatPrecisionTo > mouseBeatPrecision)
                 contentView.placementBeatPrecisionFrom = mouseBeatPrecision
             else
                 mode = NotesPlacementArea.Mode.RightResize
             break
         case NotesPlacementArea.Mode.RightResize:
+            var mouseBeatPrecision = realMouseBeatPrecision
+            if (contentView.placementBeatPrecisionScale !== 0)
+                mouseBeatPrecision = mouseBeatPrecision + (contentView.placementBeatPrecisionScale - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)) + (contentView.placementBeatPrecisionTo % contentView.placementBeatPrecisionScale)
             if (contentView.placementBeatPrecisionFrom < mouseBeatPrecision)
                 contentView.placementBeatPrecisionTo = mouseBeatPrecision
             else

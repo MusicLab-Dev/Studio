@@ -144,10 +144,19 @@ public slots:
     NodeModel *add(const QString &pluginPath)
         { return addNodeImpl(pluginPath, false); }
 
+    /** @brief Add a new node in children vector using a plugin path and an external input list */
+    NodeModel *addExternalInputs(const QString &pluginPath)
+        { return addNodeImpl(pluginPath, false); }
+
     /** @brief Add a new node in children vector using a plugin path
      *  Also add an empty partition to this node */
     NodeModel *addPartitionNode(const QString &pluginPath)
         { return addNodeImpl(pluginPath, true); }
+
+    /** @brief Add a new node in children vector using a plugin path and an external input list
+     *  Also add an empty partition to this node */
+    NodeModel *addPartitionNodeExternalInputs(const QString &pluginPath, const QStringList &paths)
+        { return addNodeImpl(pluginPath, true, paths); }
 
     /** @brief Remove a children node */
     bool remove(const int index);
@@ -197,5 +206,5 @@ private:
     PluginPtr _plugin { nullptr };
 
     /** @brief Create a node */
-    [[nodiscard]] NodeModel *addNodeImpl(const QString &pluginPath, const bool addPartition);
+    [[nodiscard]] NodeModel *addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths = QStringList());
 };
