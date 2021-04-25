@@ -54,12 +54,16 @@ public:
     [[nodiscard]] const ControlModel *get(const int index) const noexcept_ndebug;
 
 
+    /** @brief Get underlying audio controls */
+    [[nodiscard]] Audio::Controls *audioControls(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::Controls *audioControls(void) const noexcept { return _data; }
+
 public slots:
     /** @brief Return the count of element in the model */
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_controls.size()); }
 
     /** @brief Add a children to the list */
-    void add(const quint32 paramID);
+    void add(const ParamID paramID);
 
     /** @brief Remove a children from the list */
     void remove(const int index);
