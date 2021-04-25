@@ -115,4 +115,4 @@ private:
     Protocol::BoardID _boardID {};
 };
 
-static_assert_fit_cacheline(Board);
+//static_assert_fit_cacheline(Board);

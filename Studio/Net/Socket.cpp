@@ -13,6 +13,8 @@
     # define SHUT_WR SD_SEND
     # define SHUT_RDWR SD_BOTH
 
+#pragma comment(lib, "Ws2_32.lib")
+
     using Socklen = int;
     using SockAddrIn = SOCKADDR_IN;
     using SockAddr = SOCKADDR;

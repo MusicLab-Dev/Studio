@@ -142,14 +142,14 @@ void SettingsListModel::parse(const QJsonObject &objSettings, QJsonObject &objVa
                 }
 
                 _models.push_back({
-                    category: path + "/" + objSettings.keys().at(i),
-                    id: obj["id"].toString(),
-                    name: obj["name"].toString(),
-                    help: obj["help"].toString(),
-                    tags: obj["tags"].toArray().toVariantList(),
-                    type: obj["type"].toString(),
-                    currentValue: objValues.value(obj["id"].toString()).toVariant(),
-                    values: obj["values"].toArray().toVariantList()
+                    /* category: */     path + "/" + objSettings.keys().at(i),
+                    /* id: */           obj["id"].toString(),
+                    /* name: */         obj["name"].toString(),
+                    /* help: */         obj["help"].toString(),
+                    /* tags: */         obj["tags"].toArray().toVariantList(),
+                    /* type: */         obj["type"].toString(),
+                    /* currentValue: */ objValues.value(obj["id"].toString()).toVariant(),
+                    /* values: */       obj["values"].toArray().toVariantList()
                 });
             }
         }

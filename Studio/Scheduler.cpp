@@ -35,7 +35,7 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
 Scheduler::~Scheduler(void) noexcept
 {
     if (pauseImpl()) {
-        __cxx_atomic_wait(reinterpret_cast<bool *>(&_blockGenerated), false, std::memory_order::memory_order_relaxed);
+        __cxx_atomic_wait(reinterpret_cast<bool *>(&_blockGenerated), false, static_cast<int>(std::memory_order::memory_order_relaxed));
         onCatchingAudioThread();
         getCurrentGraph().wait();
     }
@@ -51,8 +51,8 @@ void Scheduler::setProductionCurrentBeat(const Beat beat)
         return;
     Models::AddProtectedEvent(
         [this, beat] {
-            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Production>();
-            range.to = beat + Audio::AScheduler::processBeatSize();
+            auto &range = currentBeatRange<Audio::PlaybackMode::Production>();
+            range.to = beat + processBeatSize();
             range.from = beat;
         },
         [this, currentBeat] {
@@ -70,8 +70,8 @@ void Scheduler::setLiveCurrentBeat(const Beat beat)
         return;
     Models::AddProtectedEvent(
         [this, beat] {
-            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Live>();
-            range.to = beat + Audio::AScheduler::processBeatSize();
+            auto &range = currentBeatRange<Audio::PlaybackMode::Live>();
+            range.to = beat + processBeatSize();
             range.from = beat;
         },
         [this, currentBeat] {
@@ -89,8 +89,8 @@ void Scheduler::setPartitionCurrentBeat(const Beat beat)
         return;
     Models::AddProtectedEvent(
         [this, beat] {
-            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::Partition>();
-            range.to = beat + Audio::AScheduler::processBeatSize();
+            auto &range = currentBeatRange<Audio::PlaybackMode::Partition>();
+            range.to = beat + processBeatSize();
             range.from = beat;
         },
         [this, currentBeat] {
@@ -108,7 +108,7 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
         return;
     Models::AddProtectedEvent(
         [this, beat] {
-            auto &range = Audio::AScheduler::currentBeatRange<Audio::PlaybackMode::OnTheFly>();
+            auto &range = currentBeatRange<Audio::PlaybackMode::OnTheFly>();
             range.to = beat + processBeatSize();
             range.from = beat;
         },
@@ -168,7 +168,7 @@ void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *nod
             setPartitionIndex(partition);
 
             auto &range = Audio::AScheduler::getCurrentBeatRange();
-            range.to = startingBeat + Audio::AScheduler::processBeatSize();
+            range.to = startingBeat + processBeatSize();
             range.from = startingBeat;
         },
         [this, mode = Audio::AScheduler::playbackMode(), partitionNodeChanged] {
@@ -226,7 +226,7 @@ void Scheduler::replay(const Scheduler::PlaybackMode mode)
             Audio::AScheduler::setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
             auto &range = Audio::AScheduler::getCurrentBeatRange();
             range.from = 0;
-            range.to = Audio::AScheduler::processBeatSize();
+            range.to = processBeatSize();
         },
         [this, mode = Audio::AScheduler::playbackMode()] {
             getCurrentGraph().wait();
@@ -261,7 +261,7 @@ void Scheduler::replayPartition(const Scheduler::PlaybackMode mode, NodeModel *n
             setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
             auto &range = Audio::AScheduler::getCurrentBeatRange();
             range.from = 0;
-            range.to = Audio::AScheduler::processBeatSize();
+            range.to = processBeatSize();
             setPartitionNode(node->audioNode());
             setPartitionIndex(partition);
         },
