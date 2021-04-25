@@ -63,16 +63,16 @@ Rectangle {
         }
 
         ListView {
+            id: controlsListView
             Layout.preferredHeight: parent.height
             Layout.fillWidth: true
             orientation: ListView.Horizontal
             clip: true
-            model: sequencerView.node ? sequencerView.node.plugin : null
             spacing: 2
+            model: sequencerView.node ? sequencerView.node.plugin : null
 
             delegate: Loader {
                 focus: true
-                anchors.verticalCenter: parent.verticalCenter
 
                 source: {
                     switch (controlType) {
@@ -88,6 +88,8 @@ Rectangle {
                         return ""
                     }
                 }
+
+                onLoaded: anchors.verticalCenter = parent.verticalCenter
             }
         }
 

@@ -15,7 +15,7 @@ MouseArea {
     hoverEnabled: true
 
     onWheel: {
-        var delta = wheel.angleDelta.y / 15 * stepRatio
+        var delta = wheel.angleDelta.y / 120 * stepRatio
         var ratio = currentRatio + delta + rest
         rest = delta % controlStepValue
         if (ratio < 0)
