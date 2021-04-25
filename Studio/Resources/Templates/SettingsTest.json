@@ -17,6 +17,12 @@
                 "type": "ComboBox",
                 "values": [22050, 44100, 48000, 88200, 96000, 192000],
                 "start": 44100
+            },
+            {
+                "id": "workspacePaths",
+                "name": "Workspace paths",
+                "tags": ["workspace", "path"],
+                "type": "StringPairList(QVector<QVector<QString>>)"
             }
         ]
     },
