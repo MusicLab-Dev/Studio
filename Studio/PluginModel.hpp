@@ -40,7 +40,7 @@ public:
     /** @brief Parameter type */
     enum class ParamType : int {
         Boolean,
-        Interger,
+        Integer,
         Floating,
         Enum
     };
@@ -69,6 +69,9 @@ public:
 
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
+
+    /** @brief Set a role */
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
 
     /** @brief Get the title property */

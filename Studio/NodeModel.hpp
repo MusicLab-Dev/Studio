@@ -43,6 +43,7 @@ class NodeModel : public QAbstractListModel
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(PartitionsModel *partitions READ partitions NOTIFY partitionsChanged)
     Q_PROPERTY(ControlsModel *controls READ controls NOTIFY controlsChanged)
+    Q_PROPERTY(PluginModel *plugin READ plugin NOTIFY pluginChanged)
     //Q_PROPERTY(ConnectionsModel *connections READ connections NOTIFY connectionsChanged)
 
 public:
@@ -125,7 +126,7 @@ public:
     [[nodiscard]] PluginModel *plugin(void) noexcept { return _plugin.get(); }
 
     /** @brief Get the controls model */
-    [[nodiscard]] Core::FlatVector<NodePtr> &nchildren(void) noexcept { return _children; }
+    [[nodiscard]] Core::FlatVector<NodePtr> &children(void) noexcept { return _children; }
 
     /** @brief Get the flags */
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
@@ -192,8 +193,8 @@ signals:
     /** @brief Notify that controls property has changed */
     void controlsChanged(void);
 
-    /** @brief Notify that connections property has changed */
-    void connectionsChanged(void);
+    /** @brief Notify that plugin property has changed */
+    void pluginChanged(void);
 
     /** @brief Notify that the parent node has changed */
     void parentNodeChanged(void);

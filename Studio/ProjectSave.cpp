@@ -66,7 +66,7 @@ QVariantMap ProjectSave::transformNodeInVariantMap(NodeModel &node)
     map.insert("controls", transformControlsInVariantList(*node.controls()));
     map.insert("plugin", transformPluginInVariantMap(*node.plugin()));
 
-    for (auto it = node.nchildren().begin(); it != node.nchildren().end(); ++it) {
+    for (auto it = node.children().begin(); it != node.children().end(); ++it) {
         children.push_back(transformNodeInVariantMap(*it->get()));
     }
     map.insert("children", children);

@@ -109,6 +109,22 @@ Item {
         color: themeManager.backgroundColor
     }
 
+    // Handle all mouse / touch gestures
+    GestureArea {
+        id: gestureArea
+        anchors.fill: parent
+
+        onScrolled: {
+            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), xOffsetMax)
+            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), yOffsetMax)
+        }
+
+        onZoomed: {
+            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoomX, 0), 1)
+            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoomY, 0), 1)
+        }
+    }
+
     ContentViewTimeline {
         id: contentViewTimeline
         height: timelineHeight
@@ -179,23 +195,6 @@ Item {
         visible: false
         color: Qt.lighter(targetColor, 1.3)
     }
-
-    // Handle all mouse / touch gestures
-    GestureArea {
-        id: gestureArea
-        anchors.fill: parent
-
-        onScrolled: {
-            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), xOffsetMax)
-            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), yOffsetMax)
-        }
-
-        onZoomed: {
-            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoomX, 0), 1)
-            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoomY, 0), 1)
-        }
-    }
-
 
     Shortcut {
         sequence: "Space"

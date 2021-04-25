@@ -17,5 +17,9 @@
         <file>ContentViewTimelineBar.qml</file>
         <file>Snapper.qml</file>
         <file>ContentViewTimeline.qml</file>
+        <file>PluginControls/BooleanControl.qml</file>
+        <file>PluginControls/EnumControl.qml</file>
+        <file>PluginControls/FloatingControl.qml</file>
+        <file>PluginControls/IntegerControl.qml</file>
     </qresource>
 </RCC>

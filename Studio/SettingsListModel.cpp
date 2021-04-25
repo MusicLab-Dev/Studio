@@ -61,14 +61,20 @@ QVariant SettingsListModel::data(const QModelIndex &index, int role) const
 bool SettingsListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     auto &model = _models[index.row()];
+    bool changed = false;
 
     switch (static_cast<Role>(role)) {
         case Role::CurrentValue:
-            model.currentValue = value;
+            if (model.currentValue != value) {
+                model.currentValue = value;
+                changed = true;
+            }
             break;
         default:
             break;
     }
+    if (changed)
+        emit dataChanged(index, index, { role });
     return true;
 }
 

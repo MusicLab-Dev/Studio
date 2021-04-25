@@ -22,6 +22,7 @@ QHash<int, QByteArray> PluginModel::roleNames(void) const noexcept
         { static_cast<int>(Roles::MaxValue), "controlMaxValue"},
         { static_cast<int>(Roles::StepValue), "controlStepValue"},
         { static_cast<int>(Roles::DefaultValue), "controlDefaultValue"},
+        { static_cast<int>(Roles::Value), "controlValue"},
         { static_cast<int>(Roles::Title), "controlTitle"},
         { static_cast<int>(Roles::Description), "controlDescription"},
     };
@@ -52,6 +53,20 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
         default:
             return QVariant();
     }
+}
+
+bool PluginModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    coreAssert(index.row() >= 0 && index.row() < count(),
+        throw std::range_error("PartitionModel::data: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
+    switch (static_cast<Roles>(role)) {
+        case Roles::Value:
+            setControl(ControlEvent(index.row(), value.toDouble()));
+            break;
+        default:
+            break;
+    }
+    return true;
 }
 
 void PluginModel::setControl(const ControlEvent &event)
