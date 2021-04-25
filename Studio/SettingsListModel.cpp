@@ -161,3 +161,23 @@ bool SettingsListModel::saveValues(void) noexcept
     _jsonValuesFile.close();
     return true;
 }
+
+bool SettingsListModel::set(const QString &id, const QVariant &value) noexcept
+{
+    for (auto it = _models.begin(); it != _models.end(); it++) {
+        if (it->id == id) {
+            it->currentValue = value;
+            return true;
+        }
+    }
+    return false;
+}
+
+const QVariant SettingsListModel::get(const QString &id) const noexcept
+{
+    for (auto it = _models.begin(); it != _models.end(); it++) {
+        if (it->id == id)
+            return it->currentValue;
+    }
+    return QVariant();
+}
