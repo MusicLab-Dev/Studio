@@ -46,7 +46,7 @@ Menu {
                     var externalInputType = pluginTable.getExternalInputType(pluginsView.selectedPath)
                     if (externalInputType === PluginTableModel.None) {
                         // Add the node
-                        app.project.master.add(pluginsView.selectedPath)
+                        var node = targetNode.add(pluginsView.selectedPath)
                         if (node === null)
                             closeMenu();
                     } else {
@@ -58,7 +58,7 @@ Menu {
                                 for (var i = 0; i < filePicker.fileUrls.length; ++i)
                                     list[i] = filePicker.fileUrls[i].toString().slice(7)
                                 // Add the node with external inputs
-                                app.project.master.addExternalInputs(pluginsView.selectedPath, list)
+                                var node = targetNode.addExternalInputs(pluginsView.selectedPath, list)
                                 if (node === null)
                                     closeMenu();
                             },
