@@ -53,6 +53,7 @@
         <file>Assets/Plugins/Mixer.png</file>
         <file>Assets/Plugins/Oscillator.png</file>
         <file>Assets/Plugins/LambdaFilter.png</file>
+        <file>Assets/Plugins/GammaEqualizer.png</file>
         <file>Assets/Plugins/Sampler.png</file>
     </qresource>
 </RCC>
