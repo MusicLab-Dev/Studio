@@ -348,7 +348,7 @@ void Scheduler::onNodeDeleted(NodeModel *targetNode)
     }
 }
 
-void Scheduler::onNodePartitionDeleted(NodeModel *targetNode, int partition)
+void Scheduler::onNodePartitionDeleted(NodeModel *targetNode, quint32 partition)
 {
     if (partitionNode() == targetNode->audioNode() && partition == partitionIndex()) {
         if (playbackMode() == PlaybackMode::Partition || playbackMode() == PlaybackMode::OnTheFly) {
@@ -379,6 +379,8 @@ void Scheduler::onCatchingAudioThread(void)
     }
 
     _blockGenerated = false;
+    std::atomic_notify_one(&_blockGenerated);
+
     if (_exitGraph)
         _timer.stop();
     AScheduler::dispatchNotifyEvents();

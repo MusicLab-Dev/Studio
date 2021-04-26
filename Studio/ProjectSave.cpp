@@ -177,7 +177,8 @@ QVariantMap ProjectSave::transformPluginInVariantMap(PluginModel &plugin) noexce
 
     QVariantList controls;
     auto &meta = plugin.audioPlugin()->getMetaData().controls;
-    for (int i = 0; i < meta.size(); i++) {
+    const auto size = static_cast<int>(meta.size());
+    for (int i = 0; i < size; i++) {
         controls.push_back(QVariantList({i, meta[i].defaultValue}));
     }
     map.insert("controls", controls);
@@ -201,7 +202,7 @@ bool ProjectSave::load(void)
     QJsonObject obj = doc.object();
 
     _project->setName(obj["name"].toString());
-    _project->setBPM(obj["bpm"].toDouble());
+    _project->setBPM(static_cast<float>(obj["bpm"].toDouble()));
     initNode(_project->master(), obj["master"].toObject());
 
     qDebug("Load success");
@@ -245,11 +246,11 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
             QJsonObject noteObj = partitionObj["notes"].toArray()[y].toObject();
             Note note;
 
-            note.range.from = noteObj["range"].toArray()[0].toInt();
-            note.range.to = noteObj["range"].toArray()[1].toInt();
-            note.key = noteObj["key"].toInt();
-            note.velocity = noteObj["velocity"].toInt();
-            note.tuning = noteObj["tuning"].toInt();
+            note.range.from = static_cast<Beat>(noteObj["range"].toArray()[0].toInt());
+            note.range.to = static_cast<Beat>(noteObj["range"].toArray()[1].toInt());
+            note.key = static_cast<Key>(noteObj["key"].toInt());
+            note.velocity = static_cast<Velocity>(noteObj["velocity"].toInt());
+            note.tuning = static_cast<Tuning>(noteObj["tuning"].toInt());
             partition->add(note);
         }
 
@@ -291,9 +292,9 @@ bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
                 QJsonObject pointObj = automationObj["points"].toArray()[p].toObject();
 
                 GPoint point;
-                point.beat = pointObj["beat"].toInt();
+                point.beat = static_cast<Beat>(pointObj["beat"].toInt());
                 point.setType(static_cast<GPoint::CurveType>(QMetaEnum::fromType<GPoint::CurveType>().keyToValue(pointObj["beat"].toString().toStdString().c_str())));
-                point.curveRate = pointObj["curveRate"].toInt();
+                point.curveRate = static_cast<GPoint::CurveRate>(pointObj["curveRate"].toInt());
                 point.value = pointObj["value"].toDouble();
                 automation->add(point);
             }

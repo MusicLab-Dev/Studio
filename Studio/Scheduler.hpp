@@ -123,7 +123,7 @@ public slots:
     void onNodeDeleted(NodeModel *targetNode);
 
     /** @brief Callback that must be called after a partition has been deleted */
-    void onNodePartitionDeleted(NodeModel *targetNode, int partition);
+    void onNodePartitionDeleted(NodeModel *targetNode, quint32 partition);
 
 signals:
     /** @brief Notify when playback mode changed */
