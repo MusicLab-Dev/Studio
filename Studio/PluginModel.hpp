@@ -75,13 +75,10 @@ public:
 
 
     /** @brief Get the title property */
-    [[nodiscard]] QString title(void) const noexcept
-        { return QString::fromLocal8Bit(_data->getMetaData().translations.getName(Audio::English).data(), _data->getMetaData().translations.getName(Audio::English).size()); }
+    [[nodiscard]] QString title(void) const noexcept;
 
     /** @brief Get the description property */
-    [[nodiscard]] QString description(void) const noexcept
-        { return QString::fromLocal8Bit(_data->getMetaData().translations.getDescription(Audio::English).data(), _data->getMetaData().translations.getDescription(Audio::English).size()); }
-
+    [[nodiscard]] QString description(void) const noexcept;
 
     /** @brief Get underlying audio plugin */
     [[nodiscard]] Audio::IPlugin *audioPlugin(void) noexcept { return _data; }
@@ -102,8 +99,9 @@ signals:
     void descriptionChanged(void);
 
 private:
+    Audio::IPlugin *_data { nullptr };
+
     /** @brief Get the current language */
     [[nodiscard]] int language(void) const noexcept;
 
-    Audio::IPlugin *_data { nullptr };
 };

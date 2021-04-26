@@ -86,3 +86,15 @@ void PluginModel::controlValueChanged(const ParamID paramID)
     const auto modelIndex = index(paramID);
     emit dataChanged(modelIndex, modelIndex, { static_cast<int>(Roles::Value) });
 }
+
+QString PluginModel::title(void) const noexcept
+{
+    const auto &cache = _data->getMetaData().translations.getName(Audio::English);
+    return QString::fromLocal8Bit(cache.data(), cache.size());
+}
+
+QString PluginModel::description(void) const noexcept
+{
+    const auto &cache = _data->getMetaData().translations.getName(Audio::English);
+    return QString::fromLocal8Bit(cache.data(), cache.size());
+}

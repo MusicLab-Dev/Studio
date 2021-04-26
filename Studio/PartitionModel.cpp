@@ -87,7 +87,7 @@ void PartitionModel::setMidiChannels(const MidiChannels midiChannels)
 
 bool PartitionModel::add(const Note &note)
 {
-    const auto idx = std::distance(_data->notes().begin(), _data->notes().findSortedPlacement(note));
+    const auto idx = static_cast<int>(std::distance(_data->notes().begin(), _data->notes().findSortedPlacement(note)));
 
     return Models::AddProtectedEvent(
         [this, note] {
@@ -139,7 +139,7 @@ const Note &PartitionModel::get(const int idx) const noexcept_ndebug
 
 void PartitionModel::set(const int idx, const Note &range)
 {
-    auto newIdx = std::distance(_data->notes().begin(), _data->notes().findSortedPlacement(range));
+    auto newIdx = static_cast<int>(std::distance(_data->notes().begin(), _data->notes().findSortedPlacement(range)));
 
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("PartitionModel::move: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));

@@ -16,21 +16,21 @@ struct ThemePack
 };
 
 static const ThemePack ClassicThemePack {
-    .background = "#3E4756",
-    .foreground = "#001E36",
-    .content = "#FFFFFF",
-    .disabled = "#C4C4C4",
-    .accent = "#31A8FF",
-    .line = "#00000"
+    /* background: */ "#3E4756",
+    /* foreground: */ "#001E36",
+    /* content: */ "#FFFFFF",
+    /* disabled: */ "#C4C4C4",
+    /* accent: */ "#31A8FF",
+    /* line: */ "#00000"
 };
 
 static const ThemePack DarkThemePack {
-    .background = "#525252",
-    .foreground = "#242424",
-    .content = "#FFFFFF",
-    .disabled = "#C4C4C4",
-    .accent = "#31A8FF",
-    .line = "#FFFFFF"
+    /* background: */ "#525252",
+    /* foreground: */ "#242424",
+    /* content: */ "#FFFFFF",
+    /* disabled: */ "#C4C4C4",
+    /* accent: */ "#31A8FF",
+    /* line: */ "#FFFFFF"
 };
 
 void ThemeManager::setTheme(const Theme theme)

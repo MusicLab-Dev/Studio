@@ -57,28 +57,28 @@ public:
         Data
     };
 
-    Board(void)
+    Board(QObject *parent)
     {
         _controls = Controls {
             Control {
-                .type = ControlType::Button,
-                .pos = QPoint(0, 0),
-                .data = 0
+                ControlType::Button,
+                QPoint(0, 0),
+                0
             },
             Control {
-                .type = ControlType::Button,
-                .pos = QPoint(1, 1),
-                .data = 1
+                ControlType::Button,
+                QPoint(1, 1),
+                1
             },
             Control {
-                .type = ControlType::Potentiometer,
-                .pos = QPoint(2, 2),
-                .data = 0
+                ControlType::Potentiometer,
+                QPoint(2, 2),
+                0
             },
             Control {
-                .type = ControlType::Potentiometer,
-                .pos = QPoint(3, 3),
-                .data = 1
+                ControlType::Potentiometer,
+                QPoint(3, 3),
+                1
             }
         };
     }

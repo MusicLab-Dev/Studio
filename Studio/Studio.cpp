@@ -34,6 +34,9 @@ void Studio::InitResources(void)
     qRegisterMetaType<Velocity>("Velocity");
     qRegisterMetaType<Tuning>("Tuning");
     qRegisterMetaType<BPM>("BPM");
+    qRegisterMetaType<MidiChannels>("MidiChannels");
+    qRegisterMetaType<BlockSize>("BlockSize");
+    qRegisterMetaType<SampleRate>("SampleRate");
     qRegisterMetaType<NoteEvent::EventType>("NoteEvent::EventType");
     qRegisterMetaType<GPoint::CurveRate>("GPoint::CurveRate");
     qRegisterMetaType<PluginModel::ParamType>("PluginModel::ParamType");

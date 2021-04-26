@@ -61,7 +61,7 @@ void AutomationModel::setName(const QString &name)
 
 bool AutomationModel::add(const GPoint &point)
 {
-    const auto idx = std::distance(_data->points().begin(), _data->points().findSortedPlacement(point));
+    const auto idx = static_cast<int>(std::distance(_data->points().begin(), _data->points().findSortedPlacement(point)));
 
     return Models::AddProtectedEvent(
         [this, point] {
@@ -99,7 +99,7 @@ const GPoint &AutomationModel::get(const int idx) const noexcept_ndebug
 
 bool AutomationModel::set(const int idx, const GPoint &point)
 {
-    auto newIdx = std::distance(_data->points().begin(), _data->points().findSortedPlacement(point));
+    auto newIdx = static_cast<int>(std::distance(_data->points().begin(), _data->points().findSortedPlacement(point)));
 
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("AutomationModel::set: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));

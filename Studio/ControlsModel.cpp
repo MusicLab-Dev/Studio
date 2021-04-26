@@ -54,7 +54,7 @@ void ControlsModel::add(const ParamID paramID)
         },
         [this, name] {
             const auto controlsData = _controls.data();
-            const auto idx = _controls.size();
+            const auto idx = static_cast<int>(_controls.size());
             beginInsertRows(QModelIndex(), idx, idx);
             _controls.push(&_data->at(idx), this, name);
             endInsertRows();
@@ -77,7 +77,7 @@ void ControlsModel::remove(const int idx)
             _controls.erase(_controls.begin() + idx);
             endRemoveRows();
             const auto count = _controls.size();
-            for (auto i = static_cast<std::size_t>(idx); i < count; ++i)
+            for (auto i = static_cast<std::uint32_t>(idx); i < count; ++i)
                 _controls.at(i)->updateInternal(&_data->at(i));
         }
     );

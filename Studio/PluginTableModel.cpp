@@ -34,17 +34,17 @@ QVariant PluginTableModel::data(const QModelIndex &index, int role) const
     case Roles::Name:
     {
         const auto name = factory->getName();
-        return QString::fromLocal8Bit(name.data(), name.length());
+        return QString::fromLocal8Bit(name.data(), static_cast<int>(name.length()));
     }
     case Roles::Description:
     {
         const auto desc = factory->getDescription();
-        return QString::fromLocal8Bit(desc.data(), desc.length());
+        return QString::fromLocal8Bit(desc.data(), static_cast<int>(desc.length()));
     }
     case Roles::Path:
     {
         const auto path = factory->getPath();
-        return QString::fromLocal8Bit(path.data(), path.length());
+        return QString::fromLocal8Bit(path.data(), static_cast<int>(path.length()));
     }
     case Roles::SDK:
         return static_cast<std::uint32_t>(factory->getSDK());
@@ -64,6 +64,7 @@ Audio::IPluginFactory *PluginTableModel::get(const int index) const noexcept_nde
 
 void PluginTableModel::add(const QString &path)
 {
+    UNUSED(path);
     // beginInsertRows(QModelIndex(), count(), count());
     // _data.registerFactory(path.toStdString());
     // endInsertRows();

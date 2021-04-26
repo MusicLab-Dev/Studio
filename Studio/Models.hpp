@@ -18,12 +18,12 @@ namespace Models
     template<typename ListModel, typename ModelVector, typename AudioModelVector, typename ...Args>
     inline void RefreshModels(ListModel * const root, ModelVector &models, AudioModelVector &audioModels, Args ...args)
     {
-        const auto modelCount = models.size();
-        const auto audioModelCount = audioModels.size();
+        const auto modelCount = static_cast<int>(models.size());
+        const auto audioModelCount = static_cast<int>(audioModels.size());
 
         // First, update already existing models
         const auto minCount = modelCount < audioModelCount ? modelCount : audioModelCount;
-        for (auto i = 0u;  i < minCount; ++i)
+        for (auto i = 0;  i < minCount; ++i)
             models.at(i)->updateInternal(&audioModels.at(i));
         // Then, delete excess models if any
         if (modelCount > audioModelCount) {

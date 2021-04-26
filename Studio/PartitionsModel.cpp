@@ -78,7 +78,7 @@ bool PartitionsModel::remove(const int idx)
             _partitions.erase(_partitions.begin() + idx);
             endRemoveRows();
             const auto count = _partitions.size();
-            for (auto i = static_cast<std::size_t>(idx); i < count; ++i)
+            for (auto i = static_cast<std::uint32_t>(idx); i < count; ++i)
                 _partitions.at(i)->updateInternal(&_data->at(i));
         }
     );

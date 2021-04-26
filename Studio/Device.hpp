@@ -16,11 +16,11 @@ class Device : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(quint32 sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
+    Q_PROPERTY(SampleRate sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(Format format READ format WRITE setFormat NOTIFY formatChanged)
     Q_PROPERTY(ChannelArrangement channelArrangement READ channelArrangement WRITE setChannelArrangement NOTIFY channelArrangementChanged)
-    Q_PROPERTY(quint16 midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
-    Q_PROPERTY(quint16 blockSize READ blockSize WRITE setBlockSize NOTIFY blockSizeChanged)
+    Q_PROPERTY(MidiChannels midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
+    Q_PROPERTY(BlockSize blockSize READ blockSize WRITE setBlockSize NOTIFY blockSizeChanged)
 
 public:
     enum class Format : int {
@@ -47,10 +47,10 @@ public:
 
 
     /** @brief Get the sample rate */
-    [[nodiscard]] quint32 sampleRate(void) const noexcept { return _data.sampleRate(); }
+    [[nodiscard]] SampleRate sampleRate(void) const noexcept { return _data.sampleRate(); }
 
     /** @brief SET the sample rate */
-    void setSampleRate(const quint32 sampleRate) noexcept;
+    void setSampleRate(const SampleRate sampleRate) noexcept;
 
 
     /** @brief Get the format */
@@ -68,17 +68,17 @@ public:
 
 
     /** @brief Get the record */
-    [[nodiscard]] quint16 midiChannels(void) const noexcept { return _data.midiChannels(); }
+    [[nodiscard]] MidiChannels midiChannels(void) const noexcept { return _data.midiChannels(); }
 
     /** @brief Set the record */
-    void setMidiChannels(const quint16 midiChannels) noexcept;
+    void setMidiChannels(const MidiChannels midiChannels) noexcept;
 
 
     /** @brief Get the record */
-    [[nodiscard]] quint16 blockSize(void) const noexcept { return _data.blockSize(); }
+    [[nodiscard]] BlockSize blockSize(void) const noexcept { return _data.blockSize(); }
 
     /** @brief Set the record */
-    void setBlockSize(const quint16 blockSize) noexcept;
+    void setBlockSize(const BlockSize blockSize) noexcept;
 
 
     /** @brief Register the audio callback */

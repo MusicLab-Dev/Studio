@@ -16,6 +16,9 @@ using Key = Audio::Key;
 using Velocity = Audio::Velocity;
 using Tuning = Audio::Tuning;
 using BPM = Audio::BPM;
+using MidiChannels = Audio::MidiChannels;
+using BlockSize = Audio::BlockSize;
+using SampleRate = Audio::SampleRate;
 
 struct BeatRange : public Audio::BeatRange
 {
