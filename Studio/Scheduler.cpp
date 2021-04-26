@@ -338,8 +338,10 @@ void Scheduler::onCatchingAudioThread(void)
     _blockGenerated = false;
     std::atomic_notify_one(&_blockGenerated);
 
-    if (_exitGraph)
+    if (_exitGraph) {
         _timer.stop();
+        graphExited();
+    }
     AScheduler::dispatchNotifyEvents();
     switch (playbackMode()) {
     case PlaybackMode::Production:
