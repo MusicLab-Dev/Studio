@@ -128,7 +128,7 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
                 _data->children().push(std::move(audioNode));
             },
             [this, node = std::move(node), hasPaused](void) mutable {
-                const auto idx = _children.size();
+                const auto idx = static_cast<int>(_children.size());
                 beginInsertRows(QModelIndex(), idx, idx);
                 _children.push(std::move(node));
                 endInsertRows();

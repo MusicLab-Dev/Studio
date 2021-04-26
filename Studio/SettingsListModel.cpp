@@ -27,11 +27,6 @@ QHash<int, QByteArray> SettingsListModel::roleNames(void) const
     };
 }
 
-int SettingsListModel::rowCount(const QModelIndex &parent) const
-{
-    return _models.size();
-}
-
 QVariant SettingsListModel::data(const QModelIndex &index, int role) const
 {
     auto &model = _models[index.row()];
@@ -122,7 +117,7 @@ bool SettingsListModel::load(const QString &settings, const QString &values) noe
 
 void SettingsListModel::parse(const QJsonObject &objSettings, QJsonObject &objValues, QString path)
 {
-    for (unsigned int i = 0; i < objSettings.keys().count(); i++) {
+    for (int i = 0; i < objSettings.keys().count(); i++) {
         auto child = objSettings[objSettings.keys().at(i)];
         if (child.isObject()) {
             parse(child.toObject(), objValues, path + "/" + objSettings.keys().at(i));
@@ -148,6 +143,7 @@ void SettingsListModel::parse(const QJsonObject &objSettings, QJsonObject &objVa
                     /* help: */         obj["help"].toString(),
                     /* tags: */         obj["tags"].toArray().toVariantList(),
                     /* type: */         obj["type"].toString(),
+                    /* start: */        obj["start"].toString(),
                     /* currentValue: */ objValues.value(obj["id"].toString()).toVariant(),
                     /* values: */       obj["values"].toArray().toVariantList()
                 });
@@ -179,7 +175,7 @@ bool SettingsListModel::set(const QString &id, const QVariant &value) noexcept
     return false;
 }
 
-const QVariant SettingsListModel::get(const QString &id) const noexcept
+QVariant SettingsListModel::get(const QString &id) const noexcept
 {
     for (auto it = _models.begin(); it != _models.end(); it++) {
         if (it->id == id)

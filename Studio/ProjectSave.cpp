@@ -78,7 +78,7 @@ QVariantList ProjectSave::transformPartitionsInVariantList(PartitionsModel &part
 {
     QVariantList list;
 
-    for (unsigned int i = 0; i < partitions.count(); i++) {
+    for (int i = 0; i < partitions.count(); i++) {
         PartitionModel *partition = partitions.get(i);
         QVariantMap data;
 
@@ -86,7 +86,7 @@ QVariantList ProjectSave::transformPartitionsInVariantList(PartitionsModel &part
         data.insert("muted", partition->muted());
 
         QVariantList listNotes;
-        for (unsigned int y = 0; y < partition->count(); y++) {
+        for (int y = 0; y < partition->count(); y++) {
             QVariantMap mapNote;
             Note note = partition->get(y);
             mapNote.insert("range", QVariantList({note.range.from, note.range.to}));
@@ -99,7 +99,7 @@ QVariantList ProjectSave::transformPartitionsInVariantList(PartitionsModel &part
 
         auto &instances = partition->instances();
         QVariantList listInstances;
-        for (unsigned int y = 0; y < instances.count(); y++) {
+        for (int y = 0; y < instances.count(); y++) {
             auto &instance = instances.get(y);
             listInstances.push_back(QVariantList({instance.from, instance.to}));
         }
@@ -114,7 +114,7 @@ QVariantList ProjectSave::transformControlsInVariantList(ControlsModel &controls
 {
     QVariantList list;
 
-    for (unsigned int i = 0; i < controls.count(); i++) {
+    for (int i = 0; i < controls.count(); i++) {
         ControlModel *control = controls.get(i);
         QVariantMap data;
 
@@ -123,7 +123,7 @@ QVariantList ProjectSave::transformControlsInVariantList(ControlsModel &controls
         data.insert("muted", control->muted());
 
         QVariantList listAutomations;
-        for (unsigned int y = 0; y < control->count(); y++) {
+        for (int y = 0; y < control->count(); y++) {
             QVariantMap mapAutomation;
             AutomationModel *automation = control->get(y);
 
@@ -131,7 +131,7 @@ QVariantList ProjectSave::transformControlsInVariantList(ControlsModel &controls
             mapAutomation.insert("muted", automation->muted());
 
             QVariantList listPoints;
-            for (unsigned p = 0; p < automation->count(); p++) {
+            for (int p = 0; p < automation->count(); p++) {
                 QVariantMap mapPoint;
                 GPoint point = automation->get(p);
 
@@ -145,7 +145,7 @@ QVariantList ProjectSave::transformControlsInVariantList(ControlsModel &controls
 
             auto &instances = automation->instances();
             QVariantList listInstances;
-            for (unsigned p = 0; p < instances.count(); p++) {
+            for (int p = 0; p < instances.count(); p++) {
                 auto &instance = instances.get(p);
                 listInstances.push_back(QVariantList({instance.from, instance.to}));
             }
@@ -190,7 +190,7 @@ QVariantMap ProjectSave::transformPluginInVariantMap(PluginModel &plugin) noexce
 
 bool ProjectSave::load(void)
 {
-    for (unsigned int i = 0; i < _project->master()->count(); i++)
+    for (int i = 0; i < _project->master()->count(); i++)
         _project->master()->remove(i);
     /** TODO: have to remove all informations in the master node */
 
@@ -220,7 +220,7 @@ bool ProjectSave::initNode(NodeModel *node, const QJsonObject &obj)
     initPartitions(node->partitions(), obj["partitions"].toArray());
     initControls(node->controls(), obj["controls"].toArray());
 
-    for (unsigned int i = 0 ; i < obj["children"].toArray().size(); i++) {
+    for (int i = 0 ; i < obj["children"].toArray().size(); i++) {
         initNode(
             node->add(obj["plugin"]["factory"].toString()),
             obj["children"][i].toObject());
@@ -231,7 +231,7 @@ bool ProjectSave::initNode(NodeModel *node, const QJsonObject &obj)
 
 bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &array)
 {
-    for (unsigned int i = 0; i < array.size(); i++) {
+    for (int i = 0; i < array.size(); i++) {
         partitions->add();
         QJsonObject partitionObj = array[i].toObject();
         PartitionModel *partition = partitions->get(i);
@@ -241,7 +241,7 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
         partition->setName(partitionObj["name"].toString());
         partition->setMuted(partitionObj["muted"].toBool());
 
-        for (unsigned int y = 0; y < partitionObj["notes"].toArray().size(); y++) {
+        for (int y = 0; y < partitionObj["notes"].toArray().size(); y++) {
             QJsonObject noteObj = partitionObj["notes"].toArray()[y].toObject();
             Note note;
 
@@ -253,10 +253,10 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
             partition->add(note);
         }
 
-        for (unsigned int y = 0; y < partitionObj["instances"].toArray().size(); y++) {
+        for (int y = 0; y < partitionObj["instances"].toArray().size(); y++) {
             QJsonArray instance = partitionObj["instances"].toArray()[y].toArray();
-            unsigned int from = instance[0].toInt();
-            unsigned int to = instance[1].toInt();
+            int from = instance[0].toInt();
+            int to = instance[1].toInt();
 
             partition->instances().add(BeatRange({from, to}));
         }
@@ -266,7 +266,7 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
 
 bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
 {
-    for (unsigned int i = 0; i < array.size(); i++) {
+    for (int i = 0; i < array.size(); i++) {
         QJsonObject controlObj = array[i].toObject();
         controls->add(controlObj["paramID"].toInt());
 
@@ -276,7 +276,7 @@ bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
 
         control->setMuted(controlObj["muted"].toBool());
 
-        for (unsigned int y = 0; y < controlObj["automations"].toArray().size(); y++) {
+        for (int y = 0; y < controlObj["automations"].toArray().size(); y++) {
             QJsonObject automationObj = controlObj["automations"].toArray()[y].toObject();
 
             control->add();
@@ -287,7 +287,7 @@ bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
             automation->setName(automationObj["name"].toString());
             automation->setMuted(automationObj["muted"].toBool());
 
-            for (unsigned p = 0; p < automationObj["points"].toArray().size(); p++) {
+            for (int p = 0; p < automationObj["points"].toArray().size(); p++) {
                 QJsonObject pointObj = automationObj["points"].toArray()[p].toObject();
 
                 GPoint point;
@@ -298,10 +298,10 @@ bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
                 automation->add(point);
             }
 
-            for (unsigned p = 0; p < automationObj["instances"].toArray().size(); p++) {
+            for (int p = 0; p < automationObj["instances"].toArray().size(); p++) {
                 QJsonArray instance = automationObj["instances"].toArray()[p].toArray();
-                unsigned int from = instance[0].toInt();
-                unsigned int to = instance[1].toInt();
+                int from = instance[0].toInt();
+                int to = instance[1].toInt();
 
                 automation->instances().add(BeatRange({from, to}));
             }

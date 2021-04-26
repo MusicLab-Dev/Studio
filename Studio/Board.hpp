@@ -12,7 +12,7 @@
 #include <Core/Vector.hpp>
 #include <Protocol/Protocol.hpp>
 
-#include "Net/Socket.hpp"
+// #include "Net/Socket.hpp"
 
 class Board;
 
@@ -57,7 +57,7 @@ public:
         Data
     };
 
-    Board(QObject *parent)
+    Board(void)
     {
         _controls = Controls {
             Control {
@@ -111,7 +111,7 @@ private:
     Core::Vector<Protocol::BoardID, int> _parentStack {};
     Controls _controls {};
     QSize _size {};
-    Net::SocketView _rooter {};
+    // Net::SocketView _rooter {};
     Protocol::BoardID _boardID {};
 };
 

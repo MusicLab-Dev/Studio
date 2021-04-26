@@ -47,9 +47,15 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
         case Roles::Value:
             return _data->getControl(index.row());
         case Roles::Title:
-            return QString::fromLocal8Bit(meta.translations.getName(Audio::English).data(), meta.translations.getName(Audio::English).size());
+        {
+            const auto &cache = meta.translations.getName(Audio::English);
+            return QString::fromLocal8Bit(cache.data(), static_cast<int>(cache.size()));
+        }
         case Roles::Description:
-            return QString::fromLocal8Bit(meta.translations.getDescription(Audio::English).data(), meta.translations.getDescription(Audio::English).size());
+        {
+            const auto &cache = meta.translations.getDescription(Audio::English);
+            return QString::fromLocal8Bit(cache.data(), static_cast<int>(cache.size()));
+        }
         default:
             return QVariant();
     }
@@ -90,11 +96,11 @@ void PluginModel::controlValueChanged(const ParamID paramID)
 QString PluginModel::title(void) const noexcept
 {
     const auto &cache = _data->getMetaData().translations.getName(Audio::English);
-    return QString::fromLocal8Bit(cache.data(), cache.size());
+    return QString::fromLocal8Bit(cache.data(), static_cast<int>(cache.size()));
 }
 
 QString PluginModel::description(void) const noexcept
 {
     const auto &cache = _data->getMetaData().translations.getName(Audio::English);
-    return QString::fromLocal8Bit(cache.data(), cache.size());
+    return QString::fromLocal8Bit(cache.data(), static_cast<int>(cache.size()));
 }

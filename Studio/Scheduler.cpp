@@ -181,12 +181,16 @@ void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *nod
             switch (mode) {
             case Audio::PlaybackMode::Production:
                 emit productionCurrentBeatChanged();
+                break;
             case Audio::PlaybackMode::Live:
                 emit liveCurrentBeatChanged();
+                break;
             case Audio::PlaybackMode::Partition:
                 emit partitionCurrentBeatChanged();
+                break;
             case Audio::PlaybackMode::OnTheFly:
                 emit onTheFlyCurrentBeatChanged();
+                break;
             }
         }
     );

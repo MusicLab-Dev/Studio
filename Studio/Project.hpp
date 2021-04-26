@@ -55,10 +55,10 @@ public:
 
 public slots:
     /** @brief Load a project file */
-    void load();
+    void load(void);
 
     /** @brief Save the project in its default file */
-    void save();
+    void save(void);
 
     /** @brief Save the project in given file */
     void saveAs(const QString &path);

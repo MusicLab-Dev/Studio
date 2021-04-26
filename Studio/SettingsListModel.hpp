@@ -57,7 +57,8 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const override;
 
     /** @brief Get the row count of the model */
-    [[nodiscard]] int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    [[nodiscard]] int rowCount(const QModelIndex & = QModelIndex()) const override
+        { return static_cast<int>(_models.size()); }
 
     /** @brief Get role data */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

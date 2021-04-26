@@ -15,7 +15,7 @@ QHash<int, QByteArray> Board::roleNames(void) const
     };
 }
 
-int Board::rowCount(const QModelIndex &parent) const
+int Board::rowCount(const QModelIndex &) const
 {
     return _controls.size();
 }
