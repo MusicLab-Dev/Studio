@@ -80,10 +80,10 @@ void InstancesModel::remove(const int idx)
         throw std::range_error("InstancesModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     Scheduler::Get()->addEvent(
         [this, idx] {
+            beginRemoveRows(QModelIndex(), idx, idx);
             _data->erase(_data->begin() + idx);
         },
-        [this, idx] {
-            beginRemoveRows(QModelIndex(), idx, idx);
+        [this] {
             endRemoveRows();
         }
     );

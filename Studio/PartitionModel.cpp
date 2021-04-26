@@ -120,10 +120,10 @@ bool PartitionModel::remove(const int idx)
         throw std::range_error("PartitionModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     return Models::AddProtectedEvent(
         [this, idx] {
+            beginRemoveRows(QModelIndex(), idx, idx);
             _data->notes().erase(_data->notes().begin() + idx);
         },
-        [this, idx] {
-            beginRemoveRows(QModelIndex(), idx, idx);
+        [this] {
             endRemoveRows();
         }
     );

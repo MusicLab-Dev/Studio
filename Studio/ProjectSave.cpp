@@ -255,8 +255,8 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
 
         for (int y = 0; y < partitionObj["instances"].toArray().size(); y++) {
             QJsonArray instance = partitionObj["instances"].toArray()[y].toArray();
-            int from = instance[0].toInt();
-            int to = instance[1].toInt();
+            Beat from = static_cast<Beat>(instance[0].toInt());
+            Beat to = static_cast<Beat>(instance[1].toInt());
 
             partition->instances().add(BeatRange({from, to}));
         }
@@ -300,8 +300,8 @@ bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
 
             for (int p = 0; p < automationObj["instances"].toArray().size(); p++) {
                 QJsonArray instance = automationObj["instances"].toArray()[p].toArray();
-                int from = instance[0].toInt();
-                int to = instance[1].toInt();
+                Beat from = static_cast<Beat>(instance[0].toInt());
+                Beat to = static_cast<Beat>(instance[1].toInt());
 
                 automation->instances().add(BeatRange({from, to}));
             }

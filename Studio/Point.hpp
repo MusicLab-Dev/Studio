@@ -15,10 +15,10 @@ struct GPoint : public Audio::Point
 {
     Q_GADGET
 
-    Q_PROPERTY(quint32 beat MEMBER beat)
+    Q_PROPERTY(Beat beat MEMBER beat)
     Q_PROPERTY(CurveType curveType READ getType WRITE setType)
-    Q_PROPERTY(qint16 curveRate MEMBER curveRate)
-    Q_PROPERTY(double value MEMBER value)
+    Q_PROPERTY(GPoint::CurveRate curveRate MEMBER curveRate)
+    Q_PROPERTY(ParamValue value MEMBER value)
 
 public:
     /** @brief Describe the interpolation type between points */
