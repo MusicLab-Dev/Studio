@@ -465,8 +465,6 @@ void BoardManager::processClientInput(Socket &clientSocket)
         return;
     }
 
-    // Process other type of packets here...
-
     // Increment network buffer by the size of the received data
     _writeIndex += inputSize;
 }
@@ -564,6 +562,7 @@ void BoardManager::removeNetworkFrom(const BoardID senderId, const BoardID targe
     // Remove all disconnected board from main board vector
     for (auto &board : _boards) {
         if (board->getStatus() == false) {
+            // board.unique();
             board.reset();
             _boards.erase(&board);
         }

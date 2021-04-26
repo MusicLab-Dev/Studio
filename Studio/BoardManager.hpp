@@ -14,7 +14,7 @@
 #include <string>
 #include <unordered_map>
 
-// network headers
+// Network headers
 #include <unistd.h>
 #include <fcntl.h>
 #include <ifaddrs.h>
