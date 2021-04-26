@@ -24,7 +24,6 @@ MouseArea {
         if (onTheFlyKey !== -1)
             removeOnTheFly(onTheFlyKey)
         onTheFlyKey = targetKey
-        console.log("Add fly", targetKey, AudioAPI.velocityMax)
         sequencerView.node.partitions.addOnTheFly(
             AudioAPI.noteEvent(
                 NoteEvent.On,
@@ -38,7 +37,6 @@ MouseArea {
     }
 
     function removeOnTheFly(targetKey) {
-        console.log("Remove fly", targetKey)
         sequencerView.node.partitions.addOnTheFly(
             AudioAPI.noteEvent(
                 NoteEvent.Off,
