@@ -32,7 +32,7 @@ public:
     using Audio::BeatRange::operator=;
 
     template<typename ...Args>
-    BeatRange(Args &&...args) noexcept : Audio::BeatRange({ std::forward<Args>(args)... }) {}
+    BeatRange(Args &&...args) noexcept : Audio::BeatRange({ static_cast<Audio::Beat>(args)... }) {}
 };
 
 Q_DECLARE_METATYPE(BeatRange)

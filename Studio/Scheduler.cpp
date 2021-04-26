@@ -35,7 +35,7 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
 Scheduler::~Scheduler(void) noexcept
 {
     if (pauseImpl()) {
-        __cxx_atomic_wait(reinterpret_cast<bool *>(&_blockGenerated), false, static_cast<int>(std::memory_order::memory_order_relaxed));
+        std::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
         onCatchingAudioThread();
         getCurrentGraph().wait();
     }
