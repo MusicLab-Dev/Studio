@@ -55,6 +55,7 @@ public:
     using Audio::AScheduler::getCurrentGraph;
     using Audio::AScheduler::partitionNode;
     using Audio::AScheduler::partitionIndex;
+    using Audio::AScheduler::hasExitedGraph;
 
     /** @brief Number of miss allowed before the graph 'OnTheFly' should stop */
     static constexpr std::uint32_t OnTheFlyMissThreshold = 25;

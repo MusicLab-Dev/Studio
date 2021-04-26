@@ -106,13 +106,22 @@ bool PartitionsModel::move(const int from, const int to)
 
 void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const quint32 partitionIndex)
 {
-    Scheduler::Get()->addEvent(
+    auto scheduler = Scheduler::Get();
+    const bool isPlaying = !scheduler->hasExitedGraph();
+    const bool graphChanged = scheduler->partitionNode() != node->audioNode() || scheduler->partitionIndex() != partitionIndex;
+    bool hasPaused = false;
+
+    if (isPlaying && graphChanged)
+        hasPaused = scheduler->pauseImpl();
+    scheduler->addEvent(
         [this, note] {
             _data->headerCustomType().push(note);
         },
-        [this, node, partitionIndex] {
+        [this, node, partitionIndex, isPlaying, graphChanged, hasPaused] {
             const auto scheduler = Scheduler::Get();
-            if (!scheduler->running() || scheduler->partitionNode() != node->audioNode() || scheduler->partitionIndex() != partitionIndex)
+            if (hasPaused)
+                scheduler->getCurrentGraph().wait();
+            if (!isPlaying || graphChanged)
                 scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, partitionIndex, 0);
         }
     );

@@ -207,7 +207,7 @@ void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *nod
     const bool graphChanged = partitionNode() != node->audioNode() || partitionIndex() != partition;
 
     pauseImpl();
-    Models::AddProtectedEvent(
+    if (!Models::AddProtectedEvent(
         [this, mode, node, partition, startingBeat] {
             setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
             setPartitionNode(node->audioNode());
@@ -238,7 +238,8 @@ void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *nod
                 break;
             }
         }
-    );
+    ))
+        qDebug() << "playPartition failed";
 }
 
 void Scheduler::pause(const Scheduler::PlaybackMode)

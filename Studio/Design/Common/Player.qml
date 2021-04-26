@@ -19,9 +19,11 @@ RowLayout {
     property real currentTimestamp: 0
     property alias isPlayerRunning: timer.running
     property bool isSchedulerRunning: app.scheduler.playbackMode === targetPlaybackMode && app.scheduler.running
+    property bool timelineMoveWhilePlaying: false
 
     function timelineBeginMove(target) {
         if (isPlayerRunning) {
+            timelineMoveWhilePlaying = true
             app.scheduler.pause(targetPlaybackMode)
             timer.stop()
         }
@@ -35,7 +37,10 @@ RowLayout {
     }
 
     function timelineEndMove() {
-
+        if (timelineMoveWhilePlaying) {
+            timelineMoveWhilePlaying = false
+            playOrPause()
+        }
     }
 
     function playOrPause() {

@@ -154,15 +154,16 @@ bool NodeModel::remove(const int idx)
             _data->children().erase(_data->children().begin() + idx);
         },
         [this, idx, hasPaused] {
+            auto scheduler = Scheduler::Get();
             beginRemoveRows(QModelIndex(), idx, idx);
             _children.erase(_children.begin() + idx);
             endRemoveRows();
             if (hasPaused) {
-                Scheduler::Get()->getCurrentGraph().wait();
-                Scheduler::Get()->invalidateCurrentGraph();
-                Scheduler::Get()->playImpl();
+                scheduler->getCurrentGraph().wait();
+                scheduler->invalidateCurrentGraph();
+                scheduler->playImpl();
             } else
-                Scheduler::Get()->invalidateCurrentGraph();
+                scheduler->invalidateCurrentGraph();
         }
     );
 }
