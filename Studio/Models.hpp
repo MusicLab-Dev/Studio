@@ -48,13 +48,16 @@ namespace Models
 
     /** @brief Register an protected event */
     template<typename Event>
-    inline void AddProtectedEvent(Event &&event)
+    inline bool AddProtectedEvent(Event &&event)
     {
         if (!EventGuard::Dirty) {
             EventGuard::Dirty = true;
             Scheduler::Get()->addEvent(std::forward<Event>(event), []{ EventGuard::Dirty = false; });
-        } else
+            return true;
+        } else {
             qWarning() << "Models::AddProtectedEvent: A protected event is already registered for this generation !";
+            return false;
+        }
     }
 
     /** @brief Register an protected event */

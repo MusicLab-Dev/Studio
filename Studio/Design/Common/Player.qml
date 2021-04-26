@@ -17,7 +17,60 @@ RowLayout {
     property real beginPlaybackBeat: 0
     property real playTimestamp: 0
     property real currentTimestamp: 0
-    property real isPlaying: timer.running
+    property alias isPlayerRunning: timer.running
+    property bool isSchedulerRunning: app.scheduler.playbackMode === targetPlaybackMode && app.scheduler.running
+
+    function timelineBeginMove(target) {
+        if (isPlayerRunning) {
+            app.scheduler.pause(targetPlaybackMode)
+            timer.stop()
+        }
+        currentPlaybackBeat = target
+        beginPlaybackBeat = target
+    }
+
+    function timelineMove(target) {
+        currentPlaybackBeat = target
+        beginPlaybackBeat = target
+    }
+
+    function timelineEndMove() {
+
+    }
+
+    function playOrPause() {
+        if (isSchedulerRunning) {
+            app.scheduler.pause(targetPlaybackMode)
+            timer.stopAndRecordPlaybackBeat()
+        } else {
+            if (isPartitionPlayer)
+                app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat)
+            else
+                app.scheduler.play(targetPlaybackMode, currentPlaybackBeat)
+            timer.start()
+        }
+        playTimestamp = new Date().getTime()
+        app.currentPlayer = player
+    }
+
+    function replay() {
+        if (isPartitionPlayer)
+            app.scheduler.replayPartition(targetPlaybackMode, targetNode, targetPartitionIndex)
+        else
+            app.scheduler.replay(targetPlaybackMode)
+        app.currentPlayer = player
+        beginPlaybackBeat = 0
+        playTimestamp = new Date().getTime()
+        timer.start()
+    }
+
+    function stop() {
+        app.scheduler.stop(targetPlaybackMode)
+        app.currentPlayer = player
+        timer.stop()
+        beginPlaybackBeat = 0
+        currentPlaybackBeat = 0
+    }
 
     id: player
     spacing: 0
@@ -61,16 +114,7 @@ RowLayout {
             anchors.right: parent.right
             colorDefault: "white"
 
-            onReleased: {
-                if (isPartitionPlayer)
-                    app.scheduler.replayPartition(targetPlaybackMode, targetNode, targetPartitionIndex)
-                else
-                    app.scheduler.replay(targetPlaybackMode)
-                app.currentPlayer = player
-                beginPlaybackBeat = 0
-                playTimestamp = new Date().getTime()
-                timer.start()
-            }
+            onReleased: player.replay()
         }
     }
 
@@ -84,29 +128,13 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.250
 
         DefaultImageButton {
-            property bool playing: app.scheduler.playbackMode === targetPlaybackMode && app.scheduler.running
-
-            source: playing ? "qrc:/Assets/Pause.png" : "qrc:/Assets/Play.png"
+            source: player.isSchedulerRunning ? "qrc:/Assets/Pause.png" : "qrc:/Assets/Play.png"
             height: parent.height / 1.5
             width: parent.height / 1.5
             anchors.centerIn: parent
             colorDefault: "white"
 
-            onReleased: {
-                if (playing) {
-                    app.scheduler.pause(targetPlaybackMode)
-                    timer.stopAndRecordPlaybackBeat()
-                } else {
-                    if (isPartitionPlayer)
-                        app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat)
-                    else
-                        app.scheduler.play(targetPlaybackMode, currentPlaybackBeat)
-                    timer.start()
-                }
-                app.currentPlayer = player
-                // beginPlaybackBeat = app.scheduler.getCurrentBeatOfMode(targetPlaybackMode)
-                playTimestamp = new Date().getTime()
-            }
+            onReleased: player.playOrPause()
         }
     }
 
@@ -127,13 +155,7 @@ RowLayout {
             anchors.left: parent.left
             colorDefault: "white"
 
-            onReleased: {
-                app.scheduler.stop(targetPlaybackMode)
-                app.currentPlayer = player
-                timer.stop()
-                beginPlaybackBeat = 0
-                currentPlaybackBeat = 0
-            }
+            onReleased: player.stop()
         }
     }
 }

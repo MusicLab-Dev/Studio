@@ -7,12 +7,22 @@ ColumnLayout {
     property int moduleIndex: -1
     property alias player: playlistViewFooter.player
 
-    id: playlistView
-    spacing: 0
-
     function onNodeDeleted(targetNode) { return false; }
 
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) { return false }
+
+    id: playlistView
+    spacing: 0
+    focus: true
+
+    Keys.onPressed: {
+        if (event.key == Qt.Key_A)
+            player.stop()
+        else if (event.key == Qt.Key_Z)
+            player.replay()
+        else if (event.key == Qt.Key_E)
+            player.playOrPause()
+    }
 
     PlaylistViewHeader {
         id: playlistViewHeader
@@ -29,6 +39,10 @@ ColumnLayout {
         Layout.fillHeight: true
         Layout.preferredHeight: parent.height * 0.8
         Layout.preferredWidth: parent.width
+
+        onTimelineBeginMove: playlistViewFooter.player.timelineBeginMove(target)
+        onTimelineMove: playlistViewFooter.player.timelineMove(target)
+        onTimelineEndMove: playlistViewFooter.player.timelineEndMove()
     }
 
     PlaylistViewFooter {

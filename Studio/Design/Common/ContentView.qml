@@ -87,6 +87,10 @@ Item {
     // Timeline
     readonly property int timelineHeight: 25
 
+    signal timelineBeginMove(var target)
+    signal timelineMove(var target)
+    signal timelineEndMove()
+
     id: contentView
 
     onXOffsetMinChanged: {

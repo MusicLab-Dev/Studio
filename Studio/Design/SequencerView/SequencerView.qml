@@ -94,6 +94,16 @@ ColumnLayout {
     id: sequencerView
     spacing: 0
     enabled: false
+    focus: true
+
+    Keys.onPressed: {
+        if (event.key == Qt.Key_A)
+            player.stop()
+        else if (event.key == Qt.Key_Z)
+            player.replay()
+        else if (event.key == Qt.Key_E)
+            player.playOrPause()
+    }
 
     SequencerViewHeader {
         id: sequencerViewHeader
@@ -110,6 +120,10 @@ ColumnLayout {
         Layout.fillHeight: true
         Layout.preferredHeight: parent.height * 0.8
         Layout.preferredWidth: parent.width
+
+        onTimelineBeginMove: player.timelineBeginMove(target)
+        onTimelineMove: player.timelineMove(target)
+        onTimelineEndMove: player.timelineEndMove()
     }
 
     SequencerViewFooter {
