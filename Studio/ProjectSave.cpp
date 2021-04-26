@@ -165,8 +165,23 @@ QVariantMap ProjectSave::transformPluginInVariantMap(PluginModel &plugin) noexce
 {
     QVariantMap map;
 
-    //todo
-    //map.insert("factory", plugin.)
+    map.insert("factory", plugin.audioPlugin()->factory()->getPath().data());
+
+    try {
+        QStringList paths;
+        for (auto it = plugin.audioPlugin()->getExternalPaths().begin(); it != plugin.audioPlugin()->getExternalPaths().end(); ++it) {
+            paths.push_back(it->data());
+        }
+        map.insert("externalPaths", paths);
+    } catch (const std::runtime_error &e) {}
+
+    QVariantList controls;
+    auto &meta = plugin.audioPlugin()->getMetaData().controls;
+    for (int i = 0; i < meta.size(); i++) {
+        controls.push_back(QVariantList({i, meta[i].defaultValue}));
+    }
+    map.insert("controls", controls);
+    //TODO: ControlsQVecto
 
     return map;
 }
@@ -207,7 +222,7 @@ bool ProjectSave::initNode(NodeModel *node, const QJsonObject &obj)
 
     for (unsigned int i = 0 ; i < obj["children"].toArray().size(); i++) {
         initNode(
-            node->add("__internal__:/Mixer"/*obj["plugin"]["factory"].toString()*/),
+            node->add(obj["plugin"]["factory"].toString()),
             obj["children"][i].toObject());
     }
 
@@ -297,11 +312,19 @@ bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
 
 bool ProjectSave::initPlugin(PluginModel *plugin, const QJsonObject &obj)
 {
-    const auto audioPlugin = plugin->audioPlugin();
-    const auto &ep = audioPlugin->getExternalPaths();
-    auto path = audioPlugin->factory()->getPath();
+    try {
+        plugin->audioPlugin()->setExternalPaths([](const QJsonObject &obj) -> Audio::ExternalPaths {
+            QJsonArray list = obj["externalPaths"].toArray();
+            Audio::ExternalPaths paths;
+            for (auto it = list.begin(); it != list.end(); it++)
+                paths.push(it->toString().toStdString());
+            return paths;
+        }(obj));
+    } catch (const std::exception &e) {}
 
-    if (ep && path.length())
-        return true;
+    auto arr = obj["controls"].toArray();
+    for (auto it = arr.begin(); it != arr.end(); it++) {
+        plugin->audioPlugin()->getControl(it[0].toInt()) = it[1].toDouble();
+    }
     return true;
 }

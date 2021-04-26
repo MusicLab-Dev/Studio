@@ -102,7 +102,8 @@ signals:
     void descriptionChanged(void);
 
 private:
-    const int language(void) const noexcept;
+    /** @brief Get the current language */
+    [[nodiscard]] int language(void) const noexcept;
 
     Audio::IPlugin *_data { nullptr };
 };

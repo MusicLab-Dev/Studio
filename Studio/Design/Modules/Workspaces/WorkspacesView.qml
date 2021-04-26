@@ -94,14 +94,15 @@ WorkspacesBackground {
         width: Math.max(parent.width * 0.2, 350)
         height: parent.height
 
-        workspacesModel: ListModel {
-            id: workspacesModel
+        workspacesModel: app.settings.get("workspacePaths");
+        // ListModel {
+        //     id: workspacesModel
 
-            ListElement {
-                name: "Default Workspace"
-                path: ""
-            }
-        }
+        //     ListElement {
+        //         name: "Default Workspace"
+        //         path: ""
+        //     }
+        // }
     }
 
     WorkspacesContentArea {
@@ -125,6 +126,7 @@ WorkspacesBackground {
                                        name: "New workspace",
                                        path: folderPicker.fileUrl.toString()
                                    })
+            app.settings.set("workspacePaths", workspacesModel);
         }
     }
 }

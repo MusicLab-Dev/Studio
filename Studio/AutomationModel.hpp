@@ -80,7 +80,7 @@ public:
 
     /** @brief Get the name property */
     [[nodiscard]] QString name(void) const noexcept
-        { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
+        { return QString::fromLocal8Bit(_data->name().data(), static_cast<int>(_data->name().size())); }
 
     /** @brief Set the name property */
     void setName(const QString &name);

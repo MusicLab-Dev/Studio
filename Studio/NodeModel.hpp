@@ -125,7 +125,7 @@ public:
     /** @brief Get the controls model */
     [[nodiscard]] PluginModel *plugin(void) noexcept { return _plugin.get(); }
 
-    /** @brief Get the controls model */
+    /** @brief Get the node children */
     [[nodiscard]] Core::FlatVector<NodePtr> &children(void) noexcept { return _children; }
 
     /** @brief Get the flags */
