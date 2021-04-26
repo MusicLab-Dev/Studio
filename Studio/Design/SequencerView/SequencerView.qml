@@ -12,7 +12,7 @@ ColumnLayout {
     property alias player: sequencerViewFooter.player
 
     function onNodeDeleted(targetNode) {
-        if (node == targetNode || node.isAParent(targetNode)) {
+        if (node === targetNode || node.isAParent(targetNode)) {
             modules.removeModule(moduleIndex)
             return true
         }
@@ -20,7 +20,7 @@ ColumnLayout {
     }
 
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
-        if (node == targetNode && partitionIndex == targetPartitionIndex) {
+        if (node === targetNode && partitionIndex === targetPartitionIndex) {
             modules.removeModule(moduleIndex)
             return true
         }

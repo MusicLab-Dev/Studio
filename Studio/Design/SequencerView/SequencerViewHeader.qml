@@ -61,7 +61,48 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width * 0.1
+
+            DefaultPotentiometer {
+                height: parent.height
+                width: parent.height
+                anchors.centerIn: parent
+                minimumValue: 0.0
+                maximumValue: 10.0
+                value: 5.0
+                stepSize: 0
+            }
+        }
+
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.1
+
+            DefaultPotentiometer {
+                label: "test"
+                height: parent.height
+                width: parent.height
+                anchors.centerIn: parent
+                minimumValue: 0.0
+                maximumValue: 10.0
+                value: 5.0
+                stepSize: 1
+            }
+        }
+
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.1
+
+            DefaultPotentiometer {
+                height: parent.height
+                width: parent.height
+                anchors.centerIn: parent
+                minimumValue: 0.0
+                maximumValue: 10.0
+                value: 5.0
+                stepSize: 1
+            }
         }
 
         Item {
