@@ -29,7 +29,7 @@ Window {
 
     ThemeManager {
         id: themeManager
-        theme: ThemeManager.Dark
+        theme: ThemeManager.Classic
     }
 
     BoardManager {

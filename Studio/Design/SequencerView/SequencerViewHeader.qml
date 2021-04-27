@@ -70,6 +70,7 @@ Rectangle {
             clip: true
             spacing: 2
             model: sequencerView.node ? sequencerView.node.plugin : null
+            boundsBehavior: Flickable.StopAtBounds
 
             delegate: Loader {
                 focus: true

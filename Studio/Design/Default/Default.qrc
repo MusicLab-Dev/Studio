@@ -18,5 +18,6 @@
         <file>DefaultSlider.qml</file>
         <file>DefaultSpinBox.qml</file>
         <file>DefaultImageButtonDefaultColor.qml</file>
+        <file>DefaultPotentiometer.qml</file>
     </qresource>
 </RCC>
