@@ -87,10 +87,20 @@ Item {
 
     // Timeline
     readonly property int timelineHeight: 25
+    property bool hasLoop: false
+    property int loopFrom: 0
+    property int loopTo: 0
 
     signal timelineBeginMove(var target)
     signal timelineMove(var target)
     signal timelineEndMove()
+
+    function disableLoopRange() {
+        hasLoop = false
+        loopFrom = 0
+        loopTo = 0
+        app.scheduler.disableLoopRange()
+    }
 
     id: contentView
 
@@ -161,11 +171,11 @@ Item {
             z: 0
 
             Rectangle {
-                visible: x >= rowHeaderWidth
                 width: 4
                 height: surfaceContentGrid.height
                 x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
-                color: "blue"
+                color: "red"
+                opacity: 0.5
             }
 
             ScrollBar {

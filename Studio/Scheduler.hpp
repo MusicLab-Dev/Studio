@@ -113,19 +113,17 @@ public slots:
     /** @brief Stop the scheduler (pause + reset beat) */
     void stop(const Scheduler::PlaybackMode mode);
 
-    /** @brief Replay the scheduler (stop + play) */
-    void replay(const Scheduler::PlaybackMode mode)
-        { play(mode, 0u); }
-
-    /** @brief Replay the scheduler setting up a partition (stop + play) */
-    void replayPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex)
-        { playPartition(mode, partitionNode, partitionIndex, 0u); }
-
     /** @brief Callback that must be called after a node has been deleted */
     void onNodeDeleted(NodeModel *targetNode);
 
     /** @brief Callback that must be called after a partition has been deleted */
     void onNodePartitionDeleted(NodeModel *targetNode, const quint32 partition);
+
+    /** @brief Set the scheduler loop range */
+    void setLoopRange(const BeatRange range);
+
+    /** @brief Disable the scheduler loop range */
+    void disableLoopRange(void);
 
 signals:
     /** @brief Notify when playback mode changed */

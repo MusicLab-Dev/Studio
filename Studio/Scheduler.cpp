@@ -324,6 +324,21 @@ void Scheduler::onNodePartitionDeleted(NodeModel *targetNode, const quint32 part
     }
 }
 
+void Scheduler::setLoopRange(const BeatRange range)
+{
+    addEvent([this, range] {
+        setIsLooping(true);
+        setLoopBeatRange(range);
+    });
+}
+
+void Scheduler::disableLoopRange(void)
+{
+    addEvent([this] {
+        setIsLooping(false);
+    });
+}
+
 void Scheduler::onCatchingAudioThread(void)
 {
     if (!_blockGenerated)

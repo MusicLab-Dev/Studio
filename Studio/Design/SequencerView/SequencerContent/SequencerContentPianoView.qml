@@ -27,7 +27,7 @@ Item {
     ]
     readonly property int keysPerOctave: keyNames.length
     property int octaves: 10
-    property int octaveOffset: 0
+    property int octaveOffset: 1
     readonly property int keyOffset: octaveOffset * keysPerOctave
     readonly property int keys: keysPerOctave * octaves
     property real headerFactor: 0.1
@@ -91,7 +91,7 @@ Item {
                 Text {
                     anchors.verticalCenter: key.isInMiddleOfHashKeys ? parent.verticalCenter : key.isDownHashKey ? parent.TopRight : parent.verticalCenter
                     anchors.right: parent.right
-                    text: pianoView.keyNames[key.keyOctaveIndex] + key.currentOctave
+                    text: pianoView.keyNames[key.keyOctaveIndex] + (key.currentOctave - 1) // Minus one to display the standard A4 middle key
                     color: !key.isHashKey ? "#7B7B7B" : "#E7E7E7"
                     z: 1
                 }

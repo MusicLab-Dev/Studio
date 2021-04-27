@@ -34,7 +34,7 @@ ColumnLayout {
     }
 
     PlaylistContentView {
-        id: playlistViewContent
+        id: contentView
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredHeight: parent.height * 0.8

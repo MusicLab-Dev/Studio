@@ -49,6 +49,10 @@ RowLayout {
             app.scheduler.pause(targetPlaybackMode)
             timer.stopAndRecordPlaybackBeat()
         } else {
+            if (contentView.hasLoop)
+                app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
+            else
+                app.scheduler.disableLoopRange()
             if (isPartitionPlayer)
                 app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat)
             else
@@ -60,12 +64,16 @@ RowLayout {
     }
 
     function replay() {
-        if (isPartitionPlayer)
-            app.scheduler.replayPartition(targetPlaybackMode, targetNode, targetPartitionIndex)
+        if (contentView.hasLoop)
+            app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
         else
-            app.scheduler.replay(targetPlaybackMode)
+            app.scheduler.disableLoopRange()
+        if (isPartitionPlayer)
+            app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, contentView.loopFrom)
+        else
+            app.scheduler.play(targetPlaybackMode, contentView.loopFrom)
         app.currentPlayer = player
-        beginPlaybackBeat = 0
+        beginPlaybackBeat = contentView.loopFrom
         playTimestamp = new Date().getTime()
         timer.start()
     }
@@ -105,6 +113,11 @@ RowLayout {
             currentTimestamp = new Date().getTime()
             var elapsedMs = (currentTimestamp - playTimestamp)
             currentPlaybackBeat = beginPlaybackBeat + elapsedMs * (app.project.bpm / 60000) * AudioAPI.beatPrecision
+            if (contentView.hasLoop && (currentPlaybackBeat > contentView.loopTo || currentPlaybackBeat < contentView.loopFrom)) {
+                currentPlaybackBeat = contentView.loopFrom
+                playTimestamp = currentTimestamp
+                beginPlaybackBeat = currentPlaybackBeat
+            }
         }
     }
 
