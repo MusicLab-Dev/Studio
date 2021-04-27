@@ -113,7 +113,6 @@ Item {
 
                 onVisibleChanged: {
                     focus = true
-                    item.focus = true
                 }
 
                 onLoaded: {

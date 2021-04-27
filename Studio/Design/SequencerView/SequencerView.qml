@@ -96,6 +96,12 @@ ColumnLayout {
     enabled: false
     focus: true
 
+    onEnabledChanged: {
+        // Center on reference octave
+        if (enabled && contentView.yOffsetMin)
+            contentView.yOffset = ((contentView.pianoView.keys - (69 - contentView.pianoView.keyOffset)) * -contentView.rowHeight) + contentView.height / 2
+    }
+
     Keys.onPressed: {
         if (event.key == Qt.Key_A)
             player.stop()

@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 import NodeModel 1.0
 
-Item {
+PlaylistContentNodeDelegate {
     // Children nodes link
     property real linkWidth: 10
     property real linkSpacing: 10
@@ -54,15 +54,10 @@ Item {
     readonly property real dataHeaderControlRectangleHeight: dataHeaderNameHeight + dataHeaderSpacing * 2
 
     // External properties
-    property alias totalHeight: master.height
+    property alias totalHeight: nodeView.height
 
     id: nodeView
     clip: true
-
-    PlaylistContentNodeDelegate {
-        id: master
-        node: app.project.master
-        recursionIndex: 0
-        y: contentView.yOffset
-    }
+    node: app.project.master
+    recursionIndex: 0
 }

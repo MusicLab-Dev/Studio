@@ -26,8 +26,8 @@ Item {
         false, true, false, true, false, true
     ]
     readonly property int keysPerOctave: keyNames.length
-    property int octaves: 6
-    property int octaveOffset: 2
+    property int octaves: 10
+    property int octaveOffset: 0
     readonly property int keyOffset: octaveOffset * keysPerOctave
     readonly property int keys: keysPerOctave * octaves
     property real headerFactor: 0.1
@@ -38,7 +38,6 @@ Item {
     // Values for snap widget
 
     id: pianoView
-    width: contentView.width
     height: totalHeight
 
 
@@ -92,7 +91,7 @@ Item {
                 Text {
                     anchors.verticalCenter: key.isInMiddleOfHashKeys ? parent.verticalCenter : key.isDownHashKey ? parent.TopRight : parent.verticalCenter
                     anchors.right: parent.right
-                    text: pianoView.keyNames[key.keyOctaveIndex] + (key.currentOctave - 1)
+                    text: pianoView.keyNames[key.keyOctaveIndex] + key.currentOctave
                     color: !key.isHashKey ? "#7B7B7B" : "#E7E7E7"
                     z: 1
                 }

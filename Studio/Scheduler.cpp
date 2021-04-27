@@ -171,16 +171,18 @@ bool Scheduler::onAudioQueueBusy(void)
 
 void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat)
 {
-    pauseImpl();
-    Models::AddProtectedEvent(
+    const bool hasPaused = pauseImpl();
+
+    if (!Models::AddProtectedEvent(
         [this, mode, startingBeat] {
             setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
             auto &range = Audio::AScheduler::getCurrentBeatRange();
             range.to = startingBeat + processBeatSize();
             range.from = startingBeat;
         },
-        [this, mode = Audio::AScheduler::playbackMode()] {
-            getCurrentGraph().wait();
+        [this, mode = Audio::AScheduler::playbackMode(), hasPaused] {
+            if (hasPaused)
+                getCurrentGraph().wait();
             playImpl();
             if (mode != Audio::AScheduler::playbackMode())
                 emit playbackModeChanged();
@@ -199,7 +201,8 @@ void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat
                 break;
             }
         }
-    );
+    ))
+        qDebug().nospace() << "Scheduler::play(" << mode << ", " << startingBeat << "): failed";
 }
 
 void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *node, const quint32 partition, const Beat startingBeat)
@@ -239,7 +242,7 @@ void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *nod
             }
         }
     ))
-        qDebug() << "playPartition failed";
+        qDebug().nospace() << "Scheduler::playPartition(" << mode << ", " << node << ", " << partition << ", " << startingBeat << "): failed";
 }
 
 void Scheduler::pause(const Scheduler::PlaybackMode)

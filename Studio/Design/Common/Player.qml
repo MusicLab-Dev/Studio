@@ -26,7 +26,8 @@ RowLayout {
             timelineMoveWhilePlaying = true
             app.scheduler.pause(targetPlaybackMode)
             timer.stop()
-        }
+        } else
+            timelineMoveWhilePlaying = false
         currentPlaybackBeat = target
         beginPlaybackBeat = target
     }

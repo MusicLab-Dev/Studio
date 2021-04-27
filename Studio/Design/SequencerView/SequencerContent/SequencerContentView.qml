@@ -4,9 +4,11 @@ import QtQuick.Controls 2.15
 import "../../Common"
 
 ContentView {
+    property alias pianoView: pianoView
+
     id: contentView
     xOffsetMin: -5000
-    yOffsetMin: pianoView.totalHeight > height ? height - pianoView.totalHeight : 0
+    yOffsetMin: pianoView.totalHeight > surfaceContentGrid.height ? surfaceContentGrid.height - pianoView.totalHeight : 0
     rowHeaderWidth: pianoView.keyWidth
     clip: true
     placementKeyCount: pianoView.keys
@@ -17,7 +19,6 @@ ContentView {
     SequencerContentPianoView {
         id: pianoView
         y: contentView.yOffset
-        width: parent.width
-        height: parent.height
+        width: contentView.width
     }
 }

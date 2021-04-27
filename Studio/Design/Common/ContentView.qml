@@ -14,15 +14,16 @@ Item {
     property int barsPerRow: xZoom * xZoomWidth + xZoomMin
     property int beatsPerBar: 4
 
-    // Horizontal scroll
+    // Horizontal scroll (xOffset && xOffsetMin is always zero or less)
     property real xOffset: 0
     property real xOffsetMin: 0
-    property real xOffsetMax: 0
 
-    // Vertical scroll
+    // Vertical scroll (yOffset && yOffsetMin is always zero or less)
     property real yOffset: 0
     property real yOffsetMin: 0
-    property real yOffsetMax: 0
+    readonly property real yOffsetWidth: -yOffsetMin
+    readonly property real yScrollIndicatorSize: yOffsetWidth ? 1 / (yOffsetWidth / width) : 1
+    readonly property real yScrollIndicatorPos: (1 - yScrollIndicatorSize) * (yOffsetMin ? yOffset / yOffsetMin : 0)
 
     // Horizontal zoom
     property real xZoom: 0.05
@@ -119,8 +120,8 @@ Item {
         anchors.fill: parent
 
         onScrolled: {
-            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), xOffsetMax)
-            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), yOffsetMax)
+            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), 0)
+            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), 0)
         }
 
         onZoomed: {
@@ -166,6 +167,22 @@ Item {
                 x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
                 color: "blue"
             }
+
+            ScrollBar {
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                active: size !== 1
+                visible: true
+                orientation: Qt.Vertical
+                size: yScrollIndicatorSize
+                position: yScrollIndicatorPos
+                policy: ScrollBar.AlwaysOn
+
+                onPositionChanged: {
+                    // yOffset = yOffsetMin * position / size
+                }
+            }
         }
     }
 
@@ -198,12 +215,5 @@ Item {
         height: contentView.rowHeight
         visible: false
         color: Qt.lighter(targetColor, 1.3)
-    }
-
-    Shortcut {
-        sequence: "Space"
-        onActivated: {
-
-        }
     }
 }
