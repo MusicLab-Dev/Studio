@@ -28,10 +28,16 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
 
-            onPressedChanged: isEditingLoop = false
-
-            onPressed: {
-                contentView.timelineBeginMove((Math.abs(xOffset) + mouseX) / contentView.pixelsPerBeatPrecision)
+            onPressedChanged: {
+                if (pressed) {
+                    contentView.timelineBeginMove((Math.abs(xOffset) + mouseX) / contentView.pixelsPerBeatPrecision)
+                } else {
+                    isEditingLoop = false
+                    if (contentView.hasLoop && contentView.loopFrom == contentView.loopTo) {
+                        contentView.disableLoopRange()
+                    } else
+                        contentView.timelineEndMove()
+                }
             }
 
             onPositionChanged: {
