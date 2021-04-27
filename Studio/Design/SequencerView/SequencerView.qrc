@@ -6,5 +6,6 @@
         <file>SequencerContent/SequencerContentView.qml</file>
         <file>SequencerContent/SequencerContentPianoView.qml</file>
         <file>SequencerContent/NotesPlacementArea.qml</file>
+        <file>SequencerContent/SequencerContentVelocityView.qml</file>
     </qresource>
 </RCC>

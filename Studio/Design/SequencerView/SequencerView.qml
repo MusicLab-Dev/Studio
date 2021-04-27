@@ -120,16 +120,26 @@ ColumnLayout {
         z: 1
     }
 
-    SequencerContentView {
-        id: contentView
+    Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredHeight: parent.height * 0.8
         Layout.preferredWidth: parent.width
 
-        onTimelineBeginMove: player.timelineBeginMove(target)
-        onTimelineMove: player.timelineMove(target)
-        onTimelineEndMove: player.timelineEndMove()
+        SequencerContentView {
+            id: contentView
+            anchors.fill: parent
+
+            onTimelineBeginMove: player.timelineBeginMove(target)
+            onTimelineMove: player.timelineMove(target)
+            onTimelineEndMove: player.timelineEndMove()
+        }
+
+        SequencerContentVelocityView {
+            y: parent.height - height
+            width: parent.width
+            height: parent.height / 2
+        }
     }
 
     SequencerViewFooter {
