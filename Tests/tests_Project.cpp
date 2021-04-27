@@ -14,7 +14,7 @@ TEST(Project, InitDestroy)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Project project(Core::FlatString("test"));
 
     ASSERT_NO_THROW(Project tmp(&project));
@@ -24,7 +24,7 @@ TEST(Project, name)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Project data(Core::FlatString("test"));
     Project project(&data);
 
@@ -39,7 +39,7 @@ TEST(Project, path)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Project data(Core::FlatString("test"));
     Project project(&data);
     QString str1 = "/ici/la";

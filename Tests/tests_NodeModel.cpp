@@ -13,7 +13,7 @@ TEST(NodeModel, InitDestroy)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Node node { nullptr };
 
     ASSERT_NO_THROW(NodeModel tmp(&node));
@@ -23,7 +23,7 @@ TEST(NodeModel, Color)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Node node { nullptr };
 
     NodeModel model(&node);
@@ -35,7 +35,7 @@ TEST(NodeModel, Muted)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Node node { nullptr };
 
     NodeModel model(&node);
@@ -49,7 +49,7 @@ TEST(NodeModel, Name)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Node node { nullptr };
 
     NodeModel model(&node);
@@ -61,7 +61,7 @@ TEST(NodeModel, AddRemove)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Node node { nullptr };
     NodeModel model(&node);
 
