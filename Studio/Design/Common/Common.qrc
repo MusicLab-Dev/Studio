@@ -16,5 +16,6 @@
         <file>ContentView.qml</file>
         <file>MuteButton.qml</file>
         <file>ContentViewTimeline.qml</file>
+        <file>TextRoundedButton.qml</file>
     </qresource>
 </RCC>

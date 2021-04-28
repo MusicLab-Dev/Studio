@@ -60,7 +60,7 @@ Rectangle {
                         workspaceForeground.parentDepth += 1
                     } else
                         workspaceView.acceptAndClose(fileUrl)
-                    workspacesViewBackButton.visible = true
+                    workspacesViewBackButtonText.visible = true
                 }
 
                 onClicked: {
