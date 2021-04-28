@@ -53,7 +53,7 @@ public:
 
 public slots:
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_data->size()); }
+    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_partitions.size()); }
 
     /** @brief Add a children to the list */
     bool add(void);
@@ -67,7 +67,7 @@ public slots:
     /** @brief Get a single partition model */
     PartitionModel *getPartition(const int index) { return get(index); }
 
-    /** @brief Adds ad note event on the fly */
+    /** @brief Adds a note event on the fly */
     void addOnTheFly(const NoteEvent &note, NodeModel *node, const quint32 partitionIndex);
 
 
@@ -83,4 +83,7 @@ private:
 
     /** @brief Refresh internal models */
     void refreshPartitions(void);
+
+    /** @brief Get an available name for a partition */
+    [[nodiscard]] Core::FlatString getAvailablePartitionName(void) const noexcept;
 };

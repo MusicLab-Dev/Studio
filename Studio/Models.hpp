@@ -18,12 +18,12 @@ namespace Models
     template<typename ListModel, typename ModelVector, typename AudioModelVector, typename ...Args>
     inline void RefreshModels(ListModel * const root, ModelVector &models, AudioModelVector &audioModels, Args ...args)
     {
-        const auto modelCount = models.size();
-        const auto audioModelCount = audioModels.size();
+        const auto modelCount = static_cast<int>(models.size());
+        const auto audioModelCount = static_cast<int>(audioModels.size());
 
         // First, update already existing models
         const auto minCount = modelCount < audioModelCount ? modelCount : audioModelCount;
-        for (auto i = 0u;  i < minCount; ++i)
+        for (auto i = 0;  i < minCount; ++i)
             models.at(i)->updateInternal(&audioModels.at(i));
         // Then, delete excess models if any
         if (modelCount > audioModelCount) {
@@ -48,13 +48,16 @@ namespace Models
 
     /** @brief Register an protected event */
     template<typename Event>
-    inline void AddProtectedEvent(Event &&event)
+    inline bool AddProtectedEvent(Event &&event)
     {
         if (!EventGuard::Dirty) {
             EventGuard::Dirty = true;
             Scheduler::Get()->addEvent(std::forward<Event>(event), []{ EventGuard::Dirty = false; });
-        } else
+            return true;
+        } else {
             qWarning() << "Models::AddProtectedEvent: A protected event is already registered for this generation !";
+            return false;
+        }
     }
 
     /** @brief Register an protected event */
@@ -64,8 +67,8 @@ namespace Models
         if (!EventGuard::Dirty) {
             EventGuard::Dirty = true;
             Scheduler::Get()->addEvent(std::forward<Event>(event), [notify = std::forward<Notify>(notify)](void) mutable {
-                notify();
                 EventGuard::Dirty = false;
+                notify();
             });
             return true;
         } else {

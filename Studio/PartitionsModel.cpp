@@ -14,6 +14,9 @@ PartitionsModel::PartitionsModel(Audio::Partitions *partitions, NodeModel *paren
     : QAbstractListModel(parent), _data(partitions)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
+    _partitions.reserve(_data->size());
+    for (auto &partition : *_data)
+        _partitions.push(&partition, this);
 }
 
 QHash<int, QByteArray> PartitionsModel::roleNames(void) const noexcept
@@ -44,29 +47,11 @@ const PartitionModel *PartitionsModel::get(const int index) const noexcept_ndebu
 
 bool PartitionsModel::add(void)
 {
-    // Get a unique name for this partition
-    std::string name = [this] {
-        std::string name;
-        auto size = _partitions.size();
-        while (true) {
-            bool unique = true;
-            name = "Partition " + std::to_string(size);
-            for (auto &partition : *_data) {
-                if (partition.name() == name) {
-                    unique = false;
-                    break;
-                }
-            }
-            if (unique)
-                break;
-            ++size;
-        }
-        return name;
-    }();
+    auto name = getAvailablePartitionName();
 
     return Models::AddProtectedEvent(
-        [this, name = Core::FlatString(std::move(name))](void) mutable {
-            _data->push().setName(std::move(name));
+        [this, name = std::move(name)](void) mutable {
+           _data->push().setName(std::move(name));
         },
         [this] {
             const auto partitionsData = _partitions.data();
@@ -93,7 +78,7 @@ bool PartitionsModel::remove(const int idx)
             _partitions.erase(_partitions.begin() + idx);
             endRemoveRows();
             const auto count = _partitions.size();
-            for (auto i = static_cast<std::size_t>(idx); i < count; ++i)
+            for (auto i = static_cast<std::uint32_t>(idx); i < count; ++i)
                 _partitions.at(i)->updateInternal(&_data->at(i));
         }
     );
@@ -121,15 +106,23 @@ bool PartitionsModel::move(const int from, const int to)
 
 void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const quint32 partitionIndex)
 {
-    Scheduler::Get()->addEvent(
+    auto scheduler = Scheduler::Get();
+    const bool isPlaying = !scheduler->hasExitedGraph();
+    const bool graphChanged = scheduler->partitionNode() != node->audioNode() || scheduler->partitionIndex() != partitionIndex;
+    bool hasPaused = false;
+
+    if (isPlaying && graphChanged)
+        hasPaused = scheduler->pauseImpl();
+    scheduler->addEvent(
         [this, note] {
             _data->headerCustomType().push(note);
         },
-        [this, node, partitionIndex] {
+        [this, node, partitionIndex, isPlaying, graphChanged, hasPaused] {
             const auto scheduler = Scheduler::Get();
-            if (!scheduler->running()) {
+            if (hasPaused)
+                scheduler->getCurrentGraph().wait();
+            if (!isPlaying || graphChanged)
                 scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, partitionIndex, 0);
-            }
         }
     );
 }
@@ -137,4 +130,24 @@ void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const 
 void PartitionsModel::refreshPartitions(void)
 {
     Models::RefreshModels(this, _partitions, *_data, this);
+}
+
+Core::FlatString PartitionsModel::getAvailablePartitionName(void) const noexcept
+{
+    std::string name;
+    auto size = _partitions.size();
+    while (true) {
+        bool unique = true;
+        name = "Partition " + std::to_string(size);
+        for (auto &partition : *_data) {
+            if (partition.name() == name) {
+                unique = false;
+                break;
+            }
+        }
+        if (unique)
+            break;
+        ++size;
+    }
+    return Core::FlatString(name);
 }

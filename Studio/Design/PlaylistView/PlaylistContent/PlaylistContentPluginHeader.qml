@@ -1,8 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import "../../Default"
 import "../../Common"
+
+import PluginModel 1.0
 
 Item {
     id: header
@@ -15,6 +18,7 @@ Item {
         height: parent.height - nodeView.pluginHeaderVerticalPadding
         radius: nodeView.pluginHeaderRadius
         color: nodeDelegate.node ? nodeDelegate.node.color : "black"
+        clip: true
 
         DefaultText {
             id: nodeName
@@ -26,7 +30,8 @@ Item {
             text: nodeDelegate.node ? nodeDelegate.node.name : ""
             color: "white"
             elide: Text.ElideRight
-            font.pointSize: nodeView.pluginHeaderNamePointSize
+            fontSizeMode: Text.HorizontalFit
+            font.pixelSize: nodeView.pluginHeaderNamePixelSize
         }
 
         MuteButton {
@@ -50,6 +55,40 @@ Item {
             height: nodeView.pluginHeaderNameHeight
 
             onReleased: pluginSettingsMenu.openMenu(pluginSettingsMenuButton, nodeDelegate.node, index)
+        }
+
+        GridLayout {
+            clip: true
+            y: nodeView.pluginHeaderNameHeight
+            width: nodeView.pluginHeaderDisplayWidth
+            height: parent.height - nodeView.pluginHeaderNameHeight
+            columnSpacing: 2
+            flow: GridLayout.TopToBottom
+            rows: Math.max(height / 30, 1)
+
+            Repeater {
+                model: nodeDelegate.node ? nodeDelegate.node.plugin : null
+
+                delegate: Loader {
+                    focus: true
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                    source: {
+                        switch (controlType) {
+                        case PluginModel.Boolean:
+                            return "qrc:/Common/PluginControls/BooleanControl.qml"
+                        case PluginModel.Integer:
+                            return "qrc:/Common/PluginControls/IntegerControl.qml"
+                        case PluginModel.Floating:
+                            return "qrc:/Common/PluginControls/FloatingControl.qml"
+                        case PluginModel.Enum:
+                            return "qrc:/Common/PluginControls/EnumControl.qml"
+                        default:
+                            return ""
+                        }
+                    }
+                }
+            }
         }
     }
 }

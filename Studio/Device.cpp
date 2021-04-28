@@ -14,7 +14,7 @@ Device::Device(const Audio::Device::LogicalDescriptor &descriptor, Audio::AudioC
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
-void Device::setSampleRate(const quint32 sampleRate) noexcept
+void Device::setSampleRate(const SampleRate sampleRate) noexcept
 {
     if (this->sampleRate() == sampleRate)
         return;
@@ -56,7 +56,7 @@ void Device::setChannelArrangement(const ChannelArrangement channelArrangement) 
     );
 }
 
-void Device::setMidiChannels(const quint16 midiChannels) noexcept
+void Device::setMidiChannels(const MidiChannels midiChannels) noexcept
 {
     if (this->midiChannels() == midiChannels)
         return;
@@ -70,7 +70,7 @@ void Device::setMidiChannels(const quint16 midiChannels) noexcept
     );
 }
 
-void Device::setBlockSize(const quint16 blockSize) noexcept
+void Device::setBlockSize(const BlockSize blockSize) noexcept
 {
     if (this->blockSize() == blockSize)
         return;

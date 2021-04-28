@@ -14,15 +14,16 @@ Item {
     property int barsPerRow: xZoom * xZoomWidth + xZoomMin
     property int beatsPerBar: 4
 
-    // Horizontal scroll
+    // Horizontal scroll (xOffset && xOffsetMin is always zero or less)
     property real xOffset: 0
     property real xOffsetMin: 0
-    property real xOffsetMax: 0
 
-    // Vertical scroll
+    // Vertical scroll (yOffset && yOffsetMin is always zero or less)
     property real yOffset: 0
     property real yOffsetMin: 0
-    property real yOffsetMax: 0
+    readonly property real yOffsetWidth: -yOffsetMin
+    readonly property real yScrollIndicatorSize: yOffsetWidth ? 1 / (yOffsetWidth / width) : 1
+    readonly property real yScrollIndicatorPos: (1 - yScrollIndicatorSize) * (yOffsetMin ? yOffset / yOffsetMin : 0)
 
     // Horizontal zoom
     property real xZoom: 0.05
@@ -86,6 +87,20 @@ Item {
 
     // Timeline
     readonly property int timelineHeight: 25
+    property bool hasLoop: false
+    property int loopFrom: 0
+    property int loopTo: 0
+
+    signal timelineBeginMove(var target)
+    signal timelineMove(var target)
+    signal timelineEndMove()
+
+    function disableLoopRange() {
+        hasLoop = false
+        loopFrom = 0
+        loopTo = 0
+        app.scheduler.disableLoopRange()
+    }
 
     id: contentView
 
@@ -109,18 +124,38 @@ Item {
         color: themeManager.backgroundColor
     }
 
-    // Content view data
-    Item {
-        id: placeholder
+    // Handle all mouse / touch gestures
+    GestureArea {
+        id: gestureArea
         anchors.fill: parent
+
+        onScrolled: {
+            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), 0)
+            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), 0)
+        }
+
+        onZoomed: {
+            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoomX, 0), 1)
+            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoomY, 0), 1)
+        }
     }
 
-    Column {
-        ContentViewTimeline {
-            id: contentViewTimeline
-            height: timelineHeight
-            width: contentView.width
-            z: 1
+    ContentViewTimeline {
+        id: contentViewTimeline
+        height: timelineHeight
+        width: contentView.width
+        z: 1
+    }
+
+    Item {
+        width: parent.width
+        height: contentView.height - contentViewTimeline.height
+        y: contentViewTimeline.height
+
+        // Content view data
+        Item {
+            id: placeholder
+            anchors.fill: parent
         }
 
         // Data grid overlay
@@ -128,12 +163,36 @@ Item {
             id: surfaceContentGrid
             x: contentView.rowHeaderWidth
             width: contentView.rowDataWidth
-            height: contentView.height
+            height: parent.height
             xOffset: contentView.xOffset
             yOffset: contentView.yOffset
             rowHeight: contentView.rowHeight
             barsPerRow: contentView.barsPerRow
             z: 0
+
+            Rectangle {
+                width: 4
+                height: surfaceContentGrid.height
+                x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
+                color: "red"
+                opacity: 0.5
+            }
+
+            ScrollBar {
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                active: size !== 1
+                visible: true
+                orientation: Qt.Vertical
+                size: yScrollIndicatorSize
+                position: yScrollIndicatorPos
+                policy: ScrollBar.AlwaysOn
+
+                onPositionChanged: {
+                    // yOffset = yOffsetMin * position / size
+                }
+            }
         }
     }
 
@@ -143,14 +202,6 @@ Item {
         width: 20
         height: surfaceContentGrid.height
         x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
-    }
-
-    Rectangle {
-        visible: x >= rowHeaderWidth
-        width: 4
-        height: surfaceContentGrid.height
-        x: rowHeaderWidth + xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
-        color: "blue"
     }
 
     Rectangle {
@@ -174,29 +225,5 @@ Item {
         height: contentView.rowHeight
         visible: false
         color: Qt.lighter(targetColor, 1.3)
-    }
-
-    // Handle all mouse / touch gestures
-    GestureArea {
-        id: gestureArea
-        anchors.fill: parent
-
-        onScrolled: {
-            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), xOffsetMax)
-            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), yOffsetMax)
-        }
-
-        onZoomed: {
-            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoomX, 0), 1)
-            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoomY, 0), 1)
-        }
-    }
-
-
-    Shortcut {
-        sequence: "Space"
-        onActivated: {
-
-        }
     }
 }

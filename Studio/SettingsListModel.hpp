@@ -57,7 +57,8 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const override;
 
     /** @brief Get the row count of the model */
-    [[nodiscard]] int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    [[nodiscard]] int rowCount(const QModelIndex & = QModelIndex()) const override
+        { return static_cast<int>(_models.size()); }
 
     /** @brief Get role data */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -71,7 +72,7 @@ public slots:
     bool set(const QString &id, const QVariant &value) noexcept;
 
     /** @brief get currentValue from model */
-    const QVariant get(const QString &id) const noexcept;
+    QVariant get(const QString &id) const noexcept;
 
     /** @brief Load settings from Strings into models */
     bool load(const QString &settings, const QString &values) noexcept;

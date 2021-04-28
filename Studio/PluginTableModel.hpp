@@ -54,6 +54,13 @@ public:
     };
     Q_ENUM(Tags)
 
+    enum class ExternalInputType {
+        None,
+        Single,
+        Multiple
+    };
+    Q_ENUM(ExternalInputType)
+
     /** @brief Default constructor */
     explicit PluginTableModel(QObject *parent = nullptr) noexcept;
 
@@ -78,6 +85,9 @@ public:
 public slots:
     /** @brief Add an new instance */
     void add(const QString &path);
+
+    /** @brief Get the external input type of a factory */
+    PluginTableModel::ExternalInputType getExternalInputType(const QString &path) const noexcept;
 
 private:
     Audio::PluginTable &_data { Audio::PluginTable::Get() };

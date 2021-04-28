@@ -43,6 +43,7 @@ class NodeModel : public QAbstractListModel
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(PartitionsModel *partitions READ partitions NOTIFY partitionsChanged)
     Q_PROPERTY(ControlsModel *controls READ controls NOTIFY controlsChanged)
+    Q_PROPERTY(PluginModel *plugin READ plugin NOTIFY pluginChanged)
     //Q_PROPERTY(ConnectionsModel *connections READ connections NOTIFY connectionsChanged)
 
 public:
@@ -109,7 +110,7 @@ public:
 
     /** @brief Get the node's name */
     [[nodiscard]] QString name(void) const noexcept
-        { return QString::fromLocal8Bit(_data->name().data(), _data->name().size()); }
+        { return QString::fromLocal8Bit(_data->name().data(), static_cast<int>(_data->name().size())); }
 
     /** @brief Set the node's name */
     void setName(const QString &name);
@@ -125,7 +126,7 @@ public:
     [[nodiscard]] PluginModel *plugin(void) noexcept { return _plugin.get(); }
 
     /** @brief Get the node children */
-    [[nodiscard]] Core::FlatVector<NodePtr> &nchildren(void) noexcept { return _children; }
+    [[nodiscard]] Core::FlatVector<NodePtr> &children(void) noexcept { return _children; }
 
     /** @brief Get the flags */
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
@@ -144,10 +145,19 @@ public slots:
     NodeModel *add(const QString &pluginPath)
         { return addNodeImpl(pluginPath, false); }
 
+    /** @brief Add a new node in children vector using a plugin path and an external input list */
+    NodeModel *addExternalInputs(const QString &pluginPath)
+        { return addNodeImpl(pluginPath, false); }
+
     /** @brief Add a new node in children vector using a plugin path
      *  Also add an empty partition to this node */
     NodeModel *addPartitionNode(const QString &pluginPath)
         { return addNodeImpl(pluginPath, true); }
+
+    /** @brief Add a new node in children vector using a plugin path and an external input list
+     *  Also add an empty partition to this node */
+    NodeModel *addPartitionNodeExternalInputs(const QString &pluginPath, const QStringList &paths)
+        { return addNodeImpl(pluginPath, true, paths); }
 
     /** @brief Remove a children node */
     bool remove(const int index);
@@ -183,8 +193,8 @@ signals:
     /** @brief Notify that controls property has changed */
     void controlsChanged(void);
 
-    /** @brief Notify that connections property has changed */
-    void connectionsChanged(void);
+    /** @brief Notify that plugin property has changed */
+    void pluginChanged(void);
 
     /** @brief Notify that the parent node has changed */
     void parentNodeChanged(void);
@@ -197,5 +207,5 @@ private:
     PluginPtr _plugin { nullptr };
 
     /** @brief Create a node */
-    [[nodiscard]] NodeModel *addNodeImpl(const QString &pluginPath, const bool addPartition);
+    [[nodiscard]] NodeModel *addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths = QStringList());
 };

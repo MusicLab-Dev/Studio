@@ -12,7 +12,7 @@
 #include <Core/Vector.hpp>
 #include <Protocol/Protocol.hpp>
 
-#include "Net/Socket.hpp"
+// #include "Net/Socket.hpp"
 
 class Board;
 
@@ -61,24 +61,24 @@ public:
     {
         _controls = Controls {
             Control {
-                .type = ControlType::Button,
-                .pos = QPoint(0, 0),
-                .data = 0
+                ControlType::Button,
+                QPoint(0, 0),
+                0
             },
             Control {
-                .type = ControlType::Button,
-                .pos = QPoint(1, 1),
-                .data = 1
+                ControlType::Button,
+                QPoint(1, 1),
+                1
             },
             Control {
-                .type = ControlType::Potentiometer,
-                .pos = QPoint(2, 2),
-                .data = 0
+                ControlType::Potentiometer,
+                QPoint(2, 2),
+                0
             },
             Control {
-                .type = ControlType::Potentiometer,
-                .pos = QPoint(3, 3),
-                .data = 1
+                ControlType::Potentiometer,
+                QPoint(3, 3),
+                1
             }
         };
     }
@@ -111,8 +111,8 @@ private:
     Core::Vector<Protocol::BoardID, int> _parentStack {};
     Controls _controls {};
     QSize _size {};
-    Net::SocketView _rooter {};
+    // Net::SocketView _rooter {};
     Protocol::BoardID _boardID {};
 };
 
-static_assert_fit_cacheline(Board);
+//static_assert_fit_cacheline(Board);

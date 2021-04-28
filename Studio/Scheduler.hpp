@@ -53,6 +53,9 @@ public:
     using Audio::AScheduler::setProject;
     using Audio::AScheduler::invalidateCurrentGraph;
     using Audio::AScheduler::getCurrentGraph;
+    using Audio::AScheduler::partitionNode;
+    using Audio::AScheduler::partitionIndex;
+    using Audio::AScheduler::hasExitedGraph;
 
     /** @brief Number of miss allowed before the graph 'OnTheFly' should stop */
     static constexpr std::uint32_t OnTheFlyMissThreshold = 25;
@@ -75,12 +78,14 @@ public:
 
 
     /** @brief Get the current beat of a given mode */
+    [[nodiscard]] Beat currentBeat(void) const noexcept;
     [[nodiscard]] Beat productionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Production>().from; }
     [[nodiscard]] Beat liveCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Live>().from; }
     [[nodiscard]] Beat partitionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Partition>().from; }
     [[nodiscard]] Beat onTheFlyCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::OnTheFly>().from; }
 
     /** @brief Set the current beat of a given mode */
+    void setCurrentBeat(const Beat beat);
     void setProductionCurrentBeat(const Beat beat);
     void setLiveCurrentBeat(const Beat beat);
     void setPartitionCurrentBeat(const Beat beat);
@@ -97,7 +102,7 @@ public:
 
 public slots:
     /** @brief Play the scheduler */
-    void play(const Scheduler::PlaybackMode mode);
+    void play(const Scheduler::PlaybackMode mode, const Beat startingBeat);
 
     /** @brief Play the scheduler setting up a partition */
     void playPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex, const Beat startingBeat);
@@ -108,20 +113,17 @@ public slots:
     /** @brief Stop the scheduler (pause + reset beat) */
     void stop(const Scheduler::PlaybackMode mode);
 
-    /** @brief Replay the scheduler (stop + play) */
-    void replay(const Scheduler::PlaybackMode mode);
-
-    /** @brief Replay the scheduler setting up a partition (stop + play) */
-    void replayPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex);
-
-    /** @brief Get a beat range */
-    Beat getCurrentBeatOfMode(const Scheduler::PlaybackMode mode) const noexcept;
-
     /** @brief Callback that must be called after a node has been deleted */
     void onNodeDeleted(NodeModel *targetNode);
 
     /** @brief Callback that must be called after a partition has been deleted */
-    void onNodePartitionDeleted(NodeModel *targetNode, int partition);
+    void onNodePartitionDeleted(NodeModel *targetNode, const quint32 partition);
+
+    /** @brief Set the scheduler loop range */
+    void setLoopRange(const BeatRange range);
+
+    /** @brief Disable the scheduler loop range */
+    void disableLoopRange(void);
 
 signals:
     /** @brief Notify when playback mode changed */

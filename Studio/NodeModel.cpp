@@ -94,7 +94,7 @@ const NodeModel *NodeModel::get(const int idx) const
     return _children.at(idx).get();
 }
 
-NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addPartition)
+NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths)
 {
     const std::string path = pluginPath.toStdString();
     const auto factory = Audio::PluginTable::Get().find(path);
@@ -113,20 +113,22 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
     audioNode->setName(Core::FlatString(factory->getName()));
     audioNode->prepareCache(Scheduler::Get()->audioSpecs());
 
+    if (addPartition)
+        audioNode->partitions().push().setName("Partition 0");
+
     NodePtr node(audioNode.get(), this);
     auto nodePtr = node.get();
-
-    if (addPartition)
-        node->partitions()->add();
-
     const bool hasPaused = Scheduler::Get()->pauseImpl();
+
+    if (!paths.isEmpty())
+        nodePtr->loadExternalInputs(paths);
 
     if (!Models::AddProtectedEvent(
             [this, audioNode = std::move(audioNode)](void) mutable {
                 _data->children().push(std::move(audioNode));
             },
             [this, node = std::move(node), hasPaused](void) mutable {
-                const auto idx = _children.size();
+                const auto idx = static_cast<int>(_children.size());
                 beginInsertRows(QModelIndex(), idx, idx);
                 _children.push(std::move(node));
                 endInsertRows();
@@ -152,15 +154,16 @@ bool NodeModel::remove(const int idx)
             _data->children().erase(_data->children().begin() + idx);
         },
         [this, idx, hasPaused] {
+            auto scheduler = Scheduler::Get();
             beginRemoveRows(QModelIndex(), idx, idx);
             _children.erase(_children.begin() + idx);
             endRemoveRows();
             if (hasPaused) {
-                Scheduler::Get()->getCurrentGraph().wait();
-                Scheduler::Get()->invalidateCurrentGraph();
-                Scheduler::Get()->playImpl();
+                scheduler->getCurrentGraph().wait();
+                scheduler->invalidateCurrentGraph();
+                scheduler->playImpl();
             } else
-                Scheduler::Get()->invalidateCurrentGraph();
+                scheduler->invalidateCurrentGraph();
         }
     );
 }

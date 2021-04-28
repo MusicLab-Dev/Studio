@@ -16,9 +16,9 @@ struct Note : public Audio::Note
     Q_GADGET
 
     Q_PROPERTY(BeatRange range MEMBER range)
-    Q_PROPERTY(quint8 key MEMBER key)
-    Q_PROPERTY(quint16 velocity MEMBER velocity)
-    Q_PROPERTY(quint16 tuning MEMBER tuning)
+    Q_PROPERTY(Key key MEMBER key)
+    Q_PROPERTY(Velocity velocity MEMBER velocity)
+    Q_PROPERTY(Tuning tuning MEMBER tuning)
 
 public:
     using Audio::Note::Note;

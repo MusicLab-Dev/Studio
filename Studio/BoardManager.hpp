@@ -57,8 +57,8 @@ signals:
 
 private:
     Core::Vector<std::unique_ptr<Board>, int> _boards {}; // TODO: Add allocator to _boards
-    Core::TinyVector<Net::Socket> _clients {};
-    Net::Socket _listenSocket {};
+    // Core::TinyVector<Net::Socket> _clients {};
+    // Net::Socket _listenSocket {};
     int _tickRate { 1000 };
     int _discoverRate { 1000 };
     QTimer _tickTimer {};

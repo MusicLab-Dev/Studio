@@ -79,7 +79,7 @@ private:
     QString _nameFilter {};
 
     /** @brief Reimplementation of the filter virtual function */
-    [[nodiscard]] bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override
+    [[nodiscard]] bool filterAcceptsRow(int sourceRow, const QModelIndex &) const override
     {
         auto *table = reinterpret_cast<const PluginTableModel *>(sourceModel());
         if (!table)
@@ -95,11 +95,11 @@ private:
         }
         if (!_nameFilter.isEmpty()) {
             auto sName = factory->getName();
-            QString name = QString::fromLocal8Bit(sName.data(), sName.length());
+            QString name = QString::fromLocal8Bit(sName.data(), static_cast<int>(sName.length()));
             if (!name.contains(_nameFilter)) {
                 sName = factory->getDescription();
                 name.clear();
-                name = QString::fromLocal8Bit(sName.data(), sName.length());
+                name = QString::fromLocal8Bit(sName.data(), static_cast<int>(sName.length()));
                 if (!name.contains(_nameFilter))
                     return false;
             }

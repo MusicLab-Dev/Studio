@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import NodeModel 1.0
+import PluginTableModel 1.0
 
 Menu {
     property var rootParent: null
@@ -20,7 +21,6 @@ Menu {
     function closeMenu() {
         targetItem = null
         targetNode = null
-        cachedNode = null
         targetNodeIndex = 0
         close()
     }
@@ -41,27 +41,35 @@ Menu {
 
         onTriggered: {
             pluginsView.open(
+                // On plugin selection accepted
                 function() {
-                    // @todo add loadExternalInputs into 'add'
-                    cachedNode = targetNode.add(pluginsView.selectedPath)
-                    if (cachedNode === null)
-                        closeMenu();
-                    else if (cachedNode.needSingleExternalInput() || cachedNode.needMultipleExternalInputs()) {
-                        filePicker.open(cachedNode.needMultipleExternalInputs(),
+                    var externalInputType = pluginTable.getExternalInputType(pluginsView.selectedPath)
+                    if (externalInputType === PluginTableModel.None) {
+                        // Add the node
+                        var node = targetNode.add(pluginsView.selectedPath)
+                        if (node === null)
+                            closeMenu();
+                    } else {
+                        filePicker.open(externalInputType === PluginTableModel.Multiple,
+                            // On external inputs selection accepted
                             function() {
+                                // Format the external input list
                                 var list = []
                                 for (var i = 0; i < filePicker.fileUrls.length; ++i)
                                     list[i] = filePicker.fileUrls[i].toString().slice(7)
-                                cachedNode.loadExternalInputs(list)
-                                closeMenu()
+                                // Add the node with external inputs
+                                var node = targetNode.addExternalInputs(pluginsView.selectedPath, list)
+                                if (node === null)
+                                    closeMenu();
                             },
+                            // On external inputs selection canceled
                             function() {
-                                targetNode.remove(targetNode.count - 1)
-                                closeMenu()
+                                closeMenu();
                             }
                         )
                     }
                 },
+                // On plugin selection canceled
                 function() {
                     closeMenu()
                 }

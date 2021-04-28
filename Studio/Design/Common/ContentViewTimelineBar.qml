@@ -17,18 +17,19 @@ ColumnLayout {
             strokeColor: "black"
             strokeWidth: 2
             strokeStyle: ShapePath.SolidLine
-             PathLine {
-                 x: shape.x
-                 y: 0
-             }
-             PathLine {
-                 x: shape.width
-                 y: 0
-             }
-             PathLine {
-                 x: shape.width / 2
-                 y: shape.height
-             }
+
+            PathLine {
+                x: shape.x
+                y: 0
+            }
+            PathLine {
+                x: shape.width
+                y: 0
+            }
+            PathLine {
+                x: shape.width / 2
+                y: shape.height
+            }
          }
      }
 

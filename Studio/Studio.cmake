@@ -55,6 +55,7 @@ set(StudioSources
     ${StudioDir}/PluginTableModel.hpp
     ${StudioDir}/PluginTableModelProxy.hpp
     ${StudioDir}/Note.hpp
+    ${StudioDir}/Control.hpp
     ${StudioDir}/Point.hpp
     ${StudioDir}/Project.cpp
     ${StudioDir}/Project.hpp
@@ -76,9 +77,6 @@ set(StudioSources
     ${StudioDir}/BoardManager.cpp
     ${StudioDir}/Board.hpp
     ${StudioDir}/Board.cpp
-    ${StudioDir}/Net/Socket.hpp
-    ${StudioDir}/Net/Socket.cpp
-    ${StudioDir}/Net/Socket.ipp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

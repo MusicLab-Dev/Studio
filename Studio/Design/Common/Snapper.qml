@@ -9,9 +9,7 @@ Item {
     readonly property variant metrics: [
         "Free",
         "1/8",
-        "1/6",
         "1/4",
-        "1/3",
         "1/2",
         "1/1",
         "2/1",
@@ -21,7 +19,7 @@ Item {
         "8/1",
     ]
     readonly property variant metricValues: [
-        0, 16, 128 / 6, 32, 128 / 3, 64, 128, 256, 384, 512, 768, 1024
+        0, 16, 32, 64, 128, 256, 384, 512, 768, 1024
     ]
 
     id: snapper

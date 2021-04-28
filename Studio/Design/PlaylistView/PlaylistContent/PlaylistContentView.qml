@@ -6,13 +6,14 @@ import "../../Common"
 ContentView {
     id: contentView
     xOffsetMin: -5000
-    yOffsetMin: nodeView.totalHeight > height ? height - nodeView.totalHeight : 0
+    yOffsetMin: nodeView.totalHeight > surfaceContentGrid.height ? surfaceContentGrid.height - nodeView.totalHeight : 0
     timelineBeatPrecision: playlistView.player.currentPlaybackBeat
     audioProcessBeatPrecision: app.scheduler.productionCurrentBeat
 
     PlaylistContentNodeView {
         id: nodeView
-        anchors.fill: parent
+        y: contentView.yOffset
+        width: parent.width
     }
 
     PlaylistContentPluginSettingsMenu {

@@ -43,7 +43,8 @@ Repeater {
                 text: controlDelegate.control ? controlDelegate.control.name : ""
                 color: "white"
                 elide: Text.ElideRight
-                font.pointSize: nodeView.dataHeaderNamePointSize
+                fontSizeMode: Text.HorizontalFit
+                font.pixelSize: nodeView.dataHeaderNamePixelSize
             }
 
             MuteButton {

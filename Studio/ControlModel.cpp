@@ -13,7 +13,7 @@ ControlModel::ControlModel(Audio::Control *control, ControlsModel *parent, const
     : QAbstractListModel(parent), _data(control), _name(name)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    _automations.reserve(_data->automations().size());
+    _automations.reserve(static_cast<std::uint32_t>(_data->automations().size()));
     for (auto &automation : _data->automations())
         _automations.push(&automation, this);
 }
@@ -137,7 +137,7 @@ bool ControlModel::add(void)
         },
         [this] {
             const auto automationsData = _automations.data();
-            const auto idx = _automations.size();
+            const auto idx = static_cast<int>(_automations.size());
             beginInsertRows(QModelIndex(), idx, idx);
             _automations.push(&_data->automations().at(idx), this);
             endInsertRows();
@@ -159,7 +159,7 @@ bool ControlModel::remove(const int idx)
             beginRemoveRows(QModelIndex(), idx, idx);
             _automations.erase(_automations.begin() + idx);
             endRemoveRows();
-            const auto count = _automations.size();
+            const auto count = static_cast<int>(_automations.size());
             for (auto i = idx + 1; i < count; ++i)
                 _automations.at(i)->updateInternal(&_data->automations().at(i));
         }

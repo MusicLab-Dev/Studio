@@ -60,7 +60,7 @@ void Project::setBPM(const BPM bpm) noexcept
     );
 }
 
-void Project::save()
+void Project::save(void)
 {
     ProjectSave psave(this);
 
@@ -71,12 +71,12 @@ void Project::save()
     psave.save();
 }
 
-void Project::saveAs(const QString &path)
+void Project::saveAs(const QString &)
 {
 
 }
 
-void Project::load()
+void Project::load(void)
 {
     ProjectSave psave(this);
 

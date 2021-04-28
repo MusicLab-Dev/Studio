@@ -12,6 +12,8 @@
 
 #include <Audio/IPlugin.hpp>
 
+#include "Control.hpp"
+
 class NodeModel;
 
 /** @brief class that contaign plugin's controls */
@@ -25,10 +27,24 @@ class PluginModel : public QAbstractListModel
 public:
     /** @brief Roles of each controls */
     enum class Roles : int {
-        Value = Qt::UserRole + 1,
+        Type = Qt::UserRole + 1,
+        MinValue,
+        MaxValue,
+        StepValue,
+        DefaultValue,
+        Value,
         Title,
         Description
     };
+
+    /** @brief Parameter type */
+    enum class ParamType : int {
+        Boolean,
+        Integer,
+        Floating,
+        Enum
+    };
+    Q_ENUM(ParamType)
 
     /** @brief Default constructor */
     explicit PluginModel(Audio::IPlugin *plugin, QObject *parent = nullptr) noexcept;
@@ -54,19 +70,26 @@ public:
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
+    /** @brief Set a role */
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+
 
     /** @brief Get the title property */
-    [[nodiscard]] QString title(void) const noexcept
-        { return QString::fromLocal8Bit(_data->getMetaData().translations.getName(Audio::English).data(), _data->getMetaData().translations.getName(Audio::English).size()); }
+    [[nodiscard]] QString title(void) const noexcept;
 
     /** @brief Get the description property */
-    [[nodiscard]] QString description(void) const noexcept
-        { return QString::fromLocal8Bit(_data->getMetaData().translations.getDescription(Audio::English).data(), _data->getMetaData().translations.getDescription(Audio::English).size()); }
-
+    [[nodiscard]] QString description(void) const noexcept;
 
     /** @brief Get underlying audio plugin */
     [[nodiscard]] Audio::IPlugin *audioPlugin(void) noexcept { return _data; }
     [[nodiscard]] const Audio::IPlugin *audioPlugin(void) const noexcept { return _data; }
+
+    /** @brief Notify that a control's value has changed */
+    void controlValueChanged(const ParamID paramID);
+
+public slots:
+    /** @brief Set a control on the fly */
+    void setControl(const ControlEvent &event);
 
 signals:
     /** @brief Notify that the title has changed */
@@ -76,7 +99,9 @@ signals:
     void descriptionChanged(void);
 
 private:
-    const int language(void) const noexcept;
-
     Audio::IPlugin *_data { nullptr };
+
+    /** @brief Get the current language */
+    [[nodiscard]] int language(void) const noexcept;
+
 };

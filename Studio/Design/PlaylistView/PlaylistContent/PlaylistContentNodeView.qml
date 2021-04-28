@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 import NodeModel 1.0
 
-Item {
+PlaylistContentNodeDelegate {
     // Children nodes link
     property real linkWidth: 10
     property real linkSpacing: 10
@@ -23,7 +23,7 @@ Item {
     readonly property real pluginHeaderSpacing: 2
     readonly property real pluginHeaderNameWidth: pluginHeaderDisplayWidth - pluginHeaderNameHeight * 2 - pluginHeaderSpacing * 4
     readonly property real pluginHeaderNameHeight: Math.min(30, (contentView.rowHeight - pluginHeaderVerticalPadding - pluginHeaderSpacing * 2))
-    readonly property real pluginHeaderNamePointSize: pluginHeaderNameHeight * 0.6
+    readonly property real pluginHeaderNamePixelSize: pluginHeaderNameHeight
     readonly property real pluginHeaderSettingsButtonX: pluginHeaderDisplayWidth - pluginHeaderNameHeight - pluginHeaderSpacing
     readonly property real pluginHeaderMuteButtonX: pluginHeaderSettingsButtonX - pluginHeaderNameHeight - pluginHeaderSpacing
 
@@ -45,7 +45,7 @@ Item {
     readonly property real dataHeaderSpacing: 2
     readonly property real dataHeaderNameWidth: dataHeaderDisplayWidth - dataHeaderNameHeight * 2 - dataHeaderSpacing * 4
     readonly property real dataHeaderNameHeight: Math.min(30, (contentView.rowHeight - dataHeaderVerticalPadding - dataHeaderSpacing * 2))
-    readonly property real dataHeaderNamePointSize: dataHeaderNameHeight * 0.6
+    readonly property real dataHeaderNamePixelSize: dataHeaderNameHeight
     readonly property real dataHeaderSettingsButtonX: dataHeaderDisplayWidth - dataHeaderNameHeight - dataHeaderSpacing
     readonly property real dataHeaderMuteButtonX: dataHeaderSettingsButtonX - dataHeaderNameHeight - dataHeaderSpacing
     readonly property real dataFirstAutomationNameY: dataHeaderNameHeight + dataHeaderSpacing * 2
@@ -54,15 +54,10 @@ Item {
     readonly property real dataHeaderControlRectangleHeight: dataHeaderNameHeight + dataHeaderSpacing * 2
 
     // External properties
-    property alias totalHeight: master.height
+    property alias totalHeight: nodeView.height
 
     id: nodeView
     clip: true
-
-    PlaylistContentNodeDelegate {
-        id: master
-        node: app.project.master
-        recursionIndex: 0
-        y: contentView.yOffset
-    }
+    node: app.project.master
+    recursionIndex: 0
 }

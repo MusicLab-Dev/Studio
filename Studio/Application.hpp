@@ -13,6 +13,7 @@
 // #include "DevicesModel.hpp"
 // #include "PluginTableModel.hpp"
 #include "Scheduler.hpp"
+#include "SettingsListModel.hpp"
 
 /** @brief Application class */
 class Application : public QObject
@@ -23,6 +24,7 @@ class Application : public QObject
     // Q_PROPERTY(DevicesModel *device READ device NOTIFY deviceChanged)
     // Q_PROPERTY(PluginTableModel *plugins READ plugins NOTIFY pluginsChanged)
     Q_PROPERTY(Scheduler *scheduler READ scheduler NOTIFY schedulerChanged)
+    Q_PROPERTY(SettingsListModel *settings READ settings NOTIFY settingsChanged)
 
 public:
     static constexpr std::string_view DefaultProjectName = "My Project";
@@ -48,6 +50,9 @@ public:
     /** @brief Get the scheduler */
     [[nodiscard]] Scheduler *scheduler(void) noexcept { return &_scheduler; }
 
+    /** @brief Get the settings manager */
+    [[nodiscard]] SettingsListModel *settings(void) noexcept { return &_settings; }
+
 public slots:
     /** @brief Get the list of devices able to output audio */
     // [[nodiscard]] QStringList getOutputDeviceList(void) const noexcept;
@@ -68,6 +73,10 @@ signals:
     /** @brief Notify that the project scheluder has changed */
     void schedulerChanged(void);
 
+
+    /** @brief Notify that the project settings manager has changed */
+    void settingsChanged(void);
+
 private:
     /** @brief Setup the internal scheduler */
     void setupScheduler(void);
@@ -76,5 +85,6 @@ private:
     Audio::ProjectPtr _backendProject;
     Scheduler _scheduler;
     Project _project;
+    SettingsListModel _settings;
     // std::unique_ptr<PluginTableModel> _plugins;
 };

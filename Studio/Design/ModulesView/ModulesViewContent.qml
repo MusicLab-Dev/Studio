@@ -111,12 +111,18 @@ Item {
                 visible: componentSelected === index
                 focus: true
 
+                onVisibleChanged: {
+                    focus = true
+                }
+
                 onLoaded: {
                     if (path === "")
                         return
                     loadedComponent.item.moduleIndex = index
                     callback.target = loadedComponent.item
                     callback.trigger()
+                    focus = true
+                    item.focus = true
                 }
             }
         }
