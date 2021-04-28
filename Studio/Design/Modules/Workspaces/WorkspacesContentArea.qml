@@ -63,7 +63,7 @@ Rectangle {
                         workspaceView.fileUrl = fileUrl
                         workspaceView.acceptAndClose()
                     }
-                    workspacesViewBackButton.visible = true
+                    workspacesViewBackButtonText.visible = true
                 }
 
                 onClicked: {

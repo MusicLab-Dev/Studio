@@ -11,8 +11,5 @@
         <file>FolderColumnView.qml</file>
         <file>FolderColumnFileDelegate.qml</file>
         <file>FolderColumnFolderDelegate.qml</file>
-        <file>WorkspacesViewCloseButton.qml</file>
-        <file>WorkspacesViewAcceptButton.qml</file>
-        <file>WorkspacesViewBackButton.qml</file>
     </qresource>
 </RCC>

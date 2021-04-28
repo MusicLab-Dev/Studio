@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import '../../Common'
+
 PluginsBackground {
     function open(accepted, canceled) {
         acceptedCallback = accepted
@@ -35,22 +37,23 @@ PluginsBackground {
         y: height
     }
 
-    Rectangle {
-        id: pluginsViewCloseButton
-        width: 70
-        height: 30
+    TextRoundedButton {
+        id: pluginsViewCloseButtonText
+        text: "Close"
         x: pluginsView.width - width - height
         y: height
-        color: "transparent"
-        radius: 5
-        border.color: pluginsViewCloseButtonText.closeButtonHovered ? "#31A8FF" : "#1E6FB0"
-        border.width: 1
 
-        PluginsViewCloseButton {
-            id: pluginsViewCloseButtonText
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: { pluginsViewCloseButtonText.buttonHovered = true }
+
+            onExited: { pluginsViewCloseButtonText.buttonHovered = false }
+
+            onReleased: { pluginsView.cancelAndClose() }
         }
     }
-
 
     PluginsForeground {
         id: pluginsForeground

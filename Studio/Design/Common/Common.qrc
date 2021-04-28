@@ -21,5 +21,6 @@
         <file>PluginControls/EnumControl.qml</file>
         <file>PluginControls/FloatingControl.qml</file>
         <file>PluginControls/IntegerControl.qml</file>
+        <file>TextRoundedButton.qml</file>
     </qresource>
 </RCC>
