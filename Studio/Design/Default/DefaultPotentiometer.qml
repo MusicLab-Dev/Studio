@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.15
 
 Dial {
     readonly property real range: Math.abs(Math.max(controlMinValue, controlMaxValue) - Math.min(controlMinValue, controlMaxValue))
+    property string text: ""
 
     id: dial
     tickmarksVisible: true
@@ -33,7 +34,7 @@ Dial {
                 radius: width / 2
 
                 DefaultText {
-                    text: "Atk"
+                    text: dial.text
                     anchors.fill: parent
                     fontSizeMode: Text.Fit
                     color: "white"
