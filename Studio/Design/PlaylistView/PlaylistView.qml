@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import "./PlaylistContent"
 
 ColumnLayout {
+    property string moduleName: "Playlist"
     property int moduleIndex: -1
     property alias player: playlistViewFooter.player
 

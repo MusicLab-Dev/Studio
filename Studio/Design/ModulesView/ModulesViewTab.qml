@@ -56,16 +56,19 @@ Rectangle {
     }
 
     Text {
-        anchors.fill: parent
-        text: title
+        height: parent.height
+        width: parent.width - closeBtn.width
+        text: modulesViewContent.getModule(index).moduleName //title
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: componentSelected === index ? "white" : mouseArea.containsMouse ? "black" : themeManager.disabledColor
         elide: Text.ElideRight
+        fontSizeMode: Text.Fit
         clip: true
     }
 
     CloseButton {
+        id: closeBtn
         width: parent.height / 3
         height: width
         anchors.verticalCenter: parent.verticalCenter

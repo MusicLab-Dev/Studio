@@ -19,7 +19,7 @@ Item {
         "8/1",
     ]
     readonly property variant metricValues: [
-        0, 16, 32, 64, 128, 256, 384, 512, 768, 1024
+        0, 16, 32, 64, AudioAPI.beatPrecision, 256, 384, 512, 768, 1024
     ]
 
     id: snapper
@@ -28,6 +28,7 @@ Item {
         height: parent.height
         width: parent.width
         model: metrics
+        currentIndex: 4
 
         onActivated: {
             contentView.placementBeatPrecisionScale = metricValues[index]

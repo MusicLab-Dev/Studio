@@ -8,6 +8,7 @@ import PluginTableModel 1.0
 import "./SequencerContent/"
 
 ColumnLayout {
+    property string moduleName: node ? node.name + " - " + partition.name : "Loading"
     property int moduleIndex: -1
     property NodeModel node: null
     property PartitionModel partition: null

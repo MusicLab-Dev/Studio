@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import AudioAPI 1.0
+
 Item {
     // Content data placeholder
     default property alias placeholder: placeholder.data
@@ -79,7 +81,7 @@ Item {
     readonly property real placementResizeMaxPixelThreshold: 20
 
     // Scale used to perfectly fit placements in beat
-    property int placementBeatPrecisionScale: 0
+    property int placementBeatPrecisionScale: AudioAPI.beatPrecision
 
     // Timeline bar
     property real timelineBeatPrecision: 0

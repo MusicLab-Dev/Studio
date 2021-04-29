@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import "../Common"
 
 Rectangle {
+    property string moduleName: qsTr("Empty")
     property int moduleIndex: -1
 
     id: emptyView
@@ -13,8 +14,8 @@ Rectangle {
         anchors.fill: parent
 
         Item {
-            Layout.preferredHeight: parent.height * 0.333
             Layout.preferredWidth: parent.width
+            Layout.preferredHeight: parent.height * 0.333
 
             EmptyViewHeader {
                 anchors.fill: parent
