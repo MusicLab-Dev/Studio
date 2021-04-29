@@ -126,10 +126,12 @@ void BoardManager::discoveryEmit(void)
     packet.connectionType = Protocol::ConnectionType::USB;
     packet.distance = 0;
 
-    for (const auto &interface : _interfaces) {
-        Socket broadcastSocket { interface.second.second };
+    for (const auto &networkInterface : _interfaces) {
+
+        Socket broadcastSocket { networkInterface.second.second };
         sockaddr_in broadcastAddress { 0 };
-        socklen_t len = sizeof(broadcastAddress);
+        Socklen len = sizeof(broadcastAddress);
+
         auto ret = ::getsockname(
             broadcastSocket,
             reinterpret_cast<sockaddr *>(&broadcastAddress),
@@ -138,14 +140,8 @@ void BoardManager::discoveryEmit(void)
         if (ret < 0) {
             throw std::runtime_error(std::strerror(errno));
         }
-        ret = ::sendto(
-            broadcastSocket,
-            &packet,
-            sizeof(packet),
-            0,
-            reinterpret_cast<sockaddr *>(&broadcastAddress),
-            len
-        );
+
+        ret = sendToSocket(broadcastSocket, broadcastAddress, reinterpret_cast<std::uint8_t *>(&packet), sizeof(packet));
         if (ret < 0) {
             if (errno == ENODEV) {
                 /*
@@ -153,7 +149,7 @@ void BoardManager::discoveryEmit(void)
                     so checking to remove the associated network.
                 */
                 std::cout << "INTERFACE DISCONNECTED" << std::endl;
-                removeInterfaceNetwork(interface.first);
+                removeInterfaceNetwork(networkInterface.first);
             }
             else {
                 throw std::runtime_error(std::strerror(errno));
@@ -172,53 +168,22 @@ Socket BoardManager::createTcpMasterSocket(const std::string &interfaceName, con
         throw std::runtime_error(std::strerror(errno));
 
     // Set address to be reusable
-    int enable = 1;
-    if (::setsockopt(tcpMasterSocket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0) {
-        ::close(tcpMasterSocket);
-        throw std::runtime_error(std::strerror(errno));
-    }
+    setSocketReusable(tcpMasterSocket);
 
+    // Set socket in non-blocking mode
     setSocketNonBlocking(tcpMasterSocket);
 
     // Bind TCP socket to the device specified by interfaceName
-    auto ret = ::setsockopt(
-        tcpMasterSocket,
-        SOL_SOCKET,
-        SO_BINDTODEVICE,
-        interfaceName.c_str(),
-        interfaceName.length()
-    );
-    if (ret < 0) {
-        ::close(tcpMasterSocket);
-        throw std::runtime_error(std::strerror(errno));
-    }
+    setSocketDevice(tcpMasterSocket,interfaceName);
 
     // Create the interface address to bind the socket to
-    sockaddr_in interfaceAddress = {
-        .sin_family = AF_INET,
-        .sin_port = ::htons(421),
-        .sin_addr = {
-            .s_addr = ::inet_addr(localAddress.c_str())
-        }
-    };
+    NetworkAddress interfaceAddress = createNetworkAddress(421, localAddress);
 
     // Bind the socket to the interface address
-    ret = ::bind(
-        tcpMasterSocket,
-        reinterpret_cast<const sockaddr *>(&interfaceAddress),
-        sizeof(interfaceAddress)
-    );
-    if (ret < 0) {
-        ::close(tcpMasterSocket);
-        throw std::runtime_error(std::strerror(errno));
-    }
+    bindSocket(tcpMasterSocket, interfaceAddress);
 
     // Listen for incomming connections on the master socket
-    ret = ::listen(tcpMasterSocket, 1);
-    if (ret < 0) {
-        ::close(tcpMasterSocket);
-        throw std::runtime_error(std::strerror(errno));
-    }
+    listenSocket(tcpMasterSocket);
 
     return tcpMasterSocket;
 }
@@ -226,7 +191,6 @@ Socket BoardManager::createTcpMasterSocket(const std::string &interfaceName, con
 Socket BoardManager::createUdpBroadcastSocket(const std::string &interfaceName, const std::string &broadcastAddress)
 {
     Socket broadcastSocket { -1 };
-    Socket broadcast { 1 };
 
     // Create a new UDP socket
     broadcastSocket = ::socket(AF_INET, SOCK_DGRAM, 0);
@@ -234,51 +198,16 @@ Socket BoardManager::createUdpBroadcastSocket(const std::string &interfaceName, 
         throw std::runtime_error(std::strerror(errno));
 
     // Set broadcast enabled on the socket
-    auto ret = ::setsockopt(
-        broadcastSocket,
-        SOL_SOCKET,
-        SO_BROADCAST,
-        &broadcast,
-        sizeof(broadcast)
-    );
-    if (ret < 0) {
-        ::close(broadcastSocket);
-        throw std::runtime_error(std::strerror(errno));
-    }
+    enableSocketBroadcast(broadcastSocket);
 
     // Bind socket to the specific interface
-    ret = ::setsockopt(
-        broadcastSocket,
-        SOL_SOCKET,
-        SO_BINDTODEVICE,
-        interfaceName.c_str(),
-        interfaceName.length()
-    );
-    if (ret < 0) {
-        ::close(broadcastSocket);
-        throw std::runtime_error(std::strerror(errno));
-    }
+    setSocketDevice(broadcastSocket, interfaceName);
 
     // Bind the UDP socket to the interface broadcast address
-    sockaddr_in udpBroadcastAddress {
-        .sin_family = AF_INET,
-        .sin_port = ::htons(420),
-        .sin_addr = {
-            .s_addr = ::inet_addr(broadcastAddress.c_str())
-        },
-        .sin_zero = { 0 }
-    };
+    NetworkAddress udpBroadcastAddress = createNetworkAddress(420, broadcastAddress);
 
     // Bind the socket to the interface broadcast address
-    ret = ::bind(
-        broadcastSocket,
-        reinterpret_cast<const sockaddr *>(&udpBroadcastAddress),
-        sizeof(udpBroadcastAddress)
-    );
-    if (ret < 0) {
-        ::close(broadcastSocket);
-        throw std::runtime_error(std::strerror(errno));
-    }
+    bindSocket(broadcastSocket, udpBroadcastAddress);
 
     return broadcastSocket;
 }
@@ -307,39 +236,45 @@ void BoardManager::processNewUsbInterfaces(const std::vector<std::tuple<std::str
 
 std::vector<std::tuple<std::string, std::string, std::string>> BoardManager::getUsbNetworkInterfaces(void)
 {
-    struct ifaddrs *ifaddr;
-    int family;
-    int i = 0;
-
     std::vector<std::tuple<std::string, std::string, std::string>> interfaces {};
 
-    std::cout << '\n';
+    #ifdef WIN32
 
-    auto ret = ::getifaddrs(&ifaddr);
-    if (ret < 0)
-        throw std::runtime_error(std::strerror(errno));
-    for (struct ifaddrs *ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
-        if (ifa->ifa_addr == nullptr)
-            continue;
-        family = ifa->ifa_addr->sa_family;
-        if (family == AF_INET && (ifa->ifa_flags & IFF_BROADCAST) && ifa->ifa_ifu.ifu_broadaddr != nullptr) {
+    #else
+        struct ifaddrs *ifaddr;
+        int family;
+        int i = 0;
 
-            sockaddr_in *ifaceaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_addr);
-            sockaddr_in *broadaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_ifu.ifu_broadaddr);
 
-            std::string interfaceName(ifa->ifa_name);
-            std::string localAddress(::inet_ntoa(ifaceaddr->sin_addr));
-            std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
+        std::cout << '\n';
 
-            std::cout << "interface: " << interfaceName << '\n';
-            std::cout << "address  : " << localAddress << '\n';
-            std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
+        auto ret = ::getifaddrs(&ifaddr);
+        if (ret < 0)
+            throw std::runtime_error(std::strerror(errno));
+        for (struct ifaddrs *ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+            if (ifa->ifa_addr == nullptr)
+                continue;
+            family = ifa->ifa_addr->sa_family;
+            if (family == AF_INET && (ifa->ifa_flags & IFF_BROADCAST) && ifa->ifa_ifu.ifu_broadaddr != nullptr) {
 
-            interfaces.push_back({ interfaceName, localAddress, broadcastAddress });
-            i++;
+                sockaddr_in *ifaceaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_addr);
+                sockaddr_in *broadaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_ifu.ifu_broadaddr);
+
+                std::string interfaceName(ifa->ifa_name);
+                std::string localAddress(::inet_ntoa(ifaceaddr->sin_addr));
+                std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
+
+                std::cout << "interface: " << interfaceName << '\n';
+                std::cout << "address  : " << localAddress << '\n';
+                std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
+
+                interfaces.push_back({ interfaceName, localAddress, broadcastAddress });
+                i++;
+            }
         }
-    }
-    ::freeifaddrs(ifaddr);
+        ::freeifaddrs(ifaddr);
+    #endif
+
     return interfaces;
 }
 
@@ -366,13 +301,13 @@ void BoardManager::processNewConnections(void)
     std::cout << "BoardManager::processNewConnections" << '\n';
 
     sockaddr_in clientAddress { 0 };
-    socklen_t clientAddressLen = sizeof(clientAddress);
+    Socklen clientAddressLen = sizeof(clientAddress);
 
-    for (const auto &interface : _interfaces) {
+    for (const auto &networkInterface : _interfaces) {
 
-        std::cout << "Start accept on: " << interface.first << std::endl;
+        std::cout << "Start accept on: " << networkInterface.first << std::endl;
 
-        Socket interfaceMasterSocket = interface.second.first;
+        Socket interfaceMasterSocket = networkInterface.second.first;
 
         const Socket clientSocket = ::accept(
             interfaceMasterSocket,
@@ -395,7 +330,7 @@ void BoardManager::processNewConnections(void)
 
         DirectClient directClient = {
             .socket = clientSocket,
-            .interfaceName = interface.first
+            .interfaceName = networkInterface.first
         };
 
         _clients.push(directClient);
@@ -424,7 +359,7 @@ bool BoardManager::handleIdentifierRequest(const Protocol::ReadablePacket &packe
         response.prepare(ProtocolType::Connection, ConnectionCommand::IDAssignment);
         response << newID;
         // Send the identifier response to the client
-        const auto ret = ::send(clientSocket, &buffer, response.totalSize(), 0);
+        int ret = sendSocket(clientSocket, reinterpret_cast<std::uint8_t *>(&buffer), static_cast<int>(response.totalSize()));
         if (ret < 0)
             throw std::runtime_error(std::strerror(errno));
         // Add the new board the studio list
@@ -438,7 +373,7 @@ void BoardManager::processClientInput(Socket &clientSocket)
 {
     std::uint8_t *bufferPtr = _networkBuffer.data() + _writeIndex;
 
-    const auto inputSize = ::recv(clientSocket, bufferPtr, NetworkBufferSize, 0);
+    const auto inputSize = recvSocket(clientSocket, bufferPtr, NetworkBufferSize);
 
     if (inputSize == 0 || (inputSize < 0 && errno == ETIMEDOUT)) {
         /*
@@ -447,7 +382,7 @@ void BoardManager::processClientInput(Socket &clientSocket)
         */
         std::cout << "BoardManager::processClientInput: Direct client disconnection detected" << std::endl;
         removeDirectClientNetwork(clientSocket);
-        close(clientSocket);
+        closeSocket(clientSocket);
         clientSocket = -1;
         return;
     }
@@ -519,19 +454,6 @@ BoardID BoardManager::aquireIdentifier(void) noexcept
         i++;
     }
     return 0;
-}
-
-void BoardManager::setSocketKeepAlive(const Socket socket)
-{
-    int enable = 1;
-    int idle = 3;
-    int interval = 3;
-    int maxpkt = 1;
-
-    ::setsockopt(socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int));
-    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int));
-    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int));
-    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int));
 }
 
 void BoardManager::removeNetworkFrom(const BoardID senderId, const BoardID targetId)

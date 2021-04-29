@@ -14,13 +14,22 @@
 #include <string>
 #include <unordered_map>
 
-// Network headers
+#ifdef WIN32
+
+// Windows network headers
+#include <winsock2.h>
+
+#else
+
+// Linux network headers
 #include <unistd.h>
 #include <fcntl.h>
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
 #include <net/if.h>
+
+#endif
 
 // Lexo headers
 #include <Core/Vector.hpp>
@@ -185,14 +194,6 @@ private:
 
     /** @brief Release an acquired identifier, it will be assignable again */
     void releaseIdentifier(const BoardID identifier) noexcept { _identifierTable[identifier] = false; };
-
-    // Sockets utils
-
-    /** @brief Set socket to be in non-blocking mode */
-    void setSocketNonBlocking(const Socket socket) { ::fcntl(socket, F_SETFL, O_NONBLOCK); };
-
-    /** @brief Set keepalive option on socket */
-    void setSocketKeepAlive(const Socket socket);
 
     // Packet processing
 
