@@ -8,12 +8,12 @@ DefaultComboBox {
     readonly property string tooltipSufixText: " " + controlUnitName + "\n" + controlDescription
 
     width: 100
-    height: 50
+    height: 30
     model: controlRangeNames
     currentIndex: controlValue
 
     ToolTip.visible: hovered || pressed
     ToolTip.text: tooltipPrefixText + currentText + tooltipSufixText
 
-    onAccepted: controlValue = currentIndex
+    onActivated: controlValue = index
 }

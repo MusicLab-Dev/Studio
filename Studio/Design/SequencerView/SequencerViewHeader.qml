@@ -56,8 +56,8 @@ Rectangle {
                             currentIndex: sequencerView.partitionIndex
 
                             onActivated: {
-                                sequencerView.partitionIndex = currentIndex
-                                sequencerView.partition = sequencerView.node.partitions.getPartition(currentIndex)
+                                sequencerView.partitionIndex = index
+                                sequencerView.partition = sequencerView.node.partitions.getPartition(index)
                             }
                         }
                     }
