@@ -11,7 +11,7 @@ ComboBox {
         anchors.right: parent.right
         anchors.rightMargin: comboBoxText.leftPadding / 2
         width: height
-        height: control.height / 2
+        height: control.height / 4
         contextType: "2d"
 
         onPaint: {
@@ -35,6 +35,7 @@ ComboBox {
         id: comboBoxText
         text: control.displayText
         font: control.font
+        fontSizeMode: Text.Fit
         verticalAlignment: Text.AlignVCenter
         leftPadding: 15
         elide: Text.ElideRight

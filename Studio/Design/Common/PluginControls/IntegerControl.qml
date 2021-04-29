@@ -4,6 +4,9 @@ import QtQuick.Controls 2.15
 import "../../Default"
 
 DefaultPotentiometer {
+    readonly property string tooltipPrefixText: controlTitle + ": "
+    readonly property string tooltipSufixText: " " + controlUnitName + "\n" + controlDescription
+
     width: 50
     height: 50
     minimumValue: controlMinValue
@@ -11,7 +14,7 @@ DefaultPotentiometer {
     stepSize: controlStepValue
 
     ToolTip.visible: hovered || pressed
-    ToolTip.text: controlTitle + ": " + controlValue.toFixed() + "\n" + controlDescription
+    ToolTip.text: tooltipPrefixText + controlValue.toFixed() + tooltipSufixText
 
     onValueChanged: {
         var fixed = Math.floor(value)
