@@ -12,12 +12,12 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            modules.insert(modulesViewContent.modules.count - 1, {
+            modules.insert(modulesViewContent.modules.count, {
                 title: "New component",
                 path: "qrc:/EmptyView/EmptyView.qml",
                 callback: modulesViewContent.nullCallback
             })
-            modulesViewContent.componentSelected = modulesViewContent.modules.count - 2
+            modulesViewContent.componentSelected = modulesViewContent.modules.count - 1
         }
     }
 

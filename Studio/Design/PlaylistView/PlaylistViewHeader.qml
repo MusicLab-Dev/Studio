@@ -10,28 +10,6 @@ import "../Default"
 Rectangle {
     color: themeManager.foregroundColor
 
-    /** Debug */
-    Row {
-        anchors.fill: parent
-        Button {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 50
-            height: 40
-            onPressed: app.project.save()
-            text: "save"
-
-        }
-        Button {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 50
-            height: 40
-            onPressed: app.project.load()
-            text: "load"
-
-        }
-    }
-    /** ---- */
-
     // ComboBox {
     //     id: playlistBeatScaleList
     //     x: parent.width * 0.1
