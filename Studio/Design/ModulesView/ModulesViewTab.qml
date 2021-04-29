@@ -58,7 +58,7 @@ Rectangle {
     Text {
         height: parent.height
         width: parent.width - closeBtn.width
-        text: modulesViewContent.getModule(index).moduleName //title
+        text: index + 1 === moduleRepeater.count ? title : modulesViewContent.getModule(index).moduleName
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: componentSelected === index ? "white" : mouseArea.containsMouse ? "black" : themeManager.disabledColor

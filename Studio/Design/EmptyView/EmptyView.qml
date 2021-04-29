@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.15
 import "../Common"
 
 Rectangle {
-    property string moduleName: qsTr("Empty")
+    property string moduleName: qsTr("New")
     property int moduleIndex: -1
 
     id: emptyView
