@@ -22,5 +22,6 @@
         <file>PluginControls/FloatingControl.qml</file>
         <file>PluginControls/IntegerControl.qml</file>
         <file>TextRoundedButton.qml</file>
+        <file>PartitionComboBox.qml</file>
     </qresource>
 </RCC>

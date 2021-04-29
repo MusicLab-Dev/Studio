@@ -27,15 +27,39 @@ Rectangle {
                     Layout.preferredHeight: parent.height
                     Layout.preferredWidth: parent.width * 0.5
 
-                    DefaultComboBox {
-                        width: parent.width / 2
+                    Row {
+                        x: parent.width / 2 - width / 2
+                        y: parent.height / 2 - height / 2
+                        width: parent.width / 2 + height + spacing
                         height: parent.height / 2
-                        anchors.centerIn: parent
-                        model: [
-                            "Sequence1",
-                            "Sequence2",
-                            "Sequence3"
-                        ]
+                        spacing: 5
+
+                        AddButton {
+                            id: addBtn
+                            width: parent.height
+                            height: parent.height
+
+                            onReleased: {
+                                sequencerView.player.stop()
+                                if (sequencerView.node.partitions.add()) {
+                                    sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
+                                    sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
+                                }
+                            }
+                        }
+
+                        PartitionComboBox {
+                            id: partitionComboBox
+                            width: parent.width - addBtn.height
+                            height: parent.height
+                            partitions: sequencerView.node ? sequencerView.node.partitions : null
+                            currentIndex: sequencerView.partitionIndex
+
+                            onActivated: {
+                                sequencerView.partitionIndex = currentIndex
+                                sequencerView.partition = sequencerView.node.partitions.getPartition(currentIndex)
+                            }
+                        }
                     }
                 }
 
