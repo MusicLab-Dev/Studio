@@ -1,13 +1,91 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import "../../Common"
+
 SettingsBackground {
+    function open() {
+        visible = true
+    }
+
+    function close() {
+        visible = false
+    }
+
     id: settingsView
+    visible: false
 
     SettingsViewTitle {
         id: settingsViewTitle
         x: (settingsForeground.width + (parent.width - settingsForeground.width) / 2) - width / 2
         y: height
+
+    }
+
+    TextRoundedButton {
+        id: settingsViewDefaultsButtonText
+        text: "Defaults"
+        type: 1
+        y: height
+        width: settingsViewReloadButtonText.width
+        height: settingsViewReloadButtonText.height
+        anchors.right: settingsViewReloadButtonText.left
+        anchors.rightMargin: height
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: { settingsViewDefaultsButtonText.buttonHovered = true }
+
+            onExited: { settingsViewDefaultsButtonText.buttonHovered = false }
+
+            onReleased: { app.settings.resetDefaults() }
+        }
+    }
+
+    TextRoundedButton {
+        id: settingsViewReloadButtonText
+        text: "Reload"
+        type: 1
+        y: height
+        width: settingsViewCloseButtonText.width
+        height: settingsViewCloseButtonText.height
+        anchors.right: settingsViewCloseButtonText.left
+        anchors.rightMargin: height
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: { settingsViewReloadButtonText.buttonHovered = true }
+
+            onExited: { settingsViewReloadButtonText.buttonHovered = false }
+
+            onReleased: { app.settings.reload() }
+        }
+    }
+
+    TextRoundedButton {
+        id: settingsViewCloseButtonText
+        x: settingsView.width - width - height
+        y: height
+        text: "Done"
+        type: 1
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: { settingsViewCloseButtonText.buttonHovered = true }
+
+            onExited: { settingsViewCloseButtonText.buttonHovered = false }
+
+            onReleased: {
+                app.settings.saveValues()
+                settingsView.close()
+            }
+        }
     }
 
     SettingsForeground {

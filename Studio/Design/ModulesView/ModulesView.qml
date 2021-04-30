@@ -4,6 +4,7 @@ import QtQuick.Dialogs 1.3
 
 import "../Modules/Plugins"
 import "../Modules/Workspaces"
+import "../Modules/Settings"
 
 Rectangle {
     function removeComponent() {
@@ -33,6 +34,7 @@ Rectangle {
 
     property alias modulesViewContent: modulesViewContent
     property alias modules: modulesViewContent.modules
+    property alias settingsView: settingsView
     property alias componentSelected: modulesViewContent.componentSelected
 
     function onNodeDeleted(targetNode) {
@@ -87,6 +89,16 @@ Rectangle {
 
     WorkspacesView {
         id: filePicker
+        width: parent.width * 0.9
+        height: parent.height * 0.9
+        anchors.centerIn: parent
+    }
+
+    SettingsView {
+        id: settingsView
+        width: parent.width * 0.9
+        height: parent.height * 0.9
+        anchors.centerIn: parent
     }
 
     Shortcut {

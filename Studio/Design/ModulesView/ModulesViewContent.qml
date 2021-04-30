@@ -57,6 +57,12 @@ Item {
 
         Menu {
             id: globalMenu
+
+            Action {
+                text: "Open settings"
+                onTriggered: modulesView.settingsView.open()
+            }
+
             Action {
                 text: "Save project"
                 onTriggered: app.project.save()

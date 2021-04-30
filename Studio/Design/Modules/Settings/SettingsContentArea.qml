@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import SettingsListModel 1.0
 
 Rectangle {
+    property alias settingsProxyModel: settingsProxyModel
+
     id: settingsContentArea
     color: "#001E36"
 
@@ -22,11 +24,22 @@ Rectangle {
         }
 
         model: SettingsListModelProxy {
-            id: settingsModel
+            id: settingsProxyModel
+            sourceModel: app.settings
         }
 
         delegate: Column {
-            property string paramCategory: subcategory
+            property string paramCategory: {
+                var tmp = category
+                var idx = tmp.lastIndexOf('/')
+                if (idx === -1)
+                    return tmp
+                var firstOccurence = tmp.indexOf('/', 1)
+                if (firstOccurence === idx || firstOccurence === - 1)
+                    return tmp.substr(idx + 1)
+                else
+                    return tmp.substr(firstOccurence + 1)
+            }
             property bool categoryVisible: false
 
             id: delegateCol

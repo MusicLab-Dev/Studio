@@ -45,8 +45,6 @@
         <file>Assets/Settings/Midi.png</file>
         <file>Assets/Settings/Project.png</file>
         <file>Assets/Free.png</file>
-        <file>Templates/SettingsTest.json</file>
-        <file>Resources.qrc</file>
         <file>Assets/BoardButton.png</file>
         <file>Assets/BoardPotentiometer.png</file>
         <file>Assets/Plugins/Default.png</file>
@@ -55,5 +53,6 @@
         <file>Assets/Plugins/LambdaFilter.png</file>
         <file>Assets/Plugins/GammaEqualizer.png</file>
         <file>Assets/Plugins/Sampler.png</file>
+        <file>Templates/SettingsModel.json</file>
     </qresource>
 </RCC>

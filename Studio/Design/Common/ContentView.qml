@@ -156,12 +156,6 @@ Item {
         height: contentView.height - contentViewTimeline.height
         y: contentViewTimeline.height
 
-        // Content view data
-        Item {
-            id: placeholder
-            anchors.fill: parent
-        }
-
         // Data grid overlay
         SurfaceContentGrid {
             id: surfaceContentGrid
@@ -197,6 +191,12 @@ Item {
                     // yOffset = yOffsetMin * position / size
                 }
             }
+        }
+
+        // Content view data
+        Item {
+            id: placeholder
+            anchors.fill: parent
         }
     }
 

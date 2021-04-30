@@ -35,45 +35,20 @@ Rectangle {
         y: settingsResearchTextInput.y + settingsResearchTextInput.height * 1.5
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 12
-        
+
         Repeater {
-            model: ListModel {
-                ListElement {
-                    categoryName: "Midi"
-                    categoryIcon: "Midi.png"
-                }
-                ListElement {
-                    categoryName: "Audio"
-                    categoryIcon: "Audio.png"
-                }
-                ListElement {
-                    categoryName: "General"
-                    categoryIcon: "General.png"
-                }
-                ListElement {
-                    categoryName: "File"
-                    categoryIcon: "File.png"
-                }
-                ListElement {
-                    categoryName: "Project"
-                    categoryIcon: "Project.png"
-                }
-                ListElement {
-                    categoryName: "Info"
-                    categoryIcon: "Info.png"
-                }
-                ListElement {
-                    categoryName: "Debug"
-                    categoryIcon: "Debug.png"
-                }
-                ListElement {
-                    categoryName: "About"
-                    categoryIcon: "About.png"
-                }
-            }
+            model: app.settings.categories
 
-            SettingsForegroundCard {
+            delegate: SettingsForegroundCard {
 
+                onReleased: {
+                    settingsContentArea.settingsProxyModel.category = modelData
+                }
+
+                Component.onCompleted: {
+                    if (index === 0)
+                        settingsContentArea.settingsProxyModel.category = modelData
+                }
             }
         }
     }
