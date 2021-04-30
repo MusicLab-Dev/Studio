@@ -51,7 +51,7 @@ Rectangle {
                         visible: playlistView.editMode === PlaylistView.EditMode.Brush
                         x: parent.width / 2
                         anchors.verticalCenter: parent.verticalCenter
-                        width: contentView.rowHeaderWidth / 2
+                        width: parent.height
                         height: parent.height / 2
                         currentIndex: 0
 
