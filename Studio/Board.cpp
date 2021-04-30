@@ -17,6 +17,7 @@ QHash<int, QByteArray> Board::roleNames(void) const
 
 int Board::rowCount(const QModelIndex &parent) const
 {
+    (void)parent; // cast to clear "unused paramter" error
     return _controls.size();
 }
 

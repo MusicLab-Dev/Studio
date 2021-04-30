@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <string>
+#include <cstring>
 
 #ifdef WIN32
 
@@ -42,6 +43,8 @@
 
     using Socklen = socklen_t;
     using NetworkAddress = sockaddr_in;
+    using Port = std::uint16_t;
+    using DataSize = std::int64_t;
 #endif
     static constexpr std::int32_t DefaultBacklog = 3;
 
@@ -88,7 +91,7 @@ inline void setSocketDevice(const Socket socket, const std::string &interfaceNam
             SOL_SOCKET,
             SO_BINDTODEVICE,
             interfaceName.c_str(),
-            interfaceName.length()
+            static_cast<Socklen>(interfaceName.length())
         );
     #endif
     if (ret < 0) {
@@ -107,7 +110,7 @@ inline void bindSocket(const Socket socket, const NetworkAddress &address)
         ret = ::bind(
             socket,
             reinterpret_cast<const sockaddr *>(&address),
-            sizeof(interfaceAddress)
+            sizeof(address)
         );
     #endif
     if (ret < 0) {
@@ -131,7 +134,7 @@ inline void listenSocket(const Socket socket)
     }
 }
 
-inline NetworkAddress createNetworkAddress(const int port, const std::string &address)
+inline NetworkAddress createNetworkAddress(const Port port, const std::string &address)
 {
     NetworkAddress tcpAddress;
 
@@ -140,13 +143,9 @@ inline NetworkAddress createNetworkAddress(const int port, const std::string &ad
         tcpAddress.sin_port = ::htons(port);
         tcpAddress.sin_addr.s_addr = ::inet_addr(address.c_str());
     #else
-        tcpAddress = {
-            .sin_family = AF_INET,
-            .sin_port = ::htons(port),
-            .sin_addr = {
-                .s_addr = ::inet_addr(address.c_str())
-            }
-        };
+        tcpAddress.sin_family = AF_INET;
+        tcpAddress.sin_port = ::htons(port);
+        tcpAddress.sin_addr.s_addr = ::inet_addr(address.c_str());
     #endif
 
     return tcpAddress;
@@ -189,7 +188,7 @@ inline void setSocketNonBlocking(const Socket socket)
     #else
         ::fcntl(socket, F_SETFL, O_NONBLOCK);
     #endif
-};
+}
 
 inline void setSocketKeepAlive(const Socket socket)
 {
@@ -211,9 +210,9 @@ inline void setSocketKeepAlive(const Socket socket)
     ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int));
 }
 
-inline int recvSocket(const Socket socket, std::uint8_t *buffer, int size)
-{  
-    int ret = 0;
+inline DataSize recvSocket(const Socket socket, std::uint8_t *buffer, DataSize size)
+{
+    DataSize ret = 0;
 
     #ifdef WIN32
         ret = ::recv(socket, reinterpret_cast<char *>(buffer), size, 0);
@@ -224,9 +223,9 @@ inline int recvSocket(const Socket socket, std::uint8_t *buffer, int size)
     return ret;
 }
 
-inline int sendSocket(const Socket socket, std::uint8_t *buffer, int size)
+inline DataSize sendSocket(const Socket socket, std::uint8_t *buffer, DataSize size)
 {
-    int ret = 0;
+    DataSize ret = 0;
 
     #ifdef WIN32
         ret = ::send(socket, reinterpret_cast<char *>(&buffer), size, 0);
@@ -237,9 +236,9 @@ inline int sendSocket(const Socket socket, std::uint8_t *buffer, int size)
     return ret;
 }
 
-inline int sendToSocket(const Socket socket, NetworkAddress &address, std::uint8_t *buffer, int size)
+inline DataSize sendToSocket(const Socket socket, NetworkAddress &address, std::uint8_t *buffer, DataSize size)
 {
-    int ret = 0;
+    DataSize ret = 0;
 
     #ifdef WIN32
         ret = ::sendto(

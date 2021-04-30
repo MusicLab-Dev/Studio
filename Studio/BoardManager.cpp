@@ -129,10 +129,10 @@ void BoardManager::discoveryEmit(void)
     for (const auto &networkInterface : _interfaces) {
 
         Socket broadcastSocket { networkInterface.second.second };
-        sockaddr_in broadcastAddress { 0 };
+        sockaddr_in broadcastAddress;
         Socklen len = sizeof(broadcastAddress);
 
-        auto ret = ::getsockname(
+        DataSize ret = ::getsockname(
             broadcastSocket,
             reinterpret_cast<sockaddr *>(&broadcastAddress),
             &len
@@ -300,7 +300,7 @@ void BoardManager::processNewConnections(void)
 {
     std::cout << "BoardManager::processNewConnections" << '\n';
 
-    sockaddr_in clientAddress { 0 };
+    NetworkAddress clientAddress;
     Socklen clientAddressLen = sizeof(clientAddress);
 
     for (const auto &networkInterface : _interfaces) {
@@ -328,10 +328,9 @@ void BoardManager::processNewConnections(void)
 
         std::cout << "New connection from [" << inet_ntoa(clientAddress.sin_addr) << ':' << clientAddress.sin_port << ']' << std::endl;
 
-        DirectClient directClient = {
-            .socket = clientSocket,
-            .interfaceName = networkInterface.first
-        };
+        DirectClient directClient;
+        directClient.socket = clientSocket;
+        directClient.interfaceName = networkInterface.first;
 
         _clients.push(directClient);
     }
@@ -359,7 +358,7 @@ bool BoardManager::handleIdentifierRequest(const Protocol::ReadablePacket &packe
         response.prepare(ProtocolType::Connection, ConnectionCommand::IDAssignment);
         response << newID;
         // Send the identifier response to the client
-        int ret = sendSocket(clientSocket, reinterpret_cast<std::uint8_t *>(&buffer), static_cast<int>(response.totalSize()));
+        DataSize ret = sendSocket(clientSocket, reinterpret_cast<std::uint8_t *>(&buffer), static_cast<int>(response.totalSize()));
         if (ret < 0)
             throw std::runtime_error(std::strerror(errno));
         // Add the new board the studio list
@@ -444,12 +443,12 @@ void BoardManager::processDirectClients(void)
 
 BoardID BoardManager::aquireIdentifier(void) noexcept
 {
-    int i = 1;
+    std::uint16_t i = 1;
 
     while (i < 256) {
         if (_identifierTable[i] == false) {
             _identifierTable[i] = true;
-            return i;
+            return static_cast<BoardID>(i);
         }
         i++;
     }

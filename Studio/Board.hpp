@@ -50,20 +50,20 @@ public:
         _rootSocket = rootSocket;
 
         _controls = Controls {
-            Control {
-                .type = ControlType::Button,
-                .pos = QPoint(1, 2),
-                .data = 1
+            {
+                ControlType::Button,
+                QPoint(1, 2),
+                1
             },
             Control {
-                .type = ControlType::Button,
-                .pos = QPoint(1, 2),
-                .data = 2
+                ControlType::Button,
+                QPoint(1, 2),
+                2
             },
             Control {
-                .type = ControlType::Button,
-                .pos = QPoint(1, 2),
-                .data = 3
+                ControlType::Button,
+                QPoint(1, 2),
+                3
             }
         };
     }
@@ -88,12 +88,12 @@ public:
     [[nodiscard]] Controls &controls(void) noexcept { return _controls; }
     [[nodiscard]] const Controls &controls(void) const  noexcept { return _controls; }
 
-    [[nodiscard]] const Protocol::BoardID getIdentifier(void) const noexcept { return _boardID; }
+    [[nodiscard]] Protocol::BoardID getIdentifier(void) const noexcept { return _boardID; }
 
     void setStatus(const bool status) noexcept { _status = status; }
-    [[nodiscard]] const bool getStatus(void) const noexcept { return _status; }
+    [[nodiscard]] bool getStatus(void) const noexcept { return _status; }
 
-    [[nodiscard]] const Socket getRootSocket(void) const noexcept { return _rootSocket; }
+    [[nodiscard]] Socket getRootSocket(void) const noexcept { return _rootSocket; }
 
     [[nodiscard]] Board *getSlave(const Protocol::BoardID slaveId) const noexcept
     {
