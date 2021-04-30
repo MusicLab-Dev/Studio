@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import Qt.labs.platform 1.1
 
-import '../../Default'
+import "../../Default"
 
 Rectangle {
     property bool expanded: workspaceFoldButton.activated

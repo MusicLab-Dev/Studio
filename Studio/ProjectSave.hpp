@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <gtest/gtest.h>
 #include <QVariantMap>
 #include <QFile>
 #include <QJsonDocument>
@@ -37,23 +36,15 @@ public:
     /** @brief Load the project from the JSON project file */
     bool load(void);
 
-private:
-    Project *_project;
-
-    /** @brief Read the JSON project file in project and return String */
-    QString read(void);
-
-    /** Write string into the JSON project file */
-    void write(const QString &json);
+public: // Reserved for unit tests
+    /** @brief return controls in QVariantList */
+    QVariantList transformControlsInVariantList(ControlsModel &controls) noexcept;
 
     /** @brief return node in QVariantMap */
     QVariantMap transformNodeInVariantMap(NodeModel &node);
 
     /** @brief return partitions in QVariantList */
     QVariantList transformPartitionsInVariantList(PartitionsModel &partitions) noexcept;
-
-    /** @brief return controls in QVariantList */
-    QVariantList transformControlsInVariantList(ControlsModel &controls) noexcept;
 
     /** @brief return partition in QVariantList */
     QVariantMap transformPluginInVariantMap(PluginModel &plugin) noexcept;
@@ -70,5 +61,12 @@ private:
     /** @brief Init a plugin model model by a QJsonObject */
     bool initPlugin(PluginModel *plugin, const QJsonObject &obj);
 
-    FRIEND_TEST(ProjectSave, transformPartitionsInVariantList);
+private:
+    Project *_project { nullptr };
+
+    /** @brief Read the JSON project file in project and return String */
+    QString read(void);
+
+    /** Write string into the JSON project file */
+    void write(const QString &json);
 };

@@ -29,6 +29,7 @@ WorkspacesBackground {
 
     property string fileUrl: ""
     property var fileUrls: [fileUrl]
+    property alias workspaceModel: workspaceForeground.workspacesModel
 
     id: workspaceView
     visible: false
@@ -111,15 +112,7 @@ WorkspacesBackground {
         width: Math.max(parent.width * 0.2, 350)
         height: parent.height
 
-        workspacesModel: app.settings.get("workspacePaths");
-        // ListModel {
-        //     id: workspacesModel
-
-        //     ListElement {
-        //         name: "Default Workspace"
-        //         path: ""
-        //     }
-        // }
+        workspacesModel: app.settings.get("workspacePaths")
     }
 
     WorkspacesContentArea {
@@ -139,11 +132,8 @@ WorkspacesBackground {
         selectFolder: true
 
         onAccepted: {
-            workspacesModel.append({
-                                       name: "New workspace",
-                                       path: folderPicker.fileUrl.toString()
-                                   })
-            app.settings.set("workspacePaths", workspacesModel);
+            app.settings.set("workspacePaths", workspacesModel + ["New workspace", folderPicker.fileUrl.toString()]);
+            app.settings.saveValues()
         }
     }
 }
