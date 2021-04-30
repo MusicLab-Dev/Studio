@@ -176,8 +176,23 @@ bool SettingsListModel::saveValues(void) noexcept
         return false;
     }
     QVariantMap map;
-    for (auto it = _models.begin(); it != _models.end(); it++)
-        map.insert(it->id, it->currentValue);
+    for (auto it = _models.begin(); it != _models.end(); it++) {
+        if (it->type != "StringPairList")
+            map.insert(it->id, it->currentValue);
+        else {
+            auto list = it->currentValue.toList();
+            QJsonArray value;
+            for (auto i = 0; i < list.size(); ++i) {
+                QJsonArray pair;
+                auto stringPair = list[i].toStringList();
+                pair.append(stringPair[0]);
+                pair.append(stringPair[1]);
+                value.append(pair);
+            }
+            qDebug() << "Map" << value;
+            map.insert(it->id, QVariant::fromValue(value));
+        }
+    }
     QJsonDocument doc(QJsonDocument::fromVariant(map));
     _jsonValuesFile.write(doc.toJson(QJsonDocument::Indented));
     _jsonValuesFile.close();
@@ -186,6 +201,7 @@ bool SettingsListModel::saveValues(void) noexcept
 
 bool SettingsListModel::set(const QString &id, const QVariant &value) noexcept
 {
+    qDebug() << "Setting" << id << value;
     for (auto it = _models.begin(); it != _models.end(); it++) {
         if (it->id == id) {
             it->currentValue = value;

@@ -1,8 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Rectangle {
+Popup {
     id: settingsBackground
-    color: "#001E36"
-    radius: 30
+
+    background: Rectangle {
+        color: "#001E36"
+        radius: 30
+    }
 }

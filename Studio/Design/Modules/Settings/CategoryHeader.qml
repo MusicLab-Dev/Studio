@@ -18,7 +18,7 @@ Row {
     DefaultText {
         id: categoryLabel
         color: "#295F8B"
-        text: paramCategory
+        text: settingsContentArea.settingsProxyModel.tags ? category.substr(1) : paramCategory
         height: parent.height
     }
 

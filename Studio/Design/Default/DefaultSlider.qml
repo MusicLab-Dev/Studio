@@ -8,6 +8,11 @@ Slider {
     height: parent.height
     hoverEnabled: true
 
+    onWidthChanged: canvas.requestPaint()
+    onHeightChanged: canvas.requestPaint()
+    onPressedChanged: canvas.requestPaint()
+    onHoveredChanged: canvas.requestPaint()
+
     background: Rectangle {
         id: background
         x: control.leftPadding
@@ -22,7 +27,7 @@ Slider {
         Repeater {
             readonly property real rangeWidth: range[1] - range[0]
             readonly property real stepCount: rangeWidth / range[2]
-            property real stepWidth: background.width / stepCount 
+            property real stepWidth: background.width / stepCount
 
             id: rep
             width: parent.width
@@ -58,12 +63,6 @@ Slider {
             context.closePath();
             context.fillStyle = control.pressed ? "#31A8FF" : control.hovered ? "#0D86CB" : "#295F8B";
             context.fill();
-        }
-
-        Connections {
-            target: control
-            function onPressedChanged() { canvas.requestPaint() }
-            function onHoveredChanged() { canvas.requestPaint() }
         }
     }
 }

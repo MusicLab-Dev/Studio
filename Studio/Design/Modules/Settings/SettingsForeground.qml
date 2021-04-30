@@ -27,6 +27,10 @@ Rectangle {
             placeholderText: qsTr("Default files")
             color: "white"
             opacity: 0.42
+
+            onTextChanged: {
+                settingsContentArea.settingsProxyModel.tags = text
+            }
         }
     }
 

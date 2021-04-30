@@ -29,7 +29,7 @@ WorkspacesBackground {
 
     property string fileUrl: ""
     property var fileUrls: [fileUrl]
-    property alias workspaceModel: workspaceForeground.workspacesModel
+    property alias workspacesModel: workspaceForeground.workspacesModel
 
     id: workspaceView
     visible: false
@@ -132,7 +132,14 @@ WorkspacesBackground {
         selectFolder: true
 
         onAccepted: {
-            app.settings.set("workspacePaths", workspacesModel + ["New workspace", folderPicker.fileUrl.toString()]);
+            console.log("WorkspacesModel before", workspacesModel)
+            var tmp = workspacesModel
+            if (tmp === undefined)
+                tmp = []
+            tmp.push(["New workspace", folderPicker.fileUrl.toString()])
+            app.settings.set("workspacePaths", tmp);
+            workspacesModel = tmp
+            console.log("WorkspacesModel after", workspacesModel)
             app.settings.saveValues()
         }
     }

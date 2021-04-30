@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 Text {
     id: settingsViewTitle
-    text: qsTr("Settings")
+    text: settingsContentArea.settingsProxyModel.tags ? "Results" : settingsContentArea.settingsProxyModel.category
     color: "lightgrey"
     font.pointSize: 34
 }

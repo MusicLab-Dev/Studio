@@ -22,7 +22,7 @@
                 "id": "workspacePaths",
                 "name": "Workspace paths",
                 "tags": ["workspace", "path"],
-                "type": "StringPairList(QVector<QVector<QString>>)"
+                "type": "StringPairList"
             }
         ],
         "Other": [
