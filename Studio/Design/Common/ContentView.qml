@@ -166,8 +166,6 @@ Item {
             else if (offset < yOffsetMin)
                 offset = yOffsetMin
             yOffset = offset
-
-            // yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoom, 0), 1)
         }
     }
 

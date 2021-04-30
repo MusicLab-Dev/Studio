@@ -19,10 +19,10 @@ MouseArea {
 
     onWheel: {
         if (wheel.modifiers & Qt.ControlModifier) {
-            if (wheel.angleDelta.x !== 0)
-                xZoomed(wheel.angleDelta.x, wheel.x)
-            else if (wheel.angleDelta.y !== 0)
-                yZoomed(wheel.angleDelta.y, wheel.y)
+            if (wheel.angleDelta.y !== 0)
+                xZoomed(wheel.angleDelta.y, wheel.y)
+            else if (wheel.angleDelta.x !== 0)
+                yZoomed(wheel.angleDelta.x, wheel.x)
         } else {
             if (wheel.angleDelta.x !== 0)
                 xScrolled(wheel.angleDelta.x, wheel.x)
