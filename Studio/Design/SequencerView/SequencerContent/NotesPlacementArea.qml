@@ -26,6 +26,7 @@ MouseArea {
     property int brushBegin: 0
     property int brushEnd: 0
     property int brushStep: 0
+    property int brushWidth: 0
 
     function addOnTheFly(targetKey) {
         if (onTheFlyKey !== -1 && onTheFlyKey !== targetKey)
@@ -93,10 +94,11 @@ MouseArea {
                 mode = NotesPlacementArea.Mode.Brush
                 brushKey = mouseKey
                 brushBegin = mouseBeatPrecision
-                brushEnd = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
+                brushWidth = contentView.placementBeatPrecisionLastWidth + brushStep
+                brushEnd = mouseBeatPrecision + brushWidth
                 partition.add(
                     AudioAPI.note(
-                        AudioAPI.beatRange(brushBegin, brushEnd),
+                        AudioAPI.beatRange(brushBegin, brushBegin + contentView.placementBeatPrecisionLastWidth),
                         brushKey,
                         AudioAPI.velocityMax,
                         0
@@ -205,49 +207,42 @@ MouseArea {
             break
         case NotesPlacementArea.Mode.Brush:
             var mouseBeatPrecision = realMouseBeatPrecision
-            var outsideBegin = mouseBeatPrecision < brushBegin
-            var outsideEnd = mouseBeatPrecision > brushEnd
-            var outsideRange = outsideBegin || outsideEnd
-            if (brushStep !== 0) {
-                var tmp = contentView.placementBeatPrecisionLastWidth + brushStep
-                if (outsideEnd)
-                    mouseBeatPrecision = mouseBeatPrecision + (tmp - (mouseBeatPrecision % tmp)) + (brushEnd % tmp)
-                else
-                    mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % tmp) + (brushBegin % tmp)
-            } else {
-                if (outsideEnd)
-                    mouseBeatPrecision = mouseBeatPrecision + (contentView.placementBeatPrecisionLastWidth - (mouseBeatPrecision % contentView.placementBeatPrecisionLastWidth)) + (brushEnd % contentView.placementBeatPrecisionLastWidth)
-                else
-                    mouseBeatPrecision = mouseBeatPrecision - ((mouseBeatPrecision - (brushBegin % contentView.placementBeatPrecisionLastWidth)) % contentView.placementBeatPrecisionLastWidth)
-            }
-            // Check if we should create a new note
-            if (brushKey != mouseKey || outsideRange) {
-                brushKey = mouseKey
-                if (outsideEnd) {
-                    brushBegin = mouseBeatPrecision - contentView.placementBeatPrecisionLastWidth
-                    brushEnd = mouseBeatPrecision
-                } else {
-                    brushBegin = mouseBeatPrecision
-                    brushEnd = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
-                }
-                // Don't brush over existing notes
-                if (partition.findOverlap(brushKey, brushBegin + 1, brushEnd - 1) === -1) {
-                    if (!sequencerView.player.isPlaying)
-                        addOnTheFly(brushKey)
-                    partition.add(
-                        AudioAPI.note(
-                            AudioAPI.beatRange(brushBegin, brushEnd),
-                            brushKey,
-                            AudioAPI.velocityMax,
-                            0
-                        )
-                    )
+            if (mouseBeatPrecision >= brushBegin && mouseBeatPrecision <= brushEnd)
+                return
+            if (mouseBeatPrecision <= brushBegin)
+                mouseBeatPrecision = mouseBeatPrecision + (brushBegin - mouseBeatPrecision) - brushWidth
+            else
+                mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision - brushEnd)
+            brushBegin = mouseBeatPrecision
+            brushEnd = mouseBeatPrecision + brushWidth
 
-                }
+            // Don't brush over existing notes
+            if (brushBegin >= 0 && partition.findOverlap(brushKey, brushBegin + 1, brushBegin + contentView.placementBeatPrecisionLastWidth - 1) === -1) {
+                if (!sequencerView.player.isPlaying)
+                    addOnTheFly(brushKey)
+                partition.add(
+                    AudioAPI.note(
+                        AudioAPI.beatRange(brushBegin, brushBegin + contentView.placementBeatPrecisionLastWidth),
+                        brushKey,
+                        AudioAPI.velocityMax,
+                        0
+                    )
+                )
             }
             break
         default:
             break
         }
+    }
+
+    Rectangle {
+        color: "transparent"
+        border.color: Qt.darker(themeManager.getColorFromChain(brushKey), 1.5)
+        border.width: 2
+        visible: mode == NotesPlacementArea.Mode.Brush
+        x: contentView.xOffset + brushBegin * contentView.pixelsPerBeatPrecision
+        y: parent.height - (brushKey - pianoView.keyOffset + 1) * contentView.rowHeight
+        width: (brushEnd - brushBegin) * contentView.pixelsPerBeatPrecision
+        height: contentView.rowHeight
     }
 }

@@ -24,7 +24,7 @@ DefaultComboBox {
         }
         ListElement {
             label: "1/2"
-            value: 65
+            value: 64
         }
         ListElement {
             label: "1/1"

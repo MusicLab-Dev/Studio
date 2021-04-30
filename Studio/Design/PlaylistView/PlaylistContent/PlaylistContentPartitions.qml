@@ -90,7 +90,7 @@ Repeater {
                         y: parent.height / 8
                         width: 1
                         height: contentView.rowHeight * 3 / 4
-                        color: "white"
+                        color: parent.border.color
                     }
 
                     Rectangle {
@@ -98,7 +98,7 @@ Repeater {
                         y: parent.height / 8
                         width: 1
                         height: contentView.rowHeight * 3 / 4
-                        color: "white"
+                        color: parent.border.color
                     }
                 }
             }

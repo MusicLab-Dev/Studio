@@ -21,6 +21,7 @@ MouseArea {
     property int brushBegin: 0
     property int brushEnd: 0
     property int brushStep: 0
+    property int brushWidth: 0
 
     id: contentPlacementArea
     acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -48,12 +49,13 @@ MouseArea {
         if (instanceIndex === -1) {
             if (contentView.placementBeatPrecisionLastWidth === 0)
                 contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionDefaultWidth
-            // Brush mode, insert note directly
+            // Brush mode, insert instance directly
             if (playlistView.editMode === PlaylistView.EditMode.Brush) {
                 mode = InstancesPlacementArea.Mode.Brush
                 brushBegin = mouseBeatPrecision
-                brushEnd = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
-                instances.add(AudioAPI.beatRange(brushBegin, brushEnd))
+                brushWidth = contentView.placementBeatPrecisionLastWidth + brushStep
+                brushEnd = mouseBeatPrecision + brushWidth
+                instances.add(AudioAPI.beatRange(brushBegin, mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth))
             // Move mode, attach preview
             } else {
                 // Attach the preview
@@ -139,37 +141,30 @@ MouseArea {
             break
         case InstancesPlacementArea.Mode.Brush:
             var mouseBeatPrecision = realMouseBeatPrecision
-            var outsideBegin = mouseBeatPrecision < brushBegin
-            var outsideEnd = mouseBeatPrecision > brushEnd
-            var outsideRange = outsideBegin || outsideEnd
-            if (brushStep !== 0) {
-                var tmp = contentView.placementBeatPrecisionLastWidth + brushStep
-                if (outsideEnd)
-                    mouseBeatPrecision = mouseBeatPrecision + (tmp - (mouseBeatPrecision % tmp)) + (brushEnd % tmp)
-                else
-                    mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % tmp) + (brushBegin % tmp)
-            } else {
-                if (outsideEnd)
-                    mouseBeatPrecision = mouseBeatPrecision + (contentView.placementBeatPrecisionLastWidth - (mouseBeatPrecision % contentView.placementBeatPrecisionLastWidth)) + (brushEnd % contentView.placementBeatPrecisionLastWidth)
-                else
-                    mouseBeatPrecision = mouseBeatPrecision - ((mouseBeatPrecision - (brushBegin % contentView.placementBeatPrecisionLastWidth)) % contentView.placementBeatPrecisionLastWidth)
-            }
-            // Check if we should create a new instance
-            if (outsideRange) {
-                if (outsideEnd) {
-                    brushBegin = mouseBeatPrecision - contentView.placementBeatPrecisionLastWidth
-                    brushEnd = mouseBeatPrecision
-                } else {
-                    brushBegin = mouseBeatPrecision
-                    brushEnd = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
-                }
-                // Don't overwrite over existing instances
-                if (instances.findOverlap(brushBegin + 1, brushEnd - 1) === -1)
-                    instances.add(AudioAPI.beatRange(brushBegin, brushEnd))
-            }
+            if (mouseBeatPrecision >= brushBegin && mouseBeatPrecision <= brushEnd)
+                return
+            if (mouseBeatPrecision <= brushBegin)
+                mouseBeatPrecision = mouseBeatPrecision + (brushBegin - mouseBeatPrecision) - brushWidth
+            else
+                mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision - brushEnd)
+            brushBegin = mouseBeatPrecision
+            brushEnd = mouseBeatPrecision + brushWidth
+            // Don't overwrite over existing instances
+            if (brushBegin >= 0 && instances.findOverlap(brushBegin + 1, brushEnd - 1) === -1)
+                instances.add(AudioAPI.beatRange(brushBegin, brushBegin + contentView.placementBeatPrecisionLastWidth))
             break
         default:
             break
         }
+    }
+
+    Rectangle {
+        color: "transparent"
+        border.color: nodeDelegate.node ? Qt.darker(nodeDelegate.node.color, 1.5) : "black"
+        border.width: 2
+        visible: mode == InstancesPlacementArea.Mode.Brush
+        x: contentView.xOffset + brushBegin * contentView.pixelsPerBeatPrecision
+        width: (brushEnd - brushBegin) * contentView.pixelsPerBeatPrecision
+        height: contentView.rowHeight
     }
 }
