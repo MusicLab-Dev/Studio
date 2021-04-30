@@ -77,6 +77,7 @@ set(StudioSources
     ${StudioDir}/BoardManager.cpp
     ${StudioDir}/Board.hpp
     ${StudioDir}/Board.cpp
+    ${StudioDir}/Socket.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

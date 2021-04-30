@@ -12,20 +12,7 @@
 #include <Core/Vector.hpp>
 #include <Protocol/Protocol.hpp>
 
-// #include "Net/Socket.hpp"
-
-class Board;
-
-struct BoardWrapper
-{
-    Q_GADGET
-
-    Q_PROPERTY(Board *instance MEMBER instance)
-
-public:
-    Board *instance { nullptr };
-};
-Q_DECLARE_METATYPE(BoardWrapper)
+#include "Socket.hpp"
 
 class alignas_cacheline Board : public QAbstractListModel
 {
@@ -57,31 +44,31 @@ public:
         Data
     };
 
-    Board(void)
+    Board(const Protocol::BoardID identifier, const Socket rootSocket)
     {
+        _boardID = identifier;
+        _rootSocket = rootSocket;
+
         _controls = Controls {
             Control {
-                ControlType::Button,
-                QPoint(0, 0),
-                0
+                .type = ControlType::Button,
+                .pos = QPoint(1, 2),
+                .data = 1
             },
             Control {
-                ControlType::Button,
-                QPoint(1, 1),
-                1
+                .type = ControlType::Button,
+                .pos = QPoint(1, 2),
+                .data = 2
             },
             Control {
-                ControlType::Potentiometer,
-                QPoint(2, 2),
-                0
-            },
-            Control {
-                ControlType::Potentiometer,
-                QPoint(3, 3),
-                1
+                .type = ControlType::Button,
+                .pos = QPoint(1, 2),
+                .data = 3
             }
         };
     }
+
+    ~Board() = default;
 
     /** @brief Names of 'Control' roles */
     [[nodiscard]] virtual QHash<int, QByteArray> roleNames(void) const override;
@@ -101,6 +88,45 @@ public:
     [[nodiscard]] Controls &controls(void) noexcept { return _controls; }
     [[nodiscard]] const Controls &controls(void) const  noexcept { return _controls; }
 
+    [[nodiscard]] const Protocol::BoardID getIdentifier(void) const noexcept { return _boardID; }
+
+    void setStatus(const bool status) noexcept { _status = status; }
+    [[nodiscard]] const bool getStatus(void) const noexcept { return _status; }
+
+    [[nodiscard]] const Socket getRootSocket(void) const noexcept { return _rootSocket; }
+
+    [[nodiscard]] Board *getSlave(const Protocol::BoardID slaveId) const noexcept
+    {
+        for (const auto &slave : _slaves) {
+            if (slave.get()->getIdentifier() == slaveId) {
+                return slave.get();
+            }
+        }
+        return nullptr;
+    }
+
+    void detachSlave(const Protocol::BoardID slaveId)
+    {
+        for (auto &slave : _slaves) {
+            if (slave.get()->getIdentifier() == slaveId) {
+                slave.reset();
+                _slaves.erase(&slave);
+                return;
+            }
+        }
+    }
+
+    void markSlavesOff(void)
+    {
+        if (_slaves.empty()) {
+            return;
+        }
+        for (auto &slave : _slaves) {
+            slave->markSlavesOff();
+            slave->setStatus(false);
+        }
+    }
+
 public slots:
 
 signals:
@@ -108,11 +134,14 @@ signals:
     void sizeChanged(void);
 
 private:
-    Core::Vector<Protocol::BoardID, int> _parentStack {};
+    Board *_master = nullptr;
+    Core::Vector<std::shared_ptr<Board>, int> _slaves {};
+    Socket _rootSocket { -1 };
+
     Controls _controls {};
     QSize _size {};
-    // Net::SocketView _rooter {};
-    Protocol::BoardID _boardID {};
+    Protocol::BoardID _boardID { 0 };
+    bool _status { true };
 };
 
-//static_assert_fit_cacheline(Board);
+// static_assert_fit_cacheline(Board);

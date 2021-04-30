@@ -20,8 +20,6 @@
 #include "SettingsListModelProxy.hpp"
 #include "BoardManager.hpp"
 
-// #include "BoardManager.hpp"
-
 void Studio::InitResources(void)
 {
     Audio::PluginTable::Init();
@@ -66,7 +64,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
-    qmlRegisterType<Board>("Board", 1, 0, "Board");
+    qmlRegisterUncreatableType<Board>("Board", 1, 0, "Board", "Cannont construct Board");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
