@@ -54,6 +54,7 @@ Item {
     // Global access data
     property alias surfaceContentGrid: surfaceContentGrid
     property alias placementRectangle: placementRectangle
+    property alias gestureArea: gestureArea
 
     // Placement ratios
     property real placementKeyCount: 0
@@ -133,14 +134,40 @@ Item {
         id: gestureArea
         anchors.fill: parent
 
-        onScrolled: {
-            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), 0)
-            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), 0)
+        onXScrolled: {
+            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scroll, xOffsetMin), 0)
         }
 
-        onZoomed: {
-            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoomX, 0), 1)
-            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoomY, 0), 1)
+        onYScrolled: {
+            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scroll, yOffsetMin), 0)
+        }
+
+        onXZoomed: {
+            var realPos = xPos > rowHeaderWidth ? xPos - rowHeaderWidth : 0
+            var posRatio = realPos / rowDataWidth
+            var targetBeat = (-xOffset + realPos) / pixelsPerBeatPrecision
+            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoom, 0), 1)
+            var offset = -targetBeat * pixelsPerBeatPrecision + rowDataWidth * posRatio
+            if (offset > 0)
+                offset = 0
+            else if (offset < xOffsetMin)
+                offset = xOffsetMin
+            xOffset = offset
+        }
+
+        onYZoomed: {
+            var realPos = yPos > timelineHeight ? yPos - timelineHeight : 0
+            var posRatio = realPos / surfaceContentGrid.height
+            var targetRow = (-yOffset + realPos) / rowHeight
+            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoom, 0), 1)
+            var offset = -targetRow * rowHeight + surfaceContentGrid.height * posRatio
+            if (offset > 0)
+                offset = 0
+            else if (offset < yOffsetMin)
+                offset = yOffsetMin
+            yOffset = offset
+
+            // yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoom, 0), 1)
         }
     }
 
