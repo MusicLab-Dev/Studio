@@ -79,7 +79,7 @@ ComboBox {
         highlighted: control.highlightedIndex === index
 
         contentItem: Text {
-            text: modelData
+            text: control.textAt(index)
             color: parent.hovered ? "#001E36": "#295F8B"
             font: control.font
             elide: Text.ElideRight

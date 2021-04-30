@@ -32,6 +32,7 @@ Rectangle {
                     Layout.preferredWidth: parent.width * 0.5
 
                     ModSelector {
+                        id: editModeSelector
                         itemsPath: [
                             "qrc:/Assets/NormalMod.png",
                             "qrc:/Assets/BrushMod.png",
@@ -40,9 +41,21 @@ Rectangle {
                         ]
                         width: parent.width / 2
                         height: parent.height / 2
-                        anchors.centerIn: parent
+                        anchors.verticalCenter: parent.verticalCenter
 
                         onItemSelectedChanged: playlistView.editMode = itemSelected
+                    }
+
+                    Snapper {
+                        id: brushSnapper
+                        visible: playlistView.editMode === PlaylistView.EditMode.Brush
+                        x: parent.width / 2
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: contentView.rowHeaderWidth / 2
+                        height: parent.height / 2
+                        currentIndex: 0
+
+                        onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
                     }
                 }
             }

@@ -72,6 +72,7 @@ Repeater {
             width: nodeView.dataContentWidth
             height: contentView.rowHeight
             instances: partitionDelegate.partition ? partitionDelegate.partition.instances : null
+            brushStep: contentView.placementBeatPrecisionBrushStep
 
             Repeater {
                 model: placementArea.instances

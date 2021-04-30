@@ -14,6 +14,12 @@ Rectangle {
         id: snapper
         width: contentView.rowHeaderWidth
         height: parent.height
+        currentIndex: 4
+
+        onActivated: {
+            contentView.placementBeatPrecisionScale = currentValue
+            contentView.placementBeatPrecisionLastWidth = 0
+        }
     }
 
     Item {

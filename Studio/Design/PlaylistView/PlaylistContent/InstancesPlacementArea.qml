@@ -142,9 +142,13 @@ MouseArea {
             var outsideBegin = mouseBeatPrecision < brushBegin
             var outsideEnd = mouseBeatPrecision > brushEnd
             var outsideRange = outsideBegin || outsideEnd
-            if (brushStep !== 0)
-                mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % brushStep)
-            else {
+            if (brushStep !== 0) {
+                var tmp = contentView.placementBeatPrecisionLastWidth + brushStep
+                if (outsideEnd)
+                    mouseBeatPrecision = mouseBeatPrecision + (tmp - (mouseBeatPrecision % tmp)) + (brushEnd % tmp)
+                else
+                    mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % tmp) + (brushBegin % tmp)
+            } else {
                 if (outsideEnd)
                     mouseBeatPrecision = mouseBeatPrecision + (contentView.placementBeatPrecisionLastWidth - (mouseBeatPrecision % contentView.placementBeatPrecisionLastWidth)) + (brushEnd % contentView.placementBeatPrecisionLastWidth)
                 else

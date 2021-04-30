@@ -104,6 +104,7 @@ Item {
         width: contentView.rowDataWidth
         height: pianoView.totalHeight
         partition: sequencerView.partition
+        brushStep: contentView.placementBeatPrecisionBrushStep
 
         Repeater {
             model: sequencerView.partition
