@@ -14,7 +14,7 @@ TEST(NodeModel, InitDestroy)
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
     Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
-    Audio::Node node { nullptr };
+    Audio::Node node(nullptr);
 
     ASSERT_NO_THROW(NodeModel tmp(&node));
 }
