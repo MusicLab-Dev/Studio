@@ -79,6 +79,7 @@ Item {
         return placementKey === -1 ? 0 : (placementKeyCount - 1 - (placementKey - placementKeyOffset)) * rowHeight
     }
     readonly property real placementResizeMaxPixelThreshold: 20
+    property real placementResizeRatioThreshold: 0.25
 
     // Scale used to perfectly fit placements in beat
     property int placementBeatPrecisionScale: AudioAPI.beatPrecision

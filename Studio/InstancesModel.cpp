@@ -74,6 +74,20 @@ int InstancesModel::find(const Beat beat) const noexcept
     return -1;
 }
 
+int InstancesModel::findOverlap(const Beat from, const Beat to) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &range : *_data) {
+        if (to < range.from || from > range.to) {
+            ++idx;
+            continue;
+        }
+        return idx;
+    }
+    return -1;
+}
+
 void InstancesModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),

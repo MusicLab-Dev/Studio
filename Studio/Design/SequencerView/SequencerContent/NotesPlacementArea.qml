@@ -5,23 +5,30 @@ import Scheduler 1.0
 import PartitionModel 1.0
 import AudioAPI 1.0
 
+import ".."
+
 MouseArea {
     enum Mode {
         None,
         Remove,
         Move,
         LeftResize,
-        RightResize
+        RightResize,
+        Brush,
+        BrushLeft,
+        BrushRight
     }
 
     property PartitionModel partition: null
     property int mode: NotesPlacementArea.Mode.None
     property int onTheFlyKey: -1
+    property int brushKey: 0
+    property int brushBegin: 0
+    property int brushEnd: 0
+    property int brushStep: 0
 
     function addOnTheFly(targetKey) {
-        if (onTheFlyKey === targetKey)
-            return;
-        if (onTheFlyKey !== -1)
+        if (onTheFlyKey !== -1 && onTheFlyKey !== targetKey)
             removeOnTheFly(onTheFlyKey)
         onTheFlyKey = targetKey
         sequencerView.node.partitions.addOnTheFly(
@@ -55,7 +62,7 @@ MouseArea {
     clip: true
 
     onPressed: {
-        var realMouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
+        var realMouseBeatPrecision = Math.floor((mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
         var noteIndex = partition.find(mouseKey, realMouseBeatPrecision)
 
@@ -66,9 +73,6 @@ MouseArea {
                 partition.remove(noteIndex)
             return
         }
-
-        // Attach the preview
-        contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
 
         // Add an on the fly note if the sequencer isn't playing
         if (!sequencerView.player.isPlaying)
@@ -84,16 +88,35 @@ MouseArea {
         if (noteIndex === -1) {
             if (contentView.placementBeatPrecisionLastWidth === 0)
                 contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionDefaultWidth
-            mode = NotesPlacementArea.Mode.Move
-            contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
-            contentView.placementBeatPrecisionFrom = mouseBeatPrecision
-            contentView.placementKey = mouseKey
+            // Brush mode, insert note directly
+            if (sequencerView.editMode === SequencerView.EditMode.Brush) {
+                mode = NotesPlacementArea.Mode.Brush
+                brushKey = mouseKey
+                brushBegin = mouseBeatPrecision
+                brushEnd = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
+                partition.add(
+                    AudioAPI.note(
+                        AudioAPI.beatRange(brushBegin, brushEnd),
+                        brushKey,
+                        AudioAPI.velocityMax,
+                        0
+                    )
+                )
+            // Move mode, attach preview
+            } else {
+                // Attach the preview
+                contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
+                mode = NotesPlacementArea.Mode.Move
+                contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
+                contentView.placementBeatPrecisionFrom = mouseBeatPrecision
+                contentView.placementKey = mouseKey
+            }
         // Left click on note -> edit
         } else {
             var beatPrecisionRange = partition.getNote(noteIndex).range
             var noteWidthBeatPrecision = (beatPrecisionRange.to - beatPrecisionRange.from)
             var noteWidth = noteWidthBeatPrecision * contentView.pixelsPerBeatPrecision
-            var resizeThreshold = Math.min(noteWidth * 0.2, contentView.placementResizeMaxPixelThreshold)
+            var resizeThreshold = Math.min(noteWidth * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
             contentView.placementBeatPrecisionLastWidth = noteWidthBeatPrecision
             if ((realMouseBeatPrecision - beatPrecisionRange.from) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
                 mode = NotesPlacementArea.Mode.LeftResize
@@ -102,6 +125,8 @@ MouseArea {
             else
                 mode = NotesPlacementArea.Mode.Move
             partition.remove(noteIndex)
+            // Attach the preview
+            contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
             contentView.placementBeatPrecisionFrom = beatPrecisionRange.from
             contentView.placementBeatPrecisionTo = beatPrecisionRange.to
             contentView.placementBeatPrecisionMouseOffset = mouseBeatPrecision - beatPrecisionRange.from
@@ -137,7 +162,7 @@ MouseArea {
     }
 
     onPositionChanged: {
-        var realMouseBeatPrecision = (mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision
+        var realMouseBeatPrecision = Math.floor((mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
         switch (mode) {
         case NotesPlacementArea.Mode.Remove:
@@ -177,6 +202,45 @@ MouseArea {
                 contentView.placementBeatPrecisionTo = mouseBeatPrecision
             else
                 mode = NotesPlacementArea.Mode.LeftResize
+            break
+        case NotesPlacementArea.Mode.Brush:
+            var mouseBeatPrecision = realMouseBeatPrecision
+            var outsideBegin = mouseBeatPrecision < brushBegin
+            var outsideEnd = mouseBeatPrecision > brushEnd
+            var outsideRange = outsideBegin || outsideEnd
+            if (brushStep !== 0)
+                mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % brushStep)
+            else {
+                if (outsideEnd)
+                    mouseBeatPrecision = mouseBeatPrecision + (contentView.placementBeatPrecisionLastWidth - (mouseBeatPrecision % contentView.placementBeatPrecisionLastWidth)) + (brushEnd % contentView.placementBeatPrecisionLastWidth)
+                else
+                    mouseBeatPrecision = mouseBeatPrecision - ((mouseBeatPrecision - (brushBegin % contentView.placementBeatPrecisionLastWidth)) % contentView.placementBeatPrecisionLastWidth)
+            }
+            // Check if we should create a new note
+            if (brushKey != mouseKey || outsideRange) {
+                brushKey = mouseKey
+                if (outsideEnd) {
+                    brushBegin = mouseBeatPrecision - contentView.placementBeatPrecisionLastWidth
+                    brushEnd = mouseBeatPrecision
+                } else {
+                    brushBegin = mouseBeatPrecision
+                    brushEnd = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
+                }
+                // Don't brush over existing notes
+                if (partition.findOverlap(brushKey, brushBegin + 1, brushEnd - 1) === -1) {
+                    if (!sequencerView.player.isPlaying)
+                        addOnTheFly(brushKey)
+                    partition.add(
+                        AudioAPI.note(
+                            AudioAPI.beatRange(brushBegin, brushEnd),
+                            brushKey,
+                            AudioAPI.velocityMax,
+                            0
+                        )
+                    )
+
+                }
+            }
             break
         default:
             break

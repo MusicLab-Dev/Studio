@@ -57,16 +57,15 @@ Item {
             onReleased: pluginSettingsMenu.openMenu(pluginSettingsMenuButton, nodeDelegate.node, index)
         }
 
-        GridLayout {
-            clip: true
+        Flow {
+            id: pluginControlGrid
             y: nodeView.pluginHeaderNameHeight
             width: nodeView.pluginHeaderDisplayWidth
-            height: parent.height - nodeView.pluginHeaderNameHeight
-            columnSpacing: 2
-            flow: GridLayout.TopToBottom
-            rows: Math.max(height / 30, 1)
+            padding: 2
+            spacing: 2
 
             Repeater {
+                id: pluginControlGridRepeater
                 model: nodeDelegate.node ? nodeDelegate.node.plugin : null
 
                 delegate: Loader {

@@ -114,6 +114,20 @@ int PartitionModel::find(const quint8 key, const quint32 beat) const noexcept
     return -1;
 }
 
+int PartitionModel::findOverlap(const Key key, const Beat from, const Beat to) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &note : _data->notes()) {
+        if (note.key != key || to < note.range.from || from > note.range.to) {
+            ++idx;
+            continue;
+        }
+        return idx;
+    }
+    return -1;
+}
+
 bool PartitionModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),

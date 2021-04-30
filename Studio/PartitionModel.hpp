@@ -119,7 +119,10 @@ public slots:
     bool add(const Note &note);
 
     /** @brief Find an instance in the list using a single beat point */
-    int find(const quint8 key, const quint32 beat) const noexcept;
+    int find(const Key key, const Beat beat) const noexcept;
+
+    /** @brief Find an instance in the list using a two beat points */
+    int findOverlap(const Key key, const Beat from, const Beat to) const noexcept;
 
     /** @brief Remove note at index */
     bool remove(const int index);

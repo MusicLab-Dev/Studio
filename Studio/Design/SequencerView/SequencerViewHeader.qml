@@ -71,16 +71,14 @@ Rectangle {
                         itemsPath: [
                             "qrc:/Assets/NormalMod.png",
                             "qrc:/Assets/BrushMod.png",
-                            "qrc:/Assets/SelectorMod.png",
-                            "qrc:/Assets/CutMod.png",
+                            // "qrc:/Assets/SelectorMod.png",
+                            // "qrc:/Assets/CutMod.png",
                         ]
                         width: parent.width / 2
                         height: parent.height / 2
                         anchors.centerIn: parent
 
-                        onItemSelectedChanged: {
-
-                        }
+                        onItemSelectedChanged: sequencerView.editMode = itemSelected
                     }
                 }
             }

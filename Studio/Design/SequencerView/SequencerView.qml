@@ -8,12 +8,20 @@ import PluginTableModel 1.0
 import "./SequencerContent/"
 
 ColumnLayout {
+    enum EditMode {
+        Regular,
+        Brush,
+        Select,
+        Cut
+    }
+
     property string moduleName: node && partition ? node.name + " - " + partition.name : "Selecting plugin"
     property int moduleIndex: -1
     property NodeModel node: null
     property PartitionModel partition: null
     property int partitionIndex: 0
     property alias player: sequencerViewFooter.player
+    property int editMode: SequencerView.EditMode.Regular
 
     function onNodeDeleted(targetNode) {
         if (node === targetNode || node.isAParent(targetNode)) {

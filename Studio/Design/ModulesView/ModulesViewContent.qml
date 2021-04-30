@@ -121,6 +121,7 @@ Item {
                 source: path
                 visible: componentSelected === index
                 focus: true
+                clip: true
 
                 onVisibleChanged: {
                     focus = true

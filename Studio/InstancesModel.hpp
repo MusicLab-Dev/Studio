@@ -51,6 +51,9 @@ public slots:
     /** @brief Find an instance in the list using a single beat point */
     int find(const quint32 beat) const noexcept;
 
+    /** @brief Find an instance in the list using a two beat points */
+    int findOverlap(const Beat from, const Beat to) const noexcept;
+
     /** @brief Remove instance at index */
     void remove(const int index);
 

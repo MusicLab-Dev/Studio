@@ -81,6 +81,24 @@ Repeater {
                     width: contentView.pixelsPerBeatPrecision * (to - from)
                     height: contentView.rowHeight
                     color: nodeDelegate.node.color
+                    border.color: Qt.darker(nodeDelegate.node.color, 1.25)
+                    border.width: 2
+
+                    Rectangle {
+                        x: Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
+                        y: parent.height / 8
+                        width: 1
+                        height: contentView.rowHeight * 3 / 4
+                        color: "white"
+                    }
+
+                    Rectangle {
+                        x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
+                        y: parent.height / 8
+                        width: 1
+                        height: contentView.rowHeight * 3 / 4
+                        color: "white"
+                    }
                 }
             }
         }
