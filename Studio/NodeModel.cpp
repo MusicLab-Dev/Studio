@@ -93,9 +93,9 @@ void NodeModel::processLatestInstanceChange(const Beat oldInstance, const Beat n
         const auto oldLatest = _latestInstance;
         _latestInstance = newInstance;
         emit latestInstanceChanged();
-        parentNode()->processLatestInstanceChange(oldLatest, _latestInstance);
+        if (const auto p = parentNode(); p)
+            p->processLatestInstanceChange(oldLatest, _latestInstance);
     } else if (_latestInstance == oldInstance) {
-        const auto oldLatest = _latestInstance;
         Beat max = 0;
         for (const auto &child : _children) {
             if (child->latestInstance() > max)
@@ -104,7 +104,7 @@ void NodeModel::processLatestInstanceChange(const Beat oldInstance, const Beat n
         _latestInstance = max;
         emit latestInstanceChanged();
         if (const auto p = parentNode(); p)
-            p->processLatestInstanceChange(oldLatest, _latestInstance);
+            p->processLatestInstanceChange(oldInstance, _latestInstance);
     }
 }
 

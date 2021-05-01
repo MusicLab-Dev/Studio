@@ -46,7 +46,6 @@ void PartitionsModel::processLatestInstanceChange(const Beat oldInstance, const 
         emit latestInstanceChanged();
         parentNode()->processLatestInstanceChange(oldLatest, _latestInstance);
     } else if (_latestInstance == oldInstance) {
-        const auto oldLatest = _latestInstance;
         Beat max = 0;
         for (const auto &p : _partitions) {
             const auto &instances = *p->instances().audioInstances();
@@ -55,7 +54,7 @@ void PartitionsModel::processLatestInstanceChange(const Beat oldInstance, const 
         }
         _latestInstance = max;
         emit latestInstanceChanged();
-        parentNode()->processLatestInstanceChange(oldLatest, _latestInstance);
+        parentNode()->processLatestInstanceChange(oldInstance, _latestInstance);
     }
 }
 
