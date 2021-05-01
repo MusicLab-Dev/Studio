@@ -11,11 +11,13 @@
 
 #ifdef WIN32
 
-#pragma comment(lib, "Ws2_32.lib")
+#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "iphlpapi.lib")
 
 // Windows network headers
 #include <winsock2.h>
-#include <WS2tcpip.h>
+#include <ws2tcpip.h>
+#include <iphlpapi.h>
 
 #else
 
@@ -36,6 +38,8 @@
 
     using Socklen = int;
     using NetworkAddress = sockaddr_in;
+    using Port = std::uint16_t;
+    using DataSize = std::int64_t;
 #else
     using Socket = int;
     static constexpr Socket NullSock = -1;

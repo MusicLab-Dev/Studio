@@ -234,19 +234,70 @@ void BoardManager::processNewUsbInterfaces(const std::vector<std::tuple<std::str
     }
 }
 
-std::vector<std::tuple<std::string, std::string, std::string>> BoardManager::getUsbNetworkInterfaces(void)
+std::vector<std::tuple<std::string, std::string, std::string>> getWindowsNetworkInterfaces(void)
 {
     std::vector<std::tuple<std::string, std::string, std::string>> interfaces {};
 
     #ifdef WIN32
+        #define MALLOC(x) HeapAlloc(GetProcessHeap(), 0, (x))
+        #define FREE(x) HeapFree(GetProcessHeap(), 0, (x))
 
+        PMIB_IPADDRTABLE pIPAddrTable;
+        DWORD dwSize = 0;
+
+        pIPAddrTable = (MIB_IPADDRTABLE *)MALLOC(sizeof (MIB_IPADDRTABLE));
+        if (pIPAddrTable) {
+            auto ret = GetIpAddrTable(pIPAddrTable, &dwSize, 0);
+            if (ret == ERROR_INSUFFICIENT_BUFFER) {
+                FREE(pIPAddrTable);
+                pIPAddrTable = (MIB_IPADDRTABLE *)MALLOC(dwSize);
+            }
+            if (pIPAddrTable == nullptr)
+                throw std::runtime_error("Memory allocation failed for GetIpAddrTable");
+        }
+
+        auto ret = GetIpAddrTable(pIPAddrTable, &dwSize, 0);
+        if (ret != NO_ERROR)
+            throw std::runtime_error(std::strerror(errno));
+
+        printf("Interface number: %ld\n\n", pIPAddrTable->dwNumEntries);
+
+        for (auto i = 0; i < (int)pIPAddrTable->dwNumEntries; i++) {
+
+            std::cout << "index: " << pIPAddrTable->table[i].dwIndex << std::endl;
+
+            struct in_addr localAddress;
+            localAddress.s_addr = (u_long) pIPAddrTable->table[i].dwAddr;
+            std::cout << "address: " << inet_ntoa(localAddress) << std::endl;
+
+            struct in_addr netmask;
+            netmask.s_addr = (u_long) pIPAddrTable->table[i].dwMask;
+            struct in_addr wildcardAdress;
+            wildcardAdress.s_addr = ~netmask.s_addr;
+
+            struct in_addr broadcastAddress;
+            broadcastAddress.s_addr = localAddress.s_addr | wildcardAdress.s_addr;
+            std::cout << "broadcast: " << inet_ntoa(broadcastAddress) << std::endl;
+
+            std::cout << std::endl;
+        }
+        if (pIPAddrTable) {
+            FREE(pIPAddrTable);
+            pIPAddrTable = nullptr;
+        }
+    #endif
+    return interfaces;
+}
+
+std::vector<std::tuple<std::string, std::string, std::string>> getLinuxNetworkInterfaces(void)
+{
+    std::vector<std::tuple<std::string, std::string, std::string>> interfaces {};
+    #ifdef WIN32
+        return interfaces;
     #else
         struct ifaddrs *ifaddr;
         int family;
         int i = 0;
-
-
-        std::cout << '\n';
 
         auto ret = ::getifaddrs(&ifaddr);
         if (ret < 0)
@@ -264,8 +315,8 @@ std::vector<std::tuple<std::string, std::string, std::string>> BoardManager::get
                 std::string localAddress(::inet_ntoa(ifaceaddr->sin_addr));
                 std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
 
-                std::cout << "interface: " << interfaceName << '\n';
-                std::cout << "address  : " << localAddress << '\n';
+                std::cout << "index: " << interfaceName << '\n';
+                std::cout << "address: " << localAddress << '\n';
                 std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
 
                 interfaces.push_back({ interfaceName, localAddress, broadcastAddress });
@@ -273,6 +324,25 @@ std::vector<std::tuple<std::string, std::string, std::string>> BoardManager::get
             }
         }
         ::freeifaddrs(ifaddr);
+    #endif
+    return interfaces;
+}
+
+std::vector<std::tuple<std::string, std::string, std::string>> BoardManager::getUsbNetworkInterfaces(void)
+{
+    std::cout << "BoardManager::getUsbNetworkInterfaces" << std::endl;
+
+    std::vector<std::tuple<std::string, std::string, std::string>> interfaces {};
+
+    #ifdef WIN32
+        WSADATA WinsockData;
+        auto ret = WSAStartup(MAKEWORD(2, 2), &WinsockData);
+        if (ret < 0) 
+            throw std::runtime_error(std::strerror(errno));
+        interfaces = getWindowsNetworkInterfaces();
+        WSACleanup();
+    #else
+        interfaces = getLinuxNetworkInterfaces();
     #endif
 
     return interfaces;
