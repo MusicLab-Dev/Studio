@@ -61,7 +61,17 @@ Item {
 
             Action {
                 text: "New Project"
-                onTriggered: app.project.clear()
+                onTriggered: {
+                    app.project.clear()
+                    while(modules.count)
+                        modules.removeModule(0)
+                    modules.insert(0, {
+                        title: "New component",
+                        path: "qrc:/EmptyView/EmptyView.qml",
+                        callback: modulesViewContent.nullCallback
+                    })
+                    componentSelected = 0
+                }
             }
 
             Action {
@@ -117,7 +127,15 @@ Item {
             nameFilters: [ "All files (*)" ]
             selectExisting: true
             onAccepted: {
+                while(modules.count)
+                    modules.removeModule(0)
                 app.project.loadFrom(fileUrls.toString().replace(/^(file:\/{2})/,"").toString())
+                modules.insert(0, {
+                        title: "Playlsit",
+                        path: "qrc:/PlaylistView/PlaylistView.qml",
+                        callback: modulesViewContent.nullCallback
+                    })
+                componentSelected = 0
                 close()
             }
             onRejected: close()
