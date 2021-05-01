@@ -54,14 +54,17 @@ public:
     void setPath(const QString &path) noexcept;
 
 public slots:
-    /** @brief Load a project file */
-    void load(void);
+    /** @brief Load a project file from a given path */
+    bool loadFrom(const QString &path) noexcept;
 
     /** @brief Save the project in its default file */
-    void save(void);
+    bool save(void) noexcept;
 
     /** @brief Save the project in given file */
-    void saveAs(const QString &path);
+    bool saveAs(const QString &path) noexcept;
+
+    /** @brief clear the project */
+    void clear(void) noexcept;
 
 signals:
     /** @brief Notify when master node changed */
