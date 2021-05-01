@@ -14,6 +14,12 @@
 PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *parent) noexcept
     : QAbstractListModel(parent), _data(partition), _instances(&partition->instances(), this)
 {
+    connect(_instances.get(), &InstancesModel::latestInstanceChanged, [this]{
+        const auto oldLast = _latestInstance;
+        _latestInstance = _instances->latestInstance();
+        emit latestInstanceChanged();
+        parentPartitions()->processLatestInstanceChange(oldLast, _latestInstance);
+    });
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
@@ -96,6 +102,11 @@ bool PartitionModel::add(const Note &note)
         [this, idx] {
             beginInsertRows(QModelIndex(), idx, idx);
             endInsertRows();
+            const auto last = _data->notes().back().range.to;
+            if (last > _latestNote) {
+                _latestNote = last;
+                emit latestNoteChanged();
+            }
         }
     );
 }
@@ -139,6 +150,16 @@ bool PartitionModel::remove(const int idx)
         },
         [this] {
             endRemoveRows();
+            if (!_data->notes().empty()) {
+                const auto last = _data->notes().back().range.to;
+                if (last > _latestNote) {
+                    _latestNote = last;
+                    emit latestNoteChanged();
+                }
+            } else if (_latestNote != 0) {
+                _latestNote = 0;
+                emit latestNoteChanged();
+            }
         }
     );
 }
@@ -168,6 +189,11 @@ void PartitionModel::set(const int idx, const Note &range)
             } else {
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);
+                const auto last = _data->notes().back().range.to;
+                if (last > _latestNote) {
+                    _latestNote = last;
+                    emit latestNoteChanged();
+                }
             }
         }
     );

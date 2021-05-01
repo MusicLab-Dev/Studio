@@ -37,6 +37,8 @@ class PartitionModel : public QAbstractListModel
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(MidiChannels midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
     Q_PROPERTY(InstancesModel *instances READ getInstances NOTIFY instancesChanged)
+    Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
+    Q_PROPERTY(Beat latestNote READ latestNote NOTIFY latestNoteChanged)
 
 public:
     /** @brief Roles of each partition */
@@ -111,6 +113,13 @@ public:
     /** @brief Update internal data pointer if it changed */
     void updateInternal(Audio::Partition *data);
 
+
+    /** @brief Get the current latest instance */
+    [[nodiscard]] Beat latestInstance(void) const noexcept { return _latestInstance; }
+
+    /** @brief Get the current latest note */
+    [[nodiscard]] Beat latestNote(void) const noexcept { return _latestNote; }
+
 public slots:
     /** @brief Return the count of element in the model */
     int count(void) const noexcept { return static_cast<int>(_data->notes().size()); }
@@ -146,7 +155,15 @@ signals:
     /** @brief Notify that the instances model has changed */
     void instancesChanged(void);
 
+    /** @brief Notify that the latest instance of the partition has changed */
+    void latestInstanceChanged(void);
+
+    /** @brief Notify that the latest note of the node has changed */
+    void latestNoteChanged(void);
+
 private:
     Audio::Partition *_data { nullptr };
     Core::UniqueAlloc<InstancesModel> _instances {};
+    Beat _latestInstance { 0u };
+    Beat _latestNote { 0u };
 };

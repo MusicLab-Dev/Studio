@@ -20,6 +20,8 @@ class PartitionsModel : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
+
 public:
     /** @brief Roles of each instance */
     enum class Roles : int {
@@ -51,6 +53,18 @@ public:
     [[nodiscard]] PartitionModel *get(const int idx) noexcept_ndebug
         { return const_cast<PartitionModel *>(const_cast<const PartitionsModel *>(this)->get(idx)); }
 
+
+    /** @brief Get the current latest instance */
+    [[nodiscard]] Beat latestInstance(void) const noexcept { return _latestInstance; }
+
+    /** @brief Process a change that could influence the latest instance */
+    void processLatestInstanceChange(const Beat oldInstance, const Beat newInstance);
+
+
+    /** @brief Get the backend data */
+    [[nodiscard]] Audio::Partitions *audioPartitions(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::Partitions *audioPartitions(void) const noexcept { return _data; }
+
 public slots:
     /** @brief Return the count of element in the model */
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_partitions.size()); }
@@ -70,6 +84,9 @@ public slots:
     /** @brief Adds a note event on the fly */
     void addOnTheFly(const NoteEvent &note, NodeModel *node, const quint32 partitionIndex);
 
+signals:
+    /** @brief Notify that the latest instance of partitions has changed */
+    void latestInstanceChanged(void);
 
 public: // Allow external insert / remove
     using QAbstractListModel::beginRemoveRows;
@@ -80,6 +97,7 @@ public: // Allow external insert / remove
 private:
     Audio::Partitions *_data { nullptr };
     Core::TinyVector<Core::UniqueAlloc<PartitionModel>> _partitions;
+    Beat _latestInstance { 0u };
 
     /** @brief Refresh internal models */
     void refreshPartitions(void);

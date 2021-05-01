@@ -56,6 +56,11 @@ void InstancesModel::add(const BeatRange &range)
         [this, idx] {
             beginInsertRows(QModelIndex(), idx, idx);
             endInsertRows();
+            const auto last = _data->back().to;
+            if (last > _latestInstance) {
+                _latestInstance = last;
+                emit latestInstanceChanged();
+            }
         }
     );
 }
@@ -99,6 +104,16 @@ void InstancesModel::remove(const int idx)
         },
         [this] {
             endRemoveRows();
+            if (!_data->empty()) {
+                const auto last = _data->back().to;
+                if (last > _latestInstance) {
+                    _latestInstance = last;
+                    emit latestInstanceChanged();
+                }
+            } else if (_latestInstance != 0u) {
+                _latestInstance = 0;
+                emit latestInstanceChanged();
+            }
         }
     );
 }
@@ -128,6 +143,11 @@ void InstancesModel::set(const int idx, const BeatRange &range)
             } else {
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);
+                const auto last = _data->back().to;
+                if (last > _latestInstance) {
+                    _latestInstance = last;
+                    emit latestInstanceChanged();
+                }
             }
         }
     );

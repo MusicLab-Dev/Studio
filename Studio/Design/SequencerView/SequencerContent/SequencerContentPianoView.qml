@@ -26,16 +26,14 @@ Item {
         false, true, false, true, false, true
     ]
     readonly property int keysPerOctave: keyNames.length
-    property int octaves: 10
-    property int octaveOffset: 1
+    property int octaves: 8
+    property int octaveOffset: 2
     readonly property int keyOffset: octaveOffset * keysPerOctave
     readonly property int keys: keysPerOctave * octaves
     property real headerFactor: 0.1
     property real keyWidth: parent.width * headerFactor
     readonly property real totalHeight: keys * rowHeight
     readonly property real snapperHeight: 30
-
-    // Values for snap widget
 
     id: pianoView
     height: totalHeight

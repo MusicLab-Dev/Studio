@@ -5,7 +5,7 @@ import "../../Common"
 
 ContentView {
     id: contentView
-    xOffsetMin: -5000
+    xOffsetMin: app.project.master ? app.project.master.latestInstance * -pixelsPerBeatPrecision : 0
     yOffsetMin: nodeView.totalHeight > surfaceContentGrid.height ? surfaceContentGrid.height - nodeView.totalHeight : 0
     timelineBeatPrecision: playlistView.player.currentPlaybackBeat
     audioProcessBeatPrecision: app.scheduler.productionCurrentBeat

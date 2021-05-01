@@ -87,6 +87,27 @@ void NodeModel::setColor(const QColor &color)
     );
 }
 
+void NodeModel::processLatestInstanceChange(const Beat oldInstance, const Beat newInstance)
+{
+    if (_latestInstance < newInstance) {
+        const auto oldLatest = _latestInstance;
+        _latestInstance = newInstance;
+        emit latestInstanceChanged();
+        parentNode()->processLatestInstanceChange(oldLatest, _latestInstance);
+    } else if (_latestInstance == oldInstance) {
+        const auto oldLatest = _latestInstance;
+        Beat max = 0;
+        for (const auto &child : _children) {
+            if (child->latestInstance() > max)
+                max = child->latestInstance();
+        }
+        _latestInstance = max;
+        emit latestInstanceChanged();
+        if (const auto p = parentNode(); p)
+            p->processLatestInstanceChange(oldLatest, _latestInstance);
+    }
+}
+
 const NodeModel *NodeModel::get(const int idx) const
 {
     coreAssert(idx >= 0 && idx < count(),

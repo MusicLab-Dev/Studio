@@ -14,6 +14,8 @@ class InstancesModel : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
+
 public:
     /** @brief Roles of each instance */
     enum Roles {
@@ -38,11 +40,19 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
 
 
+    /** @brief Get the current latest instance */
+    [[nodiscard]] Beat latestInstance(void) const noexcept { return _latestInstance; }
+
+
     /** @brief Get instance at index */
     [[nodiscard]] const BeatRange &get(const int idx) const noexcept_ndebug;
 
     /** @brief Update internal data pointer if it changed */
     void updateInternal(Audio::BeatRanges *data);
+
+    /** @brief Get the audio instances */
+    [[nodiscard]] Audio::BeatRanges *audioInstances(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::BeatRanges *audioInstances(void) const noexcept { return _data; }
 
 public slots:
     /** @brief Add instance */
@@ -63,6 +73,11 @@ public slots:
     /** @brief Set instance at index */
     void set(const int index, const BeatRange &range);
 
+signals:
+    /** @brief Notify that the latest instance of the list has changed */
+    void latestInstanceChanged(void);
+
 private:
     Audio::BeatRanges *_data { nullptr };
+    Beat _latestInstance { 0u };
 };

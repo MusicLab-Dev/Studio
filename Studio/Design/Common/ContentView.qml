@@ -19,6 +19,9 @@ Item {
     // Horizontal scroll (xOffset && xOffsetMin is always zero or less)
     property real xOffset: 0
     property real xOffsetMin: 0
+    readonly property real xOffsetWidth: -xOffsetMin
+    readonly property real xScrollIndicatorSize: xOffsetWidth ? 1 / (xOffsetWidth / width) : 1
+    readonly property real xScrollIndicatorPos: (1 - xScrollIndicatorSize) * (xOffsetMin ? xOffset / xOffsetMin : 0)
 
     // Vertical scroll (yOffset && yOffsetMin is always zero or less)
     property real yOffset: 0
@@ -200,6 +203,16 @@ Item {
                 color: "red"
                 opacity: 0.5
             }
+        }
+
+        // Content view data
+        Item {
+            id: placeholder
+            anchors.fill: parent
+        }
+
+        Item {
+            anchors.fill: surfaceContentGrid
 
             ScrollBar {
                 anchors.top: parent.top
@@ -213,15 +226,27 @@ Item {
                 policy: ScrollBar.AlwaysOn
 
                 onPositionChanged: {
-                    // yOffset = yOffsetMin * position / size
+                    if (Math.abs(position - yScrollIndicatorPos) > Number.EPSILON)
+                        yOffset = yOffsetMin * position / (1 - size)
                 }
             }
-        }
 
-        // Content view data
-        Item {
-            id: placeholder
-            anchors.fill: parent
+            ScrollBar {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                active: size !== 1
+                visible: true
+                orientation: Qt.Horizontal
+                size: xScrollIndicatorSize
+                position: xScrollIndicatorPos
+                policy: ScrollBar.AlwaysOn
+
+                onPositionChanged: {
+                    if (Math.abs(position - xScrollIndicatorPos) > Number.EPSILON)
+                        xOffset = xOffsetMin * position / (1 - size)
+                }
+            }
         }
     }
 
