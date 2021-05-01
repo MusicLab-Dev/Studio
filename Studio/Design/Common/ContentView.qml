@@ -13,7 +13,7 @@ Item {
     readonly property real rowDataWidth: width - rowHeaderWidth
 
     // Columns dimensions
-    property int barsPerRow: xZoom * xZoomWidth + xZoomMin
+    readonly property int beatsPerRow: xZoom * xZoomWidth + xZoomMin
     property int beatsPerBar: 4
 
     // Horizontal scroll (xOffset && xOffsetMin is always zero or less)
@@ -33,7 +33,7 @@ Item {
     // Horizontal zoom
     property real xZoom: 0.05
     property real xZoomMin: 1
-    property real xZoomMax: 100
+    property real xZoomMax: 100 * beatsPerBar
     readonly property real xZoomWidth: xZoomMax - xZoomMin
 
     // Vertical zoom
@@ -62,7 +62,7 @@ Item {
     // Placement ratios
     property real placementKeyCount: 0
     readonly property real beatPrecision: 128
-    readonly property real pixelsPerBeat: surfaceContentGrid.cellWidth / surfaceContentGrid.barsPerCell / beatsPerBar
+    readonly property real pixelsPerBeat: surfaceContentGrid.width / beatsPerRow
     readonly property real pixelsPerBeatPrecision: pixelsPerBeat / beatPrecision
 
     // Placement states in beat precision (128 unit = 1 beat)
@@ -193,7 +193,7 @@ Item {
             xOffset: contentView.xOffset
             yOffset: contentView.yOffset
             rowHeight: contentView.rowHeight
-            barsPerRow: contentView.barsPerRow
+            beatsPerRow: contentView.beatsPerRow
             z: 0
 
             Rectangle {
