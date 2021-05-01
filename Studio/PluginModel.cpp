@@ -23,8 +23,11 @@ QHash<int, QByteArray> PluginModel::roleNames(void) const noexcept
         { static_cast<int>(Roles::StepValue), "controlStepValue"},
         { static_cast<int>(Roles::DefaultValue), "controlDefaultValue"},
         { static_cast<int>(Roles::Value), "controlValue"},
+        { static_cast<int>(Roles::RangeNames), "controlRangeNames"},
         { static_cast<int>(Roles::Title), "controlTitle"},
         { static_cast<int>(Roles::Description), "controlDescription"},
+        { static_cast<int>(Roles::ShortName), "controlShortName"},
+        { static_cast<int>(Roles::UnitName), "controlUnitName"},
     };
 }
 
@@ -46,6 +49,15 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
             return meta.defaultValue;
         case Roles::Value:
             return _data->getControl(index.row());
+        case Roles::RangeNames:
+        {
+            QStringList list;
+            for (const auto &it : meta.rangeNames) {
+                const auto &cache = Audio::FindTranslation(it, Audio::English);
+                list.append(QString::fromLocal8Bit(cache.data(), static_cast<int>(cache.size())));
+            }
+            return list;
+        }
         case Roles::Title:
         {
             const auto &cache = meta.translations.getName(Audio::English);
@@ -54,6 +66,16 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
         case Roles::Description:
         {
             const auto &cache = meta.translations.getDescription(Audio::English);
+            return QString::fromLocal8Bit(cache.data(), static_cast<int>(cache.size()));
+        }
+        case Roles::ShortName:
+        {
+            const auto &cache = Audio::FindTranslation(meta.shortNames, Audio::English);
+            return QString::fromLocal8Bit(cache.data(), static_cast<int>(cache.size()));
+        }
+        case Roles::UnitName:
+        {
+            const auto &cache = Audio::FindTranslation(meta.unitNames, Audio::English);
             return QString::fromLocal8Bit(cache.data(), static_cast<int>(cache.size()));
         }
         default:
@@ -70,7 +92,7 @@ bool PluginModel::setData(const QModelIndex &index, const QVariant &value, int r
             setControl(ControlEvent(index.row(), value.toDouble()));
             break;
         default:
-            break;
+            return false;
     }
     return true;
 }

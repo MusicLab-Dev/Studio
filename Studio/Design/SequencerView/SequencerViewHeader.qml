@@ -27,15 +27,39 @@ Rectangle {
                     Layout.preferredHeight: parent.height
                     Layout.preferredWidth: parent.width * 0.5
 
-                    DefaultComboBox {
-                        width: parent.width / 2
+                    Row {
+                        x: parent.width / 2 - width / 2
+                        y: parent.height / 2 - height / 2
+                        width: parent.width / 2 + height + spacing
                         height: parent.height / 2
-                        anchors.centerIn: parent
-                        model: [
-                            "Sequence1",
-                            "Sequence2",
-                            "Sequence3"
-                        ]
+                        spacing: 5
+
+                        AddButton {
+                            id: addBtn
+                            width: parent.height
+                            height: parent.height
+
+                            onReleased: {
+                                sequencerView.player.stop()
+                                if (sequencerView.node.partitions.add()) {
+                                    sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
+                                    sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
+                                }
+                            }
+                        }
+
+                        PartitionComboBox {
+                            id: partitionComboBox
+                            width: parent.width - addBtn.height
+                            height: parent.height
+                            partitions: sequencerView.node ? sequencerView.node.partitions : null
+                            currentIndex: sequencerView.partitionIndex
+
+                            onActivated: {
+                                sequencerView.partitionIndex = index
+                                sequencerView.partition = sequencerView.node.partitions.getPartition(index)
+                            }
+                        }
                     }
                 }
 
@@ -44,19 +68,30 @@ Rectangle {
                     Layout.preferredWidth: parent.width * 0.5
 
                     ModSelector {
+                        id: editModeSelector
                         itemsPath: [
                             "qrc:/Assets/NormalMod.png",
                             "qrc:/Assets/BrushMod.png",
-                            "qrc:/Assets/SelectorMod.png",
-                            "qrc:/Assets/CutMod.png",
+                            // "qrc:/Assets/SelectorMod.png",
+                            // "qrc:/Assets/CutMod.png",
                         ]
                         width: parent.width / 2
                         height: parent.height / 2
-                        anchors.centerIn: parent
+                        anchors.verticalCenter: parent.verticalCenter
 
-                        onItemSelectedChanged: {
+                        onItemSelectedChanged: sequencerView.editMode = itemSelected
+                    }
 
-                        }
+                    Snapper {
+                        id: brushSnapper
+                        visible: sequencerView.editMode === SequencerView.EditMode.Brush
+                        x: parent.width / 2
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.height
+                        height: parent.height / 2
+                        currentIndex: 0
+
+                        onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
                     }
                 }
             }

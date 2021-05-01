@@ -39,6 +39,8 @@ Item {
 
     clip: true
 
+    onWidthChanged: canvasRows.requestPaint()
+    onHeightChanged: canvasColumns.requestPaint()
     onRowHeightChanged: canvasRows.requestPaint()
     onBarsPerRowChanged: canvasColumns.requestPaint()
 

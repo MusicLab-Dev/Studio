@@ -4,8 +4,17 @@ import QtQuick.Layouts 1.15
 import "./PlaylistContent"
 
 ColumnLayout {
+    enum EditMode {
+        Regular,
+        Brush,
+        Select,
+        Cut
+    }
+
+    property string moduleName: "Playlist"
     property int moduleIndex: -1
     property alias player: playlistViewFooter.player
+    property int editMode: PlaylistView.EditMode.Regular
 
     function onNodeDeleted(targetNode) { return false; }
 

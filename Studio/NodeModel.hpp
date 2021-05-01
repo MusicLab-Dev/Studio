@@ -44,7 +44,7 @@ class NodeModel : public QAbstractListModel
     Q_PROPERTY(PartitionsModel *partitions READ partitions NOTIFY partitionsChanged)
     Q_PROPERTY(ControlsModel *controls READ controls NOTIFY controlsChanged)
     Q_PROPERTY(PluginModel *plugin READ plugin NOTIFY pluginChanged)
-    //Q_PROPERTY(ConnectionsModel *connections READ connections NOTIFY connectionsChanged)
+    Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
 
 public:
     /** @brief Pointer to a node model */
@@ -132,10 +132,16 @@ public:
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
 
 
+    /** @brief Get the current latest instance */
+    [[nodiscard]] Beat latestInstance(void) const noexcept { return _latestInstance; }
+
+    /** @brief Process a change that could influence the latest instance */
+    void processLatestInstanceChange(const Beat oldInstance, const Beat newInstance);
+
+
     /** @brief Get the backend data */
     [[nodiscard]] Audio::Node *audioNode(void) noexcept { return _data; }
     [[nodiscard]] const Audio::Node *audioNode(void) const noexcept { return _data; }
-
 
 public slots:
     /** @brief Return the count of element in the model */
@@ -143,16 +149,16 @@ public slots:
 
     /** @brief Add a new node in children vector using a plugin path */
     NodeModel *add(const QString &pluginPath)
-        { return addNodeImpl(pluginPath, false); }
+        { return addNodeImpl(pluginPath, false, QStringList()); }
 
     /** @brief Add a new node in children vector using a plugin path and an external input list */
-    NodeModel *addExternalInputs(const QString &pluginPath)
-        { return addNodeImpl(pluginPath, false); }
+    NodeModel *addExternalInputs(const QString &pluginPath, const QStringList &paths)
+        { return addNodeImpl(pluginPath, false, paths); }
 
     /** @brief Add a new node in children vector using a plugin path
      *  Also add an empty partition to this node */
     NodeModel *addPartitionNode(const QString &pluginPath)
-        { return addNodeImpl(pluginPath, true); }
+        { return addNodeImpl(pluginPath, true, QStringList()); }
 
     /** @brief Add a new node in children vector using a plugin path and an external input list
      *  Also add an empty partition to this node */
@@ -199,13 +205,17 @@ signals:
     /** @brief Notify that the parent node has changed */
     void parentNodeChanged(void);
 
+    /** @brief Notify that the latest instance of the node has changed */
+    void latestInstanceChanged(void);
+
 private:
     Audio::Node *_data { nullptr };
     Core::FlatVector<NodePtr> _children {};
     PartitionsPtr _partitions { nullptr };
     ControlsPtr _controls { nullptr };
     PluginPtr _plugin { nullptr };
+    Beat _latestInstance { 0u };
 
     /** @brief Create a node */
-    [[nodiscard]] NodeModel *addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths = QStringList());
+    [[nodiscard]] NodeModel *addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths);
 };

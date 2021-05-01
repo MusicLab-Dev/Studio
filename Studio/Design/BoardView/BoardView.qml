@@ -1,6 +1,7 @@
 import QtQuick 2.15
 
 BoardBackground {
+    property string moduleName: "Boards"
     property int moduleIndex: -1
 
     function onNodeDeleted(targetNode) { return false }

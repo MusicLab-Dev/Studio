@@ -6,9 +6,10 @@ import "../Common"
 
 Rectangle {
     property bool dragActive: mouseArea.drag.active
+    property string tabTitle
 
     id: moduleViewTab
-    x: mouseArea.pressed ? x : index * tabWidth
+    x: menuButton.width + (mouseArea.pressed ? x : index * tabWidth)
     y: mouseArea.pressed ? y : mouseArea.y
     color: componentSelected === index ? themeManager.foregroundColor : themeManager.backgroundColor
     border.color: "black"
@@ -56,27 +57,29 @@ Rectangle {
     }
 
     Text {
-        anchors.fill: parent
-        text: title
+        height: parent.height
+        width: parent.width - closeBtn.width
+        text: tabTitle
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: componentSelected === index ? "white" : mouseArea.containsMouse ? "black" : themeManager.disabledColor
         elide: Text.ElideRight
+        fontSizeMode: Text.Fit
         clip: true
     }
 
     CloseButton {
+        id: closeBtn
         width: parent.height / 3
         height: width
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
         anchors.rightMargin: width / 2
-        visible: !(modules.count === 2 && title === "New component")
 
         onClicked: {
-            if (componentSelected === modules.count - 2)
-                componentSelected = modules.count - 3
-            if (modules.count === 2) {
+            if (componentSelected === modules.count - 1)
+                componentSelected = modules.count > 1 ? modules.count - 2 : 0;
+            if (modules.count === 1) {
                 modules.insert(1, {
                     title: "New component",
                     path: "qrc:/EmptyView/EmptyView.qml",

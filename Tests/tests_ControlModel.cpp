@@ -21,7 +21,7 @@ TEST(ControlModel, AddRemoveAutomation)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Control control { 1 };
 
@@ -40,7 +40,7 @@ TEST(ControlModel, MoveAutomation)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Control control { 1 };
 
@@ -61,7 +61,7 @@ TEST(ControlModel, ParamId)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Control control1 { 1 };
 
     ControlModel model(&control1);
@@ -75,7 +75,7 @@ TEST(ControlModel, UpdateInternal)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Control control1 { 1u };
     Audio::Control control2 { 2u };
 
@@ -91,7 +91,7 @@ TEST(ControlModel, Muted)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Control control1 {1u};
 
     ControlModel model(&control1);
@@ -105,7 +105,7 @@ TEST(ControlModel, ManualMode)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Control control1 {1};
 
     ControlModel model(&control1);
@@ -119,7 +119,7 @@ TEST(ControlModel, ManualPoint)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
     Audio::Control control {1u};
 
     ControlModel model(&control);

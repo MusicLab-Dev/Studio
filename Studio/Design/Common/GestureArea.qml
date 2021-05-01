@@ -1,8 +1,10 @@
 import QtQuick 2.15
 
 MouseArea {
-    signal zoomed(real zoomX, real zoomY)
-    signal scrolled(real scrollX, real scrollY)
+    signal xZoomed(real zoom, real xPos)
+    signal yZoomed(real zoom, real yPos)
+    signal xScrolled(real scroll, real xPos)
+    signal yScrolled(real scroll, real yPos)
 
     id: gestureArea
     propagateComposedEvents: true
@@ -16,9 +18,16 @@ MouseArea {
     onPressAndHold: mouse.accepted = false
 
     onWheel: {
-        if (wheel.modifiers & Qt.ControlModifier)
-            zoomed(wheel.angleDelta.x, wheel.angleDelta.y)
-        else
-            scrolled(wheel.angleDelta.x, wheel.angleDelta.y)
+        if (wheel.modifiers & Qt.ControlModifier) {
+            if (wheel.angleDelta.y !== 0)
+                xZoomed(wheel.angleDelta.y, wheel.y)
+            else if (wheel.angleDelta.x !== 0)
+                yZoomed(wheel.angleDelta.x, wheel.x)
+        } else {
+            if (wheel.angleDelta.x !== 0)
+                xScrolled(wheel.angleDelta.x, wheel.x)
+            else if (wheel.angleDelta.y !== 0)
+                yScrolled(wheel.angleDelta.y, wheel.y)
+        }
     }
 }

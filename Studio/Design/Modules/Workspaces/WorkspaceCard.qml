@@ -2,9 +2,11 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import Qt.labs.platform 1.1
 
-import '../../Default'
+import "../../Default"
 
 Rectangle {
+    property string name: modelData[0]
+    property string path: modelData[1]
     property bool expanded: workspaceFoldButton.activated
     property bool editModeEnabled: false
     property string realPath: path === "" ? StandardPaths.writableLocation(StandardPaths.HomeLocation) : path

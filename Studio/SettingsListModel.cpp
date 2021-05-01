@@ -9,7 +9,6 @@
 #include <QJsonArray>
 #include <QDebug>
 #include <QDir>
-#include <QStandardPaths>
 
 #include "SettingsListModel.hpp"
 
@@ -73,32 +72,33 @@ bool SettingsListModel::setData(const QModelIndex &index, const QVariant &value,
     return true;
 }
 
-bool SettingsListModel::read(const QString &settings, const QString &values)
+bool SettingsListModel::read(const QString &values)
 {
-    _jsonSettingsFile.setFileName(settings);
-    _jsonValuesFile.setFileName(values);
+    auto valuesPath = values;
+    if (values.isEmpty()) {
+        valuesPath = LexoDefaultSettingsPath;
 
-    _jsonSettingsFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    if (!_jsonSettingsFile.exists())
+    }
+
+    _jsonSettingsFile.setFileName(SettingsPath);
+    _jsonValuesFile.setFileName(valuesPath);
+
+    if (!_jsonSettingsFile.exists() || !_jsonSettingsFile.open(QIODevice::ReadOnly | QIODevice::Text))
         throw std::logic_error("SettingsListModel::read: No settings file");
     _jsonSettingsStr = _jsonSettingsFile.readAll();
     _jsonSettingsFile.close();
 
-    auto path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    if (path.isEmpty()) qFatal("SettingsListModel::read: Cannot determine settings storage location");
-    QDir d{path};
-    if (d.mkpath(d.absolutePath()) && QDir::setCurrent(d.absolutePath())) {
-        _jsonValuesFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        if (_jsonValuesFile.exists())
-            _jsonValuesStr = _jsonValuesFile.readAll();
+    if (_jsonValuesFile.exists() && _jsonValuesFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        _jsonValuesStr = _jsonValuesFile.readAll();
         _jsonValuesFile.close();
-    } else return false;
+    }
+
     return true;
 }
 
-bool SettingsListModel::load(const QString &settings, const QString &values) noexcept
+bool SettingsListModel::load(const QString &values) noexcept
 {
-    if (!read(settings, values) || _jsonSettingsStr.isEmpty())
+    if (!read(values) || _jsonSettingsStr.isEmpty())
         return false;
 
     QJsonDocument docSettings = QJsonDocument::fromJson(_jsonSettingsStr.toUtf8());
@@ -112,6 +112,18 @@ bool SettingsListModel::load(const QString &settings, const QString &values) noe
     endResetModel();
     _jsonSettingsStr.clear();
     _jsonValuesStr.clear();
+
+    _categories.clear();
+    for (const auto &model : _models) {
+        auto category = model.category;
+        category.remove(0, 1);
+        auto idx = category.indexOf('/');
+        if (idx != -1)
+            category.remove(idx, category.size() - idx);
+        if (_categories.indexOf(category) == -1)
+            _categories.append(category);
+    }
+    emit categoriesChanged();
     return true;
 }
 
@@ -154,10 +166,33 @@ void SettingsListModel::parse(const QJsonObject &objSettings, QJsonObject &objVa
 
 bool SettingsListModel::saveValues(void) noexcept
 {
-    _jsonValuesFile.open(QIODevice::WriteOnly | QFile::Truncate);
+    auto path = _jsonValuesFile.fileName();
+    const auto idx = path.lastIndexOf('/');
+    if (idx != -1)
+        path.remove(idx, path.size() - idx);
+    QDir().mkpath(path);
+    if (!_jsonValuesFile.open(QIODevice::WriteOnly | QFile::Truncate)) {
+        qDebug() << "SettingsListModel::saveValues: Couldn't open values file" << _jsonValuesFile.fileName();
+        return false;
+    }
     QVariantMap map;
-    for (auto it = _models.begin(); it != _models.end(); it++)
-        map.insert(it->id, it->currentValue);
+    for (auto it = _models.begin(); it != _models.end(); it++) {
+        if (it->type != "StringPairList")
+            map.insert(it->id, it->currentValue);
+        else {
+            auto list = it->currentValue.toList();
+            QJsonArray value;
+            for (auto i = 0; i < list.size(); ++i) {
+                QJsonArray pair;
+                auto stringPair = list[i].toStringList();
+                pair.append(stringPair[0]);
+                pair.append(stringPair[1]);
+                value.append(pair);
+            }
+            qDebug() << "Map" << value;
+            map.insert(it->id, QVariant::fromValue(value));
+        }
+    }
     QJsonDocument doc(QJsonDocument::fromVariant(map));
     _jsonValuesFile.write(doc.toJson(QJsonDocument::Indented));
     _jsonValuesFile.close();
@@ -166,6 +201,7 @@ bool SettingsListModel::saveValues(void) noexcept
 
 bool SettingsListModel::set(const QString &id, const QVariant &value) noexcept
 {
+    qDebug() << "Setting" << id << value;
     for (auto it = _models.begin(); it != _models.end(); it++) {
         if (it->id == id) {
             it->currentValue = value;

@@ -20,7 +20,7 @@ TEST(PartitionsModel, AddRemove)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Partitions partitions {};
 
@@ -40,7 +40,7 @@ TEST(PartitionsModel, MovePartitions)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Partitions partitions {};
 

@@ -10,41 +10,55 @@ import "../Default"
 Rectangle {
     color: themeManager.foregroundColor
 
-    /** Debug */
-    Row {
+    RowLayout {
         anchors.fill: parent
-        Button {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 50
-            height: 40
-            onPressed: app.project.save()
-            text: "save"
+        spacing: 0
 
-        }
-        Button {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 50
-            height: 40
-            onPressed: app.project.load()
-            text: "load"
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width / 3
 
+            RowLayout {
+                anchors.fill: parent
+                spacing: 0
+
+                Item {
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: parent.width * 0.5
+                }
+
+                Item {
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: parent.width * 0.5
+
+                    ModSelector {
+                        id: editModeSelector
+                        itemsPath: [
+                            "qrc:/Assets/NormalMod.png",
+                            "qrc:/Assets/BrushMod.png",
+                            // "qrc:/Assets/SelectorMod.png",
+                            // "qrc:/Assets/CutMod.png",
+                        ]
+                        width: parent.width / 2
+                        height: parent.height / 2
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        onItemSelectedChanged: playlistView.editMode = itemSelected
+                    }
+
+                    Snapper {
+                        id: brushSnapper
+                        visible: playlistView.editMode === PlaylistView.EditMode.Brush
+                        x: parent.width / 2
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.height
+                        height: parent.height / 2
+                        currentIndex: 0
+
+                        onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
+                    }
+                }
+            }
         }
     }
-    /** ---- */
-
-    // ComboBox {
-    //     id: playlistBeatScaleList
-    //     x: parent.width * 0.1
-    //     y: parent.height * 0.1
-    //     model: ["Free", "1:128", "1:64", "1:32", "1:16", "1:8", "1:4", "1:2", "1:1", "2:1", "4:1", "8:1", "16:1", "32:1", "64:1", "128:1"]
-    //     currentIndex: contentView.contentView.placementBeatPrecisionScale !== 0 ? Math.log2(contentView.contentView.placementBeatPrecisionScale) + 1 : 0
-
-    //     onActivated: {
-    //         if (!index)
-    //             contentView.contentView.placementBeatPrecisionScale = 0
-    //         else
-    //             contentView.contentView.placementBeatPrecisionScale = Math.pow(2, index - 1)
-    //         contentView.contentView.placementBeatPrecisionLastWidth = 0
-    //     }
-    // }
 }

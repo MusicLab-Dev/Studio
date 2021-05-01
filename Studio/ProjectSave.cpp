@@ -15,21 +15,6 @@ ProjectSave::ProjectSave(Project *project)
     : _project(project)
 {}
 
-/** -- SAVE PART -- */
-
-bool ProjectSave::save(void)
-{
-    QVariantMap map;
-
-    map.insert("name", _project->name());
-    map.insert("bpm", _project->bpm());
-    map.insert("master", transformNodeInVariantMap(*_project->master()));
-
-    QJsonDocument doc(QJsonDocument::fromVariant(map));
-    write(doc.toJson(QJsonDocument::Indented));
-    qDebug() << "Save Success";
-    return true;
-}
 
 QString ProjectSave::read(void)
 {
@@ -50,6 +35,22 @@ void ProjectSave::write(const QString &json)
         throw std::logic_error("ProjectSave::write: not created");
     file.write(json.toUtf8());
     file.close();
+}
+
+/** -- SAVE PART -- */
+
+bool ProjectSave::save(void)
+{
+    QVariantMap map;
+
+    map.insert("name", _project->name());
+    map.insert("bpm", _project->bpm());
+    map.insert("master", transformNodeInVariantMap(*_project->master()));
+
+    QJsonDocument doc(QJsonDocument::fromVariant(map));
+    write(doc.toJson(QJsonDocument::Indented));
+    qDebug() << "Debug: ProjectSave::save Success";
+    return true;
 }
 
 QVariantMap ProjectSave::transformNodeInVariantMap(NodeModel &node)
@@ -179,10 +180,9 @@ QVariantMap ProjectSave::transformPluginInVariantMap(PluginModel &plugin) noexce
     auto &meta = plugin.audioPlugin()->getMetaData().controls;
     const auto size = static_cast<int>(meta.size());
     for (int i = 0; i < size; i++) {
-        controls.push_back(QVariantList({i, meta[i].defaultValue}));
+        controls.push_back(QVariantList({i, plugin.audioPlugin()->getControl(static_cast<ParamID>(i))}));
     }
     map.insert("controls", controls);
-    //TODO: ControlsQVecto
 
     return map;
 }
@@ -205,7 +205,7 @@ bool ProjectSave::load(void)
     _project->setBPM(static_cast<float>(obj["bpm"].toDouble()));
     initNode(_project->master(), obj["master"].toObject());
 
-    qDebug("Load success");
+    qDebug("Debug: ProjectSave::Load success");
     return true;
 }
 
@@ -221,10 +221,14 @@ bool ProjectSave::initNode(NodeModel *node, const QJsonObject &obj)
     initPartitions(node->partitions(), obj["partitions"].toArray());
     initControls(node->controls(), obj["controls"].toArray());
 
-    for (int i = 0 ; i < obj["children"].toArray().size(); i++) {
+    auto children = obj["children"].toArray();
+    for (int i = 0 ; i < children.size(); i++) {
+        auto child = children[i].toObject();
+        auto childPlugin = child["plugin"].toObject();
         initNode(
-            node->add(obj["plugin"]["factory"].toString()),
-            obj["children"][i].toObject());
+            node->add(childPlugin["factory"].toString()),
+            child
+        );
     }
 
     return true;
@@ -242,20 +246,23 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
         partition->setName(partitionObj["name"].toString());
         partition->setMuted(partitionObj["muted"].toBool());
 
-        for (int y = 0; y < partitionObj["notes"].toArray().size(); y++) {
-            QJsonObject noteObj = partitionObj["notes"].toArray()[y].toObject();
+        auto notes = partitionObj["notes"].toArray();
+        for (int y = 0; y < notes.size(); y++) {
+            QJsonObject noteObj = notes[y].toObject();
             Note note;
 
-            note.range.from = static_cast<Beat>(noteObj["range"].toArray()[0].toInt());
-            note.range.to = static_cast<Beat>(noteObj["range"].toArray()[1].toInt());
+            auto range = noteObj["range"].toArray();
+            note.range.from = static_cast<Beat>(range[0].toInt());
+            note.range.to = static_cast<Beat>(range[1].toInt());
             note.key = static_cast<Key>(noteObj["key"].toInt());
             note.velocity = static_cast<Velocity>(noteObj["velocity"].toInt());
             note.tuning = static_cast<Tuning>(noteObj["tuning"].toInt());
             partition->add(note);
         }
 
-        for (int y = 0; y < partitionObj["instances"].toArray().size(); y++) {
-            QJsonArray instance = partitionObj["instances"].toArray()[y].toArray();
+        auto instances = partitionObj["instances"].toArray();
+        for (int y = 0; y < instances.size(); y++) {
+            QJsonArray instance = instances[y].toArray();
             Beat from = static_cast<Beat>(instance[0].toInt());
             Beat to = static_cast<Beat>(instance[1].toInt());
 
@@ -277,8 +284,9 @@ bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
 
         control->setMuted(controlObj["muted"].toBool());
 
-        for (int y = 0; y < controlObj["automations"].toArray().size(); y++) {
-            QJsonObject automationObj = controlObj["automations"].toArray()[y].toObject();
+        auto automations = controlObj["automations"].toArray();
+        for (int y = 0; y < automations.size(); y++) {
+            QJsonObject automationObj = automations[y].toObject();
 
             control->add();
             AutomationModel *automation = control->get(y);
@@ -288,8 +296,9 @@ bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
             automation->setName(automationObj["name"].toString());
             automation->setMuted(automationObj["muted"].toBool());
 
-            for (int p = 0; p < automationObj["points"].toArray().size(); p++) {
-                QJsonObject pointObj = automationObj["points"].toArray()[p].toObject();
+            auto points = automationObj["points"].toArray();
+            for (int p = 0; p < points.size(); p++) {
+                QJsonObject pointObj = points[p].toObject();
 
                 GPoint point;
                 point.beat = static_cast<Beat>(pointObj["beat"].toInt());
@@ -299,8 +308,9 @@ bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
                 automation->add(point);
             }
 
-            for (int p = 0; p < automationObj["instances"].toArray().size(); p++) {
-                QJsonArray instance = automationObj["instances"].toArray()[p].toArray();
+            auto instances = automationObj["instances"].toArray();
+            for (int p = 0; p < instances.size(); p++) {
+                QJsonArray instance = instances[p].toArray();
                 Beat from = static_cast<Beat>(instance[0].toInt());
                 Beat to = static_cast<Beat>(instance[1].toInt());
 
@@ -321,11 +331,11 @@ bool ProjectSave::initPlugin(PluginModel *plugin, const QJsonObject &obj)
                 paths.push(it->toString().toStdString());
             return paths;
         }(obj));
-    } catch (const std::exception &e) {}
+    } catch (const std::runtime_error &e) {}
 
     auto arr = obj["controls"].toArray();
     for (auto it = arr.begin(); it != arr.end(); it++) {
-        plugin->audioPlugin()->getControl(it[0].toInt()) = it[1].toDouble();
+        plugin->audioPlugin()->getControl(static_cast<ParamID>(it[0].toInt())) = it[1].toDouble();
     }
     return true;
 }

@@ -7,7 +7,7 @@ import "../Default"
 Item {
     property alias modules: modules
     property int componentSelected: 0
-    property real tabWidth: width / Math.max(modules.count, 5)
+    property real tabWidth: (width - newTabButton.width - menuButton.width) / Math.max(modules.count, 5)
     property alias nullCallback: nullCallback
     property alias sequencerPartitionNodeCallback: sequencerPartitionNodeCallback
     property alias sequencerNewPartitionNodeCallback: sequencerNewPartitionNodeCallback
@@ -44,13 +44,43 @@ Item {
         }
     }
 
+    DefaultMenuButton {
+        id: menuButton
+        height: parent.height * 0.05
+        width: parent.height * 0.05
+        imageFactor: 0.75
+        rect.color: themeManager.foregroundColor
+        rect.border.color: "black"
+        rect.border.width: 1
+
+        onReleased: globalMenu.popup()
+
+        Menu {
+            id: globalMenu
+
+            Action {
+                text: "Open settings"
+                onTriggered: modulesView.settingsView.open()
+            }
+
+            Action {
+                text: "Save project"
+                onTriggered: app.project.save()
+            }
+
+            Action {
+                text: "Load project"
+                onTriggered: app.project.load()
+            }
+        }
+    }
+
     Repeater {
         id: moduleRepeater
         model: ListModel {
             function removeModule(idx) {
                 remove(idx)
-                var end = modules.count - 1
-                for (var i = 0; i < end; ++i)
+                for (var i = 0; i < modules.count; ++i)
                     modulesViewContent.getModule(i).moduleIndex = i
             }
 
@@ -62,24 +92,18 @@ Item {
                     path: "qrc:/EmptyView/EmptyView.qml",
                     callback: nullCallback
                 })
-                modules.append({
-                    title: "+",
-                    path: "",
-                    callback: nullCallback
-                })
             }
         }
 
-        onCountChanged: {
-            if (count === 1 && modules.get(0).path === "") {
-                modules.append({
-                    title: "New component",
-                    path: "qrc:/EmptyView/EmptyView.qml",
-                    callback: nullCallback
-                })
-            }
-
-        }
+        // onCountChanged: {
+        //     if (count === 1 && modules.get(0).path === "") {
+        //         modules.append({
+        //             title: "New component",
+        //             path: "qrc:/EmptyView/EmptyView.qml",
+        //             callback: nullCallback
+        //         })
+        //     }
+        // }
 
         delegate: Column {
             property var moduleItem: loadedComponent.item
@@ -89,18 +113,11 @@ Item {
             spacing: 1.0
 
             ModulesViewTab {
+                id: moduleTab
                 height: parent.height * 0.05
                 width: tabWidth
-                z: 100
-                visible: index !== modules.count - 1
-            }
-
-            ModuleViewNewTabButton {
-                height: parent.height * 0.05
-                width: parent.height * 0.05
-                x: index * tabWidth
-                z: 100
-                visible: index === modules.count - 1
+                visible: index !== modules.count
+                tabTitle: loadedComponent.item ? loadedComponent.item.moduleName : "Loading"
             }
 
             Loader {
@@ -110,6 +127,7 @@ Item {
                 source: path
                 visible: componentSelected === index
                 focus: true
+                clip: true
 
                 onVisibleChanged: {
                     focus = true
@@ -126,5 +144,12 @@ Item {
                 }
             }
         }
+    }
+
+    ModuleViewNewTabButton {
+        id: newTabButton
+        height: parent.height * 0.05
+        width: parent.height * 0.05
+        x: menuButton.width + modules.count * tabWidth
     }
 }

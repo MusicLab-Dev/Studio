@@ -4,8 +4,6 @@ import QtQuick.Controls 2.15
 import "../../../Default"
 
 Row {
-    anchors.fill: parent
-
     Text {
         id: sliderDescription
         text: name

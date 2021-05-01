@@ -33,8 +33,11 @@ public:
         StepValue,
         DefaultValue,
         Value,
+        RangeNames,
         Title,
-        Description
+        Description,
+        ShortName,
+        UnitName
     };
 
     /** @brief Parameter type */

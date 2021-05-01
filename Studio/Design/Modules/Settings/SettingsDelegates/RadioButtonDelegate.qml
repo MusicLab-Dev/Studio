@@ -5,8 +5,6 @@ import QtQuick.Layouts 1.15
 import "../../../Default"
 
 Row {
-    anchors.fill: parent
-
     Text {
         id: nameLabel
         text: name
@@ -18,7 +16,7 @@ Row {
     RowLayout {
         width: parent.width - nameLabel.width
         height: parent.height / 1.5
-        
+
         Repeater {
             model: range
 

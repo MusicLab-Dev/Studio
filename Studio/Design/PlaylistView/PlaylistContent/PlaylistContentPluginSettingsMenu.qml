@@ -88,6 +88,7 @@ Menu {
 
     Action {
         text: qsTr("Add control")
+        enabled: false
 
         onTriggered: {
             targetNode.controls.add(1)

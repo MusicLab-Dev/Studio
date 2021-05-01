@@ -4,6 +4,7 @@ import QtQuick.Dialogs 1.3
 
 
 import "../../Default"
+import "../../Common"
 
 WorkspacesBackground {
     function open(multiplePath, accepted, canceled) {
@@ -28,6 +29,7 @@ WorkspacesBackground {
 
     property string fileUrl: ""
     property var fileUrls: [fileUrl]
+    property alias workspacesModel: workspaceForeground.workspacesModel
 
     id: workspaceView
     visible: false
@@ -38,54 +40,70 @@ WorkspacesBackground {
         y: height
     }
 
-    Rectangle {
+    TextRoundedButton {
         visible: workspaceContentArea.selectedIndex !== -1 && !workspaceContentArea.selectedIndexIsDir
-        id: workspacesViewAcceptButton
-        width: workspacesViewCloseButton.width
-        height: workspacesViewCloseButton.height
-        x: workspacesViewCloseButton.x - workspacesViewCloseButton.width - width / 5
+        id: workspacesViewAcceptButtonText
+        x: workspacesViewCloseButtonText.x - width - height
         y: height
-        color: workspacesViewAcceptButtonText.acceptButtonHovered ? "#31A8FF" : "#1E6FB0"
-        radius: 5
+        text: "Accept"
+        type: 2
 
-        WorkspacesViewAcceptButton {
-            id: workspacesViewAcceptButtonText
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: { workspacesViewAcceptButtonText.buttonHovered = true }
+
+            onExited: { workspacesViewAcceptButtonText.buttonHovered = false }
+
+            onReleased: { workspaceView.acceptAndClose() }
         }
     }
 
-    Rectangle {
+    TextRoundedButton {
         visible: workspaceForeground.parentDepth !== 0
-        id: workspacesViewBackButton
-        width: workspacesViewCloseButton.width
-        height: workspacesViewCloseButton.height
+        id: workspacesViewBackButtonText
+
+        width: workspacesViewCloseButtonText.width
+        height: workspacesViewCloseButtonText.height
         x: workspaceForeground.width + height
         y: height
-        color: "transparent"
-        radius: 5
-        border.color: workspacesViewBackButtonText.backButtonHovered ? "#31A8FF" : "#1E6FB0"
-        border.width: workspaceForeground.parentDepth !== 0 ? 1 : 0
+        text: "Back"
+        type: 1
 
-        WorkspacesViewBackButton {
-            id: workspacesViewBackButtonText
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: { workspacesViewBackButtonText.buttonHovered = true }
+
+            onExited: { workspacesViewBackButtonText.buttonHovered = false }
+
+            onReleased: {
+                workspaceForeground.actualPath += "/.."
+                workspaceForeground.parentDepth -= 1
+            }
         }
     }
 
-    Rectangle {
-        id: workspacesViewCloseButton
-        width: 70
-        height: 30
+    TextRoundedButton {
+        id: workspacesViewCloseButtonText
         x: workspaceView.width - width - height
         y: height
-        color: "transparent"
-        radius: 5
-        border.color: workspacesViewCloseButtonText.closeButtonHovered ? "#31A8FF" : "#1E6FB0"
-        border.width: 1
+        text: "Close"
+        type: 1
 
-        WorkspacesViewCloseButton {
-            id: workspacesViewCloseButtonText
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onEntered: { workspacesViewCloseButtonText.buttonHovered = true }
+
+            onExited: { workspacesViewCloseButtonText.buttonHovered = false }
+
+            onReleased: { workspaceView.cancelAndClose() }
         }
     }
-
 
     WorkspacesForeground {
         id: workspaceForeground
@@ -94,15 +112,7 @@ WorkspacesBackground {
         width: Math.max(parent.width * 0.2, 350)
         height: parent.height
 
-        workspacesModel: app.settings.get("workspacePaths");
-        // ListModel {
-        //     id: workspacesModel
-
-        //     ListElement {
-        //         name: "Default Workspace"
-        //         path: ""
-        //     }
-        // }
+        workspacesModel: app.settings.get("workspacePaths")
     }
 
     WorkspacesContentArea {
@@ -122,11 +132,15 @@ WorkspacesBackground {
         selectFolder: true
 
         onAccepted: {
-            workspacesModel.append({
-                                       name: "New workspace",
-                                       path: folderPicker.fileUrl.toString()
-                                   })
-            app.settings.set("workspacePaths", workspacesModel);
+            console.log("WorkspacesModel before", workspacesModel)
+            var tmp = workspacesModel
+            if (tmp === undefined)
+                tmp = []
+            tmp.push(["New workspace", folderPicker.fileUrl.toString()])
+            app.settings.set("workspacePaths", tmp);
+            workspacesModel = tmp
+            console.log("WorkspacesModel after", workspacesModel)
+            app.settings.saveValues()
         }
     }
 }

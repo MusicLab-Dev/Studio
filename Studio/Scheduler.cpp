@@ -79,7 +79,7 @@ void Scheduler::setProductionCurrentBeat(const Beat beat)
 
     if (currentBeat == beat)
         return;
-    Models::AddProtectedEvent(
+    addEvent(
         [this, beat] {
             auto &range = currentBeatRange<Audio::PlaybackMode::Production>();
             range.to = beat + processBeatSize();
@@ -98,7 +98,7 @@ void Scheduler::setLiveCurrentBeat(const Beat beat)
 
     if (currentBeat == beat)
         return;
-    Models::AddProtectedEvent(
+    addEvent(
         [this, beat] {
             auto &range = currentBeatRange<Audio::PlaybackMode::Live>();
             range.to = beat + processBeatSize();
@@ -117,7 +117,7 @@ void Scheduler::setPartitionCurrentBeat(const Beat beat)
 
     if (currentBeat == beat)
         return;
-    Models::AddProtectedEvent(
+    addEvent(
         [this, beat] {
             auto &range = currentBeatRange<Audio::PlaybackMode::Partition>();
             range.to = beat + processBeatSize();
@@ -136,7 +136,7 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
 
     if (currentBeat == beat)
         return;
-    Models::AddProtectedEvent(
+    addEvent(
         [this, beat] {
             auto &range = currentBeatRange<Audio::PlaybackMode::OnTheFly>();
             range.to = beat + processBeatSize();
@@ -207,7 +207,8 @@ void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat
 
 void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *node, const quint32 partition, const Beat startingBeat)
 {
-    const bool graphChanged = partitionNode() != node->audioNode() || partitionIndex() != partition;
+    const bool graphChanged = partitionNode() != node->audioNode();
+    // const bool partitionChanged = graphChanged || partitionIndex() != partition;
 
     pauseImpl();
     if (!Models::AddProtectedEvent(

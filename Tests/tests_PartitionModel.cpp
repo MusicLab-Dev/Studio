@@ -19,7 +19,7 @@ TEST(PartitionModel, AddNote)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Partition partition {};
 
@@ -49,7 +49,7 @@ TEST(PartitionModel, RemoveNote)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Partition partition {};
 
@@ -73,7 +73,7 @@ TEST(PartitionModel, UpdateInternal)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Partition partition1 {};
     Audio::Partition partition2 {};
@@ -98,7 +98,7 @@ TEST(PartitionModel, Name)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Partition partition {};
 
@@ -112,7 +112,7 @@ TEST(PartitionModel, Muted)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Partition partition {};
 
@@ -128,7 +128,7 @@ TEST(PartitionModel, MidiChannels)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler;
+    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
 
     Audio::Partition partition {};
 

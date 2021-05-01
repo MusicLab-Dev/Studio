@@ -22,7 +22,18 @@
                 "id": "workspacePaths",
                 "name": "Workspace paths",
                 "tags": ["workspace", "path"],
-                "type": "StringPairList(QVector<QVector<QString>>)"
+                "type": "StringPairList"
+            }
+        ],
+        "Other": [
+            {
+                "id": "volume2",
+                "name": "Volume2",
+                "help": "Set the volume",
+                "tags": ["Volume"],
+                "type": "Slider",
+                "start": 50,
+                "values": [0, 100, 1]
             }
         ]
     },

@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import AudioAPI 1.0
+
 Item {
     // Content data placeholder
     default property alias placeholder: placeholder.data
@@ -17,6 +19,9 @@ Item {
     // Horizontal scroll (xOffset && xOffsetMin is always zero or less)
     property real xOffset: 0
     property real xOffsetMin: 0
+    readonly property real xOffsetWidth: -xOffsetMin
+    readonly property real xScrollIndicatorSize: xOffsetWidth ? 1 / (xOffsetWidth / width) : 1
+    readonly property real xScrollIndicatorPos: (1 - xScrollIndicatorSize) * (xOffsetMin ? xOffset / xOffsetMin : 0)
 
     // Vertical scroll (yOffset && yOffsetMin is always zero or less)
     property real yOffset: 0
@@ -52,6 +57,7 @@ Item {
     // Global access data
     property alias surfaceContentGrid: surfaceContentGrid
     property alias placementRectangle: placementRectangle
+    property alias gestureArea: gestureArea
 
     // Placement ratios
     property real placementKeyCount: 0
@@ -63,6 +69,7 @@ Item {
     readonly property real placementBeatPrecisionWidth: placementBeatPrecisionTo - placementBeatPrecisionFrom
     property real placementBeatPrecisionDefaultWidth: placementBeatPrecisionScale !== 0 ? placementBeatPrecisionScale : beatPrecision
     property real placementBeatPrecisionLastWidth: 0
+    property real placementBeatPrecisionBrushStep: 0
     property real placementKeyOffset: 0 // Only used for notes
     property real placementKey: -1 // Only used for notes
     property real placementBeatPrecisionFrom: 0
@@ -77,9 +84,10 @@ Item {
         return placementKey === -1 ? 0 : (placementKeyCount - 1 - (placementKey - placementKeyOffset)) * rowHeight
     }
     readonly property real placementResizeMaxPixelThreshold: 20
+    property real placementResizeRatioThreshold: 0.25
 
     // Scale used to perfectly fit placements in beat
-    property int placementBeatPrecisionScale: 0
+    property int placementBeatPrecisionScale: AudioAPI.beatPrecision
 
     // Timeline bar
     property real timelineBeatPrecision: 0
@@ -129,14 +137,38 @@ Item {
         id: gestureArea
         anchors.fill: parent
 
-        onScrolled: {
-            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scrollX, xOffsetMin), 0)
-            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scrollY, yOffsetMin), 0)
+        onXScrolled: {
+            xOffset = Math.min(Math.max(xOffset + xScrollFactor * scroll, xOffsetMin), 0)
         }
 
-        onZoomed: {
-            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoomX, 0), 1)
-            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoomY, 0), 1)
+        onYScrolled: {
+            yOffset = Math.min(Math.max(yOffset + yScrollFactor * scroll, yOffsetMin), 0)
+        }
+
+        onXZoomed: {
+            var realPos = xPos > rowHeaderWidth ? xPos - rowHeaderWidth : 0
+            var posRatio = realPos / rowDataWidth
+            var targetBeat = (-xOffset + realPos) / pixelsPerBeatPrecision
+            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoom, 0), 1)
+            var offset = -targetBeat * pixelsPerBeatPrecision + rowDataWidth * posRatio
+            if (offset > 0)
+                offset = 0
+            else if (offset < xOffsetMin)
+                offset = xOffsetMin
+            xOffset = offset
+        }
+
+        onYZoomed: {
+            var realPos = yPos > timelineHeight ? yPos - timelineHeight : 0
+            var posRatio = realPos / surfaceContentGrid.height
+            var targetRow = (-yOffset + realPos) / rowHeight
+            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoom, 0), 1)
+            var offset = -targetRow * rowHeight + surfaceContentGrid.height * posRatio
+            if (offset > 0)
+                offset = 0
+            else if (offset < yOffsetMin)
+                offset = yOffsetMin
+            yOffset = offset
         }
     }
 
@@ -151,12 +183,6 @@ Item {
         width: parent.width
         height: contentView.height - contentViewTimeline.height
         y: contentViewTimeline.height
-
-        // Content view data
-        Item {
-            id: placeholder
-            anchors.fill: parent
-        }
 
         // Data grid overlay
         SurfaceContentGrid {
@@ -177,6 +203,16 @@ Item {
                 color: "red"
                 opacity: 0.5
             }
+        }
+
+        // Content view data
+        Item {
+            id: placeholder
+            anchors.fill: parent
+        }
+
+        Item {
+            anchors.fill: surfaceContentGrid
 
             ScrollBar {
                 anchors.top: parent.top
@@ -190,7 +226,25 @@ Item {
                 policy: ScrollBar.AlwaysOn
 
                 onPositionChanged: {
-                    // yOffset = yOffsetMin * position / size
+                    if (Math.abs(position - yScrollIndicatorPos) > Number.EPSILON)
+                        yOffset = yOffsetMin * position / (1 - size)
+                }
+            }
+
+            ScrollBar {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                active: size !== 1
+                visible: true
+                orientation: Qt.Horizontal
+                size: xScrollIndicatorSize
+                position: xScrollIndicatorPos
+                policy: ScrollBar.AlwaysOn
+
+                onPositionChanged: {
+                    if (Math.abs(position - xScrollIndicatorPos) > Number.EPSILON)
+                        xOffset = xOffsetMin * position / (1 - size)
                 }
             }
         }

@@ -130,6 +130,7 @@ Repeater {
                         width: nodeView.dataContentWidth
                         height: contentView.rowHeight
                         instances: automationDelegate.automation ? automationDelegate.automation.instances : null
+                        brushStep: contentView.placementBeatPrecisionBrushStep
 
                         Repeater {
                             model: placementArea.instances

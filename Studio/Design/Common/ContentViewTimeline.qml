@@ -14,6 +14,12 @@ Rectangle {
         id: snapper
         width: contentView.rowHeaderWidth
         height: parent.height
+        currentIndex: 4
+
+        onActivated: {
+            contentView.placementBeatPrecisionScale = currentValue
+            contentView.placementBeatPrecisionLastWidth = 0
+        }
     }
 
     Item {
@@ -93,7 +99,7 @@ Rectangle {
                 anchors.fill: parent
                 drag.target: parent
                 drag.axis: Drag.XAxis
-                drag.minimumX: 0
+                drag.minimumX: -width / 2
                 drag.maximumX: loopToIndicator.x
 
                 drag.onActiveChanged: {
@@ -129,7 +135,7 @@ Rectangle {
                 drag.target: parent
                 drag.axis: Drag.XAxis
                 drag.minimumX: loopFromIndicator.x
-                drag.maximumX: timelineArea.width
+                drag.maximumX: timelineArea.width - width / 2
 
                 drag.onActiveChanged: {
                     contentView.loopTo = (loopToIndicator.x - contentView.xOffset + loopToIndicator.width / 2) / contentView.pixelsPerBeatPrecision

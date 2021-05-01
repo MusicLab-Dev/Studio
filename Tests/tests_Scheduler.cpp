@@ -11,5 +11,5 @@ TEST(Scheduler, InitDestroy)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    ASSERT_NO_THROW(Scheduler());
+    ASSERT_NO_THROW(Scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test"))));
 }

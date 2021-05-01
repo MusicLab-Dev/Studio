@@ -38,6 +38,26 @@ QVariant PartitionsModel::data(const QModelIndex &index, int role) const
     }
 }
 
+void PartitionsModel::processLatestInstanceChange(const Beat oldInstance, const Beat newInstance)
+{
+    if (_latestInstance < newInstance) {
+        const auto oldLatest = _latestInstance;
+        _latestInstance = newInstance;
+        emit latestInstanceChanged();
+        parentNode()->processLatestInstanceChange(oldLatest, _latestInstance);
+    } else if (_latestInstance == oldInstance) {
+        Beat max = 0;
+        for (const auto &p : _partitions) {
+            const auto &instances = *p->instances().audioInstances();
+            if (!instances.empty() && instances.back().to > max)
+                max = instances.back().to;
+        }
+        _latestInstance = max;
+        emit latestInstanceChanged();
+        parentNode()->processLatestInstanceChange(oldInstance, _latestInstance);
+    }
+}
+
 const PartitionModel *PartitionsModel::get(const int index) const noexcept_ndebug
 {
     coreAssert(index >= 0 && index < count(),

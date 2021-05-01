@@ -26,16 +26,14 @@ Item {
         false, true, false, true, false, true
     ]
     readonly property int keysPerOctave: keyNames.length
-    property int octaves: 10
-    property int octaveOffset: 1
+    property int octaves: 8
+    property int octaveOffset: 2
     readonly property int keyOffset: octaveOffset * keysPerOctave
     readonly property int keys: keysPerOctave * octaves
     property real headerFactor: 0.1
     property real keyWidth: parent.width * headerFactor
     readonly property real totalHeight: keys * rowHeight
     readonly property real snapperHeight: 30
-
-    // Values for snap widget
 
     id: pianoView
     height: totalHeight
@@ -104,6 +102,7 @@ Item {
         width: contentView.rowDataWidth
         height: pianoView.totalHeight
         partition: sequencerView.partition
+        brushStep: contentView.placementBeatPrecisionBrushStep
 
         Repeater {
             model: sequencerView.partition
@@ -116,6 +115,24 @@ Item {
                 width: (beatRange.to - beatRange.from) * contentView.pixelsPerBeatPrecision
                 height: contentView.rowHeight
                 color: themeManager.getColorFromChain(key)
+                border.color: Qt.darker(color, 1.25)
+                border.width: 2
+
+                Rectangle {
+                    x: Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
+                    y: parent.height / 8
+                    width: 1
+                    height: contentView.rowHeight * 3 / 4
+                    color: parent.border.color
+                }
+
+                Rectangle {
+                    x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
+                    y: parent.height / 8
+                    width: 1
+                    height: contentView.rowHeight * 3 / 4
+                    color: parent.border.color
+                }
             }
         }
     }

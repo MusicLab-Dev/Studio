@@ -7,6 +7,6 @@ SettingsCategoryButton {
     id: settingsForegroundCard
     width: settingsForeground.width * 0.9
     height: (settingsForeground.height - settingsResearchTextInput.height) / 8 * 0.8
-    text: categoryName
-    iconSource: "qrc:/Assets/Settings/" + categoryIcon
+    text: modelData
+    iconSource: "qrc:/Assets/Settings/" + modelData + ".png"
 }
