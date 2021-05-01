@@ -4,7 +4,6 @@ import QtQuick.Controls 2.15
 import AudioAPI 1.0
 
 Rectangle {
-    property int lastHiddenIndex: Math.ceil(Math.abs(xOffset) / (contentView.beatsPerBar * surfaceContentGrid.barsPerCell * contentView.pixelsPerBeat))
     property bool isEditingLoop: false
 
     id: timeline
@@ -36,7 +35,7 @@ Rectangle {
 
             onPressedChanged: {
                 if (pressed) {
-                    contentView.timelineBeginMove((Math.abs(xOffset) + mouseX) / contentView.pixelsPerBeatPrecision)
+                    contentView.timelineBeginMove((Math.abs(contentView.xOffset) + mouseX) / contentView.pixelsPerBeatPrecision)
                 } else {
                     isEditingLoop = false
                     if (contentView.hasLoop && contentView.loopFrom == contentView.loopTo) {
@@ -49,7 +48,7 @@ Rectangle {
             onPositionChanged: {
                 if (!containsPress)
                     return
-                var beat = (Math.abs(xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
+                var beat = (Math.abs(contentView.xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
                 if (isEditingLoop) {
                     if (beat < contentView.loopFrom)
                         contentView.loopFrom = beat
@@ -69,7 +68,7 @@ Rectangle {
 
             onDoubleClicked: {
                 isEditingLoop = true
-                var beat = (Math.abs(xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
+                var beat = (Math.abs(contentView.xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
                 contentView.hasLoop = true
                 contentView.loopFrom = beat
                 contentView.loopTo = beat
@@ -158,23 +157,35 @@ Rectangle {
         }
 
         Repeater {
+            readonly property int lastHiddenBarIndex: {
+                var idx = Math.floor(Math.abs(contentView.xOffset) / (surfaceContentGrid.barWidth))
+                if (barSkipStep)
+                    idx = idx - (idx % (barSkipStep + 1))
+                return idx
+            }
+            readonly property int barModel: Math.max(surfaceContentGrid.barsPerRow, 1)
+            readonly property int barSkipStep: Math.floor(surfaceContentGrid.barsPerRow / 40)
+            readonly property int barReducedModel: Math.ceil(barModel / (barSkipStep + 1)) + 1
+
+            id: timelineRepeater
             width: parent.width
             height: parent.height
-            model: surfaceContentGrid.cellsPerRow
+            model: barReducedModel
 
             delegate: Column {
-                property int beat: (lastHiddenIndex + index) * contentView.beatsPerBar * surfaceContentGrid.barsPerCell
+                readonly property int reducedIndex: timelineRepeater.lastHiddenBarIndex + index * (timelineRepeater.barSkipStep + 1)
+                readonly property int beat: reducedIndex * contentView.beatsPerBar
 
                 x: contentView.xOffset + beat * contentView.pixelsPerBeat
 
                 Text {
-                    text: beat
+                    text: reducedIndex
                     color: "black"
                 }
 
                 Rectangle {
-                    height: timeline.height / 3
                     width: 1
+                    height: timeline.height / 3
                     color: themeManager.foregroundColor
                 }
             }
