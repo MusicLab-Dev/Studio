@@ -13,27 +13,27 @@ Item {
     readonly property real rowDataWidth: width - rowHeaderWidth
 
     // Columns dimensions
-    property int barsPerRow: xZoom * xZoomWidth + xZoomMin
+    readonly property int beatsPerRow: xZoom * xZoomWidth + xZoomMin
     property int beatsPerBar: 4
 
     // Horizontal scroll (xOffset && xOffsetMin is always zero or less)
     property real xOffset: 0
     property real xOffsetMin: 0
     readonly property real xOffsetWidth: -xOffsetMin
-    readonly property real xScrollIndicatorSize: xOffsetWidth ? 1 / (xOffsetWidth / width) : 1
+    readonly property real xScrollIndicatorSize: xOffsetWidth ? 1 / ((xOffsetWidth + width) / width) : 1
     readonly property real xScrollIndicatorPos: (1 - xScrollIndicatorSize) * (xOffsetMin ? xOffset / xOffsetMin : 0)
 
     // Vertical scroll (yOffset && yOffsetMin is always zero or less)
     property real yOffset: 0
     property real yOffsetMin: 0
     readonly property real yOffsetWidth: -yOffsetMin
-    readonly property real yScrollIndicatorSize: yOffsetWidth ? 1 / (yOffsetWidth / width) : 1
+    readonly property real yScrollIndicatorSize: yOffsetWidth ? 1 / (yOffsetWidth / height) : 1
     readonly property real yScrollIndicatorPos: (1 - yScrollIndicatorSize) * (yOffsetMin ? yOffset / yOffsetMin : 0)
 
     // Horizontal zoom
     property real xZoom: 0.05
-    property real xZoomMin: 1
-    property real xZoomMax: 100
+    property real xZoomMin: beatsPerBar + 1
+    property real xZoomMax: 100 * beatsPerBar
     readonly property real xZoomWidth: xZoomMax - xZoomMin
 
     // Vertical zoom
@@ -49,8 +49,8 @@ Item {
     readonly property real yScrollFactor: height / (wheelsPerYScrollPage * 360 * 8)
 
     // Zoom gesture
-    readonly property real wheelsPerXZoomRange: 2
-    readonly property real wheelsPerYZoomRange: 2
+    readonly property real wheelsPerXZoomRange: 5
+    readonly property real wheelsPerYZoomRange: 5
     readonly property real xZoomFactor: 1 / (wheelsPerXZoomRange * 360 * 8)
     readonly property real yZoomFactor: 1 / (wheelsPerYZoomRange * 360 * 8)
 
@@ -62,7 +62,7 @@ Item {
     // Placement ratios
     property real placementKeyCount: 0
     readonly property real beatPrecision: 128
-    readonly property real pixelsPerBeat: surfaceContentGrid.cellWidth / surfaceContentGrid.barsPerCell / beatsPerBar
+    readonly property real pixelsPerBeat: surfaceContentGrid.width / beatsPerRow
     readonly property real pixelsPerBeatPrecision: pixelsPerBeat / beatPrecision
 
     // Placement states in beat precision (128 unit = 1 beat)
@@ -120,16 +120,6 @@ Item {
     onYOffsetMinChanged: {
         if (yOffset < yOffsetMin)
             yOffset = yOffsetMin
-    }
-
-    // Content background
-    Rectangle {
-        id: contentDataBackground
-        x: contentView.rowHeaderWidth
-        y: contentViewTimeline.height
-        width: contentView.rowDataWidth
-        height: contentView.height - contentViewTimeline.height
-        color: themeManager.backgroundColor
     }
 
     // Handle all mouse / touch gestures
@@ -193,7 +183,7 @@ Item {
             xOffset: contentView.xOffset
             yOffset: contentView.yOffset
             rowHeight: contentView.rowHeight
-            barsPerRow: contentView.barsPerRow
+            beatsPerRow: contentView.beatsPerRow
             z: 0
 
             Rectangle {
@@ -219,7 +209,7 @@ Item {
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 active: size !== 1
-                visible: true
+                visible: active
                 orientation: Qt.Vertical
                 size: yScrollIndicatorSize
                 position: yScrollIndicatorPos
@@ -236,7 +226,7 @@ Item {
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 active: size !== 1
-                visible: true
+                visible: active
                 orientation: Qt.Horizontal
                 size: xScrollIndicatorSize
                 position: xScrollIndicatorPos
