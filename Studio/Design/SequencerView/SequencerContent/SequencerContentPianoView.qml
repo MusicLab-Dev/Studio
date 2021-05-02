@@ -50,7 +50,8 @@ Item {
             readonly property bool isInMiddleOfHashKeys: middleHashKeysStates[keyOctaveIndex]
             readonly property bool isUpHashKey: upHashKeyStates[keyOctaveIndex]
             readonly property bool isDownHashKey: downHashKeyStates[keyOctaveIndex]
-            readonly property color keyColor: isHashKey ? "#7B7B7B" : "#E7E7E7"
+            readonly property color keyColor: keyOctaveIndex === 0 ? "#C2C2C2" : isHashKey ? "#7B7B7B" : "#E7E7E7"
+            readonly property int placementOffset: keyOctaveIndex == 11 ? 0 : 1
 
             id: key
             width: pianoView.keyWidth
@@ -60,10 +61,10 @@ Item {
 
             Rectangle {
                 id: keyBackground
-                y: key.isUpHashKey ? -contentView.rowHeight / 2 : 0
+                y: (key.isUpHashKey ? -contentView.rowHeight / 2 : 0) - placementOffset
                 z: 1
                 width: (key.isHashKey ? pianoView.keyWidth * 0.75 : pianoView.keyWidth) - x
-                height: contentView.rowHeight * (key.isHashKey ? 1 : key.isInMiddleOfHashKeys ? 2 : 1.5)
+                height: contentView.rowHeight * (key.isHashKey ? 1 : key.isInMiddleOfHashKeys ? 2 : 1.5) + placementOffset
                 color: keyMouseArea.pressed ? Qt.darker(key.keyColor, 1.2) : key.keyColor
                 border.color: key.isHashKey ? color : "#7B7B7B"
                 border.width: 1
