@@ -189,6 +189,18 @@ bool NodeModel::remove(const int idx)
     );
 }
 
+bool NodeModel::reset(void)
+{
+    for (int i = 0; i < count(); i++)
+        remove(i);
+    for (int i = 0; i < _partitions->count(); i++)
+        _partitions->remove(i);
+    for (int i = 0; i < _controls->count(); i++)
+        _controls->remove(i);
+
+    return true;
+}
+
 bool NodeModel::isAParent(NodeModel *node) const noexcept
 {
     auto *p = parentNode();

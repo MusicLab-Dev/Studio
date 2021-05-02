@@ -48,8 +48,13 @@ bool ProjectSave::save(void)
     map.insert("master", transformNodeInVariantMap(*_project->master()));
 
     QJsonDocument doc(QJsonDocument::fromVariant(map));
-    write(doc.toJson(QJsonDocument::Indented));
-    qDebug() << "Debug: ProjectSave::save Success";
+    try {
+        write(doc.toJson(QJsonDocument::Compact));
+        qDebug() << "Debug: ProjectSave::save Success";
+    } catch (const std::logic_error &e) {
+        qDebug() << "Debug: ProjectSave::save: " + QString(e.what());
+        return false;
+    }
     return true;
 }
 
@@ -81,6 +86,9 @@ QVariantList ProjectSave::transformPartitionsInVariantList(PartitionsModel &part
 
     for (int i = 0; i < partitions.count(); i++) {
         PartitionModel *partition = partitions.get(i);
+        if (!partition)
+            continue;
+
         QVariantMap data;
 
         data.insert("name", partition->name());
@@ -117,6 +125,9 @@ QVariantList ProjectSave::transformControlsInVariantList(ControlsModel &controls
 
     for (int i = 0; i < controls.count(); i++) {
         ControlModel *control = controls.get(i);
+        if (!control)
+            continue;
+
         QVariantMap data;
 
         data.insert("name", control->name());
@@ -127,6 +138,8 @@ QVariantList ProjectSave::transformControlsInVariantList(ControlsModel &controls
         for (int y = 0; y < control->count(); y++) {
             QVariantMap mapAutomation;
             AutomationModel *automation = control->get(y);
+            if (!automation)
+                continue;
 
             mapAutomation.insert("name", automation->name());
             mapAutomation.insert("muted", automation->muted());
@@ -191,21 +204,24 @@ QVariantMap ProjectSave::transformPluginInVariantMap(PluginModel &plugin) noexce
 
 bool ProjectSave::load(void)
 {
-    for (int i = 0; i < _project->master()->count(); i++)
-        _project->master()->remove(i);
-    /** TODO: have to remove all informations in the master node */
+    _project->master()->reset();
 
-    QString jsonStr = read();
-    if (jsonStr.isEmpty())
+    try {
+        QString jsonStr = read();
+        if (jsonStr.isEmpty())
+            return false;
+        QJsonDocument doc = QJsonDocument::fromJson(jsonStr.toUtf8());
+        QJsonObject obj = doc.object();
+
+        _project->setName(obj["name"].toString());
+        _project->setBPM(static_cast<float>(obj["bpm"].toDouble()));
+        initNode(_project->master(), obj["master"].toObject());
+
+        qDebug() << "Debug: ProjectSave::Load success";
+    } catch (const std::logic_error &e) {
+        qDebug() << "Debug: ProjectSave::Load: " + QString(e.what());
         return false;
-    QJsonDocument doc = QJsonDocument::fromJson(jsonStr.toUtf8());
-    QJsonObject obj = doc.object();
-
-    _project->setName(obj["name"].toString());
-    _project->setBPM(static_cast<float>(obj["bpm"].toDouble()));
-    initNode(_project->master(), obj["master"].toObject());
-
-    qDebug("Debug: ProjectSave::Load success");
+    }
     return true;
 }
 

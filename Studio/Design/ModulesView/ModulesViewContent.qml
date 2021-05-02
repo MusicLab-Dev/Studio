@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Dialogs 1.0
 
 import "../Default"
 
@@ -59,20 +60,88 @@ Item {
             id: globalMenu
 
             Action {
-                text: "Open settings"
+                text: "New Project"
+                onTriggered: {
+                    app.project.clear()
+                    while(modules.count)
+                        modules.removeModule(0)
+                    modules.insert(0, {
+                        title: "New component",
+                        path: "qrc:/EmptyView/EmptyView.qml",
+                        callback: modulesViewContent.nullCallback
+                    })
+                    componentSelected = 0
+                }
+            }
+
+            Action {
+                text: "Save"
+                onTriggered: {
+                    if (app.project.path === "") {
+                        saveFileDialog.open()
+                        return
+                    }
+                    app.project.save()
+                }
+            }
+
+            Action {
+                text: "Save As..."
+                onTriggered: saveFileDialog.open()
+            }
+
+            Action {
+                text: "Open File..."
+                onTriggered: loadFileDialog.open()
+            }
+
+            Action {
+                text: "Preferences"
                 onTriggered: modulesView.settingsView.open()
             }
 
             Action {
-                text: "Save project"
-                onTriggered: app.project.save()
-            }
-
-            Action {
-                text: "Load project"
-                onTriggered: app.project.load()
+                text: "Exit"
+                onTriggered: Qt.quit()
             }
         }
+
+        FileDialog {
+            id: saveFileDialog
+            title: "Save a file"
+            folder: shortcuts.home
+            nameFilters: [ "All files (*)" ]
+            selectExisting: false
+            onAccepted: {
+                app.project.saveAs(fileUrls.toString().replace(/^(file:\/{2})/,"").toString())
+                close()
+            }
+            onRejected: close()
+            Component.onCompleted: visible = false
+        }
+
+        FileDialog {
+            id: loadFileDialog
+            title: "Choose a file"
+            folder: shortcuts.home
+            nameFilters: [ "All files (*)" ]
+            selectExisting: true
+            onAccepted: {
+                while(modules.count)
+                    modules.removeModule(0)
+                app.project.loadFrom(fileUrls.toString().replace(/^(file:\/{2})/,"").toString())
+                modules.insert(0, {
+                        title: "Playlsit",
+                        path: "qrc:/PlaylistView/PlaylistView.qml",
+                        callback: modulesViewContent.nullCallback
+                    })
+                componentSelected = 0
+                close()
+            }
+            onRejected: close()
+            Component.onCompleted: visible = false
+        }
+
     }
 
     Repeater {

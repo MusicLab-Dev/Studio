@@ -60,29 +60,30 @@ void Project::setBPM(const BPM bpm) noexcept
     );
 }
 
-void Project::save(void)
+bool Project::save(void) noexcept
 {
+    if (_path.isEmpty())
+        return false;
+
     ProjectSave psave(this);
-
-    /** debug */
-    setPath("save.json");
-    /* -- */
-
-    psave.save();
+    return psave.save();
 }
 
-void Project::saveAs(const QString &)
-{
-
-}
-
-void Project::load(void)
+bool Project::saveAs(const QString &path) noexcept
 {
     ProjectSave psave(this);
+    setPath(path);
+    return psave.save();
+}
 
-    /** debug */
-    setPath("save.json");
-    /* -- */
+bool Project::loadFrom(const QString &path) noexcept
+{
+    ProjectSave psave(this);
+    setPath(path);
+    return psave.load();
+}
 
-    psave.load();
+void Project::clear(void) noexcept
+{
+    _master.reset();
 }
