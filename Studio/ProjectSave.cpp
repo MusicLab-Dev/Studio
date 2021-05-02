@@ -207,9 +207,7 @@ bool ProjectSave::load(void)
 {
     auto scheduler = Scheduler::Get();
 
-    qDebug() << "Waiting";
     scheduler->stopAndWait();
-    qDebug() << "Recreating master";
     _project->recreateMasterMixer();
 
     try {
