@@ -60,22 +60,16 @@ Item {
             id: globalMenu
 
             Action {
-                text: "New Project"
+                text: qsTr("New Project")
                 onTriggered: {
+                    modulesView.removeAllComponents()
                     app.project.clear()
-                    while(modules.count)
-                        modules.removeModule(0)
-                    modules.insert(0, {
-                        title: "New component",
-                        path: "qrc:/EmptyView/EmptyView.qml",
-                        callback: modulesViewContent.nullCallback
-                    })
                     componentSelected = 0
                 }
             }
 
             Action {
-                text: "Save"
+                text: qsTr("Save")
                 onTriggered: {
                     if (app.project.path === "") {
                         saveFileDialog.open()
@@ -86,29 +80,29 @@ Item {
             }
 
             Action {
-                text: "Save As..."
+                text: qsTr("Save Project As...")
                 onTriggered: saveFileDialog.open()
             }
 
             Action {
-                text: "Open File..."
+                text: qsTr("Open Project File...")
                 onTriggered: loadFileDialog.open()
             }
 
             Action {
-                text: "Preferences"
+                text: qsTr("Preferences")
                 onTriggered: modulesView.settingsView.open()
             }
 
             Action {
-                text: "Exit"
+                text: qsTr("Exit")
                 onTriggered: Qt.quit()
             }
         }
 
         FileDialog {
             id: saveFileDialog
-            title: "Save a file"
+            title: qsTr("Save a project file")
             folder: shortcuts.home
             nameFilters: [ "All files (*)" ]
             selectExisting: false
@@ -122,13 +116,12 @@ Item {
 
         FileDialog {
             id: loadFileDialog
-            title: "Choose a file"
+            title: qsTr("Choose a file")
             folder: shortcuts.home
             nameFilters: [ "All files (*)" ]
             selectExisting: true
             onAccepted: {
-                while(modules.count)
-                    modules.removeModule(0)
+                modulesView.removeAllComponentsWithoutEmptyView()
                 app.project.loadFrom(fileUrls.toString().replace(/^(file:\/{2})/,"").toString())
                 modules.insert(0, {
                         title: "Playlsit",
@@ -186,7 +179,7 @@ Item {
                 height: parent.height * 0.05
                 width: tabWidth
                 visible: index !== modules.count
-                tabTitle: loadedComponent.item ? loadedComponent.item.moduleName : "Loading"
+                tabTitle: loadedComponent.item ? loadedComponent.item.moduleName : qsTr("Loading")
             }
 
             Loader {

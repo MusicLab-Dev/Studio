@@ -7,6 +7,7 @@
 #include <QVariantList>
 #include <QMetaEnum>
 
+#include "Scheduler.hpp"
 #include "ProjectSave.hpp"
 #include "Note.hpp"
 #include "Point.hpp"
@@ -204,7 +205,10 @@ QVariantMap ProjectSave::transformPluginInVariantMap(PluginModel &plugin) noexce
 
 bool ProjectSave::load(void)
 {
-    _project->master()->reset();
+    auto scheduler = Scheduler::Get();
+
+    scheduler->stopAndWait();
+    _project->recreateMasterMixer();
 
     try {
         QString jsonStr = read();

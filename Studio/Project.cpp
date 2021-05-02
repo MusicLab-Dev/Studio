@@ -23,8 +23,9 @@ Audio::Node *Project::createMasterMixer(void)
 }
 
 Project::Project(Audio::Project *project, QObject *parent)
-    : QObject(parent), _data(project), _master(createMasterMixer(), this)
+    : QObject(parent), _data(project)
 {
+    recreateMasterMixer();
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
@@ -85,5 +86,15 @@ bool Project::loadFrom(const QString &path) noexcept
 
 void Project::clear(void) noexcept
 {
+    Scheduler::Get()->stopAndWait();
+    recreateMasterMixer();
+}
+
+void Project::recreateMasterMixer(void)
+{
     _master.reset();
+    if (_data)
+        _data->master().reset();
+    _master = std::make_unique<NodeModel>(createMasterMixer(), this);
+    emit masterChanged();
 }

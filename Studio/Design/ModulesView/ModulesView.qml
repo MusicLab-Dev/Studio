@@ -32,6 +32,11 @@ Rectangle {
         componentSelected = 0
     }
 
+    function removeAllComponentsWithoutEmptyView() {
+        modules.clear()
+        componentSelected = 0
+    }
+
     property alias modulesViewContent: modulesViewContent
     property alias modules: modulesViewContent.modules
     property alias settingsView: settingsView

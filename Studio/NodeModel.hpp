@@ -168,9 +168,6 @@ public slots:
     /** @brief Remove a children node */
     bool remove(const int index);
 
-    /** @brief Remove all children and reset automations, partitions and everything else */
-    bool reset(void);
-
 
     /** @todo Move this in pluginmodel */
     bool needSingleExternalInput(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::SingleExternalInput); }

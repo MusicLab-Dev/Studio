@@ -35,8 +35,8 @@ Item {
     // Horizontal display logic
     readonly property real groupsPerRow: beatsPerRow / (beatsPerBar * barsPerGroup)
     readonly property real barsPerRow: Math.max(beatsPerRow / beatsPerBar, 0.5)
-    readonly property int divisionsPerBar: barsPerRow > 68 ? 0 : barsPerRow > 40 ? 2 : 4
-    readonly property int divisionsPerBeat: barsPerRow > 20 ? 0 : barsPerRow > 12 ? 2 : 4
+    readonly property int divisionsPerBar: barsPerRow > 48 ? 0 : barsPerRow > 32 ? 2 : 4
+    readonly property int divisionsPerBeat: barsPerRow > 16 ? 0 : barsPerRow > 8 ? 2 : 4
 
     // Final horizontal layout values
     readonly property real groupWidth: barWidth * barsPerGroup
@@ -94,12 +94,22 @@ Item {
             var barsToDraw = barsPerRow * 2
             var offset = 0
             var i = 0
+            var group = 0
             // Draw Bars
             offset = 0
             ctx.fillStyle = barColor
-            for (i = 0; i < barsToDraw; ++i) {
-                ctx.fillRect(offset, 0, barThickness, height)
-                offset += barWidth
+            if (divisionsPerBar !== 0) {
+                for (i = 0; i < barsToDraw; ++i) {
+                    ctx.fillRect(offset, 0, barThickness, height)
+                    offset += barWidth
+                }
+            } else {
+                for (i = 0; i < barsToDraw; ++i) {
+                    ctx.fillRect(offset, 0, group === 0 ? 2 : barThickness, height)
+                    offset += barWidth
+                    if (++group >= barsPerGroup)
+                        group = 0
+                }
             }
             // Draw Beats
             if (divisionsPerBar !== 0) {
