@@ -340,6 +340,21 @@ void Scheduler::disableLoopRange(void)
     });
 }
 
+void Scheduler::stopAndWait(void)
+{
+    if (pauseImpl()) {
+        std::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
+        onCatchingAudioThread();
+        wait();
+        setDirtyFlags();
+        setProductionCurrentBeat(0u);
+        setLiveCurrentBeat(0u);
+        setPartitionCurrentBeat(0u);
+        setOnTheFlyCurrentBeat(0u);
+        disableLoopRange();
+    }
+}
+
 void Scheduler::onCatchingAudioThread(void)
 {
     if (!_blockGenerated)

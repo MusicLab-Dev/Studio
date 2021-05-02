@@ -125,6 +125,9 @@ public slots:
     /** @brief Disable the scheduler loop range */
     void disableLoopRange(void);
 
+    /** @brief Stop the scheduler until its completly off */
+    void stopAndWait(void);
+
 signals:
     /** @brief Notify when playback mode changed */
     void playbackModeChanged(void);
