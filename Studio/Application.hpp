@@ -82,9 +82,9 @@ private:
     void setupScheduler(void);
 
 private:
+    SettingsListModel _settings;
     Audio::ProjectPtr _backendProject;
     Scheduler _scheduler;
     Project _project;
-    SettingsListModel _settings;
     // std::unique_ptr<PluginTableModel> _plugins;
 };

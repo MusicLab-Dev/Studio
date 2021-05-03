@@ -202,11 +202,14 @@ bool SettingsListModel::saveValues(void) noexcept
 bool SettingsListModel::set(const QString &id, const QVariant &value) noexcept
 {
     qDebug() << "Setting" << id << value;
+    auto i = 0;
     for (auto it = _models.begin(); it != _models.end(); it++) {
         if (it->id == id) {
             it->currentValue = value;
+            emit dataChanged(index(i), index(i), { Role::CurrentValue });
             return true;
         }
+        ++i;
     }
     return false;
 }
@@ -218,4 +221,13 @@ QVariant SettingsListModel::get(const QString &id) const noexcept
             return it->currentValue;
     }
     return QVariant();
+}
+
+QVariant SettingsListModel::getDefault(const QString &id, const QVariant &defaultValue) const noexcept
+{
+    for (auto it = _models.begin(); it != _models.end(); it++) {
+        if (it->id == id)
+            return it->currentValue;
+    }
+    return defaultValue;
 }
