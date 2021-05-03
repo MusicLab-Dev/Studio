@@ -9,6 +9,7 @@ import NodeModel 1.0
 
 Rectangle {
     property alias player: player
+    property alias tweaker: tweaker
 
     width: parent.width
     height: parent.width
@@ -23,17 +24,24 @@ Rectangle {
             Layout.preferredWidth: parent.width * 0.333
 
             ModSelector {
-                itemsPath: [
+                id: tweaker
+                itemsPaths: [
                     "qrc:/Assets/EditMod.png",
                     "qrc:/Assets/VelocityMod.png",
                     "qrc:/Assets/TunningMod.png",
                     "qrc:/Assets/AfterTouchMod.png",
                 ]
+                itemsNames: [
+                    "Standard",
+                    "Velocity",
+                    "Tunning",
+                    "Aftertouch",
+                ]
                 width: parent.width / 2
-                height: parent.height / 2
+                height: parent.height / 1.25
                 anchors.centerIn: parent
-                onItemSelectedChanged:  {
-
+                onItemSelectedChanged: {
+                    sequencerView.tweakMode = itemSelected
                 }
             }
         }

@@ -15,6 +15,13 @@ ColumnLayout {
         Cut
     }
 
+    enum TweakMode {
+        Regular,
+        Velocity,
+        Tunning,
+        AfterTouch
+    }
+
     property string moduleName: node && partition ? node.name + " - " + partition.name : "Selecting plugin"
     property int moduleIndex: -1
     property NodeModel node: null
@@ -22,6 +29,8 @@ ColumnLayout {
     property int partitionIndex: 0
     property alias player: sequencerViewFooter.player
     property int editMode: SequencerView.EditMode.Regular
+    property int tweakMode: SequencerView.TweakMode.Regular
+    property alias tweaker: sequencerViewFooter.tweaker
 
     function onNodeDeleted(targetNode) {
         if (node === targetNode || node.isAParent(targetNode)) {
@@ -112,11 +121,11 @@ ColumnLayout {
     }
 
     Keys.onPressed: {
-        if (event.key == Qt.Key_A)
+        if (event.key === Qt.Key_A)
             player.stop()
-        else if (event.key == Qt.Key_Z)
+        else if (event.key === Qt.Key_Z)
             player.replay()
-        else if (event.key == Qt.Key_E)
+        else if (event.key === Qt.Key_E)
             player.playOrPause()
     }
 
@@ -144,8 +153,9 @@ ColumnLayout {
             onTimelineEndMove: player.timelineEndMove()
         }
 
-        SequencerContentVelocityView {
-            y: parent.height - height
+        SequencerContentTweakView {
+            visible: tweakMode === SequencerView.TweakMode.Velocity || tweakMode === SequencerView.TweakMode.Tunning
+            y: tweakMode > SequencerView.TweakMode.Regular ? parent.height - height : parent.height
             width: parent.width
             height: parent.height / 2
         }

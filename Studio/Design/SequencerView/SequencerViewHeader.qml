@@ -69,14 +69,18 @@ Rectangle {
 
                     ModSelector {
                         id: editModeSelector
-                        itemsPath: [
+                        itemsPaths: [
                             "qrc:/Assets/NormalMod.png",
                             "qrc:/Assets/BrushMod.png",
                             // "qrc:/Assets/SelectorMod.png",
                             // "qrc:/Assets/CutMod.png",
                         ]
+                        itemsNames: [
+                            "Standard",
+                            "Brush",
+                        ]
                         width: parent.width / 2
-                        height: parent.height / 2
+                        height: parent.height / 1.25
                         anchors.verticalCenter: parent.verticalCenter
 
                         onItemSelectedChanged: sequencerView.editMode = itemSelected
