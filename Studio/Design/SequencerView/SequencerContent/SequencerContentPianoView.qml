@@ -46,12 +46,7 @@ Item {
 
         function launch(pressed, key) {
             sequencerView.node.partitions.addOnTheFly(
-                AudioAPI.noteEvent(
-                    !pressed,
-                    (octave * 12) + key,
-                    AudioAPI.velocityMax,
-                    0
-                    ),
+                AudioAPI.noteEvent(!pressed, (octave * 12) + key, AudioAPI.velocityMax, 0),
                 sequencerView.node,
                 sequencerView.partitionIndex
             )
