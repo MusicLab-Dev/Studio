@@ -52,6 +52,8 @@
 #endif
     static constexpr std::int32_t DefaultBacklog = 3;
 
+using InterfaceIndex = unsigned int;
+
 inline void closeSocket(const Socket socket)
 {
     #ifdef WIN32
@@ -77,7 +79,7 @@ inline void setSocketReusable(const Socket socket)
     }
 }
 
-inline void setSocketDevice(const Socket socket, const std::string &interfaceName)
+inline void setSocketDevice(const Socket socket, const InterfaceIndex interfaceIndex)
 {
     int ret = 0;
 
@@ -90,6 +92,10 @@ inline void setSocketDevice(const Socket socket, const std::string &interfaceNam
 //            interfaceName.length()
 //        );
     #else
+        char name[IF_NAMESIZE];
+        std::memset(&name, 0, IF_NAMESIZE);
+        if_indextoname(interfaceIndex, name);
+        std::string interfaceName(name);
         ret = ::setsockopt(
             socket,
             SOL_SOCKET,
@@ -214,33 +220,33 @@ inline void setSocketKeepAlive(const Socket socket)
     ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int));
 }
 
-inline DataSize recvSocket(const Socket socket, std::uint8_t *buffer, DataSize size)
+inline DataSize recvSocket(const Socket socket, std::uint8_t *buffer, DataSize maxSize)
 {
     DataSize ret = 0;
 
     #ifdef WIN32
-        ret = ::recv(socket, reinterpret_cast<char *>(buffer), size, 0);
+        ret = ::recv(socket, reinterpret_cast<char *>(buffer), maxSize, 0);
     #else
-        ret = ::recv(socket, buffer, size, 0);
+        ret = ::recv(socket, buffer, maxSize, 0);
     #endif
 
     return ret;
 }
 
-inline DataSize sendSocket(const Socket socket, std::uint8_t *buffer, DataSize size)
+inline DataSize sendSocket(const Socket socket, std::uint8_t *buffer, DataSize dataSize)
 {
     DataSize ret = 0;
 
     #ifdef WIN32
-        ret = ::send(socket, reinterpret_cast<char *>(&buffer), size, 0);
+        ret = ::send(socket, reinterpret_cast<char *>(buffer), dataSize, 0);
     #else
-        ret = ::send(socket, &buffer, size, 0);
+        ret = ::send(socket, buffer, dataSize, 0);
     #endif
 
     return ret;
 }
 
-inline DataSize sendToSocket(const Socket socket, NetworkAddress &address, std::uint8_t *buffer, DataSize size)
+inline DataSize sendToSocket(const Socket socket, NetworkAddress &address, std::uint8_t *buffer, DataSize dataSize)
 {
     DataSize ret = 0;
 
@@ -248,7 +254,7 @@ inline DataSize sendToSocket(const Socket socket, NetworkAddress &address, std::
         ret = ::sendto(
             socket,
             reinterpret_cast<const char *>(buffer),
-            size,
+            dataSize,
             0,
             reinterpret_cast<sockaddr *>(&address),
             sizeof(address)
@@ -257,7 +263,7 @@ inline DataSize sendToSocket(const Socket socket, NetworkAddress &address, std::
         ret = ::sendto(
             socket,
             buffer,
-            size,
+            dataSize,
             0,
             reinterpret_cast<sockaddr *>(&address),
             sizeof(address)

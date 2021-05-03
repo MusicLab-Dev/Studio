@@ -60,12 +60,10 @@ public:
 
     };
 
-    using Interface = std::pair<int, int>;
-
     struct DirectClient
     {
         Socket socket { -1 };
-        std::string interfaceName {};
+        InterfaceIndex interfaceIndex { 0 };
     };
 
     BoardManager(void);
@@ -107,7 +105,7 @@ private:
     fd_set _readFds;
     int _maxFd { 0 };
 
-    std::unordered_map<std::string, std::pair<int, int>> _interfaces {}; // [ interfaceName ] = { masterSocket, broadcastSocket }
+    std::unordered_map<InterfaceIndex, std::pair<int, int>> _interfaces {}; // [index] = { masterSocket, broadcastSocket }
     Core::TinyVector<DirectClient> _clients {};
     Core::Vector<std::shared_ptr<Board>, int> _boards {}; // TODO: Add allocator to _boards
 
@@ -140,21 +138,21 @@ private:
     void removeDirectClientNetwork(const Socket directClientSocket);
 
     /** @brief Remove direct clients & their network branch(s) attached to the specified interface */
-    void removeInterfaceNetwork(const std::string &interfaceName);
+    void removeInterfaceNetwork(const InterfaceIndex interfaceIndex);
 
     // Interfaces utils
 
     /** @brief Create a TCP master socket for a specific interface */
-    [[nodiscard]] Socket createTcpMasterSocket(const std::string &interfaceName, const std::string &localAddress);
+    [[nodiscard]] Socket createTcpMasterSocket(const InterfaceIndex interfaceIndex, const std::string &localAddress);
 
     /** @brief Create an UDP broadcast socket for a specific interface */
-    [[nodiscard]] Socket createUdpBroadcastSocket(const std::string &interfaceName, const std::string &broadcastAddress);
+    [[nodiscard]] Socket createUdpBroadcastSocket(const InterfaceIndex interfaceIndex, const std::string &broadcastAddress);
 
     /** @brief Scan and register new USB network interfaces */
-    void processNewUsbInterfaces(const std::vector<std::tuple<std::string, std::string, std::string>> &usbInterfaces);
+    void processNewUsbInterfaces(const std::vector<std::tuple<InterfaceIndex, std::string, std::string>> &usbInterfaces);
 
     /** @brief List available network interfaces with their broadcast address */
-    [[nodiscard]] std::vector<std::tuple<std::string, std::string, std::string>> getUsbNetworkInterfaces(void);
+    [[nodiscard]] std::vector<std::tuple<InterfaceIndex, std::string, std::string>> getUsbNetworkInterfaces(void);
 
     // Connections utils
 
