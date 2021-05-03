@@ -5,12 +5,32 @@
 
 #include <QQmlEngine>
 
+#include "Application.hpp"
 #include "Models.hpp"
+
+Audio::Device::LogicalDescriptor Scheduler::getDeviceDescriptor(void)
+{
+    auto p = parentApp();
+    if (!p)
+        return DefaultDeviceDescription;
+    else {
+        auto settings = p->settings();
+        return Audio::Device::LogicalDescriptor {
+            /*.name =               */ {},
+            /*.blockSize =          */ static_cast<BlockSize>(settings->getDefault("blockSize", 1024u).toUInt()),
+            /*.sampleRate =         */ static_cast<SampleRate>(settings->getDefault("sampleRate", 44100).toUInt()),
+            /*.isInput =            */ false,
+            /*.format =             */ Audio::Format::Floating32,
+            /*.midiChannels =       */ 2u,
+            /*.channelArrangement = */ Audio::ChannelArrangement::Mono
+        };
+    }
+}
 
 Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     :   QObject(parent),
         Audio::AScheduler(std::move(project)),
-        _device(DefaultDeviceDescription, [this](std::uint8_t *data, const std::size_t size) { consumeAudioData(data, size); }, this),
+        _device(getDeviceDescriptor(), [this](std::uint8_t *data, const std::size_t size) { consumeAudioData(data, size); }, this),
         _timer(this),
         _audioSpecs(Audio::AudioSpecs {
             _device.sampleRate(),
@@ -338,6 +358,21 @@ void Scheduler::disableLoopRange(void)
     addEvent([this] {
         setIsLooping(false);
     });
+}
+
+void Scheduler::stopAndWait(void)
+{
+    if (pauseImpl()) {
+        std::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
+        onCatchingAudioThread();
+        wait();
+        setDirtyFlags();
+        setProductionCurrentBeat(0u);
+        setLiveCurrentBeat(0u);
+        setPartitionCurrentBeat(0u);
+        setOnTheFlyCurrentBeat(0u);
+        disableLoopRange();
+    }
 }
 
 void Scheduler::onCatchingAudioThread(void)

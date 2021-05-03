@@ -13,6 +13,8 @@
 #include "Device.hpp"
 #include "NodeModel.hpp"
 
+class Application;
+
 /**
  * @brief Scheduler class
  */
@@ -68,6 +70,12 @@ public:
 
     /** @brief Destruct the instance */
     ~Scheduler(void) noexcept;
+
+    /** @brief Get the parent application */
+    [[nodiscard]] Application *parentApp(void) noexcept
+        { return reinterpret_cast<Application *>(parent()); }
+    [[nodiscard]] const Application *parentApp(void) const noexcept
+        { return reinterpret_cast<const Application *>(parent()); }
 
 
     /** @brief Get the playback mode */
@@ -125,6 +133,9 @@ public slots:
     /** @brief Disable the scheduler loop range */
     void disableLoopRange(void);
 
+    /** @brief Stop the scheduler until its completly off */
+    void stopAndWait(void);
+
 signals:
     /** @brief Notify when playback mode changed */
     void playbackModeChanged(void);
@@ -169,6 +180,9 @@ private:
     bool _isOnTheFlyMode { false };
 
     static inline Scheduler *_Instance { nullptr };
+
+    /** @brief Get the device description */
+    [[nodiscard]] Audio::Device::LogicalDescriptor getDeviceDescriptor(void);
 
 
     /** @brief Try to intercept the audio thread lock */

@@ -28,8 +28,8 @@ public:
 
 
     /** @brief Get the master node */
-    [[nodiscard]] NodeModel *master(void) noexcept { return &_master; }
-    [[nodiscard]] const NodeModel *master(void) const noexcept { return &_master; }
+    [[nodiscard]] NodeModel *master(void) noexcept { return _master.get(); }
+    [[nodiscard]] const NodeModel *master(void) const noexcept { return _master.get(); }
 
 
     /** @brief Get the project name */
@@ -53,15 +53,21 @@ public:
     /** @brief Set the project path, return true and emit pathChanged on change */
     void setPath(const QString &path) noexcept;
 
+    /** @brief Instantiate a new master node */
+    void recreateMasterMixer(void);
+
 public slots:
-    /** @brief Load a project file */
-    void load(void);
+    /** @brief Load a project file from a given path */
+    bool loadFrom(const QString &path) noexcept;
 
     /** @brief Save the project in its default file */
-    void save(void);
+    bool save(void) noexcept;
 
     /** @brief Save the project in given file */
-    void saveAs(const QString &path);
+    bool saveAs(const QString &path) noexcept;
+
+    /** @brief clear the project */
+    void clear(void) noexcept;
 
 signals:
     /** @brief Notify when master node changed */
@@ -79,8 +85,7 @@ signals:
 private:
     Audio::Project *_data { nullptr };
     QString _path {};
-    NodeModel _master;
-
+    std::unique_ptr<NodeModel> _master;
 
     /** @brief Instantiate the master node and return a pointer referencing to it */
     [[nodiscard]] Audio::Node *createMasterMixer(void);

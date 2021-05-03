@@ -9,6 +9,9 @@ ContentView {
     id: contentView
     xOffsetMin: sequencerView.partition ? sequencerView.partition.latestNote * -pixelsPerBeatPrecision : 0
     yOffsetMin: pianoView.totalHeight > surfaceContentGrid.height ? surfaceContentGrid.height - pianoView.totalHeight : 0
+    yZoom: 0.05
+    yZoomMin: 15
+    yZoomMax: 120
     rowHeaderWidth: pianoView.keyWidth
     clip: true
     placementKeyCount: pianoView.keys

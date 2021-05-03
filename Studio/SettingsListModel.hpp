@@ -84,6 +84,7 @@ public slots:
 
     /** @brief get currentValue from model */
     QVariant get(const QString &id) const noexcept;
+    QVariant getDefault(const QString &id, const QVariant &defaultValue) const noexcept;
 
     /** @brief Load settings from Strings into models */
     bool load(const QString &values) noexcept;

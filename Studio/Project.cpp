@@ -23,8 +23,9 @@ Audio::Node *Project::createMasterMixer(void)
 }
 
 Project::Project(Audio::Project *project, QObject *parent)
-    : QObject(parent), _data(project), _master(createMasterMixer(), this)
+    : QObject(parent), _data(project)
 {
+    recreateMasterMixer();
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
@@ -60,29 +61,40 @@ void Project::setBPM(const BPM bpm) noexcept
     );
 }
 
-void Project::save(void)
+bool Project::save(void) noexcept
 {
+    if (_path.isEmpty())
+        return false;
+
     ProjectSave psave(this);
-
-    /** debug */
-    setPath("save.json");
-    /* -- */
-
-    psave.save();
+    return psave.save();
 }
 
-void Project::saveAs(const QString &)
-{
-
-}
-
-void Project::load(void)
+bool Project::saveAs(const QString &path) noexcept
 {
     ProjectSave psave(this);
+    setPath(path);
+    return psave.save();
+}
 
-    /** debug */
-    setPath("save.json");
-    /* -- */
+bool Project::loadFrom(const QString &path) noexcept
+{
+    ProjectSave psave(this);
+    setPath(path);
+    return psave.load();
+}
 
-    psave.load();
+void Project::clear(void) noexcept
+{
+    Scheduler::Get()->stopAndWait();
+    recreateMasterMixer();
+}
+
+void Project::recreateMasterMixer(void)
+{
+    _master.reset();
+    if (_data)
+        _data->master().reset();
+    _master = std::make_unique<NodeModel>(createMasterMixer(), this);
+    emit masterChanged();
 }

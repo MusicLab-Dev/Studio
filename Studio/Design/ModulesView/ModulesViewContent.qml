@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Dialogs 1.0
 
 import "../Default"
 
@@ -59,20 +60,81 @@ Item {
             id: globalMenu
 
             Action {
-                text: "Open settings"
+                text: qsTr("New Project")
+                onTriggered: {
+                    modulesView.removeAllComponents()
+                    app.project.clear()
+                    componentSelected = 0
+                }
+            }
+
+            Action {
+                text: qsTr("Save")
+                onTriggered: {
+                    if (app.project.path === "") {
+                        saveFileDialog.open()
+                        return
+                    }
+                    app.project.save()
+                }
+            }
+
+            Action {
+                text: qsTr("Save Project As...")
+                onTriggered: saveFileDialog.open()
+            }
+
+            Action {
+                text: qsTr("Open Project File...")
+                onTriggered: loadFileDialog.open()
+            }
+
+            Action {
+                text: qsTr("Preferences")
                 onTriggered: modulesView.settingsView.open()
             }
 
             Action {
-                text: "Save project"
-                onTriggered: app.project.save()
-            }
-
-            Action {
-                text: "Load project"
-                onTriggered: app.project.load()
+                text: qsTr("Exit")
+                onTriggered: Qt.quit()
             }
         }
+
+        FileDialog {
+            id: saveFileDialog
+            title: qsTr("Save a project file")
+            folder: shortcuts.home
+            nameFilters: [ "All files (*)" ]
+            selectExisting: false
+            onAccepted: {
+                app.project.saveAs(fileUrls.toString().replace(/^(file:\/{2})/,"").toString())
+                close()
+            }
+            onRejected: close()
+            Component.onCompleted: visible = false
+        }
+
+        FileDialog {
+            id: loadFileDialog
+            title: qsTr("Choose a file")
+            folder: shortcuts.home
+            nameFilters: [ "All files (*)" ]
+            selectExisting: true
+            onAccepted: {
+                modulesView.removeAllComponentsWithoutEmptyView()
+                app.project.loadFrom(fileUrls.toString().replace(/^(file:\/{2})/,"").toString())
+                modules.insert(0, {
+                        title: "Playlsit",
+                        path: "qrc:/PlaylistView/PlaylistView.qml",
+                        callback: modulesViewContent.nullCallback
+                    })
+                componentSelected = 0
+                close()
+            }
+            onRejected: close()
+            Component.onCompleted: visible = false
+        }
+
     }
 
     Repeater {
@@ -117,7 +179,7 @@ Item {
                 height: parent.height * 0.05
                 width: tabWidth
                 visible: index !== modules.count
-                tabTitle: loadedComponent.item ? loadedComponent.item.moduleName : "Loading"
+                tabTitle: loadedComponent.item ? loadedComponent.item.moduleName : qsTr("Loading")
             }
 
             Loader {
