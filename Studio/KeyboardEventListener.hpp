@@ -8,6 +8,8 @@
 #include <QObject>
 #include <QGuiApplication>
 
+#include <Core/Vector.hpp>
+
 #include "AEventListener.hpp"
 
 /** @brief KeyboardEventListener class */
@@ -43,11 +45,14 @@ public:
     bool eventFilter(QObject *object, QEvent *Event) override;
 
 private:
-    QEvent *_last {nullptr};
+    Core::TinyVector<int> _activeKeys {};
 
     /** @brief send signals */
     bool sendSignals(int key, bool value);
 
     int find(int key);
+
+    /** @brief Stop all notes that are playing */
+    void stopAllPlayingNotes(void);
 
 };

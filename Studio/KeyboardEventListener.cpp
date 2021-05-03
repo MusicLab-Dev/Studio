@@ -29,19 +29,22 @@ int KeyboardEventListener::find(int input)
 
 bool KeyboardEventListener::eventFilter(QObject *object, QEvent *event)
 {
+    auto type = event->type();
+    if (type != QEvent::KeyPress && type != QEvent::KeyRelease)
+        return QObject::eventFilter(object, event);
     QKeyEvent *keyEvent = reinterpret_cast<QKeyEvent*>(event);
-    QKeyEvent *last = reinterpret_cast<QKeyEvent*>(_last);
+    if (keyEvent->isAutoRepeat())
+        return true;
     auto key = keyEvent->key();
-
-    if (event->type() == QEvent::KeyPress) {
-        if (last->key() == key)
-            return false;
+    auto it = _activeKeys.find(key);
+    if (event->type() == QEvent::KeyPress && it == _activeKeys.end()) {
         sendSignals(key, true);
-    } else if (event->type() == QEvent::KeyRelease && _last->type() != QEvent::KeyRelease)
+        _activeKeys.push(key);
+    } else if (event->type() == QEvent::KeyRelease && it != _activeKeys.end()) {
         sendSignals(key, false);
-
-    _last = event;
-    return QObject::eventFilter(object, event);
+        _activeKeys.erase(it);
+    }
+    return true;
 }
 
 bool KeyboardEventListener::sendSignals(int key, bool value)
@@ -50,64 +53,66 @@ bool KeyboardEventListener::sendSignals(int key, bool value)
         if (evt.input == key) {
             switch (evt.target) {
             case Event::Target::NOTE_0:
-                _dispatcher->note0(value);
+                emit _dispatcher->note0(value);
                 break;
             case Event::Target::NOTE_1:
-                _dispatcher->note1(value);
+                emit _dispatcher->note1(value);
                 break;
             case Event::Target::NOTE_2:
-                _dispatcher->note2(value);
+                emit _dispatcher->note2(value);
                 break;
             case Event::Target::NOTE_3:
-                _dispatcher->note3(value);
+                emit _dispatcher->note3(value);
                 break;
             case Event::Target::NOTE_4:
-                _dispatcher->note4(value);
+                emit _dispatcher->note4(value);
                 break;
             case Event::Target::NOTE_5:
-                _dispatcher->note5(value);
+                emit _dispatcher->note5(value);
                 break;
             case Event::Target::NOTE_6:
-                _dispatcher->note6(value);
+                emit _dispatcher->note6(value);
                 break;
             case Event::Target::NOTE_7:
-                _dispatcher->note7(value);
+                emit _dispatcher->note7(value);
                 break;
             case Event::Target::NOTE_8:
-                _dispatcher->note8(value);
+                emit _dispatcher->note8(value);
                 break;
             case Event::Target::NOTE_9:
-                _dispatcher->note9(value);
+                emit _dispatcher->note9(value);
                 break;
             case Event::Target::NOTE_10:
-                _dispatcher->note10(value);
+                emit _dispatcher->note10(value);
                 break;
             case Event::Target::NOTE_11:
-                _dispatcher->note11(value);
+                emit _dispatcher->note11(value);
                 break;
             case Event::Target::OCTAVE_UP:
-                _dispatcher->octaveUp(value);
+                stopAllPlayingNotes();
+                emit _dispatcher->octaveUp(value);
                 break;
             case Event::Target::OCTAVE_DOWN:
-                _dispatcher->octaveDown(value);
+                stopAllPlayingNotes();
+                emit _dispatcher->octaveDown(value);
                 break;
             case Event::Target::PLAY_CONTEXT:
-                _dispatcher->playContext(value);
+                emit _dispatcher->playContext(value);
                 break;
             case Event::Target::PAUSE_CONTEXT:
-                _dispatcher->pauseContext(value);
+                emit _dispatcher->pauseContext(value);
                 break;
             case Event::Target::STOP_CONTEXT:
-                _dispatcher->stopContext(value);
+                emit _dispatcher->stopContext(value);
                 break;
             case Event::Target::PLAY_PLAYLIST:
-                _dispatcher->playPlaylist(value);
+                emit _dispatcher->playPlaylist(value);
                 break;
             case Event::Target::PAUSE_PLAYLIST:
-                _dispatcher->pausePlaylist(value);
+                emit _dispatcher->pausePlaylist(value);
                 break;
             case Event::Target::STOP_PLAYLIST:
-                _dispatcher->stopPlaylist(value);
+                emit _dispatcher->stopPlaylist(value);
                 break;
             default:
                 break;
@@ -116,4 +121,59 @@ bool KeyboardEventListener::sendSignals(int key, bool value)
         }
     }
     return true;
+}
+
+void KeyboardEventListener::stopAllPlayingNotes(void)
+{
+    auto it = std::remove_if(_activeKeys.begin(), _activeKeys.end(), [this](const auto key) {
+        for (auto &evt : _events) {
+            if (evt.input == key) {
+                switch (evt.target) {
+                case Event::Target::NOTE_0:
+                    emit _dispatcher->note0(false);
+                    break;
+                case Event::Target::NOTE_1:
+                    emit _dispatcher->note1(false);
+                    break;
+                case Event::Target::NOTE_2:
+                    emit _dispatcher->note2(false);
+                    break;
+                case Event::Target::NOTE_3:
+                    emit _dispatcher->note3(false);
+                    break;
+                case Event::Target::NOTE_4:
+                    emit _dispatcher->note4(false);
+                    break;
+                case Event::Target::NOTE_5:
+                    emit _dispatcher->note5(false);
+                    break;
+                case Event::Target::NOTE_6:
+                    emit _dispatcher->note6(false);
+                    break;
+                case Event::Target::NOTE_7:
+                    emit _dispatcher->note7(false);
+                    break;
+                case Event::Target::NOTE_8:
+                    emit _dispatcher->note8(false);
+                    break;
+                case Event::Target::NOTE_9:
+                    emit _dispatcher->note9(false);
+                    break;
+                case Event::Target::NOTE_10:
+                    emit _dispatcher->note10(false);
+                    break;
+                case Event::Target::NOTE_11:
+                    emit _dispatcher->note11(false);
+                    break;
+                default:
+                    return false;
+                }
+                qDebug() << "Removing key" << key << evt.target;
+                return true;
+            }
+        }
+        return false;
+    });
+    if (it != _activeKeys.end())
+        _activeKeys.erase(it, _activeKeys.end());
 }
