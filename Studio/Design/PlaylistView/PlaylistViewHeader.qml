@@ -44,7 +44,7 @@ Rectangle {
                             "Brush",
                         ]
                         width: parent.width / 2
-                        height: parent.height / 2
+                        height: parent.height / 1.25
                         anchors.verticalCenter: parent.verticalCenter
 
                         onItemSelectedChanged: playlistView.editMode = itemSelected

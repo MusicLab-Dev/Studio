@@ -6,6 +6,7 @@ import AudioAPI 1.0
 import "../../Default"
 
 Rectangle {
+    id: tweakView
 
     MouseArea {
         anchors.fill: parent
@@ -21,6 +22,7 @@ Rectangle {
             height: parent.height
             border.color: "white"
             border.width: 1
+            z: 1
 
             Column {
                 height: parent.width / 2
@@ -45,6 +47,9 @@ Rectangle {
         }
 
         Rectangle {
+            property variant scaleSteps: ["100", "75", "50", "25"]
+
+            id: tweakViewContent
             width: parent.width - contentView.rowHeaderWidth
             height: contentView.rowDataWidth
             color: themeManager.backgroundColor
@@ -52,11 +57,32 @@ Rectangle {
             border.width: 1
 
             Repeater {
+                model: tweakViewContent.scaleSteps
+
+                delegate: Column {
+                    y: tweakView.height / 4  * index
+
+                    Rectangle {
+                        height: 1
+                        width: tweakViewContent.width
+                        color: "black"
+                        opacity: index === 2 ? 1 : 0.5
+                    }
+                    DefaultText {
+                        text: tweakViewContent.scaleSteps[index] + "%"
+                        color: Qt.lighter(themeManager.backgroundColor)
+                        x: 3
+                    }
+                }
+            }
+
+            Repeater {
                 model: sequencerView.partition
 
                 delegate: Rectangle {
                     readonly property var beatRange: range
 
+                    id: note
                     y: height * (velocity / AudioAPI.velocityMax) - height / 2
                     x: contentView.xOffset + beatRange.from * contentView.pixelsPerBeatPrecision
                     width: (beatRange.to - beatRange.from) * contentView.pixelsPerBeatPrecision
@@ -74,6 +100,17 @@ Rectangle {
                             velocity = mouseY * AudioAPI.velocityMax / height
                             console.info(velocity) // 65535
                         }
+                    }
+
+                    Rectangle {
+                        y: note.height / 2
+                        height: note.height * 4
+                        width: height
+                        anchors.verticalCenter: note.verticalCenter
+                        color: themeManager.getColorFromChain(key)
+                        border.width: 0.5
+                        border.color: Qt.lighter(themeManager.getColorFromChain(key))
+                        radius: 20
                     }
                 }
             }
