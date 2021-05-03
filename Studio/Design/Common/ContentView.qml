@@ -58,6 +58,7 @@ Item {
     property alias surfaceContentGrid: surfaceContentGrid
     property alias placementRectangle: placementRectangle
     property alias gestureArea: gestureArea
+    property alias timelineBar: timelineBar
 
     // Placement ratios
     property real placementKeyCount: 0
@@ -241,10 +242,10 @@ Item {
     }
 
     ContentViewTimelineBar {
-        id: timeline
+        id: timelineBar
         visible: x >= rowHeaderWidth
-        width: 20
-        height: surfaceContentGrid.height
+        width: 1
+        height: parent.height
         x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
     }
 

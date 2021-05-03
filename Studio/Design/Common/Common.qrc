@@ -23,5 +23,6 @@
         <file>PluginControls/IntegerControl.qml</file>
         <file>TextRoundedButton.qml</file>
         <file>PartitionComboBox.qml</file>
+        <file>ContentViewTimelineBarCursor.qml</file>
     </qresource>
 </RCC>
