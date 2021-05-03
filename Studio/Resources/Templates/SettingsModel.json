@@ -1,50 +1,22 @@
 {
-    "Sound": {
-        "General": [
-            {
-                "id": "volume",
-                "name": "Volume",
-                "help": "Set the volume",
-                "tags": ["Volume"],
-                "type": "Slider",
-                "start": 50,
-                "values": [0, 100, 1]
-            },
+    "Audio": {
+        "Input & Output": [
             {
                 "id": "sampleRate",
                 "name": "Sample Rate (Hz)",
-                "tags": ["Sample", "Rate", "Hz"],
+                "help": "Set the sample rate",
+                "tags": ["Hz"],
                 "type": "ComboBox",
-                "values": [22050, 44100, 48000, 88200, 96000, 192000],
+                "values": [22050, 44100, 88200],
                 "start": 44100
             },
             {
-                "id": "workspacePaths",
-                "name": "Workspace paths",
-                "tags": ["workspace", "path"],
-                "type": "StringPairList"
-            }
-        ],
-        "Other": [
-            {
-                "id": "volume2",
-                "name": "Volume2",
-                "help": "Set the volume",
-                "tags": ["Volume"],
-                "type": "Slider",
-                "start": 50,
-                "values": [0, 100, 1]
-            }
-        ]
-    },
-    "Ergonomy": {
-        "Controls": [
-            {
-                "name": "Zoom",
-                "id": "zoom",
-                "type": "Slider",
-                "tags": ["zoom"],
-                "values": [1, 2, 0.1]
+                "id": "blockSize",
+                "name": "Block Size",
+                "tags": [],
+                "type": "ComboBox",
+                "values": [512, 1024, 2048, 4096],
+                "start": 1024
             }
         ]
     }

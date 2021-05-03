@@ -7,6 +7,7 @@ import PluginTableModel 1.0
 import Application 1.0
 import NodeModel 1.0
 import BoardManager 1.0
+import EventDispatcher 1.0
 
 import "../ModulesView"
 import "../Modules/Workspaces"
@@ -42,5 +43,9 @@ Window {
 
     PluginTableModel {
         id: pluginTable
+    }
+
+    EventDispatcher {
+        id: eventDispatcher
     }
 }

@@ -77,6 +77,12 @@ set(StudioSources
     ${StudioDir}/BoardManager.cpp
     ${StudioDir}/Board.hpp
     ${StudioDir}/Board.cpp
+    ${StudioDir}/AEventListener.hpp
+    ${StudioDir}/AEventListener.cpp
+    ${StudioDir}/KeyboardEventListener.hpp
+    ${StudioDir}/KeyboardEventListener.cpp
+    ${StudioDir}/EventDispatcher.hpp
+    ${StudioDir}/EventDispatcher.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

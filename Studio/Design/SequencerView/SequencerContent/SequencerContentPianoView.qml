@@ -39,6 +39,41 @@ Item {
     height: totalHeight
 
 
+    Connections {
+        target: eventDispatcher
+
+        property real octave: 5
+
+        function launch(pressed, key) {
+            sequencerView.node.partitions.addOnTheFly(
+                AudioAPI.noteEvent(
+                    !pressed,
+                    (octave * 12) + key,
+                    AudioAPI.velocityMax,
+                    0
+                    ),
+                sequencerView.node,
+                sequencerView.partitionIndex
+            )
+        }
+
+        function onNote0(pressed) { launch(pressed, 0) }
+        function onNote1(pressed) { launch(pressed, 1) }
+        function onNote2(pressed) { launch(pressed, 2) }
+        function onNote3(pressed) { launch(pressed, 3) }
+        function onNote4(pressed) { launch(pressed, 4) }
+        function onNote5(pressed) { launch(pressed, 5) }
+        function onNote6(pressed) { launch(pressed, 6) }
+        function onNote7(pressed) { launch(pressed, 7) }
+        function onNote8(pressed) { launch(pressed, 8) }
+        function onNote9(pressed) { launch(pressed, 9) }
+        function onNote10(pressed) { launch(pressed, 10) }
+        function onNote11(pressed) { launch(pressed, 11) }
+        function onOctaveUp(pressed) { if (pressed) octave++ }
+        function onOctaveDown(pressed) { if (pressed) octave-- }
+    }
+
+
     Repeater {
         model: pianoView.keys
 

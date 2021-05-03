@@ -19,6 +19,7 @@
 #include "SettingsListModel.hpp"
 #include "SettingsListModelProxy.hpp"
 #include "BoardManager.hpp"
+#include "EventDispatcher.hpp"
 
 // #include "BoardManager.hpp"
 
@@ -67,6 +68,8 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
     qmlRegisterType<Board>("Board", 1, 0, "Board");
+    qmlRegisterType<EventDispatcher>("EventDispatcher", 1, 0, "EventDispatcher");
+
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
