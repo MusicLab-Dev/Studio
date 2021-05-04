@@ -299,6 +299,7 @@ bool Scheduler::playImpl(void)
         _isOnTheFlyMode = playbackMode() == PlaybackMode::OnTheFly;
         _device.start();
         _timer.start();
+        _elapsedTimer.restart();
         emit runningChanged();
         return true;
     } else

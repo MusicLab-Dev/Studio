@@ -13,10 +13,9 @@ RowLayout {
     property bool isPartitionPlayer: false
     property NodeModel targetNode: null
     property int targetPartitionIndex: 0
-    property real currentPlaybackBeat: 0
-    property real beginPlaybackBeat: 0
-    property real playTimestamp: 0
-    property real currentTimestamp: 0
+    property int currentPlaybackBeat: 0
+    property int beginPlaybackBeat: 0
+    property int lastLoopBeat: 0
     property alias isPlayerRunning: timer.running
     property bool isSchedulerRunning: app.scheduler.playbackMode === targetPlaybackMode && app.scheduler.running
     property bool timelineMoveWhilePlaying: false
@@ -59,7 +58,7 @@ RowLayout {
                 app.scheduler.play(targetPlaybackMode, currentPlaybackBeat)
             timer.start()
         }
-        playTimestamp = new Date().getTime()
+        lastLoopBeat = 0
         app.currentPlayer = player
     }
 
@@ -74,7 +73,7 @@ RowLayout {
             app.scheduler.play(targetPlaybackMode, contentView.loopFrom)
         app.currentPlayer = player
         beginPlaybackBeat = contentView.loopFrom
-        playTimestamp = new Date().getTime()
+        lastLoopBeat = 0
         timer.start()
     }
 
@@ -110,13 +109,12 @@ RowLayout {
         triggeredOnStart: true
 
         onTriggered: {
-            currentTimestamp = new Date().getTime()
-            var elapsedMs = (currentTimestamp - playTimestamp)
-            currentPlaybackBeat = beginPlaybackBeat + elapsedMs * (app.project.bpm / 60000) * AudioAPI.beatPrecision
+            var elapsed = app.scheduler.getElapsedBeat()
+            currentPlaybackBeat = beginPlaybackBeat + elapsed - lastLoopBeat
             if (contentView.hasLoop && (currentPlaybackBeat > contentView.loopTo || currentPlaybackBeat < contentView.loopFrom)) {
                 currentPlaybackBeat = contentView.loopFrom
-                playTimestamp = currentTimestamp
                 beginPlaybackBeat = currentPlaybackBeat
+                lastLoopBeat = elapsed
             }
         }
     }

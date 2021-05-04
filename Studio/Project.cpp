@@ -52,8 +52,8 @@ void Project::setBPM(const BPM bpm) noexcept
     if (_data->bpm() == bpm)
         return;
     Scheduler::Get()->addEvent(
-        [this, bpm] {
-            _data->setBPM(bpm);
+        [bpm] {
+            Scheduler::Get()->setBPM(bpm);
         },
         [this] {
             emit bpmChanged();

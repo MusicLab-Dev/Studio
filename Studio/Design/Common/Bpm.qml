@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 Rectangle {
     color: themeManager.backgroundColor
@@ -6,13 +7,31 @@ Rectangle {
     border.width: 2
     radius: 5
 
-    TextEdit {
-        id: name
+    SpinBox {
         anchors.centerIn: parent
-        text: qsTr("140:000")
-        font.pixelSize: parent.height * 0.75
-        color: "white"
+//        text: qsTr("140:000")
+//        font.pixelSize: parent.height * 0.75
+//        color: "white"
+        from: 10
+        to: 300
+        value: app.project.bpm
+
+        onValueModified: app.project.bpm = value
     }
+//    TextEdit {
+//        id: name
+//        anchors.centerIn: parent
+//        text: qsTr("140:000")
+//        font.pixelSize: parent.height * 0.75
+//        color: "white"
+//        validator: DoubleValidator {
+
+//        }
+
+//        onEditingFinished: {
+//            app.project.bpm = text
+//        }
+//    }
 /*
     Rectangle {
         height: parent.height* 0.25

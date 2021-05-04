@@ -7,6 +7,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include <Audio/AScheduler.hpp>
 
@@ -25,10 +26,10 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
     Q_PROPERTY(PlaybackMode playbackMode READ playbackMode NOTIFY playbackModeChanged)
     Q_PROPERTY(bool running READ running NOTIFY runningChanged)
-    Q_PROPERTY(quint32 productionCurrentBeat READ productionCurrentBeat WRITE setProductionCurrentBeat NOTIFY productionCurrentBeatChanged)
-    Q_PROPERTY(quint32 liveCurrentBeat READ liveCurrentBeat WRITE setLiveCurrentBeat NOTIFY liveCurrentBeatChanged)
-    Q_PROPERTY(quint32 partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat NOTIFY partitionCurrentBeatChanged)
-    Q_PROPERTY(quint32 onTheFlyCurrentBeat READ onTheFlyCurrentBeat WRITE setOnTheFlyCurrentBeat NOTIFY onTheFlyCurrentBeatChanged)
+    Q_PROPERTY(Beat productionCurrentBeat READ productionCurrentBeat WRITE setProductionCurrentBeat NOTIFY productionCurrentBeatChanged)
+    Q_PROPERTY(Beat liveCurrentBeat READ liveCurrentBeat WRITE setLiveCurrentBeat NOTIFY liveCurrentBeatChanged)
+    Q_PROPERTY(Beat partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat NOTIFY partitionCurrentBeatChanged)
+    Q_PROPERTY(Beat onTheFlyCurrentBeat READ onTheFlyCurrentBeat WRITE setOnTheFlyCurrentBeat NOTIFY onTheFlyCurrentBeatChanged)
 
 public:
     /** @brief The different types of playback mode */
@@ -58,6 +59,7 @@ public:
     using Audio::AScheduler::partitionNode;
     using Audio::AScheduler::partitionIndex;
     using Audio::AScheduler::hasExitedGraph;
+    using Audio::AScheduler::setBPM;
 
     /** @brief Number of miss allowed before the graph 'OnTheFly' should stop */
     static constexpr std::uint32_t OnTheFlyMissThreshold = 25;
@@ -99,7 +101,6 @@ public:
     void setPartitionCurrentBeat(const Beat beat);
     void setOnTheFlyCurrentBeat(const Beat beat);
 
-
     /** @brief Get the current device */
     [[nodiscard]] const Device *device(void) const noexcept { return &_device; }
     [[nodiscard]] Device *device(void) noexcept { return &_device; }
@@ -136,6 +137,10 @@ public slots:
     /** @brief Stop the scheduler until its completly off */
     void stopAndWait(void);
 
+    /** @brief Get elapsed time in beat since last play */
+    Beat getElapsedBeat(void) const noexcept
+        { return static_cast<Beat>(static_cast<float>(_elapsedTimer.elapsed()) * static_cast<float>(project()->bpm()) / 60000.0f * static_cast<float>(Audio::BeatPrecision)); }
+
 signals:
     /** @brief Notify when playback mode changed */
     void playbackModeChanged(void);
@@ -152,7 +157,6 @@ signals:
 
     /** @brief Notify that on the fly current beat property has changed */
     void onTheFlyCurrentBeatChanged(void);
-
 
     /** @brief Notify that the running state has changed */
     void runningChanged(void);
@@ -178,6 +182,7 @@ private:
     alignas_cacheline std::atomic<bool> _blockGenerated { false };
     alignas_cacheline std::atomic<std::size_t> _onTheFlyMissCount { false };
     bool _isOnTheFlyMode { false };
+    QElapsedTimer _elapsedTimer {};
 
     static inline Scheduler *_Instance { nullptr };
 
