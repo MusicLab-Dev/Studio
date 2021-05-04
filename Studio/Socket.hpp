@@ -54,6 +54,25 @@
 
 using InterfaceIndex = unsigned int;
 
+inline void printWindowsError(void)
+{
+    #ifdef WIN32
+        wchar_t *s = nullptr;
+
+        FormatMessageW(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
+            NULL,
+            WSAGetLastError(),
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+            (LPWSTR)&s,
+            0,
+            NULL
+        );
+        fprintf(stderr, "%S\n", s);
+        LocalFree(s);
+    #endif
+}
+
 inline void closeSocket(const Socket socket)
 {
     #ifdef WIN32
@@ -71,7 +90,7 @@ inline void setSocketReusable(const Socket socket)
         SOL_SOCKET,
         SO_REUSEADDR,
         &enable,
-        sizeof(int)
+        sizeof(enable)
     );
     if (ret < 0) {
         closeSocket(socket);
@@ -84,13 +103,7 @@ inline void setSocketDevice(const Socket socket, const InterfaceIndex interfaceI
     int ret = 0;
 
     #ifdef WIN32
-//        ret = ::setsockopt(
-//            socket,
-//            SOL_SOCKET,
-//            SO_BINDTODEVICE,
-//            interfaceName.c_str(),
-//            interfaceName.length()
-//        );
+
     #else
         char name[IF_NAMESIZE];
         std::memset(&name, 0, IF_NAMESIZE);
@@ -115,7 +128,11 @@ inline void bindSocket(const Socket socket, const NetworkAddress &address)
     int ret = 0;
 
     #ifdef WIN32
-
+        ret = ::bind(
+            socket,
+            reinterpret_cast<const sockaddr *>(&address),
+            sizeof(address)
+        );
     #else
         ret = ::bind(
             socket,
@@ -129,14 +146,14 @@ inline void bindSocket(const Socket socket, const NetworkAddress &address)
     }
 }
 
-inline void listenSocket(const Socket socket)
+inline void listenSocket(const Socket socket, int backLog)
 {
     int ret = 0;
 
     #ifdef WIN32
-        ret = ::listen(socket, 1);
+        ret = ::listen(socket, backLog);
     #else
-        ret = ::listen(socket, 1);
+        ret = ::listen(socket, backLog);
     #endif
     if (ret < 0) {
         closeSocket(socket);

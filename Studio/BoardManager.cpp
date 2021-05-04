@@ -24,11 +24,22 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
 
     _identifierTable = new bool[256];
     std::memset(_identifierTable, 0, 256);
+
+    #ifdef WIN32
+        WSADATA WinsockData;
+        auto ret = WSAStartup(MAKEWORD(2, 2), &WinsockData);
+        if (ret < 0)
+            throw std::runtime_error(std::strerror(errno));
+    #endif
 }
 
 BoardManager::~BoardManager(void)
 {
     std::cout << "BoardManager::~BoardManager" << std::endl;
+
+    #ifdef WIN32
+        WSACleanup();
+    #endif
 }
 
 QHash<int, QByteArray> BoardManager::roleNames(void) const
@@ -129,7 +140,7 @@ void BoardManager::discoveryEmit(void)
     for (const auto &networkInterface : _interfaces) {
 
         Socket broadcastSocket { networkInterface.second.second };
-        sockaddr_in broadcastAddress;
+        NetworkAddress broadcastAddress;
         Socklen len = sizeof(broadcastAddress);
 
         DataSize ret = ::getsockname(
@@ -183,7 +194,7 @@ Socket BoardManager::createTcpMasterSocket(const InterfaceIndex interfaceIndex, 
     bindSocket(tcpMasterSocket, interfaceAddress);
 
     // Listen for incomming connections on the master socket
-    listenSocket(tcpMasterSocket);
+    listenSocket(tcpMasterSocket, 1);
 
     return tcpMasterSocket;
 }
@@ -220,12 +231,12 @@ void BoardManager::processNewUsbInterfaces(const std::vector<std::tuple<Interfac
         const std::string &localAddress = std::get<1>(usbInterface);
         const std::string &broadcastAddress = std::get<2>(usbInterface);
 
-        // if (interfaceName[0] != 'e')
-        //     continue;
+        if (localAddress.substr(0, 7) != "169.254")
+            continue;
 
         if (_interfaces.find(interfaceIndex) == _interfaces.end()) {
 
-            std::cout << "New USB interface detected" << std::endl;
+            std::cout << "New USB interface detected, index: " << interfaceIndex << std::endl;
 
             Socket masterSocket = createTcpMasterSocket(interfaceIndex, localAddress);
             Socket broadcastSocket = createUdpBroadcastSocket(interfaceIndex, broadcastAddress);
@@ -260,26 +271,26 @@ std::vector<std::tuple<InterfaceIndex, std::string, std::string>> getWindowsNetw
         if (ret != NO_ERROR)
             throw std::runtime_error(std::strerror(errno));
 
-        printf("Interface number: %ld\n\n", pIPAddrTable->dwNumEntries);
-
         for (auto i = 0; i < (int)pIPAddrTable->dwNumEntries; i++) {
 
-            std::cout << "index: " << pIPAddrTable->table[i].dwIndex << std::endl;
-
-            struct in_addr localAddress;
-            localAddress.s_addr = (u_long) pIPAddrTable->table[i].dwAddr;
-            std::cout << "address: " << inet_ntoa(localAddress) << std::endl;
-
+            struct in_addr ifaceaddr;
+            ifaceaddr.s_addr = (u_long) pIPAddrTable->table[i].dwAddr;
             struct in_addr netmask;
             netmask.s_addr = (u_long) pIPAddrTable->table[i].dwMask;
-            struct in_addr wildcardAdress;
-            wildcardAdress.s_addr = ~netmask.s_addr;
+            struct in_addr wildcardaddr;
+            wildcardaddr.s_addr = ~netmask.s_addr;
+            struct in_addr broadcastaddr;
+            broadcastaddr.s_addr = ifaceaddr.s_addr | wildcardaddr.s_addr;
 
-            struct in_addr broadcastAddress;
-            broadcastAddress.s_addr = localAddress.s_addr | wildcardAdress.s_addr;
-            std::cout << "broadcast: " << inet_ntoa(broadcastAddress) << std::endl;
+            InterfaceIndex interfaceIndex = pIPAddrTable->table[i].dwIndex;
+            std::string localAddress(::inet_ntoa(ifaceaddr));
+            std::string broadcastAddress(::inet_ntoa(broadcastaddr));
 
-            std::cout << std::endl;
+            std::cout << "index: " << interfaceIndex << '\n';
+            std::cout << "address: " << localAddress << '\n';
+            std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
+
+            interfaces.push_back({ interfaceIndex, localAddress, broadcastAddress });
         }
         if (pIPAddrTable) {
             FREE(pIPAddrTable);
@@ -336,12 +347,7 @@ std::vector<std::tuple<InterfaceIndex, std::string, std::string>> BoardManager::
     std::vector<std::tuple<InterfaceIndex, std::string, std::string>> interfaces {};
 
     #ifdef WIN32
-        WSADATA WinsockData;
-        auto ret = WSAStartup(MAKEWORD(2, 2), &WinsockData);
-        if (ret < 0)
-            throw std::runtime_error(std::strerror(errno));
         interfaces = getWindowsNetworkInterfaces();
-        WSACleanup();
     #else
         interfaces = getLinuxNetworkInterfaces();
     #endif
