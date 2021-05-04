@@ -60,7 +60,7 @@ inline void printWindowsError(void)
         wchar_t *s = nullptr;
 
         FormatMessageW(
-            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             WSAGetLastError(),
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -84,14 +84,27 @@ inline void closeSocket(const Socket socket)
 
 inline void setSocketReusable(const Socket socket)
 {
-    const char enable = 1;
-    const int ret = ::setsockopt(
-        socket,
-        SOL_SOCKET,
-        SO_REUSEADDR,
-        &enable,
-        sizeof(enable)
-    );
+    int ret = 0;
+
+    #ifdef WIN32
+        const char enable = 1;
+        ret = ::setsockopt(
+            socket,
+            SOL_SOCKET,
+            SO_REUSEADDR,
+            &enable,
+            sizeof(enable)
+        );
+    #else
+        const int enable = 1;
+        ret = ::setsockopt(
+            socket,
+            SOL_SOCKET,
+            SO_REUSEADDR,
+            &enable,
+            sizeof(enable)
+        );
+    #endif
     if (ret < 0) {
         closeSocket(socket);
         throw std::runtime_error(std::strerror(errno));
