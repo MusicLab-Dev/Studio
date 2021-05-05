@@ -19,5 +19,18 @@
                 "start": 1024
             }
         ]
+    },
+    "General": {
+        "Workspaces": [
+            {
+                "id": "workspacePaths",
+                "name": "Workspace directories",
+                "help": "Every directories of the workspace view",
+                "tags": ["workspaces","directories"],
+                "type": "StringPairList",
+                "values": [],
+                "start": []
+            }
+        ]
     }
 }
