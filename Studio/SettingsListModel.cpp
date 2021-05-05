@@ -201,7 +201,6 @@ bool SettingsListModel::saveValues(void) noexcept
 
 bool SettingsListModel::set(const QString &id, const QVariant &value) noexcept
 {
-    qDebug() << "Setting" << id << value;
     auto i = 0;
     for (auto it = _models.begin(); it != _models.end(); it++) {
         if (it->id == id) {

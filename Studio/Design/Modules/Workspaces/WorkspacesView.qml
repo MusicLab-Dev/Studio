@@ -138,7 +138,7 @@ WorkspacesBackground {
                 tmp = []
             tmp.push(["New workspace", folderPicker.fileUrl.toString()])
             app.settings.set("workspacePaths", tmp);
-            workspacesModel = tmp
+            workspacesModel = app.settings.get("workspacePaths")
             console.log("WorkspacesModel after", workspacesModel)
             app.settings.saveValues()
         }
