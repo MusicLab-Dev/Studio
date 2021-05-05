@@ -17,8 +17,8 @@ Rectangle {
         value: app.project.bpm
 
         onValueModified: {
-            if (app.currentPlayer)
-                app.currentPlayer.prepareForBPMChange()
+            // if (app.currentPlayer)
+            //     app.currentPlayer.prepareForBPMChange()
             app.project.bpm = value
         }
     }

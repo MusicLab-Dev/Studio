@@ -15,7 +15,6 @@ RowLayout {
     property int targetPartitionIndex: 0
     property int currentPlaybackBeat: 0
     property int beginPlaybackBeat: 0
-    property int lastLoopBeat: 0
     property alias isPlayerRunning: timer.running
     property bool isSchedulerRunning: app.scheduler.playbackMode === targetPlaybackMode && app.scheduler.running
     property bool timelineMoveWhilePlaying: false
@@ -46,7 +45,6 @@ RowLayout {
     function pause() {
         app.scheduler.pause(targetPlaybackMode)
         timer.stopAndRecordPlaybackBeat()
-        lastLoopBeat = 0
         app.currentPlayer = player
     }
 
@@ -60,7 +58,6 @@ RowLayout {
         else
             app.scheduler.play(targetPlaybackMode, currentPlaybackBeat)
         timer.start()
-        lastLoopBeat = 0
         app.currentPlayer = player
     }
 
@@ -82,7 +79,6 @@ RowLayout {
             app.scheduler.play(targetPlaybackMode, contentView.loopFrom)
         app.currentPlayer = player
         beginPlaybackBeat = contentView.loopFrom
-        lastLoopBeat = 0
         timer.start()
     }
 
@@ -94,10 +90,10 @@ RowLayout {
         currentPlaybackBeat = 0
     }
 
-    function prepareForBPMChange() {
-        if (isSchedulerRunning)
-            pause()
-    }
+    // function prepareForBPMChange() {
+    //     if (isSchedulerRunning)
+    //         pause()
+    // }
 
     id: player
     spacing: 0
@@ -118,24 +114,16 @@ RowLayout {
         }
 
         id: timer
-        interval: 8
+        interval: 16
         repeat: true
         triggeredOnStart: true
 
         onTriggered: {
             var elapsed = app.scheduler.getAudioElapsedBeat()
-            currentPlaybackBeat = beginPlaybackBeat + elapsed - lastLoopBeat
-            if (contentView.hasLoop && (currentPlaybackBeat > contentView.loopTo || currentPlaybackBeat < contentView.loopFrom)) {
-                if (lastLoopBeat !== 0) {
-                    var offset = currentPlaybackBeat - contentView.loopTo
-                    lastLoopBeat = elapsed - offset
-                    currentPlaybackBeat = contentView.loopFrom + offset
-                } else {
-                    lastLoopBeat = elapsed
-                    currentPlaybackBeat = contentView.loopFrom
-                }
-                beginPlaybackBeat = currentPlaybackBeat
-            }
+            if (!contentView.hasLoop)
+                currentPlaybackBeat = beginPlaybackBeat + elapsed
+            else
+                currentPlaybackBeat = beginPlaybackBeat + (elapsed % contentView.loopRange)
         }
     }
 

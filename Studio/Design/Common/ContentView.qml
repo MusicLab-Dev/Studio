@@ -98,6 +98,7 @@ Item {
     property bool hasLoop: false
     property int loopFrom: 0
     property int loopTo: 0
+    property int loopRange: loopTo - loopFrom
 
     signal timelineBeginMove(var target)
     signal timelineMove(var target)
