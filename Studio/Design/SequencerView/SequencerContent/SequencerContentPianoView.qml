@@ -40,10 +40,6 @@ Item {
 
 
     Connections {
-        target: eventDispatcher
-
-        property real octave: 5
-
         function launch(pressed, key) {
             sequencerView.node.partitions.addOnTheFly(
                 AudioAPI.noteEvent(!pressed, (octave * 12) + key, AudioAPI.velocityMax, 0),
@@ -51,6 +47,11 @@ Item {
                 sequencerView.partitionIndex
             )
         }
+
+        property real octave: 5
+
+        target: eventDispatcher
+        enabled: moduleIndex == componentSelected
 
         function onNote0(pressed) { launch(pressed, 0) }
         function onNote1(pressed) { launch(pressed, 1) }
