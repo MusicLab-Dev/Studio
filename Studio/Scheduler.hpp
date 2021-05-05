@@ -108,7 +108,6 @@ public:
     /** @brief Get device specs */
     [[nodiscard]] const Audio::AudioSpecs &audioSpecs(void) const noexcept { return _audioSpecs; }
 
-
 public slots:
     /** @brief Play the scheduler */
     void play(const Scheduler::PlaybackMode mode, const Beat startingBeat);
@@ -138,8 +137,7 @@ public slots:
     void stopAndWait(void);
 
     /** @brief Get elapsed time in beat since last play */
-    Beat getElapsedBeat(void) const noexcept
-        { return static_cast<Beat>(static_cast<float>(_elapsedTimer.elapsed()) * static_cast<float>(project()->bpm()) / 60000.0f * static_cast<float>(Audio::BeatPrecision)); }
+    Beat getAudioElapsedBeat(void) const noexcept { return audioElapsedBeat(); }
 
 signals:
     /** @brief Notify when playback mode changed */
@@ -182,7 +180,6 @@ private:
     alignas_cacheline std::atomic<bool> _blockGenerated { false };
     alignas_cacheline std::atomic<std::size_t> _onTheFlyMissCount { false };
     bool _isOnTheFlyMode { false };
-    QElapsedTimer _elapsedTimer {};
 
     static inline Scheduler *_Instance { nullptr };
 

@@ -16,7 +16,11 @@ Rectangle {
         to: 300
         value: app.project.bpm
 
-        onValueModified: app.project.bpm = value
+        onValueModified: {
+            if (app.currentPlayer)
+                app.currentPlayer.prepareForBPMChange()
+            app.project.bpm = value
+        }
     }
 //    TextEdit {
 //        id: name

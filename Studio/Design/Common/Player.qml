@@ -43,23 +43,32 @@ RowLayout {
         }
     }
 
-    function playOrPause() {
-        if (isSchedulerRunning) {
-            app.scheduler.pause(targetPlaybackMode)
-            timer.stopAndRecordPlaybackBeat()
-        } else {
-            if (contentView.hasLoop)
-                app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
-            else
-                app.scheduler.disableLoopRange()
-            if (isPartitionPlayer)
-                app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat)
-            else
-                app.scheduler.play(targetPlaybackMode, currentPlaybackBeat)
-            timer.start()
-        }
+    function pause() {
+        app.scheduler.pause(targetPlaybackMode)
+        timer.stopAndRecordPlaybackBeat()
         lastLoopBeat = 0
         app.currentPlayer = player
+    }
+
+    function play() {
+        if (contentView.hasLoop)
+            app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
+        else
+            app.scheduler.disableLoopRange()
+        if (isPartitionPlayer)
+            app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat)
+        else
+            app.scheduler.play(targetPlaybackMode, currentPlaybackBeat)
+        timer.start()
+        lastLoopBeat = 0
+        app.currentPlayer = player
+    }
+
+    function playOrPause() {
+        if (isSchedulerRunning)
+            pause()
+        else
+            play()
     }
 
     function replay() {
@@ -85,6 +94,11 @@ RowLayout {
         currentPlaybackBeat = 0
     }
 
+    function prepareForBPMChange() {
+        if (isSchedulerRunning)
+            pause()
+    }
+
     id: player
     spacing: 0
 
@@ -104,17 +118,23 @@ RowLayout {
         }
 
         id: timer
-        interval: 16
+        interval: 8
         repeat: true
         triggeredOnStart: true
 
         onTriggered: {
-            var elapsed = app.scheduler.getElapsedBeat()
+            var elapsed = app.scheduler.getAudioElapsedBeat()
             currentPlaybackBeat = beginPlaybackBeat + elapsed - lastLoopBeat
             if (contentView.hasLoop && (currentPlaybackBeat > contentView.loopTo || currentPlaybackBeat < contentView.loopFrom)) {
-                currentPlaybackBeat = contentView.loopFrom
+                if (lastLoopBeat !== 0) {
+                    var offset = currentPlaybackBeat - contentView.loopTo
+                    lastLoopBeat = elapsed - offset
+                    currentPlaybackBeat = contentView.loopFrom + offset
+                } else {
+                    lastLoopBeat = elapsed
+                    currentPlaybackBeat = contentView.loopFrom
+                }
                 beginPlaybackBeat = currentPlaybackBeat
-                lastLoopBeat = elapsed
             }
         }
     }

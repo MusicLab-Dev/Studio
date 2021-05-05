@@ -41,6 +41,8 @@ ColumnLayout {
 
 
     Behavior on x {
+        enabled: !app.scheduler.running
+
         SpringAnimation {
             spring: 2
             damping: 0.2

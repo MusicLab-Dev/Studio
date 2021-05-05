@@ -46,6 +46,7 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
     setProcessParamByBlockSize(2048, _audioSpecs.sampleRate);
+    setAudioBlockSize(_device.blockSize());
     _audioSpecs.processBlockSize = processBlockSize();
     // connect(&_device, &Device::sampleRateChanged, this, &Scheduler::refreshAudioSpecs);
     _timer.setTimerType(Qt::PreciseTimer);
@@ -299,7 +300,6 @@ bool Scheduler::playImpl(void)
         _isOnTheFlyMode = playbackMode() == PlaybackMode::OnTheFly;
         _device.start();
         _timer.start();
-        _elapsedTimer.restart();
         emit runningChanged();
         return true;
     } else
@@ -423,5 +423,5 @@ void Scheduler::consumeAudioData(std::uint8_t *data, const std::size_t size) noe
         else
             _onTheFlyMissCount = 0u;
     }
-    Audio::AScheduler::ConsumeAudioData(data, size);
+    Audio::AScheduler::consumeAudioData(data, size);
 }
