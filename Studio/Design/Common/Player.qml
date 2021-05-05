@@ -79,6 +79,7 @@ RowLayout {
             app.scheduler.play(targetPlaybackMode, contentView.loopFrom)
         app.currentPlayer = player
         beginPlaybackBeat = contentView.loopFrom
+        currentPlaybackBeat = contentView.loopFrom
         timer.start()
     }
 
@@ -86,8 +87,8 @@ RowLayout {
         app.scheduler.stop(targetPlaybackMode)
         app.currentPlayer = player
         timer.stop()
-        beginPlaybackBeat = 0
-        currentPlaybackBeat = 0
+        beginPlaybackBeat = contentView.loopFrom
+        currentPlaybackBeat = contentView.loopFrom
     }
 
     // function prepareForBPMChange() {
@@ -123,7 +124,7 @@ RowLayout {
             if (!contentView.hasLoop)
                 currentPlaybackBeat = beginPlaybackBeat + elapsed
             else
-                currentPlaybackBeat = beginPlaybackBeat + (elapsed % contentView.loopRange)
+                currentPlaybackBeat = contentView.loopFrom + ((beginPlaybackBeat - contentView.loopFrom + elapsed) % contentView.loopRange)
         }
     }
 
