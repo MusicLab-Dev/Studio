@@ -71,7 +71,7 @@ ColumnLayout {
                             // Format the external input list
                             var list = []
                             for (var i = 0; i < filePicker.fileUrls.length; ++i)
-                                list[i] = filePicker.fileUrls[i].toString().slice(7)
+                                list[i] = mainWindow.urlToPath(filePicker.fileUrls[i].toString())
                             // Add the node with a partition and external inputs
                             node = app.project.master.addPartitionNodeExternalInputs(pluginsView.selectedPath, list)
                             partitionIndex = 0

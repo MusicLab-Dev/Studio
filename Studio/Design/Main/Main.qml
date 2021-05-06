@@ -14,8 +14,7 @@ import "../Modules/Workspaces"
 
 Window {
 
-    function urlToPath(url) {
-        var urlString = url.toString()
+    function urlToPath(urlString) {
         var s
         if (urlString.startsWith("file:///")) {
             var k = urlString.charAt(9) === ':' ? 8 : 7

@@ -106,7 +106,7 @@ Item {
             nameFilters: [ "All files (*)" ]
             selectExisting: false
             onAccepted: {
-                app.project.saveAs(mainWindow.urlToPath(fileUrl))
+                app.project.saveAs(mainWindow.urlToPath(fileUrl.toString()))
                 close()
             }
             onRejected: close()
@@ -121,7 +121,7 @@ Item {
             selectExisting: true
             onAccepted: {
                 modulesView.removeAllComponentsWithoutEmptyView()
-                app.project.loadFrom(mainWindow.urlToPath(fileUrl))
+                app.project.loadFrom(mainWindow.urlToPath(fileUrl.toString()))
                 modules.insert(0, {
                         title: "Playlsit",
                         path: "qrc:/PlaylistView/PlaylistView.qml",
