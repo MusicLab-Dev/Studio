@@ -24,13 +24,22 @@ ColumnLayout {
     spacing: 0
     focus: true
 
-    Keys.onPressed: {
+    /*Keys.onPressed: {
         if (event.key == Qt.Key_A)
             player.stop()
         else if (event.key == Qt.Key_Z)
             player.replay()
         else if (event.key == Qt.Key_E)
             player.playOrPause()
+    }*/
+
+    Connections {
+        target: eventDispatcher
+        enabled: moduleIndex == componentSelected
+
+        function onPlayPlaylist(pressed) { if (!pressed) return; player.playOrPause() }
+        function onPausePlaylist(pressed) { if (!pressed) return; player.pause(); }
+        function onStopPlaylist(pressed) { if (!pressed) return; player.stop(); }
     }
 
     PlaylistViewHeader {

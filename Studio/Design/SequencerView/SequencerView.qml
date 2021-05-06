@@ -100,6 +100,15 @@ ColumnLayout {
         sequencerView.enabled = true
     }
 
+    Connections {
+        target: eventDispatcher
+        enabled: moduleIndex == componentSelected
+
+        function onPlayContext(pressed) { if (!pressed) return; if(!player.isPlayerRunning) player.play(); else player.pause(); }
+        function onPauseContext(pressed) { if (!pressed) return; player.pause(); }
+        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
+    }
+
     id: sequencerView
     spacing: 0
     enabled: false
