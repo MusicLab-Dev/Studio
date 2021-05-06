@@ -11,8 +11,9 @@ Item {
     property var itemsNames: []
     property int itemSelected: 0
 
-    // advanced properties
-
+    // alias
+    default property alias placeholder: placeholder.data
+    property alias rowContainer: rowContainer
 
     //optimisation
     property real itemWidth: rowContainer.width / itemsPaths.length
@@ -25,13 +26,9 @@ Item {
         border.color: "white"
         radius: 10
 
-        Snapper {
-            id: brushSnapper
-            visible: sequencerView.editMode === SequencerView.EditMode.Brush
-            height: parent.height - rowContainer.height
-            width: parent.width
-            currentIndex: 0
-            onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
+        Item {
+            id: placeholder
+            anchors.fill: parent
         }
 
         DefaultText {

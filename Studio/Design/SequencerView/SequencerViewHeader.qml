@@ -78,6 +78,15 @@ Rectangle {
                         "CutMod",
                     ]
                     onItemSelectedChanged: sequencerView.editMode = itemSelected
+
+                    placeholder: Snapper {
+                        id: brushSnapper
+                        height: editModeSelector.height - editModeSelector.rowContainer.height
+                        width: editModeSelector.width
+                        visible: sequencerView.editMode === SequencerView.EditMode.Brush
+                        currentIndex: 0
+                        onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
+                    }
                 }
 
                 Item {
