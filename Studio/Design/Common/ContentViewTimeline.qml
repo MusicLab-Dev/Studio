@@ -1,29 +1,27 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Shapes 1.15
 
 import AudioAPI 1.0
 
-Rectangle {
+Item {
     property bool isEditingLoop: false
+    property alias timelineCursor: timelineCursor
 
     id: timeline
-    color: themeManager.disabledColor
 
-    Snapper {
-        id: snapper
+    Rectangle {
+        id: actionBox
         width: contentView.rowHeaderWidth
         height: parent.height
-        currentIndex: 4
-
-        onActivated: {
-            contentView.placementBeatPrecisionScale = currentValue
-            contentView.placementBeatPrecisionLastWidth = 0
-        }
+        color: themeManager.foregroundColor
+        border.color: "white"
+        border.width: 1
     }
 
     Item {
         anchors.top: parent.top
-        anchors.left: snapper.right
+        anchors.left: actionBox.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
@@ -169,38 +167,49 @@ Rectangle {
             color: "grey"
         }
 
-        Repeater {
-            readonly property int lastHiddenBarIndex: {
-                var idx = Math.floor(Math.abs(contentView.xOffset) / (surfaceContentGrid.barWidth))
-                if (barSkipStep)
-                    idx = idx - (idx % (barSkipStep + 1))
-                return idx
-            }
-            readonly property int barModel: Math.max(surfaceContentGrid.barsPerRow, 1)
-            readonly property int barSkipStep: Math.floor(surfaceContentGrid.barsPerRow / 40)
-            readonly property int barReducedModel: Math.ceil(barModel / (barSkipStep + 1)) + 1
-
-            id: timelineRepeater
+        Rectangle {
+            id: upTimeline
+            height: parent.height / 2
             width: parent.width
-            height: parent.height
-            model: barReducedModel
-            clip: true
+            color: "#00ECBA"
 
-            delegate: Column {
-                readonly property int reducedIndex: timelineRepeater.lastHiddenBarIndex + index * (timelineRepeater.barSkipStep + 1)
-                readonly property int beat: reducedIndex * contentView.beatsPerBar
+            ContentViewTimelineBarCursor {
+                id: timelineCursor
+            }
+        }
 
-                x: contentView.xOffset + beat * contentView.pixelsPerBeat
+        Rectangle {
+            id: bottomTimeline
+            height: parent.height / 2
+            width: parent.width
+            anchors.top: upTimeline.bottom
+            color: themeManager.foregroundColor
 
-                Text {
-                    text: reducedIndex
-                    color: "black"
+            Repeater {
+                readonly property int lastHiddenBarIndex: {
+                    var idx = Math.floor(Math.abs(contentView.xOffset) / (surfaceContentGrid.barWidth))
+                    if (barSkipStep)
+                        idx = idx - (idx % (barSkipStep + 1))
+                    return idx
                 }
+                readonly property int barModel: Math.max(surfaceContentGrid.barsPerRow, 1)
+                readonly property int barSkipStep: Math.floor(surfaceContentGrid.barsPerRow / 40)
+                readonly property int barReducedModel: Math.ceil(barModel / (barSkipStep + 1)) + 1
 
-                Rectangle {
-                    width: 1
-                    height: timeline.height / 3
-                    color: themeManager.foregroundColor
+                id: timelineRepeater
+                width: parent.width
+                height: parent.height
+                model: barReducedModel
+
+                delegate: Text {
+                    readonly property int reducedIndex: timelineRepeater.lastHiddenBarIndex + index * (timelineRepeater.barSkipStep + 1)
+                    readonly property int beat: reducedIndex * contentView.beatsPerBar
+
+                    x: contentView.xOffset + beat * contentView.pixelsPerBeat
+                    anchors.verticalCenter: bottomTimeline.verticalCenter
+                    text: reducedIndex
+                    color: "white"
+                    font.pixelSize: parent.height
                 }
             }
         }

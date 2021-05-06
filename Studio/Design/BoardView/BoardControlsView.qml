@@ -22,8 +22,7 @@ Rectangle {
     property real unitSize: (Math.min(width, height) * 0.98) / Math.max(boardWidth, boardHeight)
 
     id: boardContentView
-    //color: "#4A8693"
-    color: "#4A8693"
+    color: themeManager.foregroundColor
     visible: false
     radius: 13
 

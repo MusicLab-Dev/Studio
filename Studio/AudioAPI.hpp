@@ -19,6 +19,7 @@ class AudioAPI : public QObject
 
     Q_PROPERTY(Beat beatPrecision READ beatPrecision CONSTANT)
     Q_PROPERTY(Velocity velocityMax READ velocityMax CONSTANT)
+    Q_PROPERTY(Tuning tuningMax READ tuningMax CONSTANT)
 
 public:
     /** @brief Instantiate the singleton */
@@ -29,6 +30,9 @@ public:
 
     /** @brief Maximum velocity property */
     [[nodiscard]] Velocity velocityMax(void) const noexcept { return std::numeric_limits<Velocity>::max(); }
+
+    /** @brief Maximum tuning property */
+    [[nodiscard]] Tuning tuningMax(void) const noexcept { return std::numeric_limits<Tuning>::max(); }
 
     /** @brief Beat precision property */
     [[nodiscard]] Beat beatPrecision(void) const noexcept { return Audio::BeatPrecision; }

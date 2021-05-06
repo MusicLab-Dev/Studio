@@ -5,6 +5,4 @@ Rectangle {
     id: boardContent
     color: "red"
     anchors.fill: parent
-    radius: 13
-
 }

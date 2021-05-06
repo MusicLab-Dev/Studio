@@ -20,5 +20,6 @@
         <file>DefaultImageButtonDefaultColor.qml</file>
         <file>DefaultPotentiometer.qml</file>
         <file>DefaultMenu.qml</file>
+        <file>DefaultSectionWrapper.qml</file>
     </qresource>
 </RCC>

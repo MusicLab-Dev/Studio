@@ -58,6 +58,7 @@ Item {
     property alias surfaceContentGrid: surfaceContentGrid
     property alias placementRectangle: placementRectangle
     property alias gestureArea: gestureArea
+    property alias timelineBar: timelineBar
 
     // Placement ratios
     property real placementKeyCount: 0
@@ -92,6 +93,8 @@ Item {
     // Timeline bar
     property real timelineBeatPrecision: 0
     property real audioProcessBeatPrecision: 0
+
+    property alias timelineCursor: contentViewTimeline.timelineCursor
 
     // Timeline
     readonly property int timelineHeight: 25
@@ -242,12 +245,13 @@ Item {
     }
 
     ContentViewTimelineBar {
-        id: timeline
+        id: timelineBar
         visible: x >= rowHeaderWidth
-        width: 20
-        height: surfaceContentGrid.height
+        width: 1
+        height: parent.height - timelineCursor.height
         x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
-        z: 3
+        y: timelineCursor.height
+        z: contentViewTimeline.z + 1
     }
 
     Rectangle {
