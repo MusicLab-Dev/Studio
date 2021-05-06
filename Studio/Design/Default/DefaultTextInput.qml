@@ -8,6 +8,8 @@ TextField {
     leftPadding: 0
     placeholderTextColor: "lightgrey"
 
+    onAccepted: focus = false
+
     background: Rectangle {
         width: parent.width
         height: 2

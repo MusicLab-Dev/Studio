@@ -71,11 +71,10 @@ Item {
             Action {
                 text: qsTr("Save")
                 onTriggered: {
-                    if (app.project.path === "") {
+                    if (app.project.path === "")
                         saveFileDialog.open()
-                        return
-                    }
-                    app.project.save()
+                    else
+                        app.project.save()
                 }
             }
 
@@ -107,7 +106,7 @@ Item {
             nameFilters: [ "All files (*)" ]
             selectExisting: false
             onAccepted: {
-                app.project.saveAs(fileUrls.toString().replace(/^(file:\/{2})/,"").toString())
+                app.project.saveAs(mainWindow.urlToPath(fileUrl))
                 close()
             }
             onRejected: close()
@@ -122,7 +121,7 @@ Item {
             selectExisting: true
             onAccepted: {
                 modulesView.removeAllComponentsWithoutEmptyView()
-                app.project.loadFrom(fileUrls.toString().replace(/^(file:\/{2})/,"").toString())
+                app.project.loadFrom(mainWindow.urlToPath(fileUrl))
                 modules.insert(0, {
                         title: "Playlsit",
                         path: "qrc:/PlaylistView/PlaylistView.qml",

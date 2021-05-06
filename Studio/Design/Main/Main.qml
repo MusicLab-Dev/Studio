@@ -13,6 +13,19 @@ import "../ModulesView"
 import "../Modules/Workspaces"
 
 Window {
+
+    function urlToPath(url) {
+        var urlString = url.toString()
+        var s
+        if (urlString.startsWith("file:///")) {
+            var k = urlString.charAt(9) === ':' ? 8 : 7
+            s = urlString.substring(k)
+        } else {
+            s = urlString
+        }
+        return s;
+    }
+
     id: mainWindow
     visible: true
     width: 1280

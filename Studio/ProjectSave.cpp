@@ -32,6 +32,7 @@ void ProjectSave::write(const QString &json)
 {
     QFile file(_project->path());
     file.open(QIODevice::WriteOnly | QFile::Truncate);
+    qDebug() << _project->path();
     if (!file.exists())
         throw std::logic_error("ProjectSave::write: not created");
     file.write(json.toUtf8());
