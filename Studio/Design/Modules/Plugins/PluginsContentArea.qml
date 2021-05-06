@@ -9,8 +9,8 @@ GridView {
     property alias pluginTableProxy: pluginTableProxy
 
     id: pluginsGrid
-    cellWidth: pluginsContentArea.width / 6
-    cellHeight: cellWidth
+    cellWidth: pluginsContentArea.width / 5
+    cellHeight: cellWidth * 1.6
     clip: true
 
     model: PluginTableModelProxy {
@@ -21,10 +21,12 @@ GridView {
     }
 
     ScrollBar.vertical: DefaultScrollBar {
+        anchors.left: pluginsGrid.right + 400
         id: scrollBar
         color: "#31A8FF"
         opacity: 0.3
-        visible: parent.contentHeight > parent.height
+        //visible: parent.contentHeight > parent.height
+        visible: false
     }
 
     delegate: Item {
@@ -35,8 +37,11 @@ GridView {
         height: pluginsGrid.cellHeight
 
         PluginsSquareComponent {
-            anchors.fill: parent
-            anchors.margins: 5
+            id: pluginSquareComponent
+            width: pluginsGrid.cellWidth - x * 2
+            height: pluginsGrid.cellHeight / 1.6
+            x: 7
+            y: 10
 
             Image {
                 width: parent.width / 1.5
@@ -45,45 +50,37 @@ GridView {
                 y: parent.height / 2 - height / 2
                 source: factoryName ? "qrc:/Assets/Plugins/" + factoryName + ".png" : "qrc:/Assets/Plugins/Default.png"
             }
+        }
 
-            PluginsSquareComponentTitle {
-                id: title
-                text: factoryName
-            }
+        PluginsSquareComponentTitle {
+            id: title
+            text: factoryName
+            anchors.top: pluginSquareComponent.bottom
+        }
 
-            PluginsSquareComponentDescription {
-                id: description
+        PluginsSquareComponentDescription {
+            id: description
+            text: factoryDescription
+            anchors.top: title.bottom
+            width: parent.width
+            height: parent.height / 2
+            x: parent.width / 2 - width / 2
+            y: title.y * 1.2
+
+            ToolTip {
+                id: toolTip
                 text: factoryDescription
-                width: parent.width
-                height: parent.height / 2
-                x: parent.width / 2 - width / 2
-                y: title.y * 1.2
-
-                ToolTip {
-                    id: toolTip
-                    text: factoryDescription
-                    visible: false
-                }
+                visible: pluginsSquareComponentArea.containsMouse && description.truncated
             }
+        }
 
-            MouseArea {
-                width: parent.width
-                height: parent.height + title.height + description.height
-                hoverEnabled: true
+        MouseArea {
+            id: pluginsSquareComponentArea
+            anchors.fill: parent
+            hoverEnabled: true
 
-                onEntered: {
-                    pluginsSquareComponentHovered = true
-                    toolTip.visible = description.truncated ? true : false
-                }
-
-                onExited: {
-                    pluginsSquareComponentHovered = false
-                    toolTip.visible = false
-                }
-
-                onReleased: {
-                    pluginsView.acceptAndClose(factoryPath)
-                }
+            onReleased: {
+                pluginsView.acceptAndClose(factoryPath)
             }
         }
     }
