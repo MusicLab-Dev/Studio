@@ -11,6 +11,7 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         propagateComposedEvents: false
+        onPressedChanged: forceActiveFocus()
     }
 
     Row {

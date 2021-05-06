@@ -11,6 +11,11 @@ import PluginModel 1.0
 Rectangle {
     color: themeManager.foregroundColor
 
+    MouseArea {
+        anchors.fill: parent
+        onPressedChanged: forceActiveFocus()
+    }
+
     RowLayout {
         anchors.fill: parent
         spacing: 0
@@ -20,34 +25,41 @@ Rectangle {
             Layout.preferredWidth: parent.width * 0.6
             label: "Sampler"
 
-            ListView {
+            MouseArea {
+                anchors.fill: parent
+                onPressedChanged: forceActiveFocus()
+            }
+
+            Row {
                 id: controlsListView
                 anchors.fill: parent
-                orientation: ListView.Horizontal
                 clip: true
                 spacing: 2
-                model: sequencerView.node ? sequencerView.node.plugin : null
-                boundsBehavior: Flickable.StopAtBounds
+                padding: 2
 
-                delegate: Loader {
-                    focus: true
+                Repeater {
+                    model: sequencerView.node ? sequencerView.node.plugin : null
 
-                    source: {
-                        switch (controlType) {
-                        case PluginModel.Boolean:
-                            return "qrc:/Common/PluginControls/BooleanControl.qml"
-                        case PluginModel.Integer:
-                            return "qrc:/Common/PluginControls/IntegerControl.qml"
-                        case PluginModel.Floating:
-                            return "qrc:/Common/PluginControls/FloatingControl.qml"
-                        case PluginModel.Enum:
-                            return "qrc:/Common/PluginControls/EnumControl.qml"
-                        default:
-                            return ""
+                    delegate: Loader {
+                        focus: true
+
+                        source: {
+                            switch (controlType) {
+                            case PluginModel.Boolean:
+                                return "qrc:/Common/PluginControls/BooleanControl.qml"
+                            case PluginModel.Integer:
+                                return "qrc:/Common/PluginControls/IntegerControl.qml"
+                            case PluginModel.Floating:
+                                return "qrc:/Common/PluginControls/FloatingControl.qml"
+                            case PluginModel.Enum:
+                                return "qrc:/Common/PluginControls/EnumControl.qml"
+                            default:
+                                return ""
+                            }
                         }
-                    }
 
-                    onLoaded: anchors.verticalCenter = parent.verticalCenter
+                        onLoaded: anchors.verticalCenter = parent.verticalCenter
+                    }
                 }
             }
         }

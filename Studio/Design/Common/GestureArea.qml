@@ -10,6 +10,7 @@ MouseArea {
     propagateComposedEvents: true
     // hoverEnabled: true
 
+    onPressedChanged: forceActiveFocus()
     onClicked: mouse.accepted = false
     onPressed: mouse.accepted = false
     onReleased: mouse.accepted = false

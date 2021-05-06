@@ -8,12 +8,12 @@ Rectangle {
 
     color: "#00ECBA"
 
-    Behavior on x {
-        enabled: !app.scheduler.running
+    // Behavior on x {
+    //     enabled: !app.scheduler.running
 
-        SpringAnimation {
-            spring: 2
-            damping: 0.2
-        }
-    }
+        // SpringAnimation {
+        //     spring: 2
+        //     damping: 0.2
+        // }
+    // }
 }

@@ -24,6 +24,7 @@ Item {
         anchors.left: actionBox.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        clip: true
 
         id: timelineArea
 
@@ -31,6 +32,7 @@ Item {
             anchors.fill: parent
 
             onPressedChanged: {
+                forceActiveFocus()
                 if (pressed) {
                     contentView.timelineBeginMove((Math.abs(contentView.xOffset) + mouseX) / contentView.pixelsPerBeatPrecision)
                 } else {
@@ -73,6 +75,25 @@ Item {
         }
 
         Rectangle {
+            id: upTimeline
+            height: parent.height / 2
+            width: parent.width
+            color: "#00ECBA"
+
+            ContentViewTimelineBarCursor {
+                id: timelineCursor
+            }
+        }
+
+        Rectangle {
+            id: bottomTimeline
+            height: parent.height / 2
+            width: parent.width
+            anchors.top: upTimeline.bottom
+            color: themeManager.foregroundColor
+        }
+
+        Rectangle {
             id: loopUnusedLeftIndicator
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
@@ -91,13 +112,6 @@ Item {
             visible: contentView.hasLoop
             color: themeManager.accentColor
 
-            Rectangle {
-                x: parent.width / 2
-                width: 1
-                height: contentView.height
-                color: themeManager.accentColor
-            }
-
             MouseArea {
                 anchors.fill: parent
                 drag.target: parent
@@ -112,6 +126,8 @@ Item {
                     else
                         app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
                 }
+
+                onPressedChanged: forceActiveFocus()
             }
         }
 
@@ -133,13 +149,6 @@ Item {
             visible: contentView.hasLoop
             color: themeManager.accentColor
 
-            Rectangle {
-                x: parent.width / 2
-                width: 1
-                height: contentView.height
-                color: themeManager.accentColor
-            }
-
             MouseArea {
                 anchors.fill: parent
                 drag.target: parent
@@ -154,6 +163,8 @@ Item {
                     else
                         app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
                 }
+
+                onPressedChanged: forceActiveFocus()
             }
         }
 
@@ -167,23 +178,11 @@ Item {
             color: "grey"
         }
 
-        Rectangle {
-            id: upTimeline
-            height: parent.height / 2
-            width: parent.width
-            color: "#00ECBA"
-
-            ContentViewTimelineBarCursor {
-                id: timelineCursor
-            }
-        }
-
-        Rectangle {
-            id: bottomTimeline
-            height: parent.height / 2
-            width: parent.width
-            anchors.top: upTimeline.bottom
-            color: themeManager.foregroundColor
+        Item {
+            id: bottomTimelineItem
+            y: bottomTimeline.y
+            width: bottomTimeline.width
+            height: bottomTimeline.height
 
             Repeater {
                 readonly property int lastHiddenBarIndex: {
@@ -206,7 +205,7 @@ Item {
                     readonly property int beat: reducedIndex * contentView.beatsPerBar
 
                     x: contentView.xOffset + beat * contentView.pixelsPerBeat
-                    anchors.verticalCenter: bottomTimeline.verticalCenter
+                    anchors.verticalCenter: bottomTimelineItem.verticalCenter
                     text: reducedIndex
                     color: "white"
                     font.pixelSize: parent.height
