@@ -69,6 +69,7 @@ void Studio::InitResources(void)
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
     qmlRegisterType<Board>("Board", 1, 0, "Board");
     qmlRegisterType<EventDispatcher>("EventDispatcher", 1, 0, "EventDispatcher");
+    qmlRegisterUncreatableType<KeyboardEventListener>("KeyboardEventListener", 1, 0, "KeyboardEventListener", "Cannot construct KeyboardEventListener");
 
 
     Q_INIT_RESOURCE(Resources);

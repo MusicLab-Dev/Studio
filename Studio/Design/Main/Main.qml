@@ -47,5 +47,7 @@ Window {
 
     EventDispatcher {
         id: eventDispatcher
+
+        keyboardListener.enabled: false
     }
 }

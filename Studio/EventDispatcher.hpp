@@ -19,14 +19,23 @@ class EventDispatcher : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QStringList targetEventList READ targetEventList CONSTANT)
+    Q_PROPERTY(KeyboardEventListener* keyboardListener READ keyboardListener NOTIFY keyboardListenerChanged)
 
 public:
-
+    /** @brief Constructor */
     explicit EventDispatcher(QObject *parent = nullptr) : QObject(parent), _keyboardListener(this, parent) {}
 
+    /** @brief Get the target event list */
     [[nodiscard]] QStringList targetEventList(void) const noexcept { return QStringList(); }
 
+    /** @brief Get the keyboard listener */
+    [[nodiscard]] KeyboardEventListener *keyboardListener(void) noexcept { return &_keyboardListener; }
+    [[nodiscard]] const KeyboardEventListener *keyboardListener(void) const noexcept { return &_keyboardListener; }
+
 signals:
+    /** @brief Notify that keyboard listener has changed */
+    void keyboardListenerChanged(void);
+
     // Boolean controls
     void note0(bool pressed);
     void note1(bool pressed);

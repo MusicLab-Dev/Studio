@@ -29,6 +29,14 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher, QObjec
     set(AEventListener::Event{AEventListener::Event::OCTAVE_DOWN, 88});
 }
 
+void KeyboardEventListener::setEnabled(const bool value) noexcept
+{
+    if (_enabled == value)
+        return;
+    _enabled = value;
+    emit enabledChanged();
+}
+
 void KeyboardEventListener::set(const Event &e)
 {
     beginResetModel();
@@ -51,6 +59,8 @@ int KeyboardEventListener::find(int input)
 
 bool KeyboardEventListener::eventFilter(QObject *object, QEvent *event)
 {
+    if (!_enabled)
+        return false;
     auto type = event->type();
     if ((type != QEvent::KeyPress && type != QEvent::KeyRelease))
         return QObject::eventFilter(object, event);
