@@ -41,43 +41,51 @@ Rectangle {
         }
     }
 
-    ColumnLayout {
-        id: workspaceForegroundContent
+    ScrollView {
+        id: workspacesForegroundScrollView
         width: parent.width * 0.8
         height: parent.height * 0.75
         x: (parent.width - width) / 2
         y: workspaceResearchTextInput.y + workspaceResearchTextInput.height * 2
+        clip: true
 
-        ListView {
-            id: workspacesForegroundListView
+        DefaultScrollBar {
+            id: scrollBar
+            active: true
+            orientation: Qt.Vertical
+            size: workspacesForegroundScrollView.height / workspacesForegroundScrollView.contentHeight
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+        }
+
+        Column {
+            id: workspaceForegroundContent
+            width: parent.width
             spacing: Math.max(workspaceForeground.height / 30, 20)
-            model: workspacesModel
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            clip: true
 
-            ScrollBar.vertical: DefaultScrollBar {
-                id: scrollBar
-                color: "#31A8FF"
-                opacity: 0.3
-                visible: workspacesForegroundListView.contentHeight > workspacesForegroundListView.height
-            }
+            Repeater {
+                model: workspacesModel
 
-            delegate: WorkspaceCard {
-                width: workspacesForegroundListView.width - scrollBar.width * 1.5
+                delegate: WorkspaceCard {
+                    width: workspacesForegroundScrollView.width - scrollBar.width * 1.5
 
-                Component.onCompleted: {
-                    if (index === 0) {
-                        workspaceForeground.actualPath = realPath
+                    Component.onCompleted: {
+                        if (index === 0) {
+                            workspaceForeground.actualPath = realPath
+                        }
                     }
                 }
             }
         }
+    }
 
-        DefaultTextButton {
-            text: qsTr("+ NEW WORKSPACE")
+    DefaultTextButton {
+        text: qsTr("+ NEW WORKSPACE")
 
-            onClicked: folderPicker.open()
-        }
+        anchors.top: workspacesForegroundScrollView.bottom
+        anchors.horizontalCenter: workspacesForegroundScrollView.horizontalCenter
+
+        onClicked: folderPicker.open()
     }
 }
