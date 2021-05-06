@@ -27,12 +27,14 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher, QObjec
     set(AEventListener::Event{AEventListener::Event::NOTE_11, 78});
     set(AEventListener::Event{AEventListener::Event::OCTAVE_UP, 87});
     set(AEventListener::Event{AEventListener::Event::OCTAVE_DOWN, 88});
+
     set(AEventListener::Event{AEventListener::Event::PLAY_CONTEXT, 32});
     set(AEventListener::Event{AEventListener::Event::PAUSE_CONTEXT, 67});
     set(AEventListener::Event{AEventListener::Event::STOP_CONTEXT, 86});
-    set(AEventListener::Event{AEventListener::Event::PLAY_PLAYLIST, 32});
-    set(AEventListener::Event{AEventListener::Event::PAUSE_PLAYLIST, 67});
-    set(AEventListener::Event{AEventListener::Event::STOP_PLAYLIST, 86});
+
+    set(AEventListener::Event{AEventListener::Event::PLAY_PLAYLIST, 80});
+    //set(AEventListener::Event{AEventListener::Event::PAUSE_PLAYLIST, 67});
+    set(AEventListener::Event{AEventListener::Event::STOP_PLAYLIST, 79});
 }
 
 void KeyboardEventListener::set(const Event &e)

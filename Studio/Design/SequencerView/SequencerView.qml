@@ -111,7 +111,7 @@ ColumnLayout {
 
     Connections {
         target: eventDispatcher
-        enabled: moduleIndex == componentSelected
+        enabled: moduleIndex === componentSelected
 
         function onPlayContext(pressed) { if (!pressed) return; if(!player.isPlayerRunning) player.play(); else player.pause(); }
         function onPauseContext(pressed) { if (!pressed) return; player.pause(); }
