@@ -174,6 +174,28 @@ Item {
     }
 
     Item {
+        x: contentView.rowHeaderWidth
+        width: contentView.width - x
+        height: parent.height
+
+        Rectangle {
+            x: contentView.xOffset + contentView.loopFrom * contentView.pixelsPerBeatPrecision
+            width: 1
+            height: contentView.height
+            color: themeManager.accentColor
+            visible: contentView.hasLoop
+        }
+
+        Rectangle {
+            x: contentView.xOffset + contentView.loopTo * contentView.pixelsPerBeatPrecision
+            width: 1
+            height: contentView.height
+            color: themeManager.accentColor
+            visible: contentView.hasLoop
+        }
+    }
+
+    Item {
         width: parent.width
         height: contentView.height - contentViewTimeline.height
         y: contentViewTimeline.height
@@ -196,6 +218,22 @@ Item {
                 x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
                 color: "red"
                 opacity: 0.5
+            }
+
+            Rectangle {
+                x: contentView.xOffset + contentView.loopFrom * contentView.pixelsPerBeatPrecision
+                width: 1
+                height: contentView.height
+                color: themeManager.accentColor
+                visible: contentView.hasLoop
+            }
+
+            Rectangle {
+                x: contentView.xOffset + contentView.loopTo * contentView.pixelsPerBeatPrecision
+                width: 1
+                height: contentView.height
+                color: themeManager.accentColor
+                visible: contentView.hasLoop
             }
         }
 
@@ -249,7 +287,7 @@ Item {
         visible: x >= rowHeaderWidth
         width: 1
         height: parent.height - timelineCursor.height
-        x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
+        x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1
     }

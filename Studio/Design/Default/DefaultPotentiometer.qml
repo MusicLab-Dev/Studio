@@ -9,6 +9,7 @@ Dial {
 
     id: dial
     tickmarksVisible: true
+    activeFocusOnPress: true
 
     style: DialStyle {
         id: dialStyle

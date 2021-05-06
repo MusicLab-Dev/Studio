@@ -105,6 +105,7 @@ Item {
                     anchors.fill: parent
 
                     onPressedChanged: {
+                        forceActiveFocus()
                         sequencerView.node.partitions.addOnTheFly(
                                     AudioAPI.noteEvent(
                                         pressed ? NoteEvent.On : NoteEvent.Off,

@@ -62,6 +62,8 @@ MouseArea {
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     clip: true
 
+    onPressedChanged: forceActiveFocus()
+
     onPressed: {
         var realMouseBeatPrecision = Math.floor((mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)

@@ -13,6 +13,11 @@ Rectangle {
     height: parent.width
     color: themeManager.foregroundColor
 
+    MouseArea {
+        anchors.fill: parent
+        onPressedChanged: forceActiveFocus()
+    }
+
     RowLayout {
         anchors.fill: parent
         spacing: 0

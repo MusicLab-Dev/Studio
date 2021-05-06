@@ -57,20 +57,16 @@ Item {
                     height: rowContainer.height
                     width: itemWidth
 
-                    MouseArea{
-                        anchors.fill: parent
-
-                        onReleased: {
-                            itemSelected = index
-                        }
-                    }
-
-                    DefaultColoredImage {
+                    DefaultImageButton {
                         height: parent.height / 2
                         width: parent.height / 2
                         anchors.centerIn: parent
                         source: itemsPaths[index]
-                        color: index == itemSelected ? themeManager.accentColor : "#FFFFFF"
+                        colorDefault: index == itemSelected ? themeManager.accentColor : "#FFFFFF"
+                        scaleFactor: 1
+                        showBorder: false
+
+                        onReleased: itemSelected = index
                     }
                 }
             }
