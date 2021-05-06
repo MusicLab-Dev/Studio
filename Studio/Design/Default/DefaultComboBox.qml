@@ -10,8 +10,8 @@ ComboBox {
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
         anchors.rightMargin: comboBoxText.leftPadding / 2
-        width: height
         height: control.height / 4
+        width: height * 1.5
         contextType: "2d"
 
         onPaint: {
@@ -20,7 +20,7 @@ ComboBox {
             context.lineTo(width, 0);
             context.lineTo(width / 2, height);
             context.closePath();
-            context.fillStyle = control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : "#295F8B";
+            context.fillStyle = control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : themeManager.contentColor;
             context.fill();
         }
 
@@ -39,15 +39,21 @@ ComboBox {
         verticalAlignment: Text.AlignVCenter
         leftPadding: 15
         elide: Text.ElideRight
-        color: control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : "#295F8B";
+        color: control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : themeManager.contentColor;
         padding: control.padding
     }
 
-    background: Rectangle {
+    background: Item {
         anchors.fill: control
-        border.width: control.pressed ? 4 : 2
-        border.color: control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : "#295F8B"
-        color: control.pressed ? themeManager.backgroundColor : themeManager.foregroundColor
+
+        Rectangle {
+            id: rectBackground
+            anchors.fill: parent
+            border.width: control.pressed ? 4 : 2
+            border.color: control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : themeManager.contentColor
+            color: control.pressed ? themeManager.backgroundColor : themeManager.foregroundColor
+            radius: 10
+        }
     }
 
     popup: Popup {

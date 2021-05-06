@@ -3,26 +3,40 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls.Styles 1.4
 import "../Default"
+import "../SequencerView"
 
 Item {
+    // properties
     property var itemsPaths: []
     property var itemsNames: []
     property int itemSelected: 0
-    property real widgetWidth: height / 1.5 * itemsPaths.length
+
+    // advanced properties
+
+
+    //optimisation
+    property real itemWidth: rowContainer.width / itemsPaths.length
 
     id: container
 
     Rectangle {
-        anchors.centerIn: parent
-        height: parent.height
-        width: widgetWidth
+        anchors.fill: parent
         color: "transparent"
         border.color: "white"
         radius: 10
 
+        Snapper {
+            id: brushSnapper
+            visible: sequencerView.editMode === SequencerView.EditMode.Brush
+            height: parent.height - rowContainer.height
+            width: parent.width
+            currentIndex: 0
+            onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
+        }
+
         DefaultText {
             text: itemsNames[itemSelected]
-            anchors.top: parent.top
+            y: parent.height * 0.3 / 2 - height / 2
             anchors.horizontalCenter: parent.horizontalCenter
             color: "white"
             fontSizeMode: Text.Fit
@@ -31,21 +45,20 @@ Item {
         Rectangle {
             id: rowContainer
             anchors.bottom: parent.bottom
-            height: parent.height / 1.5
-            width: widgetWidth
+            height: parent.height * 0.7
+            width: parent.width
             color: "transparent"
             border.color: "white"
             radius: 10
 
             Repeater {
-                anchors.centerIn: parent
                 model: itemsPaths
 
                 delegate: Item {
                     id: item
-                    x: rowContainer.height * index
+                    x: itemWidth * index
                     height: rowContainer.height
-                    width: rowContainer.height
+                    width: itemWidth
 
                     MouseArea{
                         anchors.fill: parent
@@ -67,9 +80,9 @@ Item {
 
             Rectangle {
                 id: cursor
-                x: itemSelected * rowContainer.height
+                x: itemSelected * itemWidth
                 height: rowContainer.height
-                width: parent.height
+                width: itemWidth
                 border.color: "white"
                 color: "transparent"
                 radius: 10

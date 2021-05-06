@@ -5,9 +5,7 @@ import "../Default"
 
 Rectangle {
     id: boardContentView
-    //color: "#4A8693"
-    color: "#001E36"
-    radius: 13
+    color: themeManager.backgroundColor
 
     GridView {
         id: boardsPreview
@@ -41,7 +39,7 @@ Rectangle {
                     x: parent.width / 2 - width / 2
                     y: parent.height / 2 - height / 2
                     anchors.margins: parent.width * 0.02
-                    color: "#4A8693"
+                    color: themeManager.foregroundColor
                     radius: 10
 
                     DefaultText {

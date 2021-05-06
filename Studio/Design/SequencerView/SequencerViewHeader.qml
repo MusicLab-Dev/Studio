@@ -15,43 +15,85 @@ Rectangle {
         anchors.fill: parent
         spacing: 0
 
-        Item {
+        DefaultSectionWrapper {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width / 3
+            Layout.preferredWidth: parent.width * 0.6
+            label: "Sampler"
 
-            RowLayout {
+            ListView {
+                id: controlsListView
                 anchors.fill: parent
-                spacing: 0
+                orientation: ListView.Horizontal
+                clip: true
+                spacing: 2
+                model: sequencerView.node ? sequencerView.node.plugin : null
+                boundsBehavior: Flickable.StopAtBounds
+
+                delegate: Loader {
+                    focus: true
+
+                    source: {
+                        switch (controlType) {
+                        case PluginModel.Boolean:
+                            return "qrc:/Common/PluginControls/BooleanControl.qml"
+                        case PluginModel.Integer:
+                            return "qrc:/Common/PluginControls/IntegerControl.qml"
+                        case PluginModel.Floating:
+                            return "qrc:/Common/PluginControls/FloatingControl.qml"
+                        case PluginModel.Enum:
+                            return "qrc:/Common/PluginControls/EnumControl.qml"
+                        default:
+                            return ""
+                        }
+                    }
+
+                    onLoaded: anchors.verticalCenter = parent.verticalCenter
+                }
+            }
+        }
+
+        DefaultSectionWrapper {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.4
+            label: "Edition"
+
+            placeholder: RowLayout {
+                anchors.fill: parent
+                spacing: 10
+
+                ModSelector {
+                    id: editModeSelector
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: parent.width * 0.375
+                    itemsPaths: [
+                        "qrc:/Assets/NormalMod.png",
+                        "qrc:/Assets/BrushMod.png",
+                        "qrc:/Assets/SelectorMod.png",
+                        "qrc:/Assets/CutMod.png",
+                    ]
+                    itemsNames: [
+                        "Standard",
+                        "Brush",
+                        "Selector",
+                        "CutMod",
+                    ]
+                    onItemSelectedChanged: sequencerView.editMode = itemSelected
+                }
 
                 Item {
                     Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.5
+                    Layout.preferredWidth: parent.width * 0.375
+                    Layout.alignment: Qt.AlignHCenter
 
-                    Row {
-                        x: parent.width / 2 - width / 2
-                        y: parent.height / 2 - height / 2
-                        width: parent.width / 2 + height + spacing
-                        height: parent.height / 2
-                        spacing: 5
-
-                        AddButton {
-                            id: addBtn
-                            width: parent.height
-                            height: parent.height
-
-                            onReleased: {
-                                sequencerView.player.stop()
-                                if (sequencerView.node.partitions.add()) {
-                                    sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
-                                    sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
-                                }
-                            }
-                        }
+                    ColumnLayout {
+                        anchors.fill: parent
+                        spacing: 3
 
                         PartitionComboBox {
                             id: partitionComboBox
-                            width: parent.width - addBtn.height
-                            height: parent.height
+                            Layout.preferredHeight: parent.height * 0.4
+                            Layout.preferredWidth: parent.width
+                            Layout.alignment: Qt.AlignVCenter
                             partitions: sequencerView.node ? sequencerView.node.partitions : null
                             currentIndex: sequencerView.partitionIndex
 
@@ -60,85 +102,26 @@ Rectangle {
                                 sequencerView.partition = sequencerView.node.partitions.getPartition(index)
                             }
                         }
+
+                        Snapper {
+                            id: snapper
+                            Layout.preferredHeight: parent.height * 0.4
+                            Layout.preferredWidth: parent.width
+                            currentIndex: 4
+
+                            onActivated: {
+                                contentView.placementBeatPrecisionScale = currentValue
+                                contentView.placementBeatPrecisionLastWidth = 0
+                            }
+                        }
                     }
                 }
 
-                Item {
+                ArrowNextPrev {
                     Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.5
-
-                    ModSelector {
-                        id: editModeSelector
-                        itemsPaths: [
-                            "qrc:/Assets/NormalMod.png",
-                            "qrc:/Assets/BrushMod.png",
-                            // "qrc:/Assets/SelectorMod.png",
-                            // "qrc:/Assets/CutMod.png",
-                        ]
-                        itemsNames: [
-                            "Standard",
-                            "Brush",
-                        ]
-                        width: parent.width / 2
-                        height: parent.height / 1.25
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        onItemSelectedChanged: sequencerView.editMode = itemSelected
-                    }
-
-                    Snapper {
-                        id: brushSnapper
-                        visible: sequencerView.editMode === SequencerView.EditMode.Brush
-                        x: parent.width / 2
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.height
-                        height: parent.height / 2
-                        currentIndex: 0
-
-                        onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
-                    }
+                    Layout.preferredWidth: parent.width * 0.25
+                    Layout.alignment: Qt.AlignHCenter
                 }
-            }
-        }
-
-        ListView {
-            id: controlsListView
-            Layout.preferredHeight: parent.height
-            Layout.fillWidth: true
-            orientation: ListView.Horizontal
-            clip: true
-            spacing: 2
-            model: sequencerView.node ? sequencerView.node.plugin : null
-            boundsBehavior: Flickable.StopAtBounds
-
-            delegate: Loader {
-                focus: true
-
-                source: {
-                    switch (controlType) {
-                    case PluginModel.Boolean:
-                        return "qrc:/Common/PluginControls/BooleanControl.qml"
-                    case PluginModel.Integer:
-                        return "qrc:/Common/PluginControls/IntegerControl.qml"
-                    case PluginModel.Floating:
-                        return "qrc:/Common/PluginControls/FloatingControl.qml"
-                    case PluginModel.Enum:
-                        return "qrc:/Common/PluginControls/EnumControl.qml"
-                    default:
-                        return ""
-                    }
-                }
-
-                onLoaded: anchors.verticalCenter = parent.verticalCenter
-            }
-        }
-
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.133
-
-            ArrowNextPrev {
-                anchors.fill: parent
             }
         }
     }

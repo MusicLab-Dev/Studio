@@ -21,7 +21,7 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width / 3
 
             ModSelector {
                 id: tweaker
@@ -37,8 +37,8 @@ Rectangle {
                     "Tunning",
                     "Aftertouch",
                 ]
-                width: parent.width / 2
-                height: parent.height / 1.25
+                width: parent.width / 3
+                height: parent.height / 2
                 anchors.centerIn: parent
                 onItemSelectedChanged: {
                     sequencerView.tweakMode = itemSelected
@@ -48,28 +48,53 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width / 3
 
-            Player {
-                id: player
-                anchors.centerIn: parent
-                height: parent.height
-                width: 200
-                targetPlaybackMode: Scheduler.Partition
-                isPartitionPlayer: true
-                targetNode: sequencerView.node
-                targetPartitionIndex: sequencerView.partitionIndex
+            RowLayout {
+                anchors.fill: parent
+                spacing: 20
+
+                TimerView {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredHeight: parent.height * 0.5
+                    Layout.preferredWidth: parent.width * 0.25
+                }
+
+                Player {
+                    id: player
+                    Layout.preferredHeight: parent.height * 0.5
+                    Layout.preferredWidth: parent.width * 0.25
+                    targetPlaybackMode: Scheduler.Partition
+                    isPartitionPlayer: true
+                    targetNode: sequencerView.node
+                    targetPartitionIndex: sequencerView.partitionIndex
+                }
+
+                Bpm {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredHeight: parent.height * 0.5
+                    Layout.preferredWidth: parent.width * 0.25
+                }
             }
         }
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width / 3
 
-            Bpm {
-                anchors.centerIn: parent
+            AddButton {
+                id: addBtn
                 height: parent.height / 2
-                width: parent.width / 3
+                width: height
+                anchors.centerIn: parent
+
+                onReleased: {
+                    sequencerView.player.stop()
+                    if (sequencerView.node.partitions.add()) {
+                        sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
+                        sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
+                    }
+                }
             }
         }
     }

@@ -1,13 +1,12 @@
-import QtQuick 2.15
+import QtQuick 2.0
 
 import "../Default"
 
 DefaultSectionWrapper {
-    label: "bpm"
+    label: "Timer"
 
-    TextEdit {
-        anchors.centerIn: parent
-        text: qsTr("140:000")
+    DefaultText {
+        text: qsTr("04:20:69")
         font.pixelSize: parent.height * 0.75
         color: "white"
     }

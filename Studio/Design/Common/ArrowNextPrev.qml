@@ -9,33 +9,26 @@ RowLayout {
 
     Item {
         Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.475
+        Layout.preferredWidth: parent.width * 0.5
 
         DefaultImageButton {
             source: "qrc:/Assets/Previous.png"
-            height: parent.height / 1.5
-            width: parent.height / 1.5
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
+            height: width
+            width: parent.width * 0.9
+            anchors.centerIn: parent
             colorDefault: "white"
         }
     }
 
     Item {
         Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.05
-    }
-
-    Item {
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.475
+        Layout.preferredWidth: parent.width * 0.5
 
         DefaultImageButton {
             source: "qrc:/Assets/Next.png"
-            height: parent.height / 1.5
-            width: parent.height / 1.5
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
+            height: width
+            width: parent.width * 0.9
+            anchors.centerIn: parent
             colorDefault: "white"
         }
     }

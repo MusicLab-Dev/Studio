@@ -94,6 +94,8 @@ Item {
     property real timelineBeatPrecision: 0
     property real audioProcessBeatPrecision: 0
 
+    property alias timelineCursor: contentViewTimeline.timelineCursor
+
     // Timeline
     readonly property int timelineHeight: 25
     property bool hasLoop: false
@@ -245,8 +247,10 @@ Item {
         id: timelineBar
         visible: x >= rowHeaderWidth
         width: 1
-        height: parent.height
+        height: parent.height - timelineCursor.height
         x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
+        y: timelineCursor.height
+        z: contentViewTimeline.z + 1
     }
 
     Rectangle {

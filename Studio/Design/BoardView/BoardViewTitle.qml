@@ -8,7 +8,7 @@ Column {
         id: boardViewTitle
         width: parent.width
         text: qsTr("Board")
-        color: "lightgrey"
+        color: "white"
         font.pointSize: 34
     }
 
@@ -16,7 +16,7 @@ Column {
         id: boardViewSubtitle
         width: parent.width
         text: qsTr("Make the experience more physical")
-        color: "lightgrey"
+        color: "white"
         font.pointSize: 15
     }
 }

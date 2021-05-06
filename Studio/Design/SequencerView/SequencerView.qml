@@ -134,14 +134,14 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredWidth: parent.width
-        Layout.preferredHeight: parent.height * 0.1
+        Layout.preferredHeight: parent.height * 0.15
         z: 1
     }
 
     Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: parent.height * 0.8
+        Layout.preferredHeight: parent.height * 0.7
         Layout.preferredWidth: parent.width
 
         SequencerContentView {
@@ -165,7 +165,7 @@ ColumnLayout {
         id: sequencerViewFooter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: parent.height * 0.1
+        Layout.preferredHeight: parent.height * 0.15
         Layout.preferredWidth: parent.width
     }
 }

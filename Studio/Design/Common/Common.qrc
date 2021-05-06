@@ -24,5 +24,6 @@
         <file>TextRoundedButton.qml</file>
         <file>PartitionComboBox.qml</file>
         <file>ContentViewTimelineBarCursor.qml</file>
+        <file>TimerView.qml</file>
     </qresource>
 </RCC>
