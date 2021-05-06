@@ -62,7 +62,7 @@ Rectangle {
         text: tabTitle
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        color: componentSelected === index ? "white" : mouseArea.containsMouse ? "black" : themeManager.disabledColor
+        color: componentSelected === index ? "white" : mouseArea.containsMouse ? "black" : "#E5E5E5"
         elide: Text.ElideRight
         fontSizeMode: Text.Fit
         clip: true

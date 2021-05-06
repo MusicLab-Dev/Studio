@@ -14,8 +14,8 @@ Item {
         id: actionBox
         width: contentView.rowHeaderWidth
         height: parent.height
-        color: themeManager.foregroundColor
-        border.color: "white"
+        color: themeManager.backgroundColor
+        border.color: "black"
         border.width: 1
     }
 

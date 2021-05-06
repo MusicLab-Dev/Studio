@@ -86,6 +86,8 @@ Rectangle {
                         visible: sequencerView.editMode === SequencerView.EditMode.Brush
                         currentIndex: 0
                         onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
+                        rectBackground.border.width: 0
+                        rectBackground.color: "transparent"
                     }
                 }
 

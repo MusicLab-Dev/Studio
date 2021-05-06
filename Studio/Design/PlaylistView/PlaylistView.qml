@@ -25,11 +25,11 @@ ColumnLayout {
     focus: true
 
     Keys.onPressed: {
-        if (event.key == Qt.Key_A)
+        if (event.key === Qt.Key_A)
             player.stop()
-        else if (event.key == Qt.Key_Z)
+        else if (event.key === Qt.Key_Z)
             player.replay()
-        else if (event.key == Qt.Key_E)
+        else if (event.key === Qt.Key_E)
             player.playOrPause()
     }
 
@@ -38,7 +38,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredWidth: parent.width
-        Layout.preferredHeight: parent.height * 0.1
+        Layout.preferredHeight: parent.height * 0.15
         z: 1
     }
 
@@ -46,7 +46,7 @@ ColumnLayout {
         id: contentView
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: parent.height * 0.8
+        Layout.preferredHeight: parent.height * 0.7
         Layout.preferredWidth: parent.width
 
         onTimelineBeginMove: playlistViewFooter.player.timelineBeginMove(target)
@@ -58,7 +58,7 @@ ColumnLayout {
         id: playlistViewFooter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: parent.height * 0.1
+        Layout.preferredHeight: parent.height * 0.15
         Layout.preferredWidth: parent.width
     }
 }

@@ -7,6 +7,7 @@ import Project 1.0
 import "../Common"
 import "../Default"
 
+
 Rectangle {
     color: themeManager.foregroundColor
 
@@ -16,51 +17,72 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width / 3
+            Layout.preferredWidth: parent.width * 0.6
 
-            RowLayout {
+        }
+
+        DefaultSectionWrapper {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.4
+            label: "Edition"
+
+            placeholder: RowLayout {
                 anchors.fill: parent
-                spacing: 0
+                spacing: 10
 
-                Item {
+                ModSelector {
+                    id: editModeSelector
                     Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.5
+                    Layout.preferredWidth: parent.width * 0.375
+                    itemsPaths: [
+                        "qrc:/Assets/NormalMod.png",
+                        "qrc:/Assets/BrushMod.png",
+                        "qrc:/Assets/SelectorMod.png",
+                        "qrc:/Assets/CutMod.png",
+                    ]
+                    itemsNames: [
+                        "Standard",
+                        "Brush",
+                        "Selector",
+                        "CutMod",
+                    ]
+                    onItemSelectedChanged: playlistView.editMode = itemSelected
+
+                    placeholder: Snapper {
+                        id: brushSnapper
+                        height: editModeSelector.height - editModeSelector.rowContainer.height
+                        width: editModeSelector.width
+                        visible: playlistView.editMode === PlaylistView.EditMode.Brush
+                        currentIndex: 0
+                        onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
+                        rectBackground.border.width: 0
+                        rectBackground.color: "transparent"
+                    }
                 }
 
                 Item {
                     Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.5
-
-                    ModSelector {
-                        id: editModeSelector
-                        itemsPaths: [
-                            "qrc:/Assets/NormalMod.png",
-                            "qrc:/Assets/BrushMod.png",
-                            // "qrc:/Assets/SelectorMod.png",
-                            // "qrc:/Assets/CutMod.png",
-                        ]
-                        itemsNames: [
-                            "Standard",
-                            "Brush",
-                        ]
-                        width: parent.width / 2
-                        height: parent.height / 1.25
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        onItemSelectedChanged: playlistView.editMode = itemSelected
-                    }
+                    Layout.preferredWidth: parent.width * 0.375
+                    Layout.alignment: Qt.AlignHCenter
 
                     Snapper {
-                        id: brushSnapper
-                        visible: playlistView.editMode === PlaylistView.EditMode.Brush
-                        x: parent.width / 2
+                        id: snapper
+                        height: parent.height * 0.4
+                        width: parent.width
+                        currentIndex: 4
                         anchors.verticalCenter: parent.verticalCenter
-                        width: parent.height
-                        height: parent.height / 2
-                        currentIndex: 0
 
-                        onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
+                        onActivated: {
+                            contentView.placementBeatPrecisionScale = currentValue
+                            contentView.placementBeatPrecisionLastWidth = 0
+                        }
                     }
+                }
+
+                ArrowNextPrev {
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: parent.width * 0.25
+                    Layout.alignment: Qt.AlignHCenter
                 }
             }
         }
