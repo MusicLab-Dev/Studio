@@ -45,7 +45,7 @@ Rectangle {
 
         Component.onCompleted: workspaceFoldButton.activated = index === 0
 
-        TextField {
+        DefaultTextInput {
             id: workspaceName
             width: parent.width - workspaceFoldButton.width - workspaceFoldButton.x - editModeButton.width * 2
             x: workspaceFoldButton.width + workspaceFoldButton.x

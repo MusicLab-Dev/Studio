@@ -2,6 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 TextField {
+    readonly property bool cancelKeyboardEventsOnFocus: true
+
     id: control
     leftPadding: 0
     placeholderTextColor: "lightgrey"

@@ -34,6 +34,8 @@ void KeyboardEventListener::setEnabled(const bool value) noexcept
     if (_enabled == value)
         return;
     _enabled = value;
+    if (!_enabled)
+        stopAllPlayingNotes();
     emit enabledChanged();
 }
 

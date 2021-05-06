@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-TextField {
+DefaultTextInput {
     property real bottomRange: 0.0
     property real topRange: 1000000.0
 

@@ -13,6 +13,7 @@ import "../ModulesView"
 import "../Modules/Workspaces"
 
 Window {
+    id: mainWindow
     visible: true
     width: 1280
     height: 720
@@ -48,6 +49,8 @@ Window {
     EventDispatcher {
         id: eventDispatcher
 
-        keyboardListener.enabled: false
+        keyboardListener.enabled: {
+            mainWindow.activeFocusItem ? !(mainWindow.activeFocusItem["cancelKeyboardEventsOnFocus"] === true) : true
+        }
     }
 }

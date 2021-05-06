@@ -79,7 +79,7 @@ Item {
 //             y: parent.height / 2 - height / 2
 //         }
 
-//         TextField {
+//         DefaultTextInput {
 //             id: workspaceName
 //             width: parent.width - workspaceFoldButton.width - workspaceFoldButton.x - editModeButton.width * 2
 //             x: workspaceFoldButton.width + workspaceFoldButton.x

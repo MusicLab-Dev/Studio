@@ -34,7 +34,7 @@ Item {
 
 
 
-    TextField {
+    DefaultTextInput {
         id: textfield
         anchors.right: parent.right
         width: 200
@@ -44,7 +44,7 @@ Item {
         }
     }
 
-    TextField {
+    DefaultTextInput {
         id: textfieldCategory
         y: 100
         anchors.right: parent.right

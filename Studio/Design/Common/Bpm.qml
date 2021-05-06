@@ -21,7 +21,7 @@ DefaultSectionWrapper {
 //             app.project.bpm = value
 //         }
 //     }
-   TextField {
+   DefaultTextInput {
        id: name
        anchors.centerIn: parent
        text: qsTr("140:000")
