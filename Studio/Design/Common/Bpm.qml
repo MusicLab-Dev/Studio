@@ -7,35 +7,32 @@ Rectangle {
     border.width: 2
     radius: 5
 
-    SpinBox {
-        anchors.centerIn: parent
-//        text: qsTr("140:000")
-//        font.pixelSize: parent.height * 0.75
-//        color: "white"
-        from: 10
-        to: 300
-        value: app.project.bpm
+//     SpinBox {
+//         anchors.centerIn: parent
+// //        text: qsTr("140:000")
+// //        font.pixelSize: parent.height * 0.75
+// //        color: "white"
+//         from: 10
+//         to: 300
+//         value: app.project.bpm
 
-        onValueModified: {
-            // if (app.currentPlayer)
-            //     app.currentPlayer.prepareForBPMChange()
-            app.project.bpm = value
-        }
-    }
-//    TextEdit {
-//        id: name
-//        anchors.centerIn: parent
-//        text: qsTr("140:000")
-//        font.pixelSize: parent.height * 0.75
-//        color: "white"
-//        validator: DoubleValidator {
+//         onValueModified: {
+//             // if (app.currentPlayer)
+//             //     app.currentPlayer.prepareForBPMChange()
+//             app.project.bpm = value
+//         }
+//     }
+   TextField {
+       id: name
+       anchors.centerIn: parent
+       text: qsTr("140:000")
+       font.pixelSize: parent.height * 0.75
+       color: "white"
 
-//        }
-
-//        onEditingFinished: {
-//            app.project.bpm = text
-//        }
-//    }
+    //    onEditingFinished: {
+    //        app.project.bpm = text
+    //    }
+   }
 /*
     Rectangle {
         height: parent.height* 0.25

@@ -7,6 +7,28 @@
 
 #include "EventDispatcher.hpp"
 
+KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher, QObject *parent)
+    : AEventListener(dispatcher, parent)
+{
+    QGuiApplication::instance()->installEventFilter(this);
+
+    /**  -- DEBUG -- */
+    set(AEventListener::Event{AEventListener::Event::NOTE_0, 81});
+    set(AEventListener::Event{AEventListener::Event::NOTE_1, 83});
+    set(AEventListener::Event{AEventListener::Event::NOTE_2, 68});
+    set(AEventListener::Event{AEventListener::Event::NOTE_3, 70});
+    set(AEventListener::Event{AEventListener::Event::NOTE_4, 71});
+    set(AEventListener::Event{AEventListener::Event::NOTE_5, 72});
+    set(AEventListener::Event{AEventListener::Event::NOTE_6, 74});
+    set(AEventListener::Event{AEventListener::Event::NOTE_7, 75});
+    set(AEventListener::Event{AEventListener::Event::NOTE_8, 76});
+    set(AEventListener::Event{AEventListener::Event::NOTE_9, 77});
+    set(AEventListener::Event{AEventListener::Event::NOTE_10, 66});
+    set(AEventListener::Event{AEventListener::Event::NOTE_11, 78});
+    set(AEventListener::Event{AEventListener::Event::OCTAVE_UP, 87});
+    set(AEventListener::Event{AEventListener::Event::OCTAVE_DOWN, 88});
+}
+
 void KeyboardEventListener::set(const Event &e)
 {
     beginResetModel();
@@ -30,21 +52,22 @@ int KeyboardEventListener::find(int input)
 bool KeyboardEventListener::eventFilter(QObject *object, QEvent *event)
 {
     auto type = event->type();
-    if (type != QEvent::KeyPress && type != QEvent::KeyRelease)
+    if ((type != QEvent::KeyPress && type != QEvent::KeyRelease))
         return QObject::eventFilter(object, event);
     QKeyEvent *keyEvent = reinterpret_cast<QKeyEvent*>(event);
     if (keyEvent->isAutoRepeat())
         return true;
     auto key = keyEvent->key();
     auto it = _activeKeys.find(key);
+    bool catched = false;
     if (event->type() == QEvent::KeyPress && it == _activeKeys.end()) {
-        sendSignals(key, true);
+        catched = sendSignals(key, true);
         _activeKeys.push(key);
     } else if (event->type() == QEvent::KeyRelease && it != _activeKeys.end()) {
-        sendSignals(key, false);
+        catched = sendSignals(key, false);
         _activeKeys.erase(it);
     }
-    return true;
+    return catched;
 }
 
 bool KeyboardEventListener::sendSignals(int key, bool value)
@@ -115,12 +138,12 @@ bool KeyboardEventListener::sendSignals(int key, bool value)
                 emit _dispatcher->stopPlaylist(value);
                 break;
             default:
-                break;
+                return false;
             }
-            break;
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 void KeyboardEventListener::stopAllPlayingNotes(void)

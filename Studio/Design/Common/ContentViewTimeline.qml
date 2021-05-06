@@ -26,7 +26,6 @@ Rectangle {
         anchors.left: snapper.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        clip: true
 
         id: timelineArea
 
@@ -94,6 +93,13 @@ Rectangle {
             visible: contentView.hasLoop
             color: themeManager.accentColor
 
+            Rectangle {
+                x: parent.width / 2
+                width: 1
+                height: contentView.height
+                color: themeManager.accentColor
+            }
+
             MouseArea {
                 anchors.fill: parent
                 drag.target: parent
@@ -128,6 +134,13 @@ Rectangle {
             radius: width / 2
             visible: contentView.hasLoop
             color: themeManager.accentColor
+
+            Rectangle {
+                x: parent.width / 2
+                width: 1
+                height: contentView.height
+                color: themeManager.accentColor
+            }
 
             MouseArea {
                 anchors.fill: parent
@@ -171,6 +184,7 @@ Rectangle {
             width: parent.width
             height: parent.height
             model: barReducedModel
+            clip: true
 
             delegate: Column {
                 readonly property int reducedIndex: timelineRepeater.lastHiddenBarIndex + index * (timelineRepeater.barSkipStep + 1)

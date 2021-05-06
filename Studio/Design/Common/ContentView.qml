@@ -247,6 +247,7 @@ Item {
         width: 20
         height: surfaceContentGrid.height
         x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision - width / 2
+        z: 3
     }
 
     Rectangle {
