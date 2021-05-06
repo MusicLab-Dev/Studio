@@ -51,7 +51,7 @@ Item {
         property real octave: 5
 
         target: eventDispatcher
-        enabled: moduleIndex == componentSelected
+        enabled: moduleIndex === componentSelected
 
         function onNote0(pressed) { launch(pressed, 0) }
         function onNote1(pressed) { launch(pressed, 1) }
