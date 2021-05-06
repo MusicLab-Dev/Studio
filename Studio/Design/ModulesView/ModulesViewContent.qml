@@ -56,7 +56,7 @@ Item {
 
         onReleased: globalMenu.popup()
 
-        Menu {
+        DefaultMenu {
             id: globalMenu
 
             Action {

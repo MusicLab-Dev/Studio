@@ -19,5 +19,6 @@
         <file>DefaultSpinBox.qml</file>
         <file>DefaultImageButtonDefaultColor.qml</file>
         <file>DefaultPotentiometer.qml</file>
+        <file>DefaultMenu.qml</file>
     </qresource>
 </RCC>
