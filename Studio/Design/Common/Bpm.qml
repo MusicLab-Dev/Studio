@@ -1,11 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Rectangle {
-    color: themeManager.backgroundColor
-    border.color: "white"
-    border.width: 2
-    radius: 5
+import "../Default"
+
+DefaultSectionWrapper {
+    label: "bpm"
 
 //     SpinBox {
 //         anchors.centerIn: parent

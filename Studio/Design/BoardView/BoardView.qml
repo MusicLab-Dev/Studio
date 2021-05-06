@@ -9,8 +9,7 @@ BoardBackground {
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) { return false }
 
     id: boardViewBackground
-    color: "#001E36"
-    radius: 30
+    color: themeManager.foregroundColor
 
     BoardViewTitle {
         id: boardViewTitle
@@ -45,7 +44,7 @@ BoardBackground {
         text: "Back"
         font.pointSize: 14
         font.weight: Font.DemiBold
-        color: closeBtn.closeButtonHovered ? "#31A8FF" : "#FFFFFF"
+        color: closeBtn.closeButtonHovered ? themeManager.foreground : "#FFFFFF"
         opacity: closeBtn.closeButtonHovered ? 1 : 0.7
         visible: boardControlsView.visible
 

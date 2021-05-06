@@ -15,6 +15,13 @@ ColumnLayout {
         Cut
     }
 
+    enum TweakMode {
+        Regular,
+        Velocity,
+        Tunning,
+        AfterTouch
+    }
+
     property string moduleName: node && partition ? node.name + " - " + partition.name : "Selecting plugin"
     property int moduleIndex: -1
     property NodeModel node: null
@@ -22,6 +29,8 @@ ColumnLayout {
     property int partitionIndex: 0
     property alias player: sequencerViewFooter.player
     property int editMode: SequencerView.EditMode.Regular
+    property int tweakMode: SequencerView.TweakMode.Regular
+    property alias tweaker: sequencerViewFooter.tweaker
 
     function onNodeDeleted(targetNode) {
         if (node === targetNode || node.isAParent(targetNode)) {
@@ -121,11 +130,11 @@ ColumnLayout {
     }
 
     Keys.onPressed: {
-        if (event.key == Qt.Key_A)
+        if (event.key === Qt.Key_A)
             player.stop()
-        else if (event.key == Qt.Key_Z)
+        else if (event.key === Qt.Key_Z)
             player.replay()
-        else if (event.key == Qt.Key_E)
+        else if (event.key === Qt.Key_E)
             player.playOrPause()
     }
 
@@ -134,27 +143,38 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.preferredWidth: parent.width
-        Layout.preferredHeight: parent.height * 0.1
+        Layout.preferredHeight: parent.height * 0.15
         z: 1
     }
 
-    SequencerContentView {
-        id: contentView
+    Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: parent.height * 0.8
+        Layout.preferredHeight: parent.height * 0.7
         Layout.preferredWidth: parent.width
 
-        onTimelineBeginMove: player.timelineBeginMove(target)
-        onTimelineMove: player.timelineMove(target)
-        onTimelineEndMove: player.timelineEndMove()
+        SequencerContentView {
+            id: contentView
+            anchors.fill: parent
+
+            onTimelineBeginMove: player.timelineBeginMove(target)
+            onTimelineMove: player.timelineMove(target)
+            onTimelineEndMove: player.timelineEndMove()
+        }
+
+        SequencerContentTweakView {
+            visible: tweakMode === SequencerView.TweakMode.Velocity || tweakMode === SequencerView.TweakMode.Tunning
+            y: tweakMode > SequencerView.TweakMode.Regular ? parent.height - height : parent.height
+            width: parent.width
+            height: parent.height / 2
+        }
     }
 
     SequencerViewFooter {
         id: sequencerViewFooter
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.preferredHeight: parent.height * 0.1
+        Layout.preferredHeight: parent.height * 0.15
         Layout.preferredWidth: parent.width
     }
 }
