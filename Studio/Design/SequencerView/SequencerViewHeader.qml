@@ -112,34 +112,38 @@ Rectangle {
                         anchors.fill: parent
                         spacing: 3
 
-                        Row {
+                        Item {
                             Layout.preferredHeight: parent.height * 0.4
                             Layout.preferredWidth: parent.width
 
-                            PartitionComboBox {
-                                id: partitionComboBox
-                                width: parent.width - parent.height
-                                height: parent.height
-                                Layout.alignment: Qt.AlignVCenter
-                                partitions: sequencerView.node ? sequencerView.node.partitions : null
-                                currentIndex: sequencerView.partitionIndex
+                            RowLayout {
+                                spacing: 5
+                                anchors.fill: parent
 
-                                onActivated: {
-                                    sequencerView.partitionIndex = index
-                                    sequencerView.partition = sequencerView.node.partitions.getPartition(index)
+                                PartitionComboBox {
+                                    id: partitionComboBox
+                                    Layout.preferredWidth: parent.width * 0.75
+                                    Layout.preferredHeight: parent.height
+                                    partitions: sequencerView.node ? sequencerView.node.partitions : null
+                                    currentIndex: sequencerView.partitionIndex
+
+                                    onActivated: {
+                                        sequencerView.partitionIndex = index
+                                        sequencerView.partition = sequencerView.node.partitions.getPartition(index)
+                                    }
                                 }
-                            }
 
-                            AddButton {
-                                id: addBtn
-                                height: parent.height
-                                width: height
+                                AddButton {
+                                    id: addBtn
+                                    Layout.preferredWidth: parent.height
+                                    Layout.preferredHeight: parent.height
 
-                                onReleased: {
-                                    sequencerView.player.stop()
-                                    if (sequencerView.node.partitions.add()) {
-                                        sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
-                                        sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
+                                    onReleased: {
+                                        sequencerView.player.stop()
+                                        if (sequencerView.node.partitions.add()) {
+                                            sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
+                                            sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
+                                        }
                                     }
                                 }
                             }
