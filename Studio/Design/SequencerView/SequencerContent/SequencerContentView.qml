@@ -7,7 +7,7 @@ ContentView {
     property alias pianoView: pianoView
 
     id: contentView
-    xOffsetMin: sequencerView.partition ? sequencerView.partition.latestNote * -pixelsPerBeatPrecision : 0
+    xOffsetMin: sequencerView.partition ? Math.max(sequencerView.partition.latestNote, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0
     yOffsetMin: pianoView.totalHeight > surfaceContentGrid.height ? surfaceContentGrid.height - pianoView.totalHeight : 0
     yZoom: 0.05
     yZoomMin: 15
