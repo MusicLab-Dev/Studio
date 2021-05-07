@@ -16,8 +16,8 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(QColor contentColor READ contentColor NOTIFY contentColorChanged)
-    Q_PROPERTY(QColor disabledColor READ disabledColor NOTIFY disabledColorChanged)
     Q_PROPERTY(QColor accentColor READ accentColor NOTIFY accentColorChanged)
+    Q_PROPERTY(QColor timelineColor READ timelineColor NOTIFY timelineColorChanged)
 
 public:
     /** @brief Preconfigured themes */
@@ -49,8 +49,8 @@ public:
     [[nodiscard]] QColor backgroundColor(void) const noexcept { return _backgroundColor; }
     [[nodiscard]] QColor foregroundColor(void) const noexcept { return _foregroundColor; }
     [[nodiscard]] QColor contentColor(void) const noexcept { return _contentColor; }
-    [[nodiscard]] QColor disabledColor(void) const noexcept { return _disabledColor; }
     [[nodiscard]] QColor accentColor(void) const noexcept { return _accentColor; }
+    [[nodiscard]] QColor timelineColor(void) const noexcept { return _timelineColor; }
 
 public slots:
     /** @brief Get a color from color chain using an index (on overflow, index %= colorChainCount) */
@@ -64,17 +64,16 @@ signals:
     void backgroundColorChanged(void);
     void foregroundColorChanged(void);
     void contentColorChanged(void);
-    void disabledColorChanged(void);
     void accentColorChanged(void);
+    void timelineColorChanged(void);
 
 private:
     Theme _theme { Theme::Classic };
     QColor _backgroundColor {};
     QColor _foregroundColor {};
     QColor _contentColor {};
-    QColor _disabledColor {};
     QColor _accentColor {};
-    QColor _lineColor {};
+    QColor _timelineColor {};
 
     /** @brief Update colors */
     void updateThemeColors(void);

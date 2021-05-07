@@ -10,27 +10,24 @@ struct ThemePack
     QColor background {};
     QColor foreground {};
     QColor content {};
-    QColor disabled {};
     QColor accent {};
-    QColor line {};
+    QColor timeline {};
 };
 
 static const ThemePack ClassicThemePack {
-    /* background: */ "#3E4756",
-    /* foreground: */ "#001E36",
+    /* background: */ "#FFFFFF",
+    /* foreground: */ "#355079",
     /* content: */ "#FFFFFF",
-    /* disabled: */ "#C4C4C4",
-    /* accent: */ "#31A8FF",
-    /* line: */ "#00000"
+    /* accent: */ "#00ECBA",
+    /* timeline: */ "#31A8FF",
 };
 
 static const ThemePack DarkThemePack {
     /* background: */ "#525252",
     /* foreground: */ "#242424",
     /* content: */ "#FFFFFF",
-    /* disabled: */ "#C4C4C4",
     /* accent: */ "#31A8FF",
-    /* line: */ "#FFFFFF"
+    /* timeline: */ "#00ECBA",
 };
 
 void ThemeManager::setTheme(const Theme theme)
@@ -48,9 +45,8 @@ void ThemeManager::updateThemeColors(void)
         _backgroundColor = pack.background;
         _foregroundColor = pack.foreground;
         _contentColor = pack.content;
-        _disabledColor = pack.disabled;
         _accentColor = pack.accent;
-        _lineColor = pack.line;
+        _timelineColor = pack.timeline;
     };
 
     switch (theme()) {
@@ -67,8 +63,8 @@ void ThemeManager::updateThemeColors(void)
     emit backgroundColorChanged();
     emit foregroundColorChanged();
     emit contentColorChanged();
-    emit disabledColorChanged();
     emit accentColorChanged();
+    emit timelineColorChanged();
 }
 
 static const QColor ColorChain[] = {
