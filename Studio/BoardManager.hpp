@@ -13,6 +13,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 // Lexo headers
 #include <Core/Vector.hpp>
@@ -105,9 +106,11 @@ private:
     fd_set _readFds;
     int _maxFd { 0 };
 
-    std::unordered_map<InterfaceIndex, std::pair<int, int>> _interfaces {}; // [index] = { masterSocket, broadcastSocket }
+    std::unordered_map<InterfaceIndex, std::pair<Socket, Socket>> _interfaces {}; // [index] = { tcpSocket, udpSocket }
     Core::TinyVector<DirectClient> _clients {};
     Core::Vector<std::shared_ptr<Board>, int> _boards {}; // TODO: Add allocator to _boards
+
+    std::vector<NetworkAddress> _discoveredAddress {};
 
     NetworkBuffer _networkBuffer;
     std::size_t _writeIndex { 0 };
@@ -132,7 +135,7 @@ private:
     void discoveryEmit(void);
 
     // Test function
-    void testDiscoveryScan(void);
+    void discoveryScan(void);
 
     // Board network utils
 
@@ -154,10 +157,10 @@ private:
     [[nodiscard]] Socket createUdpBroadcastSocket(const InterfaceIndex interfaceIndex, const std::string &broadcastAddress);
 
     /** @brief Scan and register new USB network interfaces */
-    void processNewUsbInterfaces(const std::vector<std::tuple<InterfaceIndex, std::string, std::string>> &usbInterfaces);
+    void processNewUsbInterfaces(const std::vector<std::pair<InterfaceIndex, std::string>> &usbInterfaces);
 
     /** @brief List available network interfaces with their broadcast address */
-    [[nodiscard]] std::vector<std::tuple<InterfaceIndex, std::string, std::string>> getUsbNetworkInterfaces(void);
+    [[nodiscard]] std::vector<std::pair<InterfaceIndex, std::string>> getUsbNetworkInterfaces(void);
 
     // Connections utils
 

@@ -82,35 +82,6 @@ inline void closeSocket(const Socket socket)
     #endif
 }
 
-inline void setSocketBroadcast(const Socket socket)
-{
-    int ret = 0;
-
-    #ifdef WIN32
-        const char broadcast = 1;
-        ret = ::setsockopt(
-            socket,
-            SOL_SOCKET,
-            SO_BROADCAST,
-            &broadcast,
-            sizeof(broadcast)
-        );
-    #else
-        const int broadcast = 1;
-        ret = ::setsockopt(
-            socket,
-            SOL_SOCKET,
-            SO_BROADCAST,
-            &broadcast,
-            sizeof(broadcast)
-        );
-    #endif
-    if (ret < 0) {
-        closeSocket(socket);
-        throw std::runtime_error(std::strerror(errno));
-    }
-}
-
 inline void setSocketReusable(const Socket socket)
 {
     int ret = 0;
@@ -234,7 +205,7 @@ inline void enableSocketBroadcast(const Socket socket)
             sizeof(broadcast)
         );
     #else
-        int broadcast = 1;
+        const int broadcast = 1;
         ret = ::setsockopt(
             socket,
             SOL_SOCKET,
@@ -344,7 +315,7 @@ inline DataSize sendSocket(const Socket socket, std::uint8_t *buffer, DataSize d
     return ret;
 }
 
-inline DataSize sendToSocket(const Socket socket, NetworkAddress &address, std::uint8_t *buffer, DataSize dataSize)
+inline DataSize sendToSocket(const Socket socket, const NetworkAddress &address, std::uint8_t *buffer, DataSize dataSize)
 {
     DataSize ret = 0;
 
@@ -354,7 +325,7 @@ inline DataSize sendToSocket(const Socket socket, NetworkAddress &address, std::
             reinterpret_cast<const char *>(buffer),
             dataSize,
             0,
-            reinterpret_cast<sockaddr *>(&address),
+            reinterpret_cast<const sockaddr *>(&address),
             sizeof(address)
         );
     #else
@@ -363,7 +334,7 @@ inline DataSize sendToSocket(const Socket socket, NetworkAddress &address, std::
             buffer,
             dataSize,
             0,
-            reinterpret_cast<sockaddr *>(&address),
+            reinterpret_cast<const sockaddr *>(&address),
             sizeof(address)
         );
     #endif

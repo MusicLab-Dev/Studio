@@ -40,7 +40,7 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     // Set socket option for UDP broadcast socket
     setSocketReusable(_udpBroadcastSocket);
     setSocketNonBlocking(_udpBroadcastSocket);
-    setSocketBroadcast(_udpBroadcastSocket);
+    enableSocketBroadcast(_udpBroadcastSocket);
 
     // Create the broadcast address
     NetworkAddress udpBroadcastAddress;
@@ -127,9 +127,9 @@ void BoardManager::tick(void)
     processDirectClients();
 }
 
-void BoardManager::testDiscoveryScan(void)
+void BoardManager::discoveryScan(void)
 {
-    std::cout << "testDiscoveryScan" << std::endl;
+    std::cout << "BoardManager::discoveryScan" << std::endl;
 
     // Sender address
     NetworkAddress udpSenderAddress;
@@ -150,27 +150,34 @@ void BoardManager::testDiscoveryScan(void)
         std::cout << "RECVFROM ERROR" << std::endl;
         return;
     }
-    std::cout << "Read size: " << readSize << std::endl;
-    std::cout << "UDP Sender address: " << ::inet_ntoa(udpSenderAddress.sin_addr) << std::endl;
+    // Check if the address is already discovered
+    auto it = std::find_if(
+        _discoveredAddress.begin(),
+        _discoveredAddress.end(),
+        [&](const auto &address) { return address.sin_addr.s_addr == udpSenderAddress.sin_addr.s_addr; }
+    );
+    if (it != _discoveredAddress.end())
+        return;
+    _discoveredAddress.push_back(udpSenderAddress);
 }
 
 void BoardManager::discover(void)
 {
     std::cout << "BoardManager::discover" << std::endl;
 
-    testDiscoveryScan();
+    discoveryScan();
 
-    // // vector<tuple<interfaceName, localAddress, broadcastAddress>>
-    // const auto usbInterfaces = getUsbNetworkInterfaces();
+    // vector<pair<interfaceName, ifaceAddress>>
+    const auto usbInterfaces = getUsbNetworkInterfaces();
 
     // // Process USB network interfaces only
-    // processNewUsbInterfaces(usbInterfaces);
+    processNewUsbInterfaces(usbInterfaces);
 
     // // Emit discovery packet on discovered network interfaces
-    // discoveryScanAndEmit();
+    discoveryEmit();
 
     // // Scan for new incomming connection(s) from discovered network interfaces
-    // processNewConnections();
+    processNewConnections();
 }
 
 void BoardManager::discoveryEmit(void)
@@ -185,36 +192,50 @@ void BoardManager::discoveryEmit(void)
     packet.connectionType = Protocol::ConnectionType::USB;
     packet.distance = 0;
 
-    for (const auto &networkInterface : _interfaces) {
+    for (const NetworkAddress &address : _discoveredAddress) {
+        std::cout << "Sending discovery packet to " << ::inet_ntoa(address.sin_addr) << std::endl;
 
-        Socket broadcastSocket { networkInterface.second.second };
-        NetworkAddress broadcastAddress;
-        Socklen len = sizeof(NetworkAddress);
-
-        DataSize ret = ::getsockname(
-            broadcastSocket,
-            reinterpret_cast<sockaddr *>(&broadcastAddress),
-            &len
+        const DataSize ret = sendToSocket(
+            _udpBroadcastSocket,
+            address,
+            reinterpret_cast<std::uint8_t *>(&packet),
+            sizeof(packet)
         );
         if (ret < 0) {
-            throw std::runtime_error(std::strerror(errno));
-        }
-
-        ret = sendToSocket(broadcastSocket, broadcastAddress, reinterpret_cast<std::uint8_t *>(&packet), sizeof(packet));
-        if (ret < 0) {
-            if (errno == ENODEV) {
-                /*
-                    sendto() has failed because the network interface is not valid anymore,
-                    so checking to remove the associated network.
-                */
-                std::cout << "INTERFACE DISCONNECTED" << std::endl;
-                removeInterfaceNetwork(networkInterface.first);
-            }
-            else {
-                throw std::runtime_error(std::strerror(errno));
-            }
+            std::cout << "SENDTO ERROR" << std::endl;
         }
     }
+
+    // for (const auto &networkInterface : _interfaces) {
+
+    //     Socket broadcastSocket { networkInterface.second.second };
+    //     NetworkAddress broadcastAddress;
+    //     Socklen len = sizeof(NetworkAddress);
+
+    //     DataSize ret = ::getsockname(
+    //         broadcastSocket,
+    //         reinterpret_cast<sockaddr *>(&broadcastAddress),
+    //         &len
+    //     );
+    //     if (ret < 0) {
+    //         throw std::runtime_error(std::strerror(errno));
+    //     }
+
+    //     ret = sendToSocket(broadcastSocket, broadcastAddress, reinterpret_cast<std::uint8_t *>(&packet), sizeof(packet));
+    //     if (ret < 0) {
+    //         if (errno == ENODEV) {
+    //             /*
+    //                 sendto() has failed because the network interface is not valid anymore,
+    //                 so checking to remove the associated network.
+    //             */
+    //             std::cout << "INTERFACE DISCONNECTED" << std::endl;
+    //             removeInterfaceNetwork(networkInterface.first);
+    //         }
+    //         else {
+    //             throw std::runtime_error(std::strerror(errno));
+    //         }
+    //     }
+    // }
 }
 
 Socket BoardManager::createTcpMasterSocket(const InterfaceIndex interfaceIndex, const std::string &localAddress)
@@ -256,6 +277,8 @@ Socket BoardManager::createUdpBroadcastSocket(const InterfaceIndex interfaceInde
     if (broadcastSocket < 0)
         throw std::runtime_error(std::strerror(errno));
 
+    setSocketReusable(broadcastSocket);
+
     // Set broadcast enabled on the socket
     enableSocketBroadcast(broadcastSocket);
 
@@ -271,31 +294,30 @@ Socket BoardManager::createUdpBroadcastSocket(const InterfaceIndex interfaceInde
     return broadcastSocket;
 }
 
-void BoardManager::processNewUsbInterfaces(const std::vector<std::tuple<InterfaceIndex, std::string, std::string>> &usbInterfaces)
+void BoardManager::processNewUsbInterfaces(const std::vector<std::pair<InterfaceIndex, std::string>> &usbInterfaces)
 {
     for (const auto &usbInterface : usbInterfaces) {
 
-        const InterfaceIndex interfaceIndex = std::get<0>(usbInterface);
-        const std::string &localAddress = std::get<1>(usbInterface);
-        const std::string &broadcastAddress = std::get<2>(usbInterface);
+        const InterfaceIndex interfaceIndex = usbInterface.first;
+        const std::string &ifaceAddress = usbInterface.second;
 
-        if (localAddress.substr(0, 7) != "169.254")
+        if (ifaceAddress.substr(0, 7) != "169.254")
             continue;
 
         if (_interfaces.find(interfaceIndex) == _interfaces.end()) {
 
             std::cout << "New USB interface detected, index: " << interfaceIndex << std::endl;
 
-            Socket masterSocket = createTcpMasterSocket(interfaceIndex, localAddress);
-            Socket broadcastSocket = createUdpBroadcastSocket(interfaceIndex, broadcastAddress);
-            _interfaces.insert( { interfaceIndex, { masterSocket, broadcastSocket } } );
+            Socket masterSocket = createTcpMasterSocket(interfaceIndex, ifaceAddress);
+            Socket udpSocket = createUdpBroadcastSocket(interfaceIndex, ifaceAddress);
+            _interfaces.insert( { interfaceIndex, { masterSocket, udpSocket } } );
         }
     }
 }
 
-std::vector<std::tuple<InterfaceIndex, std::string, std::string>> getWindowsNetworkInterfaces(void)
+std::vector<std::pair<InterfaceIndex, std::string>> getWindowsNetworkInterfaces(void)
 {
-    std::vector<std::tuple<InterfaceIndex, std::string, std::string>> interfaces {};
+    std::vector<std::pair<InterfaceIndex, std::string>> interfaces {};
 
     #ifdef WIN32
         #define MALLOC(x) HeapAlloc(GetProcessHeap(), 0, (x))
@@ -348,9 +370,9 @@ std::vector<std::tuple<InterfaceIndex, std::string, std::string>> getWindowsNetw
     return interfaces;
 }
 
-std::vector<std::tuple<InterfaceIndex, std::string, std::string>> getLinuxNetworkInterfaces(void)
+std::vector<std::pair<InterfaceIndex, std::string>> getLinuxNetworkInterfaces(void)
 {
-    std::vector<std::tuple<InterfaceIndex, std::string, std::string>> interfaces {};
+    std::vector<std::pair<InterfaceIndex, std::string>> interfaces {};
     #ifdef WIN32
         return interfaces;
     #else
@@ -368,18 +390,20 @@ std::vector<std::tuple<InterfaceIndex, std::string, std::string>> getLinuxNetwor
             if (family == AF_INET && (ifa->ifa_flags & IFF_BROADCAST) && ifa->ifa_ifu.ifu_broadaddr != nullptr) {
 
                 sockaddr_in *ifaceaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_addr);
-                sockaddr_in *broadaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_ifu.ifu_broadaddr);
+                // sockaddr_in *broadaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_ifu.ifu_broadaddr);
 
                 std::string interfaceName(ifa->ifa_name);
                 InterfaceIndex interfaceIndex = if_nametoindex(ifa->ifa_name);
-                std::string localAddress(::inet_ntoa(ifaceaddr->sin_addr));
-                std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
+                std::string ifaceAddress(::inet_ntoa(ifaceaddr->sin_addr));
 
-                std::cout << "index: " << interfaceIndex << '\n';
-                std::cout << "address: " << localAddress << '\n';
-                std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
+                // std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
 
-                interfaces.push_back({ interfaceIndex, localAddress, broadcastAddress });
+                std::cout << "index:\t" << interfaceIndex << '\n';
+                std::cout << "interface address:\t" << ifaceAddress << '\n';
+
+                // std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
+
+                interfaces.push_back({ interfaceIndex, ifaceAddress });
                 i++;
             }
         }
@@ -388,14 +412,14 @@ std::vector<std::tuple<InterfaceIndex, std::string, std::string>> getLinuxNetwor
     return interfaces;
 }
 
-std::vector<std::tuple<InterfaceIndex, std::string, std::string>> BoardManager::getUsbNetworkInterfaces(void)
+std::vector<std::pair<InterfaceIndex, std::string>> BoardManager::getUsbNetworkInterfaces(void)
 {
     std::cout << "BoardManager::getUsbNetworkInterfaces" << std::endl;
 
-    std::vector<std::tuple<InterfaceIndex, std::string, std::string>> interfaces {};
+    std::vector<std::pair<InterfaceIndex, std::string>> interfaces {};
 
     #ifdef WIN32
-        interfaces = getWindowsNetworkInterfaces();
+        // interfaces = getWindowsNetworkInterfaces();
     #else
         interfaces = getLinuxNetworkInterfaces();
     #endif
