@@ -70,7 +70,7 @@ public:
     explicit NodeModel(Audio::Node *node, QObject *parent = nullptr) noexcept;
 
     /** @brief Virtual destructor */
-    ~NodeModel(void) noexcept override = default;
+    ~NodeModel(void) noexcept override;
 
     /** @brief Get the parent node if it exists */
     [[nodiscard]] NodeModel *parentNode(void) noexcept

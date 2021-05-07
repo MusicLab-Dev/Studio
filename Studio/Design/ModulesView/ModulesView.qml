@@ -70,6 +70,12 @@ Rectangle {
         }
     }
 
+    function moveModule(from, to) {
+        modulesViewContent.getModule(from).moduleIndex = to
+        modulesViewContent.getModule(to).moduleIndex = from
+        modules.move(from, to, 1)
+    }
+
     id: modulesView
     color: "#474747"
 

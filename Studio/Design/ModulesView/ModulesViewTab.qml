@@ -9,8 +9,8 @@ Rectangle {
     property string tabTitle
 
     id: moduleViewTab
-    x: menuButton.width + (mouseArea.pressed ? x : index * tabWidth)
-    y: mouseArea.pressed ? y : mouseArea.y
+    x: menuButton.width + (index * tabWidth)
+    // y: mouseArea.pressed ? y : mouseArea.y
     color: componentSelected === index ? themeManager.foregroundColor : themeManager.backgroundColor
     border.color: "black"
     Drag.hotSpot.x: width / 2
@@ -25,7 +25,7 @@ Rectangle {
 
 
     DropArea {
-        width: parent.width / 2
+        width: parent.width
         height: parent.height
         anchors.centerIn: parent
         enabled: index !== componentSelected
@@ -33,7 +33,7 @@ Rectangle {
         onEntered: {
             if (!animationX.running) {
                 var indexTmp = index
-                modules.move(index, componentSelected, 1)
+                modulesView.moveModule(index, componentSelected)
                 componentSelected = indexTmp
             }
         }
@@ -92,12 +92,12 @@ Rectangle {
     }
 
 
-    Behavior on x {
-        SpringAnimation {
-            id: animationX
-            spring: 2
-            damping: 0.3
-            duration: 400
-        }
-    }
+    // Behavior on x {
+    //     SpringAnimation {
+    //         id: animationX
+    //         spring: 2
+    //         damping: 0.3
+    //         duration: 400
+    //     }
+    // }
 }
