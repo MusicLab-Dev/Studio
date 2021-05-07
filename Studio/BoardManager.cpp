@@ -5,11 +5,12 @@
 
 #include <QDebug>
 
+#include "NetworkLog.hpp"
 #include "BoardManager.hpp"
 
 BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
 {
-    std::cout << "BoardManager::BoardManager" << std::endl;
+    NETWORK_LOG("BoardManager::BoardManager");
 
     onTickRateChanged();
     onDiscoverRateChanged();
@@ -52,13 +53,13 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
         _tickTimer.start();
         _discoverTimer.start();
     } catch (const std::exception &e) {
-        std::cout << "BoardManager::BoardManager: couldn't bind socket " << e.what() << std::endl;
+        NETWORK_LOG("BoardManager::BoardManager: couldn't bind socket ", e.what());
     }
 }
 
 BoardManager::~BoardManager(void)
 {
-    std::cout << "BoardManager::~BoardManager" << std::endl;
+    NETWORK_LOG("BoardManager::~BoardManager");
 
     #ifdef WIN32
         WSACleanup();
@@ -75,7 +76,7 @@ QHash<int, QByteArray> BoardManager::roleNames(void) const
 
 int BoardManager::rowCount(const QModelIndex &) const
 {
-    qDebug() << "Board size" << _boards.size();
+    NETWORK_LOG("Board size");
     return _boards.size();
 }
 
@@ -123,7 +124,7 @@ void BoardManager::onDiscoverRateChanged(void)
 
 void BoardManager::tick(void)
 {
-    std::cout << "\nBoardManager::tick\n" << std::endl;
+    NETWORK_LOG("\nBoardManager::tick\n");
 
     // Prepare clients sockets for future operations using select()
     prepareSockets();
@@ -133,7 +134,7 @@ void BoardManager::tick(void)
 
 void BoardManager::discoveryScan(void)
 {
-    std::cout << "BoardManager::discoveryScan" << std::endl;
+    NETWORK_LOG("BoardManager::discoveryScan");
 
     // Sender address
     NetworkAddress udpSenderAddress;
@@ -148,10 +149,10 @@ void BoardManager::discoveryScan(void)
     );
     if (readSize < 0) {
         if (operationWouldBlock() == true) {
-            std::cout << "No UDP data on socket" << std::endl;
+            NETWORK_LOG("No UDP data on socket");
             return;
         }
-        std::cout << "RECVFROM ERROR" << std::endl;
+        NETWORK_LOG("RECVFROM ERROR");
         return;
     }
     // Check if the address is already discovered
@@ -167,7 +168,7 @@ void BoardManager::discoveryScan(void)
 
 void BoardManager::discover(void)
 {
-    std::cout << "BoardManager::discover" << std::endl;
+    NETWORK_LOG("BoardManager::discover");
 
     discoveryScan();
 
@@ -186,7 +187,7 @@ void BoardManager::discover(void)
 
 void BoardManager::discoveryEmit(void)
 {
-    std::cout << "BoardManager::discoveryEmit" << std::endl;
+    NETWORK_LOG("BoardManager::discoveryEmit");
 
     // Create the studio discovery packet
     Protocol::DiscoveryPacket packet;
@@ -197,7 +198,7 @@ void BoardManager::discoveryEmit(void)
     packet.distance = 0;
 
     for (const NetworkAddress &address : _discoveredAddress) {
-        std::cout << "Sending discovery packet to " << ::inet_ntoa(address.sin_addr) << std::endl;
+        NETWORK_LOG("Sending discovery packet to ", ::inet_ntoa(address.sin_addr));
 
         const DataSize ret = sendToSocket(
             _udpBroadcastSocket,
@@ -206,7 +207,7 @@ void BoardManager::discoveryEmit(void)
             sizeof(packet)
         );
         if (ret < 0) {
-            std::cout << "SENDTO ERROR" << std::endl;
+            NETWORK_LOG("SENDTO ERROR");
         }
     }
 
@@ -310,7 +311,7 @@ void BoardManager::processNewUsbInterfaces(const std::vector<std::pair<Interface
 
         if (_interfaces.find(interfaceIndex) == _interfaces.end()) {
 
-            std::cout << "New USB interface detected, index: " << interfaceIndex << std::endl;
+            NETWORK_LOG("New USB interface detected, index: ", interfaceIndex);
 
             Socket masterSocket = createTcpMasterSocket(interfaceIndex, ifaceAddress);
             Socket udpSocket = createUdpBroadcastSocket(interfaceIndex, ifaceAddress);
@@ -402,8 +403,8 @@ std::vector<std::pair<InterfaceIndex, std::string>> getLinuxNetworkInterfaces(vo
 
                 // std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
 
-                std::cout << "index:\t" << interfaceIndex << '\n';
-                std::cout << "interface address:\t" << ifaceAddress << '\n';
+                NETWORK_LOG("index:\t", interfaceIndex);
+                NETWORK_LOG("interface address:\t", ifaceAddress);
 
                 // std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
 
@@ -418,7 +419,7 @@ std::vector<std::pair<InterfaceIndex, std::string>> getLinuxNetworkInterfaces(vo
 
 std::vector<std::pair<InterfaceIndex, std::string>> BoardManager::getUsbNetworkInterfaces(void)
 {
-    std::cout << "BoardManager::getUsbNetworkInterfaces" << std::endl;
+    NETWORK_LOG("BoardManager::getUsbNetworkInterfaces");
 
     std::vector<std::pair<InterfaceIndex, std::string>> interfaces {};
 
@@ -451,14 +452,14 @@ void BoardManager::prepareSockets(void)
 
 void BoardManager::processNewConnections(void)
 {
-    std::cout << "BoardManager::processNewConnections" << '\n';
+    NETWORK_LOG("BoardManager::processNewConnections");
 
     NetworkAddress clientAddress;
     Socklen clientAddressLen = sizeof(clientAddress);
 
     for (const auto &networkInterface : _interfaces) {
 
-        std::cout << "Start accept on interface: " << networkInterface.first << std::endl;
+        NETWORK_LOG("Start accept on interface: ", networkInterface.first);
 
         Socket interfaceMasterSocket = networkInterface.second.first;
 
@@ -469,7 +470,7 @@ void BoardManager::processNewConnections(void)
         );
 
         if (clientSocket < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-            std::cout << "BoardManager::processNewConnections: No pending connection on socket" << std::endl;
+            NETWORK_LOG("BoardManager::processNewConnections: No pending connection on socket");
             continue;
         }
         else if (clientSocket < 0) {
@@ -479,7 +480,7 @@ void BoardManager::processNewConnections(void)
         setSocketNonBlocking(clientSocket);
         setSocketKeepAlive(clientSocket);
 
-        std::cout << "New connection from [" << inet_ntoa(clientAddress.sin_addr) << ':' << clientAddress.sin_port << ']' << std::endl;
+        NETWORK_LOG("New connection from [", inet_ntoa(clientAddress.sin_addr), ':', clientAddress.sin_port, ']');
 
         DirectClient directClient;
         directClient.socket = clientSocket;
@@ -559,7 +560,7 @@ void BoardManager::processClientInput(Socket &clientSocket)
 void BoardManager::processDirectClients(void)
 {
     if (_clients.empty()) {
-        std::cout << "BoardManager::processDirectClients: No client to process, return" << std::endl;
+        NETWORK_LOG("BoardManager::processDirectClients: No client to process, return");
         return;
     }
 
@@ -571,16 +572,16 @@ void BoardManager::processDirectClients(void)
     tv.tv_usec = 0;
     auto activity = ::select(_maxFd + 1, &_readFds, NULL, NULL, &tv);
     if (activity < 0 && errno != EINTR) {
-        std::cout << "BoardManager::processDirectClients::select: " << std::strerror(errno) << std::endl;
+        NETWORK_LOG("BoardManager::processDirectClients::select: ", std::strerror(errno));
         return;
     }
     else if (activity == 0) {
-        std::cout << "BoardManager::processDirectClients: No activity from any of the clients" << std::endl;
+        NETWORK_LOG("BoardManager::processDirectClients: No activity from any of the clients");
         return;
     }
 
     // Loop through direct clients and retrieve available data or remove them if disconnected
-    std::cout << "client list size IN: " << _clients.size() << std::endl;
+    NETWORK_LOG("client list size IN: ", _clients.size());
     for(auto it = _clients.begin(); it != _clients.end();) {
         if (FD_ISSET(it->socket, &_readFds)) {
             processClientInput(it->socket);
@@ -591,7 +592,7 @@ void BoardManager::processDirectClients(void)
         } else
             ++it;
     }
-    std::cout << "client list size OUT: " << _clients.size() << std::endl;
+    NETWORK_LOG("client list size OUT: ", _clients.size());
 }
 
 BoardID BoardManager::aquireIdentifier(void) noexcept

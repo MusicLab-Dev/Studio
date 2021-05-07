@@ -10,13 +10,13 @@
 #include <QTimer>
 
 // C++ standard library
-#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 // Lexo headers
 #include <Core/Vector.hpp>
+#include <Core/MacroUtils.hpp>
 #include <Protocol/Packet.hpp>
 #include <Protocol/Protocol.hpp>
 #include <Protocol/ConnectionProtocol.hpp>
@@ -99,6 +99,9 @@ signals:
 
     /** @brief Notify that the discover rate has changed */
     void discoverRateChanged(void);
+
+    /** @brief A board event has been processed, eventValue is [0, 1] */
+    void boardEvent(const BoardID boardID, const std::uint32_t controlIndex, const float eventValue);
 
 private:
     int _tickRate { 1000 };

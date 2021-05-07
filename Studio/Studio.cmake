@@ -73,6 +73,7 @@ set(StudioSources
     ${StudioDir}/SettingsListModelProxy.cpp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
+    ${StudioDir}/NetworkLog.hpp
     ${StudioDir}/BoardManager.hpp
     ${StudioDir}/BoardManager.cpp
     ${StudioDir}/Board.hpp
