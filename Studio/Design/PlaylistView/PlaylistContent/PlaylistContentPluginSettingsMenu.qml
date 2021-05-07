@@ -56,7 +56,7 @@ Menu {
                                 // Format the external input list
                                 var list = []
                                 for (var i = 0; i < filePicker.fileUrls.length; ++i)
-                                    list[i] = mainWindow.urlToString(filePicker.fileUrls[i].toString())
+                                    list[i] = mainWindow.urlToPath(filePicker.fileUrls[i].toString())
                                 // Add the node with external inputs
                                 var node = targetNode.addExternalInputs(pluginsView.selectedPath, list)
                                 if (node === null)
