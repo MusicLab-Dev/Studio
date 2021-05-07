@@ -25,9 +25,10 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     _identifierTable = new bool[256];
     std::memset(_identifierTable, 0, 256);
 
+    int ret = 0;
     #ifdef WIN32
         WSADATA WinsockData;
-        auto ret = WSAStartup(MAKEWORD(2, 2), &WinsockData);
+        ret = WSAStartup(MAKEWORD(2, 2), &WinsockData);
         if (ret < 0)
             throw std::runtime_error(std::strerror(errno));
     #endif
@@ -41,9 +42,7 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     // Set socket option for UDP broadcast socket
     setSocketReusable(_udpBroadcastSocket);
     setSocketNonBlocking(_udpBroadcastSocket);
-
-    int broadcast = 1;
-    ::setsockopt(_udpBroadcastSocket, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast));
+    setSocketBroadcast(_udpBroadcastSocket);
 
     // Create the broadcast address
     NetworkAddress udpBroadcastAddress;
@@ -52,14 +51,7 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     udpBroadcastAddress.sin_addr.s_addr = INADDR_ANY;
 
     // Bind the address to the socket
-    auto ret = ::bind(
-        _udpBroadcastSocket,
-        reinterpret_cast<const sockaddr *>(&udpBroadcastAddress),
-        sizeof(udpBroadcastAddress)
-    );
-    if (ret < 0) {
-        throw std::runtime_error(std::strerror(errno));
-    }
+    bindSocket(_udpBroadcastSocket, udpBroadcastAddress);
 }
 
 BoardManager::~BoardManager(void)
@@ -139,6 +131,8 @@ void BoardManager::tick(void)
 
 void BoardManager::testDiscoveryScan(void)
 {
+    std::cout << "testDiscoveryScan" << std::endl;
+
     // Sender address
     NetworkAddress udpSenderAddress;
     Socklen addressLen = sizeof(udpSenderAddress);
@@ -147,20 +141,19 @@ void BoardManager::testDiscoveryScan(void)
     Protocol::DiscoveryPacket packet;
 
     // Receive disco packet one by one
-    const auto readSize = ::recvfrom(
+    const auto readSize = recvFromSocket(
         _udpBroadcastSocket,
-        &packet,
-        sizeof(Protocol::DiscoveryPacket),
-        MSG_WAITALL,
-        reinterpret_cast<sockaddr *>(&udpSenderAddress),
-        reinterpret_cast<socklen_t *>(&udpSenderAddressLength)
+        reinterpret_cast<std::uint8_t *>(&packet),
+        sizeof(packet),
+        udpSenderAddress
     );
-    if (readSize < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-        std::cout << "No UDP data on socket" << std::endl;
+    if (readSize < 0) {
+        if (operationWouldBlock() == true) {
+            std::cout << "No UDP data on socket" << std::endl;
+            return;
+        }
+        std::cout << "RECVFROM ERROR" << std::endl;
         return;
-    }
-    else if (readSize < 0) {
-        throw std::runtime_error(std::strerror(errno));
     }
     std::cout << "Read size: " << readSize << std::endl;
     std::cout << "UDP Sender address: " << ::inet_ntoa(udpSenderAddress.sin_addr) << std::endl;

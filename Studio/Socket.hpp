@@ -82,6 +82,35 @@ inline void closeSocket(const Socket socket)
     #endif
 }
 
+inline void setSocketBroadcast(const Socket socket)
+{
+    int ret = 0;
+
+    #ifdef WIN32
+        const char broadcast = 1;
+        ret = ::setsockopt(
+            socket, 
+            SOL_SOCKET, 
+            SO_BROADCAST, 
+            &broadcast, 
+            sizeof(broadcast)
+        );
+    #else
+        const int broadcast = 1;
+        ret = ::setsockopt(
+            socket, 
+            SOL_SOCKET, 
+            SO_BROADCAST, 
+            &broadcast, 
+            sizeof(broadcast)
+        );
+    #endif
+    if (ret < 0) {
+        closeSocket(socket);
+        throw std::runtime_error(std::strerror(errno));
+    }
+}
+
 inline void setSocketReusable(const Socket socket)
 {
     int ret = 0;
@@ -260,6 +289,45 @@ inline DataSize recvSocket(const Socket socket, std::uint8_t *buffer, DataSize m
         ret = ::recv(socket, buffer, maxSize, 0);
     #endif
 
+    return ret;
+}
+
+inline bool operationWouldBlock(void)
+{
+    #ifdef WIN32
+        if (WSAGetLastError() == WSAEWOULDBLOCK)
+            return true;
+    #else
+        if (errno == EAGAIN || errno == EWOULDBLOCK)
+            return true
+    #endif
+    return false;
+}
+
+inline DataSize recvFromSocket(const Socket socket, std::uint8_t *buffer, DataSize maxSize, NetworkAddress &senderAddress)
+{
+    DataSize ret = 0;
+    Socklen addressLen = sizeof(senderAddress);
+
+    #ifdef WIN32
+        ret = ::recvfrom(
+            socket,
+            reinterpret_cast<char *>(buffer),
+            maxSize,
+            0,
+            reinterpret_cast<struct sockaddr *>(&senderAddress),
+            &addressLen
+        );
+    #else
+        ret = ::recvfrom(
+            socket,
+            buffer,
+            maxSize,
+            0,
+            reinterpret_cast<sockaddr *>(&senderAddress),
+            &addressLen
+        );
+    #endif
     return ret;
 }
 
