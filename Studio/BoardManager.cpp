@@ -25,11 +25,9 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     _identifierTable = new bool[256];
     std::memset(_identifierTable, 0, 256);
 
-    int ret = 0;
     #ifdef WIN32
         WSADATA WinsockData;
-        ret = WSAStartup(MAKEWORD(2, 2), &WinsockData);
-        if (ret < 0)
+        if (WSAStartup(MAKEWORD(2, 2), &WinsockData) < 0)
             throw std::runtime_error(std::strerror(errno));
     #endif
 
@@ -135,11 +133,8 @@ void BoardManager::testDiscoveryScan(void)
 
     // Sender address
     NetworkAddress udpSenderAddress;
-    Socklen addressLen = sizeof(udpSenderAddress);
-
     // DiscoveryPacket structure
     Protocol::DiscoveryPacket packet;
-
     // Receive disco packet one by one
     const auto readSize = recvFromSocket(
         _udpBroadcastSocket,

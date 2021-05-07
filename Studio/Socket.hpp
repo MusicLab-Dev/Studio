@@ -89,19 +89,19 @@ inline void setSocketBroadcast(const Socket socket)
     #ifdef WIN32
         const char broadcast = 1;
         ret = ::setsockopt(
-            socket, 
-            SOL_SOCKET, 
-            SO_BROADCAST, 
-            &broadcast, 
+            socket,
+            SOL_SOCKET,
+            SO_BROADCAST,
+            &broadcast,
             sizeof(broadcast)
         );
     #else
         const int broadcast = 1;
         ret = ::setsockopt(
-            socket, 
-            SOL_SOCKET, 
-            SO_BROADCAST, 
-            &broadcast, 
+            socket,
+            SOL_SOCKET,
+            SO_BROADCAST,
+            &broadcast,
             sizeof(broadcast)
         );
     #endif
@@ -299,7 +299,7 @@ inline bool operationWouldBlock(void)
             return true;
     #else
         if (errno == EAGAIN || errno == EWOULDBLOCK)
-            return true
+            return true;
     #endif
     return false;
 }
