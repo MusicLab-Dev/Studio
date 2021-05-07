@@ -31,6 +31,9 @@ class BoardManager : public QAbstractListModel
     Q_PROPERTY(int discoverRate READ discoverRate WRITE setDiscoverRate NOTIFY discoverRateChanged)
 
 public:
+    static constexpr Port LexoPort = 4242;
+
+
     /** @brief Enumeration of 'Board' roles */
     enum class Role {
         Instance = Qt::UserRole + 1,

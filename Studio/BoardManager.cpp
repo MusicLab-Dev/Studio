@@ -13,8 +13,6 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
 
     onTickRateChanged();
     onDiscoverRateChanged();
-    _tickTimer.start();
-    _discoverTimer.start();
     connect(this, &BoardManager::tickRateChanged, this, &BoardManager::onTickRateChanged);
     connect(this, &BoardManager::discoverRateChanged, this, &BoardManager::onDiscoverRateChanged);
     connect(&_tickTimer, &QTimer::timeout, this, &BoardManager::tick);
@@ -45,11 +43,17 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     // Create the broadcast address
     NetworkAddress udpBroadcastAddress;
     udpBroadcastAddress.sin_family = AF_INET;
-    udpBroadcastAddress.sin_port = ::htons(420);
+    udpBroadcastAddress.sin_port = ::htons(LexoPort);
     udpBroadcastAddress.sin_addr.s_addr = INADDR_ANY;
 
     // Bind the address to the socket
-    bindSocket(_udpBroadcastSocket, udpBroadcastAddress);
+    try {
+        bindSocket(_udpBroadcastSocket, udpBroadcastAddress);
+        _tickTimer.start();
+        _discoverTimer.start();
+    } catch (const std::exception &e) {
+        std::cout << "BoardManager::BoardManager: couldn't bind socket " << e.what() << std::endl;
+    }
 }
 
 BoardManager::~BoardManager(void)
@@ -286,7 +290,7 @@ Socket BoardManager::createUdpBroadcastSocket(const InterfaceIndex interfaceInde
     setSocketDevice(broadcastSocket, interfaceIndex);
 
     // Bind the UDP socket to the interface broadcast address
-    NetworkAddress udpBroadcastAddress = createNetworkAddress(420, broadcastAddress);
+    NetworkAddress udpBroadcastAddress = createNetworkAddress(LexoPort, broadcastAddress);
 
     // Bind the socket to the interface broadcast address
     bindSocket(broadcastSocket, udpBroadcastAddress);
