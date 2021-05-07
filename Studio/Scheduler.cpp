@@ -45,7 +45,7 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     _Instance = this;
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
-    setProcessParamByBlockSize(2048, _audioSpecs.sampleRate);
+    setProcessParamByBlockSize(512, _audioSpecs.sampleRate);
     setAudioBlockSize(_device.blockSize());
     _audioSpecs.processBlockSize = processBlockSize();
     // connect(&_device, &Device::sampleRateChanged, this, &Scheduler::refreshAudioSpecs);
