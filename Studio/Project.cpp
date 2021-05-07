@@ -80,6 +80,8 @@ bool Project::saveAs(const QString &path) noexcept
 
 bool Project::loadFrom(const QString &path) noexcept
 {
+    Scheduler::Get()->stopAndWait();
+    recreateMasterMixer();
     ProjectSave psave(this);
     setPath(path);
     return psave.load();

@@ -100,6 +100,8 @@ Item {
         }
 
         FileDialog {
+            readonly property bool cancelKeyboardEventsOnFocus: true
+
             id: saveFileDialog
             title: qsTr("Save a project file")
             folder: shortcuts.home
@@ -114,6 +116,8 @@ Item {
         }
 
         FileDialog {
+            readonly property bool cancelKeyboardEventsOnFocus: true
+
             id: loadFileDialog
             title: qsTr("Choose a file")
             folder: shortcuts.home
