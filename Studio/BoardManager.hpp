@@ -114,6 +114,8 @@ private:
 
     bool *_identifierTable { nullptr };
 
+    Socket _udpBroadcastSocket { -1 }; // Test socket
+
     /** @brief Callback when the tick rate changed */
     void onTickRateChanged(void);
 
@@ -128,6 +130,9 @@ private:
 
     /** @brief Emit a DiscoveryPacket packet on every interface broadcast address */
     void discoveryEmit(void);
+
+    // Test function
+    void testDiscoveryScan(void);
 
     // Board network utils
 

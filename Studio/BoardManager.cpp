@@ -31,6 +31,35 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
         if (ret < 0)
             throw std::runtime_error(std::strerror(errno));
     #endif
+
+    // Open the UDP broadcast socket
+    _udpBroadcastSocket = ::socket(AF_INET, SOCK_DGRAM, 0);
+    if (_udpBroadcastSocket < 0) {
+        throw std::runtime_error(std::strerror(errno));
+    }
+
+    // Set socket option for UDP broadcast socket
+    setSocketReusable(_udpBroadcastSocket);
+    setSocketNonBlocking(_udpBroadcastSocket);
+
+    int broadcast = 1;
+    ::setsockopt(_udpBroadcastSocket, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast));
+
+    // Create the broadcast address
+    NetworkAddress udpBroadcastAddress;
+    udpBroadcastAddress.sin_family = AF_INET;
+    udpBroadcastAddress.sin_port = ::htons(420);
+    udpBroadcastAddress.sin_addr.s_addr = INADDR_ANY;
+
+    // Bind the address to the socket
+    auto ret = ::bind(
+        _udpBroadcastSocket,
+        reinterpret_cast<const sockaddr *>(&udpBroadcastAddress),
+        sizeof(udpBroadcastAddress)
+    );
+    if (ret < 0) {
+        throw std::runtime_error(std::strerror(errno));
+    }
 }
 
 BoardManager::~BoardManager(void)
@@ -108,21 +137,52 @@ void BoardManager::tick(void)
     processDirectClients();
 }
 
+void BoardManager::testDiscoveryScan(void)
+{
+    // Sender address
+    NetworkAddress udpSenderAddress;
+    Socklen addressLen = sizeof(udpSenderAddress);
+
+    // DiscoveryPacket structure
+    Protocol::DiscoveryPacket packet;
+
+    // Receive disco packet one by one
+    const auto readSize = ::recvfrom(
+        _udpBroadcastSocket,
+        &packet,
+        sizeof(Protocol::DiscoveryPacket),
+        MSG_WAITALL,
+        reinterpret_cast<sockaddr *>(&udpSenderAddress),
+        reinterpret_cast<socklen_t *>(&udpSenderAddressLength)
+    );
+    if (readSize < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
+        std::cout << "No UDP data on socket" << std::endl;
+        return;
+    }
+    else if (readSize < 0) {
+        throw std::runtime_error(std::strerror(errno));
+    }
+    std::cout << "Read size: " << readSize << std::endl;
+    std::cout << "UDP Sender address: " << ::inet_ntoa(udpSenderAddress.sin_addr) << std::endl;
+}
+
 void BoardManager::discover(void)
 {
     std::cout << "BoardManager::discover" << std::endl;
 
-    // vector<tuple<interfaceName, localAddress, broadcastAddress>>
-    const auto usbInterfaces = getUsbNetworkInterfaces();
+    testDiscoveryScan();
 
-    // Process USB network interfaces only
-    processNewUsbInterfaces(usbInterfaces);
+    // // vector<tuple<interfaceName, localAddress, broadcastAddress>>
+    // const auto usbInterfaces = getUsbNetworkInterfaces();
 
-    // Emit discovery packet on discovered network interfaces
-    discoveryEmit();
+    // // Process USB network interfaces only
+    // processNewUsbInterfaces(usbInterfaces);
 
-    // Scan for new incomming connection(s) from discovered network interfaces
-    processNewConnections();
+    // // Emit discovery packet on discovered network interfaces
+    // discoveryScanAndEmit();
+
+    // // Scan for new incomming connection(s) from discovered network interfaces
+    // processNewConnections();
 }
 
 void BoardManager::discoveryEmit(void)
@@ -141,7 +201,7 @@ void BoardManager::discoveryEmit(void)
 
         Socket broadcastSocket { networkInterface.second.second };
         NetworkAddress broadcastAddress;
-        Socklen len = sizeof(broadcastAddress);
+        Socklen len = sizeof(NetworkAddress);
 
         DataSize ret = ::getsockname(
             broadcastSocket,
