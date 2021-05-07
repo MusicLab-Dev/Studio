@@ -12,7 +12,7 @@ Rectangle {
         enabled: !app.scheduler.running
 
         SpringAnimation {
-            spring: 2
+            spring: 1
             damping: 0.2
         }
     }
