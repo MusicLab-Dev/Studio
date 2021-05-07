@@ -49,16 +49,6 @@ Rectangle {
         y: workspaceResearchTextInput.y + workspaceResearchTextInput.height * 2
         clip: true
 
-        DefaultScrollBar {
-            id: scrollBar
-            active: true
-            orientation: Qt.Vertical
-            size: workspacesForegroundScrollView.height / workspacesForegroundScrollView.contentHeight
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-        }
-
         Column {
             id: workspaceForegroundContent
             width: parent.width
@@ -68,7 +58,7 @@ Rectangle {
                 model: workspacesModel
 
                 delegate: WorkspaceCard {
-                    width: workspacesForegroundScrollView.width - scrollBar.width * 1.5
+                    width: workspacesForegroundScrollView.width - 15
 
                     Component.onCompleted: {
                         if (index === 0) {
