@@ -345,22 +345,22 @@ std::vector<std::pair<InterfaceIndex, std::string>> getWindowsNetworkInterfaces(
 
             struct in_addr ifaceaddr;
             ifaceaddr.s_addr = (u_long) pIPAddrTable->table[i].dwAddr;
-            struct in_addr netmask;
-            netmask.s_addr = (u_long) pIPAddrTable->table[i].dwMask;
-            struct in_addr wildcardaddr;
-            wildcardaddr.s_addr = ~netmask.s_addr;
-            struct in_addr broadcastaddr;
-            broadcastaddr.s_addr = ifaceaddr.s_addr | wildcardaddr.s_addr;
+            // struct in_addr netmask;
+            // netmask.s_addr = (u_long) pIPAddrTable->table[i].dwMask;
+            // struct in_addr wildcardaddr;
+            // wildcardaddr.s_addr = ~netmask.s_addr;
+            // struct in_addr broadcastaddr;
+            // broadcastaddr.s_addr = ifaceaddr.s_addr | wildcardaddr.s_addr;
 
             InterfaceIndex interfaceIndex = pIPAddrTable->table[i].dwIndex;
-            std::string localAddress(::inet_ntoa(ifaceaddr));
-            std::string broadcastAddress(::inet_ntoa(broadcastaddr));
+            std::string ifaceAddress(::inet_ntoa(ifaceaddr));
+            // std::string broadcastAddress(::inet_ntoa(broadcastaddr));
 
-            std::cout << "index: " << interfaceIndex << '\n';
-            std::cout << "address: " << localAddress << '\n';
-            std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
+            std::cout << "index:\t" << interfaceIndex << '\n';
+            std::cout << "interface address:\t" << ifaceAddress << '\n';
+            // std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
 
-            interfaces.push_back({ interfaceIndex, localAddress, broadcastAddress });
+            interfaces.push_back({ interfaceIndex, ifaceAddress });
         }
         if (pIPAddrTable) {
             FREE(pIPAddrTable);
