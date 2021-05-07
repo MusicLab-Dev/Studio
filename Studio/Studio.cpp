@@ -21,8 +21,6 @@
 #include "BoardManager.hpp"
 #include "EventDispatcher.hpp"
 
-// #include "BoardManager.hpp"
-
 void Studio::InitResources(void)
 {
     Audio::PluginTable::Init();
