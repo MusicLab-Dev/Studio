@@ -181,7 +181,6 @@ Item {
                 id: moduleTab
                 height: parent.height * 0.05
                 width: tabWidth
-                visible: index !== modules.count
                 tabTitle: loadedComponent.item ? loadedComponent.item.moduleName : qsTr("Loading")
             }
 
