@@ -207,11 +207,6 @@ QVariantMap ProjectSave::transformPluginInVariantMap(PluginModel &plugin) noexce
 
 bool ProjectSave::load(void)
 {
-    auto scheduler = Scheduler::Get();
-
-    scheduler->stopAndWait();
-    _project->recreateMasterMixer();
-
     try {
         QString jsonStr = read();
         if (jsonStr.isEmpty())

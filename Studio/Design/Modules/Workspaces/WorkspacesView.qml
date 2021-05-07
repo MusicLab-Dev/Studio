@@ -126,6 +126,8 @@ WorkspacesBackground {
 
 
     FileDialog {
+        readonly property bool cancelKeyboardEventsOnFocus: true
+
         id: folderPicker
         title: "Please choose a workspace folder"
         folder: shortcuts.documents

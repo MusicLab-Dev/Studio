@@ -31,8 +31,10 @@ Dial {
                 anchors.centerIn: parent
                 height: parent.width * 0.75
                 width: parent.width * 0.75
-                color: Qt.darker(themeManager.backgroundColor, 1.2)
+                color: "transparent"
                 radius: width / 2
+                border.width: 1
+                border.color: "white"
 
                 DefaultText {
                     text: dial.text
@@ -48,7 +50,7 @@ Dial {
             height: 4
             width: 4
             radius: 2
-            color: styleData.index ? themeManager.accentColor : themeManager.disabledColor
+            color: styleData.index ? themeManager.accentColor : "#E5E5E5"
         }
     }
 }

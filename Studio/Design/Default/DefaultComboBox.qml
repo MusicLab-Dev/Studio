@@ -2,6 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 ComboBox {
+    property alias rectBackground: rectBackground
+
     id: control
     hoverEnabled: true
 

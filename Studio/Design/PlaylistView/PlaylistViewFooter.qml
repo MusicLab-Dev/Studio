@@ -24,31 +24,41 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width / 3
         }
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
+            Layout.preferredWidth: parent.width / 3
 
-            Player {
-                id: player
-                anchors.centerIn: parent
-                height: parent.height
-                width: 200
-                targetPlaybackMode: Scheduler.Production
+            RowLayout {
+                anchors.fill: parent
+                spacing: 20
+
+                TimerView {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredHeight: parent.height * 0.5
+                    Layout.preferredWidth: parent.width * 0.25
+                }
+
+                Player {
+                    id: player
+                    Layout.preferredHeight: parent.height * 0.5
+                    Layout.preferredWidth: parent.width * 0.25
+                    targetPlaybackMode: Scheduler.Production
+                }
+
+                Bpm {
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredHeight: parent.height * 0.5
+                    Layout.preferredWidth: parent.width * 0.25
+                }
             }
         }
 
         Item {
             Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.333
-
-            Bpm {
-                anchors.centerIn: parent
-                height: parent.height / 2
-                width: parent.width / 3
-            }
+            Layout.preferredWidth: parent.width / 3
         }
     }
 }

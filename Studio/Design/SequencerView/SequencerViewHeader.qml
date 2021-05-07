@@ -98,6 +98,8 @@ Rectangle {
                         visible: sequencerView.editMode === SequencerView.EditMode.Brush
                         currentIndex: 0
                         onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
+                        rectBackground.border.width: 0
+                        rectBackground.color: "transparent"
                     }
                 }
 
@@ -110,17 +112,36 @@ Rectangle {
                         anchors.fill: parent
                         spacing: 3
 
-                        PartitionComboBox {
-                            id: partitionComboBox
+                        Row {
                             Layout.preferredHeight: parent.height * 0.4
                             Layout.preferredWidth: parent.width
-                            Layout.alignment: Qt.AlignVCenter
-                            partitions: sequencerView.node ? sequencerView.node.partitions : null
-                            currentIndex: sequencerView.partitionIndex
 
-                            onActivated: {
-                                sequencerView.partitionIndex = index
-                                sequencerView.partition = sequencerView.node.partitions.getPartition(index)
+                            PartitionComboBox {
+                                id: partitionComboBox
+                                width: parent.width - parent.height
+                                height: parent.height
+                                Layout.alignment: Qt.AlignVCenter
+                                partitions: sequencerView.node ? sequencerView.node.partitions : null
+                                currentIndex: sequencerView.partitionIndex
+
+                                onActivated: {
+                                    sequencerView.partitionIndex = index
+                                    sequencerView.partition = sequencerView.node.partitions.getPartition(index)
+                                }
+                            }
+
+                            AddButton {
+                                id: addBtn
+                                height: parent.height
+                                width: height
+
+                                onReleased: {
+                                    sequencerView.player.stop()
+                                    if (sequencerView.node.partitions.add()) {
+                                        sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
+                                        sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
+                                    }
+                                }
                             }
                         }
 
