@@ -10,7 +10,7 @@
 #include <Core/MacroUtils.hpp>
 
 #ifndef NETWORK_LOG_ENABLED
-# define NETWORK_LOG_ENABLED false
+# define NETWORK_LOG_ENABLED true
 #endif
 
 #if NETWORK_LOG_ENABLED

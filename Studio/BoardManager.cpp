@@ -350,20 +350,12 @@ std::vector<std::pair<InterfaceIndex, std::string>> getWindowsNetworkInterfaces(
 
             struct in_addr ifaceaddr;
             ifaceaddr.s_addr = (u_long) pIPAddrTable->table[i].dwAddr;
-            // struct in_addr netmask;
-            // netmask.s_addr = (u_long) pIPAddrTable->table[i].dwMask;
-            // struct in_addr wildcardaddr;
-            // wildcardaddr.s_addr = ~netmask.s_addr;
-            // struct in_addr broadcastaddr;
-            // broadcastaddr.s_addr = ifaceaddr.s_addr | wildcardaddr.s_addr;
 
             InterfaceIndex interfaceIndex = pIPAddrTable->table[i].dwIndex;
             std::string ifaceAddress(::inet_ntoa(ifaceaddr));
-            // std::string broadcastAddress(::inet_ntoa(broadcastaddr));
 
-            std::cout << "index:\t" << interfaceIndex << '\n';
-            std::cout << "interface address:\t" << ifaceAddress << '\n';
-            // std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
+            NETWORK_LOG("index:\t", interfaceIndex);
+            NETWORK_LOG("interface address:\t", ifaceAddress);
 
             interfaces.push_back({ interfaceIndex, ifaceAddress });
         }
@@ -424,7 +416,7 @@ std::vector<std::pair<InterfaceIndex, std::string>> BoardManager::getUsbNetworkI
     std::vector<std::pair<InterfaceIndex, std::string>> interfaces {};
 
     #ifdef WIN32
-        // interfaces = getWindowsNetworkInterfaces();
+        interfaces = getWindowsNetworkInterfaces();
     #else
         interfaces = getLinuxNetworkInterfaces();
     #endif
@@ -462,25 +454,20 @@ void BoardManager::processNewConnections(void)
         NETWORK_LOG("Start accept on interface: ", networkInterface.first);
 
         Socket interfaceMasterSocket = networkInterface.second.first;
-
-        const Socket clientSocket = ::accept(
-            interfaceMasterSocket,
-            reinterpret_cast<sockaddr *>(&clientAddress),
-            &clientAddressLen
-        );
-
-        if (clientSocket < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-            NETWORK_LOG("BoardManager::processNewConnections: No pending connection on socket");
-            continue;
-        }
-        else if (clientSocket < 0) {
+        
+        const Socket clientSocket = acceptSocket(interfaceMasterSocket, clientAddress);
+        if (clientSocket < 0) {
+            if (operationWouldBlock() == true) {
+                std::cout << "BoardManager::processNewConnections: No pending connection on socket" << std::endl;
+                continue;
+            }
             throw std::runtime_error(std::strerror(errno));
         }
 
         setSocketNonBlocking(clientSocket);
         setSocketKeepAlive(clientSocket);
 
-        NETWORK_LOG("New connection from [", inet_ntoa(clientAddress.sin_addr), ':', clientAddress.sin_port, ']');
+        NETWORK_LOG("New connection from [", ::inet_ntoa(clientAddress.sin_addr), ':', clientAddress.sin_port, ']');
 
         DirectClient directClient;
         directClient.socket = clientSocket;
