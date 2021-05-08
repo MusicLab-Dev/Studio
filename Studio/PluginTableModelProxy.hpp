@@ -3,6 +3,8 @@
  * @ Description: PluginTable Proxy
  */
 
+#pragma once
+
 #include <QSortFilterProxyModel>
 #include <QDebug>
 
