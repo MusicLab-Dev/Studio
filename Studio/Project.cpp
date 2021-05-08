@@ -47,21 +47,6 @@ void Project::setPath(const QString &path) noexcept
     emit pathChanged();
 }
 
-void Project::setBPM(const BPM bpm) noexcept
-{
-    if (_data->bpm() == bpm)
-        return;
-
-    Scheduler::Get()->addEvent(
-        [bpm] {
-            Scheduler::Get()->setBPM(bpm);
-        },
-        [this] {
-            emit bpmChanged();
-        }
-    );
-}
-
 bool Project::save(void) noexcept
 {
     if (_path.isEmpty())

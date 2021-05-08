@@ -45,7 +45,7 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     _Instance = this;
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
-    setProcessParamByBlockSize(512, _audioSpecs.sampleRate);
+    setProcessParamByBlockSize(4096u / 2u, _audioSpecs.sampleRate);
     setAudioBlockSize(_device.blockSize());
     _audioSpecs.processBlockSize = processBlockSize();
     // connect(&_device, &Device::sampleRateChanged, this, &Scheduler::refreshAudioSpecs);
@@ -166,6 +166,20 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
         [this, currentBeat] {
             if (currentBeat != onTheFlyCurrentBeat())
                 emit onTheFlyCurrentBeatChanged();
+        }
+    );
+}
+
+void Scheduler::setBPM(const BPM value) noexcept
+{
+    if (bpm() == value)
+        return;
+    addEvent(
+        [this, value] {
+            Audio::AScheduler::setBPM(value);
+        },
+        [this] {
+            emit bpmChanged();
         }
     );
 }

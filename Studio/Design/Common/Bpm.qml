@@ -9,7 +9,7 @@ DefaultSectionWrapper {
    DefaultTextInput {
        id: name
        anchors.centerIn: parent
-       text: app.project.bpm
+       text: app.scheduler.bpm
        font.pixelSize: parent.height * 0.75
        color: acceptableInput ? "white" : "red"
        validator: IntValidator {
@@ -19,7 +19,7 @@ DefaultSectionWrapper {
 
        onTextChanged: {
             if (acceptableInput)
-                app.project.bpm = text
+                app.scheduler.bpm = text
        }
    }
 }

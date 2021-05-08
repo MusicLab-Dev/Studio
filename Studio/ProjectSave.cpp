@@ -46,7 +46,7 @@ bool ProjectSave::save(void)
     QVariantMap map;
 
     map.insert("name", _project->name());
-    map.insert("bpm", _project->bpm());
+    map.insert("bpm", Scheduler::Get()->bpm());
     map.insert("master", transformNodeInVariantMap(*_project->master()));
 
     QJsonDocument doc(QJsonDocument::fromVariant(map));
@@ -214,7 +214,7 @@ bool ProjectSave::load(void)
         QJsonObject obj = doc.object();
 
         _project->setName(obj["name"].toString());
-        _project->setBPM(static_cast<float>(obj["bpm"].toDouble()));
+        Scheduler::Get()->setBPM(static_cast<float>(obj["bpm"].toDouble()));
         initNode(_project->master(), obj["master"].toObject());
 
         qDebug() << "Debug: ProjectSave::Load success";
