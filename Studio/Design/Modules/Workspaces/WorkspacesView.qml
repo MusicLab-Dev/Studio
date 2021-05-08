@@ -56,7 +56,10 @@ WorkspacesBackground {
 
             onExited: { workspacesViewAcceptButtonText.buttonHovered = false }
 
-            onReleased: { workspaceView.acceptAndClose() }
+            onReleased: {
+                workspaceView.fileUrl = workspaceContentArea.selectedPath
+                workspaceView.acceptAndClose()
+            }
         }
     }
 
