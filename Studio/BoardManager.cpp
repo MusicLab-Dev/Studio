@@ -262,7 +262,7 @@ Socket BoardManager::createTcpMasterSocket(const InterfaceIndex interfaceIndex, 
     setSocketDevice(tcpMasterSocket, interfaceIndex);
 
     // Create the interface address to bind the socket to
-    NetworkAddress interfaceAddress = createNetworkAddress(421, localAddress);
+    NetworkAddress interfaceAddress = createNetworkAddress(LexoPort + 1, localAddress);
 
     // Bind the socket to the interface address
     bindSocket(tcpMasterSocket, interfaceAddress);
