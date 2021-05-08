@@ -125,8 +125,13 @@ inline void bindSocket(const Socket socket, const NetworkAddress &address)
 inline Socket acceptSocket(const Socket masterSocket, NetworkAddress &clientAddress)
 {
     Socket clientSocket { -1 };
-    int clientAddressLen = sizeof(clientAddress);
-    
+
+    #ifdef WIN32
+        int clientAddressLen = sizeof(clientAddress);
+    #else
+        Socklen clientAddressLen = sizeof(clientAddress);
+    #endif
+
     clientSocket = ::accept(
         masterSocket,
         reinterpret_cast<sockaddr *>(&clientAddress),

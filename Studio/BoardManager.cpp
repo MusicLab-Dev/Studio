@@ -447,14 +447,13 @@ void BoardManager::processNewConnections(void)
     NETWORK_LOG("BoardManager::processNewConnections");
 
     NetworkAddress clientAddress;
-    Socklen clientAddressLen = sizeof(clientAddress);
 
     for (const auto &networkInterface : _interfaces) {
 
         NETWORK_LOG("Start accept on interface: ", networkInterface.first);
 
         Socket interfaceMasterSocket = networkInterface.second.first;
-        
+
         const Socket clientSocket = acceptSocket(interfaceMasterSocket, clientAddress);
         if (clientSocket < 0) {
             if (operationWouldBlock() == true) {
