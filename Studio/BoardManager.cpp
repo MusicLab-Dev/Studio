@@ -152,7 +152,6 @@ void BoardManager::discoveryScan(void)
             NETWORK_LOG("No UDP data on socket");
             return;
         }
-        NETWORK_LOG("RECVFROM ERROR");
         return;
     }
     // Check if the address is already discovered
@@ -170,7 +169,10 @@ void BoardManager::discover(void)
 {
     NETWORK_LOG("BoardManager::discover");
 
-    discoveryScan();
+    // This feature is only needed on windows
+    #ifdef WIN32
+        discoveryScan();
+    #endif
 
     // vector<pair<interfaceName, ifaceAddress>>
     const auto usbInterfaces = getUsbNetworkInterfaces();
@@ -197,50 +199,52 @@ void BoardManager::discoveryEmit(void)
     packet.connectionType = Protocol::ConnectionType::USB;
     packet.distance = 0;
 
-    for (const NetworkAddress &address : _discoveredAddress) {
-        NETWORK_LOG("Sending discovery packet to ", ::inet_ntoa(address.sin_addr));
+    #ifdef WIN32
+        for (const NetworkAddress &address : _discoveredAddress) {
+            NETWORK_LOG("Sending discovery packet to ", ::inet_ntoa(address.sin_addr));
 
-        const DataSize ret = sendToSocket(
-            _udpBroadcastSocket,
-            address,
-            reinterpret_cast<std::uint8_t *>(&packet),
-            sizeof(packet)
-        );
-        if (ret < 0) {
-            NETWORK_LOG("SENDTO ERROR");
+            const DataSize ret = sendToSocket(
+                _udpBroadcastSocket,
+                address,
+                reinterpret_cast<std::uint8_t *>(&packet),
+                sizeof(packet)
+            );
+            if (ret < 0) {
+                NETWORK_LOG("SENDTO ERROR");
+            }
         }
-    }
+    #else
+        for (const auto &networkInterface : _interfaces) {
 
-    // for (const auto &networkInterface : _interfaces) {
+            Socket udpSocket { networkInterface.second.second };
+            NetworkAddress broadcastAddress;
+            broadcastAddress.sin_family = AF_INET;
+            broadcastAddress.sin_port = ::htons(LexoPort);
+            broadcastAddress.sin_addr.s_addr = ::inet_addr("169.254.255.255");
+            DataSize ret = 0;
 
-    //     Socket broadcastSocket { networkInterface.second.second };
-    //     NetworkAddress broadcastAddress;
-    //     Socklen len = sizeof(NetworkAddress);
-
-    //     DataSize ret = ::getsockname(
-    //         broadcastSocket,
-    //         reinterpret_cast<sockaddr *>(&broadcastAddress),
-    //         &len
-    //     );
-    //     if (ret < 0) {
-    //         throw std::runtime_error(std::strerror(errno));
-    //     }
-
-    //     ret = sendToSocket(broadcastSocket, broadcastAddress, reinterpret_cast<std::uint8_t *>(&packet), sizeof(packet));
-    //     if (ret < 0) {
-    //         if (errno == ENODEV) {
-    //             /*
-    //                 sendto() has failed because the network interface is not valid anymore,
-    //                 so checking to remove the associated network.
-    //             */
-    //             std::cout << "INTERFACE DISCONNECTED" << std::endl;
-    //             removeInterfaceNetwork(networkInterface.first);
-    //         }
-    //         else {
-    //             throw std::runtime_error(std::strerror(errno));
-    //         }
-    //     }
-    // }
+            NETWORK_LOG("Sending discovery packet to ", ::inet_ntoa(broadcastAddress.sin_addr));
+            DataSize ret = sendToSocket(
+                udpSocket,
+                broadcastAddress,
+                reinterpret_cast<std::uint8_t *>(&packet),
+                sizeof(packet)
+            );
+            if (ret < 0) {
+                if (errno == ENODEV) {
+                    /*
+                        sendto() has failed because the network interface is not valid anymore,
+                        so checking to remove the associated network.
+                    */
+                    std::cout << "INTERFACE DISCONNECTED" << std::endl;
+                    removeInterfaceNetwork(networkInterface.first);
+                }
+                else {
+                    throw std::runtime_error(std::strerror(errno));
+                }
+            }
+        }
+    #endif
 }
 
 Socket BoardManager::createTcpMasterSocket(const InterfaceIndex interfaceIndex, const std::string &localAddress)
@@ -387,17 +391,16 @@ std::vector<std::pair<InterfaceIndex, std::string>> getLinuxNetworkInterfaces(vo
             if (family == AF_INET && (ifa->ifa_flags & IFF_BROADCAST) && ifa->ifa_ifu.ifu_broadaddr != nullptr) {
 
                 sockaddr_in *ifaceaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_addr);
-                // sockaddr_in *broadaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_ifu.ifu_broadaddr);
-
                 std::string interfaceName(ifa->ifa_name);
                 InterfaceIndex interfaceIndex = if_nametoindex(ifa->ifa_name);
                 std::string ifaceAddress(::inet_ntoa(ifaceaddr->sin_addr));
 
-                // std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
-
                 NETWORK_LOG("index:\t", interfaceIndex);
                 NETWORK_LOG("interface address:\t", ifaceAddress);
 
+                // This code may be usefull later
+                // sockaddr_in *broadaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_ifu.ifu_broadaddr);
+                // std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
                 // std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
 
                 interfaces.push_back({ interfaceIndex, ifaceAddress });
