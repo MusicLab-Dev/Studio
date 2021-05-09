@@ -19,7 +19,7 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     connect(&_tickTimer, &QTimer::timeout, this, &BoardManager::tick);
     connect(&_discoverTimer, &QTimer::timeout, this, &BoardManager::discover);
 
-    _networkBuffer.reset();
+    resetNetworkBuffer();
 
     _identifierTable = new bool[256];
     std::memset(_identifierTable, 0, 256);
@@ -122,6 +122,62 @@ void BoardManager::onDiscoverRateChanged(void)
     _tickTimer.setTimerType(Qt::CoarseTimer); // 5% margin
 }
 
+void BoardManager::processBoardPacket(Protocol::ReadablePacket &packet)
+{
+    NETWORK_LOG("BoardManager::processBoardPacket");
+
+    using namespace Protocol;
+
+    BoardID packetBoardId = packet.extract<BoardID>();
+    NETWORK_LOG("Packet board ID: ", static_cast<int>(packetBoardId));
+
+    switch (packet.protocolType())
+    {
+    case ProtocolType::Connection:
+        switch (packet.commandAs<ConnectionCommand>())
+        {
+        case ConnectionCommand::HardwareSpecs:
+            NETWORK_LOG("Received HardwareSpecs command");
+            break;
+        default:
+            break;
+        }
+        break;
+    case ProtocolType::Event:
+        switch (packet.commandAs<EventCommand>())
+        {
+        case EventCommand::ControlsChanged:
+            NETWORK_LOG("Received ControlsChanged command");
+            break;
+        default:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+void BoardManager::processNetworkBufferData(void)
+{
+    NETWORK_LOG("BoardManager::processNetworkBufferData");
+
+    using namespace Protocol;
+
+    std::uint8_t *networkBufferBegin = _networkBuffer.data();
+    std::uint8_t *networkBufferEnd = _networkBuffer.data() + _writeIndex;
+    std::size_t processIndex = 0;
+
+    while (processIndex < _writeIndex) {
+
+        ReadablePacket packet(networkBufferBegin + processIndex, networkBufferEnd);
+        if (packet.magicKey() != SpecialLabMagicKey)
+            break;
+        processBoardPacket(packet);
+        processIndex = processIndex + packet.totalSize();
+    }
+}
+
 void BoardManager::tick(void)
 {
     NETWORK_LOG("\nBoardManager::tick\n");
@@ -130,6 +186,10 @@ void BoardManager::tick(void)
     prepareSockets();
     // Process connected clients inputs using select()
     processDirectClients();
+    // Process data stored in the network buffer for this tick
+    if (_writeIndex == 0)
+        return;
+    processNetworkBufferData();
 }
 
 void BoardManager::discoveryScan(void)
@@ -221,7 +281,6 @@ void BoardManager::discoveryEmit(void)
             broadcastAddress.sin_family = AF_INET;
             broadcastAddress.sin_port = ::htons(LexoPort);
             broadcastAddress.sin_addr.s_addr = ::inet_addr("169.254.255.255");
-            DataSize ret = 0;
 
             NETWORK_LOG("Sending discovery packet to ", ::inet_ntoa(broadcastAddress.sin_addr));
             DataSize ret = sendToSocket(
@@ -553,8 +612,9 @@ void BoardManager::processDirectClients(void)
         return;
     }
 
+    // Reset the network buffer before data from clients
     _writeIndex = 0;
-    _networkBuffer.reset();
+    resetNetworkBuffer();
 
     struct timeval tv;
     tv.tv_sec = 0;
@@ -570,7 +630,7 @@ void BoardManager::processDirectClients(void)
     }
 
     // Loop through direct clients and retrieve available data or remove them if disconnected
-    NETWORK_LOG("client list size IN: ", _clients.size());
+    NETWORK_LOG("BoardManager::processDirectClients: Client list size in: ", _clients.size());
     for(auto it = _clients.begin(); it != _clients.end();) {
         if (FD_ISSET(it->socket, &_readFds)) {
             processClientInput(it->socket);
@@ -581,7 +641,7 @@ void BoardManager::processDirectClients(void)
         } else
             ++it;
     }
-    NETWORK_LOG("client list size OUT: ", _clients.size());
+    NETWORK_LOG("BoardManager::processDirectClients: Client list size out: ", _clients.size());
 }
 
 BoardID BoardManager::aquireIdentifier(void) noexcept
