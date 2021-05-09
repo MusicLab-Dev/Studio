@@ -707,6 +707,7 @@ void BoardManager::removeNetworkFrom(const BoardID senderId, const BoardID targe
         }
     }
     // Remove all disconnected board from main board vector
+    beginResetModel();
     for (auto &board : _boards) {
         if (board->getStatus() == false) {
             // board.unique();
@@ -714,6 +715,7 @@ void BoardManager::removeNetworkFrom(const BoardID senderId, const BoardID targe
             _boards.erase(&board);
         }
     }
+    endResetModel();
 }
 
 void BoardManager::removeDirectClientNetwork(const Socket directClientSocket)
@@ -721,12 +723,14 @@ void BoardManager::removeDirectClientNetwork(const Socket directClientSocket)
     std::cout << "BoardManager::removeDirectClientNetwork" << std::endl;
 
     std::cout << "board list size IN: " << _boards.size() << std::endl;
+    beginResetModel();
     for (auto it = _boards.begin(); it != _boards.end();) {
-        if (it->get()->getRootSocket() == directClientSocket)
+        if (it->get()->getRootSocket() == directClientSocket) {
             _boards.erase(it);
-        else
+        } else
             ++it;
     }
+    endResetModel();
     std::cout << "board list size OUT: " << _boards.size() << std::endl;
 }
 
