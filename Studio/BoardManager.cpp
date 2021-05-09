@@ -137,8 +137,13 @@ void BoardManager::processBoardPacket(Protocol::ReadablePacket &packet)
         switch (packet.commandAs<ConnectionCommand>())
         {
         case ConnectionCommand::HardwareSpecs:
+        {
             NETWORK_LOG("Received HardwareSpecs command");
+            BoardSize boardSize = packet.extract<BoardSize>();
+            std::cout << "Board height: " << static_cast<int>(boardSize.height) << std::endl;
+            std::cout << "Board width: " << static_cast<int>(boardSize.width) << std::endl;
             break;
+        }
         default:
             break;
         }
@@ -147,8 +152,16 @@ void BoardManager::processBoardPacket(Protocol::ReadablePacket &packet)
         switch (packet.commandAs<EventCommand>())
         {
         case EventCommand::ControlsChanged:
+        {
             NETWORK_LOG("Received ControlsChanged command");
+            Core::Vector<InputEvent> events;
+            packet >> events;
+            for (const auto &event : events) {
+                std::cout << "Input index: " << static_cast<int>(event.inputIdx) << std::endl;
+                std::cout << "Event value: " << static_cast<int>(event.value) << std::endl;
+            }
             break;
+        }
         default:
             break;
         }
