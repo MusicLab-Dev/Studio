@@ -578,7 +578,9 @@ bool BoardManager::handleIdentifierRequest(const Protocol::ReadablePacket &packe
         if (ret < 0)
             throw std::runtime_error(std::strerror(errno));
         // Add the new board the studio list
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
         _boards.push(std::make_shared<Board>(newID, clientSocket));
+        endInsertRows();
         return true;
     }
     return false;
