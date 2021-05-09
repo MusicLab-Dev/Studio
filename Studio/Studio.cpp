@@ -41,6 +41,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<PluginModel::ParamType>("PluginModel::ParamType");
     qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
     qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");
+    qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
@@ -68,6 +69,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<Board>("Board", 1, 0, "Board", "Cannot constrict Board");
     qmlRegisterType<EventDispatcher>("EventDispatcher", 1, 0, "EventDispatcher");
     qmlRegisterUncreatableType<KeyboardEventListener>("KeyboardEventListener", 1, 0, "KeyboardEventListener", "Cannot construct KeyboardEventListener");
+    qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
 
 
     Q_INIT_RESOURCE(Resources);
