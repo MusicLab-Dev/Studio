@@ -12,10 +12,17 @@ DefaultPotentiometer {
     minimumValue: controlMinValue
     maximumValue: controlMaxValue
     stepSize: controlStepValue
-    value: controlValue
 
     ToolTip.visible: hovered || pressed
     ToolTip.text: tooltipPrefixText + controlValue.toFixed() + tooltipSufixText
+
+    Component.onCompleted: value = Math.floor(controlValue)
+
+    Binding {
+        target: control
+        property: "value"
+        value: Math.floor(controlValue)
+    }
 
     onValueChanged: {
         var fixed = Math.floor(value)

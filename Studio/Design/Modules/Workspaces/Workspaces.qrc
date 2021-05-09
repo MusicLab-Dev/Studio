@@ -2,7 +2,6 @@
     <qresource prefix="/Modules/Workspaces">
         <file>WorkspacesBackground.qml</file>
         <file>WorkspacesForeground.qml</file>
-        <file>WorkspacesViewTitle.qml</file>
         <file>WorkspacesView.qml</file>
         <file>WorkspaceCard.qml</file>
         <file>WorkspacesSquareComponent.qml</file>

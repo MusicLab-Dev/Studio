@@ -37,6 +37,7 @@ Item {
             onReleased: {
                 if (fileIsDir) {
                     workspaceForeground.actualPath = fileUrl
+                    workspaceView.lastSelectedWorkspace = workspaceCard.workspaceName.text
                     workspaceForeground.parentDepth = depth
                 }
             }
@@ -53,68 +54,3 @@ Item {
         depth: folderColumnFolderDelegate.depth
     }
 }
-
-// Item {
-//     property bool expanded: folderFoldButton.activated
-
-//     id: workspaceCard
-//     height: cardHeader.height + (expanded ? folderColumnView.height + spacing : 0)
-
-
-//     Item {
-//         id: cardHeader
-//         width: parent.width
-//         height: Math.max(workspaceForeground.height / 14, 50)
-
-//         MouseArea {
-//             anchors.fill: parent
-//             onPressed: workspaceForeground.actualPath = realPath
-//         }
-
-//         DefaultFoldButton {
-//             id: folderFoldButton
-//             width: parent.width * 0.08
-//             height: parent.height * 0.3
-//             x: parent.x + width / 3
-//             y: parent.height / 2 - height / 2
-//         }
-
-//         DefaultTextInput {
-//             id: workspaceName
-//             width: parent.width - workspaceFoldButton.width - workspaceFoldButton.x - editModeButton.width * 2
-//             x: workspaceFoldButton.width + workspaceFoldButton.x
-//             y: parent.height / 2 - height / 2
-//             color: "#FFFFFF"
-//             opacity: enabled ? 0.6 : 0.4
-//             enabled: editModeEnabled
-//             text: name + " " + realPath
-
-//             background: Rectangle {
-//                 anchors.fill: parent
-//                 color: "transparent"
-//             }
-//         }
-
-//         DefaultImageButton {
-//             id: editModeButton
-//             width: parent.width * 0.08
-//             height: parent.height * 0.4
-//             x: parent.width * 0.85
-//             y: parent.height / 2 - height / 2
-//             //source: "qrc:/Assets/EditWorkspaceName.png"
-
-//             onClicked: editModeEnabled = !editModeEnabled
-//         }
-//     }
-
-//     FolderColumnView {
-//         id: folderColumnView
-//         visible: workspaceCard.expanded
-//         width: parent.width
-//         anchors.top: cardHeader.bottom
-//         anchors.topMargin: workspaceCard.spacing
-//     }
-// }
-
-
-

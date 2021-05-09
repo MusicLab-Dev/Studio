@@ -43,6 +43,8 @@ RowLayout {
     }
 
     function pause() {
+        if (isPartitionPlayer && !targetNode)
+            return;
         app.scheduler.pause(targetPlaybackMode)
         timer.stopAndRecordPlaybackBeat()
         app.currentPlayer = player
@@ -53,9 +55,11 @@ RowLayout {
             app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
         else
             app.scheduler.disableLoopRange()
-        if (isPartitionPlayer)
+        if (isPartitionPlayer) {
+            if (!targetNode)
+                return;
             app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat)
-        else
+        } else
             app.scheduler.play(targetPlaybackMode, currentPlaybackBeat)
         timer.start()
         app.currentPlayer = player
@@ -73,9 +77,11 @@ RowLayout {
             app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
         else
             app.scheduler.disableLoopRange()
-        if (isPartitionPlayer)
+        if (isPartitionPlayer) {
+            if (!targetNode)
+                return;
             app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, contentView.loopFrom)
-        else
+        } else
             app.scheduler.play(targetPlaybackMode, contentView.loopFrom)
         app.currentPlayer = player
         beginPlaybackBeat = contentView.loopFrom
@@ -84,6 +90,8 @@ RowLayout {
     }
 
     function stop() {
+        if (isPartitionPlayer && !targetNode)
+            return;
         app.scheduler.stop(targetPlaybackMode)
         app.currentPlayer = player
         timer.stop()

@@ -29,14 +29,19 @@ WorkspacesBackground {
     property string fileUrl: ""
     property var fileUrls: [fileUrl]
     property alias workspacesModel: workspaceForeground.workspacesModel
+    property string lastSelectedWorkspace: ""
+    property alias searchFilter: workspaceForeground.searchFilter
 
     id: workspaceView
     visible: false
 
-    WorkspacesViewTitle {
+    Text {
         id: workspaceViewTitle
         x: (workspaceForeground.width + (parent.width - workspaceForeground.width) / 2) - width / 2
         y: height
+        color: "lightgrey"
+        font.pointSize: 34
+        text: lastSelectedWorkspace
     }
 
     TextRoundedButton {
@@ -136,14 +141,21 @@ WorkspacesBackground {
         selectFolder: true
 
         onAccepted: {
-            console.log("WorkspacesModel before", workspacesModel)
             var tmp = workspacesModel
             if (tmp === undefined)
                 tmp = []
-            tmp.push(["New workspace", folderPicker.fileUrl.toString()])
+            var path = folderPicker.fileUrl.toString()
+            var nameStartIdx = path.lastIndexOf('/')
+            var name = ""
+            if (nameStartIdx === path.length - 1)
+                nameStartIdx = path.lastIndexOf('/', 1)
+            if (nameStartIdx === -1)
+                name = path
+            else
+                name = path.substr(nameStartIdx + 1)
+            tmp.push([name, path])
             app.settings.set("workspacePaths", tmp);
             workspacesModel = app.settings.get("workspacePaths")
-            console.log("WorkspacesModel after", workspacesModel)
             app.settings.saveValues()
         }
     }

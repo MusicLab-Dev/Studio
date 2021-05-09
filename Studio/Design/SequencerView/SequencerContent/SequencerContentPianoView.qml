@@ -43,11 +43,12 @@ Item {
 
     Connections {
         function launch(pressed, key) {
-            sequencerView.node.partitions.addOnTheFly(
-                AudioAPI.noteEvent(!pressed, (targetOctave * keysPerOctave) + key, AudioAPI.velocityMax, 0),
-                sequencerView.node,
-                sequencerView.partitionIndex
-            )
+            if (sequencerView.node)
+                sequencerView.node.partitions.addOnTheFly(
+                    AudioAPI.noteEvent(!pressed, (targetOctave * keysPerOctave) + key, AudioAPI.velocityMax, 0),
+                    sequencerView.node,
+                    sequencerView.partitionIndex
+                )
         }
 
         property real targetOctave: 5

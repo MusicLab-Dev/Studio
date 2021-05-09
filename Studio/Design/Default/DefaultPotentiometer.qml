@@ -20,7 +20,7 @@ Dial {
             height: 4
             width: 4
             radius: 2
-            color: Qt.lighter(themeManager.accentColor, 1.65 - 0.65 * ((dial.value - dial.minimumValue) / dial.range))
+            color: Qt.darker("white", 1.65 - 0.65 * ((dial.value - dial.minimumValue) / dial.range))
         }
 
         background: Rectangle {
@@ -50,7 +50,7 @@ Dial {
             height: 4
             width: 4
             radius: 2
-            color: styleData.index ? themeManager.accentColor : "#E5E5E5"
+            color: styleData.index ? "white" : "grey"
         }
     }
 }

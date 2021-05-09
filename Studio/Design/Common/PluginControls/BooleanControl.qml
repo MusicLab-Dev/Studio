@@ -15,12 +15,20 @@ Rectangle {
     ToolTip.visible: mouseArea.containsMouse
     ToolTip.text: controlTitle + ": " + (controlValue !== 0) + "\n" + controlDescription
 
+    Binding {
+        target: image
+        property: "visible"
+        value: controlValue
+    }
+
     Image {
+        id: image
         anchors.centerIn: parent
         width: parent.width / 2
         height: parent.height / 2
         source: "qrc:/Assets/Checked.png"
-        visible: controlValue
+
+        Component.onCompleted: visible = controlValue
     }
 
     MouseArea {
