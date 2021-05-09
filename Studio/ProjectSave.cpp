@@ -7,6 +7,7 @@
 #include <QVariantList>
 #include <QMetaEnum>
 
+#include "Control.hpp"
 #include "Scheduler.hpp"
 #include "ProjectSave.hpp"
 #include "Note.hpp"
@@ -351,7 +352,8 @@ bool ProjectSave::initPlugin(PluginModel *plugin, const QJsonObject &obj)
 
     auto arr = obj["controls"].toArray();
     for (auto it = arr.begin(); it != arr.end(); it++) {
-        plugin->audioPlugin()->getControl(static_cast<ParamID>(it[0].toInt())) = it[1].toDouble();
+        auto values = it->toArray();
+        plugin->setControl(ControlEvent(values[0].toInt(), values[1].toDouble()));
     }
     return true;
 }

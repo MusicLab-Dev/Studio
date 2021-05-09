@@ -13,6 +13,7 @@ DefaultPotentiometer {
     maximumValue: controlMaxValue
     stepSize: controlStepValue
     text: controlShortName
+    value: controlValue
 
     ToolTip.visible: hovered || pressed
     ToolTip.text: tooltipPrefixText + controlValue.toFixed(2) + tooltipSufixText

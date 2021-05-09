@@ -13,28 +13,28 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher, QObjec
     QGuiApplication::instance()->installEventFilter(this);
 
     /**  -- DEBUG -- */
-    set(AEventListener::Event{AEventListener::Event::NOTE_0, 81});
-    set(AEventListener::Event{AEventListener::Event::NOTE_1, 83});
-    set(AEventListener::Event{AEventListener::Event::NOTE_2, 68});
-    set(AEventListener::Event{AEventListener::Event::NOTE_3, 70});
-    set(AEventListener::Event{AEventListener::Event::NOTE_4, 71});
-    set(AEventListener::Event{AEventListener::Event::NOTE_5, 72});
-    set(AEventListener::Event{AEventListener::Event::NOTE_6, 74});
-    set(AEventListener::Event{AEventListener::Event::NOTE_7, 75});
-    set(AEventListener::Event{AEventListener::Event::NOTE_8, 76});
-    set(AEventListener::Event{AEventListener::Event::NOTE_9, 77});
-    set(AEventListener::Event{AEventListener::Event::NOTE_10, 66});
-    set(AEventListener::Event{AEventListener::Event::NOTE_11, 78});
-    set(AEventListener::Event{AEventListener::Event::OCTAVE_UP, 87});
-    set(AEventListener::Event{AEventListener::Event::OCTAVE_DOWN, 88});
+    set(AEventListener::Event { AEventListener::Event::NOTE_0,          Qt::Key_Q           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_1,          Qt::Key_S           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_2,          Qt::Key_D           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_3,          Qt::Key_F           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_4,          Qt::Key_G           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_5,          Qt::Key_H           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_6,          Qt::Key_J           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_7,          Qt::Key_K           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_8,          Qt::Key_L           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_9,          Qt::Key_M           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_10,         Qt::Key_Ugrave      });
+    set(AEventListener::Event { AEventListener::Event::NOTE_11,         Qt::Key_multiply    });
+    set(AEventListener::Event { AEventListener::Event::OCTAVE_UP,       Qt::Key_W           });
+    set(AEventListener::Event { AEventListener::Event::OCTAVE_DOWN,     Qt::Key_X           });
 
-    set(AEventListener::Event{AEventListener::Event::PLAY_CONTEXT, 32});
-    set(AEventListener::Event{AEventListener::Event::PAUSE_CONTEXT, 67});
-    set(AEventListener::Event{AEventListener::Event::STOP_CONTEXT, 86});
+    set(AEventListener::Event { AEventListener::Event::PLAY_CONTEXT,    Qt::Key_Space       });
+    set(AEventListener::Event { AEventListener::Event::REPLAY_CONTEXT,  Qt::Key_A           });
+    set(AEventListener::Event { AEventListener::Event::STOP_CONTEXT,    Qt::Key_Z           });
 
-    set(AEventListener::Event{AEventListener::Event::PLAY_PLAYLIST, 80});
-    //set(AEventListener::Event{AEventListener::Event::PAUSE_PLAYLIST, 67});
-    set(AEventListener::Event{AEventListener::Event::STOP_PLAYLIST, 79});
+    set(AEventListener::Event{AEventListener::Event::PLAY_PLAYLIST,     Qt::Key_I           });
+    set(AEventListener::Event{AEventListener::Event::REPLAY_PLAYLIST,   Qt::Key_O           });
+    set(AEventListener::Event{AEventListener::Event::STOP_PLAYLIST,     Qt::Key_P           });
 }
 
 void KeyboardEventListener::setEnabled(const bool value) noexcept
@@ -142,8 +142,8 @@ bool KeyboardEventListener::sendSignals(int key, bool value)
             case Event::Target::PLAY_CONTEXT:
                 emit _dispatcher->playContext(value);
                 break;
-            case Event::Target::PAUSE_CONTEXT:
-                emit _dispatcher->pauseContext(value);
+            case Event::Target::REPLAY_CONTEXT:
+                emit _dispatcher->replayContext(value);
                 break;
             case Event::Target::STOP_CONTEXT:
                 emit _dispatcher->stopContext(value);
@@ -151,8 +151,8 @@ bool KeyboardEventListener::sendSignals(int key, bool value)
             case Event::Target::PLAY_PLAYLIST:
                 emit _dispatcher->playPlaylist(value);
                 break;
-            case Event::Target::PAUSE_PLAYLIST:
-                emit _dispatcher->pausePlaylist(value);
+            case Event::Target::REPLAY_PLAYLIST:
+                emit _dispatcher->replayPlaylist(value);
                 break;
             case Event::Target::STOP_PLAYLIST:
                 emit _dispatcher->stopPlaylist(value);
@@ -211,7 +211,6 @@ void KeyboardEventListener::stopAllPlayingNotes(void)
                 default:
                     return false;
                 }
-                qDebug() << "Removing key" << key << evt.target;
                 return true;
             }
         }

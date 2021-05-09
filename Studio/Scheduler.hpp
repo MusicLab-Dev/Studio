@@ -113,6 +113,9 @@ public:
     /** @brief Set the BPM */
     void setBPM(const BPM bpm) noexcept;
 
+    /** @brief Reset the on the fly miss count */
+    void resetOnTheFlyMiss(void) noexcept { _onTheFlyMissCount = 0u; }
+
 public slots:
     /** @brief Play the scheduler */
     void play(const Scheduler::PlaybackMode mode, const Beat startingBeat);

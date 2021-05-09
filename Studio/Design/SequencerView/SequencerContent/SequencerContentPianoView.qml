@@ -28,6 +28,8 @@ Item {
     readonly property int keysPerOctave: keyNames.length
     property int octaves: 8
     property int octaveOffset: 2
+    readonly property int octaveMin: octaveOffset
+    readonly property int octaveMax: octaves + octaveOffset
     readonly property int keyOffset: octaveOffset * keysPerOctave
     readonly property int keys: keysPerOctave * octaves
     property real headerFactor: 0.1
@@ -42,14 +44,15 @@ Item {
     Connections {
         function launch(pressed, key) {
             sequencerView.node.partitions.addOnTheFly(
-                AudioAPI.noteEvent(!pressed, (octave * 12) + key, AudioAPI.velocityMax, 0),
+                AudioAPI.noteEvent(!pressed, (targetOctave * keysPerOctave) + key, AudioAPI.velocityMax, 0),
                 sequencerView.node,
                 sequencerView.partitionIndex
             )
         }
 
-        property real octave: 5
+        property real targetOctave: 5
 
+        id: notesConnections
         target: eventDispatcher
         enabled: moduleIndex === componentSelected
 
@@ -65,10 +68,9 @@ Item {
         function onNote9(pressed) { launch(pressed, 9) }
         function onNote10(pressed) { launch(pressed, 10) }
         function onNote11(pressed) { launch(pressed, 11) }
-        function onOctaveUp(pressed) { if (pressed) octave++ }
-        function onOctaveDown(pressed) { if (pressed) octave-- }
+        function onOctaveUp(pressed) { if (pressed) targetOctave = Math.min(targetOctave, octaveMax) }
+        function onOctaveDown(pressed) { if (pressed) targetOctave = Math.max(targetOctave, octaveMin) }
     }
-
 
     Repeater {
         model: pianoView.keys
@@ -169,4 +171,13 @@ Item {
             }
         }
     }
+
+    // Rectangle {
+    //     y: height - notesConnections.targetOctave * height - height
+    //     width: contentView.rowHeaderWidth
+    //     height: contentView.rowHeight * keysPerOctave
+    //     color: "red"
+    //     border.color: themeManager.accentColor
+    //     border.width: 1
+    // }
 }

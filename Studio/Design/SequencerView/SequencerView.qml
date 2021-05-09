@@ -114,8 +114,8 @@ Column {
         target: eventDispatcher
         enabled: moduleIndex === componentSelected
 
-        function onPlayContext(pressed) { if (!pressed) return; if(!player.isPlayerRunning) player.play(); else player.pause(); }
-        function onPauseContext(pressed) { if (!pressed) return; player.pause(); }
+        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
+        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
         function onStopContext(pressed) { if (!pressed) return; player.stop(); }
     }
 

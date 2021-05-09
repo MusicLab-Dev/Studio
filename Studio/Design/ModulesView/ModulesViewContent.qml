@@ -122,7 +122,7 @@ Item {
                 modulesView.removeAllComponentsWithoutEmptyView()
                 app.project.loadFrom(mainWindow.urlToPath(fileUrl.toString()))
                 modules.insert(0, {
-                        title: "Playlsit",
+                        title: "Playlist",
                         path: "qrc:/PlaylistView/PlaylistView.qml",
                         callback: modulesViewContent.nullCallback
                     })

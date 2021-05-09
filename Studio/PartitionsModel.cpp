@@ -136,6 +136,7 @@ void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const 
     scheduler->addEvent(
         [this, note] {
             _data->headerCustomType().push(note);
+            Scheduler::Get()->resetOnTheFlyMiss();
         },
         [this, node, partitionIndex, isPlaying, graphChanged, hasPaused] {
             const auto scheduler = Scheduler::Get();

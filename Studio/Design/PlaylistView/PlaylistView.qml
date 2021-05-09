@@ -29,7 +29,7 @@ ColumnLayout {
         enabled: moduleIndex === componentSelected
 
         function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
-        function onPauseContext(pressed) { if (!pressed) return; player.pause(); }
+        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
         function onStopContext(pressed) { if (!pressed) return; player.stop(); }
     }
 
@@ -37,7 +37,7 @@ ColumnLayout {
         target: eventDispatcher
 
         function onPlayPlaylist(pressed) { if (!pressed) return; player.playOrPause() }
-        function onPausePlaylist(pressed) { if (!pressed) return; player.pause(); }
+        function onReplayPlaylist(pressed) { if (!pressed) return; player.replay(); }
         function onStopContext(pressed) { if (!pressed) return; player.stop(); }
     }
 

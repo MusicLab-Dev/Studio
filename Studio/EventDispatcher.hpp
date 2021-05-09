@@ -53,10 +53,10 @@ signals:
     void octaveDown(bool pressed);
 
     void playContext(bool pressed);
-    void pauseContext(bool pressed);
+    void replayContext(bool pressed);
     void stopContext(bool pressed);
     void playPlaylist(bool pressed);
-    void pausePlaylist(bool pressed);
+    void replayPlaylist(bool pressed);
     void stopPlaylist(bool pressed);
 
     // Floating controls

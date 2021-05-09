@@ -23,7 +23,7 @@ Rectangle {
         DefaultSectionWrapper {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.width * 0.6
-            label: "Sampler"
+            label: sequencerView.node ? sequencerView.node.plugin.title : ""
 
             MouseArea {
                 anchors.fill: parent
