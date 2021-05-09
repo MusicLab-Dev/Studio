@@ -159,6 +159,7 @@ void BoardManager::processBoardPacket(Protocol::ReadablePacket &packet)
             for (const auto &event : events) {
                 std::cout << "Input index: " << static_cast<int>(event.inputIdx) << std::endl;
                 std::cout << "Event value: " << static_cast<int>(event.value) << std::endl;
+                emit boardEvent(static_cast<int>(packetBoardId), event.inputIdx, static_cast<float>(event.value));
             }
             break;
         }
