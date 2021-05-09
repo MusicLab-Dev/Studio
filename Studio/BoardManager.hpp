@@ -85,7 +85,7 @@ signals:
     void boardEvent(int board, int input, float value);
 
 private:
-    int _tickRate { 1000 };
+    int _tickRate { 10 };
     int _discoverRate { 1000 };
     QTimer _tickTimer {};
     QTimer _discoverTimer {};

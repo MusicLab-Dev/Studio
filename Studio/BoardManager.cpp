@@ -164,8 +164,8 @@ void BoardManager::processBoardPacket(Protocol::ReadablePacket &packet)
             Core::Vector<InputEvent> events;
             packet >> events;
             for (const auto &event : events) {
-                std::cout << "Input index: " << static_cast<int>(event.inputIdx) << std::endl;
-                std::cout << "Event value: " << static_cast<int>(event.value) << std::endl;
+                NETWORK_LOG("Input index: ", static_cast<int>(event.inputIdx));
+                NETWORK_LOG("Event value: ", static_cast<int>(event.value));
                 emit boardEvent(static_cast<int>(packetBoardId), event.inputIdx, static_cast<float>(event.value));
             }
             break;
@@ -316,7 +316,7 @@ void BoardManager::discoveryEmit(void)
                         sendto() has failed because the network interface is not valid anymore,
                         so checking to remove the associated network.
                     */
-                    std::cout << "INTERFACE DISCONNECTED" << std::endl;
+                    NETWORK_LOG("INTERFACE DISCONNECTED");
                     removeInterfaceNetwork(networkInterface.first);
                 }
                 else {
@@ -540,7 +540,7 @@ void BoardManager::processNewConnections(void)
         const Socket clientSocket = acceptSocket(interfaceMasterSocket, clientAddress);
         if (clientSocket < 0) {
             if (operationWouldBlock() == true) {
-                std::cout << "BoardManager::processNewConnections: No pending connection on socket" << std::endl;
+                NETWORK_LOG("BoardManager::processNewConnections: No pending connection on socket");
                 continue;
             }
             throw std::runtime_error(std::strerror(errno));
@@ -567,11 +567,11 @@ bool BoardManager::handleIdentifierRequest(const Protocol::ReadablePacket &packe
         packet.commandAs<ConnectionCommand>() == ConnectionCommand::IDAssignment &&
         packet.footprintStackSize() == 0) {
 
-        std::cout << "Identifier request from a direct client received." << std::endl;
+        NETWORK_LOG("Identifier request from a direct client received.");
 
         BoardID newID = aquireIdentifier();
         if (newID == 0) {
-            std::cout << "BoardManager::aquireIdentifier: OUT OF IDENTIFIER" << std::endl;
+            NETWORK_LOG("BoardManager::aquireIdentifier: OUT OF IDENTIFIER");
             /* handle out of identifier error here */
             throw std::runtime_error("OUT OF IDENTIFIER");
         }
@@ -604,7 +604,7 @@ void BoardManager::processClientInput(Socket &clientSocket)
             recv() detected that the connection has been closed by the peer or
             the keepalive option detected that the peer has timed out.
         */
-        std::cout << "BoardManager::processClientInput: Direct client disconnection detected" << std::endl;
+        NETWORK_LOG("BoardManager::processClientInput: Direct client disconnection detected");
         removeDirectClientNetwork(clientSocket);
         closeSocket(clientSocket);
         clientSocket = -1;
@@ -614,7 +614,7 @@ void BoardManager::processClientInput(Socket &clientSocket)
         throw std::runtime_error(std::strerror(errno));
     }
 
-    std::cout << inputSize << " byte(s) received from client" << std::endl;
+    NETWORK_LOG(inputSize, " byte(s) received from client");
 
     Protocol::ReadablePacket packet(bufferPtr, bufferPtr + inputSize);
 
@@ -720,9 +720,9 @@ void BoardManager::removeNetworkFrom(const BoardID senderId, const BoardID targe
 
 void BoardManager::removeDirectClientNetwork(const Socket directClientSocket)
 {
-    std::cout << "BoardManager::removeDirectClientNetwork" << std::endl;
+    NETWORK_LOG("BoardManager::removeDirectClientNetwork");
 
-    std::cout << "board list size IN: " << _boards.size() << std::endl;
+    NETWORK_LOG("BoardManager::removeDirectClientNetwork: board list size in: ", _boards.size());
     beginResetModel();
     for (auto it = _boards.begin(); it != _boards.end();) {
         if (it->get()->getRootSocket() == directClientSocket) {
@@ -731,14 +731,14 @@ void BoardManager::removeDirectClientNetwork(const Socket directClientSocket)
             ++it;
     }
     endResetModel();
-    std::cout << "board list size OUT: " << _boards.size() << std::endl;
+    NETWORK_LOG("BoardManager::removeDirectClientNetwork: Board list size out: ", _boards.size());
 }
 
 void BoardManager::removeInterfaceNetwork(const InterfaceIndex interfaceIndex)
 {
-    std::cout << "BoardManager::removeInterfaceNetwork" << std::endl;
+    NETWORK_LOG("BoardManager::removeInterfaceNetwork");
 
-    std::cout << "Removing interface network for index: " << interfaceIndex << std::endl;
+    NETWORK_LOG("Removing interface network for index: ", interfaceIndex);
 
     for (auto &directClient : _clients) {
         if (directClient.interfaceIndex == interfaceIndex) {

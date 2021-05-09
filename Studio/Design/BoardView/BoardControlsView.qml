@@ -37,7 +37,6 @@ Rectangle {
                 text: modelData
 
                 onTriggered: {
-                    console.log(board.boardID, assignMenu.targetInput, index);
                     eventDispatcher.boardListener.add(board.boardID, assignMenu.targetInput, index)
                 }
             }

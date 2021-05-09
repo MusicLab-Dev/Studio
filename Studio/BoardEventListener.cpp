@@ -105,7 +105,6 @@ bool BoardEventListener::boardEventFilter(int board, int input, float value)
     const KeyDescriptor desc { board, input };
     auto it = _activeKeys.find(desc);
     bool catched = false;
-    catched = sendSignals(desc, value);
     if (value == 1.0f && it == _activeKeys.end()) {
         _activeKeys.push(desc);
         catched = sendSignals(desc, value);
