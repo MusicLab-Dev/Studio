@@ -32,15 +32,6 @@ NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
 
 NodeModel::~NodeModel(void) noexcept
 {
-    if (auto p = _data->parent(); p) {
-        std::uint32_t idx = 0u;
-        for (auto &child : p->children()) {
-            if (child.get() == p) {
-                p->children().erase(p->children().begin() + idx);
-                break;
-            }
-        }
-    }
 }
 
 QHash<int, QByteArray> NodeModel::roleNames(void) const noexcept

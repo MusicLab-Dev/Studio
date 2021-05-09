@@ -41,15 +41,6 @@ ColumnLayout {
         function onStopContext(pressed) { if (!pressed) return; player.stop(); }
     }
 
-    Keys.onPressed: {
-        if (event.key === Qt.Key_A)
-            player.stop()
-        else if (event.key === Qt.Key_Z)
-            player.replay()
-        else if (event.key === Qt.Key_E)
-            player.playOrPause()
-    }
-
     PlaylistViewHeader {
         id: playlistViewHeader
         Layout.fillWidth: true
