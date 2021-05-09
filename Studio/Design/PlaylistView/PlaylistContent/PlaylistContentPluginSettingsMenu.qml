@@ -78,6 +78,14 @@ Menu {
     }
 
     Action {
+        text: qsTr("Add parent")
+
+        onTriggered: {
+
+        }
+    }
+
+    Action {
         text: qsTr("Add partition")
 
         onTriggered: {
@@ -94,6 +102,17 @@ Menu {
             targetNode.controls.add(1)
             closeMenu()
         }
+    }
+
+    Action {
+        text: qsTr("Edit name")
+        enabled: true
+
+        function setName() {
+            targetNode.name = globalTextField.text;
+        }
+
+        onTriggered: globalTextField.open(targetNode.name, setName);
     }
 
     Action {
