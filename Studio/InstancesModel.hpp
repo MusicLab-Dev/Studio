@@ -18,7 +18,7 @@ class InstancesModel : public QAbstractListModel
 
 public:
     /** @brief Roles of each instance */
-    enum Roles {
+    enum class Roles {
         From = Qt::UserRole + 1,
         To
     };

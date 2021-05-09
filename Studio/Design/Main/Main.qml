@@ -65,5 +65,7 @@ Window {
         keyboardListener.enabled: {
             !cancelEvents && (mainWindow.activeFocusItem ? !(mainWindow.activeFocusItem["cancelKeyboardEventsOnFocus"] === true) : true)
         }
+
+        boardListener.boardManager: boardManager
     }
 }

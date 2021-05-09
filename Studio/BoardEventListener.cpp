@@ -1,61 +1,33 @@
 /**
- * @ Author: Cédric Lucchese
- * @ Description: Keyboard event listener
+ * @ Author: Matthieu Moinvaziri
+ * @ Description: Board event listener
  */
 
 #include "EventDispatcher.hpp"
 
-KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher)
+BoardEventListener::BoardEventListener(EventDispatcher *dispatcher)
     : AEventListener(dispatcher)
 {
-    QGuiApplication::instance()->installEventFilter(this);
-
-    /**  -- DEBUG -- */
-    add(Qt::Key_Q,          0, EventTarget::Note0           );
-    add(Qt::Key_S,          0, EventTarget::Note1           );
-    add(Qt::Key_D,          0, EventTarget::Note2           );
-    add(Qt::Key_F,          0, EventTarget::Note3           );
-    add(Qt::Key_G,          0, EventTarget::Note4           );
-    add(Qt::Key_H,          0, EventTarget::Note5           );
-    add(Qt::Key_J,          0, EventTarget::Note6           );
-    add(Qt::Key_K,          0, EventTarget::Note7           );
-    add(Qt::Key_L,          0, EventTarget::Note8           );
-    add(Qt::Key_M,          0, EventTarget::Note9           );
-    add(Qt::Key_Ugrave,     0, EventTarget::Note10          );
-    add(Qt::Key_Asterisk,   0, EventTarget::Note11          );
-    add(Qt::Key_W,          0, EventTarget::OctaveDown      );
-    add(Qt::Key_X,          0, EventTarget::OctaveUp        );
-    add(Qt::Key_Colon,      0, EventTarget::OctaveDown      );
-    add(Qt::Key_Exclam,     0, EventTarget::OctaveUp        );
-
-    add(Qt::Key_Space,      0, EventTarget::PlayContext     );
-    add(Qt::Key_A,          0, EventTarget::ReplayContext   );
-    add(Qt::Key_Z,          0, EventTarget::StopContext     );
-
-    add(Qt::Key_I,          0, EventTarget::PlayPlaylist    );
-    add(Qt::Key_O,          0, EventTarget::ReplayPlaylist  );
-    add(Qt::Key_P,          0, EventTarget::StopPlaylist    );
 }
 
-
-QHash<int, QByteArray> KeyboardEventListener::roleNames(void) const noexcept
+QHash<int, QByteArray> BoardEventListener::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(Roles::Key), "eventKey" },
-        { static_cast<int>(Roles::Modifiers), "eventModifiers" },
+        { static_cast<int>(Roles::Board), "eventBoard" },
+        { static_cast<int>(Roles::Input), "eventInput" },
         { static_cast<int>(Roles::Event), "eventType" }
     };
 }
 
-QVariant KeyboardEventListener::data(const QModelIndex &index, int role) const
+QVariant BoardEventListener::data(const QModelIndex &index, int role) const
 {
     auto &event = _events[static_cast<std::uint32_t>(index.row())];
 
     switch (static_cast<Roles>(role)) {
-        case Roles::Key:
-            return event.desc.key;
-        case Roles::Modifiers:
-            return event.desc.modifiers;
+        case Roles::Board:
+            return event.desc.board;
+        case Roles::Input:
+            return event.desc.input;
         case Roles::Event:
             return event.event;
         default:
@@ -63,7 +35,7 @@ QVariant KeyboardEventListener::data(const QModelIndex &index, int role) const
     }
 }
 
-void KeyboardEventListener::setEnabled(const bool value) noexcept
+void BoardEventListener::setEnabled(const bool value) noexcept
 {
     if (_enabled == value)
         return;
@@ -73,7 +45,19 @@ void KeyboardEventListener::setEnabled(const bool value) noexcept
     emit enabledChanged();
 }
 
-void KeyboardEventListener::add(int key, int modifiers, EventTarget event)
+void BoardEventListener::setBoardManager(BoardManager *manager) noexcept
+{
+    if (_boardManager)
+        disconnect(_boardManager, &BoardManager::boardEvent, this, &BoardEventListener::boardEventFilter);
+    if (_boardManager == manager)
+        return;
+    _boardManager = manager;
+    if (_boardManager)
+        connect(_boardManager, &BoardManager::boardEvent, this, &BoardEventListener::boardEventFilter);
+    emit boardManagerChanged();
+}
+
+void BoardEventListener::add(const int key, const int modifiers, EventTarget event)
 {
     const KeyDescriptor desc { key, modifiers };
     auto idx = find(desc);
@@ -91,7 +75,7 @@ void KeyboardEventListener::add(int key, int modifiers, EventTarget event)
     }
 }
 
-void KeyboardEventListener::remove(const int idx)
+void BoardEventListener::remove(const int idx)
 {
     if (idx < 0 || idx >= count())
         return;
@@ -104,7 +88,7 @@ void KeyboardEventListener::remove(const int idx)
     endRemoveRows();
 }
 
-int KeyboardEventListener::find(const KeyDescriptor &desc)
+int BoardEventListener::find(const KeyDescriptor &desc)
 {
     for (auto i = 0u; i < _events.size(); ++i) {
         auto &evt = _events[i];
@@ -114,97 +98,93 @@ int KeyboardEventListener::find(const KeyDescriptor &desc)
     return -1;
 }
 
-bool KeyboardEventListener::eventFilter(QObject *object, QEvent *event)
+bool BoardEventListener::boardEventFilter(int board, int input, float value)
 {
     if (!_enabled)
         return false;
-    auto type = event->type();
-    if ((type != QEvent::KeyPress && type != QEvent::KeyRelease))
-        return QObject::eventFilter(object, event);
-    QKeyEvent *keyEvent = reinterpret_cast<QKeyEvent*>(event);
-    if (keyEvent->isAutoRepeat())
-        return true;
-    const KeyDescriptor desc { keyEvent->key(), static_cast<int>(keyEvent->modifiers()) };
+    const KeyDescriptor desc { board, input };
     auto it = _activeKeys.find(desc);
     bool catched = false;
-    if (event->type() == QEvent::KeyPress && it == _activeKeys.end()) {
-        catched = sendSignals(desc, true);
+    catched = sendSignals(desc, value);
+    if (value == 1.0f && it == _activeKeys.end()) {
         _activeKeys.push(desc);
-    } else if (event->type() == QEvent::KeyRelease && it != _activeKeys.end()) {
-        catched = sendSignals(desc, false);
+        catched = sendSignals(desc, value);
+    } else if (it != _activeKeys.end()) {
+        catched = sendSignals(desc, value);
         _activeKeys.erase(it);
     }
     return catched;
 }
 
-bool KeyboardEventListener::sendSignals(const KeyDescriptor &desc, bool value)
+bool BoardEventListener::sendSignals(const KeyDescriptor &desc, float value)
 {
+    const bool boolValue = static_cast<bool>(value);
     auto idx = find(desc);
     if (idx == -1)
         return false;
     const auto &event = _events[static_cast<std::uint32_t>(idx)];
     switch (event.event) {
     case EventTarget::Note0:
-        emit _dispatcher->note0(value);
+        emit _dispatcher->note0(boolValue);
         break;
     case EventTarget::Note1:
-        emit _dispatcher->note1(value);
+        emit _dispatcher->note1(boolValue);
         break;
     case EventTarget::Note2:
-        emit _dispatcher->note2(value);
+        emit _dispatcher->note2(boolValue);
         break;
     case EventTarget::Note3:
-        emit _dispatcher->note3(value);
+        emit _dispatcher->note3(boolValue);
         break;
     case EventTarget::Note4:
-        emit _dispatcher->note4(value);
+        emit _dispatcher->note4(boolValue);
         break;
     case EventTarget::Note5:
-        emit _dispatcher->note5(value);
+        emit _dispatcher->note5(boolValue);
         break;
     case EventTarget::Note6:
-        emit _dispatcher->note6(value);
+        emit _dispatcher->note6(boolValue);
         break;
     case EventTarget::Note7:
-        emit _dispatcher->note7(value);
+        emit _dispatcher->note7(boolValue);
         break;
     case EventTarget::Note8:
-        emit _dispatcher->note8(value);
+        emit _dispatcher->note8(boolValue);
         break;
     case EventTarget::Note9:
-        emit _dispatcher->note9(value);
+        emit _dispatcher->note9(boolValue);
         break;
     case EventTarget::Note10:
-        emit _dispatcher->note10(value);
+        emit _dispatcher->note10(boolValue);
         break;
     case EventTarget::Note11:
-        emit _dispatcher->note11(value);
+        emit _dispatcher->note11(boolValue);
         break;
     case EventTarget::OctaveUp:
         stopAllPlayingNotes();
-        emit _dispatcher->octaveUp(value);
+        emit _dispatcher->octaveUp(boolValue);
         break;
     case EventTarget::OctaveDown:
         stopAllPlayingNotes();
-        emit _dispatcher->octaveDown(value);
+        emit _dispatcher->octaveDown(boolValue);
         break;
     case EventTarget::PlayContext:
-        emit _dispatcher->playContext(value);
+        emit _dispatcher->playContext(boolValue);
         break;
     case EventTarget::ReplayContext:
-        emit _dispatcher->replayContext(value);
+        emit _dispatcher->replayContext(boolValue);
         break;
     case EventTarget::StopContext:
-        emit _dispatcher->stopContext(value);
+        emit _dispatcher->stopContext(boolValue);
         break;
     case EventTarget::PlayPlaylist:
-        emit _dispatcher->playPlaylist(value);
+        emit _dispatcher->playPlaylist(boolValue);
         break;
     case EventTarget::ReplayPlaylist:
-        emit _dispatcher->replayPlaylist(value);
+        emit _dispatcher->replayPlaylist(boolValue);
         break;
     case EventTarget::StopPlaylist:
-        emit _dispatcher->stopPlaylist(value);
+        emit _dispatcher->stopPlaylist(boolValue);
         break;
     default:
         return false;
@@ -212,7 +192,7 @@ bool KeyboardEventListener::sendSignals(const KeyDescriptor &desc, bool value)
     return true;
 }
 
-void KeyboardEventListener::stopAllPlayingNotes(void)
+void BoardEventListener::stopAllPlayingNotes(void)
 {
     auto it = std::remove_if(_activeKeys.begin(), _activeKeys.end(), [this](const auto &desc) {
         for (auto &evt : _events) {

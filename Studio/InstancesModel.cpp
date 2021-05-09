@@ -18,15 +18,15 @@ InstancesModel::InstancesModel(Audio::BeatRanges *beatRanges, QObject *parent) n
 QHash<int, QByteArray> InstancesModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { Roles::From, "from" },
-        { Roles::To, "to" }
+        { static_cast<int>(Roles::From), "from" },
+        { static_cast<int>(Roles::To), "to" }
     };
 }
 
 QVariant InstancesModel::data(const QModelIndex &index, int role) const
 {
     const auto &child = get(index.row());
-    switch (role) {
+    switch (static_cast<Roles>(role)) {
     case Roles::From:
         return child.from;
     case Roles::To:

@@ -15,14 +15,14 @@
 QHash<int, QByteArray> SettingsListModel::roleNames(void) const
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(Role::Category), "category" },
-        { static_cast<int>(Role::ID), "roleID" },
-        { static_cast<int>(Role::Name), "name" },
-        { static_cast<int>(Role::Help), "help" },
-        { static_cast<int>(Role::Tags), "tags" },
-        { static_cast<int>(Role::Type), "type" },
-        { static_cast<int>(Role::CurrentValue), "roleValue" },
-        { static_cast<int>(Role::Values), "range" }
+        { static_cast<int>(Roles::Category), "category" },
+        { static_cast<int>(Roles::ID), "roleID" },
+        { static_cast<int>(Roles::Name), "name" },
+        { static_cast<int>(Roles::Help), "help" },
+        { static_cast<int>(Roles::Tags), "tags" },
+        { static_cast<int>(Roles::Type), "type" },
+        { static_cast<int>(Roles::CurrentValue), "roleValue" },
+        { static_cast<int>(Roles::Values), "range" }
     };
 }
 
@@ -30,22 +30,22 @@ QVariant SettingsListModel::data(const QModelIndex &index, int role) const
 {
     auto &model = _models[index.row()];
 
-    switch (static_cast<Role>(role)) {
-    case Role::Category:
+    switch (static_cast<Roles>(role)) {
+    case Roles::Category:
         return model.category;
-    case Role::ID:
+    case Roles::ID:
         return model.id;
-    case Role::Name:
+    case Roles::Name:
         return model.name;
-    case Role::Help:
+    case Roles::Help:
         return model.help;
-    case Role::Tags:
+    case Roles::Tags:
         return model.tags;
-    case Role::Type:
+    case Roles::Type:
         return model.type;
-    case Role::CurrentValue:
+    case Roles::CurrentValue:
         return model.currentValue;
-    case Role::Values:
+    case Roles::Values:
         return model.values;
     default:
         return model.name;
@@ -57,8 +57,8 @@ bool SettingsListModel::setData(const QModelIndex &index, const QVariant &value,
     auto &model = _models[index.row()];
     bool changed = false;
 
-    switch (static_cast<Role>(role)) {
-        case Role::CurrentValue:
+    switch (static_cast<Roles>(role)) {
+        case Roles::CurrentValue:
             if (model.currentValue != value) {
                 model.currentValue = value;
                 changed = true;
@@ -205,7 +205,7 @@ bool SettingsListModel::set(const QString &id, const QVariant &value) noexcept
     for (auto it = _models.begin(); it != _models.end(); it++) {
         if (it->id == id) {
             it->currentValue = value;
-            emit dataChanged(index(i), index(i), { Role::CurrentValue });
+            emit dataChanged(index(i), index(i), { static_cast<int>(Roles::CurrentValue) });
             return true;
         }
         ++i;

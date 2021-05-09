@@ -8,9 +8,9 @@
 bool SettingsListModelProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QModelIndex index0 = sourceModel()->index(sourceRow, 0, sourceParent);
-    QString name = sourceModel()->data(index0, SettingsListModel::Name).toString();
-    QVariant tags = sourceModel()->data(index0, SettingsListModel::Tags);
-    QString category = sourceModel()->data(index0, SettingsListModel::Category).toString();
+    QString name = sourceModel()->data(index0, static_cast<int>(SettingsListModel::Roles::Name)).toString();
+    QVariant tags = sourceModel()->data(index0, static_cast<int>(SettingsListModel::Roles::Tags));
+    QString category = sourceModel()->data(index0, static_cast<int>(SettingsListModel::Roles::Category)).toString();
 
     // Filter by tag
     if (_tags != "") {

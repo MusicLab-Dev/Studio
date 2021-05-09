@@ -28,66 +28,71 @@ qt_add_resources(QtResources
 )
 
 set(StudioPrecompiledHeaders
-    ${StudioDir}/Base.hpp
-    ${StudioDir}/AudioAPI.hpp
-    ${StudioDir}/Application.hpp
-    ${StudioDir}/AutomationModel.hpp
-    ${StudioDir}/ControlModel.hpp
-    ${StudioDir}/ControlsModel.hpp
-    ${StudioDir}/Device.hpp
-    ${StudioDir}/DevicesModel.hpp
-    ${StudioDir}/InstancesModel.hpp
-    ${StudioDir}/Models.hpp
-    ${StudioDir}/NodeModel.hpp
-    ${StudioDir}/PartitionModel.hpp
-    ${StudioDir}/PartitionsModel.hpp
-    ${StudioDir}/PluginTableModel.hpp
-    ${StudioDir}/PluginTableModelProxy.hpp
-    ${StudioDir}/Note.hpp
-    ${StudioDir}/Control.hpp
-    ${StudioDir}/Point.hpp
-    ${StudioDir}/Project.hpp
-    ${StudioDir}/ProjectSave.hpp
     ${StudioDir}/Scheduler.hpp
-    ${StudioDir}/Studio.hpp
-    ${StudioDir}/ThemeManager.hpp
-    ${StudioDir}/SettingsListModel.hpp
-    ${StudioDir}/SettingsListModelProxy.hpp
-    ${StudioDir}/PluginModel.hpp
-    ${StudioDir}/NetworkLog.hpp
-    ${StudioDir}/BoardManager.hpp
-    ${StudioDir}/Board.hpp
-    ${StudioDir}/AEventListener.hpp
-    ${StudioDir}/KeyboardEventListener.hpp
-    ${StudioDir}/EventDispatcher.hpp
 )
 
 set(StudioSources
     ${StudioPrecompiledHeaders}
-    ${StudioDir}/Application.cpp
-    ${StudioDir}/AutomationModel.cpp
-    ${StudioDir}/ControlModel.cpp
-    ${StudioDir}/ControlsModel.cpp
-    ${StudioDir}/Device.cpp
-    ${StudioDir}/DevicesModel.cpp
-    ${StudioDir}/InstancesModel.cpp
-    ${StudioDir}/NodeModel.cpp
-    ${StudioDir}/PartitionModel.cpp
-    ${StudioDir}/PartitionsModel.cpp
-    ${StudioDir}/PluginTableModel.cpp
-    ${StudioDir}/Project.cpp
-    ${StudioDir}/ProjectSave.cpp
-    ${StudioDir}/Scheduler.cpp
-    ${StudioDir}/Studio.cpp
-    ${StudioDir}/ThemeManager.cpp
-    ${StudioDir}/SettingsListModel.cpp
-    ${StudioDir}/SettingsListModelProxy.cpp
-    ${StudioDir}/PluginModel.cpp
-    ${StudioDir}/BoardManager.cpp
-    ${StudioDir}/Board.cpp
+    ${StudioDir}/Base.hpp
     ${StudioDir}/AEventListener.cpp
-    ${StudioDir}/KeyboardEventListener.cpp
+    ${StudioDir}/AEventListener.hpp
+    ${StudioDir}/Application.cpp
+    ${StudioDir}/Application.hpp
+    ${StudioDir}/AudioAPI.hpp
+    ${StudioDir}/AutomationModel.cpp
+    ${StudioDir}/AutomationModel.hpp
+    ${StudioDir}/Base.hpp
+    ${StudioDir}/Board.cpp
+    ${StudioDir}/Board.hpp
+    ${StudioDir}/BoardEventListener.cpp
+    ${StudioDir}/BoardEventListener.hpp
+    ${StudioDir}/BoardManager.cpp
+    ${StudioDir}/BoardManager.hpp
+    ${StudioDir}/Control.hpp
+    ${StudioDir}/ControlModel.cpp
+    ${StudioDir}/ControlModel.hpp
+    ${StudioDir}/ControlsModel.cpp
+    ${StudioDir}/ControlsModel.hpp
+    ${StudioDir}/Device.cpp
+    ${StudioDir}/Device.hpp
+    ${StudioDir}/DevicesModel.cpp
+    ${StudioDir}/DevicesModel.hpp
     ${StudioDir}/EventDispatcher.cpp
+    ${StudioDir}/EventDispatcher.hpp
+    ${StudioDir}/InstancesModel.cpp
+    ${StudioDir}/InstancesModel.hpp
+    ${StudioDir}/KeyboardEventListener.cpp
+    ${StudioDir}/KeyboardEventListener.hpp
+    ${StudioDir}/Main.cpp
+    ${StudioDir}/Models.hpp
+    ${StudioDir}/NetworkLog.hpp
+    ${StudioDir}/NodeModel.cpp
+    ${StudioDir}/NodeModel.hpp
+    ${StudioDir}/Note.hpp
+    ${StudioDir}/PartitionModel.cpp
+    ${StudioDir}/PartitionModel.hpp
+    ${StudioDir}/PartitionsModel.cpp
+    ${StudioDir}/PartitionsModel.hpp
+    ${StudioDir}/PluginModel.cpp
+    ${StudioDir}/PluginModel.hpp
+    ${StudioDir}/PluginTableModel.cpp
+    ${StudioDir}/PluginTableModel.hpp
+    ${StudioDir}/PluginTableModelProxy.hpp
+    ${StudioDir}/Point.hpp
+    ${StudioDir}/Project.cpp
+    ${StudioDir}/Project.hpp
+    ${StudioDir}/ProjectSave.cpp
+    ${StudioDir}/ProjectSave.hpp
+    ${StudioDir}/Scheduler.cpp
+    ${StudioDir}/SettingsListModel.cpp
+    ${StudioDir}/SettingsListModel.hpp
+    ${StudioDir}/SettingsListModelProxy.cpp
+    ${StudioDir}/SettingsListModelProxy.hpp
+    ${StudioDir}/Socket.hpp
+    ${StudioDir}/Studio.cpp
+    ${StudioDir}/Studio.hpp
+    ${StudioDir}/ThemeManager.cpp
+    ${StudioDir}/ThemeManager.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
