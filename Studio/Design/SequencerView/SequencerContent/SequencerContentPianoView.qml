@@ -68,8 +68,8 @@ Item {
         function onNote9(pressed) { launch(pressed, 9) }
         function onNote10(pressed) { launch(pressed, 10) }
         function onNote11(pressed) { launch(pressed, 11) }
-        function onOctaveUp(pressed) { if (pressed) targetOctave = Math.min(targetOctave, octaveMax) }
-        function onOctaveDown(pressed) { if (pressed) targetOctave = Math.max(targetOctave, octaveMin) }
+        function onOctaveUp(pressed) { if (pressed) targetOctave = Math.min(targetOctave + 1, octaveMax) }
+        function onOctaveDown(pressed) { if (pressed) targetOctave = Math.max(targetOctave - 1, octaveMin) }
     }
 
     Repeater {
@@ -90,7 +90,7 @@ Item {
             width: pianoView.keyWidth
             height: contentView.rowHeight
             y: index * contentView.rowHeight
-            z: isHashKey ? 100 : 1
+            z: isHashKey ? 2 : 1
 
             Rectangle {
                 id: keyBackground
@@ -132,6 +132,16 @@ Item {
         }
     }
 
+    Rectangle {
+        y: totalHeight - height - (notesConnections.targetOctave - octaveOffset) * contentView.rowHeight * keysPerOctave
+        width: contentView.rowHeaderWidth
+        height: contentView.rowHeight * keysPerOctave
+        color: "transparent"
+        border.color: themeManager.accentColor
+        border.width: 2
+        z: 10
+    }
+
     NotesPlacementArea {
         x: contentView.rowHeaderWidth
         width: contentView.rowDataWidth
@@ -171,13 +181,4 @@ Item {
             }
         }
     }
-
-    // Rectangle {
-    //     y: height - notesConnections.targetOctave * height - height
-    //     width: contentView.rowHeaderWidth
-    //     height: contentView.rowHeight * keysPerOctave
-    //     color: "red"
-    //     border.color: themeManager.accentColor
-    //     border.width: 1
-    // }
 }

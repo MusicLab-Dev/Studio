@@ -24,9 +24,11 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher, QObjec
     set(AEventListener::Event { AEventListener::Event::NOTE_8,          Qt::Key_L           });
     set(AEventListener::Event { AEventListener::Event::NOTE_9,          Qt::Key_M           });
     set(AEventListener::Event { AEventListener::Event::NOTE_10,         Qt::Key_Ugrave      });
-    set(AEventListener::Event { AEventListener::Event::NOTE_11,         Qt::Key_multiply    });
-    set(AEventListener::Event { AEventListener::Event::OCTAVE_UP,       Qt::Key_W           });
-    set(AEventListener::Event { AEventListener::Event::OCTAVE_DOWN,     Qt::Key_X           });
+    set(AEventListener::Event { AEventListener::Event::NOTE_11,         Qt::Key_Asterisk    });
+    set(AEventListener::Event { AEventListener::Event::OCTAVE_DOWN,     Qt::Key_W           });
+    set(AEventListener::Event { AEventListener::Event::OCTAVE_UP,       Qt::Key_X           });
+    set(AEventListener::Event { AEventListener::Event::OCTAVE_DOWN,     Qt::Key_Colon       });
+    set(AEventListener::Event { AEventListener::Event::OCTAVE_UP,       Qt::Key_Exclam      });
 
     set(AEventListener::Event { AEventListener::Event::PLAY_CONTEXT,    Qt::Key_Space       });
     set(AEventListener::Event { AEventListener::Event::REPLAY_CONTEXT,  Qt::Key_A           });
