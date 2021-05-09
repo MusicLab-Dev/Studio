@@ -14,10 +14,25 @@
 
 #include "Socket.hpp"
 
+class Board;
+
+struct BoardWrapper
+{
+    Q_GADGET
+
+    Q_PROPERTY(Board *instance MEMBER instance)
+public:
+
+    Board *instance { nullptr };
+};
+
+Q_DECLARE_METATYPE(BoardWrapper)
+
 class alignas_cacheline Board : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(int boardID READ boardID NOTIFY boardIDChanged)
     Q_PROPERTY(QSize size READ size WRITE setSize NOTIFY sizeChanged)
 
 public:
@@ -52,20 +67,21 @@ public:
         _controls = Controls {
             {
                 ControlType::Button,
-                QPoint(1, 2),
+                QPoint(0, 0),
                 1
             },
             Control {
                 ControlType::Button,
-                QPoint(1, 2),
+                QPoint(1, 1),
                 2
             },
             Control {
                 ControlType::Button,
-                QPoint(1, 2),
+                QPoint(2, 2),
                 3
             }
         };
+        _size = QSize(3, 3);
     }
 
     ~Board() = default;
@@ -79,6 +95,8 @@ public:
     /** @brief Query data from a 'Control' */
     [[nodiscard]] virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
+    /** @brief Get the board ID */
+    [[nodiscard]] int boardID(void) const noexcept { return static_cast<int>(_boardID); }
 
     /** @brief Get / Set the size property */
     [[nodiscard]] const QSize &size(void) const noexcept { return _size; }
@@ -130,6 +148,9 @@ public:
 public slots:
 
 signals:
+    /** @brief Notify that the board ID has changed */
+    void boardIDChanged(void);
+
     /** @brief Notify that the size has changed */
     void sizeChanged(void);
 

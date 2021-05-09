@@ -29,7 +29,7 @@ public:
     static inline const QString LexoDefaultSettingsPath = LexoSettingsDir + "UserSettings.json";
 
     /** @brief Settings model roles */
-    enum Role {
+    enum class Roles {
         Category = Qt::UserRole + 1,
         ID,
         Name,

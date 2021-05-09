@@ -101,7 +101,7 @@ signals:
     void discoverRateChanged(void);
 
     /** @brief A board event has been processed, eventValue is [0, 1] */
-    void boardEvent(const BoardID boardID, const std::uint32_t controlIndex, const float eventValue);
+    void boardEvent(int board, int input, float value);
 
 private:
     int _tickRate { 1000 };

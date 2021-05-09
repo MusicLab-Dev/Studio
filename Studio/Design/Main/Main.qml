@@ -9,6 +9,7 @@ import NodeModel 1.0
 import BoardManager 1.0
 import EventDispatcher 1.0
 
+import "../Common"
 import "../ModulesView"
 import "../Modules/Workspaces"
 
@@ -49,10 +50,6 @@ Window {
         id: boardManager
     }
 
-    ModulesView {
-        anchors.fill: parent
-    }
-
     PluginTableModel {
         id: pluginTable
     }
@@ -65,5 +62,16 @@ Window {
         keyboardListener.enabled: {
             !cancelEvents && (mainWindow.activeFocusItem ? !(mainWindow.activeFocusItem["cancelKeyboardEventsOnFocus"] === true) : true)
         }
+
+        boardListener.boardManager: boardManager
+    }
+
+    ModulesView {
+        enabled: !globalTextField.visible
+        anchors.fill: parent
+    }
+
+    GlobalTextField {
+        id: globalTextField
     }
 }

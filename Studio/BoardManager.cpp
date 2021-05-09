@@ -12,6 +12,10 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
 {
     NETWORK_LOG("BoardManager::BoardManager");
 
+    _boards.push(std::make_shared<Board>(1, 0));
+    _boards.push(std::make_shared<Board>(2, 0));
+    return;
+
     onTickRateChanged();
     onDiscoverRateChanged();
     connect(this, &BoardManager::tickRateChanged, this, &BoardManager::onTickRateChanged);
@@ -86,7 +90,7 @@ QVariant BoardManager::data(const QModelIndex &index, int role) const
 
     switch (static_cast<Role>(role)) {
     case Role::Instance:
-        return QVariant::fromValue(elem.get());
+        return QVariant::fromValue(BoardWrapper { elem.get() });
     case Role::Size:
         return elem->size();
     default:
