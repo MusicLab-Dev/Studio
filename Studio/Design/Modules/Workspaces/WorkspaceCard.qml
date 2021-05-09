@@ -53,11 +53,17 @@ Rectangle {
             color: "#FFFFFF"
             opacity: enabled ? 0.6 : 0.4
             enabled: editModeEnabled
-            text: name + " " + realPath
+            text: name
 
             background: Rectangle {
                 anchors.fill: parent
                 color: "transparent"
+            }
+
+            onTextChanged: {
+                var tmp = modelData
+                tmp[0] = text
+                modelData = tmp
             }
         }
 

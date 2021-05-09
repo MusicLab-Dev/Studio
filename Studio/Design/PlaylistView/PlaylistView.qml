@@ -38,7 +38,7 @@ ColumnLayout {
 
         function onPlayPlaylist(pressed) { if (!pressed) return; player.playOrPause() }
         function onReplayPlaylist(pressed) { if (!pressed) return; player.replay(); }
-        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
+        function onStopPlaylist(pressed) { if (!pressed) return; player.stop(); }
     }
 
     PlaylistViewHeader {

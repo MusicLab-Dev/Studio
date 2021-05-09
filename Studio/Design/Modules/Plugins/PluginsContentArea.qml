@@ -9,7 +9,7 @@ GridView {
     property alias pluginTableProxy: pluginTableProxy
 
     id: pluginsGrid
-    cellWidth: pluginsContentArea.width / 5
+    cellWidth: 150
     cellHeight: cellWidth * 1.6
     clip: true
 
@@ -21,7 +21,6 @@ GridView {
     }
 
     ScrollBar.vertical: DefaultScrollBar {
-        anchors.left: pluginsGrid.right + 400
         id: scrollBar
         color: "#31A8FF"
         opacity: 0.3

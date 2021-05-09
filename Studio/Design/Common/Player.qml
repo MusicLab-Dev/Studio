@@ -99,6 +99,11 @@ RowLayout {
     id: player
     spacing: 0
 
+    Component.onDestruction: {
+        if (isPlayerRunning)
+            stop()
+    }
+
     Connections {
         target: app
 

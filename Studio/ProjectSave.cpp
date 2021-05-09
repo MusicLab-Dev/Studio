@@ -212,15 +212,17 @@ bool ProjectSave::load(void)
         if (jsonStr.isEmpty())
             return false;
         QJsonDocument doc = QJsonDocument::fromJson(jsonStr.toUtf8());
+        if (!doc.isObject())
+            throw std::logic_error("ProjectSave::load: Invalid file");
         QJsonObject obj = doc.object();
 
         _project->setName(obj["name"].toString());
         Scheduler::Get()->setBPM(static_cast<float>(obj["bpm"].toDouble()));
         initNode(_project->master(), obj["master"].toObject());
 
-        qDebug() << "Debug: ProjectSave::Load success";
+        qDebug() << "ProjectSave::load success";
     } catch (const std::logic_error &e) {
-        qDebug() << "Debug: ProjectSave::Load: " + QString(e.what());
+        qDebug() << "ProjectSave::load: " + QString(e.what());
         return false;
     }
     return true;
