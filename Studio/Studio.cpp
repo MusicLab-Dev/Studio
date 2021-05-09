@@ -21,8 +21,6 @@
 #include "BoardManager.hpp"
 #include "EventDispatcher.hpp"
 
-// #include "BoardManager.hpp"
-
 void Studio::InitResources(void)
 {
     Audio::PluginTable::Init();
@@ -67,7 +65,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
-    qmlRegisterType<Board>("Board", 1, 0, "Board");
+    qmlRegisterUncreatableType<Board>("Board", 1, 0, "Board", "Cannot constrict Board");
     qmlRegisterType<EventDispatcher>("EventDispatcher", 1, 0, "EventDispatcher");
     qmlRegisterUncreatableType<KeyboardEventListener>("KeyboardEventListener", 1, 0, "KeyboardEventListener", "Cannot construct KeyboardEventListener");
 

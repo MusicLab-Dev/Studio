@@ -20,7 +20,6 @@ class Project : public QObject
     Q_PROPERTY(NodeModel *master READ master NOTIFY masterChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
-    Q_PROPERTY(float bpm READ bpm WRITE setBPM NOTIFY bpmChanged)
 
 public:
     /** @brief Construct a new project instance */
@@ -38,14 +37,6 @@ public:
 
     /** @brief Set the project name, return true and emit nameChanged on change */
     void setName(const QString &name) noexcept;
-
-
-    /** @brief Get the project bpm */
-    [[nodiscard]] BPM bpm(void) const noexcept { return _data->bpm(); }
-
-    /** @brief Set the project bpm, return true and emit bpmChanged on change */
-    void setBPM(const BPM bpm) noexcept;
-
 
     /** @brief Get the project path */
     [[nodiscard]] const QString &path(void) const noexcept { return _path; }
@@ -78,9 +69,6 @@ signals:
 
     /** @brief Notify when project path changed */
     void pathChanged(void);
-
-    /** @brief Notify when project bpm changed */
-    void bpmChanged(void);
 
 private:
     Audio::Project *_data { nullptr };

@@ -40,10 +40,10 @@ public:
             OCTAVE_UP,
             OCTAVE_DOWN,
             PLAY_CONTEXT,
-            PAUSE_CONTEXT,
+            REPLAY_CONTEXT,
             STOP_CONTEXT,
             PLAY_PLAYLIST,
-            PAUSE_PLAYLIST,
+            REPLAY_PLAYLIST,
             STOP_PLAYLIST,
             VOLUME_CONTEXT,
             VOLUME_PLAYLIST

@@ -28,6 +28,8 @@ Item {
     readonly property int keysPerOctave: keyNames.length
     property int octaves: 8
     property int octaveOffset: 2
+    readonly property int octaveMin: octaveOffset
+    readonly property int octaveMax: octaves + octaveOffset
     readonly property int keyOffset: octaveOffset * keysPerOctave
     readonly property int keys: keysPerOctave * octaves
     property real headerFactor: 0.1
@@ -41,15 +43,17 @@ Item {
 
     Connections {
         function launch(pressed, key) {
-            sequencerView.node.partitions.addOnTheFly(
-                AudioAPI.noteEvent(!pressed, (octave * 12) + key, AudioAPI.velocityMax, 0),
-                sequencerView.node,
-                sequencerView.partitionIndex
-            )
+            if (sequencerView.node)
+                sequencerView.node.partitions.addOnTheFly(
+                    AudioAPI.noteEvent(!pressed, (targetOctave * keysPerOctave) + key, AudioAPI.velocityMax, 0),
+                    sequencerView.node,
+                    sequencerView.partitionIndex
+                )
         }
 
-        property real octave: 5
+        property real targetOctave: 5
 
+        id: notesConnections
         target: eventDispatcher
         enabled: moduleIndex === componentSelected
 
@@ -65,10 +69,9 @@ Item {
         function onNote9(pressed) { launch(pressed, 9) }
         function onNote10(pressed) { launch(pressed, 10) }
         function onNote11(pressed) { launch(pressed, 11) }
-        function onOctaveUp(pressed) { if (pressed) octave++ }
-        function onOctaveDown(pressed) { if (pressed) octave-- }
+        function onOctaveUp(pressed) { if (pressed) targetOctave = Math.min(targetOctave + 1, octaveMax) }
+        function onOctaveDown(pressed) { if (pressed) targetOctave = Math.max(targetOctave - 1, octaveMin) }
     }
-
 
     Repeater {
         model: pianoView.keys
@@ -88,7 +91,7 @@ Item {
             width: pianoView.keyWidth
             height: contentView.rowHeight
             y: index * contentView.rowHeight
-            z: isHashKey ? 100 : 1
+            z: isHashKey ? 2 : 1
 
             Rectangle {
                 id: keyBackground
@@ -128,6 +131,16 @@ Item {
                 }
             }
         }
+    }
+
+    Rectangle {
+        y: totalHeight - height - (notesConnections.targetOctave - octaveOffset) * contentView.rowHeight * keysPerOctave
+        width: contentView.rowHeaderWidth
+        height: contentView.rowHeight * keysPerOctave
+        color: "transparent"
+        border.color: themeManager.accentColor
+        border.width: 2
+        z: 10
     }
 
     NotesPlacementArea {

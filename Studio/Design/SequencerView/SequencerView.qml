@@ -7,7 +7,7 @@ import PluginTableModel 1.0
 
 import "./SequencerContent/"
 
-ColumnLayout {
+Column {
     enum EditMode {
         Regular,
         Brush,
@@ -31,6 +31,7 @@ ColumnLayout {
     property int editMode: SequencerView.EditMode.Regular
     property int tweakMode: SequencerView.TweakMode.Regular
     property alias tweaker: sequencerViewFooter.tweaker
+    property bool mustCenter: false
 
     function onNodeDeleted(targetNode) {
         if (node === targetNode || node.isAParent(targetNode)) {
@@ -113,8 +114,8 @@ ColumnLayout {
         target: eventDispatcher
         enabled: moduleIndex === componentSelected
 
-        function onPlayContext(pressed) { if (!pressed) return; if(!player.isPlayerRunning) player.play(); else player.pause(); }
-        function onPauseContext(pressed) { if (!pressed) return; player.pause(); }
+        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
+        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
         function onStopContext(pressed) { if (!pressed) return; player.stop(); }
     }
 
@@ -125,37 +126,37 @@ ColumnLayout {
 
     onEnabledChanged: {
         // Center on reference octave
-        if (enabled && contentView.yOffsetMin)
-            contentView.yOffset = ((contentView.pianoView.keys - (69 - contentView.pianoView.keyOffset)) * -contentView.rowHeight) + contentView.height / 2
-    }
-
-    Keys.onPressed: {
-        if (event.key === Qt.Key_A)
-            player.stop()
-        else if (event.key === Qt.Key_Z)
-            player.replay()
-        else if (event.key === Qt.Key_E)
-            player.playOrPause()
+        if (enabled && contentView.yOffsetMin) {
+            if (contentView.height === 0)
+                mustCenter = true
+            else
+                contentView.yOffset = ((contentView.pianoView.keys - (69 - contentView.pianoView.keyOffset)) * -contentView.rowHeight) + contentView.height / 2
+        }
     }
 
     SequencerViewHeader {
         id: sequencerViewHeader
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.preferredWidth: parent.width
-        Layout.preferredHeight: parent.height * 0.15
+        width: parent.width
+        height: parent.height * 0.15
         z: 1
     }
 
     Item {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.preferredHeight: parent.height * 0.7
-        Layout.preferredWidth: parent.width
+        id: contentArea
+        width: parent.width
+        height: parent.height * 0.7
 
         SequencerContentView {
             id: contentView
             anchors.fill: parent
+
+            // When we use loadPartitionNode, contentView.height === 0 so we need to center the view once it is updated
+            onHeightChanged: {
+                if (mustCenter) {
+                    contentView.yOffset = ((contentView.pianoView.keys - (69 - contentView.pianoView.keyOffset)) * -contentView.rowHeight) + contentView.height / 2
+                    mustCenter = false
+                }
+            }
 
             onTimelineBeginMove: player.timelineBeginMove(target)
             onTimelineMove: player.timelineMove(target)
@@ -172,9 +173,7 @@ ColumnLayout {
 
     SequencerViewFooter {
         id: sequencerViewFooter
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.preferredHeight: parent.height * 0.15
-        Layout.preferredWidth: parent.width
+        width: parent.width
+        height: parent.height * 0.15
     }
 }

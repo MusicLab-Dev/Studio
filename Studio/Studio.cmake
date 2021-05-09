@@ -27,65 +27,72 @@ qt_add_resources(QtResources
     ${StudioDir}/Design/Modules/Settings/Settings.qrc
 )
 
-set(StudioSources
+set(StudioPrecompiledHeaders
     ${StudioDir}/Base.hpp
     ${StudioDir}/AudioAPI.hpp
-    ${StudioDir}/Application.cpp
     ${StudioDir}/Application.hpp
-    ${StudioDir}/AutomationModel.cpp
     ${StudioDir}/AutomationModel.hpp
-    ${StudioDir}/ControlModel.cpp
     ${StudioDir}/ControlModel.hpp
-    ${StudioDir}/ControlsModel.cpp
     ${StudioDir}/ControlsModel.hpp
-    ${StudioDir}/Device.cpp
     ${StudioDir}/Device.hpp
-    ${StudioDir}/DevicesModel.cpp
     ${StudioDir}/DevicesModel.hpp
-    ${StudioDir}/InstancesModel.cpp
     ${StudioDir}/InstancesModel.hpp
     ${StudioDir}/Models.hpp
-    ${StudioDir}/NodeModel.cpp
     ${StudioDir}/NodeModel.hpp
-    ${StudioDir}/PartitionModel.cpp
     ${StudioDir}/PartitionModel.hpp
-    ${StudioDir}/PartitionsModel.cpp
     ${StudioDir}/PartitionsModel.hpp
-    ${StudioDir}/PluginTableModel.cpp
     ${StudioDir}/PluginTableModel.hpp
     ${StudioDir}/PluginTableModelProxy.hpp
     ${StudioDir}/Note.hpp
     ${StudioDir}/Control.hpp
     ${StudioDir}/Point.hpp
-    ${StudioDir}/Project.cpp
     ${StudioDir}/Project.hpp
-    ${StudioDir}/ProjectSave.cpp
     ${StudioDir}/ProjectSave.hpp
-    ${StudioDir}/Scheduler.cpp
     ${StudioDir}/Scheduler.hpp
-    ${StudioDir}/Studio.cpp
     ${StudioDir}/Studio.hpp
-    ${StudioDir}/ThemeManager.cpp
     ${StudioDir}/ThemeManager.hpp
     ${StudioDir}/SettingsListModel.hpp
-    ${StudioDir}/SettingsListModel.cpp
     ${StudioDir}/SettingsListModelProxy.hpp
+    ${StudioDir}/PluginModel.hpp
+    ${StudioDir}/NetworkLog.hpp
+    ${StudioDir}/BoardManager.hpp
+    ${StudioDir}/Board.hpp
+    ${StudioDir}/AEventListener.hpp
+    ${StudioDir}/KeyboardEventListener.hpp
+    ${StudioDir}/EventDispatcher.hpp
+)
+
+set(StudioSources
+    ${StudioPrecompiledHeaders}
+    ${StudioDir}/Application.cpp
+    ${StudioDir}/AutomationModel.cpp
+    ${StudioDir}/ControlModel.cpp
+    ${StudioDir}/ControlsModel.cpp
+    ${StudioDir}/Device.cpp
+    ${StudioDir}/DevicesModel.cpp
+    ${StudioDir}/InstancesModel.cpp
+    ${StudioDir}/NodeModel.cpp
+    ${StudioDir}/PartitionModel.cpp
+    ${StudioDir}/PartitionsModel.cpp
+    ${StudioDir}/PluginTableModel.cpp
+    ${StudioDir}/Project.cpp
+    ${StudioDir}/ProjectSave.cpp
+    ${StudioDir}/Scheduler.cpp
+    ${StudioDir}/Studio.cpp
+    ${StudioDir}/ThemeManager.cpp
+    ${StudioDir}/SettingsListModel.cpp
     ${StudioDir}/SettingsListModelProxy.cpp
     ${StudioDir}/PluginModel.cpp
-    ${StudioDir}/PluginModel.hpp
-    ${StudioDir}/BoardManager.hpp
     ${StudioDir}/BoardManager.cpp
-    ${StudioDir}/Board.hpp
     ${StudioDir}/Board.cpp
-    ${StudioDir}/AEventListener.hpp
     ${StudioDir}/AEventListener.cpp
-    ${StudioDir}/KeyboardEventListener.hpp
     ${StudioDir}/KeyboardEventListener.cpp
-    ${StudioDir}/EventDispatcher.hpp
     ${StudioDir}/EventDispatcher.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
+
+target_precompile_headers(${PROJECT_NAME} PUBLIC ${StudioPrecompiledHeaders})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${StudioDir}/..)
 

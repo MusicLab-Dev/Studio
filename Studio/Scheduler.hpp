@@ -30,6 +30,7 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(Beat liveCurrentBeat READ liveCurrentBeat WRITE setLiveCurrentBeat NOTIFY liveCurrentBeatChanged)
     Q_PROPERTY(Beat partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat NOTIFY partitionCurrentBeatChanged)
     Q_PROPERTY(Beat onTheFlyCurrentBeat READ onTheFlyCurrentBeat WRITE setOnTheFlyCurrentBeat NOTIFY onTheFlyCurrentBeatChanged)
+    Q_PROPERTY(BPM bpm READ bpm WRITE setBPM NOTIFY bpmChanged)
 
 public:
     /** @brief The different types of playback mode */
@@ -59,7 +60,8 @@ public:
     using Audio::AScheduler::partitionNode;
     using Audio::AScheduler::partitionIndex;
     using Audio::AScheduler::hasExitedGraph;
-    using Audio::AScheduler::setBPM;
+    using Audio::AScheduler::bpm;
+    using Audio::AScheduler::tempo;
 
     /** @brief Number of miss allowed before the graph 'OnTheFly' should stop */
     static constexpr std::uint32_t OnTheFlyMissThreshold = 25;
@@ -107,6 +109,12 @@ public:
 
     /** @brief Get device specs */
     [[nodiscard]] const Audio::AudioSpecs &audioSpecs(void) const noexcept { return _audioSpecs; }
+
+    /** @brief Set the BPM */
+    void setBPM(const BPM bpm) noexcept;
+
+    /** @brief Reset the on the fly miss count */
+    void resetOnTheFlyMiss(void) noexcept { _onTheFlyMissCount = 0u; }
 
 public slots:
     /** @brief Play the scheduler */
@@ -159,6 +167,8 @@ signals:
     /** @brief Notify that the running state has changed */
     void runningChanged(void);
 
+    /** @brief Notify that the bpm has changed */
+    void bpmChanged(void);
 
     /** @brief Notify that the device has changed */
     void deviceChanged(void);

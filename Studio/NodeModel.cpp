@@ -30,6 +30,10 @@ NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     _data->setColor(ThemeManager::GetColorFromChain(CurrentColorIndex++).rgba());
 }
 
+NodeModel::~NodeModel(void) noexcept
+{
+}
+
 QHash<int, QByteArray> NodeModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {

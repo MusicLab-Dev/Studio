@@ -29,7 +29,7 @@ ColumnLayout {
         enabled: moduleIndex === componentSelected
 
         function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
-        function onPauseContext(pressed) { if (!pressed) return; player.pause(); }
+        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
         function onStopContext(pressed) { if (!pressed) return; player.stop(); }
     }
 
@@ -37,17 +37,8 @@ ColumnLayout {
         target: eventDispatcher
 
         function onPlayPlaylist(pressed) { if (!pressed) return; player.playOrPause() }
-        function onPausePlaylist(pressed) { if (!pressed) return; player.pause(); }
-        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
-    }
-
-    Keys.onPressed: {
-        if (event.key === Qt.Key_A)
-            player.stop()
-        else if (event.key === Qt.Key_Z)
-            player.replay()
-        else if (event.key === Qt.Key_E)
-            player.playOrPause()
+        function onReplayPlaylist(pressed) { if (!pressed) return; player.replay(); }
+        function onStopPlaylist(pressed) { if (!pressed) return; player.stop(); }
     }
 
     PlaylistViewHeader {

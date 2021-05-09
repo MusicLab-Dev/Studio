@@ -21,5 +21,6 @@
         <file>DefaultPotentiometer.qml</file>
         <file>DefaultMenu.qml</file>
         <file>DefaultSectionWrapper.qml</file>
+        <file>DefaultFileDialog.qml</file>
     </qresource>
 </RCC>

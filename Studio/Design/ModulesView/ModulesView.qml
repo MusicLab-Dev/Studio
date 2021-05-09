@@ -20,6 +20,8 @@ Rectangle {
             componentSelected = 0
         }
         modules.removeModule(moduleSelectedTmp)
+        filePicker.cancelAndClose()
+        pluginsView.cancelAndClose()
     }
 
     function removeAllComponents() {
@@ -30,11 +32,15 @@ Rectangle {
             callback: modulesViewContent.nullCallback
         })
         componentSelected = 0
+        filePicker.cancelAndClose()
+        pluginsView.cancelAndClose()
     }
 
     function removeAllComponentsWithoutEmptyView() {
         modules.clear()
         componentSelected = 0
+        filePicker.cancelAndClose()
+        pluginsView.cancelAndClose()
     }
 
     property alias modulesViewContent: modulesViewContent
@@ -68,6 +74,12 @@ Rectangle {
                     componentSelected = i - 1
             }
         }
+    }
+
+    function moveModule(from, to) {
+        modulesViewContent.getModule(from).moduleIndex = to
+        modulesViewContent.getModule(to).moduleIndex = from
+        modules.move(from, to, 1)
     }
 
     id: modulesView

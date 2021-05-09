@@ -30,6 +30,9 @@ Rectangle {
         model: FolderListModel {
             id: folderModel
             folder: workspaceForeground.actualPath
+            nameFilters: ["*" + workspaceView.searchFilter + "*.wav"]
+            caseSensitive: false
+            showDirsFirst: true
         }
 
         delegate: WorkspacesSquareComponent {

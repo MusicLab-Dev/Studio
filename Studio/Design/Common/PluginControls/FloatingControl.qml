@@ -7,6 +7,7 @@ DefaultPotentiometer {
     readonly property string tooltipPrefixText: controlTitle + ": "
     readonly property string tooltipSufixText: " " + controlUnitName + "\n" + controlDescription
 
+    id: control
     width: 50
     height: 50
     minimumValue: controlMinValue
@@ -16,6 +17,14 @@ DefaultPotentiometer {
 
     ToolTip.visible: hovered || pressed
     ToolTip.text: tooltipPrefixText + controlValue.toFixed(2) + tooltipSufixText
+
+    Component.onCompleted: value = controlValue
+
+    Binding {
+        target: control
+        property: "value"
+        value: controlValue
+    }
 
     onValueChanged: {
         if (Math.abs(value - controlValue) > Number.EPSILON)

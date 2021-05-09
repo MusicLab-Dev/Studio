@@ -47,5 +47,4 @@ private:
 
     /** @brief Stop all notes that are playing */
     void stopAllPlayingNotes(void);
-
 };

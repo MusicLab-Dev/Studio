@@ -9,7 +9,7 @@ Rectangle {
     property string tabTitle
 
     id: moduleViewTab
-    x: menuButton.width + (mouseArea.pressed ? x : index * tabWidth)
+    x: menuButton.width + (mouseArea.pressed ? index * tabWidth : index * tabWidth)
     y: mouseArea.pressed ? y : mouseArea.y
     color: componentSelected === index ? themeManager.foregroundColor : themeManager.backgroundColor
     border.color: "black"
@@ -17,10 +17,11 @@ Rectangle {
     Drag.hotSpot.y: height / 2
 
     onDragActiveChanged: {
-        if (dragActive)
+        if (dragActive) {
             Drag.start();
-        else
+        } else {
             Drag.drop();
+        }
     }
 
 
@@ -31,7 +32,7 @@ Rectangle {
         enabled: index !== componentSelected
 
         onEntered: {
-            if (!animationX.running) {
+            if (index != componentSelected) {
                 var indexTmp = index
                 modules.move(index, componentSelected, 1)
                 componentSelected = indexTmp
@@ -43,8 +44,7 @@ Rectangle {
         id: mouseArea
         anchors.fill: parent
         drag.target: parent
-        drag.minimumY: 0
-        drag.maximumY: 0
+        drag.axis: Drag.XAxis
         hoverEnabled: true
 
         onPressed: {
@@ -91,13 +91,10 @@ Rectangle {
         }
     }
 
-
-    Behavior on x {
-        SpringAnimation {
-            id: animationX
-            spring: 2
-            damping: 0.3
-            duration: 400
-        }
-    }
+    // Behavior on x {
+    //     SmoothedAnimation {
+    //         id: animationX
+    //         velocity: 500
+    //     }
+    // }
 }

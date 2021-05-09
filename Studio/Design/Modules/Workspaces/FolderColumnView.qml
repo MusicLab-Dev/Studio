@@ -14,6 +14,9 @@ Column {
         FolderListModel {
             id: folderModel
             folder: realPath
+            nameFilters: [\"*\" + workspaceView.searchFilter + \"*.wav\"]
+            caseSensitive: false
+            showDirsFirst: true
         }", repeater, "FolderModel")
     }
 

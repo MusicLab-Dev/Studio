@@ -14,8 +14,10 @@ DefaultSectionWrapper {
         anchors.fill: parent
         color: "white"
         text: {
-            var left = (currentPlaybackBeat / AudioAPI.beatPrecision).toFixed()
-            var right = (100 * (currentPlaybackBeat % AudioAPI.beatPrecision) / 128).toFixed()
+            var left = Math.floor(currentPlaybackBeat / AudioAPI.beatPrecision)
+            var right = Math.floor(100 * (currentPlaybackBeat % AudioAPI.beatPrecision) / 128)
+            if (right < 10)
+                right = "0" + right
             return left + "." + right
         }
     }

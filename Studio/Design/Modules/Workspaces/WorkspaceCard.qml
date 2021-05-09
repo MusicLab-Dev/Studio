@@ -11,6 +11,7 @@ Rectangle {
     property bool editModeEnabled: false
     property string realPath: path === "" ? StandardPaths.writableLocation(StandardPaths.HomeLocation) : path
     property real spacing: 4
+    property alias workspaceName: workspaceName
 
     id: workspaceCard
     height: cardHeader.height + (expanded ? folderColumnView.height + spacing : 0)
@@ -27,49 +28,90 @@ Rectangle {
         width: parent.width
         height: Math.max(workspaceForeground.height / 14, 50)
 
+        Component.onCompleted: {
+            if (index === 0) {
+                workspaceFoldButton.activated = true
+                workspaceView.lastSelectedWorkspace = workspaceName.text
+            }
+        }
+
         MouseArea {
             anchors.fill: parent
+
             onPressed: {
                 workspaceForeground.actualPath = realPath
                 parentDepth = 0
+                workspaceView.lastSelectedWorkspace = workspaceName.text
             }
         }
 
-        DefaultFoldButton {
-            id: workspaceFoldButton
-            width: parent.width * 0.08
-            height: parent.height * 0.3
-            x: parent.x + width / 3
-            y: parent.height / 2 - height / 2
-        }
+        Row {
+            anchors.fill: parent
+            anchors.margins: spacing
+            spacing: 10
 
-        Component.onCompleted: workspaceFoldButton.activated = index === 0
-
-        DefaultTextInput {
-            id: workspaceName
-            width: parent.width - workspaceFoldButton.width - workspaceFoldButton.x - editModeButton.width * 2
-            x: workspaceFoldButton.width + workspaceFoldButton.x
-            y: parent.height / 2 - height / 2
-            color: "#FFFFFF"
-            opacity: enabled ? 0.6 : 0.4
-            enabled: editModeEnabled
-            text: name + " " + realPath
-
-            background: Rectangle {
-                anchors.fill: parent
-                color: "transparent"
+            DefaultFoldButton {
+                id: workspaceFoldButton
+                anchors.verticalCenter: parent.verticalCenter
+                width: height
+                height: parent.height * 0.6
             }
-        }
 
-        DefaultImageButton {
-            id: editModeButton
-            width: parent.width * 0.08
-            height: parent.height * 0.4
-            x: parent.width * 0.85
-            y: parent.height / 2 - height / 2
-            //source: "qrc:/Assets/EditWorkspaceName.png"
+            DefaultTextInput {
+                id: workspaceName
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width - parent.spacing * 3 - workspaceFoldButton.width * 3
+                color: "#FFFFFF"
+                opacity: enabled ? 1 : 0.5
+                text: name
+                enabled: editModeEnabled
 
-            onClicked: editModeEnabled = !editModeEnabled
+                background: Rectangle {
+                    anchors.fill: parent
+                    color: "transparent"
+                }
+
+                onEditingFinished: {
+                    console.log("Editing finished")
+                    var tmpModel = workspaceView.workspacesModel
+                    tmpModel[index][0] = text
+                    app.settings.set("workspacePaths", tmpModel);
+                    app.settings.saveValues()
+                }
+            }
+
+            DefaultImageButton {
+                id: editBtn
+                anchors.verticalCenter: parent.verticalCenter
+                width: height
+                height: parent.height * 0.6
+                source: "qrc:/Assets/EditWorkspaceName.png"
+                colorDefault: editModeEnabled ? themeManager.accentColor : "grey"
+                showBorder: false
+                scaleFactor: 1
+
+                onReleased: editModeEnabled = !editModeEnabled
+            }
+
+            DefaultImageButton {
+                id: deleteBtn
+                anchors.verticalCenter: parent.verticalCenter
+                width: height
+                height: parent.height * 0.6
+                colorDefault: "red"
+                source: "qrc:/Assets/Close.png"
+                showBorder: false
+                scaleFactor: 1
+
+                onReleased: {
+                    var tmpModel = workspaceView.workspacesModel
+                    console.log(tmpModel)
+                    tmpModel.splice(index, 1)
+                    app.settings.set("workspacePaths", tmpModel);
+                    app.settings.saveValues()
+                    workspaceView.workspacesModel = tmpModel
+                }
+            }
         }
     }
 

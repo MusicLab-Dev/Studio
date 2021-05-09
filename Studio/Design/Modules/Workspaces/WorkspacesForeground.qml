@@ -9,6 +9,7 @@ Rectangle {
     property var workspacesModel
     property string actualPath: ""
     property int parentDepth: 0
+    property alias searchFilter: searchBar.text
 
     onActualPathChanged: {
         workspaceContentArea.selectedIndex = -1
@@ -34,6 +35,7 @@ Rectangle {
         y: (parent.height - height) / 10
 
         DefaultTextInput {
+            id: searchBar
             anchors.fill: parent
             placeholderText: qsTr("Default files")
             color: "white"
