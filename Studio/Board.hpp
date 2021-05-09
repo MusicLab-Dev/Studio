@@ -63,25 +63,6 @@ public:
     {
         _boardID = identifier;
         _rootSocket = rootSocket;
-
-        _controls = Controls {
-            {
-                ControlType::Button,
-                QPoint(0, 0),
-                1
-            },
-            Control {
-                ControlType::Button,
-                QPoint(1, 1),
-                2
-            },
-            Control {
-                ControlType::Button,
-                QPoint(2, 2),
-                3
-            }
-        };
-        _size = QSize(3, 3);
     }
 
     ~Board() = default;
