@@ -63,7 +63,7 @@ void BoardEventListener::add(const int key, const int modifiers, EventTarget eve
     auto idx = find(desc);
 
     if (idx == -1) {
-        beginInsertRows(QModelIndex(), idx, idx);
+        beginInsertRows(QModelIndex(), count(), count());
         _events.push(KeyAssignment {
             desc,
             event
