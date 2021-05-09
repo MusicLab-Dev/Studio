@@ -73,6 +73,8 @@ inline void printWindowsError(void)
     #endif
 }
 
+// Socket functions
+
 inline void closeSocket(const Socket socket)
 {
     #ifdef WIN32
@@ -81,6 +83,65 @@ inline void closeSocket(const Socket socket)
         ::close(socket);
     #endif
 }
+
+inline void listenSocket(const Socket socket, int backLog)
+{
+    int ret = 0;
+
+    #ifdef WIN32
+        ret = ::listen(socket, backLog);
+    #else
+        ret = ::listen(socket, backLog);
+    #endif
+    if (ret < 0) {
+        closeSocket(socket);
+        throw std::runtime_error(std::strerror(errno));
+    }
+}
+
+inline void bindSocket(const Socket socket, const NetworkAddress &address)
+{
+    int ret = 0;
+
+    #ifdef WIN32
+        ret = ::bind(
+            socket,
+            reinterpret_cast<const sockaddr *>(&address),
+            sizeof(address)
+        );
+    #else
+        ret = ::bind(
+            socket,
+            reinterpret_cast<const sockaddr *>(&address),
+            sizeof(address)
+        );
+    #endif
+    if (ret < 0) {
+        closeSocket(socket);
+        throw std::runtime_error(std::strerror(errno));
+    }
+}
+
+inline Socket acceptSocket(const Socket masterSocket, NetworkAddress &clientAddress)
+{
+    Socket clientSocket { -1 };
+
+    #ifdef WIN32
+        int clientAddressLen = sizeof(clientAddress);
+    #else
+        Socklen clientAddressLen = sizeof(clientAddress);
+    #endif
+
+    clientSocket = ::accept(
+        masterSocket,
+        reinterpret_cast<sockaddr *>(&clientAddress),
+        &clientAddressLen
+    );
+
+    return clientSocket;
+}
+
+/* Socket options setters */
 
 inline void setSocketReusable(const Socket socket)
 {
@@ -136,59 +197,34 @@ inline void setSocketDevice(const Socket socket, const InterfaceIndex interfaceI
     }
 }
 
-inline void bindSocket(const Socket socket, const NetworkAddress &address)
+inline void setSocketNonBlocking(const Socket socket)
 {
-    int ret = 0;
-
     #ifdef WIN32
-        ret = ::bind(
-            socket,
-            reinterpret_cast<const sockaddr *>(&address),
-            sizeof(address)
-        );
+        u_long iMode = 1;
+        ::ioctlsocket(socket, FIONBIO, &iMode);
     #else
-        ret = ::bind(
-            socket,
-            reinterpret_cast<const sockaddr *>(&address),
-            sizeof(address)
-        );
+        ::fcntl(socket, F_SETFL, O_NONBLOCK);
     #endif
-    if (ret < 0) {
-        closeSocket(socket);
-        throw std::runtime_error(std::strerror(errno));
-    }
 }
 
-inline void listenSocket(const Socket socket, int backLog)
+inline void setSocketKeepAlive(const Socket socket)
 {
-    int ret = 0;
-
     #ifdef WIN32
-        ret = ::listen(socket, backLog);
+        const char enable = 1;
+        const char idle = 3;
+        const char interval = 3;
+        const char maxpkt = 1;
     #else
-        ret = ::listen(socket, backLog);
-    #endif
-    if (ret < 0) {
-        closeSocket(socket);
-        throw std::runtime_error(std::strerror(errno));
-    }
-}
-
-inline NetworkAddress createNetworkAddress(const Port port, const std::string &address)
-{
-    NetworkAddress tcpAddress;
-
-    #ifdef WIN32
-        tcpAddress.sin_family = AF_INET;
-        tcpAddress.sin_port = ::htons(port);
-        tcpAddress.sin_addr.s_addr = ::inet_addr(address.c_str());
-    #else
-        tcpAddress.sin_family = AF_INET;
-        tcpAddress.sin_port = ::htons(port);
-        tcpAddress.sin_addr.s_addr = ::inet_addr(address.c_str());
+        int enable = 1;
+        int idle = 3;
+        int interval = 3;
+        int maxpkt = 1;
     #endif
 
-    return tcpAddress;
+    ::setsockopt(socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int));
+    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int));
+    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int));
+    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int));
 }
 
 inline void enableSocketBroadcast(const Socket socket)
@@ -220,35 +256,7 @@ inline void enableSocketBroadcast(const Socket socket)
     }
 }
 
-inline void setSocketNonBlocking(const Socket socket)
-{
-    #ifdef WIN32
-        u_long iMode = 1;
-        ::ioctlsocket(socket, FIONBIO, &iMode);
-    #else
-        ::fcntl(socket, F_SETFL, O_NONBLOCK);
-    #endif
-}
-
-inline void setSocketKeepAlive(const Socket socket)
-{
-    #ifdef WIN32
-        const char enable = 1;
-        const char idle = 3;
-        const char interval = 3;
-        const char maxpkt = 1;
-    #else
-        int enable = 1;
-        int idle = 3;
-        int interval = 3;
-        int maxpkt = 1;
-    #endif
-
-    ::setsockopt(socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int));
-    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int));
-    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int));
-    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int));
-}
+/* Socket data transfer functions */
 
 inline DataSize recvSocket(const Socket socket, std::uint8_t *buffer, DataSize maxSize)
 {
@@ -261,18 +269,6 @@ inline DataSize recvSocket(const Socket socket, std::uint8_t *buffer, DataSize m
     #endif
 
     return ret;
-}
-
-inline bool operationWouldBlock(void)
-{
-    #ifdef WIN32
-        if (WSAGetLastError() == WSAEWOULDBLOCK)
-            return true;
-    #else
-        if (errno == EAGAIN || errno == EWOULDBLOCK)
-            return true;
-    #endif
-    return false;
 }
 
 inline DataSize recvFromSocket(const Socket socket, std::uint8_t *buffer, DataSize maxSize, NetworkAddress &senderAddress)
@@ -340,4 +336,35 @@ inline DataSize sendToSocket(const Socket socket, const NetworkAddress &address,
     #endif
 
     return ret;
+}
+
+/* Network utils */
+
+inline NetworkAddress createNetworkAddress(const Port port, const std::string &address)
+{
+    NetworkAddress tcpAddress;
+
+    #ifdef WIN32
+        tcpAddress.sin_family = AF_INET;
+        tcpAddress.sin_port = ::htons(port);
+        tcpAddress.sin_addr.s_addr = ::inet_addr(address.c_str());
+    #else
+        tcpAddress.sin_family = AF_INET;
+        tcpAddress.sin_port = ::htons(port);
+        tcpAddress.sin_addr.s_addr = ::inet_addr(address.c_str());
+    #endif
+
+    return tcpAddress;
+}
+
+inline bool operationWouldBlock(void)
+{
+    #ifdef WIN32
+        if (WSAGetLastError() == WSAEWOULDBLOCK)
+            return true;
+    #else
+        if (errno == EAGAIN || errno == EWOULDBLOCK)
+            return true;
+    #endif
+    return false;
 }

@@ -20,6 +20,7 @@
 #include <Protocol/Packet.hpp>
 #include <Protocol/Protocol.hpp>
 #include <Protocol/ConnectionProtocol.hpp>
+#include <Protocol/EventProtocol.hpp>
 
 #include "Board.hpp"
 
@@ -33,7 +34,6 @@ class BoardManager : public QAbstractListModel
 public:
     static constexpr Port LexoPort = 4242;
 
-
     /** @brief Enumeration of 'Board' roles */
     enum class Role {
         Instance = Qt::UserRole + 1,
@@ -42,27 +42,8 @@ public:
 
     static constexpr std::size_t NetworkBufferSize = 4096;
 
-    using Vector = Core::Vector<std::uint8_t, std::uint16_t>;
-
     /** @brief Network buffer used to store direct client(s) inputs */
-    class NetworkBuffer : public Vector
-    {
-
-        public:
-
-            NetworkBuffer(std::size_t networkBufferSize) : Vector(static_cast<short unsigned int>(networkBufferSize)) {  }
-
-            void setTransferSize(std::size_t size) noexcept { this->setSize(static_cast<short unsigned int>(size)); }
-
-            void reset(void) noexcept
-            {
-                std::memset(data(), 0, capacity());
-                setSize(0);
-            }
-
-        private:
-
-    };
+    using NetworkBuffer = Core::Vector<std::uint8_t, std::uint16_t>;
 
     struct DirectClient
     {
@@ -194,4 +175,18 @@ private:
 
     /** @brief to complete */
     bool handleIdentifierRequest(const Protocol::ReadablePacket &packet, const Socket &clientSocket);
+
+    /** @brief Process the data received in the network buffer for the current tick */
+    void processNetworkBufferData(void);
+
+    /** @brief Process a valid packet received form board */
+    void processBoardPacket(Protocol::ReadablePacket &packet);
+
+    // Network buffer utils
+
+    void resetNetworkBuffer(void)
+    {
+        std::memset(_networkBuffer.data(), 0, _networkBuffer.capacity());
+        _networkBuffer.clear();
+    }
 };

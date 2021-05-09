@@ -23,7 +23,7 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     connect(&_tickTimer, &QTimer::timeout, this, &BoardManager::tick);
     connect(&_discoverTimer, &QTimer::timeout, this, &BoardManager::discover);
 
-    _networkBuffer.reset();
+    resetNetworkBuffer();
 
     _identifierTable = new bool[256];
     std::memset(_identifierTable, 0, 256);
@@ -126,6 +126,75 @@ void BoardManager::onDiscoverRateChanged(void)
     _tickTimer.setTimerType(Qt::CoarseTimer); // 5% margin
 }
 
+void BoardManager::processBoardPacket(Protocol::ReadablePacket &packet)
+{
+    NETWORK_LOG("BoardManager::processBoardPacket");
+
+    using namespace Protocol;
+
+    BoardID packetBoardId = packet.extract<BoardID>();
+    NETWORK_LOG("Packet board ID: ", static_cast<int>(packetBoardId));
+
+    switch (packet.protocolType())
+    {
+    case ProtocolType::Connection:
+        switch (packet.commandAs<ConnectionCommand>())
+        {
+        case ConnectionCommand::HardwareSpecs:
+        {
+            NETWORK_LOG("Received HardwareSpecs command");
+            BoardSize boardSize = packet.extract<BoardSize>();
+            std::cout << "Board height: " << static_cast<int>(boardSize.height) << std::endl;
+            std::cout << "Board width: " << static_cast<int>(boardSize.width) << std::endl;
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    case ProtocolType::Event:
+        switch (packet.commandAs<EventCommand>())
+        {
+        case EventCommand::ControlsChanged:
+        {
+            NETWORK_LOG("Received ControlsChanged command");
+            Core::Vector<InputEvent> events;
+            packet >> events;
+            for (const auto &event : events) {
+                std::cout << "Input index: " << static_cast<int>(event.inputIdx) << std::endl;
+                std::cout << "Event value: " << static_cast<int>(event.value) << std::endl;
+            }
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+void BoardManager::processNetworkBufferData(void)
+{
+    NETWORK_LOG("BoardManager::processNetworkBufferData");
+
+    using namespace Protocol;
+
+    std::uint8_t *networkBufferBegin = _networkBuffer.data();
+    std::uint8_t *networkBufferEnd = _networkBuffer.data() + _writeIndex;
+    std::size_t processIndex = 0;
+
+    while (processIndex < _writeIndex) {
+
+        ReadablePacket packet(networkBufferBegin + processIndex, networkBufferEnd);
+        if (packet.magicKey() != SpecialLabMagicKey)
+            break;
+        processBoardPacket(packet);
+        processIndex = processIndex + packet.totalSize();
+    }
+}
+
 void BoardManager::tick(void)
 {
     NETWORK_LOG("\nBoardManager::tick\n");
@@ -134,6 +203,10 @@ void BoardManager::tick(void)
     prepareSockets();
     // Process connected clients inputs using select()
     processDirectClients();
+    // Process data stored in the network buffer for this tick
+    if (_writeIndex == 0)
+        return;
+    processNetworkBufferData();
 }
 
 void BoardManager::discoveryScan(void)
@@ -156,7 +229,6 @@ void BoardManager::discoveryScan(void)
             NETWORK_LOG("No UDP data on socket");
             return;
         }
-        NETWORK_LOG("RECVFROM ERROR");
         return;
     }
     // Check if the address is already discovered
@@ -174,7 +246,10 @@ void BoardManager::discover(void)
 {
     NETWORK_LOG("BoardManager::discover");
 
-    discoveryScan();
+    // This feature is only needed on windows
+    #ifdef WIN32
+        discoveryScan();
+    #endif
 
     // vector<pair<interfaceName, ifaceAddress>>
     const auto usbInterfaces = getUsbNetworkInterfaces();
@@ -201,50 +276,51 @@ void BoardManager::discoveryEmit(void)
     packet.connectionType = Protocol::ConnectionType::USB;
     packet.distance = 0;
 
-    for (const NetworkAddress &address : _discoveredAddress) {
-        NETWORK_LOG("Sending discovery packet to ", ::inet_ntoa(address.sin_addr));
+    #ifdef WIN32
+        for (const NetworkAddress &address : _discoveredAddress) {
+            NETWORK_LOG("Sending discovery packet to ", ::inet_ntoa(address.sin_addr));
 
-        const DataSize ret = sendToSocket(
-            _udpBroadcastSocket,
-            address,
-            reinterpret_cast<std::uint8_t *>(&packet),
-            sizeof(packet)
-        );
-        if (ret < 0) {
-            NETWORK_LOG("SENDTO ERROR");
+            const DataSize ret = sendToSocket(
+                _udpBroadcastSocket,
+                address,
+                reinterpret_cast<std::uint8_t *>(&packet),
+                sizeof(packet)
+            );
+            if (ret < 0) {
+                NETWORK_LOG("SENDTO ERROR");
+            }
         }
-    }
+    #else
+        for (const auto &networkInterface : _interfaces) {
 
-    // for (const auto &networkInterface : _interfaces) {
+            Socket udpSocket { networkInterface.second.second };
+            NetworkAddress broadcastAddress;
+            broadcastAddress.sin_family = AF_INET;
+            broadcastAddress.sin_port = ::htons(LexoPort);
+            broadcastAddress.sin_addr.s_addr = ::inet_addr("169.254.255.255");
 
-    //     Socket broadcastSocket { networkInterface.second.second };
-    //     NetworkAddress broadcastAddress;
-    //     Socklen len = sizeof(NetworkAddress);
-
-    //     DataSize ret = ::getsockname(
-    //         broadcastSocket,
-    //         reinterpret_cast<sockaddr *>(&broadcastAddress),
-    //         &len
-    //     );
-    //     if (ret < 0) {
-    //         throw std::runtime_error(std::strerror(errno));
-    //     }
-
-    //     ret = sendToSocket(broadcastSocket, broadcastAddress, reinterpret_cast<std::uint8_t *>(&packet), sizeof(packet));
-    //     if (ret < 0) {
-    //         if (errno == ENODEV) {
-    //             /*
-    //                 sendto() has failed because the network interface is not valid anymore,
-    //                 so checking to remove the associated network.
-    //             */
-    //             std::cout << "INTERFACE DISCONNECTED" << std::endl;
-    //             removeInterfaceNetwork(networkInterface.first);
-    //         }
-    //         else {
-    //             throw std::runtime_error(std::strerror(errno));
-    //         }
-    //     }
-    // }
+            NETWORK_LOG("Sending discovery packet to ", ::inet_ntoa(broadcastAddress.sin_addr));
+            DataSize ret = sendToSocket(
+                udpSocket,
+                broadcastAddress,
+                reinterpret_cast<std::uint8_t *>(&packet),
+                sizeof(packet)
+            );
+            if (ret < 0) {
+                if (errno == ENODEV) {
+                    /*
+                        sendto() has failed because the network interface is not valid anymore,
+                        so checking to remove the associated network.
+                    */
+                    std::cout << "INTERFACE DISCONNECTED" << std::endl;
+                    removeInterfaceNetwork(networkInterface.first);
+                }
+                else {
+                    throw std::runtime_error(std::strerror(errno));
+                }
+            }
+        }
+    #endif
 }
 
 Socket BoardManager::createTcpMasterSocket(const InterfaceIndex interfaceIndex, const std::string &localAddress)
@@ -266,7 +342,7 @@ Socket BoardManager::createTcpMasterSocket(const InterfaceIndex interfaceIndex, 
     setSocketDevice(tcpMasterSocket, interfaceIndex);
 
     // Create the interface address to bind the socket to
-    NetworkAddress interfaceAddress = createNetworkAddress(421, localAddress);
+    NetworkAddress interfaceAddress = createNetworkAddress(LexoPort + 1, localAddress);
 
     // Bind the socket to the interface address
     bindSocket(tcpMasterSocket, interfaceAddress);
@@ -354,20 +430,12 @@ std::vector<std::pair<InterfaceIndex, std::string>> getWindowsNetworkInterfaces(
 
             struct in_addr ifaceaddr;
             ifaceaddr.s_addr = (u_long) pIPAddrTable->table[i].dwAddr;
-            // struct in_addr netmask;
-            // netmask.s_addr = (u_long) pIPAddrTable->table[i].dwMask;
-            // struct in_addr wildcardaddr;
-            // wildcardaddr.s_addr = ~netmask.s_addr;
-            // struct in_addr broadcastaddr;
-            // broadcastaddr.s_addr = ifaceaddr.s_addr | wildcardaddr.s_addr;
 
             InterfaceIndex interfaceIndex = pIPAddrTable->table[i].dwIndex;
             std::string ifaceAddress(::inet_ntoa(ifaceaddr));
-            // std::string broadcastAddress(::inet_ntoa(broadcastaddr));
 
-            std::cout << "index:\t" << interfaceIndex << '\n';
-            std::cout << "interface address:\t" << ifaceAddress << '\n';
-            // std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
+            NETWORK_LOG("index:\t", interfaceIndex);
+            NETWORK_LOG("interface address:\t", ifaceAddress);
 
             interfaces.push_back({ interfaceIndex, ifaceAddress });
         }
@@ -399,17 +467,16 @@ std::vector<std::pair<InterfaceIndex, std::string>> getLinuxNetworkInterfaces(vo
             if (family == AF_INET && (ifa->ifa_flags & IFF_BROADCAST) && ifa->ifa_ifu.ifu_broadaddr != nullptr) {
 
                 sockaddr_in *ifaceaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_addr);
-                // sockaddr_in *broadaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_ifu.ifu_broadaddr);
-
                 std::string interfaceName(ifa->ifa_name);
                 InterfaceIndex interfaceIndex = if_nametoindex(ifa->ifa_name);
                 std::string ifaceAddress(::inet_ntoa(ifaceaddr->sin_addr));
 
-                // std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
-
                 NETWORK_LOG("index:\t", interfaceIndex);
                 NETWORK_LOG("interface address:\t", ifaceAddress);
 
+                // This code may be usefull later
+                // sockaddr_in *broadaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_ifu.ifu_broadaddr);
+                // std::string broadcastAddress(::inet_ntoa(broadaddr->sin_addr));
                 // std::cout << "broadcast: " << broadcastAddress << '\n' << std::endl;
 
                 interfaces.push_back({ interfaceIndex, ifaceAddress });
@@ -428,7 +495,7 @@ std::vector<std::pair<InterfaceIndex, std::string>> BoardManager::getUsbNetworkI
     std::vector<std::pair<InterfaceIndex, std::string>> interfaces {};
 
     #ifdef WIN32
-        // interfaces = getWindowsNetworkInterfaces();
+        interfaces = getWindowsNetworkInterfaces();
     #else
         interfaces = getLinuxNetworkInterfaces();
     #endif
@@ -459,7 +526,6 @@ void BoardManager::processNewConnections(void)
     NETWORK_LOG("BoardManager::processNewConnections");
 
     NetworkAddress clientAddress;
-    Socklen clientAddressLen = sizeof(clientAddress);
 
     for (const auto &networkInterface : _interfaces) {
 
@@ -467,24 +533,19 @@ void BoardManager::processNewConnections(void)
 
         Socket interfaceMasterSocket = networkInterface.second.first;
 
-        const Socket clientSocket = ::accept(
-            interfaceMasterSocket,
-            reinterpret_cast<sockaddr *>(&clientAddress),
-            &clientAddressLen
-        );
-
-        if (clientSocket < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-            NETWORK_LOG("BoardManager::processNewConnections: No pending connection on socket");
-            continue;
-        }
-        else if (clientSocket < 0) {
+        const Socket clientSocket = acceptSocket(interfaceMasterSocket, clientAddress);
+        if (clientSocket < 0) {
+            if (operationWouldBlock() == true) {
+                std::cout << "BoardManager::processNewConnections: No pending connection on socket" << std::endl;
+                continue;
+            }
             throw std::runtime_error(std::strerror(errno));
         }
 
         setSocketNonBlocking(clientSocket);
         setSocketKeepAlive(clientSocket);
 
-        NETWORK_LOG("New connection from [", inet_ntoa(clientAddress.sin_addr), ':', clientAddress.sin_port, ']');
+        NETWORK_LOG("New connection from [", ::inet_ntoa(clientAddress.sin_addr), ':', clientAddress.sin_port, ']');
 
         DirectClient directClient;
         directClient.socket = clientSocket;
@@ -568,8 +629,9 @@ void BoardManager::processDirectClients(void)
         return;
     }
 
+    // Reset the network buffer before data from clients
     _writeIndex = 0;
-    _networkBuffer.reset();
+    resetNetworkBuffer();
 
     struct timeval tv;
     tv.tv_sec = 0;
@@ -585,7 +647,7 @@ void BoardManager::processDirectClients(void)
     }
 
     // Loop through direct clients and retrieve available data or remove them if disconnected
-    NETWORK_LOG("client list size IN: ", _clients.size());
+    NETWORK_LOG("BoardManager::processDirectClients: Client list size in: ", _clients.size());
     for(auto it = _clients.begin(); it != _clients.end();) {
         if (FD_ISSET(it->socket, &_readFds)) {
             processClientInput(it->socket);
@@ -596,7 +658,7 @@ void BoardManager::processDirectClients(void)
         } else
             ++it;
     }
-    NETWORK_LOG("client list size OUT: ", _clients.size());
+    NETWORK_LOG("BoardManager::processDirectClients: Client list size out: ", _clients.size());
 }
 
 BoardID BoardManager::aquireIdentifier(void) noexcept
