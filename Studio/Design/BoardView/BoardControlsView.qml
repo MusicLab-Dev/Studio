@@ -36,7 +36,7 @@ Rectangle {
             delegate: MenuItem {
                 text: modelData
 
-                onTriggered: eventDispatcher.boardListener.add(board.boardID, targetInput, index)
+                onTriggered: eventDispatcher.boardListener.add(board.boardID, assignMenu.targetInput, index)
             }
         }
     }
@@ -75,6 +75,7 @@ Rectangle {
             model: board
 
             delegate: DefaultImageButton {
+                id: delegateBtn
                 x: controlPos.x * boardGrid.cellWidth
                 y: controlPos.y * boardGrid.cellHeight
                 width: boardGrid.cellWidth
@@ -83,6 +84,7 @@ Rectangle {
 
                 onReleased: {
                     assignMenu.targetInput = index
+                    assignMenu.parent = delegateBtn
                     assignMenu.open()
                 }
             }

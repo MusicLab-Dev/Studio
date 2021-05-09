@@ -54,6 +54,16 @@ Menu {
     }
 
     Action {
+        text: qsTr("Edit name")
+
+        function setName() {
+            targetPartition.name = globalTextField.text
+        }
+
+        onTriggered: globalTextField.open(targetPartition.name, setName)
+    }
+
+    Action {
         text: qsTr("Remove")
         enabled: app.scheduler.partitionNode != targetNode || app.scheduler.partitionIndex != targetPartitionIndex
 
