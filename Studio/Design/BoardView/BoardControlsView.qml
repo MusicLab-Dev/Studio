@@ -36,7 +36,10 @@ Rectangle {
             delegate: MenuItem {
                 text: modelData
 
-                onTriggered: eventDispatcher.boardListener.add(board.boardID, assignMenu.targetInput, index)
+                onTriggered: {
+                    console.log(board.boardID, assignMenu.targetInput, index);
+                    eventDispatcher.boardListener.add(board.boardID, assignMenu.targetInput, index)
+                }
             }
         }
     }

@@ -95,7 +95,7 @@ signals:
 private:
     Core::TinyVector<KeyAssignment> _events;
     Core::TinyVector<KeyDescriptor> _activeKeys {};
-    bool _enabled { false };
+    bool _enabled { true };
     BoardManager *_boardManager { nullptr };
 
     /** @brief Send signals to dispatcher */

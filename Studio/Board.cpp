@@ -43,5 +43,10 @@ QVariant Board::data(const QModelIndex &index, int role) const
         return false;
     _size = size;
     emit sizeChanged();
+    beginResetModel();
+    for (auto i = 0; i < _size.width(); ++i) {
+        _controls.push(Control { ControlType::Button, { i, 0 }, 0 });
+    }
+    endResetModel();
     return true;
 }
