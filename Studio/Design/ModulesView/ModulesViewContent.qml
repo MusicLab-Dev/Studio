@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import QtQuick.Dialogs 1.0
 
 import "../Default"
 
@@ -99,9 +98,7 @@ Item {
             }
         }
 
-        FileDialog {
-            readonly property bool cancelKeyboardEventsOnFocus: true
-
+        DefaultFileDialog {
             id: saveFileDialog
             title: qsTr("Save a project file")
             folder: shortcuts.home
@@ -115,9 +112,7 @@ Item {
             Component.onCompleted: visible = false
         }
 
-        FileDialog {
-            readonly property bool cancelKeyboardEventsOnFocus: true
-
+        DefaultFileDialog {
             id: loadFileDialog
             title: qsTr("Choose a file")
             folder: shortcuts.home

@@ -13,7 +13,6 @@ import "../ModulesView"
 import "../Modules/Workspaces"
 
 Window {
-
     function urlToPath(urlString) {
         var s
         if (urlString.startsWith("file:///")) {
@@ -59,10 +58,12 @@ Window {
     }
 
     EventDispatcher {
+        property bool cancelEvents: false
+
         id: eventDispatcher
 
         keyboardListener.enabled: {
-            mainWindow.activeFocusItem ? !(mainWindow.activeFocusItem["cancelKeyboardEventsOnFocus"] === true) : true
+            !cancelEvents && (mainWindow.activeFocusItem ? !(mainWindow.activeFocusItem["cancelKeyboardEventsOnFocus"] === true) : true)
         }
     }
 }
