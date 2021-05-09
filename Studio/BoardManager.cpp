@@ -140,8 +140,15 @@ void BoardManager::processBoardPacket(Protocol::ReadablePacket &packet)
         {
             NETWORK_LOG("Received HardwareSpecs command");
             BoardSize boardSize = packet.extract<BoardSize>();
-            std::cout << "Board height: " << static_cast<int>(boardSize.height) << std::endl;
-            std::cout << "Board width: " << static_cast<int>(boardSize.width) << std::endl;
+
+            int i = 0;
+            for (const auto &board : _boards) {
+                if (board->boardID() == static_cast<int>(packetBoardId)) {
+                    board->setSize(QSize { static_cast<int>(boardSize.width), static_cast<int>(boardSize.heigth) });
+                    emit dataChanged(index(i), index(i), { static_cast<int>(Role::Size) });
+                    break;
+                }
+            }
             break;
         }
         default:
