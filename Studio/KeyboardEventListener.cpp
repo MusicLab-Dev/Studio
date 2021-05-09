@@ -79,7 +79,7 @@ void KeyboardEventListener::add(int key, int modifiers, EventTarget event)
     auto idx = find(desc);
 
     if (idx == -1) {
-        beginInsertRows(QModelIndex(), idx, idx);
+        beginInsertRows(QModelIndex(), count(), count());
         _events.push(KeyAssignment {
             desc,
             event
