@@ -44,6 +44,7 @@ Rectangle {
 
                     DefaultText {
                         anchors.centerIn: parent
+                        color: "white"
                         text: "(" + boardPreviewSlot.boardWidth + ", " + boardPreviewSlot.boardHeight + ")"
                     }
                 }

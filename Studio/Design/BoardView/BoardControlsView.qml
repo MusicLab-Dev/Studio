@@ -26,6 +26,21 @@ Rectangle {
     visible: false
     radius: 13
 
+    DefaultMenu {
+        property int targetInput: 0
+        id: assignMenu
+
+        Repeater {
+            model: eventDispatcher.targetEventList
+
+            delegate: MenuItem {
+                text: modelData
+
+                onTriggered: eventDispatcher.boardListener.add(board.boardID, targetInput, index)
+            }
+        }
+    }
+
     Grid {
         property real cellWidth: width / boardWidth
         property real cellHeight: height / boardHeight
@@ -65,6 +80,11 @@ Rectangle {
                 width: boardGrid.cellWidth
                 height: boardGrid.cellHeight
                 source: controlType === Board.ControlType.Button ? "qrc:/Assets/BoardButton.png" : controlType === Board.ControlType.Potentiometer ? "qrc:/Assets/BoardPotentiometer.png" : ""
+
+                onReleased: {
+                    assignMenu.targetInput = index
+                    assignMenu.open()
+                }
             }
         }
     }
