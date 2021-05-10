@@ -60,6 +60,8 @@ ColumnLayout {
         onTimelineBeginMove: playlistViewFooter.player.timelineBeginMove(target)
         onTimelineMove: playlistViewFooter.player.timelineMove(target)
         onTimelineEndMove: playlistViewFooter.player.timelineEndMove()
+        onTimelineBeginLoopMove: playlistViewFooter.player.timelineBeginLoopMove()
+        onTimelineEndLoopMove: playlistViewFooter.player.timelineEndLoopMove()
     }
 
     PlaylistViewFooter {
