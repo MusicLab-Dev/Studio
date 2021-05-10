@@ -127,6 +127,7 @@ public:
 
     /** @brief Get the node children */
     [[nodiscard]] Core::FlatVector<NodePtr> &children(void) noexcept { return _children; }
+    [[nodiscard]] const Core::FlatVector<NodePtr> &children(void) const noexcept { return _children; }
 
     /** @brief Get the flags */
     [[nodiscard]] Audio::IPlugin::Flags getFlags(void) const noexcept { return _data->flags(); }
@@ -164,6 +165,14 @@ public slots:
      *  Also add an empty partition to this node */
     NodeModel *addPartitionNodeExternalInputs(const QString &pluginPath, const QStringList &paths)
         { return addNodeImpl(pluginPath, true, paths); }
+
+    /** @brief Add a new node in children vector using a plugin path */
+    NodeModel *addParent(const QString &pluginPath)
+        { return addParentNodeImpl(pluginPath, false, QStringList()); }
+
+    /** @brief Add a new node in children vector using a plugin path */
+    NodeModel *addParenExternalInputst(const QString &pluginPath, QStringList &paths)
+        { return addParentNodeImpl(pluginPath, true, paths); }
 
     /** @brief Remove a children node */
     bool remove(const int index);
@@ -216,6 +225,12 @@ private:
     PluginPtr _plugin { nullptr };
     Beat _latestInstance { 0u };
 
+    /** @brief Prepare a node to be inserted (event free) */
+    [[nodiscard]] std::unique_ptr<Audio::Node> prepareNode(const QString &pluginPath, const bool addPartition, const QStringList &paths);
+
     /** @brief Create a node */
     [[nodiscard]] NodeModel *addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths);
+
+    /** @brief Create a node */
+    [[nodiscard]] NodeModel *addParentNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths);
 };

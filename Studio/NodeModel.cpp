@@ -9,6 +9,7 @@
 #include <QHash>
 #include <QQmlEngine>
 #include <QColor>
+#include <QFileInfo>
 
 #include <Audio/PluginTable.hpp>
 
@@ -119,7 +120,7 @@ const NodeModel *NodeModel::get(const int idx) const
     return _children.at(idx).get();
 }
 
-NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths)
+std::unique_ptr<Audio::Node> NodeModel::prepareNode(const QString &pluginPath, const bool addPartition, const QStringList &paths)
 {
     const std::string path = pluginPath.toStdString();
     const auto factory = Audio::PluginTable::Get().find(path);
@@ -135,12 +136,23 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
 
     auto audioNode = std::make_unique<Audio::Node>(_data, std::move(plugin));
 
-    audioNode->setName(Core::FlatString(factory->getName()));
+    if (paths.empty())
+        audioNode->setName(Core::FlatString(factory->getName()));
+    else {
+        QFileInfo fi(paths[0]);
+        auto name = Core::FlatString(fi.fileName().toStdString());
+    }
     audioNode->prepareCache(Scheduler::Get()->audioSpecs());
 
     if (addPartition)
         audioNode->partitions().push().setName("Partition 0");
 
+    return audioNode;
+}
+
+NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths)
+{
+    auto audioNode = prepareNode(pluginPath, addPartition, paths);
     NodePtr node(audioNode.get(), this);
     auto nodePtr = node.get();
     const bool hasPaused = Scheduler::Get()->pauseImpl();
@@ -157,6 +169,47 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
                 beginInsertRows(QModelIndex(), idx, idx);
                 _children.push(std::move(node));
                 endInsertRows();
+                if (hasPaused) {
+                    Scheduler::Get()->getCurrentGraph().wait();
+                    Scheduler::Get()->invalidateCurrentGraph();
+                    Scheduler::Get()->playImpl();
+                } else
+                    Scheduler::Get()->invalidateCurrentGraph();
+            }
+        ))
+        return nullptr;
+    return nodePtr;
+}
+
+NodeModel *NodeModel::addParentNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths)
+{
+    auto parent = parentNode();
+    if (!parent)
+        return nullptr;
+
+    auto audioNode = prepareNode(pluginPath, addPartition, paths);
+    NodePtr node(audioNode.get(), parent);
+    auto nodePtr = node.get();
+    const bool hasPaused = Scheduler::Get()->pauseImpl();
+
+    if (!paths.isEmpty())
+        nodePtr->loadExternalInputs(paths);
+
+    if (!Models::AddProtectedEvent(
+            [this, audioNode = std::move(audioNode)](void) mutable {
+                auto parent = _data->parent();
+                auto &self = *parent->children().find([this](const auto &p) { return p.get() == _data; });
+                self.swap(audioNode);
+                self->children().push(std::move(audioNode));
+            },
+            [this, node = std::move(node), hasPaused](void) mutable {
+                auto parent = parentNode();
+                setParent(node.get());
+                int i = -1;
+                auto &self = *parent->children().find([this, &i](const auto &p) { ++i; return p.get() == this; });
+                self.swap(node);
+                self->children().push(std::move(node));
+                parent->dataChanged(parent->index(i), parent->index(i), { static_cast<int>(Roles::NodeInstance) });
                 if (hasPaused) {
                     Scheduler::Get()->getCurrentGraph().wait();
                     Scheduler::Get()->invalidateCurrentGraph();

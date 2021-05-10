@@ -4,8 +4,9 @@ import QtQuick.Controls 2.15
 import NodeModel 1.0
 
 Column {
-    property NodeModel node: null
+    property NodeModel node: isDelegate ? nodeInstance.instance : null
     property int recursionIndex: 0
+    property bool isDelegate: false
 
     id: nodeDelegate
     width: nodeView.width
@@ -53,7 +54,7 @@ Column {
             source: "qrc:/PlaylistView/PlaylistContent/PlaylistContentNodeDelegate.qml"
 
             onLoaded: {
-                item.node = nodeInstance.instance
+                item.isDelegate = true
                 item.recursionIndex = nodeDelegate.recursionIndex + 1
             }
         }
