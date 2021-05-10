@@ -19,7 +19,7 @@ class Project : public QObject
 
     Q_PROPERTY(NodeModel *master READ master NOTIFY masterChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
 
 public:
     /** @brief Construct a new project instance */

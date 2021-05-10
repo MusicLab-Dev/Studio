@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import AudioAPI 1.0
+
 import "../../Common"
 
 ContentView {
@@ -18,6 +20,7 @@ ContentView {
     placementKeyOffset: pianoView.keyOffset
     timelineBeatPrecision: sequencerView.player.currentPlaybackBeat
     audioProcessBeatPrecision: app.scheduler.partitionCurrentBeat
+    placementBeatPrecisionScale: AudioAPI.beatPrecision / 4
 
     SequencerContentPianoView {
         id: pianoView
