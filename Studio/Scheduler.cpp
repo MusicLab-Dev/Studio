@@ -45,7 +45,7 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     _Instance = this;
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
-    setProcessParamByBlockSize(4096u / 2u, _audioSpecs.sampleRate);
+    setProcessParamByBlockSize(1024u, _audioSpecs.sampleRate);
     setAudioBlockSize(_device.blockSize());
     _audioSpecs.processBlockSize = processBlockSize();
     // connect(&_device, &Device::sampleRateChanged, this, &Scheduler::refreshAudioSpecs);
@@ -55,11 +55,7 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
 
 Scheduler::~Scheduler(void) noexcept
 {
-    if (pauseImpl()) {
-        std::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
-        onCatchingAudioThread();
-        getCurrentGraph().wait();
-    }
+    stopAndWait();
 
     _Instance = nullptr;
 }
@@ -188,6 +184,7 @@ bool Scheduler::onAudioBlockGenerated(void)
 {
     _busy = false;
     _blockGenerated = true;
+    std::atomic_notify_one(&_blockGenerated);
     while (_blockGenerated) {
         std::this_thread::yield();
     }
@@ -198,6 +195,7 @@ bool Scheduler::onAudioQueueBusy(void)
 {
     _busy = true;
     _blockGenerated = true;
+    std::atomic_notify_one(&_blockGenerated);
     while (_blockGenerated) {
         std::this_thread::yield();
     }
@@ -289,7 +287,7 @@ void Scheduler::pause(const Scheduler::PlaybackMode)
 
 void Scheduler::stop(const Scheduler::PlaybackMode mode)
 {
-    pauseImpl();
+    stopAndWait();
     switch (mode) {
     case PlaybackMode::Production:
         return setProductionCurrentBeat(0u);
@@ -319,17 +317,19 @@ bool Scheduler::pauseImpl(void)
 {
     if (setState(Audio::AScheduler::State::Pause)) {
         _device.stop();
+        _pausing = true;
         emit runningChanged();
         return true;
-    } else
+    } else {
         return false;
+    }
 }
 
 void Scheduler::onNodeDeleted(NodeModel *targetNode)
 {
     if (partitionNode() == targetNode->audioNode()) {
         if (playbackMode() == PlaybackMode::Partition || playbackMode() == PlaybackMode::OnTheFly) {
-            pauseImpl();
+            stopAndWait();
             setPlaybackMode(Audio::PlaybackMode::Production);
             emit playbackModeChanged();
         }
@@ -344,7 +344,7 @@ void Scheduler::onNodePartitionDeleted(NodeModel *targetNode, const quint32 part
 {
     if (partitionNode() == targetNode->audioNode() && partition == partitionIndex()) {
         if (playbackMode() == PlaybackMode::Partition || playbackMode() == PlaybackMode::OnTheFly) {
-            pauseImpl();
+            stopAndWait();
             setPlaybackMode(Audio::PlaybackMode::Production);
             emit playbackModeChanged();
         }
@@ -372,9 +372,12 @@ void Scheduler::disableLoopRange(void)
 
 void Scheduler::stopAndWait(void)
 {
-    if (pauseImpl()) {
-        std::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
-        onCatchingAudioThread();
+    const bool wasPausing = _pausing;
+    if (wasPausing || pauseImpl()) {
+        if (!wasPausing) {
+            std::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
+            onCatchingAudioThread();
+        }
         wait();
         setDirtyFlags();
         setProductionCurrentBeat(0u);
@@ -402,6 +405,7 @@ void Scheduler::onCatchingAudioThread(void)
 
     _blockGenerated = false;
     std::atomic_notify_one(&_blockGenerated);
+    _pausing = false;
 
     if (_exitGraph) {
         _timer.stop();
