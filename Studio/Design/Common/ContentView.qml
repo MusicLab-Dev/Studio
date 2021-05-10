@@ -221,7 +221,7 @@ Item {
             }
 
             Rectangle {
-                x: contentView.xOffset + contentView.loopFrom * contentView.pixelsPerBeatPrecision
+                x: contentViewTimeline.loopFromIndicatorX
                 width: 1
                 height: contentView.height
                 color: themeManager.accentColor
@@ -229,7 +229,7 @@ Item {
             }
 
             Rectangle {
-                x: contentView.xOffset + contentView.loopTo * contentView.pixelsPerBeatPrecision
+                x: contentViewTimeline.loopToIndicatorX
                 width: 1
                 height: contentView.height
                 color: themeManager.accentColor

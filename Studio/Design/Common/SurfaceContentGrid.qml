@@ -144,14 +144,15 @@ Item {
         id: canvasRows
         y: yRowOffset
         width: parent.width
-        height: parent.height
+        height: parent.height * 2
 
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
             var offset = 0
             ctx.fillStyle = rowColor
-            for (var i = 0; i <= rowsPerColumn; ++i) {
+            var rowsToDraw = rowsPerColumn * 2
+            for (var i = 0; i <= rowsToDraw; ++i) {
                 ctx.fillRect(0, offset, width, rowThickness)
                 offset += rowHeight
             }

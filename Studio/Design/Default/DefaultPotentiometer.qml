@@ -17,9 +17,9 @@ Dial {
 
         handle: Rectangle {
             id: handler
-            height: 4
-            width: 4
-            radius: 2
+            height: 6
+            width: 6
+            radius: 3
             color: Qt.darker("white", 1.65 - 0.65 * ((dial.value - dial.minimumValue) / dial.range))
         }
 
@@ -47,9 +47,9 @@ Dial {
 
         tickmarkLabel: Rectangle {
             id: tickmark
-            height: 4
-            width: 4
-            radius: 2
+            height: 6
+            width: 6
+            radius: 3
             color: styleData.index ? "white" : "grey"
         }
     }

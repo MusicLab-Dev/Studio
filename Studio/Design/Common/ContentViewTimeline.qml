@@ -7,6 +7,8 @@ import AudioAPI 1.0
 Item {
     property bool isEditingLoop: false
     property alias timelineCursor: timelineCursor
+    readonly property real loopFromIndicatorX: loopFromIndicator.x + loopFromIndicator.width / 2
+    readonly property real loopToIndicatorX: loopToIndicator.x + loopToIndicator.width / 2
 
     id: timeline
 
