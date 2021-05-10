@@ -146,7 +146,7 @@ public:
 
 public slots:
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_children.size()); }
+    int count(void) const noexcept { return static_cast<int>(_children.size()); }
 
     /** @brief Add a new node in children vector using a plugin path */
     NodeModel *add(const QString &pluginPath)

@@ -55,10 +55,10 @@ public:
 
 public slots:
     /** @brief Get the list of devices able to output audio */
-    // [[nodiscard]] QStringList getOutputDeviceList(void) const noexcept;
+    // QStringList getOutputDeviceList(void) const noexcept;
 
     /** @brief Get the list of devices able to take audio as input */
-    // [[nodiscard]] QStringList selectOutputDevice(const QString &device) const noexcept;
+    // QStringList selectOutputDevice(const QString &device) const noexcept;
 
 signals:
     /** @brief Notify that the project has changed */

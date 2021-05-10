@@ -10,7 +10,7 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml REQUIRED)
 find_package(Threads)
 
-qt_add_resources(QtResources
+qt5_add_resources(QtResources
     ${StudioDir}/Resources/Resources.qrc
     ${StudioDir}/Design/Main/Main.qrc
     ${StudioDir}/Design/Default/Default.qrc
@@ -25,10 +25,6 @@ qt_add_resources(QtResources
     ${StudioDir}/Design/Modules/Plugins/Plugins.qrc
     ${StudioDir}/Design/Modules/Workspaces/Workspaces.qrc
     ${StudioDir}/Design/Modules/Settings/Settings.qrc
-)
-
-set(StudioPrecompiledHeaders
-    ${StudioDir}/Scheduler.hpp
 )
 
 set(StudioSources
@@ -83,6 +79,7 @@ set(StudioSources
     ${StudioDir}/Project.hpp
     ${StudioDir}/ProjectSave.cpp
     ${StudioDir}/ProjectSave.hpp
+    ${StudioDir}/Scheduler.hpp
     ${StudioDir}/Scheduler.cpp
     ${StudioDir}/SettingsListModel.cpp
     ${StudioDir}/SettingsListModel.hpp
@@ -97,15 +94,13 @@ set(StudioSources
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
 
-target_precompile_headers(${PROJECT_NAME} PUBLIC ${StudioPrecompiledHeaders})
-
 target_include_directories(${PROJECT_NAME} PUBLIC ${StudioDir}/..)
 
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Audio
     Protocol
-    Qt::Core Qt::Quick Qt::Qml Qt::QuickControls2
+    Qt5::Core Qt5::Quick Qt5::Qml Qt5::QuickControls2
     Threads::Threads
 )
 

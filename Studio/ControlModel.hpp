@@ -113,7 +113,7 @@ public:
 
 public slots:
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_automations.size()); }
+    int count(void) const noexcept { return static_cast<int>(_automations.size()); }
 
     /** @brief Add a children to the list */
     bool add(void);

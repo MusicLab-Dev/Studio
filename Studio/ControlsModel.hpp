@@ -60,7 +60,7 @@ public:
 
 public slots:
     /** @brief Return the count of element in the model */
-    [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_controls.size()); }
+    int count(void) const noexcept { return static_cast<int>(_controls.size()); }
 
     /** @brief Add a children to the list */
     void add(const ParamID paramID);
