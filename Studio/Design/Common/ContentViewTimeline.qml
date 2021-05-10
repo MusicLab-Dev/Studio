@@ -122,11 +122,12 @@ Item {
                 drag.maximumX: loopToIndicator.x
 
                 drag.onActiveChanged: {
-                    contentView.loopFrom = (loopFromIndicator.x - contentView.xOffset + loopFromIndicator.width / 2) / contentView.pixelsPerBeatPrecision
-                    if (contentView.loopFrom === contentView.loopTo)
-                        contentView.disableLoopRange()
-                    else
-                        app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
+                    if (drag.active)
+                        contentView.timelineBeginLoopMove()
+                   else {
+                        contentView.loopFrom = (loopFromIndicator.x - contentView.xOffset + loopFromIndicator.width / 2) / contentView.pixelsPerBeatPrecision
+                        contentView.timelineEndLoopMove()
+                    }
                 }
 
                 onPressedChanged: forceActiveFocus()
@@ -159,11 +160,12 @@ Item {
                 drag.maximumX: timelineArea.width - width / 2
 
                 drag.onActiveChanged: {
-                    contentView.loopTo = (loopToIndicator.x - contentView.xOffset + loopToIndicator.width / 2) / contentView.pixelsPerBeatPrecision
-                    if (contentView.loopFrom === contentView.loopTo)
-                        contentView.disableLoopRange()
-                    else
-                        app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
+                    if (drag.active)
+                        contentView.timelineBeginLoopMove()
+                   else {
+                        contentView.loopTo = (loopToIndicator.x - contentView.xOffset + loopToIndicator.width / 2) / contentView.pixelsPerBeatPrecision
+                        contentView.timelineEndLoopMove()
+                    }
                 }
 
                 onPressedChanged: forceActiveFocus()

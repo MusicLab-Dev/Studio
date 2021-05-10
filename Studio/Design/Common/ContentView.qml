@@ -107,6 +107,9 @@ Item {
     signal timelineMove(var target)
     signal timelineEndMove()
 
+    signal timelineBeginLoopMove()
+    signal timelineEndLoopMove()
+
     function disableLoopRange() {
         hasLoop = false
         loopFrom = 0

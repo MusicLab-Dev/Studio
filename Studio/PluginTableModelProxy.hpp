@@ -98,11 +98,10 @@ private:
         if (!_nameFilter.isEmpty()) {
             auto sName = factory->getName();
             QString name = QString::fromLocal8Bit(sName.data(), static_cast<int>(sName.length()));
-            if (!name.contains(_nameFilter)) {
+            if (!name.contains(_nameFilter, Qt::CaseInsensitive)) {
                 sName = factory->getDescription();
-                name.clear();
                 name = QString::fromLocal8Bit(sName.data(), static_cast<int>(sName.length()));
-                if (!name.contains(_nameFilter))
+                if (!name.contains(_nameFilter, Qt::CaseInsensitive))
                     return false;
             }
         }
