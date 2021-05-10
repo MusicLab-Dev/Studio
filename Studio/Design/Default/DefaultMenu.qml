@@ -5,25 +5,7 @@ Menu {
     id: globalMenu
     width: 200
 
-    delegate: MenuItem {
-        id: menuItem
-        height: menuItem.enabled ? 40 : 0
-        hoverEnabled: true
-
-        background: Rectangle {
-            color: menuItem.hovered ? themeManager.backgroundColor : themeManager.foregroundColor
-        }
-
-        contentItem: Text {
-            id: contentText
-            text: menuItem.text
-            font: menuItem.font
-            color:  parent.hovered ? "#338DCF": "#295F8B"
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
-    }
+    delegate: DefaultMenuItem {}
 
     background: Rectangle {
         border.color: "#338DCF"

@@ -30,6 +30,8 @@ Rectangle {
                 anchors.fill: parent
                 anchors.margins: parent.width * 0.02
                 color: "white"
+                border.width: boardManagerMouseArea.containsMouse ? 5 : 0
+                border.color: themeManager.accentColor
                 radius: 10
 
                 Rectangle {
@@ -39,17 +41,21 @@ Rectangle {
                     x: parent.width / 2 - width / 2
                     y: parent.height / 2 - height / 2
                     anchors.margins: parent.width * 0.02
-                    color: themeManager.foregroundColor
+                    color: boardManagerMouseArea.containsMouse ? themeManager.accentColor : themeManager.foregroundColor
                     radius: 10
 
                     DefaultText {
                         anchors.centerIn: parent
-                        color: "white"
-                        text: "(" + boardPreviewSlot.boardWidth + ", " + boardPreviewSlot.boardHeight + ")"
+                        text: boardPreviewSlot.boardWidth + " x " + boardPreviewSlot.boardHeight
+                        font.pixelSize: 40
+                        font.bold: true
+                        color: boardManagerMouseArea.containsMouse ? "black" : "white"
                     }
                 }
 
                 MouseArea {
+                    id: boardManagerMouseArea
+                    hoverEnabled: true
                     anchors.fill: parent
 
                     onClicked: {

@@ -33,7 +33,7 @@ Rectangle {
         Repeater {
             model: eventDispatcher.targetEventList
 
-            delegate: MenuItem {
+            delegate: DefaultMenuItem {
                 text: modelData
 
                 onTriggered: {
@@ -76,18 +76,25 @@ Rectangle {
         Repeater {
             model: board
 
-            delegate: DefaultImageButton {
+            delegate: DefaultImageButtonDefaultColor {
                 id: delegateBtn
                 x: controlPos.x * boardGrid.cellWidth
                 y: controlPos.y * boardGrid.cellHeight
                 width: boardGrid.cellWidth
                 height: boardGrid.cellHeight
                 source: controlType === Board.ControlType.Button ? "qrc:/Assets/BoardButton.png" : controlType === Board.ControlType.Potentiometer ? "qrc:/Assets/BoardPotentiometer.png" : ""
+                hoverEnabled: true
 
                 onReleased: {
                     assignMenu.targetInput = index
                     assignMenu.parent = delegateBtn
                     assignMenu.open()
+                }
+
+                background: Rectangle {
+                    border.width: parent.hovered ? 5 : 0
+                    border.color: themeManager.accentColor
+                    radius: 10
                 }
             }
         }

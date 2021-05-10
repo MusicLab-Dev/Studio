@@ -20,6 +20,7 @@
         <file>DefaultImageButtonDefaultColor.qml</file>
         <file>DefaultPotentiometer.qml</file>
         <file>DefaultMenu.qml</file>
+        <file>DefaultMenuItem.qml</file>
         <file>DefaultSectionWrapper.qml</file>
         <file>DefaultFileDialog.qml</file>
     </qresource>
