@@ -17,6 +17,7 @@ RowLayout {
             width: parent.width * 0.9
             anchors.centerIn: parent
             colorDefault: "white"
+            enabled: false
         }
     }
 
@@ -30,6 +31,7 @@ RowLayout {
             width: parent.width * 0.9
             anchors.centerIn: parent
             colorDefault: "white"
+            enabled: false
         }
     }
 }

@@ -55,7 +55,7 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.333
 
         ClickableCard {
-            title: "Board"
+            title: "Boards"
             description: "Connect your Boards for a better experience"
             source: "qrc:/Assets/Board.png"
             colorDefault: "#D272AC"
@@ -64,7 +64,7 @@ RowLayout {
             width: parent.width / 1.5
             onClicked: {
                 modulesView.addModule(index, {
-                                   title: "Board",
+                                   title: "Boards",
                                    path: "qrc:/BoardView/BoardView.qml",
                                    callback: modulesViewContent.nullCallback
                                })

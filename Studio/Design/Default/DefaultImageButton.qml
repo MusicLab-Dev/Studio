@@ -6,6 +6,7 @@ Button {
     property color colorOnPressed: "#1A6DAA"
     property color colorHovered: "#338DCF"
     property color colorDefault: "#31A8FF"
+    property color colorDisabled: themeManager.disabledColor
     property bool showBorder: true
     property real scaleFactor: 0.5
 
@@ -28,7 +29,7 @@ Button {
         width: control.width * scaleFactor
         height: control.height * scaleFactor
         source: control.source
-        color: control.pressed ? colorOnPressed : control.hovered ? colorHovered : colorDefault
+        color: control.enabled ? control.pressed ? colorOnPressed : control.hovered ? colorHovered : colorDefault : colorDisabled
     }
 }
 

@@ -148,6 +148,7 @@ void BoardManager::processBoardPacket(Protocol::ReadablePacket &packet)
                     emit dataChanged(index(i), index(i), { static_cast<int>(Role::Size) });
                     break;
                 }
+                ++i;
             }
             break;
         }

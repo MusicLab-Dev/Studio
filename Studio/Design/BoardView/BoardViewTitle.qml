@@ -7,7 +7,7 @@ Column {
     DefaultText {
         id: boardViewTitle
         width: parent.width
-        text: qsTr("Board")
+        text: qsTr("Boards")
         color: "white"
         font.pointSize: 34
     }
