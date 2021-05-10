@@ -153,6 +153,9 @@ std::unique_ptr<Audio::Node> NodeModel::prepareNode(const QString &pluginPath, c
 NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths)
 {
     auto audioNode = prepareNode(pluginPath, addPartition, paths);
+    if (!audioNode)
+        return nullptr;
+
     NodePtr node(audioNode.get(), this);
     auto nodePtr = node.get();
     const bool hasPaused = Scheduler::Get()->pauseImpl();
@@ -188,6 +191,9 @@ NodeModel *NodeModel::addParentNodeImpl(const QString &pluginPath, const bool ad
         return nullptr;
 
     auto audioNode = prepareNode(pluginPath, addPartition, paths);
+    if (!audioNode)
+        return nullptr;
+
     NodePtr node(audioNode.get(), parent);
     auto nodePtr = node.get();
     const bool hasPaused = Scheduler::Get()->pauseImpl();
@@ -200,6 +206,8 @@ NodeModel *NodeModel::addParentNodeImpl(const QString &pluginPath, const bool ad
                 auto parent = _data->parent();
                 auto &self = *parent->children().find([this](const auto &p) { return p.get() == _data; });
                 self.swap(audioNode);
+                self->setParent(parent);
+                audioNode->setParent(self.get());
                 self->children().push(std::move(audioNode));
             },
             [this, node = std::move(node), hasPaused](void) mutable {

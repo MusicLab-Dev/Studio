@@ -19,7 +19,6 @@ WorkspacesBackground {
             acceptedCallback()
         acceptedCallback = null
         canceledCallback = null
-        fileUrl = ""
     }
 
     function cancelAndClose() {
@@ -28,7 +27,6 @@ WorkspacesBackground {
             canceledCallback()
         acceptedCallback = null
         canceledCallback = null
-        fileUrl = ""
     }
 
     property var acceptedCallback: function() {}

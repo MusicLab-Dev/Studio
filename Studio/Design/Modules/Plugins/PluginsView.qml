@@ -18,7 +18,6 @@ PluginsBackground {
             acceptedCallback()
         acceptedCallback = null
         canceledCallback = null
-        selectedPath = ""
     }
 
     function cancelAndClose() {
@@ -27,7 +26,6 @@ PluginsBackground {
             canceledCallback()
         acceptedCallback = null
         canceledCallback = null
-        selectedPath = ""
     }
 
     property var acceptedCallback: function() {}

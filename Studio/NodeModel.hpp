@@ -171,7 +171,7 @@ public slots:
         { return addParentNodeImpl(pluginPath, false, QStringList()); }
 
     /** @brief Add a new node in children vector using a plugin path */
-    NodeModel *addParenExternalInputst(const QString &pluginPath, QStringList &paths)
+    NodeModel *addParentExternalInputs(const QString &pluginPath, QStringList &paths)
         { return addParentNodeImpl(pluginPath, true, paths); }
 
     /** @brief Remove a children node */
