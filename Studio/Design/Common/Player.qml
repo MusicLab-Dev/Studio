@@ -51,16 +51,13 @@ RowLayout {
     }
 
     function play() {
-        if (contentView.hasLoop)
-            app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
-        else
-            app.scheduler.disableLoopRange()
+        var loopRange = contentView.hasLoop ? AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo) : AudioAPI.beatRange(0, 0)
         if (isPartitionPlayer) {
             if (!targetNode)
                 return;
-            app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat)
+            app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, currentPlaybackBeat, loopRange)
         } else
-            app.scheduler.play(targetPlaybackMode, currentPlaybackBeat)
+            app.scheduler.play(targetPlaybackMode, currentPlaybackBeat, loopRange)
         timer.start()
         app.currentPlayer = player
     }
@@ -73,16 +70,13 @@ RowLayout {
     }
 
     function replay() {
-        if (contentView.hasLoop)
-            app.scheduler.setLoopRange(AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo))
-        else
-            app.scheduler.disableLoopRange()
+        var loopRange = contentView.hasLoop ? AudioAPI.beatRange(contentView.loopFrom, contentView.loopTo) : AudioAPI.beatRange(0, 0)
         if (isPartitionPlayer) {
             if (!targetNode)
                 return;
-            app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, contentView.loopFrom)
+            app.scheduler.playPartition(targetPlaybackMode, targetNode, targetPartitionIndex, contentView.loopFrom, loopRange)
         } else
-            app.scheduler.play(targetPlaybackMode, contentView.loopFrom)
+            app.scheduler.play(targetPlaybackMode, contentView.loopFrom, loopRange)
         app.currentPlayer = player
         beginPlaybackBeat = contentView.loopFrom
         currentPlaybackBeat = contentView.loopFrom

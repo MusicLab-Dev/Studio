@@ -49,7 +49,7 @@ Item {
         function load(path) {
             modulesView.removeAllComponentsWithoutEmptyView()
             app.project.loadFrom(path)
-            modules.insert(0, {
+            modulesView.addModule(0, {
                     title: "Playlist",
                     path: "qrc:/PlaylistView/PlaylistView.qml",
                     callback: modulesViewContent.nullCallback

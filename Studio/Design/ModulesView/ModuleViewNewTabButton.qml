@@ -12,7 +12,7 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            modules.insert(modulesViewContent.modules.count, {
+            modulesView.addModule(modulesViewContent.modules.count, {
                 title: "New component",
                 path: "qrc:/EmptyView/EmptyView.qml",
                 callback: modulesViewContent.nullCallback

@@ -17,7 +17,7 @@ RowLayout {
             height: parent.height / 1.25
             width: parent.width / 1.5
             onClicked: {
-                modules.insert(index, {
+                modulesView.addModule(index, {
                     title: "Sequencer",
                     path: "qrc:/SequencerView/SequencerView.qml",
                     callback: modulesViewContent.sequencerNewPartitionNodeCallback
@@ -40,7 +40,7 @@ RowLayout {
             height: parent.height / 1.25
             width: parent.width / 1.5
             onClicked: {
-                modules.insert(index, {
+                modulesView.addModule(index, {
                                    title: "Playlist",
                                    path: "qrc:/PlaylistView/PlaylistView.qml",
                                    callback: modulesViewContent.nullCallback
@@ -63,7 +63,7 @@ RowLayout {
             height: parent.height / 1.25
             width: parent.width / 1.5
             onClicked: {
-                modules.insert(index, {
+                modulesView.addModule(index, {
                                    title: "Board",
                                    path: "qrc:/BoardView/BoardView.qml",
                                    callback: modulesViewContent.nullCallback

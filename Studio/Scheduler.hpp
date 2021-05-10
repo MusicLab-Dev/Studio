@@ -118,10 +118,10 @@ public:
 
 public slots:
     /** @brief Play the scheduler */
-    void play(const Scheduler::PlaybackMode mode, const Beat startingBeat);
+    void play(const Scheduler::PlaybackMode mode, const Beat startingBeat, const BeatRange &loopRange = BeatRange{});
 
     /** @brief Play the scheduler setting up a partition */
-    void playPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex, const Beat startingBeat);
+    void playPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex, const Beat startingBeat, const BeatRange &loopRange = BeatRange{});
 
     /** @brief Pause the scheduler */
     void pause(const Scheduler::PlaybackMode mode);

@@ -80,7 +80,7 @@ Rectangle {
             if (componentSelected === modules.count - 1)
                 componentSelected = modules.count > 1 ? modules.count - 2 : 0;
             if (modules.count === 1) {
-                modules.insert(1, {
+                modulesView.addModule(1, {
                     title: "New component",
                     path: "qrc:/EmptyView/EmptyView.qml",
                     callback: modulesViewContent.nullCallback

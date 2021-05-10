@@ -12,7 +12,7 @@ Rectangle {
         if (componentSelected === modules.count - 1)
             componentSelected = modules.count > 1 ? modules.count - 2 : 0;
         if (modules.count === 1) {
-            modules.insert(1, {
+            modulesView.addModule(1, {
                 title: "New component",
                 path: "qrc:/EmptyView/EmptyView.qml",
                 callback: modulesViewContent.nullCallback
@@ -26,7 +26,7 @@ Rectangle {
 
     function removeAllComponents() {
         modules.clear()
-        modules.insert(0, {
+        modulesView.addModule(0, {
             title: "New component",
             path: "qrc:/EmptyView/EmptyView.qml",
             callback: modulesViewContent.nullCallback
@@ -82,6 +82,12 @@ Rectangle {
         modules.move(from, to, 1)
     }
 
+    function addModule(at, module) {
+//        filePicker.cancelAndClose()
+//        pluginsView.cancelAndClose()
+        modules.insert(at, module)
+    }
+
     id: modulesView
     color: "#474747"
 
@@ -121,7 +127,7 @@ Rectangle {
     Shortcut {
         sequence: "Ctrl+T"
         onActivated: {
-            modules.insert(modules.count, {
+            modulesView.addModule(modules.count, {
                 title: "New component",
                 path: "qrc:/EmptyView/EmptyView.qml",
                 callback: modulesViewContent.nullCallback

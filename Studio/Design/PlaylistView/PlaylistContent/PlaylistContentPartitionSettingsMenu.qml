@@ -46,7 +46,7 @@ DefaultMenu {
         onTriggered: {
             app.partitionNodeCache = targetNode
             app.partitionIndexCache = targetPartitionIndex
-            modules.insert(modules.count, {
+            modulesView.addModule(modules.count, {
                 title: "Sequencer",
                 path: "qrc:/SequencerView/SequencerView.qml",
                 callback: modulesViewContent.sequencerPartitionNodeCallback

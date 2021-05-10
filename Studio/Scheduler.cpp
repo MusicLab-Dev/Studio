@@ -202,7 +202,7 @@ bool Scheduler::onAudioQueueBusy(void)
     return _exitGraph;
 }
 
-void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat)
+void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat, const BeatRange &loopRange)
 {
     stopAndWait();
 
@@ -210,6 +210,11 @@ void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat
         setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
         emit playbackModeChanged();
     }
+
+    if (loopRange.from != loopRange.to)
+        setLoopRange(loopRange);
+    else
+        disableLoopRange();
 
     auto &range = Audio::AScheduler::getCurrentBeatRange();
     if (range.from != startingBeat) {
@@ -234,7 +239,7 @@ void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat
     playImpl();
 }
 
-void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *node, const quint32 partition, const Beat startingBeat)
+void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *node, const quint32 partition, const Beat startingBeat, const BeatRange &loopRange)
 {
     const bool graphChanged = partitionNode() != node->audioNode();
     // const bool partitionChanged = graphChanged || partitionIndex() != partition;
@@ -247,6 +252,11 @@ void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *nod
     }
     setPartitionNode(node->audioNode());
     setPartitionIndex(partition);
+
+    if (loopRange.from != loopRange.to)
+        setLoopRange(loopRange);
+    else
+        disableLoopRange();
 
     auto &range = Audio::AScheduler::getCurrentBeatRange();
     if (range.from != startingBeat) {
