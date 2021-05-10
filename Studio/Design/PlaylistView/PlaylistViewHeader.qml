@@ -51,6 +51,7 @@ Rectangle {
                         "Selector",
                         "CutMod",
                     ]
+                    itemUsableTill: 1
                     onItemSelectedChanged: playlistView.editMode = itemSelected
 
                     placeholder: Snapper {

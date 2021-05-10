@@ -89,6 +89,7 @@ Rectangle {
                         "Selector",
                         "CutMod",
                     ]
+                    itemUsableTill: 1
                     onItemSelectedChanged: sequencerView.editMode = itemSelected
 
                     placeholder: Snapper {
