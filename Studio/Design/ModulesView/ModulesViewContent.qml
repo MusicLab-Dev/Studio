@@ -45,6 +45,18 @@ Item {
     }
 
     DefaultMenuButton {
+
+        function load(path) {
+            modulesView.removeAllComponentsWithoutEmptyView()
+            app.project.loadFrom(path)
+            modules.insert(0, {
+                    title: "Playlist",
+                    path: "qrc:/PlaylistView/PlaylistView.qml",
+                    callback: modulesViewContent.nullCallback
+                })
+            componentSelected = 0
+        }
+
         id: menuButton
         height: parent.height * 0.05
         width: parent.height * 0.05
@@ -87,6 +99,20 @@ Item {
                 onTriggered: loadFileDialog.open()
             }
 
+            DefaultMenu {
+
+                title: "Open Template..."
+
+                Action {
+                    text: "Basic"
+                    onTriggered: {
+                        menuButton.load(":/Templates/TEMPLATE_basic")
+                        app.project.path = ""
+                    }
+                }
+
+            }
+
             Action {
                 text: qsTr("Preferences")
                 onTriggered: modulesView.settingsView.open()
@@ -118,20 +144,12 @@ Item {
             folder: shortcuts.home
             nameFilters: [ "All files (*)" ]
             selectExisting: true
-            onAccepted: {
-                modulesView.removeAllComponentsWithoutEmptyView()
-                app.project.loadFrom(mainWindow.urlToPath(fileUrl.toString()))
-                modules.insert(0, {
-                        title: "Playlist",
-                        path: "qrc:/PlaylistView/PlaylistView.qml",
-                        callback: modulesViewContent.nullCallback
-                    })
-                componentSelected = 0
-                close()
-            }
+            onAccepted: menuButton.load(mainWindow.urlToPath(fileUrl.toString()))
+
             onRejected: close()
             Component.onCompleted: visible = false
         }
+
 
     }
 

@@ -9,6 +9,7 @@ ContentView {
     yOffsetMin: nodeView.totalHeight > surfaceContentGrid.height ? surfaceContentGrid.height - nodeView.totalHeight : 0
     timelineBeatPrecision: playlistView.player.currentPlaybackBeat
     audioProcessBeatPrecision: app.scheduler.productionCurrentBeat
+    yZoom: 0.25
 
     PlaylistContentNodeView {
         id: nodeView
