@@ -18,9 +18,9 @@ Column {
 
         Rectangle {
             x: nodeView.linkSpacing + nodeDelegate.recursionIndex * (nodeView.linkWidth + nodeView.linkSpacing)
-            y: pluginHeader.height - 12
+            y: pluginHeader.height - nodeView.pluginHeaderTopPadding
             width: nodeView.linkWidth
-            height: nodeDelegate.height - pluginHeader.height - 24
+            height: nodeDelegate.height - pluginHeader.height
             visible: nodeRepeater.count
             color: nodeDelegate.node ? nodeDelegate.node.color : "black"
         }

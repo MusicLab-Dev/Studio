@@ -187,6 +187,7 @@ private:
     Audio::AudioSpecs _audioSpecs;
     bool _exitGraph { false };
     bool _busy { false };
+    bool _pausing { false };
     alignas_cacheline std::atomic<bool> _blockGenerated { false };
     alignas_cacheline std::atomic<std::size_t> _onTheFlyMissCount { false };
     bool _isOnTheFlyMode { false };
