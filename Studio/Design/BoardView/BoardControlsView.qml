@@ -59,12 +59,19 @@ Rectangle {
         Repeater {
             model: board
 
-            delegate: DefaultImageButton {
+            delegate: DefaultImageButtonDefaultColor {
                 x: controlPos.x * boardGrid.cellWidth
                 y: controlPos.y * boardGrid.cellHeight
                 width: boardGrid.cellWidth
                 height: boardGrid.cellHeight
-                source: controlType === Board.ControlType.Button ? "qrc:/Assets/BoardButton.png" : controlType === Board.ControlType.Potentiometer ? "qrc:/Assets/BoardPotentiometer.png" : ""
+                source: controlType === Board.ControlType.Button ? "qrc:/Assets/BoardButton.png" : controlType === Board.ControlType.Potentiometer ? "qrc:/Assets/BoardPotentiometer.png" : ""    
+                hoverEnabled: true
+
+                background: Rectangle {
+                    border.width: parent.hovered ? 5 : 0
+                    border.color: themeManager.accentColor
+                    radius: 10
+                }
             }
         }
     }
