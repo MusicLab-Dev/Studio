@@ -12,20 +12,22 @@ PluginsBackground {
     }
 
     function acceptAndClose(path) {
+        var accepted = acceptedCallback
         selectedPath = path
         visible = false
-        if (acceptedCallback)
-            acceptedCallback()
         acceptedCallback = null
         canceledCallback = null
+        if (accepted)
+            accepted()
     }
 
     function cancelAndClose() {
+        var canceled = canceledCallback
         visible = false
-        if (canceledCallback)
-            canceledCallback()
         acceptedCallback = null
         canceledCallback = null
+        if (canceled)
+            canceled()
     }
 
     property var acceptedCallback: function() {}
