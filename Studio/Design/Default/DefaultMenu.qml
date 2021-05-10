@@ -7,7 +7,7 @@ Menu {
 
     delegate: MenuItem {
         id: menuItem
-        height: 40
+        height: menuItem.enabled ? 40 : 0
         hoverEnabled: true
 
         background: Rectangle {

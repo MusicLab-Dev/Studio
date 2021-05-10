@@ -12,6 +12,7 @@ struct ThemePack
     QColor content {};
     QColor accent {};
     QColor timeline {};
+    QColor disabled {};
 };
 
 static const ThemePack ClassicThemePack {
@@ -20,6 +21,7 @@ static const ThemePack ClassicThemePack {
     /* content: */ "#FFFFFF",
     /* accent: */ "#00ECBA",
     /* timeline: */ "#31A8FF",
+    /* disabled: */ "#3d3d3d"
 };
 
 static const ThemePack DarkThemePack {
@@ -28,6 +30,7 @@ static const ThemePack DarkThemePack {
     /* content: */ "#FFFFFF",
     /* accent: */ "#31A8FF",
     /* timeline: */ "#00ECBA",
+    /* disabled: */ "#3d3d3d"
 };
 
 void ThemeManager::setTheme(const Theme theme)
@@ -47,6 +50,7 @@ void ThemeManager::updateThemeColors(void)
         _contentColor = pack.content;
         _accentColor = pack.accent;
         _timelineColor = pack.timeline;
+        _disabledColor = pack.disabled;
     };
 
     switch (theme()) {
@@ -65,6 +69,7 @@ void ThemeManager::updateThemeColors(void)
     emit contentColorChanged();
     emit accentColorChanged();
     emit timelineColorChanged();
+    emit disabledColorChanged();
 }
 
 static const QColor ColorChain[] = {

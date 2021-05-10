@@ -140,7 +140,7 @@ std::unique_ptr<Audio::Node> NodeModel::prepareNode(const QString &pluginPath, c
         audioNode->setName(Core::FlatString(factory->getName()));
     else {
         QFileInfo fi(paths[0]);
-        auto name = Core::FlatString(fi.fileName().toStdString());
+        audioNode->setName(Core::FlatString(fi.baseName().toStdString()));
     }
     audioNode->prepareCache(Scheduler::Get()->audioSpecs());
 

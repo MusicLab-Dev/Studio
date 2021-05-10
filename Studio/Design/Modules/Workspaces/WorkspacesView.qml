@@ -15,12 +15,20 @@ WorkspacesBackground {
 
     function acceptAndClose() {
         visible = false
-        acceptedCallback()
+        if (acceptedCallback)
+            acceptedCallback()
+        acceptedCallback = null
+        canceledCallback = null
+        fileUrl = ""
     }
 
     function cancelAndClose() {
         visible = false
-        canceledCallback()
+        if (canceledCallback)
+            canceledCallback()
+        acceptedCallback = null
+        canceledCallback = null
+        fileUrl = ""
     }
 
     property var acceptedCallback: function() {}

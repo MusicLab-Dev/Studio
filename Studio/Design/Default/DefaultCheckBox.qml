@@ -17,7 +17,7 @@ CheckBox {
         x: control.leftPadding
         y: control.height / 2 - height / 2
         radius: 5
-        color: control.enabled ? "#001E36" : "#C4C4C4"
+        color: control.enabled ? "#001E36" : themeManager.disabledColor
         border.width: control.down ? 2 : control.hovered ? 1 : 0
         border.color: "#31A8FF"
     }

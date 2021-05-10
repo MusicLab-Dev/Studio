@@ -4,7 +4,9 @@ import QtQuick.Controls 2.15
 import NodeModel 1.0
 import ControlModel 1.0
 
-Menu {
+import "../../Default"
+
+DefaultMenu {
     property var rootParent: null
     property var targetItem: null
     property NodeModel targetNode: null

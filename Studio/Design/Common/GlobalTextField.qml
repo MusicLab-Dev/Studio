@@ -14,7 +14,6 @@ Item {
     function close() {
         if (acceptedCallback) {
             acceptedCallback()
-            console.debug("callback launched")
         }
         textInput.text = ""
         animClose.start()
