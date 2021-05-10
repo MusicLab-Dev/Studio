@@ -45,6 +45,7 @@ Rectangle {
                 width: parent.width / 3
                 height: parent.height / 2
                 anchors.centerIn: parent
+                itemUsableTill: 0
                 onItemSelectedChanged: {
                     sequencerView.tweakMode = itemSelected
                 }

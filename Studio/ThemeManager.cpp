@@ -74,20 +74,15 @@ void ThemeManager::updateThemeColors(void)
 
 static const QColor ColorChain[] = {
     QColor(0x31A8FF),
-    QColor(0x00C5FF),
-    QColor(0x00DCE7),
-    QColor(0x00ECBA),
-    QColor(0x9EF78C),
-    QColor(0xFFD569),
+    QColor(0x00D1FF),
+    QColor(0x53C989),
+    QColor(0x40B436),
+    QColor(0xEDB012),
     QColor(0xFFB377),
-    QColor(0xFF978F),
-    QColor(0xFF85A8),
-    QColor(0xF382BB),
+    QColor(0xFF9B85),
+    QColor(0xFF6F6F),
     QColor(0xDF83CE),
-    QColor(0xC487DE),
     QColor(0xAC90EC),
-    QColor(0x8E98F7),
-    QColor(0x69A1FD)
 };
 
 constexpr quint32 ColorChainCount = sizeof(ColorChain) / sizeof(ColorChain[0]);
