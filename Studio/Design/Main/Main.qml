@@ -27,11 +27,16 @@ Window {
 
     id: mainWindow
     visible: true
-    width: 1280
-    height: 720
     title: qsTr("Lexo")
     minimumWidth: 800
     minimumHeight: 600
+
+    Component.onCompleted: {
+        width = Screen.desktopAvailableWidth * 0.85
+        height = Screen.desktopAvailableHeight * 0.85
+        x = Screen.desktopAvailableWidth / 2 - width / 2
+        y = Screen.desktopAvailableHeight / 2 - height / 2
+    }
 
     Application {
         property NodeModel partitionNodeCache: null

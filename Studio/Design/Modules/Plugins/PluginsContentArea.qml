@@ -61,10 +61,9 @@ GridView {
             id: description
             text: factoryDescription
             anchors.top: title.bottom
-            width: parent.width
-            height: parent.height / 2
-            x: parent.width / 2 - width / 2
-            y: title.y * 1.2
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             ToolTip {
                 id: toolTip
