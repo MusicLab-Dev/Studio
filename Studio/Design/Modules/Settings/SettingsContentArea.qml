@@ -9,6 +9,7 @@ ListView {
     id: settingsContentArea
     width: parent.width
     height: parent.height
+    spacing: 10
 
     onCountChanged: {
         var lastCategory = ""
@@ -50,11 +51,34 @@ ListView {
             height: 40
         }
 
-        Loader {
-            id: delegateLoader
-            width: settingsContentArea.width
-            height: 40
-            source: "qrc:/Modules/Settings/SettingsDelegates/" + type + "Delegate.qml"
+        Item {
+            width: delegateLoader.width
+            height: delegateLoader.height
+
+            Loader {
+                id: delegateLoader
+                width: settingsContentArea.width
+                source: "qrc:/Modules/Settings/SettingsDelegates/" + type + "Delegate.qml"
+            }
+
+            MouseArea {
+                id: delegateMouseArea
+                propagateComposedEvents: true
+                hoverEnabled: true
+                anchors.fill: parent
+                onClicked: mouse.accepted = false
+                onPressed: mouse.accepted = false
+                onReleased: mouse.accepted = false
+                onDoubleClicked: mouse.accepted = false
+                onPositionChanged: mouse.accepted = false
+                onPressAndHold: mouse.accepted = false
+            }
+
+            ToolTip {
+                id: toolTip
+                text: help
+                visible: delegateMouseArea.containsMouse && text !== ""
+            }
         }
     }
 }

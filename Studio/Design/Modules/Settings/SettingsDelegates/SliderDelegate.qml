@@ -4,7 +4,10 @@ import QtQuick.Controls 2.15
 import "../../../Default"
 
 Row {
-    Text {
+    height: 40
+    spacing: 5
+
+    DefaultText {
         id: sliderDescription
         text: name
         width: Math.max(parent.width * 0.15, 150)
@@ -12,7 +15,7 @@ Row {
         color: "#295F8B"
     }
 
-    Text {
+    DefaultText {
         text: slider.from
         color: "#295F8B"
         x: sliderDescription.x + sliderDescription.width
@@ -31,7 +34,7 @@ Row {
         snapMode: Slider.SnapAlways
     }
 
-    Text {
+    DefaultText {
         text: slider.to
         color: "#295F8B"
     }

@@ -5,7 +5,10 @@ import QtQuick.Layouts 1.15
 import "../../../Default"
 
 Row {
-    Text {
+    height: 40
+    spacing: 5
+
+    DefaultText {
         id: nameLabel
         text: name
         width: Math.max(parent.width * 0.15, 150)

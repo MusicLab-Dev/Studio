@@ -15,5 +15,7 @@
         <file>SettingsDelegates/IntegerTextBoxDelegate.qml</file>
         <file>SettingsDelegates/FloatingTextBoxDelegate.qml</file>
         <file>SettingsDelegates/SpinBoxDelegate.qml</file>
+        <file>SettingsDelegates/DevicesModelDelegate.qml</file>
+        <file>SettingsDelegates/StringPairListDelegate.qml</file>
     </qresource>
 </RCC>

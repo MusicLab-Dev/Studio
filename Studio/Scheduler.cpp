@@ -16,7 +16,7 @@ Audio::Device::LogicalDescriptor Scheduler::getDeviceDescriptor(void)
     else {
         auto settings = p->settings();
         return Audio::Device::LogicalDescriptor {
-            /*.name =               */ {},
+            /*.name =               */ settings->getDefault("outputDevice", Audio::Device::DefaultDeviceName).toString().toStdString(),
             /*.blockSize =          */ static_cast<BlockSize>(settings->getDefault("blockSize", 1024u).toUInt()),
             /*.sampleRate =         */ static_cast<SampleRate>(settings->getDefault("sampleRate", 44100).toUInt()),
             /*.isInput =            */ false,
@@ -45,7 +45,7 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     _Instance = this;
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
-    setProcessParamByBlockSize(1024u, _audioSpecs.sampleRate);
+    setProcessParamByBlockSize(static_cast<BlockSize>(parentApp()->settings()->getDefault("processBlockSize", 1024u).toUInt()), _audioSpecs.sampleRate);
     setAudioBlockSize(_device.blockSize());
     _audioSpecs.processBlockSize = processBlockSize();
     // connect(&_device, &Device::sampleRateChanged, this, &Scheduler::refreshAudioSpecs);
@@ -396,6 +396,12 @@ void Scheduler::stopAndWait(void)
         setOnTheFlyCurrentBeat(0u);
         disableLoopRange();
     }
+}
+
+void Scheduler::reloadDevice(const QString &name)
+{
+    stopAndWait();
+    _device.setName(name);
 }
 
 void Scheduler::onCatchingAudioThread(void)

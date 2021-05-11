@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import "../../../Default"
 
 Row {
+    spacing: 5
+
     Text {
         text: name
         width: Math.max(parent.width * 0.15, 150)

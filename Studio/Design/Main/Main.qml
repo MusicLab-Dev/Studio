@@ -8,6 +8,7 @@ import Application 1.0
 import NodeModel 1.0
 import BoardManager 1.0
 import EventDispatcher 1.0
+import DevicesModel 1.0
 
 import "../Common"
 import "../ModulesView"
@@ -27,11 +28,16 @@ Window {
 
     id: mainWindow
     visible: true
-    width: 1280
-    height: 720
     title: qsTr("Lexo")
     minimumWidth: 800
     minimumHeight: 600
+
+    Component.onCompleted: {
+        width = Screen.desktopAvailableWidth * 0.85
+        height = Screen.desktopAvailableHeight * 0.85
+        x = Screen.desktopAvailableWidth / 2 - width / 2
+        y = Screen.desktopAvailableHeight / 2 - height / 2
+    }
 
     Application {
         property NodeModel partitionNodeCache: null
@@ -64,6 +70,10 @@ Window {
         }
 
         boardListener.boardManager: boardManager
+    }
+
+    DevicesModel {
+        id: devicesModel
     }
 
     ModulesView {

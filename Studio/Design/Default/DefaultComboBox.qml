@@ -3,9 +3,13 @@ import QtQuick.Controls 2.15
 
 ComboBox {
     property alias rectBackground: rectBackground
+    property alias listView: listView
 
     id: control
     hoverEnabled: true
+
+    onPressedChanged: canvas.requestPaint()
+    onHoveredChanged: canvas.requestPaint()
 
     indicator: Canvas {
         id: canvas
@@ -17,19 +21,14 @@ ComboBox {
         contextType: "2d"
 
         onPaint: {
-            context.reset();
-            context.moveTo(0, 0);
-            context.lineTo(width, 0);
-            context.lineTo(width / 2, height);
-            context.closePath();
-            context.fillStyle = control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : themeManager.contentColor;
-            context.fill();
-        }
-
-        Connections {
-            target: control
-            function onPressedChanged() { canvas.requestPaint() }
-            function onHoveredChanged() { canvas.requestPaint() }
+            var ctx = getContext("2d")
+            ctx.reset();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(width, 0);
+            ctx.lineTo(width / 2, height);
+            ctx.closePath();
+            ctx.fillStyle = control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : themeManager.contentColor;
+            ctx.fill();
         }
     }
 
@@ -66,6 +65,7 @@ ComboBox {
         padding: 2
 
         contentItem: ListView {
+            id: listView
             clip: true
             implicitHeight: contentHeight
             model: control.popup.visible ? control.delegateModel : null

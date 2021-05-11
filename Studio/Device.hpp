@@ -16,6 +16,7 @@ class Device : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(SampleRate sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(Format format READ format WRITE setFormat NOTIFY formatChanged)
     Q_PROPERTY(ChannelArrangement channelArrangement READ channelArrangement WRITE setChannelArrangement NOTIFY channelArrangementChanged)
@@ -44,6 +45,14 @@ public:
 
     /** @brief Destruct the instance */
     ~Device(void) noexcept = default;
+
+
+    /** @brief Get the name property */
+    [[nodiscard]] QString name(void) const noexcept
+        { return QString::fromLocal8Bit(_data.name().data(), static_cast<int>(_data.name().size())); }
+
+    /** @brief Set the device name (reload device) */
+    void setName(const QString &name);
 
 
     /** @brief Get the sample rate */
@@ -87,7 +96,13 @@ public:
     /** @brief Unregister the audio callback */
     void stop(void) { _data.stop(); }
 
+    [[nodiscard]] Audio::Device *audioDevice(void) noexcept { return &_data; }
+    [[nodiscard]] const Audio::Device *audioDevice(void) const noexcept { return &_data; }
+
 signals:
+    /** @brief Notify that name property has changed */
+    void nameChanged(void);
+
     /** @brief Notify that sample rate property has changed */
     void sampleRateChanged(void);
 

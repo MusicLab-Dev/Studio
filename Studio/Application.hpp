@@ -20,11 +20,11 @@ class Application : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(SettingsListModel *settings READ settings NOTIFY settingsChanged)
     Q_PROPERTY(Project *project READ project NOTIFY projectChanged)
     // Q_PROPERTY(DevicesModel *device READ device NOTIFY deviceChanged)
     // Q_PROPERTY(PluginTableModel *plugins READ plugins NOTIFY pluginsChanged)
     Q_PROPERTY(Scheduler *scheduler READ scheduler NOTIFY schedulerChanged)
-    Q_PROPERTY(SettingsListModel *settings READ settings NOTIFY settingsChanged)
 
 public:
     static constexpr std::string_view DefaultProjectName = "My Project";
@@ -38,6 +38,9 @@ public:
     ~Application(void) override = default;
 
 
+    /** @brief Get the settings manager */
+    [[nodiscard]] SettingsListModel *settings(void) noexcept { return &_settings; }
+
     /** @brief Get the project */
     [[nodiscard]] Project *project(void) noexcept { return &_project; }
 
@@ -50,9 +53,6 @@ public:
     /** @brief Get the scheduler */
     [[nodiscard]] Scheduler *scheduler(void) noexcept { return &_scheduler; }
 
-    /** @brief Get the settings manager */
-    [[nodiscard]] SettingsListModel *settings(void) noexcept { return &_settings; }
-
 public slots:
     /** @brief Get the list of devices able to output audio */
     // QStringList getOutputDeviceList(void) const noexcept;
@@ -61,6 +61,9 @@ public slots:
     // QStringList selectOutputDevice(const QString &device) const noexcept;
 
 signals:
+    /** @brief Notify that the project settings manager has changed */
+    void settingsChanged(void);
+
     /** @brief Notify that the project has changed */
     void projectChanged(void);
 
@@ -73,9 +76,6 @@ signals:
     /** @brief Notify that the project scheluder has changed */
     void schedulerChanged(void);
 
-
-    /** @brief Notify that the project settings manager has changed */
-    void settingsChanged(void);
 
 private:
     /** @brief Setup the internal scheduler */
