@@ -59,7 +59,6 @@ set(StudioSources
     ${StudioDir}/InstancesModel.hpp
     ${StudioDir}/KeyboardEventListener.cpp
     ${StudioDir}/KeyboardEventListener.hpp
-    ${StudioDir}/Main.cpp
     ${StudioDir}/Models.hpp
     ${StudioDir}/NetworkLog.hpp
     ${StudioDir}/NodeModel.cpp
