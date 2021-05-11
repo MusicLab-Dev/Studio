@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 get_filename_component(StudioRoot ${CMAKE_CURRENT_LIST_FILE} PATH)
 
+set(VCPKG_TARGET_TRIPLET x64-windows-static)
+
 include(${StudioRoot}/CompileOptions/ToolchainOptions.cmake)
 
 project(Studio)

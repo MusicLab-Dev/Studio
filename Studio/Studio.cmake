@@ -3,11 +3,15 @@ project(Studio)
 
 get_filename_component(StudioDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
+include(${StudioRoot}/QtStaticCMake.cmake)
+set(QT_STATIC_SOURCE_DIR ${QT_STATIC_SOURCE_DIR} CACHE STRING "Source directory of QtStaticCMake.cmake" FORCE)
+set(QT_STATIC_QT_ROOT ${QT_STATIC_QT_ROOT} CACHE STRING "Qt sdk root folder" FORCE)
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets Quick QuickControls2 Qml QmlWorkerScript QuickShapes REQUIRED)
 find_package(Threads)
 
 qt5_add_resources(QtResources
@@ -100,7 +104,7 @@ target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Audio
     Protocol
-    Qt5::Core Qt5::Quick Qt5::Qml Qt5::QuickControls2
+    Qt5::Core Qt5::Widgets Qt5::Quick Qt5::Qml Qt5::QuickControls2 Qt5::QmlWorkerScript Qt5::QuickShapes
     Threads::Threads
 )
 
@@ -109,12 +113,26 @@ if(CODE_COVERAGE)
     target_link_options(${PROJECT_NAME} PUBLIC --coverage)
 endif()
 
-set(StudioAppSources
-    ${StudioDir}/Main.cpp
-)
-
 set(Application ${PROJECT_NAME}App)
 
-add_executable(${Application} ${StudioAppSources})
+set(StudioAppSources
+    ${StudioDir}/Main.cpp
+    ${PROJECT_BINARY_DIR}/${Application}_plugin_import.cpp
+    ${PROJECT_BINARY_DIR}/${Application}_qml_plugin_import.cpp
+)
 
-target_link_libraries(${Application} Studio)
+add_executable(${Application} WIN32 ${StudioAppSources})
+
+qt_generate_plugin_import(${Application}
+#    VERBOSE
+)
+
+qt_generate_qml_plugin_import(${Application}
+    QML_SRC ${StudioDir}/Design/
+#    VERBOSE
+)
+
+target_link_libraries(${Application}
+PUBLIC
+    Studio
+)
