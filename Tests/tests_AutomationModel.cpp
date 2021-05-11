@@ -5,8 +5,8 @@
 
 #include <gtest/gtest.h>
 
+#include <Studio/Application.hpp>
 #include <Studio/AutomationModel.hpp>
-#include <Studio/Scheduler.hpp>
 #include <Studio/Point.hpp>
 #include <Studio/Scheduler.hpp>
 
@@ -14,7 +14,7 @@ TEST(AutomationModel, InitDestroy)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Automation automation {};
 
     ASSERT_NO_THROW(AutomationModel tmp(&automation));
@@ -24,7 +24,7 @@ TEST(AutomationModel, InitWithValueDestroy)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Automation automation {};
     automation.instances().push<Audio::BeatRange>({1, 2});
 
@@ -38,7 +38,7 @@ TEST(AutomationModel, UpdateInternal)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Automation automation1 {};
     Audio::Automation automation2 {};
 
@@ -58,7 +58,7 @@ TEST(AutomationModel, AddPoint)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Automation automation {};
 
     AutomationModel model(&automation);
@@ -78,7 +78,7 @@ TEST(AutomationModel, Count)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Automation automation {};
 
     AutomationModel model(&automation);
@@ -98,7 +98,7 @@ TEST(AutomationModel, RemovePoint)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Automation automation {};
 
     AutomationModel model(&automation);
@@ -115,7 +115,7 @@ TEST(AutomationModel, InstancesAddRemoveBasics)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
 
     Audio::Automation automation {};
 
@@ -154,7 +154,7 @@ TEST(AutomationModel, SetPoint)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Automation automation {};
 
     AutomationModel model(&automation);
@@ -178,7 +178,7 @@ TEST(AutomationModel, Muted)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Automation automation {};
 
     AutomationModel model(&automation);

@@ -5,7 +5,7 @@
 
 #include <gtest/gtest.h>
 
-#include <Studio/Scheduler.hpp>
+#include <Studio/Application.hpp>
 #include <Studio/InstancesModel.hpp>
 
 TEST(InstancesModel, InitDestroy)
@@ -18,7 +18,7 @@ TEST(InstancesModel, UpdateInternal)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::BeatRanges ranges1 { { 0u, 1u }, { 1u, 2u } };
     Audio::BeatRanges ranges2 { { 2u, 3u }, { 3u, 4u }, { 5u, 6u } };
     Audio::BeatRanges ranges3 { { 7u, 8u }, { 9u, 10u }, {11u, 12u}, {13u, 14u} };
@@ -59,7 +59,7 @@ TEST(InstancesModel, Add)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::BeatRanges ranges { };
 
     InstancesModel model(&ranges);
@@ -77,7 +77,7 @@ TEST(InstancesModel, Remove)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::BeatRanges ranges { {1u, 2u}, {3u, 4u}, {5u, 6u}, {7u, 8u} };
 
     InstancesModel model(&ranges);
@@ -111,7 +111,7 @@ TEST(InstancesModel, Set)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
 
     Audio::BeatRanges ranges { {1u, 2u}, {3u, 4u}, {5u, 6u}, {7u, 8u} };
 
