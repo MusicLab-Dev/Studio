@@ -215,13 +215,13 @@ Item {
             beatsPerRow: contentView.beatsPerRow
             z: 0
 
-            Rectangle {
-                width: 4
-                height: surfaceContentGrid.height
-                x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
-                color: "red"
-                opacity: 0.5
-            }
+            // Rectangle {
+            //     width: 4
+            //     height: surfaceContentGrid.height
+            //     x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
+            //     color: "red"
+            //     opacity: 0.5
+            // }
 
             Rectangle {
                 x: contentViewTimeline.loopFromIndicatorX
