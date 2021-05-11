@@ -8,9 +8,17 @@
 #include "NetworkLog.hpp"
 #include "BoardManager.hpp"
 
+#ifndef DISABLE_BOARD_NETWORKING
+# define DISABLE_BOARD_NETWORKING true
+#endif
+
 BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
 {
-    NETWORK_LOG("BoardManager::BoardManager");
+#if DISABLE_BOARD_NETWORKING
+    qDebug() << "BoardManager: Networking disabled";
+    return;
+#else
+    qDebug() << "BoardManager: Networking enabled";
 
     onTickRateChanged();
     onDiscoverRateChanged();
@@ -55,6 +63,7 @@ BoardManager::BoardManager(void) : _networkBuffer(NetworkBufferSize)
     } catch (const std::exception &e) {
         NETWORK_LOG("BoardManager::BoardManager: couldn't bind socket ", e.what());
     }
+#endif
 }
 
 BoardManager::~BoardManager(void)

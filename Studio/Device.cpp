@@ -4,6 +4,7 @@
  */
 
 #include <QQmlEngine>
+#include <QDebug>
 
 #include "Models.hpp"
 #include "Device.hpp"
@@ -12,6 +13,27 @@ Device::Device(const Audio::Device::LogicalDescriptor &descriptor, Audio::AudioC
     : QObject(parent), _data(descriptor, std::move(callback))
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
+
+    auto n = name();
+    if (n.isEmpty())
+        n = Audio::Device::DefaultDeviceName;
+    qDebug().nospace() << "Acquired audio device:"
+        << "\n\tname: " << n
+        << "\n\tsampleRate: " << sampleRate()
+        << "\n\tformat: " << format()
+        << "\n\tblockSize: " << blockSize()
+        << "\n\tchannelArrangement: " << channelArrangement()
+        << "\n\tmidiChannels: " << midiChannels();
+}
+
+void Device::setName(const QString &name)
+{
+    Core::TinyString n = name.toStdString();
+    if (_data.name() == n)
+        return;
+    _data.setName(n);
+    _data.reloadDevice();
+    emit nameChanged();
 }
 
 void Device::setSampleRate(const SampleRate sampleRate) noexcept

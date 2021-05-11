@@ -8,6 +8,7 @@ import Application 1.0
 import NodeModel 1.0
 import BoardManager 1.0
 import EventDispatcher 1.0
+import DevicesModel 1.0
 
 import "../Common"
 import "../ModulesView"
@@ -69,6 +70,10 @@ Window {
         }
 
         boardListener.boardManager: boardManager
+    }
+
+    DevicesModel {
+        id: devicesModel
     }
 
     ModulesView {

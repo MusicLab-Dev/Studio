@@ -10,8 +10,16 @@
 #include "DevicesModel.hpp"
 
 DevicesModel::DevicesModel(QObject *parent) noexcept
-    : QAbstractListModel(parent), _descriptors(Audio::Device::GetPhysicalDescriptors())
+    : QAbstractListModel(parent)
 {
+    const auto descs = Audio::Device::GetPhysicalDescriptors(false, true);
+
+    _descriptors.push_back(Audio::Device::PhysicalDescriptor {
+        /* name: */ Audio::Device::DefaultDeviceName,
+        /* hasInput: */ false,
+        /* hasOutput: */ true
+    });
+    _descriptors.insert(_descriptors.end(), descs.begin(), descs.end());
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 

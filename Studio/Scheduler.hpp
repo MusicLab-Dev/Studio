@@ -147,6 +147,9 @@ public slots:
     /** @brief Get elapsed time in beat since last play */
     Beat getAudioElapsedBeat(void) const noexcept { return audioElapsedBeat(); }
 
+    /** @brief Reload the device */
+    void reloadDevice(const QString &name);
+
 signals:
     /** @brief Notify when playback mode changed */
     void playbackModeChanged(void);
