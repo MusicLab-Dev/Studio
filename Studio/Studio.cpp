@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QFontDatabase>
 #include <QQuickStyle>
+#include <QIcon>
 
 #include "AudioAPI.hpp"
 #include "Application.hpp"
@@ -118,6 +119,7 @@ static char *DefaultArgv[] = { DefaultArg, nullptr };
 Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
 {
     QQuickStyle::setStyle("Default");
+    setWindowIcon(QIcon(":/Assets/Logo.png"));
 }
 
 Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)

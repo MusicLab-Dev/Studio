@@ -59,8 +59,8 @@ RowLayout {
     function pause() {
         if (isPartitionPlayer && !targetNode)
             return;
-        app.scheduler.pause(targetPlaybackMode)
         timer.stopAndRecordPlaybackBeat()
+        app.scheduler.pause(targetPlaybackMode)
         app.currentPlayer = player
     }
 
