@@ -121,7 +121,9 @@ set(StudioAppSources
     ${PROJECT_BINARY_DIR}/${Application}_qml_plugin_import.cpp
 )
 
-add_executable(${Application} WIN32 ${StudioAppSources})
+
+
+add_executable(${Application} WIN32 ${StudioAppSources} ${StudioRoot}/Window.rc)
 
 qt_generate_plugin_import(${Application}
 #    VERBOSE

@@ -49,6 +49,8 @@ DefaultMenu {
                     var externalInputType = pluginTable.getExternalInputType(pluginsView.selectedPath)
                     if (externalInputType === PluginTableModel.None) {
                         // Add the node
+                        if (app.currentPlayer)
+                            app.currentPlayer.pause()
                         if (target.add(pluginsView.selectedPath) === null)
                             console.log("Couldn't create node")
                     } else {
@@ -60,6 +62,8 @@ DefaultMenu {
                                 for (var i = 0; i < filePicker.fileUrls.length; ++i)
                                     list[i] = mainWindow.urlToPath(filePicker.fileUrls[i].toString())
                                 // Add the node with external inputs
+                                if (app.currentPlayer)
+                                    app.currentPlayer.pause()
                                 if (target.addExternalInputs(pluginsView.selectedPath, list) === null)
                                     console.log("Couldn't create node")
                             },
@@ -89,6 +93,8 @@ DefaultMenu {
                     var externalInputType = pluginTable.getExternalInputType(pluginsView.selectedPath)
                     if (externalInputType === PluginTableModel.None) {
                         // Add the node
+                        if (app.currentPlayer)
+                            app.currentPlayer.pause()
                         if (target.addParent(pluginsView.selectedPath) === null)
                             console.log("Couldn't create node")
                     } else {
@@ -100,6 +106,8 @@ DefaultMenu {
                                 for (var i = 0; i < filePicker.fileUrls.length; ++i)
                                     list[i] = mainWindow.urlToPath(filePicker.fileUrls[i].toString())
                                 // Add the node with external inputs
+                                if (app.currentPlayer)
+                                    app.currentPlayer.pause()
                                 if (target.addParentExternalInputs(pluginsView.selectedPath, list) === null)
                                     console.log("Couldn't create node")
                             },
