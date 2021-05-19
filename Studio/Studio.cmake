@@ -89,6 +89,8 @@ set(StudioSources
     ${StudioDir}/Studio.hpp
     ${StudioDir}/ThemeManager.cpp
     ${StudioDir}/ThemeManager.hpp
+    ${StudioDir}/ActionsManager.hpp
+    ${StudioDir}/ActionsManager.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
