@@ -22,6 +22,8 @@
 #include "BoardManager.hpp"
 #include "EventDispatcher.hpp"
 #include "DevicesModel.hpp"
+#include "PartitionPreviewInstance.hpp"
+#include "InstancesModelProxy.hpp"
 
 void Studio::InitResources(void)
 {
@@ -67,13 +69,15 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<ControlModel>("ControlModel", 1, 0, "ControlModel", "Cannot construct ControlModel");
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
+    qmlRegisterType<InstancesModelProxy>("InstancesModelProxy", 1, 0, "InstancesModelProxy");
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
     qmlRegisterUncreatableType<Board>("Board", 1, 0, "Board", "Cannot constrict Board");
     qmlRegisterType<EventDispatcher>("EventDispatcher", 1, 0, "EventDispatcher");
     qmlRegisterUncreatableType<KeyboardEventListener>("KeyboardEventListener", 1, 0, "KeyboardEventListener", "Cannot construct KeyboardEventListener");
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
-
+    qmlRegisterUncreatableType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview", "Cannot construct PartitionPreview");
+    qmlRegisterType<PartitionPreviewInstance>("PartitionPreviewInstance", 1, 0, "PartitionPreviewInstance");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);

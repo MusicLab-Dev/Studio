@@ -57,6 +57,7 @@ set(StudioSources
     ${StudioDir}/EventDispatcher.hpp
     ${StudioDir}/InstancesModel.cpp
     ${StudioDir}/InstancesModel.hpp
+    ${StudioDir}/InstancesModelProxy.hpp
     ${StudioDir}/KeyboardEventListener.cpp
     ${StudioDir}/KeyboardEventListener.hpp
     ${StudioDir}/Models.hpp
@@ -68,6 +69,10 @@ set(StudioSources
     ${StudioDir}/PartitionModel.hpp
     ${StudioDir}/PartitionsModel.cpp
     ${StudioDir}/PartitionsModel.hpp
+    ${StudioDir}/PartitionPreview.cpp
+    ${StudioDir}/PartitionPreview.hpp
+    ${StudioDir}/PartitionPreviewInstance.cpp
+    ${StudioDir}/PartitionPreviewInstance.hpp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
     ${StudioDir}/PluginTableModel.cpp

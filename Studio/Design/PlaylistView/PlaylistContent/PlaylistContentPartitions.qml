@@ -2,7 +2,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import PartitionModel 1.0
+import PartitionPreviewInstance 1.0
 import AudioAPI 1.0
+import InstancesModelProxy 1.0
 
 import "../../Default"
 import "../../Common"
@@ -75,7 +77,10 @@ Repeater {
             brushStep: contentView.placementBeatPrecisionBrushStep
 
             Repeater {
-                model: placementArea.instances
+                model: InstancesModelProxy {
+                    range: AudioAPI.beatRange(-contentView.xOffset / contentView.pixelsPerBeatPrecision, (placementArea.width - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
+                    sourceModel: placementArea.instances
+                }
 
                 delegate: Rectangle {
                     x: contentView.xOffset + contentView.pixelsPerBeatPrecision * from
@@ -99,6 +104,12 @@ Repeater {
                         width: 1
                         height: contentView.rowHeight * 3 / 4
                         color: parent.border.color
+                    }
+
+                    PartitionPreviewInstance {
+                        anchors.fill: parent
+                        range: AudioAPI.beatRange(from, to)
+                        source: partitionDelegate.partition.preview
                     }
                 }
             }

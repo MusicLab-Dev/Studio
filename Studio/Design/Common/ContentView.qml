@@ -253,8 +253,7 @@ Item {
                 anchors.top: parent.top
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                active: size !== 1
-                visible: active
+                visible: size !== 1
                 orientation: Qt.Vertical
                 size: yScrollIndicatorSize
                 position: yScrollIndicatorPos
@@ -270,8 +269,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                active: size !== 1
-                visible: active
+                visible: size !== 1
                 orientation: Qt.Horizontal
                 size: xScrollIndicatorSize
                 position: xScrollIndicatorPos

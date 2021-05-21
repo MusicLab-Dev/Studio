@@ -12,6 +12,7 @@
 
 #include "Note.hpp"
 #include "InstancesModel.hpp"
+#include "PartitionPreview.hpp"
 
 class PartitionModel;
 class PartitionsModel;
@@ -39,6 +40,7 @@ class PartitionModel : public QAbstractListModel
     Q_PROPERTY(InstancesModel *instances READ getInstances NOTIFY instancesChanged)
     Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
     Q_PROPERTY(Beat latestNote READ latestNote NOTIFY latestNoteChanged)
+    Q_PROPERTY(PartitionPreview *preview READ preview CONSTANT)
 
 public:
     /** @brief Roles of each partition */
@@ -110,15 +112,25 @@ public:
     void setMidiChannels(const MidiChannels midiChannels);
 
 
-    /** @brief Update internal data pointer if it changed */
-    void updateInternal(Audio::Partition *data);
-
-
     /** @brief Get the current latest instance */
     [[nodiscard]] Beat latestInstance(void) const noexcept { return _latestInstance; }
 
     /** @brief Get the current latest note */
     [[nodiscard]] Beat latestNote(void) const noexcept { return _latestNote; }
+
+
+    /** @brief Get the internal partition preview */
+    [[nodiscard]] PartitionPreview *preview(void) noexcept { return &_preview; }
+    [[nodiscard]] const PartitionPreview *preview(void) const noexcept { return &_preview; }
+
+
+    /** @brief Get the internal audio partition */
+    [[nodiscard]] Audio::Partition *audioPartition(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::Partition *audioPartition(void) const noexcept { return _data; }
+
+
+    /** @brief Update internal data pointer if it changed */
+    void updateInternal(Audio::Partition *data);
 
 public slots:
     /** @brief Return the count of element in the model */
@@ -166,4 +178,5 @@ private:
     Core::UniqueAlloc<InstancesModel> _instances {};
     Beat _latestInstance { 0u };
     Beat _latestNote { 0u };
+    PartitionPreview _preview;
 };
