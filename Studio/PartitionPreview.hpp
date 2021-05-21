@@ -5,42 +5,48 @@
 
 #pragma once
 
-#include <QObject>
-#include <QPixmap>
+#include <QQuickPaintedItem>
+
+#include "Base.hpp"
 
 class PartitionModel;
 
-class PartitionPreview : public QObject
+class PartitionPreview : public QQuickPaintedItem
 {
     Q_OBJECT
 
     Q_PROPERTY(PartitionModel *target READ target WRITE setTarget NOTIFY targetChanged)
+    Q_PROPERTY(BeatRange range READ range WRITE setRange NOTIFY rangeChanged)
 
 public:
     /** @brief Constructor */
-    PartitionPreview(QObject *parent = nullptr);
+    PartitionPreview(QQuickItem *parent = nullptr);
 
     /** @brief Destructor */
-    ~PartitionPreview(void) = default;
+    ~PartitionPreview(void) override = default;
 
     /** @brief Get / Set the target property */
     [[nodiscard]] PartitionModel *target(void) const noexcept { return _target; }
-    void setTarget(PartitionModel *target) noexcept;
+    void setTarget(PartitionModel *target);
 
-    /** @brief Invalidate the preview so it has to be re-computed */
-    void invalidatePreview(void);
+    /** @brief Get / Set the range property */
+    [[nodiscard]] const BeatRange &range(void) noexcept { return _range; }
+    void setRange(const BeatRange &range);
 
-    /** @brief Get internal pixamp */
-    [[nodiscard]] const QPixmap &pixmap(void) const noexcept { return _pixmap; }
+    /** @brief Draw target within specified range */
+    void paint(QPainter *painter) final;
 
 signals:
     /** @brief Notify when target property changes */
     void targetChanged(void);
 
-    /** @brief Notify that the preview has been invalidated */
-    void previewInvalidated(void);
+    /** @brief Notify when range property changes */
+    void rangeChanged(void);
 
 private:
     PartitionModel *_target { nullptr };
-    QPixmap _pixmap {};
+    BeatRange _range {};
+
+    /** @brief Request an update */
+    void requestUpdate(void) { update(); }
 };

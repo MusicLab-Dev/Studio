@@ -12,7 +12,7 @@
 #include "PartitionsModel.hpp"
 
 PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *parent) noexcept
-    : QAbstractListModel(parent), _data(partition), _instances(&partition->instances(), this), _preview(this)
+    : QAbstractListModel(parent), _data(partition), _instances(&partition->instances(), this)
 {
     connect(_instances.get(), &InstancesModel::latestInstanceChanged, [this]{
         const auto oldLast = _latestInstance;
@@ -21,7 +21,6 @@ PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *par
         parentPartitions()->processLatestInstanceChange(oldLast, _latestInstance);
     });
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    _preview.setTarget(this);
 }
 
 QHash<int, QByteArray> PartitionModel::roleNames(void) const noexcept
@@ -108,7 +107,7 @@ bool PartitionModel::add(const Note &note)
                 _latestNote = last;
                 emit latestNoteChanged();
             }
-            _preview.invalidatePreview();
+            emit instancesChanged();
         }
     );
 }
@@ -162,7 +161,7 @@ bool PartitionModel::remove(const int idx)
                 _latestNote = 0;
                 emit latestNoteChanged();
             }
-            _preview.invalidatePreview();
+            emit instancesChanged();
         }
     );
 }
@@ -198,7 +197,7 @@ void PartitionModel::set(const int idx, const Note &range)
                     emit latestNoteChanged();
                 }
             }
-            _preview.invalidatePreview();
+            emit instancesChanged();
         }
     );
 }
@@ -217,7 +216,7 @@ void PartitionModel::updateInternal(Audio::Partition *data)
             if (_data->notes().data() != data->notes().data()) {
                 beginResetModel();
                 endResetModel();
-                _preview.invalidatePreview();
+                emit instancesChanged();
             }
         });
 }

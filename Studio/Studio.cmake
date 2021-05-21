@@ -71,8 +71,6 @@ set(StudioSources
     ${StudioDir}/PartitionsModel.hpp
     ${StudioDir}/PartitionPreview.cpp
     ${StudioDir}/PartitionPreview.hpp
-    ${StudioDir}/PartitionPreviewInstance.cpp
-    ${StudioDir}/PartitionPreviewInstance.hpp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
     ${StudioDir}/PluginTableModel.cpp

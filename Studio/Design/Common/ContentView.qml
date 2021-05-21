@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import AudioAPI 1.0
+import PartitionPreview 1.0
 
 Item {
     // Content data placeholder
@@ -302,9 +303,18 @@ Item {
             visible = true
         }
 
+        function attachPartition(newParent, newColor, partition) {
+            parent = newParent
+            targetColor = newColor
+            visible = true
+            placementPartitionPreview.target = partition
+
+        }
+
         function detach(newParent) {
             parent = contentView
             visible = false
+            placementPartitionPreview.target = null
         }
 
         id: placementRectangle
@@ -314,5 +324,15 @@ Item {
         height: contentView.rowHeight
         visible: false
         color: Qt.lighter(targetColor, 1.3)
+        border.color: Qt.darker(targetColor, 1.25)
+        border.width: 2
+
+
+        PartitionPreview {
+            id: placementPartitionPreview
+            anchors.fill: parent
+            anchors.margins: 2
+            range: AudioAPI.beatRange(placementBeatPrecisionFrom, placementBeatPrecisionTo)
+        }
     }
 }
