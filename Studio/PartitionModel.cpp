@@ -151,14 +151,9 @@ bool PartitionModel::remove(const int idx)
         },
         [this] {
             endRemoveRows();
-            if (!_data->notes().empty()) {
-                const auto last = _data->notes().back().range.to;
-                if (last > _latestNote) {
-                    _latestNote = last;
-                    emit latestNoteChanged();
-                }
-            } else if (_latestNote != 0) {
-                _latestNote = 0;
+            const Beat last = _data->notes().empty() ? 0u : _data->notes().back().range.to;
+            if (last > _latestNote) {
+                _latestNote = last;
                 emit latestNoteChanged();
             }
             emit instancesChanged();
@@ -202,38 +197,78 @@ void PartitionModel::set(const int idx, const Note &range)
     );
 }
 
-void PartitionModel::addRange(const QVector<Note> &notes)
+bool PartitionModel::addRange(const QVariantList &noteList)
 {
-    _data->notes().insert(notes.begin(), notes.end());
-}
-
-void PartitionModel::removeRange(const QVector<int> &indexes)
-{
-    int idx = 0;
-    auto it = std::remove_if(_data->notes().begin(), _data->notes().end(), [&idx, &indexes](const auto &) {
-        for (const auto i : indexes) {
-            if (i == idx)
-                return true;
+    if (noteList.empty())
+        return true;
+    else if (noteList.size() == 1)
+        return add(noteList.front().value<Note>());
+    QVector<Note> notes;
+    notes.reserve(noteList.size());
+    for (const auto &n : noteList)
+        notes.append(n.value<Note>());
+    return Models::AddProtectedEvent(
+        [this, notes] {
+            _data->notes().insert(notes.begin(), notes.end());
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+            const auto last = _data->notes().back().range.to;
+            if (last > _latestNote) {
+                _latestNote = last;
+                emit latestNoteChanged();
+            }
+            emit instancesChanged();
         }
-        ++idx;
-        return false;
-    });
-
-    if (it != _data->notes().end())
-        _data->notes().erase(it, _data->notes().end());
+    );
 }
 
-QVector<int> PartitionModel::select(const BeatRange &range, const Key keyFrom, const Key keyTo)
+bool PartitionModel::removeRange(const QVariantList &indexes)
+{
+    if (indexes.empty())
+        return true;
+    else if (indexes.size() == 1)
+        return remove(indexes.front().toInt());
+    return Models::AddProtectedEvent(
+        [this, indexes] {
+            int idx = 0;
+            auto it = std::remove_if(_data->notes().begin(), _data->notes().end(), [&idx, &indexes](const auto &) {
+                for (const auto &i : indexes) {
+                    if (i.toInt() == idx) {
+                        ++idx;
+                        return true;
+                    }
+                }
+                ++idx;
+                return false;
+            });
+
+            if (it != _data->notes().end())
+                _data->notes().erase(it, _data->notes().end());
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+            const Beat last = _data->notes().empty() ? 0u : _data->notes().back().range.to;
+            if (last > _latestNote) {
+                _latestNote = last;
+                emit latestNoteChanged();
+            }
+            emit instancesChanged();
+        }
+    );
+}
+
+QVariantList PartitionModel::select(const BeatRange &range, const Key keyFrom, const Key keyTo)
 {
     int idx = 0;
-    QVector<int> indexes;
+    QVariantList indexes;
 
     for (const auto &note : _data->notes()) {
-        if (note.key < keyFrom || note.key > keyTo || note.range.from > range.to || note.range.to < range.from) {
-            ++idx;
-            continue;
-        }
-        indexes.push_back(idx);
+        if (note.key >= keyFrom && note.key <= keyTo && note.range.from <= range.to && note.range.to >= range.from)
+            indexes.append(idx);
+        ++idx;
     }
     return indexes;
 }
@@ -253,5 +288,6 @@ void PartitionModel::updateInternal(Audio::Partition *data)
                 endResetModel();
                 emit instancesChanged();
             }
-        });
+        }
+    );
 }

@@ -17,7 +17,9 @@ MouseArea {
         Brush,
         BrushLeft,
         BrushRight,
-        Select
+        Select,
+        SelectRemove,
+        SelectMove
     }
 
     property PartitionModel partition: null
@@ -36,6 +38,9 @@ MouseArea {
     property real selectionBeatPrecisionTo: 0
     property real selectionKeyFrom: 0
     property real selectionKeyTo: 0
+    property var selectionListModel: null
+    property var selectionMoveBeatPrecisionOffset: 0
+    property var selectionMoveKeyOffset: 0
 
     function addOnTheFly(targetKey) {
         if (onTheFlyKey !== -1 && onTheFlyKey !== targetKey)
@@ -74,14 +79,23 @@ MouseArea {
     onPressedChanged: forceActiveFocus()
 
     onPressed: {
+        var isSelection = sequencerView.editMode === SequencerView.EditMode.Select || mouse.modifiers & Qt.ShiftModifier
         var realMouseBeatPrecision = Math.floor((mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
         var noteIndex = partition.find(mouseKey, realMouseBeatPrecision)
 
         // Right click on note -> delete
         if (mouse.buttons & Qt.RightButton) {
+            // Reset selection
+            selectionListModel = null
             mode = NotesPlacementArea.Mode.Remove
-            if (noteIndex !== -1)
+            if (isSelection) {
+                mode = NotesPlacementArea.Mode.SelectRemove
+                selectionBeatPrecisionFrom = realMouseBeatPrecision
+                selectionBeatPrecisionTo = realMouseBeatPrecision
+                selectionKeyFrom = mouseKey
+                selectionKeyTo = mouseKey
+            } else if (noteIndex !== -1)
                 partition.remove(noteIndex)
             return
         }
@@ -94,8 +108,10 @@ MouseArea {
 
         // Left click not on note -> insert
         if (noteIndex === -1) {
+            // Reset selection
+            selectionListModel = null
             // Select mode, start selection
-            if (sequencerView.editMode === SequencerView.EditMode.Select || mouse.modifiers & Qt.ShiftModifier) {
+            if (isSelection) {
                 mode = NotesPlacementArea.Mode.Select
                 selectionBeatPrecisionFrom = realMouseBeatPrecision
                 selectionBeatPrecisionTo = realMouseBeatPrecision
@@ -140,9 +156,16 @@ MouseArea {
                 mode = NotesPlacementArea.Mode.LeftResize
             else if ((beatPrecisionRange.to - realMouseBeatPrecision) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
                 mode = NotesPlacementArea.Mode.RightResize
-            else
+            else if (selectionListModel === null || selectionListModel.indexOf(noteIndex) === -1) {
                 mode = NotesPlacementArea.Mode.Move
-            partition.remove(noteIndex)
+            } else
+                mode = NotesPlacementArea.Mode.SelectMove
+            if (mode !== NotesPlacementArea.Mode.SelectMove) {
+                // Reset selection
+                selectionListModel = null
+                partition.remove(noteIndex)
+            } else
+                partition.removeRange(selectionListModel)
             // Attach the preview
             contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
             contentView.placementBeatPrecisionFrom = beatPrecisionRange.from
@@ -161,8 +184,6 @@ MouseArea {
         case NotesPlacementArea.Mode.Move:
         case NotesPlacementArea.Mode.LeftResize:
         case NotesPlacementArea.Mode.RightResize:
-            if (contentView.placementBeatPrecisionFrom < 0)
-                contentView.placementBeatPrecisionFrom = 0
             contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionWidth
             partition.add(
                 AudioAPI.note(
@@ -176,8 +197,33 @@ MouseArea {
             break
         case NotesPlacementArea.Mode.Select:
             // Select notes
-            mode = NotesPlacementArea.Mode.None
-            return
+            var list = partition.select(
+                AudioAPI.beatRange(
+                    Math.min(selectionBeatPrecisionFrom, selectionBeatPrecisionTo),
+                    Math.max(selectionBeatPrecisionFrom, selectionBeatPrecisionTo)
+                ),
+                Math.min(selectionKeyFrom, selectionKeyTo),
+                Math.max(selectionKeyFrom, selectionKeyTo)
+            )
+            selectionListModel = list
+            break
+        case NotesPlacementArea.Mode.SelectRemove:
+            // Select notes
+            var list = partition.select(
+                AudioAPI.beatRange(
+                    Math.min(selectionBeatPrecisionFrom, selectionBeatPrecisionTo),
+                    Math.max(selectionBeatPrecisionFrom, selectionBeatPrecisionTo)
+                ),
+                Math.min(selectionKeyFrom, selectionKeyTo),
+                Math.max(selectionKeyFrom, selectionKeyTo)
+            )
+            partition.removeRange(list)
+            break
+        case NotesPlacementArea.Mode.SelectMove:
+            partition.addRange(selectionList.toNoteList())
+            selectionMoveBeatPrecisionOffset = 0
+            selectionMoveKeyOffset = 0
+            break
         default:
             break
         }
@@ -190,6 +236,12 @@ MouseArea {
     onPositionChanged: {
         var realMouseBeatPrecision = Math.floor((mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
+        if (mouseKey < pianoView.keyMin)
+            mouseKey = pianoView.keyMin
+        else if (mouseKey > pianoView.keyMax)
+            mouseKey = pianoView.keyMax
+        if (realMouseBeatPrecision < 0)
+            realMouseBeatPrecision = 0
         switch (mode) {
         case NotesPlacementArea.Mode.Remove:
             var noteIndex = partition.find(mouseKey, realMouseBeatPrecision)
@@ -197,7 +249,10 @@ MouseArea {
                 partition.remove(noteIndex)
             break
         case NotesPlacementArea.Mode.Move:
+        case NotesPlacementArea.Mode.SelectMove:
             var mouseBeatPrecision = realMouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
+            var oldBeat = contentView.placementBeatPrecisionFrom
+            var oldKey = contentView.placementKey
             if (contentView.placementBeatPrecisionScale >= AudioAPI.beatPrecision)
                 mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % AudioAPI.beatPrecision)
             else if (contentView.placementBeatPrecisionScale !== 0)
@@ -209,6 +264,10 @@ MouseArea {
                 if (!sequencerView.player.isPlaying)
                     addOnTheFly(mouseKey)
                 contentView.placementKey = mouseKey
+            }
+            if (mode === NotesPlacementArea.Mode.SelectMove) {
+                selectionMoveBeatPrecisionOffset += (contentView.placementBeatPrecisionFrom - oldBeat)
+                selectionMoveKeyOffset += contentView.placementKey - oldKey
             }
             break
         case NotesPlacementArea.Mode.LeftResize:
@@ -255,6 +314,7 @@ MouseArea {
             }
             break
         case NotesPlacementArea.Mode.Select:
+        case NotesPlacementArea.Mode.SelectRemove:
             selectionBeatPrecisionTo = realMouseBeatPrecision
             selectionKeyTo = mouseKey
             break
@@ -274,9 +334,48 @@ MouseArea {
         height: contentView.rowHeight
     }
 
+    Repeater {
+        function toNoteList() {
+            var list = []
+            for (var i = 0; i < count; ++i) {
+                list[i] = getMovedNote(itemAt(i).note)
+            }
+            return list
+        }
+
+        function getMovedNote(note) {
+            var copy = note
+            var rangeCopy = copy.range
+            if (selectionMoveBeatPrecisionOffset < 0 && -selectionMoveBeatPrecisionOffset > rangeCopy.from) {
+                rangeCopy.to = rangeCopy.to - rangeCopy.from
+                rangeCopy.from = 0
+            } else {
+                rangeCopy.from += selectionMoveBeatPrecisionOffset
+                rangeCopy.to += selectionMoveBeatPrecisionOffset
+            }
+            copy.range = rangeCopy
+            copy.key += selectionMoveKeyOffset
+            return copy
+        }
+
+        id: selectionList
+        model: selectionListModel
+
+        delegate: Rectangle {
+            property var note: partition.getNote(modelData)
+
+            x: contentView.xOffset + (selectionMoveBeatPrecisionOffset + note.range.from) * contentView.pixelsPerBeatPrecision
+            y: parent.height - (selectionMoveKeyOffset + note.key - pianoView.keyOffset + 1) * contentView.rowHeight
+            width: (note.range.to - note.range.from) * contentView.pixelsPerBeatPrecision
+            height: contentView.rowHeight
+            color: "white"
+            opacity: 0.5
+        }
+    }
+
     Rectangle {
         id: selectionOverlay
-        visible: mode === NotesPlacementArea.Mode.Select
+        visible: mode === NotesPlacementArea.Mode.Select || mode === NotesPlacementArea.Mode.SelectRemove
         x: contentView.xOffset + Math.min(selectionBeatPrecisionFrom, selectionBeatPrecisionTo) * contentView.pixelsPerBeatPrecision
         y: parent.height - (Math.max(selectionKeyFrom, selectionKeyTo) - pianoView.keyOffset + 1) * contentView.rowHeight
         width: Math.abs(selectionBeatPrecisionTo - selectionBeatPrecisionFrom) * contentView.pixelsPerBeatPrecision

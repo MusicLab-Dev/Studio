@@ -148,13 +148,13 @@ public slots:
     void set(const int idx, const Note &range);
 
     /** @brief Add a group of notes */
-    void addRange(const QVector<Note> &notes);
+    bool addRange(const QVariantList &notes);
 
     /** @brief Remove a group of notes */
-    void removeRange(const QVector<int> &indexes);
+    bool removeRange(const QVariantList &indexes);
 
     /** @brief Select all notes within a specified range (returns indexes) */
-    QVector<int> select(const BeatRange &range, const Key keyFrom, const Key keyTo);
+    QVariantList select(const BeatRange &range, const Key keyFrom, const Key keyTo);
 
 signals:
     /** @brief Notify that the channel has changed */
