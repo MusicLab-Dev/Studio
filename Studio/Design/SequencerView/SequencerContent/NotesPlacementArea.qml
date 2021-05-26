@@ -16,17 +16,26 @@ MouseArea {
         RightResize,
         Brush,
         BrushLeft,
-        BrushRight
+        BrushRight,
+        Select
     }
 
     property PartitionModel partition: null
     property int mode: NotesPlacementArea.Mode.None
     property int onTheFlyKey: -1
+
+    // Brush
     property int brushKey: 0
     property int brushBegin: 0
     property int brushEnd: 0
     property int brushStep: 0
     property int brushWidth: 0
+
+    // Selection
+    property real selectionBeatPrecisionFrom: 0
+    property real selectionBeatPrecisionTo: 0
+    property real selectionKeyFrom: 0
+    property real selectionKeyTo: 0
 
     function addOnTheFly(targetKey) {
         if (onTheFlyKey !== -1 && onTheFlyKey !== targetKey)
@@ -77,10 +86,6 @@ MouseArea {
             return
         }
 
-        // Add an on the fly note if the sequencer isn't playing
-        if (!sequencerView.player.isPlaying)
-            addOnTheFly(mouseKey)
-
         var mouseBeatPrecision = realMouseBeatPrecision
         if (contentView.placementBeatPrecisionScale >= AudioAPI.beatPrecision)
             mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % AudioAPI.beatPrecision)
@@ -89,6 +94,15 @@ MouseArea {
 
         // Left click not on note -> insert
         if (noteIndex === -1) {
+            // Select mode, start selection
+            if (sequencerView.editMode === SequencerView.EditMode.Select || mouse.modifiers & Qt.ShiftModifier) {
+                mode = NotesPlacementArea.Mode.Select
+                selectionBeatPrecisionFrom = realMouseBeatPrecision
+                selectionBeatPrecisionTo = realMouseBeatPrecision
+                selectionKeyFrom = mouseKey
+                selectionKeyTo = mouseKey
+                return
+            }
             if (contentView.placementBeatPrecisionLastWidth === 0)
                 contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionDefaultWidth
             // Brush mode, insert note directly
@@ -136,6 +150,10 @@ MouseArea {
             contentView.placementBeatPrecisionMouseOffset = mouseBeatPrecision - beatPrecisionRange.from
             contentView.placementKey = mouseKey
         }
+
+        // Add an on the fly note if the sequencer isn't playing
+        if (!sequencerView.player.isPlaying)
+            addOnTheFly(mouseKey)
     }
 
     onReleased: {
@@ -155,9 +173,13 @@ MouseArea {
                 )
             )
             contentView.placementBeatPrecisionMouseOffset = 0
-            break;
+            break
+        case NotesPlacementArea.Mode.Select:
+            // Select notes
+            mode = NotesPlacementArea.Mode.None
+            return
         default:
-            break;
+            break
         }
         contentView.placementRectangle.detach()
         mode = NotesPlacementArea.Mode.None
@@ -232,6 +254,10 @@ MouseArea {
                 )
             }
             break
+        case NotesPlacementArea.Mode.Select:
+            selectionBeatPrecisionTo = realMouseBeatPrecision
+            selectionKeyTo = mouseKey
+            break
         default:
             break
         }
@@ -241,10 +267,23 @@ MouseArea {
         color: "transparent"
         border.color: Qt.darker(themeManager.getColorFromChain(brushKey), 1.5)
         border.width: 2
-        visible: mode == NotesPlacementArea.Mode.Brush
+        visible: mode === NotesPlacementArea.Mode.Brush
         x: contentView.xOffset + brushBegin * contentView.pixelsPerBeatPrecision
         y: parent.height - (brushKey - pianoView.keyOffset + 1) * contentView.rowHeight
         width: (brushEnd - brushBegin) * contentView.pixelsPerBeatPrecision
         height: contentView.rowHeight
+    }
+
+    Rectangle {
+        id: selectionOverlay
+        visible: mode === NotesPlacementArea.Mode.Select
+        x: contentView.xOffset + Math.min(selectionBeatPrecisionFrom, selectionBeatPrecisionTo) * contentView.pixelsPerBeatPrecision
+        y: parent.height - (Math.max(selectionKeyFrom, selectionKeyTo) - pianoView.keyOffset + 1) * contentView.rowHeight
+        width: Math.abs(selectionBeatPrecisionTo - selectionBeatPrecisionFrom) * contentView.pixelsPerBeatPrecision
+        height: (Math.abs(selectionKeyTo - selectionKeyFrom) + 1) * contentView.rowHeight
+        color: "grey"
+        opacity: 0.5
+        border.color: "white"
+        border.width: 1
     }
 }

@@ -64,12 +64,14 @@ void PartitionPreview::paint(QPainter *painter)
 
     // Cached computations
     const QColor color(255, 255, 255, 200);
+    const QColor borderColor(127, 127, 127, 200);
     const int fixedWidth = static_cast<int>(width());
     const int fixedHeight = static_cast<int>(height()) - noteHeight;
     const qreal pixelsPerBeatPrecision = width() / static_cast<qreal>(_range.to - _range.from);
     QRect rect;
 
     // Draw each visible note
+    painter->setPen(borderColor);
     for (const auto &note : notes) {
         rect.setX(static_cast<int>(static_cast<qreal>(note.range.from) * pixelsPerBeatPrecision));
         rect.setY(fixedHeight - static_cast<int>(static_cast<qreal>(note.key - arrangedMinKey) * realNoteHeight));
@@ -78,5 +80,11 @@ void PartitionPreview::paint(QPainter *painter)
         if (rect.x() > fixedWidth)
             return;
         painter->fillRect(rect, color);
+        if (noteHeight < 3) {
+            painter->drawLine(QLine(rect.left(), rect.y(), rect.x(), rect.bottom()));
+            painter->drawLine(QLine(rect.right(), rect.y(), rect.right(), rect.bottom()));
+        } else {
+            painter->drawRect(rect);
+        }
     }
 }

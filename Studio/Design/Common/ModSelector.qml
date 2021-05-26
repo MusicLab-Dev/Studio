@@ -10,7 +10,7 @@ Item {
     property var itemsPaths: []
     property var itemsNames: []
     property int itemSelected: 0
-    property int itemUsableTill: 3
+    property int itemUsableTill: 0
 
     // alias
     default property alias placeholder: placeholder.data

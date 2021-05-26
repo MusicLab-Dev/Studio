@@ -202,6 +202,41 @@ void PartitionModel::set(const int idx, const Note &range)
     );
 }
 
+void PartitionModel::addRange(const QVector<Note> &notes)
+{
+    _data->notes().insert(notes.begin(), notes.end());
+}
+
+void PartitionModel::removeRange(const QVector<int> &indexes)
+{
+    int idx = 0;
+    auto it = std::remove_if(_data->notes().begin(), _data->notes().end(), [&idx, &indexes](const auto &) {
+        for (const auto i : indexes) {
+            if (i == idx)
+                return true;
+        }
+        ++idx;
+        return false;
+    });
+
+    if (it != _data->notes().end())
+        _data->notes().erase(it, _data->notes().end());
+}
+
+QVector<int> PartitionModel::select(const BeatRange &range, const Key keyFrom, const Key keyTo)
+{
+    int idx = 0;
+    QVector<int> indexes;
+
+    for (const auto &note : _data->notes()) {
+        if (note.key < keyFrom || note.key > keyTo || note.range.from > range.to || note.range.to < range.from) {
+            ++idx;
+            continue;
+        }
+        indexes.push_back(idx);
+    }
+    return indexes;
+}
 
 void PartitionModel::updateInternal(Audio::Partition *data)
 {
