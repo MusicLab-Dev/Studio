@@ -6,13 +6,13 @@
 #include <gtest/gtest.h>
 
 #include <Studio/ControlsModel.hpp>
-#include <Studio/Scheduler.hpp>
+#include <Studio/Application.hpp>
 
 TEST(ControlsModel, InitDestroy)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Controls controls;
 
     ASSERT_NO_THROW(ControlsModel tmp(&controls));
@@ -22,7 +22,7 @@ TEST(ControlsModel, AddRemoveControlCount)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Controls controls;
 
     ControlsModel model(&controls);
@@ -43,7 +43,7 @@ TEST(ControlsModel, MoveControl)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
     Audio::Controls controls;
 
     ControlsModel model(&controls);

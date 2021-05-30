@@ -8,26 +8,23 @@
 #include <Studio/Project.hpp>
 #include <Audio/Project.hpp>
 #include <Audio/PluginTable.hpp>
-#include <Studio/Scheduler.hpp>
+#include <Studio/Application.hpp>
 
 TEST(Project, InitDestroy)
 {
-    Audio::Device::DriverInstance driver;
-    Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
-    Audio::Project project(Core::FlatString("test"));
-
-    ASSERT_NO_THROW(Project tmp(&project));
+    // Audio::Device::DriverInstance driver;
+    // Audio::PluginTable::Instance instance;
+    // Application app;
 }
 
 TEST(Project, name)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
-    Audio::Project data(Core::FlatString("test"));
-    Project project(&data);
+    Application app;
+    auto &project = *app.project();
 
+    project.setName("test");
     ASSERT_EQ(project.name().toStdString(), "test");
     project.setName("1");
     ASSERT_EQ(project.name().toStdString(), "1");
@@ -39,9 +36,8 @@ TEST(Project, path)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
-    Audio::Project data(Core::FlatString("test"));
-    Project project(&data);
+    Application app;
+    auto &project = *app.project();
     QString str1 = "/ici/la";
     QString str2 = "/enfaitela/ok";
 

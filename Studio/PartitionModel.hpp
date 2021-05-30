@@ -110,15 +110,20 @@ public:
     void setMidiChannels(const MidiChannels midiChannels);
 
 
-    /** @brief Update internal data pointer if it changed */
-    void updateInternal(Audio::Partition *data);
-
-
     /** @brief Get the current latest instance */
     [[nodiscard]] Beat latestInstance(void) const noexcept { return _latestInstance; }
 
     /** @brief Get the current latest note */
     [[nodiscard]] Beat latestNote(void) const noexcept { return _latestNote; }
+
+
+    /** @brief Get the internal audio partition */
+    [[nodiscard]] Audio::Partition *audioPartition(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::Partition *audioPartition(void) const noexcept { return _data; }
+
+
+    /** @brief Update internal data pointer if it changed */
+    void updateInternal(Audio::Partition *data);
 
 public slots:
     /** @brief Return the count of element in the model */
@@ -141,6 +146,15 @@ public slots:
 
     /** @brief Set note at index */
     void set(const int idx, const Note &range);
+
+    /** @brief Add a group of notes */
+    bool addRange(const QVariantList &notes);
+
+    /** @brief Remove a group of notes */
+    bool removeRange(const QVariantList &indexes);
+
+    /** @brief Select all notes within a specified range (returns indexes) */
+    QVariantList select(const BeatRange &range, const Key keyFrom, const Key keyTo);
 
 signals:
     /** @brief Notify that the channel has changed */

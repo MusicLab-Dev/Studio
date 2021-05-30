@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import InstancesModel 1.0
+import PartitionModel 1.0
 import AudioAPI 1.0
 
 import ".."
@@ -16,6 +17,7 @@ MouseArea {
         Brush
     }
 
+    property PartitionModel targetPartition: null
     property InstancesModel instances: null
     property int mode: InstancesPlacementArea.Mode.None
     property int brushBegin: 0
@@ -61,7 +63,10 @@ MouseArea {
             // Move mode, attach preview
             } else {
                 // Attach the preview
-                contentView.placementRectangle.attach(contentPlacementArea, nodeDelegate.node.color)
+                if (targetPartition !== null)
+                    contentView.placementRectangle.attachPartition(contentPlacementArea, nodeDelegate.node.color, targetPartition)
+                else
+                    contentView.placementRectangle.attach(contentPlacementArea, nodeDelegate.node.color)
                 mode = InstancesPlacementArea.Mode.Move
                 contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
                 contentView.placementBeatPrecisionFrom = mouseBeatPrecision
@@ -81,7 +86,10 @@ MouseArea {
                 mode = InstancesPlacementArea.Mode.Move
             instances.remove(instanceIndex)
             // Attach the preview
-            contentView.placementRectangle.attach(contentPlacementArea, nodeDelegate.node.color)
+            if (targetPartition !== null)
+                contentView.placementRectangle.attachPartition(contentPlacementArea, nodeDelegate.node.color, targetPartition)
+            else
+                contentView.placementRectangle.attach(contentPlacementArea, nodeDelegate.node.color)
             contentView.placementBeatPrecisionFrom = beatPrecisionRange.from
             contentView.placementBeatPrecisionTo = beatPrecisionRange.to
             contentView.placementBeatPrecisionMouseOffset = mouseBeatPrecision - beatPrecisionRange.from

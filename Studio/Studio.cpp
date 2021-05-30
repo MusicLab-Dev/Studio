@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QFontDatabase>
 #include <QQuickStyle>
+#include <QIcon>
 
 #include "AudioAPI.hpp"
 #include "Application.hpp"
@@ -21,6 +22,8 @@
 #include "BoardManager.hpp"
 #include "EventDispatcher.hpp"
 #include "DevicesModel.hpp"
+#include "PartitionPreview.hpp"
+#include "InstancesModelProxy.hpp"
 
 void Studio::InitResources(void)
 {
@@ -66,13 +69,14 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<ControlModel>("ControlModel", 1, 0, "ControlModel", "Cannot construct ControlModel");
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
+    qmlRegisterType<InstancesModelProxy>("InstancesModelProxy", 1, 0, "InstancesModelProxy");
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
     qmlRegisterUncreatableType<Board>("Board", 1, 0, "Board", "Cannot constrict Board");
     qmlRegisterType<EventDispatcher>("EventDispatcher", 1, 0, "EventDispatcher");
     qmlRegisterUncreatableType<KeyboardEventListener>("KeyboardEventListener", 1, 0, "KeyboardEventListener", "Cannot construct KeyboardEventListener");
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
-
+    qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
@@ -118,6 +122,7 @@ static char *DefaultArgv[] = { DefaultArg, nullptr };
 Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
 {
     QQuickStyle::setStyle("Default");
+    setWindowIcon(QIcon(":/Assets/Logo.png"));
 }
 
 Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)

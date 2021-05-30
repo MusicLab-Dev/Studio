@@ -8,17 +8,16 @@
 #include "Studio/Project.hpp"
 #include "Studio/ProjectSave.hpp"
 #include "Studio/Device.hpp"
-#include "Studio/Scheduler.hpp"
+#include "Studio/Application.hpp"
 
 TEST(ProjectSave, transformPartitionsInVariantList)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
+    Application app;
 
-    Project project(scheduler.project().get());
-    ProjectSave save(&project);
+    ProjectSave save(app.project());
 
-    auto list = save.transformPartitionsInVariantList(*project.master()->partitions());
+    auto list = save.transformPartitionsInVariantList(*app.project()->master()->partitions());
 }
 

@@ -30,6 +30,8 @@ Item {
     property int octaveOffset: 2
     readonly property int octaveMin: octaveOffset
     readonly property int octaveMax: octaves + octaveOffset
+    readonly property int keyMin: octaveMin * keysPerOctave
+    readonly property int keyMax: octaveMax * keysPerOctave - 1
     readonly property int keyOffset: octaveOffset * keysPerOctave
     readonly property int keys: keysPerOctave * octaves
     property real headerFactor: 0.1
@@ -143,12 +145,10 @@ Item {
         z: 10
     }
 
-    NotesPlacementArea {
+    Item {
         x: contentView.rowHeaderWidth
         width: contentView.rowDataWidth
         height: pianoView.totalHeight
-        partition: sequencerView.partition
-        brushStep: contentView.placementBeatPrecisionBrushStep
 
         Repeater {
             model: sequencerView.partition
@@ -180,6 +180,12 @@ Item {
                     color: parent.border.color
                 }
             }
+        }
+
+        NotesPlacementArea {
+            anchors.fill: parent
+            partition: sequencerView.partition
+            brushStep: contentView.placementBeatPrecisionBrushStep
         }
     }
 }

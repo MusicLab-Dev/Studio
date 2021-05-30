@@ -1,3 +1,4 @@
+
 /**
  * @ Author: Cédric Lucchese
  * @ Description: Points tests
@@ -6,15 +7,14 @@
 #include <gtest/gtest.h>
 #include <QColor>
 
-#include <Studio/NodeModel.hpp>
-#include <Studio/Scheduler.hpp>
+#include <Studio/Application.hpp>
 
 TEST(NodeModel, InitDestroy)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
-    Audio::Node node(nullptr);
+    Application app;
+    Audio::Node &node = *app.scheduler()->project()->master();
 
     ASSERT_NO_THROW(NodeModel tmp(&node));
 }
@@ -23,8 +23,8 @@ TEST(NodeModel, Color)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
-    Audio::Node node { nullptr };
+    Application app;
+    Audio::Node &node = *app.scheduler()->project()->master();
 
     NodeModel model(&node);
     model.setColor(Qt::red);
@@ -35,8 +35,8 @@ TEST(NodeModel, Muted)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
-    Audio::Node node { nullptr };
+    Application app;
+    Audio::Node &node = *app.scheduler()->project()->master();
 
     NodeModel model(&node);
     model.setMuted(true);
@@ -49,8 +49,8 @@ TEST(NodeModel, Name)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
-    Audio::Node node { nullptr };
+    Application app;
+    Audio::Node &node = *app.scheduler()->project()->master();
 
     NodeModel model(&node);
     model.setName("testnode");
@@ -61,8 +61,8 @@ TEST(NodeModel, AddRemove)
 {
     Audio::Device::DriverInstance driver;
     Audio::PluginTable::Instance instance;
-    Scheduler scheduler(Audio::ProjectPtr(std::make_shared<Audio::Project>("test")));
-    Audio::Node node { nullptr };
+    Application app;
+    Audio::Node &node = *app.scheduler()->project()->master();
     NodeModel model(&node);
 
     model.add("__internal__:/Mixer");

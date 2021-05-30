@@ -57,9 +57,9 @@ set(StudioSources
     ${StudioDir}/EventDispatcher.hpp
     ${StudioDir}/InstancesModel.cpp
     ${StudioDir}/InstancesModel.hpp
+    ${StudioDir}/InstancesModelProxy.hpp
     ${StudioDir}/KeyboardEventListener.cpp
     ${StudioDir}/KeyboardEventListener.hpp
-    ${StudioDir}/Main.cpp
     ${StudioDir}/Models.hpp
     ${StudioDir}/NetworkLog.hpp
     ${StudioDir}/NodeModel.cpp
@@ -69,6 +69,8 @@ set(StudioSources
     ${StudioDir}/PartitionModel.hpp
     ${StudioDir}/PartitionsModel.cpp
     ${StudioDir}/PartitionsModel.hpp
+    ${StudioDir}/PartitionPreview.cpp
+    ${StudioDir}/PartitionPreview.hpp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
     ${StudioDir}/PluginTableModel.cpp
