@@ -7,11 +7,13 @@ DefaultPotentiometer {
     readonly property string tooltipPrefixText: controlTitle + ": "
     readonly property string tooltipSufixText: " " + controlUnitName + "\n" + controlDescription
 
+    id: control
     width: 50
     height: 50
     minimumValue: controlMinValue
     maximumValue: controlMaxValue
     stepSize: controlStepValue
+    text: controlShortName
 
     ToolTip.visible: hovered || pressed
     ToolTip.text: tooltipPrefixText + controlValue.toFixed() + tooltipSufixText
@@ -26,7 +28,7 @@ DefaultPotentiometer {
 
     onValueChanged: {
         var fixed = Math.floor(value)
-        if (Math.floor(controlValue) === fixed)
+        if (Math.floor(controlValue) !== fixed)
             controlValue = fixed
     }
 }
