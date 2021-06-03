@@ -72,8 +72,10 @@ MouseArea {
         // Right click on note -> delete
         if (mouse.buttons & Qt.RightButton) {
             mode = NotesPlacementArea.Mode.Remove
-            if (noteIndex !== -1)
+            if (noteIndex !== -1) {
+                actionsManager.push(["Remove", partition.getNote(noteIndex).range.from, partition.getNote(noteIndex).range.to, partition.getNote(noteIndex).key, partition.getNote(noteIndex).velocity, partition.getNote(noteIndex).tuning])
                 partition.remove(noteIndex)
+            }
             return
         }
 
@@ -98,22 +100,25 @@ MouseArea {
                 brushBegin = mouseBeatPrecision
                 brushWidth = contentView.placementBeatPrecisionLastWidth + brushStep
                 brushEnd = mouseBeatPrecision + brushWidth
+                var last = brushBegin + contentView.placementBeatPrecisionLastWidth
                 partition.add(
                     AudioAPI.note(
-                        AudioAPI.beatRange(brushBegin, brushBegin + contentView.placementBeatPrecisionLastWidth),
+                        AudioAPI.beatRange(brushBegin, last),
                         brushKey,
                         AudioAPI.velocityMax,
                         0
                     )
                 )
+                actionsManager.push(["Brush", brushBegin, last, brushKey, AudioAPI.velocityMax])
+
             // Move mode, attach preview
             } else {
                 // Attach the preview
-                contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
-                mode = NotesPlacementArea.Mode.Move
                 contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
                 contentView.placementBeatPrecisionFrom = mouseBeatPrecision
                 contentView.placementKey = mouseKey
+                contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey), partition.find(contentView.placementKey, contentView.placementBeatPrecisionFrom))
+                mode = NotesPlacementArea.Mode.Move
             }
         // Left click on note -> edit
         } else {
@@ -159,8 +164,7 @@ MouseArea {
         default:
             break;
         }
-        contentView.placementRectangle.detach()
-        mode = NotesPlacementArea.Mode.None
+        contentView.placementRectangle.detach(mode != NotesPlacementArea.Mode.Brush || mode != NotesPlacementArea.Mode.Remove)
         if (onTheFlyKey !== -1)
             removeOnTheFly(onTheFlyKey)
     }
@@ -171,8 +175,10 @@ MouseArea {
         switch (mode) {
         case NotesPlacementArea.Mode.Remove:
             var noteIndex = partition.find(mouseKey, realMouseBeatPrecision)
-            if (noteIndex !== -1)
+            if (noteIndex !== -1) {
+                actionsManager.push(["Remove", partition.getNote(noteIndex).range.from, partition.getNote(noteIndex).range.to, partition.getNote(noteIndex).key, partition.getNote(noteIndex).velocity, partition.getNote(noteIndex).tuning])
                 partition.remove(noteIndex)
+            }
             break
         case NotesPlacementArea.Mode.Move:
             var mouseBeatPrecision = realMouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
@@ -222,14 +228,16 @@ MouseArea {
             if (brushBegin >= 0 && partition.findOverlap(brushKey, brushBegin + 1, brushBegin + contentView.placementBeatPrecisionLastWidth - 1) === -1) {
                 if (!sequencerView.player.isPlaying)
                     addOnTheFly(brushKey)
+                var last = brushBegin + contentView.placementBeatPrecisionLastWidth
                 partition.add(
                     AudioAPI.note(
-                        AudioAPI.beatRange(brushBegin, brushBegin + contentView.placementBeatPrecisionLastWidth),
+                        AudioAPI.beatRange(brushBegin, last),
                         brushKey,
                         AudioAPI.velocityMax,
                         0
                     )
                 )
+                actionsManager.push(["Brush", brushBegin, last, brushKey, AudioAPI.velocityMax])
             }
             break
         default:
