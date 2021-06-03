@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import ActionsManager 1.0
+
 import "./PlaylistContent"
 
 ColumnLayout {
@@ -71,4 +73,9 @@ ColumnLayout {
         Layout.preferredHeight: parent.height * 0.15
         Layout.preferredWidth: parent.width
     }
+
+    ActionsManager {
+        id: actionsManager
+    }
+
 }

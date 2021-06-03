@@ -213,7 +213,12 @@ Column {
                 return
             }
             if (action[0] == "Brush") {
-                partition.remove(partition.find(action[3], action[1] + 1))
+                var idx = partition.find(action[3], action[1] + 1)
+                if (idx == -1) {
+                    undo()
+                    return
+                }
+                partition.remove(idx)
                 if (lastAction()[0] == "Brush")
                     undo()
                 return
