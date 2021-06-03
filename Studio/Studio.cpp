@@ -22,6 +22,7 @@
 #include "BoardManager.hpp"
 #include "EventDispatcher.hpp"
 #include "DevicesModel.hpp"
+#include "ActionsManager.hpp"
 
 void Studio::InitResources(void)
 {
@@ -73,6 +74,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<KeyboardEventListener>("KeyboardEventListener", 1, 0, "KeyboardEventListener", "Cannot construct KeyboardEventListener");
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
+    qmlRegisterType<ActionsManager>("ActionsManager", 1, 0, "ActionsManager");
 
 
     Q_INIT_RESOURCE(Resources);

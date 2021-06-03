@@ -1,22 +1,44 @@
 /**
  * @ Author: Cédric Lucchese
- * @ Description: Actions Manager
+ * @ Description: Actions Manager listener
  */
 
-#include <QQmlEngine>
+#include <QDebug>
 
 #include "ActionsManager.hpp"
 
-ActionsManager::ActionsManager(QObject *parent)
-    : QObject(parent)
+void ActionsManager::undo(void) noexcept
 {
-    if (_Instance)
-        throw std::runtime_error("ActionsManager::ActionsManager: An instance of the scheduler already exists");
-    _Instance = this;
-    QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
+    if (_index > 0) {
+        _index--;
+        emit undoProcess(_actions[_index]);
+
+        qDebug() << "undo";
+    }
 }
 
-ActionsManager::~ActionsManager(void) noexcept
+void ActionsManager::redo(void) noexcept
 {
-    _Instance = nullptr;
+    if (_index < _actions.size() - 1) {
+        _index++;
+        emit redoProcess(_actions[_index]);
+
+        qDebug() << "redo";
+    }
+}
+
+QVariantList ActionsManager::lastAction(void) noexcept
+{
+    if (_index - 1 > 0)
+        return _actions[_index - 1];
+    return QVariantList();
+}
+
+void ActionsManager::push(const QVariantList &var) noexcept
+{
+    _actions.remove(_index, _actions.size() - _index);
+    _actions.push_back(var);
+    _index++;
+
+    qDebug() << "push" << var;
 }
