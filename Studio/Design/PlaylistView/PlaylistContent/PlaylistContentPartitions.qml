@@ -91,13 +91,6 @@ Repeater {
                     border.color: Qt.darker(nodeDelegate.node.color, 1.25)
                     border.width: 2
 
-                    PartitionPreview {
-                        anchors.fill: parent
-                        anchors.margins: 2
-                        range: AudioAPI.beatRange(from, to)
-                        target: partitionDelegate.partition
-                    }
-
                     Rectangle {
                         x: Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
                         y: parent.height / 8
@@ -112,6 +105,13 @@ Repeater {
                         width: 1
                         height: contentView.rowHeight * 3 / 4
                         color: parent.border.color
+                    }
+
+                    PartitionPreview {
+                        anchors.fill: parent
+                        anchors.margins: 2
+                        range: AudioAPI.beatRange(from, to)
+                        target: partitionDelegate.partition
                     }
                 }
             }
