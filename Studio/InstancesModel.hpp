@@ -56,22 +56,31 @@ public:
 
 public slots:
     /** @brief Add instance */
-    void add(const BeatRange &range);
+    bool add(const BeatRange &range);
 
     /** @brief Find an instance in the list using a single beat point */
     int find(const quint32 beat) const noexcept;
 
     /** @brief Find an instance in the list using a two beat points */
-    int findOverlap(const Beat from, const Beat to) const noexcept;
+    int findOverlap(const BeatRange &range) const noexcept;
 
     /** @brief Remove instance at index */
-    void remove(const int index);
+    bool remove(const int index);
 
     /** @brief Get instance at index */
     QVariant getInstance(const int index) const { return QVariant::fromValue(get(index)); }
 
     /** @brief Set instance at index */
     void set(const int index, const BeatRange &range);
+
+    /** @brief Add a group of notes */
+    bool addRange(const QVariantList &notes);
+
+    /** @brief Remove a group of notes */
+    bool removeRange(const QVariantList &indexes);
+
+    /** @brief Select all notes within a specified range (returns indexes) */
+    QVariantList select(const BeatRange &range);
 
 signals:
     /** @brief Notify that the latest instance of the list has changed */

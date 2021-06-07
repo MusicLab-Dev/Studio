@@ -68,14 +68,11 @@ Repeater {
             }
         }
 
-        InstancesPlacementArea {
-            id: placementArea
+        Item {
             x: nodeView.dataHeaderWidth
             width: nodeView.dataContentWidth
             height: contentView.rowHeight
-            targetPartition: partitionDelegate.partition
-            instances: partitionDelegate.partition ? partitionDelegate.partition.instances : null
-            brushStep: contentView.placementBeatPrecisionBrushStep
+            clip: true
 
             Repeater {
                 model: InstancesModelProxy {
@@ -115,6 +112,16 @@ Repeater {
                     }
                 }
             }
+        }
+
+        InstancesPlacementArea {
+            id: placementArea
+            x: nodeView.dataHeaderWidth
+            width: nodeView.dataContentWidth
+            height: contentView.rowHeight
+            targetPartition: partitionDelegate.partition
+            instances: partitionDelegate.partition ? partitionDelegate.partition.instances : null
+            brushStep: contentView.placementBeatPrecisionBrushStep
         }
     }
 }

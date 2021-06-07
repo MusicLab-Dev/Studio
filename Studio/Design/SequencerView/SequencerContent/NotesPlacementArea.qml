@@ -53,6 +53,27 @@ MouseArea {
     property var selectionMoveTopOffset: 0
     property var selectionMoveBottomOffset: 0
 
+    function resetBrush() {
+        brushKey = 0
+        brushBegin = 0
+        brushEnd = 0
+        brushStep = 0
+        brushWidth = 0
+    }
+
+    function resetSelection() {
+        selectionBeatPrecisionFrom = 0
+        selectionBeatPrecisionTo = 0
+        selectionKeyFrom = 0
+        selectionKeyTo = 0
+        selectionListModel = null
+        selectionMoveBeatPrecisionOffset = 0
+        selectionMoveKeyOffset = 0
+        selectionMoveLeftOffset = 0
+        selectionMoveTopOffset = 0
+        selectionMoveBottomOffset = 0
+    }
+
     function addOnTheFly(targetKey) {
         if (onTheFlyKey !== -1 && onTheFlyKey !== targetKey)
             removeOnTheFly(onTheFlyKey)
@@ -90,7 +111,7 @@ MouseArea {
         return realMouseBeatPrecision
     }
 
-    function getScopedNoteBeatPrecision(realMouseBeatPrecision) {
+    function getScopedBeatPrecision(realMouseBeatPrecision) {
         var noteBeatPrecision = realMouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
         if (noteBeatPrecision < selectionMoveLeftOffset)
             noteBeatPrecision = selectionMoveLeftOffset
@@ -118,10 +139,10 @@ MouseArea {
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
         var noteIndex = partition.find(mouseKey, realMouseBeatPrecision)
 
+        resetBrush()
         // Right click on note -> delete
         if (mouse.buttons & Qt.RightButton) {
-            // Reset selection
-            selectionListModel = null
+            resetSelection()
             mode = NotesPlacementArea.Mode.Remove
             if (isSelection) {
                 mode = NotesPlacementArea.Mode.SelectRemove
@@ -142,8 +163,7 @@ MouseArea {
 
         // Left click not on note -> insert
         if (noteIndex === -1) {
-            // Reset selection
-            selectionListModel = null
+            resetSelection()
             // Select mode, start selection
             if (isSelection) {
                 mode = NotesPlacementArea.Mode.Select
@@ -194,11 +214,7 @@ MouseArea {
             else
                 mode = isPartOfSelection ? NotesPlacementArea.Mode.SelectMove : NotesPlacementArea.Mode.Move
             if (mode < NotesPlacementArea.Mode.Select) {
-                // Reset selection
-                selectionListModel = null
-                selectionMoveLeftOffset = 0
-                selectionMoveTopOffset = 0
-                selectionMoveBottomOffset = 0
+                resetSelection()
                 partition.remove(noteIndex)
             } else {
                 partition.removeRange(selectionListModel)
@@ -241,7 +257,7 @@ MouseArea {
             break
         case NotesPlacementArea.Mode.Move:
         case NotesPlacementArea.Mode.SelectMove:
-            var noteBeatPrecision = getScopedNoteBeatPrecision(realMouseBeatPrecision)
+            var noteBeatPrecision = getScopedBeatPrecision(realMouseBeatPrecision)
             var oldBeat = contentView.placementBeatPrecisionFrom
             var oldKey = contentView.placementKey
             if (contentView.placementBeatPrecisionScale >= AudioAPI.beatPrecision)
@@ -299,7 +315,7 @@ MouseArea {
             brushEnd = mouseBeatPrecision + brushWidth
 
             // Don't brush over existing notes
-            if (brushBegin >= 0 && partition.findOverlap(brushKey, brushBegin + 1, brushBegin + contentView.placementBeatPrecisionLastWidth - 1) === -1) {
+            if (brushBegin >= 0 && partition.findOverlap(brushKey, AudioAPI.beatRange(brushBegin + 1, brushBegin + contentView.placementBeatPrecisionLastWidth - 1)) === -1) {
                 if (!sequencerView.player.isPlaying)
                     addOnTheFly(brushKey)
                 partition.add(
@@ -365,7 +381,7 @@ MouseArea {
         case NotesPlacementArea.Mode.SelectMove:
         case NotesPlacementArea.Mode.SelectLeftResize:
         case NotesPlacementArea.Mode.SelectRightResize:
-            partition.addRange(selectionList.toNoteList())
+            partition.addRange(selectionList.toList())
             selectionMoveBeatPrecisionOffset = 0
             selectionMoveKeyOffset = 0
             break
@@ -390,15 +406,15 @@ MouseArea {
     }
 
     Repeater {
-        function toNoteList() {
+        function toList() {
             var list = []
             for (var i = 0; i < count; ++i) {
-                list[i] = getMovedNote(itemAt(i))
+                list[i] = getMoved(itemAt(i))
             }
             return list
         }
 
-        function getMovedNote(item) {
+        function getMoved(item) {
             var copy = item.note
             var rangeCopy = copy.range
             if (selectionMoveBeatPrecisionOffset < 0 && -selectionMoveBeatPrecisionOffset > rangeCopy.from) {

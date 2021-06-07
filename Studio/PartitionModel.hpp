@@ -132,11 +132,11 @@ public slots:
     /** @brief Add node */
     bool add(const Note &note);
 
-    /** @brief Find an instance in the list using a single beat point */
+    /** @brief Find a note in the list using a single beat point */
     int find(const Key key, const Beat beat) const noexcept;
 
-    /** @brief Find an instance in the list using a two beat points */
-    int findOverlap(const Key key, const Beat from, const Beat to) const noexcept;
+    /** @brief Find a note in the list using a two beat points */
+    int findOverlap(const Key key, const BeatRange &range) const noexcept;
 
     /** @brief Remove note at index */
     bool remove(const int index);
@@ -168,6 +168,9 @@ signals:
 
     /** @brief Notify that the instances model has changed */
     void instancesChanged(void);
+
+    /** @brief Notify that notes has changed */
+    void notesChanged(void);
 
     /** @brief Notify that the latest instance of the partition has changed */
     void latestInstanceChanged(void);

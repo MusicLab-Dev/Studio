@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import ControlModel 1.0
 import AutomationModel 1.0
 import AudioAPI 1.0
+import InstancesModelProxy 1.0
 
 import "../../Default"
 import "../../Common"
@@ -124,16 +125,17 @@ Repeater {
                         onReleased: automationSettingsMenu.openMenu(automationSettingsMenuButton, controlDelegate.control, automationDelegate.automation, index)
                     }
 
-                    InstancesPlacementArea {
-                        id: placementArea
+                    Item {
                         x: nodeView.dataHeaderWidth
                         width: nodeView.dataContentWidth
                         height: contentView.rowHeight
-                        instances: automationDelegate.automation ? automationDelegate.automation.instances : null
-                        brushStep: contentView.placementBeatPrecisionBrushStep
+                        clip: true
 
                         Repeater {
-                            model: placementArea.instances
+                            model: InstancesModelProxy {
+                                range: AudioAPI.beatRange(-contentView.xOffset / contentView.pixelsPerBeatPrecision, (placementArea.width - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
+                                sourceModel: placementArea.instances
+                            }
 
                             delegate: Rectangle {
                                 x: contentView.xOffset + contentView.pixelsPerBeatPrecision * from
@@ -142,6 +144,15 @@ Repeater {
                                 color: nodeDelegate.node.color
                             }
                         }
+                    }
+
+                    InstancesPlacementArea {
+                        id: placementArea
+                        x: nodeView.dataHeaderWidth
+                        width: nodeView.dataContentWidth
+                        height: contentView.rowHeight
+                        instances: automationDelegate.automation ? automationDelegate.automation.instances : null
+                        brushStep: contentView.placementBeatPrecisionBrushStep
                     }
                 }
             }
