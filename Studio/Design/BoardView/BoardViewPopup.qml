@@ -23,8 +23,8 @@ Item {
         var isTop = y <= height * 0.25
         var isBottom = y >= height * 0.75
 
-        if (isLeft && isTop)
-            return BoardViewPopup.
+    //    if (isLeft && isTop)
+    //        return BoardViewPopup.
     }
 
     id: boardViewPopup

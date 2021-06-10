@@ -27,7 +27,9 @@ QStringList EventDispatcher::targetEventList(void) const noexcept
         "Stop context",
         "Play playlist",
         "Replay playlist",
-        "Stop playlist"
+        "Stop playlist",
+        "Copy",
+        "Paste"
     };
 
     return List;

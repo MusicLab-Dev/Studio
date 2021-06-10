@@ -513,4 +513,50 @@ MouseArea {
         border.color: "white"
         border.width: 1
     }
+
+    Connections {
+        id: selectionCopy
+        target: eventDispatcher
+        //enabled: moduleIndex === componentSelected
+
+        function onCopy(pressed) {
+            if (!pressed)
+                return
+            var text = '{"Notes":[';
+            for (var i = 0; i < selectionListModel.length; i++) {
+                var note = '{'
+                        + '"from":' + partition.getNote(selectionListModel[i]).range.from + ","
+                        + '"to":' + partition.getNote(selectionListModel[i]).range.to  + ","
+                        + '"key":' + partition.getNote(selectionListModel[i]).key + ","
+                        + '"velocity":' + partition.getNote(selectionListModel[i]).velocity + ","
+                        + '"tuning":' + partition.getNote(selectionListModel[i]).tuning
+                        + "}";
+                if (i < selectionListModel.length - 1)
+                   note += ','
+                text += note
+            }
+            text += "]}"
+            clipboardManager.copy(text)
+        }
+
+        function onPaste(pressed) {
+            if (!pressed)
+                return
+            var notes = JSON.parse(clipboardManager.paste(true)).Notes;
+            console.debug(notes)
+            for (var i = 0; i < notes.length; i++) {
+                var note = notes[i]
+                console.log(note.from)
+                partition.add(
+                    AudioAPI.note(
+                        AudioAPI.beatRange(note.from, note.to),
+                        note.key,
+                        note.velocity,
+                        note.tuning
+                    )
+                )
+            }
+        }
+    }
+
 }

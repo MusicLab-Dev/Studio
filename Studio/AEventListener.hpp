@@ -37,6 +37,8 @@ public:
         PlayPlaylist,
         ReplayPlaylist,
         StopPlaylist,
+        Copy,
+        Paste,
         VolumeContext,
         VolumePlaylist
     };

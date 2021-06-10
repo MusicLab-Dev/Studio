@@ -24,6 +24,7 @@
 #include "DevicesModel.hpp"
 #include "PartitionPreview.hpp"
 #include "InstancesModelProxy.hpp"
+#include "ClipboardManager.hpp"
 
 void Studio::InitResources(void)
 {
@@ -77,6 +78,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
     qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
+    qmlRegisterType<ClipboardManager>("ClipboardManager", 1, 0, "ClipboardManager");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);

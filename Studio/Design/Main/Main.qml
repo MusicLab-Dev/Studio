@@ -9,6 +9,7 @@ import NodeModel 1.0
 import BoardManager 1.0
 import EventDispatcher 1.0
 import DevicesModel 1.0
+import ClipboardManager 1.0
 
 import "../Common"
 import "../ModulesView"
@@ -84,4 +85,9 @@ Window {
     GlobalTextField {
         id: globalTextField
     }
+
+    ClipboardManager {
+        id: clipboardManager
+    }
+
 }
