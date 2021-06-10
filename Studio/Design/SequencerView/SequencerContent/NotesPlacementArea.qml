@@ -485,48 +485,55 @@ MouseArea {
     }
 
     Connections {
+
         id: selectionCopy
         target: eventDispatcher
-        //enabled: moduleIndex === componentSelected
+        enabled: moduleIndex === componentSelected
 
-        function onCopy(pressed) {
-            if (!pressed)
-                return
+        function copyInClipboard(erase) {
             var text = '{"Notes":[';
             for (var i = 0; i < selectionListModel.length; i++) {
-                var note = '{'
-                        + '"from":' + partition.getNote(selectionListModel[i]).range.from + ","
-                        + '"to":' + partition.getNote(selectionListModel[i]).range.to  + ","
-                        + '"key":' + partition.getNote(selectionListModel[i]).key + ","
-                        + '"velocity":' + partition.getNote(selectionListModel[i]).velocity + ","
-                        + '"tuning":' + partition.getNote(selectionListModel[i]).tuning
+                var note = partition.getNote(selectionListModel[i])
+                var json = '{'
+                        + '"from":' + (note.range.from) + ","
+                        + '"to":' + (note.range.to) + ","
+                        + '"key":' + note.key + ","
+                        + '"velocity":' + note.velocity + ","
+                        + '"tuning":' + note.tuning
                         + "}";
                 if (i < selectionListModel.length - 1)
-                   note += ','
-                text += note
+                   json += ','
+                text += json
+            }
+            if (erase) {
+                partition.removeRange(selectionListModel)
+                resetSelection()
             }
             text += "]}"
             clipboardManager.copy(text)
         }
 
+        function onCopy(pressed) {
+            if (!pressed)
+                return
+            copyInClipboard(false)
+        }
+
+        function onCut(pressed) {
+            console.debug("cut")
+            if (!pressed)
+                return
+            copyInClipboard(true)
+        }
+
         function onPaste(pressed) {
             if (!pressed)
                 return
-            var notes = JSON.parse(clipboardManager.paste(true)).Notes;
-            console.debug(notes)
-            for (var i = 0; i < notes.length; i++) {
-                var note = notes[i]
-                console.log(note.from)
-                partition.add(
-                    AudioAPI.note(
-                        AudioAPI.beatRange(note.from, note.to),
-                        note.key,
-                        note.velocity,
-                        note.tuning
-                    )
-                )
-            }
+            resetSelection()
+            partition.addJsonRange(clipboardManager.paste(true), placementBeatPrecisionScale)
         }
+
+
     }
 
 }

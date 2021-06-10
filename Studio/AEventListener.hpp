@@ -39,6 +39,7 @@ public:
         StopPlaylist,
         Copy,
         Paste,
+        Cut,
         VolumeContext,
         VolumePlaylist
     };
