@@ -107,7 +107,7 @@ bool PartitionModel::add(const Note &note)
                 _latestNote = last;
                 emit latestNoteChanged();
             }
-            emit instancesChanged();
+            emit notesChanged();
         }
     );
 }
@@ -126,12 +126,12 @@ int PartitionModel::find(const quint8 key, const quint32 beat) const noexcept
     return -1;
 }
 
-int PartitionModel::findOverlap(const Key key, const Beat from, const Beat to) const noexcept
+int PartitionModel::findOverlap(const Key key, const BeatRange &range) const noexcept
 {
     int idx = 0;
 
     for (const auto &note : _data->notes()) {
-        if (note.key != key || to < note.range.from || from > note.range.to) {
+        if (note.key != key || range.to < note.range.from || range.from > note.range.to) {
             ++idx;
             continue;
         }
@@ -156,7 +156,7 @@ bool PartitionModel::remove(const int idx)
                 _latestNote = last;
                 emit latestNoteChanged();
             }
-            emit instancesChanged();
+            emit notesChanged();
         }
     );
 }
@@ -192,7 +192,7 @@ void PartitionModel::set(const int idx, const Note &range)
                     emit latestNoteChanged();
                 }
             }
-            emit instancesChanged();
+            emit notesChanged();
         }
     );
 }
@@ -219,7 +219,7 @@ bool PartitionModel::addRange(const QVariantList &noteList)
                 _latestNote = last;
                 emit latestNoteChanged();
             }
-            emit instancesChanged();
+            emit notesChanged();
         }
     );
 }
@@ -255,7 +255,7 @@ bool PartitionModel::removeRange(const QVariantList &indexes)
                 _latestNote = last;
                 emit latestNoteChanged();
             }
-            emit instancesChanged();
+            emit notesChanged();
         }
     );
 }
@@ -286,7 +286,7 @@ void PartitionModel::updateInternal(Audio::Partition *data)
             if (_data->notes().data() != data->notes().data()) {
                 beginResetModel();
                 endResetModel();
-                emit instancesChanged();
+                emit notesChanged();
             }
         }
     );
