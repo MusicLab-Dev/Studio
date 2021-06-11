@@ -85,6 +85,27 @@ bool PartitionsModel::add(void)
     );
 }
 
+bool PartitionsModel::duplicate(const int idx)
+{
+    try {
+        auto *source = get(idx);
+        if (!source)
+            return false;
+        add();
+        auto *target = get(count() -1);
+        if (!target)
+            return false;
+        target->setName(source->name());
+        target->setMuted(source->muted());
+        target->setMidiChannels(source->midiChannels());
+        target->addRange(source->getNotes());
+        target->instances().addRange(source->instances().getInstances());
+        return true;
+    } catch (const std::range_error &e) {
+        return false;
+    }
+}
+
 bool PartitionsModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),

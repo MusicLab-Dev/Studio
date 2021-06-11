@@ -226,3 +226,11 @@ QVariantList InstancesModel::select(const BeatRange &range)
     }
     return indexes;
 }
+
+QVariantList InstancesModel::getInstances(void) const
+{
+    QVariantList list;
+    for (int i = 0; i < count(); i++)
+        list.append(QVariant::fromValue(get(i)));
+    return list;
+}

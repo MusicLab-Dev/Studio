@@ -72,6 +72,9 @@ public slots:
     /** @brief Add a children to the list */
     bool add(void);
 
+    /** @brief Deplicate a children to the list */
+    bool duplicate(const int index);
+
     /** @brief Remove a children from the list */
     bool remove(const int index);
 

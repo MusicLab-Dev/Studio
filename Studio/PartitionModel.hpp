@@ -144,6 +144,9 @@ public slots:
     /** @brief Get note at index */
     QVariant getNote(const int index) const { return QVariant::fromValue(get(index)); }
 
+    /** @brief Get All notes */
+    QVariantList getNotes(void) const;
+
     /** @brief Set note at index */
     void set(const int idx, const Note &range);
 

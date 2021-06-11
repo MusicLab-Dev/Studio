@@ -56,6 +56,16 @@ DefaultMenu {
     }
 
     Action {
+        text: qsTr("Duplicate")
+
+        onTriggered: {
+            targetNode.partitions.duplicate(targetPartitionIndex)
+            closeMenu()
+        }
+    }
+
+
+    Action {
         text: qsTr("Edit name")
 
         function setName() {

@@ -70,6 +70,9 @@ public slots:
     /** @brief Get instance at index */
     QVariant getInstance(const int index) const { return QVariant::fromValue(get(index)); }
 
+    /** @brief Get All instances */
+    QVariantList getInstances(void) const;
+
     /** @brief Set instance at index */
     void set(const int index, const BeatRange &range);
 
