@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 
 Button {
     property real imageFactor: 1
+    property string sourceImage: "qrc:/Assets/MenuButton.png"
+
     property alias rect: bgRect
 
     id: control
@@ -20,7 +22,7 @@ Button {
         width: control.width * imageFactor
         height: control.height * imageFactor
         anchors.centerIn: control
-        source: "qrc:/Assets/MenuButton.png"
+        source: sourceImage
         color: control.pressed ? "#1A6DAA" : control.hovered ? "#338DCF" : "#31A8FF"
     }
 }

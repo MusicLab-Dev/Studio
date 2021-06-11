@@ -150,6 +150,8 @@ Item {
         anchors.left: menuButton.right
 
         sourceImage: "qrc:/Assets/Soundwave.png"
+        
+        onReleased: globalMenu.popup()        
     }
 
     Repeater {

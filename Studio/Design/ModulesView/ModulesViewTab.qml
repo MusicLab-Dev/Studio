@@ -9,7 +9,7 @@ Rectangle {
     property string tabTitle
 
     id: moduleViewTab
-    x: menuButton.width + (mouseArea.pressed ? index * tabWidth : index * tabWidth)
+    x: menuButton.width + playlistButton.width + (mouseArea.pressed ? index * tabWidth : index * tabWidth)
     y: mouseArea.pressed ? y : mouseArea.y
     color: componentSelected === index ? themeManager.foregroundColor : themeManager.backgroundColor
     border.color: "black"
