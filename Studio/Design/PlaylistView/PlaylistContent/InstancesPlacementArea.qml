@@ -85,7 +85,7 @@ MouseArea {
     onPressedChanged: forceActiveFocus()
 
     onPressed: {
-        var isSelection = playlistView.editMode === PlaylistView.EditMode.Select || mouse.modifiers & Qt.ShiftModifier
+        var isSelection = playlistView.editMode === PlaylistView.EditMode.Select || mouse.modifiers & Qt.ControlModifier
         var realMouseBeatPrecision = Math.floor((mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
         var instanceIndex = instances.find(realMouseBeatPrecision)
 

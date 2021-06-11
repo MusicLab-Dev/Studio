@@ -134,7 +134,7 @@ MouseArea {
     onPressedChanged: forceActiveFocus()
 
     onPressed: {
-        var isSelection = sequencerView.editMode === SequencerView.EditMode.Select || mouse.modifiers & Qt.ShiftModifier
+        var isSelection = sequencerView.editMode === SequencerView.EditMode.Select || mouse.modifiers & Qt.ControlModifier
         var realMouseBeatPrecision = Math.floor((mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
         var noteIndex = partition.find(mouseKey, realMouseBeatPrecision)
