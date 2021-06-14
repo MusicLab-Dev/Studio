@@ -61,8 +61,7 @@ Column {
                     node = app.project.master.addPartitionNode(pluginsView.selectedPath)
                     partitionIndex = 0
                     if (node === null) {
-                        modulesView.componentSelected = moduleIndex
-                        modulesView.removeComponent()
+                        modulesView.removeModule(moduleIndex)
                     } else {
                         partition = node.partitions.getPartition(partitionIndex)
                         sequencerView.enabled = true
@@ -81,8 +80,7 @@ Column {
                             node = app.project.master.addPartitionNodeExternalInputs(pluginsView.selectedPath, list)
                             partitionIndex = 0
                             if (node === null) {
-                                modulesView.componentSelected = moduleIndex
-                                modulesView.removeComponent()
+                                modulesView.removeModule(moduleIndex)
                             } else {
                                 partition = node.partitions.getPartition(partitionIndex)
                                 sequencerView.enabled = true
@@ -90,16 +88,14 @@ Column {
                         },
                         // On external inputs selection canceled
                         function() {
-                            modulesView.componentSelected = moduleIndex
-                            modulesView.removeComponent()
+                            modulesView.removeModule(moduleIndex)
                         }
                     )
                 }
             },
             // On plugin selection canceled
             function() {
-                modulesView.componentSelected = moduleIndex
-                modulesView.removeComponent()
+                modulesView.removeModule(moduleIndex)
             }
         )
     }
@@ -110,13 +106,13 @@ Column {
         partition = app.partitionNodeCache.partitions.getPartition(app.partitionIndexCache)
         app.partitionNodeCache = null
         app.partitionIndexCache = -1
-        modulesView.componentSelected = moduleIndex
+        modulesView.selectedModule = moduleIndex
         sequencerView.enabled = true
     }
 
     Connections {
         target: eventDispatcher
-        enabled: moduleIndex === componentSelected
+        enabled: moduleIndex === modulesView.selectedModule
 
         function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
         function onReplayContext(pressed) { if (!pressed) return; player.replay(); }

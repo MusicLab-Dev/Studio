@@ -1,100 +1,45 @@
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 
 import "../Default"
 import "../Common"
 
-Rectangle {
-    property bool dragActive: mouseArea.drag.active
-    property string tabTitle
+StaticModulesViewTab {
+    property real dragOldX: 0
 
-    id: moduleViewTab
-    x: menuButton.width + (mouseArea.pressed ? index * tabWidth : index * tabWidth)
-    y: mouseArea.pressed ? y : mouseArea.y
-    color: componentSelected === index ? themeManager.foregroundColor : themeManager.backgroundColor
-    border.color: "black"
+    id: tabMouseArea
+    z: drag.active ? 10 : 0
+    drag.target: tabMouseArea
+    drag.axis: Drag.XAxis
+    drag.smoothed: true
+    drag.minimumX: tabRow.minimumDragX
+    drag.maximumX: tabRow.maximumDragX
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
 
-    onDragActiveChanged: {
-        if (dragActive) {
-            Drag.start();
-        } else {
-            Drag.drop();
-        }
-    }
+    onPressed: dragOldX = x
 
-
-    DropArea {
-        width: parent.width / 2
-        height: parent.height
-        anchors.centerIn: parent
-        enabled: index !== componentSelected
-
-        onEntered: {
-            if (index != componentSelected) {
-                var indexTmp = index
-                modules.move(index, componentSelected, 1)
-                componentSelected = indexTmp
-            }
-        }
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        drag.target: parent
-        drag.axis: Drag.XAxis
-        hoverEnabled: true
-
-        onPressed: {
-            componentSelected = index
-        }
-
-        onReleased: {
-            moduleViewTab.y = 0
-        }
-    }
-
-    Text {
-        height: parent.height
-        width: parent.width - closeBtn.width
-        text: tabTitle
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        color: componentSelected === index ? "white" : mouseArea.containsMouse ? "black" : "#E5E5E5"
-        elide: Text.ElideRight
-        fontSizeMode: Text.Fit
-        clip: true
+    onReleased: {
+        var newIdx = Math.round(x / modulesTabs.tabWidth)
+        if (newIdx < 0)
+            newIdx = 0
+        else if (newIdx >= tabRepeater.count)
+            newIdx = tabRepeater.count - 1
+        if (tabIndex != newIdx) {
+            modulesView.modules.move(tabIndex, newIdx, 1)
+            modulesView.selectedModule = newIdx
+        } else
+            x = dragOldX
     }
 
     CloseButton {
         id: closeBtn
         width: parent.height / 3
         height: width
-        anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
         anchors.rightMargin: width / 2
+        anchors.verticalCenter: parent.verticalCenter
 
-        onClicked: {
-            if (componentSelected === modules.count - 1)
-                componentSelected = modules.count > 1 ? modules.count - 2 : 0;
-            if (modules.count === 1) {
-                modulesView.addModule(1, {
-                    title: "New component",
-                    path: "qrc:/EmptyView/EmptyView.qml",
-                    callback: modulesViewContent.nullCallback
-                })
-                componentSelected = 0
-            }
-            modules.removeModule(index)
-        }
+        onClicked: modules.removeModule(tabIndex)
     }
-
-    // Behavior on x {
-    //     SmoothedAnimation {
-    //         id: animationX
-    //         velocity: 500
-    //     }
-    // }
 }

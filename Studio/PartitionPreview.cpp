@@ -20,10 +20,10 @@ void PartitionPreview::setTarget(PartitionModel *target)
     if (target == _target)
         return;
     if (_target)
-        disconnect(_target, &PartitionModel::instancesChanged, this, &PartitionPreview::requestUpdate);
+        disconnect(_target, &PartitionModel::notesChanged, this, &PartitionPreview::requestUpdate);
     _target = target;
     if (_target)
-        connect(_target, &PartitionModel::instancesChanged, this, &PartitionPreview::requestUpdate);
+        connect(_target, &PartitionModel::notesChanged, this, &PartitionPreview::requestUpdate);
     emit targetChanged();
     requestUpdate();
 }

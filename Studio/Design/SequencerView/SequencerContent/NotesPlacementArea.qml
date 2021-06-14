@@ -53,6 +53,27 @@ MouseArea {
     property var selectionMoveTopOffset: 0
     property var selectionMoveBottomOffset: 0
 
+    function resetBrush() {
+        brushKey = 0
+        brushBegin = 0
+        brushEnd = 0
+        brushStep = 0
+        brushWidth = 0
+    }
+
+    function resetSelection() {
+        selectionBeatPrecisionFrom = 0
+        selectionBeatPrecisionTo = 0
+        selectionKeyFrom = 0
+        selectionKeyTo = 0
+        selectionListModel = null
+        selectionMoveBeatPrecisionOffset = 0
+        selectionMoveKeyOffset = 0
+        selectionMoveLeftOffset = 0
+        selectionMoveTopOffset = 0
+        selectionMoveBottomOffset = 0
+    }
+
     function addOnTheFly(targetKey) {
         if (onTheFlyKey !== -1 && onTheFlyKey !== targetKey)
             removeOnTheFly(onTheFlyKey)
@@ -90,7 +111,7 @@ MouseArea {
         return realMouseBeatPrecision
     }
 
-    function getScopedNoteBeatPrecision(realMouseBeatPrecision) {
+    function getScopedBeatPrecision(realMouseBeatPrecision) {
         var noteBeatPrecision = realMouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
         if (noteBeatPrecision < selectionMoveLeftOffset)
             noteBeatPrecision = selectionMoveLeftOffset
@@ -113,15 +134,15 @@ MouseArea {
     onPressedChanged: forceActiveFocus()
 
     onPressed: {
-        var isSelection = sequencerView.editMode === SequencerView.EditMode.Select || mouse.modifiers & Qt.ShiftModifier
+        var isSelection = sequencerView.editMode === SequencerView.EditMode.Select || mouse.modifiers & Qt.ControlModifier
         var realMouseBeatPrecision = Math.floor((mouse.x - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
         var mouseKey = pianoView.keyOffset + Math.floor((height - mouse.y) / contentView.rowHeight)
         var noteIndex = partition.find(mouseKey, realMouseBeatPrecision)
 
+        resetBrush()
         // Right click on note -> delete
         if (mouse.buttons & Qt.RightButton) {
-            // Reset selection
-            selectionListModel = null
+            resetSelection()
             mode = NotesPlacementArea.Mode.Remove
             if (isSelection) {
                 mode = NotesPlacementArea.Mode.SelectRemove
@@ -142,8 +163,7 @@ MouseArea {
 
         // Left click not on note -> insert
         if (noteIndex === -1) {
-            // Reset selection
-            selectionListModel = null
+            resetSelection()
             // Select mode, start selection
             if (isSelection) {
                 mode = NotesPlacementArea.Mode.Select
@@ -194,11 +214,7 @@ MouseArea {
             else
                 mode = isPartOfSelection ? NotesPlacementArea.Mode.SelectMove : NotesPlacementArea.Mode.Move
             if (mode < NotesPlacementArea.Mode.Select) {
-                // Reset selection
-                selectionListModel = null
-                selectionMoveLeftOffset = 0
-                selectionMoveTopOffset = 0
-                selectionMoveBottomOffset = 0
+                resetSelection()
                 partition.remove(noteIndex)
             } else {
                 partition.removeRange(selectionListModel)
@@ -241,7 +257,7 @@ MouseArea {
             break
         case NotesPlacementArea.Mode.Move:
         case NotesPlacementArea.Mode.SelectMove:
-            var noteBeatPrecision = getScopedNoteBeatPrecision(realMouseBeatPrecision)
+            var noteBeatPrecision = getScopedBeatPrecision(realMouseBeatPrecision)
             var oldBeat = contentView.placementBeatPrecisionFrom
             var oldKey = contentView.placementKey
             if (contentView.placementBeatPrecisionScale >= AudioAPI.beatPrecision)
@@ -266,40 +282,26 @@ MouseArea {
             var mouseBeatPrecision = realMouseBeatPrecision
             if (contentView.placementBeatPrecisionScale !== 0)
                 mouseBeatPrecision = mouseBeatPrecision - (mouseBeatPrecision % contentView.placementBeatPrecisionScale) + (contentView.placementBeatPrecisionFrom % contentView.placementBeatPrecisionScale)
-            if (contentView.placementBeatPrecisionTo > mouseBeatPrecision) {
-                var oldFrom = contentView.placementBeatPrecisionFrom
+            var oldFrom = contentView.placementBeatPrecisionFrom
+            if (contentView.placementBeatPrecisionTo > mouseBeatPrecision)
                 contentView.placementBeatPrecisionFrom = mouseBeatPrecision
-                if (mode === NotesPlacementArea.Mode.SelectLeftResize && contentView.placementBeatPrecisionFrom != oldFrom)
-                    selectionList.resizeLeft(contentView.placementBeatPrecisionFrom - oldFrom)
-            } else {
-                var oldFrom = contentView.placementBeatPrecisionFrom
-                var noteWidth = contentView.placementBeatPrecisionTo - contentView.placementBeatPrecisionFrom
-                contentView.placementBeatPrecisionFrom = contentView.placementBeatPrecisionTo
-                contentView.placementBeatPrecisionTo = mouseBeatPrecision + noteWidth
-                if (mode === NotesPlacementArea.Mode.SelectLeftResize)
-                    selectionList.resizeLeft(contentView.placementBeatPrecisionFrom - oldFrom)
-                mode = mode === NotesPlacementArea.Mode.SelectLeftResize ? NotesPlacementArea.Mode.SelectRightResize : NotesPlacementArea.Mode.RightResize
-            }
+            else
+                contentView.placementBeatPrecisionFrom = contentView.placementBeatPrecisionTo - contentView.placementBeatPrecisionScale
+            if (mode === NotesPlacementArea.Mode.SelectLeftResize && contentView.placementBeatPrecisionFrom != oldFrom)
+                selectionList.resizeLeft(contentView.placementBeatPrecisionFrom - oldFrom)
             break
         case NotesPlacementArea.Mode.RightResize:
         case NotesPlacementArea.Mode.SelectRightResize:
             var mouseBeatPrecision = realMouseBeatPrecision
             if (contentView.placementBeatPrecisionScale !== 0)
                 mouseBeatPrecision = mouseBeatPrecision + (contentView.placementBeatPrecisionScale - (mouseBeatPrecision % contentView.placementBeatPrecisionScale)) + (contentView.placementBeatPrecisionTo % contentView.placementBeatPrecisionScale)
-            if (contentView.placementBeatPrecisionFrom < mouseBeatPrecision) {
-                var oldTo = contentView.placementBeatPrecisionTo
+            var oldTo = contentView.placementBeatPrecisionTo
+            if (contentView.placementBeatPrecisionFrom < mouseBeatPrecision)
                 contentView.placementBeatPrecisionTo = mouseBeatPrecision
-                if (mode === NotesPlacementArea.Mode.SelectRightResize && contentView.placementBeatPrecisionTo != oldTo)
-                    selectionList.resizeRight(contentView.placementBeatPrecisionTo - oldTo)
-            } else {
-                var oldTo = contentView.placementBeatPrecisionTo
-                var noteWidth = contentView.placementBeatPrecisionTo - contentView.placementBeatPrecisionFrom
-                contentView.placementBeatPrecisionTo = contentView.placementBeatPrecisionFrom
-                contentView.placementBeatPrecisionFrom = mouseBeatPrecision - noteWidth
-                if (mode === NotesPlacementArea.Mode.SelectRightResize)
-                    selectionList.resizeRight(contentView.placementBeatPrecisionTo - oldTo)
-                mode = mode === NotesPlacementArea.Mode.SelectRightResize ? NotesPlacementArea.Mode.SelectLeftResize : NotesPlacementArea.Mode.LeftResize
-            }
+            else
+                contentView.placementBeatPrecisionTo = contentView.placementBeatPrecisionFrom + contentView.placementBeatPrecisionScale
+            if (mode === NotesPlacementArea.Mode.SelectRightResize && contentView.placementBeatPrecisionTo != oldTo)
+                selectionList.resizeRight(contentView.placementBeatPrecisionTo - oldTo)
             break
         case NotesPlacementArea.Mode.Brush:
             var mouseBeatPrecision = realMouseBeatPrecision
@@ -313,7 +315,7 @@ MouseArea {
             brushEnd = mouseBeatPrecision + brushWidth
 
             // Don't brush over existing notes
-            if (brushBegin >= 0 && partition.findOverlap(brushKey, brushBegin + 1, brushBegin + contentView.placementBeatPrecisionLastWidth - 1) === -1) {
+            if (brushBegin >= 0 && partition.findOverlap(brushKey, AudioAPI.beatRange(brushBegin + 1, brushBegin + contentView.placementBeatPrecisionLastWidth - 1)) === -1) {
                 if (!sequencerView.player.isPlaying)
                     addOnTheFly(brushKey)
                 partition.add(
@@ -379,7 +381,7 @@ MouseArea {
         case NotesPlacementArea.Mode.SelectMove:
         case NotesPlacementArea.Mode.SelectLeftResize:
         case NotesPlacementArea.Mode.SelectRightResize:
-            partition.addRange(selectionList.toNoteList())
+            partition.addRange(selectionList.toList())
             selectionMoveBeatPrecisionOffset = 0
             selectionMoveKeyOffset = 0
             break
@@ -404,15 +406,15 @@ MouseArea {
     }
 
     Repeater {
-        function toNoteList() {
+        function toList() {
             var list = []
             for (var i = 0; i < count; ++i) {
-                list[i] = getMovedNote(itemAt(i))
+                list[i] = getMoved(itemAt(i))
             }
             return list
         }
 
-        function getMovedNote(item) {
+        function getMoved(item) {
             var copy = item.note
             var rangeCopy = copy.range
             if (selectionMoveBeatPrecisionOffset < 0 && -selectionMoveBeatPrecisionOffset > rangeCopy.from) {
@@ -428,48 +430,17 @@ MouseArea {
             return copy
         }
 
-        function resizeNoteLeft(item, offset) {
-            var note = item.note
-            var range = note.range
-            console.log(item, "ResizeNoteLeft", offset, item.inversion)
-            if (range.from + offset >= range.to) {
-                range.from = range.to
-                range.to += offset
-                console.log(item, "Inversing note from left to right")
-                item.inversion = NotesPlacementArea.Inversion.Right
-            } else {
-                range.from += offset
-                // if (range.from < 0)
-                //     range.from = 0
-            }
-            note.range = range
-            item.note = note
-        }
-
-        function resizeNoteRight(item, offset) {
-            var note = item.note
-            var range = note.range
-            console.log(item, "ResizeNoteRight", offset, item.inversion)
-            if (range.to + offset <= range.from) {
-                range.to = range.from
-                range.from += offset
-                // if (range.from < 0)
-                //     range.from = 0
-                console.log(item, "Inversing note from right to left")
-                item.inversion = NotesPlacementArea.Inversion.Left
-            } else
-                range.to += offset
-            note.range = range
-            item.note = note
-        }
-
         function resizeLeft(offset) {
             for (var i = 0; i < count; ++i) {
                 var item = itemAt(i)
-                if (item.inversion === NotesPlacementArea.Inversion.Right)
-                    resizeNoteRight(item, offset)
-                else
-                    resizeNoteLeft(item, offset)
+                var note = item.note
+                var range = note.range
+                if (range.from + offset < range.to)
+                    range.from += offset
+                if (range.from < 0)
+                    range.from = 0;
+                note.range = range
+                item.note = note
             }
         }
 
@@ -478,10 +449,10 @@ MouseArea {
                 var item = itemAt(i)
                 var note = item.note
                 var range = note.range
-                if (item.inversion === NotesPlacementArea.Inversion.Left)
-                    resizeNoteLeft(item, offset)
-                else
-                    resizeNoteRight(item, offset)
+                if (range.to + offset > range.from)
+                    range.to += offset
+                note.range = range
+                item.note = note
             }
         }
 
@@ -490,7 +461,6 @@ MouseArea {
 
         delegate: Rectangle {
             property var note: partition.getNote(modelData)
-            property int inversion: 0
 
             x: contentView.xOffset + (selectionMoveBeatPrecisionOffset + note.range.from) * contentView.pixelsPerBeatPrecision
             y: parent.height - (selectionMoveKeyOffset + note.key - pianoView.keyOffset + 1) * contentView.rowHeight

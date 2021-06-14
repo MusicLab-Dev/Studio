@@ -26,7 +26,7 @@ ColumnLayout {
 
     Connections {
         target: eventDispatcher
-        enabled: moduleIndex === componentSelected
+        enabled: moduleIndex === modulesView.selectedModule
 
         function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
         function onReplayContext(pressed) { if (!pressed) return; player.replay(); }

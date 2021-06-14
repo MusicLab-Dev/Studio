@@ -68,14 +68,11 @@ Repeater {
             }
         }
 
-        InstancesPlacementArea {
-            id: placementArea
+        Item {
             x: nodeView.dataHeaderWidth
             width: nodeView.dataContentWidth
             height: contentView.rowHeight
-            targetPartition: partitionDelegate.partition
-            instances: partitionDelegate.partition ? partitionDelegate.partition.instances : null
-            brushStep: contentView.placementBeatPrecisionBrushStep
+            clip: true
 
             Repeater {
                 model: InstancesModelProxy {
@@ -90,13 +87,6 @@ Repeater {
                     color: nodeDelegate.node.color
                     border.color: Qt.darker(nodeDelegate.node.color, 1.25)
                     border.width: 2
-
-                    PartitionPreview {
-                        anchors.fill: parent
-                        anchors.margins: 2
-                        range: AudioAPI.beatRange(from, to)
-                        target: partitionDelegate.partition
-                    }
 
                     Rectangle {
                         x: Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
@@ -113,8 +103,25 @@ Repeater {
                         height: contentView.rowHeight * 3 / 4
                         color: parent.border.color
                     }
+
+                    PartitionPreview {
+                        anchors.fill: parent
+                        anchors.margins: 2
+                        range: AudioAPI.beatRange(from, to)
+                        target: partitionDelegate.partition
+                    }
                 }
             }
+        }
+
+        InstancesPlacementArea {
+            id: placementArea
+            x: nodeView.dataHeaderWidth
+            width: nodeView.dataContentWidth
+            height: contentView.rowHeight
+            targetPartition: partitionDelegate.partition
+            instances: partitionDelegate.partition ? partitionDelegate.partition.instances : null
+            brushStep: contentView.placementBeatPrecisionBrushStep
         }
     }
 }

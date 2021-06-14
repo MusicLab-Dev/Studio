@@ -2,7 +2,9 @@
     <qresource prefix="/ModulesView">
         <file>ModulesView.qml</file>
         <file>ModulesViewContent.qml</file>
-        <file>ModuleViewNewTabButton.qml</file>
+        <file>ModulesViewNewTabButton.qml</file>
+        <file>ModulesViewTabs.qml</file>
         <file>ModulesViewTab.qml</file>
+        <file>StaticModulesViewTab.qml</file>
     </qresource>
 </RCC>

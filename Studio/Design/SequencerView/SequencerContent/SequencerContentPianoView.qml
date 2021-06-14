@@ -57,7 +57,7 @@ Item {
 
         id: notesConnections
         target: eventDispatcher
-        enabled: moduleIndex === componentSelected
+        enabled: moduleIndex === modulesView.selectedModule
 
         function onNote0(pressed) { launch(pressed, 0) }
         function onNote1(pressed) { launch(pressed, 1) }

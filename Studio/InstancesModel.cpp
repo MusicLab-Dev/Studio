@@ -7,7 +7,7 @@
 
 #include <QHash>
 
-#include "Scheduler.hpp"
+#include "Models.hpp"
 #include "InstancesModel.hpp"
 
 InstancesModel::InstancesModel(Audio::BeatRanges *beatRanges, QObject *parent) noexcept
@@ -45,11 +45,11 @@ void InstancesModel::updateInternal(Audio::BeatRanges *data)
     endResetModel();
 }
 
-void InstancesModel::add(const BeatRange &range)
+bool InstancesModel::add(const BeatRange &range)
 {
     const auto idx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(range)));
 
-    Scheduler::Get()->addEvent(
+    return Models::AddProtectedEvent(
         [this, range] {
             _data->insert(range);
         },
@@ -79,12 +79,12 @@ int InstancesModel::find(const Beat beat) const noexcept
     return -1;
 }
 
-int InstancesModel::findOverlap(const Beat from, const Beat to) const noexcept
+int InstancesModel::findOverlap(const BeatRange &range) const noexcept
 {
     int idx = 0;
 
-    for (const auto &range : *_data) {
-        if (to < range.from || from > range.to) {
+    for (const auto &instance : *_data) {
+        if (range.to < instance.from || instance.from > instance.to) {
             ++idx;
             continue;
         }
@@ -93,11 +93,11 @@ int InstancesModel::findOverlap(const Beat from, const Beat to) const noexcept
     return -1;
 }
 
-void InstancesModel::remove(const int idx)
+bool InstancesModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("InstancesModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
-    Scheduler::Get()->addEvent(
+    return Models::AddProtectedEvent(
         [this, idx] {
             beginRemoveRows(QModelIndex(), idx, idx);
             _data->erase(_data->begin() + idx);
@@ -151,4 +151,78 @@ void InstancesModel::set(const int idx, const BeatRange &range)
             }
         }
     );
+}
+
+bool InstancesModel::addRange(const QVariantList &instanceList)
+{
+    if (instanceList.empty())
+        return true;
+    else if (instanceList.size() == 1)
+        return add(instanceList.front().value<BeatRange>());
+    QVector<BeatRange> instances;
+    instances.reserve(instanceList.size());
+    for (const auto &instance : instanceList)
+        instances.append(instance.value<BeatRange>());
+    return Models::AddProtectedEvent(
+        [this, instances] {
+            _data->insert(instances.begin(), instances.end());
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+            const auto last = _data->back().to;
+            if (last > _latestInstance) {
+                _latestInstance = last;
+                emit latestInstanceChanged();
+            }
+        }
+    );
+}
+
+bool InstancesModel::removeRange(const QVariantList &indexes)
+{
+    if (indexes.empty())
+        return true;
+    else if (indexes.size() == 1)
+        return remove(indexes.front().toInt());
+    return Models::AddProtectedEvent(
+        [this, indexes] {
+            int idx = 0;
+            auto it = std::remove_if(_data->begin(), _data->end(), [&idx, &indexes](const auto &) {
+                for (const auto &i : indexes) {
+                    if (i.toInt() == idx) {
+                        ++idx;
+                        return true;
+                    }
+                }
+                ++idx;
+                return false;
+            });
+
+            if (it != _data->end())
+                _data->erase(it, _data->end());
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+            const Beat last = _data->empty() ? 0u : _data->back().to;
+            if (last > _latestInstance) {
+                _latestInstance = last;
+                emit latestInstanceChanged();
+            }
+        }
+    );
+}
+
+QVariantList InstancesModel::select(const BeatRange &range)
+{
+    int idx = 0;
+    QVariantList indexes;
+
+    for (const auto &instance : *_data) {
+        if (instance.from <= range.to && instance.to >= range.from)
+            indexes.append(idx);
+        ++idx;
+    }
+    return indexes;
 }

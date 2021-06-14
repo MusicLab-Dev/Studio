@@ -1,63 +1,71 @@
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
-import QtQuick.Dialogs 1.3
+import QtQuick.Controls 2.15
 
 import "../Modules/Plugins"
 import "../Modules/Workspaces"
 import "../Modules/Settings"
 
 Rectangle {
-    function removeComponent() {
-        var moduleSelectedTmp = componentSelected
-        if (componentSelected === modules.count - 1)
-            componentSelected = modules.count > 1 ? modules.count - 2 : 0;
-        if (modules.count === 1) {
-            modulesView.addModule(1, {
-                title: "New component",
-                path: "qrc:/EmptyView/EmptyView.qml",
-                callback: modulesViewContent.nullCallback
-            })
-            componentSelected = 0
-        }
-        modules.removeModule(moduleSelectedTmp)
+    function addModule(module) {
         filePicker.cancelAndClose()
         pluginsView.cancelAndClose()
+        modules.append(module)
+        selectedModule = modules.count - 1
     }
 
-    function removeAllComponents() {
+    function removeModule(at) {
+        var oldCount = modules.count
+        var idx = at
+        filePicker.cancelAndClose()
+        pluginsView.cancelAndClose()
+        if (idx < 0)
+            return
+        if (oldCount == modules.count)
+            modules.remove(idx, 1)
+        if (idx >= modules.count)
+            idx = modules.count - 1
+        selectedModule = idx
+    }
+
+    function removeSelectedModule() {
+        removeModule(selectedModule)
+    }
+
+    function removeAllModules() {
+        filePicker.cancelAndClose()
+        pluginsView.cancelAndClose()
         modules.clear()
-        modulesView.addModule(0, {
-            title: "New component",
-            path: "qrc:/EmptyView/EmptyView.qml",
-            callback: modulesViewContent.nullCallback
+        selectedModule = -staticTabCount
+    }
+
+    function addNewSequencer() {
+        addModule({
+            path: "qrc:/SequencerView/SequencerView.qml",
+            callback: sequencerNewPartitionNodeCallback
         })
-        componentSelected = 0
-        filePicker.cancelAndClose()
-        pluginsView.cancelAndClose()
     }
 
-    function removeAllComponentsWithoutEmptyView() {
-        modules.clear()
-        componentSelected = 0
-        filePicker.cancelAndClose()
-        pluginsView.cancelAndClose()
+    function addSequencerWithExistingPartition() {
+        addModule({
+            path: "qrc:/SequencerView/SequencerView.qml",
+            callback: sequencerPartitionNodeCallback
+        })
     }
 
-    property alias modulesViewContent: modulesViewContent
-    property alias modules: modulesViewContent.modules
-    property alias settingsView: settingsView
-    property alias componentSelected: modulesViewContent.componentSelected
+    function getModule(idx) {
+        return modulesViewContent.getModule(idx)
+    }
 
     function onNodeDeleted(targetNode) {
         app.scheduler.onNodeDeleted(targetNode)
         for (var i = 0; i < modules.count;) {
-            if (!modulesViewContent.getModule(i).onNodeDeleted(targetNode))
+            if (!getModule(i).onNodeDeleted(targetNode))
                 ++i
-            else if (i < componentSelected) {
+            else if (i < selectedModule) {
                 if (i === 0)
-                    componentSelected = 0
+                    changeSelectedModule(0)
                 else
-                    componentSelected = i - 1
+                    changeSelectedModule(i - 1)
             }
         }
     }
@@ -65,42 +73,60 @@ Rectangle {
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
         app.scheduler.onNodePartitionDeleted(targetNode, targetPartitionIndex)
         for (var i = 0; i < modules.count;) {
-            if (!modulesViewContent.getModule(i).onNodePartitionDeleted(targetNode, targetPartitionIndex))
+            if (!getModule(i).onNodePartitionDeleted(targetNode, targetPartitionIndex))
                 ++i
-            else if (i < componentSelected) {
+            else if (i < selectedModule) {
                 if (i === 0)
-                    componentSelected = 0
+                    changeSelectedModule(0)
                 else
-                    componentSelected = i - 1
+                    changeSelectedModule(i - 1)
             }
         }
     }
 
-    function moveModule(from, to) {
-        modulesViewContent.getModule(from).moduleIndex = to
-        modulesViewContent.getModule(to).moduleIndex = from
-        modules.move(from, to, 1)
+    function changeSelectedModule(at) {
+        var idx = at
+        if (selectedModule === idx)
+            return
+        filePicker.cancelAndClose()
+        pluginsView.cancelAndClose()
+        if (idx >= modules.count)
+            idx = modules.count - 1
+        selectedModule = idx
     }
 
-    function addModule(at, module) {
-//        filePicker.cancelAndClose()
-//        pluginsView.cancelAndClose()
-        modules.insert(at, module)
-    }
+    property alias modulesViewContent: modulesViewContent
+    property alias modules: modules
+    property alias settingsView: settingsView
+    property alias selectedModule: modulesViewContent.selectedModule
 
     id: modulesView
     color: "#474747"
 
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: 0
+    Action {
+        property var target: null
+        id: nullCallback
+    }
 
-        ModulesViewContent {
-            id: modulesViewContent
-            Layout.preferredHeight: parent.height * 1
-            Layout.preferredWidth: parent.width
-            // add min / max values
-        }
+    Action {
+        property var target: null
+        id: sequencerPartitionNodeCallback
+        onTriggered: target.loadPartitionNode()
+    }
+
+    Action {
+        property var target: null
+        id: sequencerNewPartitionNodeCallback
+        onTriggered: target.loadNewPartitionNode()
+    }
+
+    ListModel {
+        id: modules
+    }
+
+    ModulesViewContent {
+        id: modulesViewContent
+        anchors.fill: parent
     }
 
     PluginsView {
@@ -126,42 +152,27 @@ Rectangle {
 
     Shortcut {
         sequence: "Ctrl+T"
-        onActivated: {
-            modulesView.addModule(modules.count, {
-                title: "New component",
-                path: "qrc:/EmptyView/EmptyView.qml",
-                callback: modulesViewContent.nullCallback
-            })
-            componentSelected = modules.count - 1
-        }
+        onActivated: addNewSequencer()
     }
 
     Shortcut {
         sequence: "Ctrl+W"
-        onActivated: {
-            if (pluginsView.visible)
-                pluginsView.cancelAndClose()
-            removeComponent()
-        }
+        onActivated: removeSelectedModule()
     }
 
     Shortcut {
         sequence: "Ctrl+Shift+W"
-        onActivated: {
-            if (pluginsView.visible)
-                pluginsView.cancelAndClose()
-            removeAllComponents()
-        }
+        onActivated: removeAllModules()
     }
 
     Shortcut {
         sequence: "Ctrl+Tab"
         onActivated: {
-            if (modules.count > 1) {
-                if (componentSelected == modules.count - 1)
-                    componentSelected = 0
+            if (modules.count > 0) {
+                if (selectedModule == modules.count - 1)
+                    changeSelectedModule(-staticTabCount)
                 else
-                    componentSelected += 1
+                    changeSelectedModule(selectedModule + 1)
             }
         }
     }
@@ -170,10 +181,10 @@ Rectangle {
         sequence: "Ctrl+Shift+Tab"
         onActivated: {
             if (modules.count > 1) {
-                if (componentSelected == 0)
-                    componentSelected = modules.count - 1
+                if (selectedModule == -staticTabCount)
+                    changeSelectedModule(modules.count - 1)
                 else
-                    componentSelected -= 1
+                    changeSelectedModule(selectedModule - 1)
             }
         }
     }
