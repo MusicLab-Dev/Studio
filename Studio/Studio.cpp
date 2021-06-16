@@ -58,8 +58,8 @@ void Studio::InitResources(void)
     qmlRegisterType<PluginTableModelProxy>("PluginTableModel", 1, 0, "PluginTableModelProxy");
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
-    qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "Application");
-    qmlRegisterType<SettingsListModelProxy>("SettingsListModelProxy", 1, 0, "Application");
+    qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "SettingsListModel");
+    qmlRegisterType<SettingsListModelProxy>("SettingsListModel", 1, 0, "SettingsListModelProxy");
     qmlRegisterUncreatableType<Scheduler>("Scheduler", 1, 0, "Scheduler", "Cannot construct Scheduler");
     qmlRegisterUncreatableType<Project>("Project", 1, 0, "Project", "Cannot construct Project");
     qmlRegisterUncreatableType<NodeModel>("NodeModel", 1, 0, "NodeModel", "Cannot construct NodeModel");
@@ -127,8 +127,8 @@ Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
 
 Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
 {
-    qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "SettingsListModel");
-    qmlRegisterType<SettingsListModelProxy>("SettingsListModel", 1, 0, "SettingsListModelProxy");
+    setOrganizationName("Lexo");
+    setOrganizationDomain("lexo-music.com");
 
     /** DEBUG */
     //SettingsListModel list("test.json", "values.json", nullptr);

@@ -11,6 +11,8 @@ find_package(Qt5QmlImportScanner REQUIRED)
 find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml REQUIRED)
 find_package(Threads)
 
+set(APP_ICON_RESOURCE_WINDOWS "${StudioRoot}/Lexo.rc")
+
 qt5_add_resources(QtResources
     ${StudioDir}/Resources/Resources.qrc
     ${StudioDir}/Design/Main/Main.qrc
@@ -118,7 +120,7 @@ set(StudioAppSources
 
 set(Application ${PROJECT_NAME}App)
 
-add_executable(${Application} ${StudioAppSources})
+add_executable(${Application} ${StudioAppSources} ${APP_ICON_RESOURCE_WINDOWS})
 
 target_link_libraries(${Application} PUBLIC Studio)
 
