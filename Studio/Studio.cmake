@@ -7,6 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+find_package(Qt5QmlImportScanner REQUIRED)
 find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml REQUIRED)
 find_package(Threads)
 
@@ -119,4 +120,6 @@ set(Application ${PROJECT_NAME}App)
 
 add_executable(${Application} ${StudioAppSources})
 
-target_link_libraries(${Application} Studio)
+target_link_libraries(${Application} PUBLIC Studio)
+
+qt5_import_qml_plugins(${Application})
