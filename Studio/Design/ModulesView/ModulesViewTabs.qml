@@ -5,7 +5,7 @@ import "../Default"
 import "../Common"
 
 Item {
-    readonly property real tabWidth: 200//Math.min(Math.max(tabArea.width / 8, 100), 200)
+    readonly property real tabWidth: 200
     readonly property real tabHeight: 35
     readonly property real totalStaticTabWidth: staticTabCount * tabWidth
     readonly property real totalDynamicTabWidth: modules.count * tabWidth
@@ -13,6 +13,7 @@ Item {
     readonly property bool allTabsInOneScreen: totalTabWidth <= width - tabHeight * 2
     property int selectedModule: -staticTabCount
     readonly property int staticTabCount: 1
+    readonly property alias scrollOffsetIsMoving: scrollOffsetNumberAnimation.running
 
     id: modulesTabs
     width: parent.width
@@ -34,17 +35,26 @@ Item {
         visible: !modulesTabs.allTabsInOneScreen
         enabled: tabArea.scrollOffset < 0
 
-        onPressed: tabArea.scrollOffset = tabArea.ensureScrollOffset(tabArea.scrollOffset + modulesTabs.tabWidth)
-        onDoubleClicked: tabArea.scrollOffset = 0
+        onPressed: tabArea.scroll(modulesTabs.tabWidth)
+        onDoubleClicked: tabArea.scrollLeftMost()
     }
 
     Item {
-        function ensureScrollOffset(offset) {
-            if (offset > 0)
-                offset = 0
-            else if (offset < minScrollOffset)
-                offset = minScrollOffset
-            return offset
+        function scroll(offset) {
+            var newScrollOffset = scrollOffset + offset
+            if (newScrollOffset > 0)
+                newScrollOffset = 0
+            else if (newScrollOffset < minScrollOffset)
+                newScrollOffset = minScrollOffset
+            scrollOffset = newScrollOffset
+        }
+
+        function scrollLeftMost() {
+            tabArea.scrollOffset = 0
+        }
+
+        function scrollRightMost() {
+            tabArea.scrollOffset = tabArea.minScrollOffset
         }
 
         readonly property real minScrollOffset: width - modulesTabs.totalTabWidth
@@ -56,18 +66,18 @@ Item {
         height: parent.height
         clip: true
 
-        onScrollOffsetChanged: {
-            if (scrollOffset === behavior.targetValue) {
-                if (leftMoveButton.pressed)
-                    scrollOffset = tabArea.ensureScrollOffset(scrollOffset + modulesTabs.tabWidth)
-                else if (rightMoveButton.pressed)
-                    scrollOffset = tabArea.ensureScrollOffset(scrollOffset - modulesTabs.tabWidth)
-            }
-        }
-
         Behavior on scrollOffset {
-            id: behavior
-            NumberAnimation { duration: 500 }
+            NumberAnimation {
+                id: scrollOffsetNumberAnimation
+                duration: 500
+
+                onRunningChanged: {
+                    if (leftMoveButton.pressed)
+                        tabArea.scroll(modulesTabs.tabWidth)
+                    else if (rightMoveButton.pressed)
+                        tabArea.scroll(-modulesTabs.tabWidth)
+                }
+            }
         }
 
         Row {
@@ -106,13 +116,9 @@ Item {
         visible: !modulesTabs.allTabsInOneScreen
         enabled: tabArea.scrollOffset > tabArea.minScrollOffset
 
-        onPressed: {
-            tabArea.scrollOffset = tabArea.ensureScrollOffset(tabArea.scrollOffset - modulesTabs.tabWidth)
-        }
+        onPressed: tabArea.scroll(-modulesTabs.tabWidth)
 
-        onDoubleClicked: {
-            tabArea.scrollOffset = tabArea.minScrollOffset
-        }
+        onDoubleClicked: tabArea.scrollRightMost()
     }
 
     ModulesViewNewTabButton {

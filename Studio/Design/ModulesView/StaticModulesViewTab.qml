@@ -11,7 +11,7 @@ MouseArea {
 
     id: tabMouseArea
     width: modulesTabs.tabWidth
-    height: modulesTabs.height
+    height: modulesTabs.tabHeight
     hoverEnabled: true
 
     onPressed: modulesView.changeSelectedModule(tabIndex)
@@ -31,5 +31,6 @@ MouseArea {
         color: isSelectedModule ? "white" : tabMouseArea.containsPress ? "darkgrey" : tabMouseArea.containsMouse ? "grey" : "#E5E5E5"
         fontSizeMode: Text.HorizontalFit
         text: modulesView.getModule(tabIndex).moduleName
+        elide: Text.ElideRight
     }
 }
