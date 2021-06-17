@@ -32,19 +32,16 @@ StaticModulesViewTab {
                 newIdx = 0
             else if (newIdx >= tabRepeater.count)
                 newIdx = tabRepeater.count - 1
+            if (!modulesTabs.scrollOffsetIsMoving) {
+                var offset = x + tabArea.scrollOffset
+                if (offset < 0)
+                    tabArea.scroll(-offset)
+                else if (offset > modulesTabs.dynamicTabRow - modulesTabs.tabWidth)
+                    tabArea.scroll(offset - (modulesTabs.dynamicTabRow - modulesTabs.tabWidth))
+            }
             if (tabIndex != newIdx) {
                 modulesView.modules.move(tabIndex, newIdx, 1)
                 modulesView.selectedModule = newIdx
-                if (!modulesTabs.scrollOffsetIsMoving) {
-                    var offset = x + tabArea.scrollOffset
-                    if (offset < 0) {
-                        console.log("Scrolling left", modulesTabs.tabWidth)
-                        tabArea.scroll(modulesTabs.tabWidth)
-                    } else if (offset > tabArea.width - modulesTabs.tabWidth) {
-                        console.log("Scrolling right", -modulesTabs.tabWidth)
-                        tabArea.scroll(-modulesTabs.tabWidth)
-                    }
-                }
             }
         }
     }
