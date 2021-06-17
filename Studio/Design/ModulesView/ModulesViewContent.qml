@@ -35,7 +35,7 @@ Item {
             height: parent.height - modulesTabs.height
 
             PlaylistView {
-                readonly property int tabIndex: 0
+                readonly property int tabIndex: -1
 
                 id: playlistView
                 anchors.fill: parent
@@ -47,7 +47,7 @@ Item {
                 model: modulesView.modules
 
                 delegate: Loader {
-                    readonly property int tabIndex: index + 1
+                    readonly property int tabIndex: index
                     readonly property bool isSelectedModule: modulesViewContent.selectedModule === tabIndex
 
                     anchors.fill: modulesLoaders
@@ -55,6 +55,7 @@ Item {
                     enabled: isSelectedModule
                     focus: true
                     source: path
+                    clip: true
 
                     onVisibleChanged: focus = true
 

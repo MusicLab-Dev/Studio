@@ -7,9 +7,11 @@ import "../Common"
 Item {
     readonly property real tabWidth: 200//Math.min(Math.max(tabArea.width / 8, 100), 200)
     readonly property real tabHeight: 35
+    readonly property real totalStaticTabWidth: staticTabCount * tabWidth
+    readonly property real totalDynamicTabWidth: modules.count * tabWidth
     readonly property real totalTabWidth: tabRow.width
     readonly property bool allTabsInOneScreen: totalTabWidth <= width - tabHeight * 2
-    property int selectedModule: 0
+    property int selectedModule: -staticTabCount
     readonly property int staticTabCount: 1
 
     id: modulesTabs
@@ -69,24 +71,27 @@ Item {
         }
 
         Row {
-            readonly property real minimumDragX: modulesTabs.staticTabCount * modulesTabs.tabWidth
-            readonly property real maximumDragX: modulesTabs.totalTabWidth - modulesTabs.tabWidth
-
             id: tabRow
             x: tabArea.scrollOffset
-            height: modulesTabs.height
+            height: parent.height
 
             StaticModulesViewTab {
                 id: playlistTab
                 tabIndex: -1
             }
 
-            Repeater {
-                id: tabRepeater
-                model: modulesView.modules
+            Item {
+                id: dynamicTabRow
+                width: modulesTabs.totalDynamicTabWidth
+                height: parent.height
 
-                delegate: ModulesViewTab {
-                    tabIndex: index
+                Repeater {
+                    id: tabRepeater
+                    model: modulesView.modules
+
+                    delegate: ModulesViewTab {
+                        tabIndex: index
+                    }
                 }
             }
         }

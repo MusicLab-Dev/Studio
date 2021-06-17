@@ -8,29 +8,36 @@ StaticModulesViewTab {
     property real dragOldX: 0
 
     id: tabMouseArea
+    x: tabIndex * modulesTabs.tabWidth
     z: drag.active ? 10 : 0
     drag.target: tabMouseArea
     drag.axis: Drag.XAxis
     drag.smoothed: true
-    drag.minimumX: tabRow.minimumDragX
-    drag.maximumX: tabRow.maximumDragX
+    drag.minimumX: 0
+    drag.maximumX: modulesTabs.totalDynamicTabWidth - modulesTabs.tabWidth
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
 
     onPressed: dragOldX = x
 
-    onReleased: {
-        var newIdx = Math.round(x / modulesTabs.tabWidth)
-        if (newIdx < 0)
-            newIdx = 0
-        else if (newIdx >= tabRepeater.count)
-            newIdx = tabRepeater.count - 1
-        if (tabIndex != newIdx) {
-            modulesView.modules.move(tabIndex, newIdx, 1)
-            modulesView.selectedModule = newIdx
-        } else
-            x = dragOldX
+    onXChanged: {
+        if (drag.active) {
+            var newIdx = Math.round(x / modulesTabs.tabWidth)
+            if (newIdx < 0)
+                newIdx = 0
+            else if (newIdx >= tabRepeater.count)
+                newIdx = tabRepeater.count - 1
+            if (tabIndex != newIdx) {
+                dragOldX = x
+                modulesView.modules.move(tabIndex, newIdx, 1)
+                modulesView.selectedModule = newIdx
+                x = dragOldX
+                dragOldX = newIdx * modulesTabs.tabWidth
+            }
+        }
     }
+
+    onReleased: x = dragOldX
 
     CloseButton {
         id: closeBtn

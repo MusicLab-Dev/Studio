@@ -93,6 +93,7 @@ Rectangle {
         if (idx >= modules.count)
             idx = modules.count - 1
         selectedModule = idx
+        console.log("Change selected", selectedModule)
     }
 
     property alias modulesViewContent: modulesViewContent
