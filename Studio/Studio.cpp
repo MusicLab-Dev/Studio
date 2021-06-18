@@ -81,14 +81,11 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
     Q_INIT_RESOURCE(Default);
-    Q_INIT_RESOURCE(ModulesView);
-    Q_INIT_RESOURCE(SequencerView);
+    Q_INIT_RESOURCE(Modules);
+    Q_INIT_RESOURCE(Sequencer);
     Q_INIT_RESOURCE(Common);
-    Q_INIT_RESOURCE(PlaylistView);
-    Q_INIT_RESOURCE(EmptyView);
-    Q_INIT_RESOURCE(BoardView);
-
-    /** Modules **/
+    Q_INIT_RESOURCE(Playlist);
+    Q_INIT_RESOURCE(Boards);
     Q_INIT_RESOURCE(Plugins);
     Q_INIT_RESOURCE(Workspaces);
     Q_INIT_RESOURCE(Settings);
@@ -99,14 +96,11 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Resources);
     Q_CLEANUP_RESOURCE(Main);
     Q_CLEANUP_RESOURCE(Default);
-    Q_CLEANUP_RESOURCE(ModulesView);
-    Q_CLEANUP_RESOURCE(SequencerView);
+    Q_CLEANUP_RESOURCE(Modules);
+    Q_CLEANUP_RESOURCE(Sequencer);
     Q_CLEANUP_RESOURCE(Common);
-    Q_CLEANUP_RESOURCE(PlaylistView);
-    Q_CLEANUP_RESOURCE(EmptyView);
-    Q_CLEANUP_RESOURCE(BoardView);
-
-    /** Modules **/
+    Q_CLEANUP_RESOURCE(Playlist);
+    Q_CLEANUP_RESOURCE(Boards);
     Q_CLEANUP_RESOURCE(Plugins);
     Q_CLEANUP_RESOURCE(Workspaces);
     Q_CLEANUP_RESOURCE(Settings);

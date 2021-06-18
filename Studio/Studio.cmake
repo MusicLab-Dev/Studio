@@ -17,17 +17,14 @@ qt5_add_resources(QtResources
     ${StudioDir}/Resources/Resources.qrc
     ${StudioDir}/Design/Main/Main.qrc
     ${StudioDir}/Design/Default/Default.qrc
-    ${StudioDir}/Design/ModulesView/ModulesView.qrc
-    ${StudioDir}/Design/SequencerView/SequencerView.qrc
+    ${StudioDir}/Design/Modules/Modules.qrc
+    ${StudioDir}/Design/Sequencer/Sequencer.qrc
     ${StudioDir}/Design/Common/Common.qrc
-    ${StudioDir}/Design/PlaylistView/PlaylistView.qrc
-    ${StudioDir}/Design/EmptyView/EmptyView.qrc
-    ${StudioDir}/Design/BoardView/BoardView.qrc
-
-    # Modules
-    ${StudioDir}/Design/Modules/Plugins/Plugins.qrc
-    ${StudioDir}/Design/Modules/Workspaces/Workspaces.qrc
-    ${StudioDir}/Design/Modules/Settings/Settings.qrc
+    ${StudioDir}/Design/Playlist/Playlist.qrc
+    ${StudioDir}/Design/Boards/Boards.qrc
+    ${StudioDir}/Design/Plugins/Plugins.qrc
+    ${StudioDir}/Design/Workspaces/Workspaces.qrc
+    ${StudioDir}/Design/Settings/Settings.qrc
 )
 
 set(StudioSources

@@ -28,7 +28,7 @@ Item {
                 id: delegateLoader
                 width: settingsListModel.width
                 height: 40
-                source: "qrc:/Modules/Settings/SettingsDelegates/" + type + "Delegate.qml"
+                source: "qrc:/Settings/SettingsDelegates/" + type + "Delegate.qml"
             }
         }
 

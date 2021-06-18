@@ -11,8 +11,8 @@ import EventDispatcher 1.0
 import DevicesModel 1.0
 
 import "../Common"
-import "../ModulesView"
-import "../Modules/Workspaces"
+import "../Modules"
+import "../Workspaces"
 
 Window {
     function urlToPath(urlString) {
