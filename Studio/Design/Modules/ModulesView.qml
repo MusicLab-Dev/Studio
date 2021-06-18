@@ -4,12 +4,17 @@ import QtQuick.Controls 2.15
 import "../Plugins"
 import "../Workspaces"
 import "../Settings"
-import "../Board"
+import "../Boards"
 
 Rectangle {
-    function addModule(module) {
-        filePicker.cancelAndClose()
+    function closeAllPopups() {
+        workspacesView.cancelAndClose()
         pluginsView.cancelAndClose()
+        boardsView.close()
+    }
+
+    function addModule(module) {
+        closeAllPopups()
         modules.append(module)
         selectedModule = modules.count - 1
     }
@@ -19,8 +24,7 @@ Rectangle {
         if (at < 0)
             return
         var item = getModule(at)
-        filePicker.cancelAndClose()
-        pluginsView.cancelAndClose()
+        closeAllPopups()
         if (item == getModule(at))
             modules.remove(at, 1)
         if (selectedModule >= modules.count)
@@ -32,8 +36,7 @@ Rectangle {
     }
 
     function removeAllModules() {
-        filePicker.cancelAndClose()
-        pluginsView.cancelAndClose()
+        closeAllPopups()
         modules.clear()
         selectedModule = -modulesContent.staticTabCount
     }
@@ -90,18 +93,19 @@ Rectangle {
         var idx = at
         if (selectedModule === idx)
             return
-        filePicker.cancelAndClose()
-        pluginsView.cancelAndClose()
+        closeAllPopups()
         if (idx >= modules.count)
             idx = modules.count - 1
         selectedModule = idx
     }
 
-    property alias modulesContent: modulesContent
-    property alias totalModuleCount: modulesContent.totalTabCount
     property alias modules: modules
-    property alias settingsView: settingsView
+    property alias totalModuleCount: modulesContent.totalTabCount
     property alias selectedModule: modulesContent.selectedModule
+    property alias modulesContent: modulesContent
+    property alias workspacesView: workspacesView
+    property alias settingsView: settingsView
+    property alias boardsView: boardsView
 
     id: modulesView
     color: "#474747"
@@ -140,7 +144,7 @@ Rectangle {
     }
 
     WorkspacesView {
-        id: filePicker
+        id: workspacesView
         width: parent.width * 0.9
         height: parent.height * 0.9
         anchors.centerIn: parent
@@ -148,6 +152,13 @@ Rectangle {
 
     SettingsView {
         id: settingsView
+        width: parent.width * 0.9
+        height: parent.height * 0.9
+        anchors.centerIn: parent
+    }
+
+    BoardsView {
+        id: boardsView
         width: parent.width * 0.9
         height: parent.height * 0.9
         anchors.centerIn: parent

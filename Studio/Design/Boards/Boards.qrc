@@ -1,7 +1,7 @@
 <RCC>
-    <qresource prefix="/Board">
+    <qresource prefix="/Boards">
         <file>BoardsView.qml</file>
-        <file>BoardsManagerView.qml</file>
+        <file>BoardManagerView.qml</file>
         <file>BoardsTitle.qml</file>
         <file>BoardsContentArea.qml</file>
         <file>BoardsBackground.qml</file>

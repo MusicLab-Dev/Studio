@@ -1,6 +1,8 @@
 import QtQuick 2.15
 
-BoardBackground {
+import "../Common"
+
+BoardsBackground {
     function open() {
         visible = true
     }
@@ -18,8 +20,8 @@ BoardBackground {
         width: parent.width
     }
 
-    BoardsManagerView {
-        id: boardsManagerView
+    BoardManagerView {
+        id: boardManagerView
         anchors.top: boardsViewTitle.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -60,5 +62,14 @@ BoardBackground {
 
             onReleased: { boardControlsView.close() }
         }
+    }
+
+    TextRoundedButton {
+        id: boardsViewCloseButtonText
+        x: parent.width - width - height
+        y: height
+        text: "Done"
+
+        onReleased: boardsView.close()
     }
 }

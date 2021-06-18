@@ -58,7 +58,7 @@ WorkspacesBackground {
         x: workspacesViewCloseButtonText.x - width - height
         y: height
         text: "Accept"
-        type: 2
+        hoverOnText: false
 
         MouseArea {
             anchors.fill: parent
@@ -76,28 +76,17 @@ WorkspacesBackground {
     }
 
     TextRoundedButton {
-        visible: workspaceForeground.parentDepth !== 0
         id: workspacesViewBackButtonText
-
+        visible: workspaceForeground.parentDepth !== 0
         width: workspacesViewCloseButtonText.width
         height: workspacesViewCloseButtonText.height
         x: workspaceForeground.width + height
         y: height
         text: "Back"
-        type: 1
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-
-            onEntered: { workspacesViewBackButtonText.buttonHovered = true }
-
-            onExited: { workspacesViewBackButtonText.buttonHovered = false }
-
-            onReleased: {
-                workspaceForeground.actualPath += "/.."
-                workspaceForeground.parentDepth -= 1
-            }
+        onReleased: {
+            workspaceForeground.actualPath += "/.."
+            workspaceForeground.parentDepth -= 1
         }
     }
 
@@ -106,18 +95,8 @@ WorkspacesBackground {
         x: workspaceView.width - width - height
         y: height
         text: "Close"
-        type: 1
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-
-            onEntered: { workspacesViewCloseButtonText.buttonHovered = true }
-
-            onExited: { workspacesViewCloseButtonText.buttonHovered = false }
-
-            onReleased: { workspaceView.cancelAndClose() }
-        }
+        onReleased: workspaceView.cancelAndClose()
     }
 
     WorkspacesForeground {

@@ -51,16 +51,7 @@ PluginsBackground {
         x: pluginsView.width - width - height
         y: height
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-
-            onEntered: { pluginsViewCloseButtonText.buttonHovered = true }
-
-            onExited: { pluginsViewCloseButtonText.buttonHovered = false }
-
-            onReleased: { pluginsView.cancelAndClose() }
-        }
+        onReleased: pluginsView.cancelAndClose()
     }
 
     PluginsForeground {

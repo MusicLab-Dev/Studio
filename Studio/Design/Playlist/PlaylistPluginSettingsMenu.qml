@@ -54,13 +54,13 @@ DefaultMenu {
                         if (target.add(pluginsView.selectedPath) === null)
                             console.log("Couldn't create node")
                     } else {
-                        filePicker.open(externalInputType === PluginTableModel.Multiple,
+                        modulesView.workspacesView.open(externalInputType === PluginTableModel.Multiple,
                             // On external inputs selection accepted
                             function() {
                                 // Format the external input list
                                 var list = []
-                                for (var i = 0; i < filePicker.fileUrls.length; ++i)
-                                    list[i] = mainWindow.urlToPath(filePicker.fileUrls[i].toString())
+                                for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
+                                    list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
                                 // Add the node with external inputs
                                 if (app.currentPlayer)
                                     app.currentPlayer.pause()
@@ -98,13 +98,13 @@ DefaultMenu {
                         if (target.addParent(pluginsView.selectedPath) === null)
                             console.log("Couldn't create node")
                     } else {
-                        filePicker.open(externalInputType === PluginTableModel.Multiple,
+                        modulesView.workspacesView.open(externalInputType === PluginTableModel.Multiple,
                             // On external inputs selection accepted
                             function() {
                                 // Format the external input list
                                 var list = []
-                                for (var i = 0; i < filePicker.fileUrls.length; ++i)
-                                    list[i] = mainWindow.urlToPath(filePicker.fileUrls[i].toString())
+                                for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
+                                    list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
                                 // Add the node with external inputs
                                 if (app.currentPlayer)
                                     app.currentPlayer.pause()

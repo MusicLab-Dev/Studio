@@ -14,7 +14,7 @@ Rectangle {
         cellWidth: boardContentView.width / 3
         cellHeight: cellWidth / 2
 
-        model: boardsManager
+        model: boardManager
 
         delegate: Item {
             width: boardsPreview.cellWidth
@@ -30,7 +30,7 @@ Rectangle {
                 anchors.fill: parent
                 anchors.margins: parent.width * 0.02
                 color: "white"
-                border.width: boardsManagerMouseArea.containsMouse ? 5 : 0
+                border.width: boardManagerMouseArea.containsMouse ? 5 : 0
                 border.color: themeManager.accentColor
                 radius: 10
 
@@ -41,7 +41,7 @@ Rectangle {
                     x: parent.width / 2 - width / 2
                     y: parent.height / 2 - height / 2
                     anchors.margins: parent.width * 0.02
-                    color: boardsManagerMouseArea.containsMouse ? themeManager.accentColor : themeManager.foregroundColor
+                    color: boardManagerMouseArea.containsMouse ? themeManager.accentColor : themeManager.foregroundColor
                     radius: 10
 
                     DefaultText {
@@ -49,12 +49,12 @@ Rectangle {
                         text: boardPreviewSlot.boardWidth + " x " + boardPreviewSlot.boardHeight
                         font.pixelSize: 40
                         font.bold: true
-                        color: boardsManagerMouseArea.containsMouse ? "black" : "white"
+                        color: boardManagerMouseArea.containsMouse ? "black" : "white"
                     }
                 }
 
                 MouseArea {
-                    id: boardsManagerMouseArea
+                    id: boardManagerMouseArea
                     hoverEnabled: true
                     anchors.fill: parent
 
