@@ -13,7 +13,7 @@ Rectangle {
     readonly property real tabHeight: 35
     readonly property bool allTabsInOneRow: tabRows === 1
     property int selectedModule: -staticTabCount
-    readonly property int staticTabCount: 1
+    readonly property int staticTabCount: 2
     property bool expanded: false
 
     onAllTabsInOneRowChanged: {
@@ -39,9 +39,16 @@ Rectangle {
         anchors.right: expandButton.left
         height: modulesTabs.tabHeight * modulesTabs.tabRows
 
-        ModulesStaticTab {
-            id: playlistTab
-            tabIndex: -1
+        Row {
+            ModulesStaticTab {
+                id: treeTab
+                tabIndex: -2
+            }
+
+            ModulesStaticTab {
+                id: playlistTab
+                tabIndex: -1
+            }
         }
 
         Repeater {

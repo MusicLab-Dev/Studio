@@ -20,6 +20,7 @@ qt5_add_resources(QtResources
     ${StudioDir}/Design/Modules/Modules.qrc
     ${StudioDir}/Design/Sequencer/Sequencer.qrc
     ${StudioDir}/Design/Common/Common.qrc
+    ${StudioDir}/Design/Tree/Tree.qrc
     ${StudioDir}/Design/Playlist/Playlist.qrc
     ${StudioDir}/Design/Boards/Boards.qrc
     ${StudioDir}/Design/Plugins/Plugins.qrc

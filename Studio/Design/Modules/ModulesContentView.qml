@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 
 import "../Default"
 import "../Playlist"
+import "../Tree"
 
 Item {
     function getModule(idx) {
@@ -11,6 +12,8 @@ Item {
             switch (idx) {
             case -1:
                 return playlistView
+            case -2:
+                return treeView
             default:
                 return null
             }
@@ -29,6 +32,30 @@ Item {
     ModulesTabs {
         id: modulesTabs
         z: 100
+    }
+
+    TreeView {
+        id: treeView
+        visible: modulesContent.selectedModule === moduleIndex
+        moduleIndex: -2
+
+        Binding on y {
+            when: visible
+            value: modulesTabs.height
+            restoreMode: Binding.RestoreNone
+        }
+
+        Binding on width {
+            when: visible
+            value: parent.width
+            restoreMode: Binding.RestoreNone
+        }
+
+        Binding on height {
+            when: visible
+            value: parent.height - modulesTabs.height
+            restoreMode: Binding.RestoreNone
+        }
     }
 
     PlaylistView {

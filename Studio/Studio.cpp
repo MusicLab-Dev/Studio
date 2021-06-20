@@ -82,6 +82,7 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Main);
     Q_INIT_RESOURCE(Default);
     Q_INIT_RESOURCE(Modules);
+    Q_INIT_RESOURCE(Tree);
     Q_INIT_RESOURCE(Sequencer);
     Q_INIT_RESOURCE(Common);
     Q_INIT_RESOURCE(Playlist);
@@ -97,6 +98,7 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Main);
     Q_CLEANUP_RESOURCE(Default);
     Q_CLEANUP_RESOURCE(Modules);
+    Q_CLEANUP_RESOURCE(Tree);
     Q_CLEANUP_RESOURCE(Sequencer);
     Q_CLEANUP_RESOURCE(Common);
     Q_CLEANUP_RESOURCE(Playlist);

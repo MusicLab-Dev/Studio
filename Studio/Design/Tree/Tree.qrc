@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/Tree">
+        <file>TreeView.qml</file>
+        <file>TreeHeader.qml</file>
+        <file>TreeFooter.qml</file>
+        <file>TreeContentView.qml</file>
+        <file>TreeSurface.qml</file>
+        <file>TreeNodeDelegate.qml</file>
+    </qresource>
+</RCC>
