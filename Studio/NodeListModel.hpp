@@ -23,6 +23,7 @@ public:
     /** @brief Destructor */
     ~NodeListModel(void) override = default;
 
+
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
@@ -35,6 +36,12 @@ public:
 public slots:
     /** @brief Return the count of element in the model */
     int count(void) const noexcept { return _models.size(); }
+
+    /** @brief Load a single node */
+    void loadNode(NodeModel *node);
+
+    /** @brief Load multiple nodes */
+    void loadNodes(const QVector<NodeModel *> &models);
 
 private:
     QVector<NodeModel *> _models;

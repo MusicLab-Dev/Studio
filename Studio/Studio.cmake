@@ -65,6 +65,8 @@ set(StudioSources
     ${StudioDir}/NetworkLog.hpp
     ${StudioDir}/NodeModel.cpp
     ${StudioDir}/NodeModel.hpp
+    ${StudioDir}/NodeListModel.cpp
+    ${StudioDir}/NodeListModel.hpp
     ${StudioDir}/Note.hpp
     ${StudioDir}/PartitionModel.cpp
     ${StudioDir}/PartitionModel.hpp

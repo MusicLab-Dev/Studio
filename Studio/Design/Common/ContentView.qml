@@ -31,6 +31,12 @@ Item {
     readonly property real yScrollIndicatorSize: yOffsetWidth ? 1 / (yOffsetWidth / height) : 1
     readonly property real yScrollIndicatorPos: (1 - yScrollIndicatorSize) * (yOffsetMin ? yOffset / yOffsetMin : 0)
 
+    // Scroll gesture
+    readonly property real wheelsPerXScrollPage: 1
+    readonly property real wheelsPerYScrollPage: 1
+    readonly property real xScrollFactor: width / (wheelsPerXScrollPage * 360 * 8)
+    readonly property real yScrollFactor: height / (wheelsPerYScrollPage * 360 * 8)
+
     // Horizontal zoom
     property real xZoom: 0.05
     property real xZoomMin: beatsPerBar + 1
@@ -42,12 +48,6 @@ Item {
     property real yZoomMin: 30
     property real yZoomMax: 300
     readonly property real yZoomWidth: yZoomMax - yZoomMin
-
-    // Scroll gesture
-    readonly property real wheelsPerXScrollPage: 1
-    readonly property real wheelsPerYScrollPage: 1
-    readonly property real xScrollFactor: width / (wheelsPerXScrollPage * 360 * 8)
-    readonly property real yScrollFactor: height / (wheelsPerYScrollPage * 360 * 8)
 
     // Zoom gesture
     readonly property real wheelsPerXZoomRange: 5
