@@ -37,8 +37,8 @@ Item {
     readonly property real yScrollFactor: height / (wheelsPerYScrollPage * 360 * 8)
 
     // Zoom gesture
-    readonly property real wheelsPerXZoomRange: 1
-    readonly property real wheelsPerYZoomRange: 1
+    readonly property real wheelsPerXZoomRange: 5
+    readonly property real wheelsPerYZoomRange: 5
     readonly property real xZoomFactor: 1 / (wheelsPerXZoomRange * 360 * 8)
     readonly property real yZoomFactor: 1 / (wheelsPerYZoomRange * 360 * 8)
 
@@ -69,53 +69,46 @@ Item {
         anchors.fill: parent
 
         onXScrolled: {
-            treeSurfaceTranslate.x += contentView.xScrollFactor * scroll
-            // contentView.xOffset = Math.min(Math.max(contentView.xOffset + contentView.xScrollFactor * scroll, contentView.xOffsetMin), 0)
+            contentView.xOffset = Math.min(Math.max(contentView.xOffset + contentView.xScrollFactor * scroll, contentView.xOffsetMin), 0)
         }
 
         onYScrolled: {
-            treeSurfaceTranslate.y += contentView.yScrollFactor * scroll
-            // contentView.yOffset = Math.min(Math.max(contentView.yOffset + contentView.yScrollFactor * scroll, contentView.yOffsetMin), 0)
+            contentView.yOffset = Math.min(Math.max(contentView.yOffset + contentView.yScrollFactor * scroll, contentView.yOffsetMin), 0)
         }
 
         onXZoomed: {
-            var oldWidth = treeSurface.width * treeSurface.scale
-            var oldHeight = treeSurface.height * treeSurface.scale
-            var oldPoint = mapToItem(treeSurface, mouseX, mouseY)
-            var oldXRatio = oldPoint.x / oldWidth
-            var oldYRatio = oldPoint.y / oldHeight
-
-            treeSurface.scale += contentView.xZoomFactor * zoom
-
-            var newWidth = treeSurface.width * treeSurface.scale
-            var newHeight = treeSurface.height * treeSurface.scale
-            var newPoint = mapToItem(treeSurface, mouseX, mouseY)
-            var newXRatio = newPoint.x / newWidth
-            var newYRatio = newPoint.y / newHeight
-
-            // console.log(oldXRatio, "->", newXRatio, "|", oldYRatio, "->", newYRatio)
-            // treeSurfaceTranslate.x += (newXRatio - oldXRatio) * newWidth
-            // treeSurfaceTranslate.y += (newYRatio - oldYRatio) * newHeight / 2
-            console.log(oldYRatio, "->", newYRatio, "=", (newYRatio - oldYRatio) * newHeight)
-            treeSurfaceTranslate.y += (newYRatio - oldYRatio) * newHeight
-
-            // applyZoom(zoom)
+            applyZoom(zoom)
         }
 
-        // onYZoomed: {
-        //     applyZoom(zoom)
-        // }
+        onYZoomed: {
+            applyZoom(zoom)
+        }
     }
 
     TreeSurface {
+        property bool zoomingX: false
+        property bool zoomingY: false
+        property real oldXRatioPos: 0
+        property real oldYRatioPos: 0
+
         id: treeSurface
-        // anchors.centerIn: parent
-        // transformOrigin: Item.Center
-        scale: 1
-        transform: Translate {
-            id: treeSurfaceTranslate
-            x: 0
-            y: 0
+        x: contentView.xOffset //+ (parent.width / 2 - width / 2)
+        y: contentView.yOffset //+ (parent.height / 2 - height / 2)
+        instanceDefaultWidth: contentView.xZoomMin + contentView.xZoom * contentView.xZoomWidth
+        instanceDefaultHeight: contentView.yZoomMin + contentView.yZoom * contentView.yZoomWidth
+
+        onWidthChanged: {
+            if (zoomingX) {
+                contentView.xOffset = -treeSurface.width * oldXRatioPos
+                zoomingX = false
+            }
+        }
+
+        onHeightChanged: {
+            if (zoomingY) {
+                contentView.yOffset = -treeSurface.height * oldYRatioPos
+                zoomingY = false
+            }
         }
     }
 

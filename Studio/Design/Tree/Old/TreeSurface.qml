@@ -2,12 +2,9 @@ import QtQuick 2.15
 
 import NodeModel 1.0
 
-Rectangle {
-    color: "purple"
-    border.color: "red"
-
-    property real instanceDefaultWidth: 100
-    property real instanceDefaultHeight: 75
+Item {
+    property real instanceDefaultWidth
+    property real instanceDefaultHeight
     readonly property real instanceExpandedWidth: instanceDefaultWidth * 2
     readonly property real instanceExpandedHeight: instanceDefaultHeight * 2
     readonly property real instancePadding: instanceDefaultWidth / 2

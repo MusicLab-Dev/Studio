@@ -8,7 +8,7 @@ MouseArea {
 
     id: gestureArea
     propagateComposedEvents: true
-    // hoverEnabled: true
+    hoverEnabled: true
 
     onPressedChanged: forceActiveFocus()
     onClicked: mouse.accepted = false
