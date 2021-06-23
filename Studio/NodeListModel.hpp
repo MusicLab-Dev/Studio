@@ -11,6 +11,8 @@
 
 class NodeListModel : public QAbstractListModel
 {
+    Q_OBJECT
+
 public:
     /** @brief Roles of each instance */
     enum class Roles : int {

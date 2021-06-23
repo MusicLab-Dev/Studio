@@ -23,6 +23,7 @@ Column {
             height: nodeDelegate.isSelected ? treeSurface.instanceExpandedHeight : treeSurface.instanceDefaultHeight
             color: nodeDelegate.node ? nodeDelegate.node.color : "black"
             anchors.centerIn: parent
+            radius: 15
 
             DefaultText {
                 anchors.centerIn: parent
@@ -31,12 +32,9 @@ Column {
 
             MouseArea {
                 anchors.fill: parent
-                onPressed: {
-                    if (isSelected)
-                        treeSurface.selectedNode = null
-                    else
-                        treeSurface.selectedNode = nodeDelegate.node
-                }
+
+                onClicked: treeSurface.selectedNode = nodeDelegate.node
+                onDoubleClicked: modulesView.addNewPlanner(nodeDelegate.node)
             }
         }
 

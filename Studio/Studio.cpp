@@ -24,6 +24,8 @@
 #include "DevicesModel.hpp"
 #include "PartitionPreview.hpp"
 #include "InstancesModelProxy.hpp"
+#include "NodeListModel.hpp"
+#include "PluginModelProxy.hpp"
 
 void Studio::InitResources(void)
 {
@@ -54,6 +56,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<GPoint>("AudioAPI", 1, 0, "Point", "Cannot construct Point");
     qmlRegisterUncreatableType<ControlEvent>("AudioAPI", 1, 0, "ControlEvent", "Cannot construct ControlEvent");
     qmlRegisterUncreatableType<PluginModel>("PluginModel", 1, 0, "PluginModel", "Cannot construct PluginModel");
+    qmlRegisterType<PluginModelProxy>("PluginModelProxy", 1, 0, "PluginModelProxy");
     qmlRegisterType<PluginTableModel>("PluginTableModel", 1, 0, "PluginTableModel");
     qmlRegisterType<PluginTableModelProxy>("PluginTableModel", 1, 0, "PluginTableModelProxy");
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
@@ -77,6 +80,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
     qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
+    qmlRegisterType<NodeListModel>("NodeListModel", 1, 0, "NodeListModel");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
@@ -86,6 +90,7 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Sequencer);
     Q_INIT_RESOURCE(Common);
     Q_INIT_RESOURCE(Playlist);
+    Q_INIT_RESOURCE(Planner);
     Q_INIT_RESOURCE(Boards);
     Q_INIT_RESOURCE(Plugins);
     Q_INIT_RESOURCE(Workspaces);
@@ -102,6 +107,7 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Sequencer);
     Q_CLEANUP_RESOURCE(Common);
     Q_CLEANUP_RESOURCE(Playlist);
+    Q_CLEANUP_RESOURCE(Planner);
     Q_CLEANUP_RESOURCE(Boards);
     Q_CLEANUP_RESOURCE(Plugins);
     Q_CLEANUP_RESOURCE(Workspaces);

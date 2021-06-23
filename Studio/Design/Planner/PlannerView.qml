@@ -1,7 +1,7 @@
 import QtQuick 2.15
 
 Column {
-    property string moduleName: "Project"
+    property string moduleName: "Planner"
     property int moduleIndex
 
     function onNodeDeleted(targetNode) {
@@ -12,24 +12,36 @@ Column {
         return false
     }
 
-    id: treeView
+    function loadNode() {
+        nodeList.loadNode(app.plannerNodeCache)
+        app.plannerNodeCache = null
+    }
+
+    function loadMultipleNodes() {
+        nodeList.loadNodes(app.plannerNodesCache)
+        app.plannerNodesCache = []
+    }
+
+    property alias nodeList: contentView.nodeList
+
+    id: plannerView
     focus: true
 
-    TreeHeader {
-        id: treeHeader
+    PlannerHeader {
+        id: plannerHeader
         width: parent.width
         height: parent.height * 0.15
         z: 1
     }
 
-    TreeContentView {
+    PlannerContentView {
         id: contentView
         width: parent.width
         height: parent.height * 0.7
     }
 
-    TreeFooter {
-        id: treeFooter
+    PlannerFooter {
+        id: plannerFooter
         width: parent.width
         height: parent.height * 0.15
     }

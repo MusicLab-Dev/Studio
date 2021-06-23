@@ -104,7 +104,6 @@ Column {
         partition = app.partitionNodeCache.partitions.getPartition(app.partitionIndexCache)
         app.partitionNodeCache = null
         app.partitionIndexCache = -1
-        modulesView.selectedModule = moduleIndex
         sequencerView.enabled = true
     }
 

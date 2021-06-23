@@ -5,17 +5,38 @@ MouseArea {
     signal yZoomed(real zoom, real xPos, real yPos)
     signal xScrolled(real scroll, real xPos, real yPos)
     signal yScrolled(real scroll, real xPos, real yPos)
+    signal offsetScroll(real xOffset, real yOffset)
+
+    property bool isDragging: false
+    property point lastDragEvent: Qt.point(0, 0)
 
     id: gestureArea
     propagateComposedEvents: true
+    acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
-    onPressedChanged: forceActiveFocus()
     onClicked: mouse.accepted = false
-    onPressed: mouse.accepted = false
     onReleased: mouse.accepted = false
     onDoubleClicked: mouse.accepted = false
-    onPositionChanged: mouse.accepted = false
     onPressAndHold: mouse.accepted = false
+
+    onPressed: {
+        forceActiveFocus()
+        if (mouse.buttons & Qt.MiddleButton) {
+            isDragging = true
+            lastDragEvent = Qt.point(mouse.x, mouse.y)
+        } else
+            mouse.accepted = false
+    }
+
+    onPositionChanged: {
+        if (isDragging) {
+            var dragEvent = Qt.point(mouse.x, mouse.y)
+            offsetScroll(dragEvent.x - lastDragEvent.x, dragEvent.y - lastDragEvent.y)
+            lastDragEvent = dragEvent
+        } else {
+            mouse.accepted = false
+        }
+    }
 
     onWheel: {
         var multiplier = wheel.modifiers & Qt.ShiftModifier ? 3 : 1

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 Item {
     // Format inputs
+    property bool enableRows: true
     property int barsPerGroup: 4
     property int beatsPerBar: 4
 
@@ -143,10 +144,13 @@ Item {
     Canvas {
         id: canvasRows
         y: yRowOffset
+        visible: surfaceContentGrid.enableRows
         width: parent.width
         height: parent.height * 2
 
         onPaint: {
+            if (!surfaceContentGrid.enableRows)
+                return;
             var ctx = getContext("2d")
             ctx.reset()
             var offset = 0

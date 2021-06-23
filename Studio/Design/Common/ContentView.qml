@@ -8,6 +8,9 @@ Item {
     // Content data placeholder
     default property alias placeholder: placeholder.data
 
+    // Display inputs
+    property alias enableRows: surfaceContentGrid.enableRows
+
     // Rows dimensions
     property real rowHeight: yZoom * yZoomWidth + yZoomMin
     property real rowHeaderWidth: width * 0.2
@@ -134,6 +137,11 @@ Item {
     GestureArea {
         id: gestureArea
         anchors.fill: parent
+
+        onOffsetScroll: {
+            xOffset = Math.min(Math.max(xOffset + xOffset, xOffsetMin), 0)
+            yOffset = Math.min(Math.max(yOffset + yOffset, yOffsetMin), 0)
+        }
 
         onXScrolled: {
             xOffset = Math.min(Math.max(xOffset + xScrollFactor * scroll, xOffsetMin), 0)

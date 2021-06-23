@@ -22,6 +22,7 @@ qt5_add_resources(QtResources
     ${StudioDir}/Design/Common/Common.qrc
     ${StudioDir}/Design/Tree/Tree.qrc
     ${StudioDir}/Design/Playlist/Playlist.qrc
+    ${StudioDir}/Design/Planner/Planner.qrc
     ${StudioDir}/Design/Boards/Boards.qrc
     ${StudioDir}/Design/Plugins/Plugins.qrc
     ${StudioDir}/Design/Workspaces/Workspaces.qrc
@@ -76,9 +77,12 @@ set(StudioSources
     ${StudioDir}/PartitionPreview.hpp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
+    ${StudioDir}/PluginModelProxy.cpp
+    ${StudioDir}/PluginModelProxy.hpp
     ${StudioDir}/PluginTableModel.cpp
     ${StudioDir}/PluginTableModel.hpp
     ${StudioDir}/PluginTableModelProxy.hpp
+    ${StudioDir}/PluginTableModelProxy.cpp
     ${StudioDir}/Point.hpp
     ${StudioDir}/Project.cpp
     ${StudioDir}/Project.hpp

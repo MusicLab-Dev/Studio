@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 import "../Common"
 
-Item {
+MouseArea {
     function incrementXOffset(offset) {
         contentView.xOffset = Math.min(Math.max(contentView.xOffset + offset, contentView.xOffsetMin), contentView.xOffsetMax)
     }
@@ -46,6 +46,8 @@ Item {
 
     id: contentView
 
+    onClicked: treeSurface.selectedNode = null
+
     onXOffsetMinChanged: {
         if (xOffset < xOffsetMin)
             xOffset = xOffsetMin
@@ -70,6 +72,11 @@ Item {
     GestureArea {
         id: gestureArea
         anchors.fill: parent
+
+        onOffsetScroll: {
+            contentView.incrementXOffset(xOffset)
+            contentView.incrementYOffset(yOffset)
+        }
 
         onXScrolled: contentView.incrementXOffset(contentView.xScrollFactor * scroll)
         onYScrolled: contentView.incrementYOffset(contentView.yScrollFactor * scroll)
