@@ -7,20 +7,25 @@ Button {
     property color colorHovered: "#338DCF"
     property color colorDefault: "#31A8FF"
     property color colorDisabled: themeManager.disabledColor
-    property bool showBorder: true
     property real scaleFactor: 0.5
+    property alias showBorder: backgroundRect.visible
+    property alias backgroundRadius: backgroundRect.radius
+    property alias backgroundColor: backgroundRect.color
+    property alias borderColor: backgroundRect.border.color
+    property alias borderWidth: backgroundRect.border.width
 
     id: control
     hoverEnabled: true
 
     background: Rectangle {
+        id: backgroundRect
         width: control.width
         height: control.height
         color: "transparent"
+        radius: 40
+        visible: true
         border.width: 1
         border.color: "white"
-        radius: 40
-        visible: showBorder
     }
 
     indicator: DefaultColoredImage {

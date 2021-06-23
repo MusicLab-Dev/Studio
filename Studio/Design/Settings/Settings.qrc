@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/Settings">
+        <file>SettingsView.qml</file>
+        <file>SettingsBackground.qml</file>
+        <file>SettingsForeground.qml</file>
+        <file>SettingsForegroundCard.qml</file>
+        <file>SettingsContentArea.qml</file>
+        <file>SettingsTitle.qml</file>
+        <file>CategoryHeader.qml</file>
+        <file>SettingsDelegates/ComboBoxDelegate.qml</file>
+        <file>SettingsDelegates/CheckBoxDelegate.qml</file>
+        <file>SettingsDelegates/RadioButtonDelegate.qml</file>
+        <file>SettingsDelegates/SliderDelegate.qml</file>
+        <file>SettingsDelegates/TextBoxDelegate.qml</file>
+        <file>SettingsDelegates/IntegerTextBoxDelegate.qml</file>
+        <file>SettingsDelegates/FloatingTextBoxDelegate.qml</file>
+        <file>SettingsDelegates/SpinBoxDelegate.qml</file>
+        <file>SettingsDelegates/DevicesModelDelegate.qml</file>
+        <file>SettingsDelegates/StringPairListDelegate.qml</file>
+    </qresource>
+</RCC>

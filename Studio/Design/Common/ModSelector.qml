@@ -3,14 +3,14 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls.Styles 1.4
 import "../Default"
-import "../SequencerView"
+import "../Sequencer"
 
 Item {
     // properties
     property var itemsPaths: []
     property var itemsNames: []
     property int itemSelected: 0
-    property int itemUsableTill: 3
+    property int itemUsableTill: 0
 
     // alias
     default property alias placeholder: placeholder.data

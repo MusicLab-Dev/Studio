@@ -107,6 +107,7 @@ bool PartitionModel::add(const Note &note)
                 _latestNote = last;
                 emit latestNoteChanged();
             }
+            emit notesChanged();
         }
     );
 }
@@ -125,12 +126,12 @@ int PartitionModel::find(const quint8 key, const quint32 beat) const noexcept
     return -1;
 }
 
-int PartitionModel::findOverlap(const Key key, const Beat from, const Beat to) const noexcept
+int PartitionModel::findOverlap(const Key key, const BeatRange &range) const noexcept
 {
     int idx = 0;
 
     for (const auto &note : _data->notes()) {
-        if (note.key != key || to < note.range.from || from > note.range.to) {
+        if (note.key != key || range.to < note.range.from || range.from > note.range.to) {
             ++idx;
             continue;
         }
@@ -150,16 +151,12 @@ bool PartitionModel::remove(const int idx)
         },
         [this] {
             endRemoveRows();
-            if (!_data->notes().empty()) {
-                const auto last = _data->notes().back().range.to;
-                if (last > _latestNote) {
-                    _latestNote = last;
-                    emit latestNoteChanged();
-                }
-            } else if (_latestNote != 0) {
-                _latestNote = 0;
+            const Beat last = _data->notes().empty() ? 0u : _data->notes().back().range.to;
+            if (last > _latestNote) {
+                _latestNote = last;
                 emit latestNoteChanged();
             }
+            emit notesChanged();
         }
     );
 }
@@ -195,10 +192,86 @@ void PartitionModel::set(const int idx, const Note &range)
                     emit latestNoteChanged();
                 }
             }
+            emit notesChanged();
         }
     );
 }
 
+bool PartitionModel::addRange(const QVariantList &noteList)
+{
+    if (noteList.empty())
+        return true;
+    else if (noteList.size() == 1)
+        return add(noteList.front().value<Note>());
+    QVector<Note> notes;
+    notes.reserve(noteList.size());
+    for (const auto &n : noteList)
+        notes.append(n.value<Note>());
+    return Models::AddProtectedEvent(
+        [this, notes] {
+            _data->notes().insert(notes.begin(), notes.end());
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+            const auto last = _data->notes().back().range.to;
+            if (last > _latestNote) {
+                _latestNote = last;
+                emit latestNoteChanged();
+            }
+            emit notesChanged();
+        }
+    );
+}
+
+bool PartitionModel::removeRange(const QVariantList &indexes)
+{
+    if (indexes.empty())
+        return true;
+    else if (indexes.size() == 1)
+        return remove(indexes.front().toInt());
+    return Models::AddProtectedEvent(
+        [this, indexes] {
+            int idx = 0;
+            auto it = std::remove_if(_data->notes().begin(), _data->notes().end(), [&idx, &indexes](const auto &) {
+                for (const auto &i : indexes) {
+                    if (i.toInt() == idx) {
+                        ++idx;
+                        return true;
+                    }
+                }
+                ++idx;
+                return false;
+            });
+
+            if (it != _data->notes().end())
+                _data->notes().erase(it, _data->notes().end());
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+            const Beat last = _data->notes().empty() ? 0u : _data->notes().back().range.to;
+            if (last > _latestNote) {
+                _latestNote = last;
+                emit latestNoteChanged();
+            }
+            emit notesChanged();
+        }
+    );
+}
+
+QVariantList PartitionModel::select(const BeatRange &range, const Key keyFrom, const Key keyTo)
+{
+    int idx = 0;
+    QVariantList indexes;
+
+    for (const auto &note : _data->notes()) {
+        if (note.key >= keyFrom && note.key <= keyTo && note.range.from <= range.to && note.range.to >= range.from)
+            indexes.append(idx);
+        ++idx;
+    }
+    return indexes;
+}
 
 void PartitionModel::updateInternal(Audio::Partition *data)
 {
@@ -213,6 +286,8 @@ void PartitionModel::updateInternal(Audio::Partition *data)
             if (_data->notes().data() != data->notes().data()) {
                 beginResetModel();
                 endResetModel();
+                emit notesChanged();
             }
-        });
+        }
+    );
 }

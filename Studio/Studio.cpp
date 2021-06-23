@@ -22,6 +22,8 @@
 #include "BoardManager.hpp"
 #include "EventDispatcher.hpp"
 #include "DevicesModel.hpp"
+#include "PartitionPreview.hpp"
+#include "InstancesModelProxy.hpp"
 
 void Studio::InitResources(void)
 {
@@ -56,8 +58,8 @@ void Studio::InitResources(void)
     qmlRegisterType<PluginTableModelProxy>("PluginTableModel", 1, 0, "PluginTableModelProxy");
     qmlRegisterType<ThemeManager>("ThemeManager", 1, 0, "ThemeManager");
     qmlRegisterType<Application>("Application", 1, 0, "Application");
-    qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "Application");
-    qmlRegisterType<SettingsListModelProxy>("SettingsListModelProxy", 1, 0, "Application");
+    qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "SettingsListModel");
+    qmlRegisterType<SettingsListModelProxy>("SettingsListModel", 1, 0, "SettingsListModelProxy");
     qmlRegisterUncreatableType<Scheduler>("Scheduler", 1, 0, "Scheduler", "Cannot construct Scheduler");
     qmlRegisterUncreatableType<Project>("Project", 1, 0, "Project", "Cannot construct Project");
     qmlRegisterUncreatableType<NodeModel>("NodeModel", 1, 0, "NodeModel", "Cannot construct NodeModel");
@@ -67,25 +69,23 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<ControlModel>("ControlModel", 1, 0, "ControlModel", "Cannot construct ControlModel");
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
+    qmlRegisterType<InstancesModelProxy>("InstancesModelProxy", 1, 0, "InstancesModelProxy");
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
     qmlRegisterUncreatableType<Board>("Board", 1, 0, "Board", "Cannot constrict Board");
     qmlRegisterType<EventDispatcher>("EventDispatcher", 1, 0, "EventDispatcher");
     qmlRegisterUncreatableType<KeyboardEventListener>("KeyboardEventListener", 1, 0, "KeyboardEventListener", "Cannot construct KeyboardEventListener");
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
-
+    qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
     Q_INIT_RESOURCE(Default);
-    Q_INIT_RESOURCE(ModulesView);
-    Q_INIT_RESOURCE(SequencerView);
+    Q_INIT_RESOURCE(Modules);
+    Q_INIT_RESOURCE(Sequencer);
     Q_INIT_RESOURCE(Common);
-    Q_INIT_RESOURCE(PlaylistView);
-    Q_INIT_RESOURCE(EmptyView);
-    Q_INIT_RESOURCE(BoardView);
-
-    /** Modules **/
+    Q_INIT_RESOURCE(Playlist);
+    Q_INIT_RESOURCE(Boards);
     Q_INIT_RESOURCE(Plugins);
     Q_INIT_RESOURCE(Workspaces);
     Q_INIT_RESOURCE(Settings);
@@ -96,14 +96,11 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Resources);
     Q_CLEANUP_RESOURCE(Main);
     Q_CLEANUP_RESOURCE(Default);
-    Q_CLEANUP_RESOURCE(ModulesView);
-    Q_CLEANUP_RESOURCE(SequencerView);
+    Q_CLEANUP_RESOURCE(Modules);
+    Q_CLEANUP_RESOURCE(Sequencer);
     Q_CLEANUP_RESOURCE(Common);
-    Q_CLEANUP_RESOURCE(PlaylistView);
-    Q_CLEANUP_RESOURCE(EmptyView);
-    Q_CLEANUP_RESOURCE(BoardView);
-
-    /** Modules **/
+    Q_CLEANUP_RESOURCE(Playlist);
+    Q_CLEANUP_RESOURCE(Boards);
     Q_CLEANUP_RESOURCE(Plugins);
     Q_CLEANUP_RESOURCE(Workspaces);
     Q_CLEANUP_RESOURCE(Settings);
@@ -124,8 +121,8 @@ Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
 
 Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
 {
-    qmlRegisterType<SettingsListModel>("SettingsListModel", 1, 0, "SettingsListModel");
-    qmlRegisterType<SettingsListModelProxy>("SettingsListModel", 1, 0, "SettingsListModelProxy");
+    setOrganizationName("Lexo");
+    setOrganizationDomain("lexo-music.com");
 
     /** DEBUG */
     //SettingsListModel list("test.json", "values.json", nullptr);

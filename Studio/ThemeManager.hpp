@@ -34,8 +34,7 @@ public:
 
 
     /** @brief Construct a theme manager */
-    ThemeManager(QObject *parent = nullptr)
-        : QObject(parent) { updateThemeColors(); }
+    ThemeManager(QObject *parent = nullptr);
 
     /** @brief Construct a theme manager */
     virtual ~ThemeManager(void) = default;

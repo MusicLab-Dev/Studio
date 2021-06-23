@@ -57,6 +57,7 @@
         <file>Assets/Plugins/Equalizer.png</file>
         <file>Assets/Plugins/Delay.png</file>
         <file>Assets/Plugins/Sampler.png</file>
+        <file>Assets/Plugins/Arpeggiator.png</file>
         <file>Templates/SettingsModel.json</file>
         <file>Templates/TEMPLATE_basic</file>
     </qresource>

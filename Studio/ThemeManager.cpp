@@ -33,6 +33,12 @@ static const ThemePack DarkThemePack {
     /* disabled: */ "#3d3d3d"
 };
 
+ThemeManager::ThemeManager(QObject *parent)
+    : QObject(parent)
+{
+    updateThemeColors();
+}
+
 void ThemeManager::setTheme(const Theme theme)
 {
     if (_theme == theme)
