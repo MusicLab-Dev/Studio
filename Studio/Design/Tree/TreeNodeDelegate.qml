@@ -43,7 +43,7 @@ Column {
         Rectangle {
             id: verticalLinkUp
             color: nodeDelegate.parentNode ? nodeDelegate.parentNode.color : "black"
-            width: 2
+            width: 3
             anchors.top: parent.top
             anchors.bottom: nodeInstanceBackground.top
             anchors.horizontalCenter: parent.horizontalCenter
@@ -56,7 +56,7 @@ Column {
             anchors.top: nodeInstanceBackground.bottom
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            width: 2
+            width: 3
             visible: childrenRepeater.count
         }
     }
@@ -68,7 +68,7 @@ Column {
         anchors.right: parent.right
         anchors.leftMargin: childrenRow.leftMargin
         anchors.rightMargin: childrenRow.rightMargin
-        height: 2
+        height: 3
         visible: childrenRepeater.count > 1
         // When visible is not turned off the tree is perfectly symetric (on selection) but I don't know why
     }

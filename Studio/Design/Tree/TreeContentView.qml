@@ -71,8 +71,8 @@ Item {
         id: gestureArea
         anchors.fill: parent
 
-        onXScrolled: incrementXOffset(contentView.xScrollFactor * scroll)
-        onYScrolled: incrementYOffset(contentView.yScrollFactor * scroll)
+        onXScrolled: contentView.incrementXOffset(contentView.xScrollFactor * scroll)
+        onYScrolled: contentView.incrementYOffset(contentView.yScrollFactor * scroll)
 
         onXZoomed: {
             var oldWidth = treeSurface.scaledWidth
@@ -80,8 +80,8 @@ Item {
             var oldXRatio = Math.min(Math.max((xPos - treeSurface.x) / oldWidth, 0), 1) - 0.5
             var oldYRatio = Math.min(Math.max((yPos - treeSurface.y) / oldHeight, 0), 1) - 0.5
             contentView.zoom = Math.min(Math.max(contentView.zoom + contentView.zoomFactor * zoom, 0), 1)
-            incrementXOffset(-oldXRatio * (treeSurface.scaledWidth - oldWidth))
-            incrementYOffset(-oldYRatio * (treeSurface.scaledHeight - oldHeight))
+            contentView.incrementXOffset(-oldXRatio * (treeSurface.scaledWidth - oldWidth))
+            contentView.incrementYOffset(-oldYRatio * (treeSurface.scaledHeight - oldHeight))
         }
     }
 
@@ -92,7 +92,7 @@ Item {
         id: treeSurface
         x: parent.width / 2 - scaledWidth / 2 + contentView.xOffset
         y: parent.height / 2 - scaledHeight / 2 + contentView.yOffset
-        transformOrigin: Item.Center
+        transformOrigin: Item.TopLeft
         scale: contentView.zoomMin + contentView.zoom * contentView.zoomWidth
     }
 
