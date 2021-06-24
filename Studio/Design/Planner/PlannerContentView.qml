@@ -21,6 +21,7 @@ ContentView {
 
     Column {
         id: nodeView
+        y: contentView.yOffset
         width: parent.width
 
         Repeater {

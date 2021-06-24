@@ -28,7 +28,7 @@ Item {
         Rectangle {
             x: -width
             y: parent.height / 2 - 2
-            width: contentView.rowHeaderWidth * (0.25 - 0.125)
+            width: contentView.rowHeaderWidth * (0.2 - 0.1)
             height: 4
             color: nodeDelegate.parentDelegate ? nodeDelegate.parentDelegate.color : "black"
             visible: nodeDelegate.isChild
@@ -39,7 +39,7 @@ Item {
         anchors.top: nodeHeaderBackground.bottom
         anchors.bottom: nodeDelegate.bottom
         anchors.bottomMargin: 5
-        x: contentView.rowHeaderWidth * 0.125
+        x: contentView.rowHeaderWidth * (contentView.isChild ? 0.2 : 0.1)
         width: 4
         color: nodeDelegate.color
     }
