@@ -6,13 +6,27 @@ import "../Default"
 import PluginModelProxy 1.0
 
 Repeater {
+    property real linkBottom: 0
+
     id: nodeAutomations
 
     model: PluginModelProxy {
         sourceModel: nodeDelegate.isSelected && nodeDelegate.node ? nodeDelegate.node.plugin : null
     }
 
+    onCountChanged: {
+        if (!count)
+            linkBottom = Qt.binding(function() { return 0 })
+    }
+
     delegate: Column {
+        property int modelIndex: index
+
+        onModelIndexChanged: {
+            if (modelIndex === nodeAutomations.count - 1)
+                nodeAutomations.linkBottom = Qt.binding(function() { return item.y + item.height / 2 })
+        }
+
         Row {
             Item {
                 id: nodeAutomationHeader
@@ -20,19 +34,19 @@ Repeater {
                 height: contentView.rowHeight
 
                 Rectangle {
-                    x: parent.width * 0.125
-                    y: contentView.rowHeight / 2 - 2
-                    width: parent.width * (0.35 - 0.125)
-                    height: 4
+                    x: nodeDelegate.isChild ? contentView.linkChildOffset : contentView.linkOffset
+                    y: contentView.rowHeight / 2 - contentView.linkHalfThickness
+                    width: contentView.automationOffset - x
+                    height: contentView.linkThickness
                     color: nodeDelegate.color
                 }
 
                 Rectangle {
                     id: nodeAutomationHeaderBackground
-                    x: contentView.rowHeaderWidth * 0.35
-                    y: 5
-                    width: contentView.rowHeaderWidth * 0.65 - 10
-                    height: contentView.rowHeight - 10
+                    x: contentView.automationOffset
+                    y: contentView.headerHalfMargin
+                    width: contentView.rowHeaderWidth - x - contentView.headerMargin
+                    height: contentView.rowHeight - contentView.headerMargin
                     color: nodeDelegate.node ? nodeDelegate.node.color : "black"
                     radius: 15
 

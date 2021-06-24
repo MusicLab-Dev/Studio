@@ -11,13 +11,13 @@ Row {
     Item {
         id: nodePartitionsHeader
         width: contentView.rowHeaderWidth
-        height: contentView.rowHeight * (nodeDelegate.isSelected ? 1.25 : 1)
+        height: nodeDelegate.isSelected ? contentView.selectedRowHeight : contentView.rowHeight
 
         Item {
             id: nodePartitionsBackground
-            x: nodeDelegate.isChild ? contentView.rowHeaderWidth * 0.25 : 10
-            y: 5
-            width: contentView.rowHeaderWidth - x - 10
+            x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
+            y: contentView.headerHalfMargin
+            width: contentView.rowHeaderWidth - x - contentView.headerMargin
             height: nodePartitions.height
 
             MouseArea {

@@ -15,10 +15,10 @@ Row {
 
         Item {
             id: nodePartitionsBackground
-            x: nodeDelegate.isChild ? contentView.rowHeaderWidth * 0.25 : 10
-            y: 5
-            width: contentView.rowHeaderWidth - x - 10
-            height: nodeControlsFlow.height - 10
+            x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
+            y: contentView.headerHalfMargin
+            width: contentView.rowHeaderWidth - x - contentView.headerMargin
+            height: nodeControlsFlow.height - contentView.headerMargin
 
             Rectangle {
                 width: parent.width

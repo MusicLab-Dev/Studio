@@ -6,6 +6,16 @@ import "../Common"
 import NodeListModel 1.0
 
 ContentView {
+    readonly property real linkThickness: 4
+    readonly property real linkHalfThickness: linkThickness / 2
+    readonly property real headerMargin: 10
+    readonly property real headerHalfMargin: headerMargin / 2
+    readonly property real linkOffset: 0.1 * rowHeaderWidth
+    readonly property real linkChildOffset: 0.3 * rowHeaderWidth
+    readonly property real childOffset: 0.2 * rowHeaderWidth
+    readonly property real automationOffset: 0.4 * rowHeaderWidth
+    readonly property real linkChildWidth: childOffset - linkOffset
+    readonly property real selectedRowHeight: rowHeight * 1.25
     property bool showChildren: true
     property NodeListModel nodeList: NodeListModel {
         id: nodeList

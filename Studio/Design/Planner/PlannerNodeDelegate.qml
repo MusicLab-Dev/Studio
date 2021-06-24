@@ -11,6 +11,7 @@ Item {
     property bool showChildren: false
     property var parentDelegate: null
     readonly property bool isChild: parentDelegate !== null
+    property alias nodeHeaderBackground: nodeHeaderBackground
 
     id: nodeDelegate
     width: nodeDelegateCol.width
@@ -18,29 +19,28 @@ Item {
 
     Rectangle {
         id: nodeHeaderBackground
-        x: nodeDelegate.isChild ? contentView.rowHeaderWidth * 0.25 : 10
-        y: 5
-        width: contentView.rowHeaderWidth - x - 10
-        height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodePartitions.height) - 5
+        x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
+        y: contentView.headerHalfMargin
+        width: contentView.rowHeaderWidth - x - contentView.headerMargin
+        height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodePartitions.height) - contentView.headerHalfMargin
         color: Qt.lighter(nodeDelegate.color, nodePartitions.headerPressed ? 1.25 : nodePartitions.headerHovered ? 1.15 : 1)
         radius: 15
 
         Rectangle {
             x: -width
-            y: parent.height / 2 - 2
-            width: contentView.rowHeaderWidth * (0.2 - 0.1)
-            height: 4
+            y: parent.height / 2 - contentView.linkHalfThickness
+            width: contentView.linkChildWidth
+            height: contentView.linkThickness
             color: nodeDelegate.parentDelegate ? nodeDelegate.parentDelegate.color : "black"
             visible: nodeDelegate.isChild
         }
     }
 
     Rectangle {
-        anchors.top: nodeHeaderBackground.bottom
-        anchors.bottom: nodeDelegate.bottom
-        anchors.bottomMargin: 5
-        x: contentView.rowHeaderWidth * (contentView.isChild ? 0.2 : 0.1)
-        width: 4
+        x: nodeDelegate.isChild ? contentView.linkChildOffset : contentView.linkOffset
+        y: nodeHeaderBackground.y + nodeHeaderBackground.height
+        width: contentView.linkThickness
+        height: (nodeChildren.linkBottom !== 0 ? nodeChildren.linkBottom : nodeAutomations.linkBottom) - y
         color: nodeDelegate.color
     }
 
