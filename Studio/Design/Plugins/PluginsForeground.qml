@@ -72,7 +72,7 @@ Rectangle {
             anchors.fill: parent
             spacing: parent.height * 0.04
             ScrollBar.vertical: DefaultScrollBar {
-                color: "#31A8FF"
+                color: themeManager.accentColor
                 opacity: 0.3
                 visible: parent.contentHeight > parent.height
             }

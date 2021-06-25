@@ -20,6 +20,7 @@
         <file>DefaultSpinBox.qml</file>
         <file>DefaultImageButtonDefaultColor.qml</file>
         <file>DefaultMenu.qml</file>
+        <file>DefaultMenuSeparator.qml</file>
         <file>DefaultMenuItem.qml</file>
         <file>DefaultSectionWrapper.qml</file>
         <file>DefaultFileDialog.qml</file>

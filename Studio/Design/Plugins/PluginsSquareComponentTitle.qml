@@ -6,7 +6,7 @@ import '../Default'
 DefaultText {
     width: parent.width
     y: parent.height + height * 0.5
-    color: pluginsSquareComponentArea.containsMouse ? "#31A8FF" : "#FFFFFF"
+    color: pluginsSquareComponentArea.containsMouse ? themeManager.accentColor : "#FFFFFF"
     opacity: pluginsSquareComponentArea.containsMouse ? 1 : 0.7
     font.pointSize: 14
     font.weight: Font.DemiBold

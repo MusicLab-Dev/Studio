@@ -8,22 +8,23 @@ DefaultComboBox {
     readonly property string tooltipSufixText: " " + controlUnitName + "\n" + controlDescription
 
     id: control
-    width: 100
-    height: 30
+    width: 120
+    height: 40
     model: controlRangeNames
+
+    onActivated: controlValue = index
+
+    Component.onCompleted: currentIndex = controlValue
 
     DefaultToolTip { // @todo make this a unique instance
         visible: hovered || pressed
         text: tooltipPrefixText + currentText + tooltipSufixText
+        accentColor: control.accentColor
     }
-
-    Component.onCompleted: currentIndex = controlValue
 
     Binding {
         target: control
         property: "currentIndex"
         value: controlValue
     }
-
-    onActivated: controlValue = index
 }

@@ -14,7 +14,7 @@ Button {
 
         onPaint: {
             var ctx = getContext("2d")
-            ctx.strokeStyle = control.pressed ? "#31A8FF" : control.hovered ? "#1E6FB0" : "#0D2D47"
+            ctx.strokeStyle = control.pressed ? themeManager.accentColor : control.hovered ? "#1E6FB0" : "#0D2D47"
             ctx.lineWidth = control.background.border.width / 2;
             ctx.beginPath();
             ctx.moveTo(0, height / 2);
@@ -38,7 +38,7 @@ Button {
         width: control.width
         height: control.height
         border.width: 4
-        border.color: control.pressed ? "#31A8FF" : control.hovered ? "#1E6FB0" : "#0D2D47"
+        border.color: control.pressed ? themeManager.accentColor : control.hovered ? "#1E6FB0" : "#0D2D47"
         radius: 8
     }
 }

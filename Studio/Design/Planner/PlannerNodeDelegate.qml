@@ -8,6 +8,9 @@ Item {
     property NodeModel node: nodeInstance.instance
     property bool isSelected: false
     property color color: nodeDelegate.node ? nodeDelegate.node.color : "black"
+    property color hoveredColor: Qt.darker(color, 1.8)
+    property color pressedColor: Qt.darker(color, 2.2)
+    property color accentColor: Qt.darker(color, 1.6)
     property bool showChildren: false
     property var parentDelegate: null
     readonly property bool isChild: parentDelegate !== null
@@ -23,8 +26,33 @@ Item {
         y: contentView.headerHalfMargin
         width: contentView.rowHeaderWidth - x - contentView.headerMargin
         height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodePartitions.height) - contentView.headerHalfMargin
-        color: Qt.lighter(nodeDelegate.color, nodePartitions.headerPressed ? 1.25 : nodePartitions.headerHovered ? 1.15 : 1)
         radius: 15
+        color: nodeDelegate.color
+        border.color: nodeHeaderMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.hoveredColor
+        border.width: nodeHeaderMouseArea.containsMouse ? 4 : 0
+
+        MouseArea {
+            id: nodeHeaderMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            onPressed: {
+                if (mouse.button === Qt.RightButton) {
+                    plannerNodeMenu.openMenu(nodeDelegate, nodeDelegate.node)
+                    plannerNodeMenu.x = mouse.x
+                    plannerNodeMenu.y = mouse.y
+                } else {
+                    nodeDelegate.isSelected = !nodeDelegate.isSelected
+                }
+            }
+
+            onPressAndHold: {
+                plannerNodeMenu.openMenu(nodeDelegate, nodeDelegate.node)
+                plannerNodeMenu.x = mouse.x
+                plannerNodeMenu.y = mouse.y
+            }
+        }
 
         Rectangle {
             x: -width

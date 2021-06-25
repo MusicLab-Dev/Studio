@@ -51,6 +51,8 @@ Window {
     }
 
     ThemeManager {
+        property color semiAccentColor: "#338DCF" // @todo add this to ThemeManager
+
         id: themeManager
         theme: ThemeManager.Dark
     }

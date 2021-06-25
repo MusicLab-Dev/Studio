@@ -265,3 +265,15 @@ bool NodeModel::isAParent(NodeModel *node) const noexcept
     }
     return false;
 }
+
+int NodeModel::getChildIndex(NodeModel *node) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &child : _children) {
+        if (child.get() == node)
+            return idx;
+        ++idx;
+    }
+    return -1;
+}

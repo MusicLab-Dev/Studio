@@ -45,4 +45,8 @@ Column {
         width: parent.width
         height: parent.height * 0.15
     }
+
+    PlannerNodeMenu {
+        id: plannerNodeMenu
+    }
 }

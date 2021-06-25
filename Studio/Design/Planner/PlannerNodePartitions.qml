@@ -3,36 +3,48 @@ import QtQuick 2.15
 import "../Default"
 
 Row {
-    property alias headerHovered: nodePartitionsHeaderMouseArea.containsMouse
-    property alias headerPressed: nodePartitionsHeaderMouseArea.containsPress
-
     id: nodePartitions
 
     Item {
         id: nodePartitionsHeader
         width: contentView.rowHeaderWidth
-        height: nodeDelegate.isSelected ? contentView.selectedRowHeight : contentView.rowHeight
+        height: contentView.rowHeight
 
         Item {
             id: nodePartitionsBackground
             x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
             y: contentView.headerHalfMargin
             width: contentView.rowHeaderWidth - x - contentView.headerMargin
-            height: nodePartitions.height
-
-            MouseArea {
-                id: nodePartitionsHeaderMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-
-                onReleased: {
-                    nodeDelegate.isSelected = !nodeDelegate.isSelected
-                }
-            }
+            height: nodePartitionsHeader.height
 
             DefaultText {
-                anchors.centerIn: parent
+                x: 10
+                width: parent.width * 0.5
+                anchors.verticalCenter: parent.verticalCenter
+                horizontalAlignment: Text.AlignLeft
+                fontSizeMode: Text.HorizontalFit
+                font.pointSize: 28
+                color: nodeDelegate.accentColor
                 text: nodeDelegate.node ? nodeDelegate.node.name : "ERROR"
+                wrapMode: Text.Wrap
+            }
+
+            DefaultImageButton {
+                readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
+
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                width: height
+                height: Math.min(nodePartitionsBackground.height / 2, 50)
+                source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
+                showBorder: false
+                scaleFactor: 1
+                colorDefault: nodeDelegate.accentColor
+                colorHovered: nodeDelegate.hoveredColor
+                colorOnPressed: nodeDelegate.pressedColor
+
+                onReleased: nodeDelegate.node.muted = !isMuted
             }
         }
     }

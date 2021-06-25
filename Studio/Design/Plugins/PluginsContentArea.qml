@@ -22,7 +22,7 @@ GridView {
 
     ScrollBar.vertical: DefaultScrollBar {
         id: scrollBar
-        color: "#31A8FF"
+        color: themeManager.accentColor
         opacity: 0.3
         //visible: parent.contentHeight > parent.height
         visible: false

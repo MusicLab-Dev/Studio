@@ -47,14 +47,14 @@ Item {
     readonly property real xZoomWidth: xZoomMax - xZoomMin
 
     // Vertical zoom
-    property real yZoom: 0.1
-    property real yZoomMin: 30
-    property real yZoomMax: 300
+    property real yZoom: 0.05
+    property real yZoomMin: 70
+    property real yZoomMax: 200
     readonly property real yZoomWidth: yZoomMax - yZoomMin
 
     // Zoom gesture
     readonly property real wheelsPerXZoomRange: 5
-    readonly property real wheelsPerYZoomRange: 5
+    readonly property real wheelsPerYZoomRange: 1
     readonly property real xZoomFactor: 1 / (wheelsPerXZoomRange * 360 * 8)
     readonly property real yZoomFactor: 1 / (wheelsPerYZoomRange * 360 * 8)
 

@@ -24,6 +24,7 @@ MouseArea {
     property string shortName: ""
     property string unitName: ""
     property string description: ""
+    property color accentColor: themeManager.accentColor
 
     // States
     property bool tracking: false
@@ -54,11 +55,6 @@ MouseArea {
     width: 40
     height: 40
     hoverEnabled: !tracking
-
-    DefaultToolTip { // @todo make this a unique instance
-        visible: control.tracking || control.containsMouse
-        text: tooltipPrefixText + value.toFixed(digitCount) + tooltipSufixText
-    }
 
     Component.onCompleted: valueRatio = (value - minimumValue) / rangeValue
 
@@ -92,19 +88,25 @@ MouseArea {
         }
     }
 
+    DefaultToolTip { // @todo make this a unique instance
+        visible: control.tracking || control.containsMouse
+        text: tooltipPrefixText + value.toFixed(digitCount) + tooltipSufixText
+        accentColor: control.accentColor
+    }
+
     Rectangle {
         id: controlCircle
         anchors.fill: parent
         color: "transparent"
         radius: width / 2
-        border.color: control.containsMouse || control.tracking ? themeManager.accentColor : "white"
+        border.color: control.containsMouse || control.tracking ? control.accentColor : "white"
         border.width: 1
 
         DefaultText {
             text: control.shortName
             anchors.fill: parent
             fontSizeMode: Text.Fit
-            color: control.tracking ? themeManager.accentColor : "white"
+            color: control.tracking ? control.accentColor : "white"
         }
 
         Item {

@@ -21,7 +21,7 @@ Button {
         height: control.height * imageFactor
         anchors.centerIn: control
         source: "qrc:/Assets/MenuButton.png"
-        color: control.pressed ? "#1A6DAA" : control.hovered ? "#338DCF" : "#31A8FF"
+        color: control.pressed ? "#1A6DAA" : control.hovered ? themeManager.semiAccentColor : themeManager.accentColor
     }
 }
 
