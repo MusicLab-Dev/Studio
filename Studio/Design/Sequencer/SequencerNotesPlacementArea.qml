@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import Scheduler 1.0
 import PartitionModel 1.0
 import AudioAPI 1.0
+import ActionsManager 1.0
 
 import ".."
 
@@ -150,8 +151,17 @@ MouseArea {
                 selectionBeatPrecisionTo = realMouseBeatPrecision
                 selectionKeyFrom = mouseKey
                 selectionKeyTo = mouseKey
-            } else if (noteIndex !== -1)
+            } else if (noteIndex !== -1) {
+                var note = partition.getNote(noteIndex)
+                actionsManager.push(ActionsManager.Action.REMOVE_NOTE,
+                                    [partition,
+                                     note.range.from,
+                                     note.range.to,
+                                     note.key,
+                                     note.velocity,
+                                     note.tuning])
                 partition.remove(noteIndex)
+            }
             return
         }
 
@@ -198,6 +208,7 @@ MouseArea {
                 contentView.placementBeatPrecisionTo = mouseBeatPrecision + contentView.placementBeatPrecisionLastWidth
                 contentView.placementBeatPrecisionFrom = mouseBeatPrecision
                 contentView.placementKey = mouseKey
+
             }
         // Left click on note -> edit
         } else {
@@ -239,6 +250,14 @@ MouseArea {
             contentView.placementBeatPrecisionTo = beatPrecisionRange.to
             contentView.placementBeatPrecisionMouseOffset = mouseBeatPrecision - beatPrecisionRange.from
             contentView.placementKey = mouseKey
+
+            actionsManager.push(ActionsManager.Action.MOVE_NOTE,
+                                [partition,
+                                 contentView.placementBeatPrecisionFrom,
+                                 contentView.placementBeatPrecisionTo,
+                                 contentView.placementKey,
+                                 AudioAPI.velocityMax,
+                                 0])
         }
 
         // Add an on the fly note if the sequencer isn't playing
@@ -318,14 +337,22 @@ MouseArea {
             if (brushBegin >= 0 && partition.findOverlap(brushKey, AudioAPI.beatRange(brushBegin + 1, brushBegin + contentView.placementBeatPrecisionLastWidth - 1)) === -1) {
                 if (!sequencerView.player.isPlaying)
                     addOnTheFly(brushKey)
+                var end = brushBegin + contentView.placementBeatPrecisionLastWidth
                 partition.add(
                     AudioAPI.note(
-                        AudioAPI.beatRange(brushBegin, brushBegin + contentView.placementBeatPrecisionLastWidth),
+                        AudioAPI.beatRange(brushBegin, end),
                         brushKey,
                         AudioAPI.velocityMax,
                         0
                     )
                 )
+                actionsManager.push(ActionsManager.Action.ADD_NOTE,
+                                    [partition,
+                                     brushBegin,
+                                     end,
+                                     brushKey,
+                                     AudioAPI.velocityMax,
+                                     0])
             }
             break
         case SequencerNotesPlacementArea.Mode.Select:
@@ -339,6 +366,7 @@ MouseArea {
     }
 
     onReleased: {
+        console.debug(mode)
         switch (mode) {
         case SequencerNotesPlacementArea.Mode.Move:
         case SequencerNotesPlacementArea.Mode.LeftResize:
@@ -353,6 +381,13 @@ MouseArea {
                 )
             )
             contentView.placementBeatPrecisionMouseOffset = 0
+            actionsManager.push(ActionsManager.Action.ADD_NOTE,
+                                [partition,
+                                 contentView.placementBeatPrecisionFrom,
+                                 contentView.placementBeatPrecisionTo,
+                                 contentView.placementKey,
+                                 AudioAPI.velocityMax,
+                                 0])
             break
         case SequencerNotesPlacementArea.Mode.Select:
             // Select notes

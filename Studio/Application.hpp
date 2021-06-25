@@ -26,7 +26,6 @@ class Application : public QObject
     // Q_PROPERTY(DevicesModel *device READ device NOTIFY deviceChanged)
     // Q_PROPERTY(PluginTableModel *plugins READ plugins NOTIFY pluginsChanged)
     Q_PROPERTY(Scheduler *scheduler READ scheduler NOTIFY schedulerChanged)
-    Q_PROPERTY(ActionsManager *ActionsManager READ actionsManager NOTIFY actionsManagerChanged)
 
 public:
     static constexpr std::string_view DefaultProjectName = "My Project";
@@ -54,9 +53,6 @@ public:
 
     /** @brief Get the scheduler */
     [[nodiscard]] Scheduler *scheduler(void) noexcept { return &_scheduler; }
-
-    /** @brief Get the scheduler */
-    [[nodiscard]] ActionsManager *actionsManager(void) noexcept { return &_actionsManager; }
 
 public slots:
     /** @brief Get the list of devices able to output audio */
@@ -90,7 +86,6 @@ private:
     SettingsListModel _settings;
     Audio::ProjectPtr _backendProject;
     Scheduler _scheduler;
-    ActionsManager _actionsManager;
     Project _project;
     // std::unique_ptr<PluginTableModel> _plugins;
 };

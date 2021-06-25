@@ -165,6 +165,10 @@ Rectangle {
                 }
 
                 ArrowNextPrev {
+                    prev.onPressed: actionsManager.undo()
+                    prev.enabled: true
+                    next.onPressed: actionsManager.redo()
+
                     Layout.preferredHeight: parent.height
                     Layout.preferredWidth: parent.width * 0.25
                     Layout.alignment: Qt.AlignHCenter

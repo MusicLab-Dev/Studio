@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import NodeModel 1.0
 import PartitionModel 1.0
 import PluginTableModel 1.0
+import ActionsManager 1.0
 
 Column {
     enum EditMode {
@@ -175,5 +176,9 @@ Column {
         id: sequencerViewFooter
         width: parent.width
         height: parent.height * 0.15
+    }
+
+    ActionsManager {
+        id: actionsManager
     }
 }

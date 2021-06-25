@@ -5,6 +5,9 @@ import "../Default/"
 import "../Common/"
 
 RowLayout {
+    property alias prev: prev
+    property alias next: next
+
     spacing: 0
 
     Item {
@@ -12,6 +15,8 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.5
 
         DefaultImageButton {
+            id: prev
+
             source: "qrc:/Assets/Previous.png"
             height: width
             width: parent.width * 0.9
@@ -26,6 +31,8 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.5
 
         DefaultImageButton {
+            id: next
+
             source: "qrc:/Assets/Next.png"
             height: width
             width: parent.width * 0.9

@@ -12,7 +12,6 @@ Application::Application(QObject *parent)
         _settings(this),
         _backendProject(std::make_shared<Audio::Project>(Core::FlatString(DefaultProjectName))),
         _scheduler(Audio::ProjectPtr(_backendProject), this),
-        _actionsManager(this),
         _project(_backendProject.get(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
