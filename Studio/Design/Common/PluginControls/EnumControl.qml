@@ -12,8 +12,10 @@ DefaultComboBox {
     height: 30
     model: controlRangeNames
 
-    ToolTip.visible: hovered || pressed
-    ToolTip.text: tooltipPrefixText + currentText + tooltipSufixText
+    DefaultToolTip { // @todo make this a unique instance
+        visible: hovered || pressed
+        text: tooltipPrefixText + currentText + tooltipSufixText
+    }
 
     Component.onCompleted: currentIndex = controlValue
 

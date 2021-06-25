@@ -41,6 +41,22 @@ Rectangle {
         selectedModule = -modulesContent.staticTabCount
     }
 
+    function addNewPlanner(node) {
+        app.plannerNodeCache = node
+        addModule({
+            path: "qrc:/Planner/PlannerView.qml",
+            callback: plannerNodeCallback
+        })
+    }
+
+    function addNewPlannerWithMultipleNodes(nodes) {
+        app.plannerNodesCache = nodes
+        addModule({
+            path: "qrc:/Planner/PlannerView.qml",
+            callback: plannerMultipleNodesCallback
+        })
+    }
+
     function addNewSequencer() {
         addModule({
             path: "qrc:/Sequencer/SequencerView.qml",
@@ -63,7 +79,10 @@ Rectangle {
 
     function onNodeDeleted(targetNode) {
         app.scheduler.onNodeDeleted(targetNode)
-        for (var i = 0; i < modules.count;) {
+        var i = -modulesContent.staticTabCount;
+        for (; i < 0; ++i)
+            getModule(i).onNodeDeleted(targetNode)
+        for (i = 0; i < modules.count;) {
             if (!getModule(i).onNodeDeleted(targetNode))
                 ++i
             else if (i < selectedModule) {
@@ -77,7 +96,10 @@ Rectangle {
 
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
         app.scheduler.onNodePartitionDeleted(targetNode, targetPartitionIndex)
-        for (var i = 0; i < modules.count;) {
+        var i = -modulesContent.staticTabCount;
+        for (; i < 0; ++i)
+            getModule(i).onNodePartitionDeleted(targetNode, targetPartitionIndex)
+        for (i = 0; i < modules.count;) {
             if (!getModule(i).onNodePartitionDeleted(targetNode, targetPartitionIndex))
                 ++i
             else if (i < selectedModule) {
@@ -125,6 +147,18 @@ Rectangle {
         property var target: null
         id: sequencerNewPartitionNodeCallback
         onTriggered: target.loadNewPartitionNode()
+    }
+
+    Action {
+        property var target: null
+        id: plannerNodeCallback
+        onTriggered: target.loadNode()
+    }
+
+    Action {
+        property var target: null
+        id: plannerMultipleNodesCallback
+        onTriggered: target.loadMultipleNodes()
     }
 
     ListModel {

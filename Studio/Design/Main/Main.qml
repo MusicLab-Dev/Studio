@@ -43,6 +43,8 @@ Window {
     Application {
         property NodeModel partitionNodeCache: null
         property int partitionIndexCache: -1
+        property NodeModel plannerNodeCache: null
+        property var plannerNodesCache: []
         property var currentPlayer: null
 
         id: app

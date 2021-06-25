@@ -12,8 +12,10 @@ Rectangle {
     border.width: mouseArea.containsPress ? 3 : mouseArea.containsMouse ? 2 : 1
     border.color: "grey"
 
-    ToolTip.visible: mouseArea.containsMouse
-    ToolTip.text: controlTitle + ": " + (controlValue !== 0) + "\n" + controlDescription
+    DefaultToolTip { // @todo make this a unique instance
+        visible: mouseArea.containsMouse
+        text: controlTitle + ": " + (controlValue !== 0) + "\n" + controlDescription
+    }
 
     Binding {
         target: image
