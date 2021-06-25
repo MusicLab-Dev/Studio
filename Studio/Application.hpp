@@ -8,6 +8,7 @@
 #include <memory>
 
 #include <QObject>
+#include <QPoint>
 
 #include "Project.hpp"
 // #include "DevicesModel.hpp"
@@ -59,6 +60,12 @@ public slots:
 
     /** @brief Get the list of devices able to take audio as input */
     // QStringList selectOutputDevice(const QString &device) const noexcept;
+
+    /** @brief Set the mouse cursor visibility */
+    void setCursorVisibility(bool visible) const noexcept;
+
+    /** @brief Set the mouse cursor position */
+    void setCursorPos(const QPoint &pos) const noexcept;
 
 signals:
     /** @brief Notify that the project settings manager has changed */

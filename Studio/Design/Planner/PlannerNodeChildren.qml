@@ -22,7 +22,7 @@ Repeater {
             item.parentDelegate = nodeDelegate
             if (index === nodeChildren.count - 1)
                 nodeChildren.linkBottom = Qt.binding(function () {
-                    return item.y + item.nodeHeaderBackground.y + item.nodeHeaderBackground.height / 2
+                    return y + item.nodeHeaderBackground.y + item.nodeHeaderBackground.height / 2
                 })
         }
     }

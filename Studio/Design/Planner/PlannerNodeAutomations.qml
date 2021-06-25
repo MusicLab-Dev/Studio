@@ -7,10 +7,12 @@ import PluginModelProxy 1.0
 
 Repeater {
     property real linkBottom: 0
+    property alias pluginProxy: pluginProxy
 
     id: nodeAutomations
 
     model: PluginModelProxy {
+        id: pluginProxy
         sourceModel: nodeDelegate.isSelected && nodeDelegate.node ? nodeDelegate.node.plugin : null
     }
 
@@ -24,7 +26,7 @@ Repeater {
 
         onModelIndexChanged: {
             if (modelIndex === nodeAutomations.count - 1)
-                nodeAutomations.linkBottom = Qt.binding(function() { return item.y + item.height / 2 })
+                nodeAutomations.linkBottom = Qt.binding(function() { return y + height / 2 })
         }
 
         Row {
