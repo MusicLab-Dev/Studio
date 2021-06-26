@@ -36,7 +36,7 @@ Row {
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
                 width: height
-                height: Math.min(nodePartitionsBackground.height / 2, 50)
+                height: Math.min(parent.height / 2, 50)
                 source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
                 showBorder: false
                 scaleFactor: 1

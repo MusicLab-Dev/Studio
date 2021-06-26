@@ -70,6 +70,24 @@ Repeater {
                         text: controlTitle
                         wrapMode: Text.Wrap
                     }
+
+                    DefaultImageButton {
+                        readonly property bool isMuted: false //nodeDelegate.node ? nodeDelegate.node.muted : false
+
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: height
+                        height: Math.min(parent.height / 2, 50)
+                        source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
+                        showBorder: false
+                        scaleFactor: 1
+                        colorDefault: nodeDelegate.accentColor
+                        colorHovered: nodeDelegate.hoveredColor
+                        colorOnPressed: nodeDelegate.pressedColor
+
+                        // onReleased: nodeDelegate.node.muted = !isMuted
+                    }
                 }
             }
 
