@@ -12,7 +12,7 @@
 
 #include <Audio/IPlugin.hpp>
 
-#include "Control.hpp"
+#include "ControlEvent.hpp"
 
 class NodeModel;
 

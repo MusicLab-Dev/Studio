@@ -13,7 +13,7 @@ Rectangle {
     readonly property real tabHeight: 35
     readonly property bool allTabsInOneRow: tabRows === 1
     property int selectedModule: -staticTabCount
-    readonly property int staticTabCount: 2
+    readonly property int staticTabCount: 1
     property bool expanded: false
 
     onAllTabsInOneRowChanged: {
@@ -40,13 +40,10 @@ Rectangle {
         height: modulesTabs.tabHeight * modulesTabs.tabRows
 
         Row {
-            ModulesStaticTab {
-                id: treeTab
-                tabIndex: -2
-            }
+            id: staticTabRow
 
             ModulesStaticTab {
-                id: playlistTab
+                id: treeTab
                 tabIndex: -1
             }
         }

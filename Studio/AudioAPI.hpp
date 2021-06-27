@@ -9,7 +9,7 @@
 #include <QVariant>
 
 #include "Point.hpp"
-#include "Control.hpp"
+#include "ControlEvent.hpp"
 #include "Note.hpp"
 
 /** @brief AudioAPI class */

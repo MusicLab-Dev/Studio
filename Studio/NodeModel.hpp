@@ -15,7 +15,7 @@
 #include <Audio/Node.hpp>
 
 #include "PartitionsModel.hpp"
-#include "ControlsModel.hpp"
+#include "AutomationsModel.hpp"
 #include "PluginModel.hpp"
 
 class NodeModel;
@@ -42,7 +42,7 @@ class NodeModel : public QAbstractListModel
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(PartitionsModel *partitions READ partitions NOTIFY partitionsChanged)
-    Q_PROPERTY(ControlsModel *controls READ controls NOTIFY controlsChanged)
+    Q_PROPERTY(AutomationsModel *automations READ automations NOTIFY automationsChanged)
     Q_PROPERTY(PluginModel *plugin READ plugin NOTIFY pluginChanged)
     Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
 
@@ -53,8 +53,8 @@ public:
     /** @brief Pointer to a partition model */
     using PartitionsPtr = Core::UniqueAlloc<PartitionsModel>;
 
-    /** @brief Pointer to a controls model */
-    using ControlsPtr = Core::UniqueAlloc<ControlsModel>;
+    /** @brief Pointer to a automations model */
+    using AutomationsPtr = Core::UniqueAlloc<AutomationsModel>;
 
     /** @brief Pointer to a plugin model */
     using PluginPtr = Core::UniqueAlloc<PluginModel>;
@@ -119,10 +119,10 @@ public:
     /** @brief Get the partitions model */
     [[nodiscard]] PartitionsModel *partitions(void) noexcept { return _partitions.get(); }
 
-    /** @brief Get the controls model */
-    [[nodiscard]] ControlsModel *controls(void) noexcept { return _controls.get(); }
+    /** @brief Get the automations model */
+    [[nodiscard]] AutomationsModel *automations(void) noexcept { return _automations.get(); }
 
-    /** @brief Get the controls model */
+    /** @brief Get the plugin model */
     [[nodiscard]] PluginModel *plugin(void) noexcept { return _plugin.get(); }
 
     /** @brief Get the node children */
@@ -208,8 +208,8 @@ signals:
     /** @brief Notify that partitions property has changed */
     void partitionsChanged(void);
 
-    /** @brief Notify that controls property has changed */
-    void controlsChanged(void);
+    /** @brief Notify that automations property has changed */
+    void automationsChanged(void);
 
     /** @brief Notify that plugin property has changed */
     void pluginChanged(void);
@@ -224,7 +224,7 @@ private:
     Audio::Node *_data { nullptr };
     Core::FlatVector<NodePtr> _children {};
     PartitionsPtr _partitions { nullptr };
-    ControlsPtr _controls { nullptr };
+    AutomationsPtr _automations { nullptr };
     PluginPtr _plugin { nullptr };
     Beat _latestInstance { 0u };
 

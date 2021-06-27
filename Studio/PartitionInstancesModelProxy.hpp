@@ -7,9 +7,9 @@
 
 #include <QSortFilterProxyModel>
 
-#include "InstancesModel.hpp"
+#include "PartitionInstancesModel.hpp"
 
-class InstancesModelProxy : public QSortFilterProxyModel
+class PartitionInstancesModelProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
 
@@ -17,10 +17,10 @@ class InstancesModelProxy : public QSortFilterProxyModel
 
 public:
     /** @brief Constructor */
-    InstancesModelProxy(QObject *parent = nullptr) : QSortFilterProxyModel(parent) {}
+    PartitionInstancesModelProxy(QObject *parent = nullptr) : QSortFilterProxyModel(parent) {}
 
     /** @brief Destructor */
-    ~InstancesModelProxy(void) override = default;
+    ~PartitionInstancesModelProxy(void) override = default;
 
     /** @brief Get / Set the range property */
     [[nodiscard]] const BeatRange &range(void) noexcept { return _range; }
@@ -59,10 +59,10 @@ private:
     /** @brief Reimplementation of the filter virtual function */
     [[nodiscard]] bool filterAcceptsRow(int sourceRow, const QModelIndex &) const override
     {
-        auto *source = reinterpret_cast<const InstancesModel *>(sourceModel());
+        auto *source = reinterpret_cast<const PartitionInstancesModel *>(sourceModel());
         if (!source)
             return false;
-        const auto &rowRange = source->get(sourceRow);
-        return rowRange.from <= _filterRange.to && rowRange.to >= _filterRange.from;
+        const auto &instance = source->get(sourceRow);
+        return instance.range.from <= _filterRange.to && instance.range.to >= _filterRange.from;
     }
 };

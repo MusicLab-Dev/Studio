@@ -7,10 +7,12 @@
 
 #include <QAbstractListModel>
 
-#include "Base.hpp"
+#include "PartitionInstance.hpp"
+
+class PartitionsModel;
 
 /** @brief The studio is the instance running the application process */
-class InstancesModel : public QAbstractListModel
+class PartitionInstancesModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -19,15 +21,22 @@ class InstancesModel : public QAbstractListModel
 public:
     /** @brief Roles of each instance */
     enum class Roles {
-        From = Qt::UserRole + 1,
-        To
+        PartitionIndex = Qt::UserRole + 1,
+        Offset,
+        Range
     };
 
     /** @brief Default constructor */
-    explicit InstancesModel(Audio::BeatRanges *beatRanges, QObject *parent = nullptr) noexcept;
+    explicit PartitionInstancesModel(Audio::PartitionInstances *instances, QObject *parent = nullptr) noexcept;
 
     /** @brief Virtual destructor */
-    ~InstancesModel(void) noexcept override = default;
+    ~PartitionInstancesModel(void) noexcept override = default;
+
+
+    /** @brief Get the parent partitions if it exists */
+    [[nodiscard]] PartitionsModel *parentPartitions(void) noexcept
+        { return reinterpret_cast<PartitionsModel *>(parent()); }
+
 
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
@@ -45,24 +54,24 @@ public:
 
 
     /** @brief Get instance at index */
-    [[nodiscard]] const BeatRange &get(const int idx) const noexcept_ndebug;
+    [[nodiscard]] const PartitionInstance &get(const int idx) const noexcept_ndebug;
 
     /** @brief Update internal data pointer if it changed */
-    void updateInternal(Audio::BeatRanges *data);
+    void updateInternal(Audio::PartitionInstances *data);
 
     /** @brief Get the audio instances */
-    [[nodiscard]] Audio::BeatRanges *audioInstances(void) noexcept { return _data; }
-    [[nodiscard]] const Audio::BeatRanges *audioInstances(void) const noexcept { return _data; }
+    [[nodiscard]] Audio::PartitionInstances *audioInstances(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::PartitionInstances *audioInstances(void) const noexcept { return _data; }
 
 public slots:
     /** @brief Add instance */
-    bool add(const BeatRange &range);
+    bool add(const PartitionInstance &instance);
 
     /** @brief Find an instance in the list using a single beat point */
     int find(const quint32 beat) const noexcept;
 
     /** @brief Find an instance in the list using a two beat points */
-    int findOverlap(const BeatRange &range) const noexcept;
+    int findOverlap(const PartitionInstance &instance) const noexcept;
 
     /** @brief Remove instance at index */
     bool remove(const int index);
@@ -71,7 +80,7 @@ public slots:
     QVariant getInstance(const int index) const { return QVariant::fromValue(get(index)); }
 
     /** @brief Set instance at index */
-    void set(const int index, const BeatRange &range);
+    void set(const int index, const PartitionInstance &instance);
 
     /** @brief Add a group of notes */
     bool addRange(const QVariantList &notes);
@@ -80,13 +89,13 @@ public slots:
     bool removeRange(const QVariantList &indexes);
 
     /** @brief Select all notes within a specified range (returns indexes) */
-    QVariantList select(const BeatRange &range);
+    QVariantList select(const PartitionInstance &instance);
 
 signals:
     /** @brief Notify that the latest instance of the list has changed */
     void latestInstanceChanged(void);
 
 private:
-    Audio::BeatRanges *_data { nullptr };
+    Audio::PartitionInstances *_data { nullptr };
     Beat _latestInstance { 0u };
 };

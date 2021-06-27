@@ -11,9 +11,10 @@
 #include "NodeModel.hpp"
 
 PartitionsModel::PartitionsModel(Audio::Partitions *partitions, NodeModel *parent) noexcept
-    : QAbstractListModel(parent), _data(partitions)
+    : QAbstractListModel(parent), _data(partitions), _instances(&partitions->headerCustomType().instances, this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
+    _instances.connect(&_instances, &PartitionInstancesModel::latestInstanceChanged, this, &PartitionsModel::processLatestInstanceChange);
     _partitions.reserve(_data->size());
     for (auto &partition : *_data)
         _partitions.push(&partition, this);
@@ -29,7 +30,7 @@ QHash<int, QByteArray> PartitionsModel::roleNames(void) const noexcept
 QVariant PartitionsModel::data(const QModelIndex &index, int role) const
 {
     coreAssert(index.row() >= 0 && index.row() < count(),
-        throw std::range_error("PartitionsModel::get: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
+        throw std::range_error("PartitionsModel::data: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
     switch (static_cast<PartitionsModel::Roles>(role)) {
     case Roles::Partition:
         return QVariant::fromValue(PartitionWrapper { const_cast<PartitionModel *>(get(index.row())) });
@@ -38,23 +39,15 @@ QVariant PartitionsModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void PartitionsModel::processLatestInstanceChange(const Beat oldInstance, const Beat newInstance)
+void PartitionsModel::processLatestInstanceChange(void)
 {
+    const Beat newInstance = _instances.count() ? _instances.audioInstances()->back().range.to : 0u;
+
     if (_latestInstance < newInstance) {
         const auto oldLatest = _latestInstance;
         _latestInstance = newInstance;
         emit latestInstanceChanged();
         parentNode()->processLatestInstanceChange(oldLatest, _latestInstance);
-    } else if (_latestInstance == oldInstance) {
-        Beat max = 0;
-        for (const auto &p : _partitions) {
-            const auto &instances = *p->instances().audioInstances();
-            if (!instances.empty() && instances.back().to > max)
-                max = instances.back().to;
-        }
-        _latestInstance = max;
-        emit latestInstanceChanged();
-        parentNode()->processLatestInstanceChange(oldInstance, _latestInstance);
     }
 }
 
@@ -67,17 +60,15 @@ const PartitionModel *PartitionsModel::get(const int index) const noexcept_ndebu
 
 bool PartitionsModel::add(void)
 {
-    auto name = getAvailablePartitionName();
-
     return Models::AddProtectedEvent(
-        [this, name = std::move(name)](void) mutable {
-           _data->push().setName(std::move(name));
+        [this](void) mutable {
+           _data->push();
         },
-        [this] {
+        [this, name = getAvailablePartitionName()] {
             const auto partitionsData = _partitions.data();
             const auto idx = _partitions.size();
             beginInsertRows(QModelIndex(), idx, idx);
-            _partitions.push(&_data->at(idx), this);
+            _partitions.push(&_data->at(idx), this, name);
             endInsertRows();
             if (_partitions.data() != partitionsData)
                 refreshPartitions();
@@ -167,13 +158,13 @@ void PartitionsModel::refreshPartitions(void)
     Models::RefreshModels(this, _partitions, *_data, this);
 }
 
-Core::FlatString PartitionsModel::getAvailablePartitionName(void) const noexcept
+QString PartitionsModel::getAvailablePartitionName(void) const noexcept
 {
-    std::string name;
+    QString name;
     auto size = _partitions.size();
     while (true) {
         bool unique = true;
-        name = "Partition " + std::to_string(size);
+        name = "Partition " + QString::number(size);
         for (auto &partition : *_data) {
             if (partition.name() == name) {
                 unique = false;

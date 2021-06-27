@@ -8,35 +8,38 @@
 #include <QHash>
 
 #include "Models.hpp"
-#include "InstancesModel.hpp"
+#include "PartitionInstancesModel.hpp"
 
-InstancesModel::InstancesModel(Audio::BeatRanges *beatRanges, QObject *parent) noexcept
-    : QAbstractListModel(parent), _data(beatRanges)
+PartitionInstancesModel::PartitionInstancesModel(Audio::PartitionInstances *data, QObject *parent) noexcept
+    : QAbstractListModel(parent), _data(data)
 {
 }
 
-QHash<int, QByteArray> InstancesModel::roleNames(void) const noexcept
+QHash<int, QByteArray> PartitionInstancesModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
-        { static_cast<int>(Roles::From), "from" },
-        { static_cast<int>(Roles::To), "to" }
+        { static_cast<int>(Roles::PartitionIndex), "partitionIndex" },
+        { static_cast<int>(Roles::Offset), "offset" },
+        { static_cast<int>(Roles::Range), "range" }
     };
 }
 
-QVariant InstancesModel::data(const QModelIndex &index, int role) const
+QVariant PartitionInstancesModel::data(const QModelIndex &index, int role) const
 {
     const auto &child = get(index.row());
     switch (static_cast<Roles>(role)) {
-    case Roles::From:
-        return child.from;
-    case Roles::To:
-        return child.to;
+    case Roles::PartitionIndex:
+        return child.partitionIndex;
+    case Roles::Offset:
+        return child.offset;
+    case Roles::Range:
+        return QVariant::fromValue(BeatRange(child.range));
     default:
         return QVariant();
     }
 }
 
-void InstancesModel::updateInternal(Audio::BeatRanges *data)
+void PartitionInstancesModel::updateInternal(Audio::PartitionInstances *data)
 {
     if (_data == data)
         return;
@@ -45,18 +48,18 @@ void InstancesModel::updateInternal(Audio::BeatRanges *data)
     endResetModel();
 }
 
-bool InstancesModel::add(const BeatRange &range)
+bool PartitionInstancesModel::add(const PartitionInstance &instance)
 {
-    const auto idx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(range)));
+    const auto idx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(instance)));
 
     return Models::AddProtectedEvent(
-        [this, range] {
-            _data->insert(range);
+        [this, instance] {
+            _data->insert(instance);
         },
         [this, idx] {
             beginInsertRows(QModelIndex(), idx, idx);
             endInsertRows();
-            const auto last = _data->back().to;
+            const auto last = _data->back().range.to;
             if (last > _latestInstance) {
                 _latestInstance = last;
                 emit latestInstanceChanged();
@@ -65,26 +68,12 @@ bool InstancesModel::add(const BeatRange &range)
     );
 }
 
-int InstancesModel::find(const Beat beat) const noexcept
-{
-    int idx = 0;
-
-    for (const auto &range : *_data) {
-        if (beat < range.from || beat > range.to) {
-            ++idx;
-            continue;
-        }
-        return idx;
-    }
-    return -1;
-}
-
-int InstancesModel::findOverlap(const BeatRange &range) const noexcept
+int PartitionInstancesModel::find(const Beat beat) const noexcept
 {
     int idx = 0;
 
     for (const auto &instance : *_data) {
-        if (range.to < instance.from || instance.from > instance.to) {
+        if (beat < instance.range.from || beat > instance.range.to) {
             ++idx;
             continue;
         }
@@ -93,10 +82,24 @@ int InstancesModel::findOverlap(const BeatRange &range) const noexcept
     return -1;
 }
 
-bool InstancesModel::remove(const int idx)
+int PartitionInstancesModel::findOverlap(const PartitionInstance &instance) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &elem : *_data) {
+        if (instance.range.to < elem.range.from || instance.range.from > elem.range.to) {
+            ++idx;
+            continue;
+        }
+        return idx;
+    }
+    return -1;
+}
+
+bool PartitionInstancesModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
-        throw std::range_error("InstancesModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+        throw std::range_error("PartitionInstancesModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     return Models::AddProtectedEvent(
         [this, idx] {
             beginRemoveRows(QModelIndex(), idx, idx);
@@ -105,36 +108,36 @@ bool InstancesModel::remove(const int idx)
         [this] {
             endRemoveRows();
             if (!_data->empty()) {
-                const auto last = _data->back().to;
+                const auto last = _data->back().range.to;
                 if (last > _latestInstance) {
                     _latestInstance = last;
                     emit latestInstanceChanged();
                 }
             } else if (_latestInstance != 0u) {
-                _latestInstance = 0;
+                _latestInstance = 0u;
                 emit latestInstanceChanged();
             }
         }
     );
 }
 
-const BeatRange &InstancesModel::get(const int idx) const noexcept_ndebug
+const PartitionInstance &PartitionInstancesModel::get(const int idx) const noexcept_ndebug
 {
     coreAssert(idx >= 0 && idx < count(),
-        throw std::range_error("InstancesModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+        throw std::range_error("PartitionInstancesModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
 
-    return reinterpret_cast<const BeatRange &>(_data->at(idx));
+    return reinterpret_cast<const PartitionInstance &>(_data->at(idx));
 }
 
-void InstancesModel::set(const int idx, const BeatRange &range)
+void PartitionInstancesModel::set(const int idx, const PartitionInstance &instance)
 {
-    auto newIdx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(range)));
+    auto newIdx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(instance)));
 
     coreAssert(idx >= 0 && idx < count(),
-        throw std::range_error("InstancesModel::move: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+        throw std::range_error("PartitionInstancesModel::move: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     Scheduler::Get()->addEvent(
-        [this, range, idx] {
-            _data->assign(idx, range);
+        [this, instance, idx] {
+            _data->assign(idx, instance);
         },
         [this, idx, newIdx] {
             if (idx != newIdx) {
@@ -143,7 +146,7 @@ void InstancesModel::set(const int idx, const BeatRange &range)
             } else {
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);
-                const auto last = _data->back().to;
+                const auto last = _data->back().range.to;
                 if (last > _latestInstance) {
                     _latestInstance = last;
                     emit latestInstanceChanged();
@@ -153,16 +156,16 @@ void InstancesModel::set(const int idx, const BeatRange &range)
     );
 }
 
-bool InstancesModel::addRange(const QVariantList &instanceList)
+bool PartitionInstancesModel::addRange(const QVariantList &instanceList)
 {
     if (instanceList.empty())
         return true;
     else if (instanceList.size() == 1)
-        return add(instanceList.front().value<BeatRange>());
-    QVector<BeatRange> instances;
+        return add(instanceList.front().value<PartitionInstance>());
+    QVector<PartitionInstance> instances;
     instances.reserve(instanceList.size());
     for (const auto &instance : instanceList)
-        instances.append(instance.value<BeatRange>());
+        instances.append(instance.value<PartitionInstance>());
     return Models::AddProtectedEvent(
         [this, instances] {
             _data->insert(instances.begin(), instances.end());
@@ -170,7 +173,7 @@ bool InstancesModel::addRange(const QVariantList &instanceList)
         [this] {
             beginResetModel();
             endResetModel();
-            const auto last = _data->back().to;
+            const auto last = _data->back().range.to;
             if (last > _latestInstance) {
                 _latestInstance = last;
                 emit latestInstanceChanged();
@@ -179,7 +182,7 @@ bool InstancesModel::addRange(const QVariantList &instanceList)
     );
 }
 
-bool InstancesModel::removeRange(const QVariantList &indexes)
+bool PartitionInstancesModel::removeRange(const QVariantList &indexes)
 {
     if (indexes.empty())
         return true;
@@ -205,7 +208,7 @@ bool InstancesModel::removeRange(const QVariantList &indexes)
         [this] {
             beginResetModel();
             endResetModel();
-            const Beat last = _data->empty() ? 0u : _data->back().to;
+            const Beat last = _data->empty() ? 0u : _data->back().range.to;
             if (last > _latestInstance) {
                 _latestInstance = last;
                 emit latestInstanceChanged();
@@ -214,13 +217,13 @@ bool InstancesModel::removeRange(const QVariantList &indexes)
     );
 }
 
-QVariantList InstancesModel::select(const BeatRange &range)
+QVariantList PartitionInstancesModel::select(const PartitionInstance &instance)
 {
     int idx = 0;
     QVariantList indexes;
 
-    for (const auto &instance : *_data) {
-        if (instance.from <= range.to && instance.to >= range.from)
+    for (const auto &elem : *_data) {
+        if (elem.range.from <= instance.range.to && elem.range.to >= instance.range.from)
             indexes.append(idx);
         ++idx;
     }

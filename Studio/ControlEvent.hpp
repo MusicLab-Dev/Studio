@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-#include <Audio/Control.hpp>
+#include <Audio/ControlEvent.hpp>
 
 #include "Base.hpp"
 

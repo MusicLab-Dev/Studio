@@ -58,30 +58,6 @@ Item {
         }
     }
 
-    PlaylistView {
-        id: playlistView
-        visible: modulesContent.selectedModule === moduleIndex
-        moduleIndex: -1
-
-        Binding on y {
-            when: visible
-            value: modulesTabs.height
-            restoreMode: Binding.RestoreNone
-        }
-
-        Binding on width {
-            when: visible
-            value: parent.width
-            restoreMode: Binding.RestoreNone
-        }
-
-        Binding on height {
-            when: visible
-            value: parent.height - modulesTabs.height
-            restoreMode: Binding.RestoreNone
-        }
-    }
-
     Repeater {
         id: modulesLoadersRepeater
         model: modulesView.modules

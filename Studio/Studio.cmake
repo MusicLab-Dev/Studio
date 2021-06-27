@@ -21,7 +21,6 @@ qt5_add_resources(QtResources
     ${StudioDir}/Design/Sequencer/Sequencer.qrc
     ${StudioDir}/Design/Common/Common.qrc
     ${StudioDir}/Design/Tree/Tree.qrc
-    ${StudioDir}/Design/Playlist/Playlist.qrc
     ${StudioDir}/Design/Planner/Planner.qrc
     ${StudioDir}/Design/Boards/Boards.qrc
     ${StudioDir}/Design/Plugins/Plugins.qrc
@@ -46,20 +45,18 @@ set(StudioSources
     ${StudioDir}/BoardEventListener.hpp
     ${StudioDir}/BoardManager.cpp
     ${StudioDir}/BoardManager.hpp
-    ${StudioDir}/Control.hpp
-    ${StudioDir}/ControlModel.cpp
-    ${StudioDir}/ControlModel.hpp
-    ${StudioDir}/ControlsModel.cpp
-    ${StudioDir}/ControlsModel.hpp
+    ${StudioDir}/ControlEvent.hpp
+    ${StudioDir}/AutomationsModel.cpp
+    ${StudioDir}/AutomationsModel.hpp
     ${StudioDir}/Device.cpp
     ${StudioDir}/Device.hpp
     ${StudioDir}/DevicesModel.cpp
     ${StudioDir}/DevicesModel.hpp
     ${StudioDir}/EventDispatcher.cpp
     ${StudioDir}/EventDispatcher.hpp
-    ${StudioDir}/InstancesModel.cpp
-    ${StudioDir}/InstancesModel.hpp
-    ${StudioDir}/InstancesModelProxy.hpp
+    ${StudioDir}/PartitionInstancesModel.cpp
+    ${StudioDir}/PartitionInstancesModel.hpp
+    ${StudioDir}/PartitionInstancesModelProxy.hpp
     ${StudioDir}/KeyboardEventListener.cpp
     ${StudioDir}/KeyboardEventListener.hpp
     ${StudioDir}/Models.hpp

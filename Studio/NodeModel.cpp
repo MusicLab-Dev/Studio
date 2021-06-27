@@ -24,7 +24,7 @@ NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     :   QAbstractListModel(parent),
         _data(node),
         _partitions(&node->partitions(), this),
-        _controls(&node->controls(), this),
+        _automations(&node->automations(), this),
         _plugin(node->plugin(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
@@ -145,7 +145,7 @@ std::unique_ptr<Audio::Node> NodeModel::prepareNode(const QString &pluginPath, c
     audioNode->prepareCache(Scheduler::Get()->audioSpecs());
 
     if (addPartition)
-        audioNode->partitions().push().setName("Partition 0");
+        audioNode->partitions().push();
 
     return audioNode;
 }
@@ -157,6 +157,8 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
         return nullptr;
 
     NodePtr node(audioNode.get(), this);
+    if (addPartition)
+        node->partitions()->get(0)->setName("Partition 0");
     auto nodePtr = node.get();
     const bool hasPaused = Scheduler::Get()->pauseImpl();
 

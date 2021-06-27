@@ -17,6 +17,7 @@ class PartitionPreview : public QQuickPaintedItem
 
     Q_PROPERTY(PartitionModel *target READ target WRITE setTarget NOTIFY targetChanged)
     Q_PROPERTY(BeatRange range READ range WRITE setRange NOTIFY rangeChanged)
+    Q_PROPERTY(Beat offset READ offset WRITE setOffset NOTIFY offsetChanged)
 
 public:
     /** @brief Constructor */
@@ -33,6 +34,10 @@ public:
     [[nodiscard]] const BeatRange &range(void) noexcept { return _range; }
     void setRange(const BeatRange &range);
 
+    /** @brief Get / Set the offset property */
+    [[nodiscard]] const Beat &offset(void) noexcept { return _offset; }
+    void setOffset(const Beat &offset);
+
     /** @brief Draw target within specified range */
     void paint(QPainter *painter) final;
 
@@ -43,9 +48,13 @@ signals:
     /** @brief Notify when range property changes */
     void rangeChanged(void);
 
+    /** @brief Notify when offset property changes */
+    void offsetChanged(void);
+
 private:
     PartitionModel *_target { nullptr };
     BeatRange _range {};
+    Beat _offset { 0u };
 
     /** @brief Request an update */
     void requestUpdate(void) { update(); }

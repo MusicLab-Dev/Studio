@@ -17,7 +17,7 @@
 #include "Project.hpp"
 #include "NodeModel.hpp"
 #include "PartitionsModel.hpp"
-#include "ControlsModel.hpp"
+#include "AutomationsModel.hpp"
 #include "PluginModel.hpp"
 
 class Project;
@@ -37,26 +37,26 @@ public:
     bool load(void);
 
 public: // Reserved for unit tests
-    /** @brief return controls in QVariantList */
-    QVariantList transformControlsInVariantList(ControlsModel &controls) noexcept;
+    /** @brief Return automations in QVariantList */
+    QVariantList transformAutomationsInVariantList(AutomationsModel &automations) noexcept;
 
-    /** @brief return node in QVariantMap */
+    /** @brief Return node in QVariantMap */
     QVariantMap transformNodeInVariantMap(NodeModel &node);
 
-    /** @brief return partitions in QVariantList */
-    QVariantList transformPartitionsInVariantList(PartitionsModel &partitions) noexcept;
+    /** @brief Return partitions in QVariantList */
+    QVariantMap transformPartitionsInVariantMap(PartitionsModel &partitions) noexcept;
 
-    /** @brief return partition in QVariantList */
+    /** @brief Return partition in QVariantList */
     QVariantMap transformPluginInVariantMap(PluginModel &plugin) noexcept;
 
     /** @brief Init a node model by a QJsonObject */
     bool initNode(NodeModel *node, const QJsonObject &obj);
 
-    /** @brief Init a partitions model model by a QJsonArray */
-    bool initPartitions(PartitionsModel *partitions, const QJsonArray &obj);
+    /** @brief Init a partitions model model by a QJsonObject */
+    bool initPartitions(PartitionsModel *partitions, const QJsonObject &obj);
 
-    /** @brief Init a controls model model by a QJsonArray */
-    bool initControls(ControlsModel *controls, const QJsonArray &obj);
+    /** @brief Init an automations model model by a QJsonArray */
+    bool initAutomations(AutomationsModel *automations, const QJsonArray &obj);
 
     /** @brief Init a plugin model model by a QJsonObject */
     bool initPlugin(PluginModel *plugin, const QJsonObject &obj);

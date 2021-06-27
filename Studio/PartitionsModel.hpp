@@ -12,6 +12,7 @@
 #include <Audio/Node.hpp>
 
 #include "PartitionModel.hpp"
+#include "PartitionInstancesModel.hpp"
 
 class NodeModel;
 
@@ -21,6 +22,7 @@ class PartitionsModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
+    Q_PROPERTY(PartitionInstancesModel *instances READ instances NOTIFY instancesChanged)
 
 public:
     /** @brief Roles of each instance */
@@ -61,6 +63,11 @@ public:
     void processLatestInstanceChange(const Beat oldInstance, const Beat newInstance);
 
 
+    /** @brief Get the PartitionInstances model */
+    [[nodiscard]] PartitionInstancesModel *instances(void) noexcept { return &_instances; }
+    [[nodiscard]] const PartitionInstancesModel *instances(void) const noexcept { return &_instances; }
+
+
     /** @brief Get the backend data */
     [[nodiscard]] Audio::Partitions *audioPartitions(void) noexcept { return _data; }
     [[nodiscard]] const Audio::Partitions *audioPartitions(void) const noexcept { return _data; }
@@ -88,6 +95,9 @@ signals:
     /** @brief Notify that the latest instance of partitions has changed */
     void latestInstanceChanged(void);
 
+    /** @brief Notify that the intances model has changed */
+    void instancesChanged(void);
+
 public: // Allow external insert / remove
     using QAbstractListModel::beginRemoveRows;
     using QAbstractListModel::endRemoveRows;
@@ -98,10 +108,11 @@ private:
     Audio::Partitions *_data { nullptr };
     Core::TinyVector<Core::UniqueAlloc<PartitionModel>> _partitions;
     Beat _latestInstance { 0u };
+    PartitionInstancesModel _instances;
 
     /** @brief Refresh internal models */
     void refreshPartitions(void);
 
     /** @brief Get an available name for a partition */
-    [[nodiscard]] Core::FlatString getAvailablePartitionName(void) const noexcept;
+    [[nodiscard]] QString getAvailablePartitionName(void) const noexcept;
 };

@@ -11,7 +11,7 @@
 #include "Scheduler.hpp"
 
 AutomationModel::AutomationModel(Audio::Automation *automation, QObject *parent) noexcept
-    : QAbstractListModel(parent), _data(automation), _instances(&automation->instances(), this)
+    : QAbstractListModel(parent), _data(automation)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
@@ -35,37 +35,36 @@ QVariant AutomationModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void AutomationModel::setMuted(const bool muted)
+bool AutomationModel::muted(void) const noexcept
 {
-    Models::AddProtectedEvent(
-        [this, muted] {
-            _data->setMuted(muted);
-        },
-        [this, muted = _data->muted()] {
-            if (muted != _data->muted())
-                emit mutedChanged();
-        }
-    );
+    if (_data->isSafe())
+        return _data->headerCustomType().muted;
+    return true;
 }
 
-void AutomationModel::setName(const QString &name)
+void AutomationModel::setMuted(const bool muted)
 {
-    Models::AddProtectedEvent(
-        [this, name = Core::FlatString(name.toStdString())](void) mutable { _data->setName(std::move(name)); },
-        [this, name = _data->name()] {
-            if (name != _data->name())
-                emit nameChanged();
-        }
-    );
+    if (bool value = true; _data->isSafe()) {
+        value = _data->headerCustomType().muted;
+        Models::AddProtectedEvent(
+            [this, muted] {
+                _data->headerCustomType().muted = muted;
+            },
+            [this, value] {
+                if (value != _data->headerCustomType().muted)
+                    emit mutedChanged();
+            }
+        );
+    }
 }
 
 bool AutomationModel::add(const GPoint &point)
 {
-    const auto idx = static_cast<int>(std::distance(_data->points().begin(), _data->points().findSortedPlacement(point)));
+    const auto idx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(point)));
 
     return Models::AddProtectedEvent(
         [this, point] {
-            _data->points().insert(point);
+            _data->insert(point);
         },
         [this, idx] {
             beginInsertRows(QModelIndex(), idx, idx);
@@ -81,7 +80,7 @@ bool AutomationModel::remove(const int idx)
     return Models::AddProtectedEvent(
         [this, idx] {
             beginRemoveRows(QModelIndex(), idx, idx);
-            _data->points().erase(_data->points().begin() + idx);
+            _data->erase(_data->begin() + idx);
         },
         [this] {
             endRemoveRows();
@@ -94,18 +93,18 @@ const GPoint &AutomationModel::get(const int idx) const noexcept_ndebug
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("AutomationModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
 
-    return reinterpret_cast<const GPoint &>(_data->points().at(idx));
+    return reinterpret_cast<const GPoint &>(_data->at(idx));
 }
 
 bool AutomationModel::set(const int idx, const GPoint &point)
 {
-    auto newIdx = static_cast<int>(std::distance(_data->points().begin(), _data->points().findSortedPlacement(point)));
+    auto newIdx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(point)));
 
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("AutomationModel::set: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     return Models::AddProtectedEvent(
         [this, point, idx] {
-            _data->points().assign(idx, point);
+            _data->assign(idx, point);
         },
         [this, idx, newIdx] {
             if (idx != newIdx) {
@@ -124,9 +123,8 @@ void AutomationModel::updateInternal(Audio::Automation *data)
     if (_data == data)
         return;
     std::swap(_data, data);
-    if (_data->points().data() != data->points().data()) {
+    if (_data->data() != data->data()) {
         beginResetModel();
         endResetModel();
     }
-    _instances->updateInternal(&_data->instances());
 }

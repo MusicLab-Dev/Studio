@@ -36,16 +36,24 @@ void PartitionPreview::setRange(const BeatRange &range)
     emit rangeChanged();
 }
 
+void PartitionPreview::setOffset(const Beat &offset)
+{
+    if (_offset == offset)
+        return;
+    _offset = offset;
+    emit offsetChanged();
+}
+
 void PartitionPreview::paint(QPainter *painter)
 {
     constexpr int NotesPerOctave = 12;
 
-    if (!_target || _target->audioPartition()->notes().empty()) {
+    if (!_target || _target->audioPartition()->empty()) {
         // painter->fillRect(0, 0, static_cast<int>(width()), static_cast<int>(height()), QColorConstants::Transparent);
         return;
     }
 
-    const auto &notes = _target->audioPartition()->notes();
+    const auto &notes = *_target->audioPartition();
 
     // Find the key range
     Audio::Key minKey = std::numeric_limits<Audio::Key>::max();
@@ -73,12 +81,14 @@ void PartitionPreview::paint(QPainter *painter)
     // Draw each visible note
     painter->setPen(borderColor);
     for (const auto &note : notes) {
-        rect.setX(static_cast<int>(static_cast<qreal>(note.range.from) * pixelsPerBeatPrecision));
+        if (note.range.to <= _offset)
+            continue;
+        rect.setX(static_cast<int>((static_cast<qreal>(note.range.from) - static_cast<qreal>(_offset)) * pixelsPerBeatPrecision));
+        if (rect.x() > fixedWidth)
+            return;
         rect.setY(fixedHeight - static_cast<int>(static_cast<qreal>(note.key - arrangedMinKey) * realNoteHeight));
         rect.setWidth(static_cast<int>(static_cast<qreal>(note.range.to - note.range.from) * pixelsPerBeatPrecision));
         rect.setHeight(noteHeight);
-        if (rect.x() > fixedWidth)
-            return;
         painter->fillRect(rect, color);
         if (noteHeight < 3) {
             painter->drawLine(QLine(rect.left(), rect.y(), rect.x(), rect.bottom()));

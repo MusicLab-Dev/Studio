@@ -23,7 +23,7 @@
 #include "EventDispatcher.hpp"
 #include "DevicesModel.hpp"
 #include "PartitionPreview.hpp"
-#include "InstancesModelProxy.hpp"
+#include "PartitionPartitionInstancesModelProxy.hpp"
 #include "NodeListModel.hpp"
 #include "PluginModelProxy.hpp"
 
@@ -68,11 +68,10 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<NodeModel>("NodeModel", 1, 0, "NodeModel", "Cannot construct NodeModel");
     qmlRegisterUncreatableType<PartitionsModel>("PartitionsModel", 1, 0, "PartitionsModel", "Cannot construct PartitionsModel");
     qmlRegisterUncreatableType<PartitionModel>("PartitionModel", 1, 0, "PartitionModel", "Cannot construct PartitionModel");
-    qmlRegisterUncreatableType<ControlsModel>("ControlsModel", 1, 0, "ControlsModel", "Cannot construct ControlsModel");
-    qmlRegisterUncreatableType<ControlModel>("ControlModel", 1, 0, "ControlModel", "Cannot construct ControlModel");
+    qmlRegisterUncreatableType<AutomationsModel>("AutomationsModel", 1, 0, "AutomationsModel", "Cannot construct AutomationsModel");
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
-    qmlRegisterUncreatableType<InstancesModel>("InstancesModel", 1, 0, "InstancesModel", "Cannot construct InstancesModel");
-    qmlRegisterType<InstancesModelProxy>("InstancesModelProxy", 1, 0, "InstancesModelProxy");
+    qmlRegisterUncreatableType<PartitionInstancesModel>("PartitionInstancesModel", 1, 0, "PartitionInstancesModel", "Cannot construct PartitionInstancesModel");
+    qmlRegisterType<PartitionInstancesModelProxy>("PartitionInstancesModelProxy", 1, 0, "PartitionInstancesModelProxy");
     qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
     qmlRegisterUncreatableType<Board>("Board", 1, 0, "Board", "Cannot constrict Board");
     qmlRegisterType<EventDispatcher>("EventDispatcher", 1, 0, "EventDispatcher");
@@ -89,7 +88,6 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Tree);
     Q_INIT_RESOURCE(Sequencer);
     Q_INIT_RESOURCE(Common);
-    Q_INIT_RESOURCE(Playlist);
     Q_INIT_RESOURCE(Planner);
     Q_INIT_RESOURCE(Boards);
     Q_INIT_RESOURCE(Plugins);
@@ -106,7 +104,6 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Tree);
     Q_CLEANUP_RESOURCE(Sequencer);
     Q_CLEANUP_RESOURCE(Common);
-    Q_CLEANUP_RESOURCE(Playlist);
     Q_CLEANUP_RESOURCE(Planner);
     Q_CLEANUP_RESOURCE(Boards);
     Q_CLEANUP_RESOURCE(Plugins);

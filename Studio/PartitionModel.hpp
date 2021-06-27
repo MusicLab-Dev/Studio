@@ -11,7 +11,6 @@
 #include <Audio/Partition.hpp>
 
 #include "Note.hpp"
-#include "InstancesModel.hpp"
 
 class PartitionModel;
 class PartitionsModel;
@@ -34,10 +33,6 @@ class PartitionModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
-    Q_PROPERTY(MidiChannels midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
-    Q_PROPERTY(InstancesModel *instances READ getInstances NOTIFY instancesChanged)
-    Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
     Q_PROPERTY(Beat latestNote READ latestNote NOTIFY latestNoteChanged)
 
 public:
@@ -82,36 +77,13 @@ public:
         { return const_cast<Note &>(const_cast<const PartitionModel *>(this)->get(idx)); }
 
 
-    /** @brief Get the list of instances */
-    [[nodiscard]] InstancesModel &instances(void) noexcept { return *_instances; }
-    [[nodiscard]] const InstancesModel &instances(void) const noexcept { return *_instances; }
-    [[nodiscard]] InstancesModel *getInstances(void) noexcept { return _instances.get(); }
-
-
     /** @brief Get the name property */
     [[nodiscard]] QString name(void) const noexcept
-        { return QString::fromLocal8Bit(_data->name().data(), static_cast<int>(_data->name().size())); }
+        { return _name; }
 
     /** @brief Set the name property */
     void setName(const QString &name);
 
-
-    /** @brief Return true is the partition model is muted */
-    [[nodiscard]] bool muted(void) const noexcept { return _data->muted(); }
-
-    /** @brief Set the muted propertie */
-    void setMuted(bool muted) noexcept;
-
-
-    /** @brief Return the channel of the partition */
-    [[nodiscard]] MidiChannels midiChannels(void) const noexcept { return static_cast<MidiChannels>(_data->midiChannels()); }
-
-    /** @brief Set the channel of the partition */
-    void setMidiChannels(const MidiChannels midiChannels);
-
-
-    /** @brief Get the current latest instance */
-    [[nodiscard]] Beat latestInstance(void) const noexcept { return _latestInstance; }
 
     /** @brief Get the current latest note */
     [[nodiscard]] Beat latestNote(void) const noexcept { return _latestNote; }
@@ -127,7 +99,7 @@ public:
 
 public slots:
     /** @brief Return the count of element in the model */
-    int count(void) const noexcept { return static_cast<int>(_data->notes().size()); }
+    int count(void) const noexcept { return static_cast<int>(_data->size()); }
 
     /** @brief Add node */
     bool add(const Note &note);
@@ -160,27 +132,14 @@ signals:
     /** @brief Notify that the channel has changed */
     void nameChanged(void);
 
-    /** @brief Notify that the muted property has changed */
-    void mutedChanged(void);
-
-    /** @brief Notify that the channel has changed */
-    void midiChannelsChanged(void);
-
-    /** @brief Notify that the instances model has changed */
-    void instancesChanged(void);
-
     /** @brief Notify that notes has changed */
     void notesChanged(void);
-
-    /** @brief Notify that the latest instance of the partition has changed */
-    void latestInstanceChanged(void);
 
     /** @brief Notify that the latest note of the node has changed */
     void latestNoteChanged(void);
 
 private:
     Audio::Partition *_data { nullptr };
-    Core::UniqueAlloc<InstancesModel> _instances {};
-    Beat _latestInstance { 0u };
+    QString _name {};
     Beat _latestNote { 0u };
 };

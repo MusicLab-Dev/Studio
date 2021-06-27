@@ -7,7 +7,7 @@
 #include <QVariantList>
 #include <QMetaEnum>
 
-#include "Control.hpp"
+#include "ControlEvent.hpp"
 #include "Scheduler.hpp"
 #include "ProjectSave.hpp"
 #include "Note.hpp"
@@ -71,8 +71,8 @@ QVariantMap ProjectSave::transformNodeInVariantMap(NodeModel &node)
     map.insert("name", node.name());
     map.insert("color", node.color());
     map.insert("muted", node.muted());
-    map.insert("partitions", transformPartitionsInVariantList(*node.partitions()));
-    map.insert("controls", transformControlsInVariantList(*node.controls()));
+    map.insert("partitions", transformPartitionsInVariantMap(*node.partitions()));
+    map.insert("controls", transformAutomationsInVariantList(*node.controls()));
     map.insert("plugin", transformPluginInVariantMap(*node.plugin()));
 
     for (auto it = node.children().begin(); it != node.children().end(); ++it) {
@@ -83,19 +83,19 @@ QVariantMap ProjectSave::transformNodeInVariantMap(NodeModel &node)
     return map;
 }
 
-QVariantList ProjectSave::transformPartitionsInVariantList(PartitionsModel &partitions) noexcept
+QVariantMap ProjectSave::transformPartitionsInVariantMap(PartitionsModel &partitions) noexcept
 {
-    QVariantList list;
+    QVariantMap data;
+    QVariantList partitionList;
 
     for (int i = 0; i < partitions.count(); i++) {
         PartitionModel *partition = partitions.get(i);
         if (!partition)
             continue;
 
-        QVariantMap data;
+        QVariantMap mapPartition;
 
-        data.insert("name", partition->name());
-        data.insert("muted", partition->muted());
+        mapPartition.insert("name", partition->name());
 
         QVariantList listNotes;
         for (int y = 0; y < partition->count(); y++) {
@@ -107,74 +107,52 @@ QVariantList ProjectSave::transformPartitionsInVariantList(PartitionsModel &part
             mapNote.insert("tuning", note.tuning);
             listNotes.push_back(mapNote);
         }
-        data.insert("notes", listNotes);
-
-        auto &instances = partition->instances();
-        QVariantList listInstances;
-        for (int y = 0; y < instances.count(); y++) {
-            auto &instance = instances.get(y);
-            listInstances.push_back(QVariantList({instance.from, instance.to}));
-        }
-        data.insert("instances", listInstances);
-
-        list.push_back(data);
+        mapPartition.insert("notes", listNotes);
+        partitionList.push_back(mapPartition);
     }
-    return list;
+    data.insert("partitions", partitionList);
+    QJsonArray instanceList;
+    for (auto &instance : *partitions.instances()->audioInstances()) {
+        QJsonMap mapInstance;
+        mapInstance.insert("partitionIndex", instance.partitionIndex);
+        mapInstance.insert("offset", instance.offset);
+        QJsonArray rangeList;
+        rangeList.push_back(instance.range.from);
+        rangeList.push_back(instance.range.to);
+        mapInstance.insert("range", rangeList);
+        instanceList.push_back(mapInstance);
+    }
+    data.insert("instances", instanceList);
+    return data;
 }
 
-QVariantList ProjectSave::transformControlsInVariantList(ControlsModel &controls) noexcept
+QVariantList ProjectSave::transformAutomationsInVariantList(AutomationsModel &automations) noexcept
 {
     QVariantList list;
 
-    for (int i = 0; i < controls.count(); i++) {
-        ControlModel *control = controls.get(i);
-        if (!control)
+    for (int i = 0; i < automations.count(); i++) {
+        AutomationModel *automation = automations.get(i);
+        if (!automation)
             continue;
 
         QVariantMap data;
 
-        data.insert("name", control->name());
-        data.insert("paramID", control->paramID());
-        data.insert("muted", control->muted());
+        data.insert("name", automation->name());
+        data.insert("muted", automation->muted());
 
-        QVariantList listAutomations;
-        for (int y = 0; y < control->count(); y++) {
-            QVariantMap mapAutomation;
-            AutomationModel *automation = control->get(y);
-            if (!automation)
-                continue;
-
-            mapAutomation.insert("name", automation->name());
-            mapAutomation.insert("muted", automation->muted());
-
-            QVariantList listPoints;
-            for (int p = 0; p < automation->count(); p++) {
-                QVariantMap mapPoint;
-                GPoint point = automation->get(p);
-
-                mapPoint.insert("beat", point.beat);
-                mapPoint.insert("curveType", QVariant::fromValue(point.getType()).toJsonValue());
-                mapPoint.insert("curveRate", point.curveRate);
-                mapPoint.insert("value", point.value);
-                listPoints.push_back(mapPoint);
-            }
-            mapAutomation.insert("points", listPoints);
-
-            auto &instances = automation->instances();
-            QVariantList listInstances;
-            for (int p = 0; p < instances.count(); p++) {
-                auto &instance = instances.get(p);
-                listInstances.push_back(QVariantList({instance.from, instance.to}));
-            }
-            mapAutomation.insert("instances", listInstances);
-
-            listAutomations.push_back(mapAutomation);
+        QVariantList listPoints;
+        for (int p = 0; p < automation->count(); p++) {
+            QVariantMap mapPoint;
+            const GPoint point = automation->get(p);
+            mapPoint.insert("beat", point.beat);
+            mapPoint.insert("curveType", QVariant::fromValue(point.getType()).toJsonValue());
+            mapPoint.insert("curveRate", point.curveRate);
+            mapPoint.insert("value", point.value);
+            listPoints.push_back(mapPoint);
         }
-        data.insert("automations", listAutomations);
-
+        data.insert("points", listPoints);
         list.push_back(data);
     }
-
     return list;
 }
 
@@ -237,8 +215,8 @@ bool ProjectSave::initNode(NodeModel *node, const QJsonObject &obj)
     node->setColor(obj["color"].toString());
     node->setMuted(obj["muted"].toBool());
     initPlugin(node->plugin(), obj["plugin"].toObject());
-    initPartitions(node->partitions(), obj["partitions"].toArray());
-    initControls(node->controls(), obj["controls"].toArray());
+    initPartitions(node->partitions(), obj["partitions"].toObject());
+    initAutomations(node->automations(), obj["automations"].toArray());
 
     auto children = obj["children"].toArray();
     for (int i = 0 ; i < children.size(); i++) {
@@ -253,8 +231,11 @@ bool ProjectSave::initNode(NodeModel *node, const QJsonObject &obj)
     return true;
 }
 
-bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &array)
+bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonObject &obj)
 {
+    // Load partitions
+    QJsonArray array = obj["partitions"].toArray();
+
     for (int i = 0; i < array.size(); i++) {
         partitions->add();
         QJsonObject partitionObj = array[i].toObject();
@@ -263,7 +244,6 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
             continue;
 
         partition->setName(partitionObj["name"].toString());
-        partition->setMuted(partitionObj["muted"].toBool());
 
         auto notes = partitionObj["notes"].toArray();
         for (int y = 0; y < notes.size(); y++) {
@@ -278,63 +258,55 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonArray &
             note.tuning = static_cast<Tuning>(noteObj["tuning"].toInt());
             partition->add(note);
         }
+    }
 
-        auto instances = partitionObj["instances"].toArray();
-        for (int y = 0; y < instances.size(); y++) {
-            QJsonArray instance = instances[y].toArray();
-            Beat from = static_cast<Beat>(instance[0].toInt());
-            Beat to = static_cast<Beat>(instance[1].toInt());
+    // Load instances
+    auto instances = obj["instances"].toArray();
+    const auto partitionCount = partitions->count();
+    for (int y = 0; y < instances.size(); y++) {
+        QJsonObject instanceObj = instances[y].toObject();
+        const std::uint32_t partitionIndex = static_cast<std::uint32_t>(instanceObj["partitionIndex"].toInt());
+        const Beat offset = static_cast<Beat>(instanceObj["offset"].toInt());
+        const QJsonArray rangeObj = instanceObj["range"].toArray();
+        const Beat from = static_cast<Beat>(rangeObj[0].toInt());
+        const Beat to = static_cast<Beat>(rangeObj[1].toInt());
 
-            partition->instances().add(BeatRange({from, to}));
+        if (partitionIndex >= partitionCount) {
+            qDebug() << "ProjectSave::initPartitions: Invalid partition instance, out of range partition index"
+                    << partitionIndex << "/" << partitionCount;
+            continue;
         }
+
+        partition->instances().add(PartitionInstance {
+            partitionIndex,
+            offset,
+            BeatRange { from, to }
+        });
     }
     return true;
 }
 
-bool ProjectSave::initControls(ControlsModel *controls, const QJsonArray &array)
+bool ProjectSave::initAutomations(AutomationsModel *automations, const QJsonArray &array)
 {
+    if (array.size() >= automations->count()) {
+        qDebug() << "ProjectSave::initAutomations: mismatching automation count";
+        return false;
+    }
     for (int i = 0; i < array.size(); i++) {
-        QJsonObject controlObj = array[i].toObject();
-        controls->add(controlObj["paramID"].toInt());
+        QJsonObject automationObj = array[i].toObject();
+        AutomationModel *automation = automations->get(i);
+        automation->setMuted(automationObj["muted"].toBool());
+        automation->setName(automationObj["name"].toString());
 
-        ControlModel *control = controls->get(i);
-        if (!control)
-            continue;
-
-        control->setMuted(controlObj["muted"].toBool());
-
-        auto automations = controlObj["automations"].toArray();
-        for (int y = 0; y < automations.size(); y++) {
-            QJsonObject automationObj = automations[y].toObject();
-
-            control->add();
-            AutomationModel *automation = control->get(y);
-            if (!automation)
-                continue;
-
-            automation->setName(automationObj["name"].toString());
-            automation->setMuted(automationObj["muted"].toBool());
-
-            auto points = automationObj["points"].toArray();
-            for (int p = 0; p < points.size(); p++) {
-                QJsonObject pointObj = points[p].toObject();
-
-                GPoint point;
-                point.beat = static_cast<Beat>(pointObj["beat"].toInt());
-                point.setType(static_cast<GPoint::CurveType>(QMetaEnum::fromType<GPoint::CurveType>().keyToValue(pointObj["beat"].toString().toStdString().c_str())));
-                point.curveRate = static_cast<GPoint::CurveRate>(pointObj["curveRate"].toInt());
-                point.value = pointObj["value"].toDouble();
-                automation->add(point);
-            }
-
-            auto instances = automationObj["instances"].toArray();
-            for (int p = 0; p < instances.size(); p++) {
-                QJsonArray instance = instances[p].toArray();
-                Beat from = static_cast<Beat>(instance[0].toInt());
-                Beat to = static_cast<Beat>(instance[1].toInt());
-
-                automation->instances().add(BeatRange({from, to}));
-            }
+        auto points = automationObj["points"].toArray();
+        for (int p = 0; p < points.size(); p++) {
+            QJsonObject pointObj = points[p].toObject();
+            GPoint point;
+            point.beat = static_cast<Beat>(pointObj["beat"].toInt());
+            point.setType(static_cast<GPoint::CurveType>(QMetaEnum::fromType<GPoint::CurveType>().keyToValue(pointObj["beat"].toString().toStdString().c_str())));
+            point.curveRate = static_cast<GPoint::CurveRate>(pointObj["curveRate"].toInt());
+            point.value = pointObj["value"].toDouble();
+            automation->add(point);
         }
     }
     return true;
