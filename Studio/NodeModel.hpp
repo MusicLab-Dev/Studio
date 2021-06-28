@@ -192,6 +192,9 @@ public slots:
     /** @brief Check if a given node is a parent of this */
     bool isAParent(NodeModel *node) const noexcept;
 
+    /** @brief Get the index of a children node */
+    int getChildIndex(NodeModel *node) const noexcept;
+
 signals:
     /** @brief Notify that muted property has changed */
     void mutedChanged(void);

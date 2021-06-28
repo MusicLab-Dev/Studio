@@ -22,11 +22,18 @@ Repeater {
     }
 
     delegate: Column {
-        property int modelIndex: index
-
-        onModelIndexChanged: {
-            if (modelIndex === nodeAutomations.count - 1)
+        Component.onCompleted: {
+            if (index === nodeAutomations.count - 1)
                 nodeAutomations.linkBottom = Qt.binding(function() { return y + height / 2 })
+        }
+
+        Connections {
+            target: nodeAutomations
+
+            function onCountChanged() {
+                if (index === nodeAutomations.count - 1)
+                    nodeAutomations.linkBottom = Qt.binding(function() { return y + height / 2 })
+            }
         }
 
         Row {
@@ -53,8 +60,15 @@ Repeater {
                     radius: 15
 
                     DefaultText {
-                        anchors.centerIn: parent
+                        x: 10
+                        width: parent.width * 0.5
+                        anchors.verticalCenter: parent.verticalCenter
+                        horizontalAlignment: Text.AlignLeft
+                        fontSizeMode: Text.HorizontalFit
+                        font.pointSize: 20
+                        color: nodeDelegate.accentColor
                         text: controlTitle
+                        wrapMode: Text.Wrap
                     }
                 }
             }

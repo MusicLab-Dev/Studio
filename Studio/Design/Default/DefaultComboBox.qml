@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 ComboBox {
     property alias rectBackground: rectBackground
     property alias listView: listView
+    property color accentColor: themeManager.accentColor
 
     id: control
     hoverEnabled: true
@@ -22,13 +23,13 @@ ComboBox {
 
         onPaint: {
             var ctx = getContext("2d")
-            ctx.reset();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(width, 0);
-            ctx.lineTo(width / 2, height);
-            ctx.closePath();
-            ctx.fillStyle = control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : themeManager.contentColor;
-            ctx.fill();
+            ctx.reset()
+            ctx.moveTo(0, 0)
+            ctx.lineTo(width, 0)
+            ctx.lineTo(width / 2, height)
+            ctx.closePath()
+            ctx.fillStyle = control.pressed || popup.opened ? control.accentColor : themeManager.contentColor
+            ctx.fill()
         }
     }
 
@@ -40,21 +41,17 @@ ComboBox {
         verticalAlignment: Text.AlignVCenter
         leftPadding: 15
         elide: Text.ElideRight
-        color: control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : themeManager.contentColor;
+        color: control.pressed || popup.opened ? control.accentColor : themeManager.contentColor
         padding: control.padding
     }
 
-    background: Item {
+    background: Rectangle {
+        id: rectBackground
         anchors.fill: control
-
-        Rectangle {
-            id: rectBackground
-            anchors.fill: parent
-            border.width: control.pressed ? 4 : 2
-            border.color: control.pressed || popup.opened ? "#31A8FF" : control.hovered ? "#0D86CB" : themeManager.contentColor
-            color: control.pressed ? themeManager.backgroundColor : themeManager.foregroundColor
-            radius: 10
-        }
+        border.width: 2
+        border.color: control.hovered || popup.opened ? control.accentColor : themeManager.contentColor
+        color: control.pressed ? themeManager.backgroundColor : themeManager.foregroundColor
+        radius: 10
     }
 
     popup: Popup {
@@ -75,8 +72,8 @@ ComboBox {
         }
 
         background: Rectangle {
-            color: "#001E36"
-            border.color: "#31A8FF"
+            color: themeManager.foregroundColor
+            border.color: control.accentColor
             border.width: 2
         }
     }
@@ -88,7 +85,7 @@ ComboBox {
 
         contentItem: Text {
             text: control.textAt(index)
-            color: parent.hovered ? "#001E36": "#295F8B"
+            color: control.accentColor
             font: control.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter

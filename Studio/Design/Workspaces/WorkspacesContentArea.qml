@@ -22,7 +22,7 @@ Rectangle {
 
         ScrollBar.vertical: DefaultScrollBar {
             id: scrollBar
-            color: "#31A8FF"
+            color: themeManager.accentColor
             opacity: 0.3
             visible: parent.contentHeight > parent.height
         }
@@ -39,7 +39,7 @@ Rectangle {
             id: workspacesSquareComponent
 
             border.width: 2
-            border.color: selectedIndex === index ? "#31A8FF" : hoveredIndex === index ? "#1E6FB0" : "transparent"
+            border.color: selectedIndex === index ? themeManager.accentColor : hoveredIndex === index ? "#1E6FB0" : "transparent"
 
             Image {
                 id: image

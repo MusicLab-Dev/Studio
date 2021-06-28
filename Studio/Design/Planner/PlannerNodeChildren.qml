@@ -20,10 +20,23 @@ Repeater {
 
         onLoaded: {
             item.parentDelegate = nodeDelegate
-            if (index === nodeChildren.count - 1)
+            if (index === nodeChildren.count - 1) {
                 nodeChildren.linkBottom = Qt.binding(function () {
                     return y + item.nodeHeaderBackground.y + item.nodeHeaderBackground.height / 2
                 })
+            }
+        }
+
+        Connections {
+            target: nodeChildren
+
+            function onCountChanged() {
+                if (item && index === nodeChildren.count - 1) {
+                    nodeChildren.linkBottom = Qt.binding(function() {
+                        return y + item.nodeHeaderBackground.y + item.nodeHeaderBackground.height / 2
+                    })
+                }
+            }
         }
     }
 }

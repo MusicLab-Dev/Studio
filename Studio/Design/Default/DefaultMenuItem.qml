@@ -14,7 +14,7 @@ MenuItem {
         id: contentText
         text: menuItem.text
         font: menuItem.font
-        color:  parent.hovered ? "#338DCF": "#295F8B"
+        color:  parent.hovered ? themeManager.semiAccentColor : "#295F8B"
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight

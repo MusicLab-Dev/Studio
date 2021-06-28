@@ -14,9 +14,9 @@ MouseArea {
 
     Rectangle {
         anchors.fill: parent
-        color: textRoundedButton.hoverOnText ? "transparent" : (textRoundedButton.containsMouse ? "#31A8FF" : "#1E6FB0")
+        color: textRoundedButton.hoverOnText ? "transparent" : (textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0")
         radius: 5
-        border.color: textRoundedButton.containsMouse ? "#31A8FF" : "#1E6FB0"
+        border.color: textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0"
         border.width: textRoundedButton.hoverOnText ? 1 : 0
 
         Text {

@@ -61,7 +61,7 @@ Slider {
             context.lineTo(width, 0);
             context.lineTo(width / 2, height);
             context.closePath();
-            context.fillStyle = control.pressed ? "#31A8FF" : control.hovered ? "#0D86CB" : "#295F8B";
+            context.fillStyle = control.pressed ? themeManager.accentColor : control.hovered ? "#0D86CB" : "#295F8B";
             context.fill();
         }
     }

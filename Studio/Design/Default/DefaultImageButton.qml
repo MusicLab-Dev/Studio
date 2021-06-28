@@ -4,8 +4,8 @@ import QtQuick.Controls 2.15
 Button {
     property alias source: image.source
     property color colorOnPressed: "#1A6DAA"
-    property color colorHovered: "#338DCF"
-    property color colorDefault: "#31A8FF"
+    property color colorHovered: themeManager.semiAccentColor
+    property color colorDefault: themeManager.accentColor
     property color colorDisabled: themeManager.disabledColor
     property real scaleFactor: 0.5
     property alias showBorder: backgroundRect.visible
