@@ -72,7 +72,7 @@ QVariantMap ProjectSave::transformNodeInVariantMap(NodeModel &node)
     map.insert("color", node.color());
     map.insert("muted", node.muted());
     map.insert("partitions", transformPartitionsInVariantMap(*node.partitions()));
-    map.insert("controls", transformAutomationsInVariantList(*node.controls()));
+    map.insert("automations", transformAutomationsInVariantList(*node.automations()));
     map.insert("plugin", transformPluginInVariantMap(*node.plugin()));
 
     for (auto it = node.children().begin(); it != node.children().end(); ++it) {
@@ -111,12 +111,12 @@ QVariantMap ProjectSave::transformPartitionsInVariantMap(PartitionsModel &partit
         partitionList.push_back(mapPartition);
     }
     data.insert("partitions", partitionList);
-    QJsonArray instanceList;
+    QVariantList instanceList;
     for (auto &instance : *partitions.instances()->audioInstances()) {
-        QJsonMap mapInstance;
+        QVariantMap mapInstance;
         mapInstance.insert("partitionIndex", instance.partitionIndex);
         mapInstance.insert("offset", instance.offset);
-        QJsonArray rangeList;
+        QVariantList rangeList;
         rangeList.push_back(instance.range.from);
         rangeList.push_back(instance.range.to);
         mapInstance.insert("range", rangeList);
@@ -137,7 +137,6 @@ QVariantList ProjectSave::transformAutomationsInVariantList(AutomationsModel &au
 
         QVariantMap data;
 
-        data.insert("name", automation->name());
         data.insert("muted", automation->muted());
 
         QVariantList listPoints;
@@ -261,10 +260,11 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonObject 
     }
 
     // Load instances
-    auto instances = obj["instances"].toArray();
-    const auto partitionCount = partitions->count();
-    for (int y = 0; y < instances.size(); y++) {
-        QJsonObject instanceObj = instances[y].toObject();
+    auto instances = partitions->instances();
+    auto instanceList = obj["instances"].toArray();
+    const auto partitionCount = static_cast<std::uint32_t>(partitions->count());
+    for (int y = 0; y < instanceList.size(); y++) {
+        QJsonObject instanceObj = instanceList[y].toObject();
         const std::uint32_t partitionIndex = static_cast<std::uint32_t>(instanceObj["partitionIndex"].toInt());
         const Beat offset = static_cast<Beat>(instanceObj["offset"].toInt());
         const QJsonArray rangeObj = instanceObj["range"].toArray();
@@ -277,7 +277,7 @@ bool ProjectSave::initPartitions(PartitionsModel *partitions, const QJsonObject 
             continue;
         }
 
-        partition->instances().add(PartitionInstance {
+        instances->add(PartitionInstance {
             partitionIndex,
             offset,
             BeatRange { from, to }
@@ -296,7 +296,6 @@ bool ProjectSave::initAutomations(AutomationsModel *automations, const QJsonArra
         QJsonObject automationObj = array[i].toObject();
         AutomationModel *automation = automations->get(i);
         automation->setMuted(automationObj["muted"].toBool());
-        automation->setName(automationObj["name"].toString());
 
         auto points = automationObj["points"].toArray();
         for (int p = 0; p < points.size(); p++) {

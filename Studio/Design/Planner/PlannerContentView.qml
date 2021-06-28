@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 import "../Common"
 
+import NodeModel 1.0
 import NodeListModel 1.0
 
 ContentView {
@@ -20,12 +21,13 @@ ContentView {
     property NodeListModel nodeList: NodeListModel {
         id: nodeList
     }
+    property var lastSelectedNode: null
 
     id: contentView
     enableRows: false
     xOffsetMin: app.project.master ? Math.max(app.project.master.latestInstance, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0
     yOffsetMin: nodeView.height > surfaceContentGrid.height ? surfaceContentGrid.height - nodeView.height : 0
-    timelineBeatPrecision: playlistView.player.currentPlaybackBeat
+    // timelineBeatPrecision: playlistView.player.currentPlaybackBeat
     audioProcessBeatPrecision: app.scheduler.productionCurrentBeat
     yZoom: 0.25
 

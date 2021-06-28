@@ -23,7 +23,7 @@
 #include "EventDispatcher.hpp"
 #include "DevicesModel.hpp"
 #include "PartitionPreview.hpp"
-#include "PartitionPartitionInstancesModelProxy.hpp"
+#include "PartitionInstancesModelProxy.hpp"
 #include "NodeListModel.hpp"
 #include "PluginModelProxy.hpp"
 
@@ -53,6 +53,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
     qmlRegisterUncreatableType<Note>("AudioAPI", 1, 0, "Note", "Cannot construct Note");
     qmlRegisterUncreatableType<NoteEvent>("AudioAPI", 1, 0, "NoteEvent", "Cannot construct NoteEvent");
+    qmlRegisterUncreatableType<PartitionInstance>("AudioAPI", 1, 0, "PartitionInstance", "Cannot construct PartitionInstance");
     qmlRegisterUncreatableType<GPoint>("AudioAPI", 1, 0, "Point", "Cannot construct Point");
     qmlRegisterUncreatableType<ControlEvent>("AudioAPI", 1, 0, "ControlEvent", "Cannot construct ControlEvent");
     qmlRegisterUncreatableType<PluginModel>("PluginModel", 1, 0, "PluginModel", "Cannot construct PluginModel");

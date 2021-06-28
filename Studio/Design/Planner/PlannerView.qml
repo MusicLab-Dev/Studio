@@ -44,6 +44,14 @@ Column {
         id: plannerFooter
         width: parent.width
         height: parent.height * 0.15
+
+        PlannerPartitionsPreview {
+            id: partitionsPreview
+            visible: contentView.lastSelectedNode
+            y: -height
+            width: contentView.width
+            height: contentView.rowHeight
+        }
     }
 
     PlannerNodeMenu {

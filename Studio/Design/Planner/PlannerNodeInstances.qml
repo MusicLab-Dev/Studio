@@ -3,19 +3,19 @@ import QtQuick 2.15
 import "../Default"
 
 Row {
-    id: nodePartitions
+    id: nodeInstances
 
     Item {
-        id: nodePartitionsHeader
+        id: nodeInstancesHeader
         width: contentView.rowHeaderWidth
         height: contentView.rowHeight
 
         Item {
-            id: nodePartitionsBackground
+            id: nodeInstancesBackground
             x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
             y: contentView.headerHalfMargin
             width: contentView.rowHeaderWidth - x - contentView.headerMargin
-            height: nodePartitionsHeader.height
+            height: nodeInstancesHeader.height
 
             DefaultText {
                 x: 10
@@ -50,8 +50,8 @@ Row {
     }
 
     Item {
-        id: nodePartitionsData
+        id: nodeInstancesData
         width: contentView.rowDataWidth
-        height: nodePartitionsHeader.height
+        height: contentView.rowHeight
     }
 }

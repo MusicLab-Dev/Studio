@@ -54,6 +54,7 @@ set(StudioSources
     ${StudioDir}/DevicesModel.hpp
     ${StudioDir}/EventDispatcher.cpp
     ${StudioDir}/EventDispatcher.hpp
+    ${StudioDir}/PartitionInstance.hpp
     ${StudioDir}/PartitionInstancesModel.cpp
     ${StudioDir}/PartitionInstancesModel.hpp
     ${StudioDir}/PartitionInstancesModelProxy.hpp

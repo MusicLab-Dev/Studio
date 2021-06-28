@@ -60,17 +60,18 @@ const PartitionModel *PartitionsModel::get(const int index) const noexcept_ndebu
 
 bool PartitionsModel::add(void)
 {
+    const auto oldData = _data->data();
+
     return Models::AddProtectedEvent(
         [this](void) mutable {
            _data->push();
         },
-        [this, name = getAvailablePartitionName()] {
-            const auto partitionsData = _partitions.data();
+        [this, name = getAvailablePartitionName(), oldData] {
             const auto idx = _partitions.size();
             beginInsertRows(QModelIndex(), idx, idx);
             _partitions.push(&_data->at(idx), this, name);
             endInsertRows();
-            if (_partitions.data() != partitionsData)
+            if (_data->data() != oldData)
                 refreshPartitions();
         }
     );
@@ -79,7 +80,7 @@ bool PartitionsModel::add(void)
 bool PartitionsModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),
-        throw std::range_error("ControlsModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+        throw std::range_error("PartitionsModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
     return Models::AddProtectedEvent(
         [this, idx] {
             _data->erase(_data->begin() + idx);
@@ -127,20 +128,20 @@ void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const 
     scheduler->addEvent(
         [this, note] {
             if (/* note.type != Audio::NoteEvent::EventType::OnOff && */ note.type != Audio::NoteEvent::EventType::PolyPressure) {
-                auto &onTheFly = _data->headerCustomType();
-                if (auto it = std::remove_if(onTheFly.begin(), onTheFly.end(), [note](const NoteEvent evt) {
+                auto &notesOnTheFly = _data->headerCustomType().notesOnTheFly;
+                if (auto it = std::remove_if(notesOnTheFly.begin(), notesOnTheFly.end(), [note](const NoteEvent evt) {
                     return (
                         note.key == evt.key &&
                         note.sampleOffset == evt.sampleOffset &&
                         note.type != evt.type
                     );
-                });     it == onTheFly.end()) {
-                    onTheFly.push(note);
+                });     it == notesOnTheFly.end()) {
+                    notesOnTheFly.push(note);
                 } else {
-                    onTheFly.erase(it, onTheFly.end());
+                    notesOnTheFly.erase(it, notesOnTheFly.end());
                 }
             } else
-                _data->headerCustomType().push(note);
+                _data->headerCustomType().notesOnTheFly.push(note);
             Scheduler::Get()->resetOnTheFlyMiss();
         },
         [this, node, partitionIndex, isPlaying, graphChanged, hasPaused] {
@@ -165,8 +166,8 @@ QString PartitionsModel::getAvailablePartitionName(void) const noexcept
     while (true) {
         bool unique = true;
         name = "Partition " + QString::number(size);
-        for (auto &partition : *_data) {
-            if (partition.name() == name) {
+        for (const auto &partition : _partitions) {
+            if (partition->name() == name) {
                 unique = false;
                 break;
             }
@@ -175,5 +176,5 @@ QString PartitionsModel::getAvailablePartitionName(void) const noexcept
             break;
         ++size;
     }
-    return Core::FlatString(name);
+    return name;
 }

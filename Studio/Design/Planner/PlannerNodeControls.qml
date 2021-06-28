@@ -24,7 +24,7 @@ Row {
             Rectangle {
                 width: parent.width
                 height: 1
-                color: Qt.darker(nodeDelegate.color, 1.25)
+                color: nodeDelegate.darkColor
             }
 
             DefaultText {
@@ -44,7 +44,7 @@ Row {
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
                 width: height
-                height: parent.height * 0.5
+                height: Math.min(parent.height / 2, 50)
                 source: "qrc:/Assets/SelectorMod.png"
                 showBorder: false
                 scaleFactor: 1

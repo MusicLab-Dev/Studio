@@ -6,10 +6,11 @@
         <file>PlannerContentView.qml</file>
         <file>PlannerRowDataLine.qml</file>
         <file>PlannerNodeDelegate.qml</file>
-        <file>PlannerNodePartitions.qml</file>
         <file>PlannerNodeControls.qml</file>
+        <file>PlannerNodeInstances.qml</file>
         <file>PlannerNodeAutomations.qml</file>
         <file>PlannerNodeChildren.qml</file>
         <file>PlannerNodeMenu.qml</file>
+        <file>PlannerPartitionsPreview.qml</file>
     </qresource>
 </RCC>

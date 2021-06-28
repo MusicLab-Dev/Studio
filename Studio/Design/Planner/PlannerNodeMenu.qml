@@ -38,6 +38,32 @@ DefaultMenu {
     id: nodeMenu
 
     Action {
+        id: focusAction
+        text: qsTr("Focus node")
+        enabled: targetNode != plannerView.node
+
+        onTriggered: {
+            app.plannerNodeCache = targetNode
+            plannerView.loadNode()
+        }
+    }
+
+    Action {
+        id: focusParentAction
+        text: qsTr("Focus parent node")
+        enabled: targetNode ? targetNode.parentNode : false
+
+        onTriggered: {
+            app.plannerNodeCache = targetNode.parentNode
+            plannerView.loadNode()
+        }
+    }
+
+    DefaultMenuSeparator {
+        enabled: focusAction.enabled || focusParentAction.enabled
+    }
+
+    Action {
         text: qsTr("Edit name")
         enabled: true
 

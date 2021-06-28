@@ -51,7 +51,7 @@ public:
 
 
     /** @brief Default constructor */
-    explicit PartitionModel(Audio::Partition *partition, PartitionsModel *parent = nullptr) noexcept;
+    explicit PartitionModel(Audio::Partition *partition, PartitionsModel *parent = nullptr, const QString &name = QString()) noexcept;
 
     /** @brief Virtual destructor */
     ~PartitionModel(void) noexcept override = default;

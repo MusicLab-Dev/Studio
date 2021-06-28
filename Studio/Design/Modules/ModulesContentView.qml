@@ -3,7 +3,6 @@ import QtQml 2.15
 import QtQuick.Controls 2.15
 
 import "../Default"
-import "../Playlist"
 import "../Tree"
 
 Item {
@@ -11,8 +10,6 @@ Item {
         if (idx < 0) {
             switch (idx) {
             case -1:
-                return playlistView
-            case -2:
                 return treeView
             default:
                 return null
@@ -37,7 +34,7 @@ Item {
     TreeView {
         id: treeView
         visible: modulesContent.selectedModule === moduleIndex
-        moduleIndex: -2
+        moduleIndex: -1
 
         Binding on y {
             when: visible

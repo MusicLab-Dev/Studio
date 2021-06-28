@@ -59,8 +59,8 @@ public:
     /** @brief Get the current latest instance */
     [[nodiscard]] Beat latestInstance(void) const noexcept { return _latestInstance; }
 
-    /** @brief Process a change that could influence the latest instance */
-    void processLatestInstanceChange(const Beat oldInstance, const Beat newInstance);
+    /** @brief Process a last instance change */
+    void processLatestInstanceChange(void);
 
 
     /** @brief Get the PartitionInstances model */

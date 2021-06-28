@@ -11,8 +11,8 @@
 #include "Models.hpp"
 #include "PartitionsModel.hpp"
 
-PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *parent) noexcept
-    : QAbstractListModel(parent), _data(partition)
+PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *parent, const QString &name) noexcept
+    : QAbstractListModel(parent), _data(partition), _name(name)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
@@ -247,7 +247,7 @@ void PartitionModel::updateInternal(Audio::Partition *data)
             _data = data;
         },
         [this, data] {
-            if (_data->data() != data->notes().data()) {
+            if (_data->data() != data->data()) {
                 beginResetModel();
                 endResetModel();
                 emit notesChanged();

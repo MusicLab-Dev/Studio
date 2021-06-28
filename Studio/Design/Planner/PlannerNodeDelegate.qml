@@ -6,15 +6,24 @@ import "../Default"
 
 Item {
     property NodeModel node: nodeInstance.instance
-    property bool isSelected: false
-    property color color: nodeDelegate.node ? nodeDelegate.node.color : "black"
-    property color hoveredColor: Qt.darker(color, 1.8)
-    property color pressedColor: Qt.darker(color, 2.2)
-    property color accentColor: Qt.darker(color, 1.6)
     property bool showChildren: false
     property var parentDelegate: null
     readonly property bool isChild: parentDelegate !== null
-    property alias nodeHeaderBackground: nodeHeaderBackground
+
+    // Selection
+    property bool isSelected: false
+    property bool isLastSelected: nodeDelegate == contentView.lastSelectedNode
+
+    // Colors
+    readonly property color color: nodeDelegate.node ? nodeDelegate.node.color : "black"
+    readonly property color darkColor: Qt.darker(color, 1.25)
+    readonly property color lightColor: Qt.lighter(color, 1.6)
+    readonly property color hoveredColor: Qt.darker(color, 1.8)
+    readonly property color pressedColor: Qt.darker(color, 2.2)
+    readonly property color accentColor: Qt.darker(color, 1.6)
+
+    // Alias
+    readonly property alias nodeHeaderBackground: nodeHeaderBackground
 
     id: nodeDelegate
     width: nodeDelegateCol.width
@@ -25,11 +34,11 @@ Item {
         x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
         y: contentView.headerHalfMargin
         width: contentView.rowHeaderWidth - x - contentView.headerMargin
-        height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodePartitions.height) - contentView.headerHalfMargin
+        height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodeInstances.height) - contentView.headerHalfMargin
         radius: 15
         color: nodeDelegate.color
-        border.color: nodeHeaderMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.hoveredColor
-        border.width: nodeHeaderMouseArea.containsMouse ? 4 : 0
+        border.color: nodeHeaderMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isLastSelected ? nodeDelegate.lightColor : nodeDelegate.hoveredColor
+        border.width: nodeHeaderMouseArea.containsMouse || nodeDelegate.isLastSelected ? 4 : 0
 
         MouseArea {
             id: nodeHeaderMouseArea
@@ -43,7 +52,14 @@ Item {
                     plannerNodeMenu.x = mouse.x
                     plannerNodeMenu.y = mouse.y
                 } else {
-                    nodeDelegate.isSelected = !nodeDelegate.isSelected
+                    if (isLastSelected) {
+                        nodeDelegate.isSelected = !nodeDelegate.isSelected
+                        if (!nodeDelegate.isSelected)
+                            contentView.lastSelectedNode = null
+                    } else {
+                        nodeDelegate.isSelected = true
+                        contentView.lastSelectedNode = nodeDelegate
+                    }
                 }
             }
 
@@ -75,8 +91,8 @@ Item {
     Column {
         id: nodeDelegateCol
 
-        PlannerNodePartitions {
-            id: nodePartitions
+        PlannerNodeInstances {
+            id: nodeInstances
         }
 
         PlannerRowDataLine {}
