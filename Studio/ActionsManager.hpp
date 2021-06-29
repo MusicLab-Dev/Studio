@@ -25,20 +25,20 @@ struct ActionPartitionBase : public ActionNodeBase
 };
 Q_DECLARE_METATYPE(ActionPartitionBase)
 
-struct ActionNoteBase : public ActionPartitionBase
+struct ActionNotesBase : public ActionPartitionBase
 {
-    Note note;
+    QVector<Note> notes;
 };
-Q_DECLARE_METATYPE(ActionNoteBase)
+Q_DECLARE_METATYPE(ActionNotesBase)
 
-using ActionAddNote = ActionNoteBase;
-using ActionRemoveNote = ActionNoteBase;
+using ActionAddNotes = ActionNotesBase;
+using ActionRemoveNotes = ActionNotesBase;
 
-struct ActionMoveNote : public ActionNoteBase
+struct ActionMoveNotes : public ActionNotesBase
 {
-    Note oldNote;
+    QVector<Note> oldNotes;
 };
-Q_DECLARE_METATYPE(ActionMoveNote)
+Q_DECLARE_METATYPE(ActionMoveNotes)
 
 
 /** @brief Actions Manager class */
@@ -51,17 +51,17 @@ public:
         None = 0,
 
         // Add
-        AddNote,
+        AddNotes,
         AddPartition,
         AddNode,
 
         // Remove
-        RemoveNote,
+        RemoveNotes,
         RemovePartition,
         RemoveNode,
         
         // Move
-        MoveNote,
+        MoveNotes,
         MovePartition,
         MoveNode,
     };
@@ -79,7 +79,7 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit ActionsManager(void);
+    explicit ActionsManager(QObject *parent = nullptr);
 
     /** @brief get current event */
     [[nodiscard]] const Event &current(void) const noexcept { return _events[_index - 1]; }
@@ -96,16 +96,16 @@ public slots:
     bool redo(void) noexcept;
 
     /** @brief Wrappers */
-    [[nodiscard]] ActionAddNote makeActionAddNote(PartitionModel *partition, int nodeID, int partitionID, const int from, const int to, const int key, const int velocity, const int tuning) const noexcept;
-    [[nodiscard]] ActionRemoveNote makeActionRemoveNote(PartitionModel *partition, int nodeID, int partitionID, const int from, const int to, const int key, const int velocity, const int tuning) const noexcept;
-    [[nodiscard]] ActionMoveNote makeActionMoveNote(PartitionModel *partition, int nodeID, int partitionID, const int oldFrom, const int from, const int oldTo, const int to, const int oldKey, const int key, const int oldVelocity, const int velocity, const int oldTuning, const int tuning) const noexcept;
+    [[nodiscard]] ActionAddNotes makeActionAddNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept;
+    [[nodiscard]] ActionRemoveNotes makeActionRemoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept;
+    [[nodiscard]] ActionMoveNotes makeActionMoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept;
 
 private:
     QVector<Event> _events {};
     int _index = 0;
 
     bool process(const Event &event, const Type type) noexcept;
-    bool actionAddNote(const Type type, const ActionAddNote &action);
-    bool actionRemoveNote(const Type type, const ActionRemoveNote &action);
-    bool actionMoveNote(const Type type, const ActionMoveNote &action);
+    bool actionAddNotes(const Type type, const ActionAddNotes &action);
+    bool actionRemoveNotes(const Type type, const ActionRemoveNotes &action);
+    bool actionMoveNotes(const Type type, const ActionMoveNotes &action);
 };

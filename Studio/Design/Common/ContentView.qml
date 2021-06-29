@@ -309,8 +309,6 @@ Item {
             parent = newParent
             targetColor = newColor
             visible = true
-            if (!isVoid)
-                actionsManager.push(["Attach", contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo, contentView.placementKey, AudioAPI.velocityMax])
         }
 
         function attachPartition(newParent, newColor, partition) {

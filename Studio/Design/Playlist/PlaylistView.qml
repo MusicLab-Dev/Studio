@@ -3,8 +3,6 @@ import QtQuick.Layouts 1.15
 
 import ActionsManager 1.0
 
-import "./PlaylistContent"
-
 ColumnLayout {
     enum EditMode {
         Regular,

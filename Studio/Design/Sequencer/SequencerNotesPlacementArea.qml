@@ -54,6 +54,8 @@ MouseArea {
     property var selectionMoveTopOffset: 0
     property var selectionMoveBottomOffset: 0
 
+    property var oldNotes: []
+
     property var oldNoteFrom
     property var oldNoteTo
     property var oldNoteKey
@@ -160,8 +162,8 @@ MouseArea {
                 selectionKeyTo = mouseKey
             } else if (noteIndex !== -1) {
                 var note = partition.getNote(noteIndex)
-                actionsManager.push(ActionsManager.Action.RemoveNote,
-                                    actionsManager.makeActionRemoveNote(partition, 0, 0, note.range.from, note.range.to, note.key, note.velocity, note.tuning))
+                actionsManager.push(ActionsManager.Action.RemoveNotes,
+                                    actionsManager.makeActionRemoveNotes(partition, 0, 0, [[note.range.from, note.range.to, note.key, note.velocity, note.tuning]]))
                 partition.remove(noteIndex)
             }
             return
@@ -203,8 +205,8 @@ MouseArea {
                     )
                 )
 
-                actionsManager.push(ActionsManager.Action.AddNote,
-                                    actionsManager.makeActionAddNote(partition, 0, 0, brushBegin, brushBegin + contentView.placementBeatPrecisionLastWidth, brushKey, AudioAPI.velocityMax, 0))
+                actionsManager.push(ActionsManager.Action.AddNotes,
+                                    actionsManager.makeActionAddNotes(partition, 0, 0, [[brushBegin, brushBegin + contentView.placementBeatPrecisionLastWidth, brushKey, AudioAPI.velocityMax, 0]]))
             // Move mode, attach preview
             } else {
                 // Attach the preview
@@ -351,8 +353,8 @@ MouseArea {
                         0
                     )
                 )
-                actionsManager.push(ActionsManager.Action.AddNote,
-                                    actionsManager.makeActionAddNote(partition, 0, 0, brushBegin, end, brushKey, AudioAPI.velocityMax, 0))
+                actionsManager.push(ActionsManager.Action.AddNotes,
+                                    actionsManager.makeActionAddNotes(partition, 0, 0, [[brushBegin, end, brushKey, AudioAPI.velocityMax, 0]]))
             }
             break
         case SequencerNotesPlacementArea.Mode.Select:
@@ -383,16 +385,16 @@ MouseArea {
             contentView.placementBeatPrecisionMouseOffset = 0
 
             if (isMoving)
-                actionsManager.push(ActionsManager.Action.MoveNote,
-                                actionsManager.makeActionMoveNote(partition, 0, 0,
-                                                                  oldNoteFrom, contentView.placementBeatPrecisionFrom,
+                actionsManager.push(ActionsManager.Action.MoveNotes,
+                                actionsManager.makeActionMoveNotes(partition, 0, 0,
+                                                                  [[oldNoteFrom, contentView.placementBeatPrecisionFrom,
                                                                   oldNoteTo, contentView.placementBeatPrecisionTo,
                                                                   oldNoteKey, contentView.placementKey,
                                                                   oldNoteVelocity, AudioAPI.velocityMax,
-                                                                  oldNoteTuning, 0))
+                                                                  oldNoteTuning, 0]]))
             else
-                actionsManager.push(ActionsManager.Action.AddNote,
-                                actionsManager.makeActionAddNote(partition, 0, 0, contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo, contentView.placementKey, AudioAPI.velocityMax, 0))
+                actionsManager.push(ActionsManager.Action.AddNotes,
+                                actionsManager.makeActionAddNotes(partition, 0, 0, [[contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo, contentView.placementKey, AudioAPI.velocityMax, 0]]))
             isMoving = false
             break
         case SequencerNotesPlacementArea.Mode.Select:
@@ -406,6 +408,14 @@ MouseArea {
                 Math.max(selectionKeyFrom, selectionKeyTo)
             )
             selectionListModel = list
+            var count = oldNotes.length
+            for (var i = 0; i < count; ++i)
+                oldNotes.pop()
+            for (var id in list) {
+                var note = partition.getNote(id);
+                oldNotes.push([note.range.from, note.range.to, note.key, note.velocity, note.tuning])
+            }
+
             break
         case SequencerNotesPlacementArea.Mode.SelectRemove:
             // Select notes
@@ -425,6 +435,21 @@ MouseArea {
             partition.addRange(selectionList.toList())
             selectionMoveBeatPrecisionOffset = 0
             selectionMoveKeyOffset = 0
+
+            var count = oldNotes.length
+            var notes = []
+            for (var i = 0; i < count; ++i) {
+                var newNote = selectionList.toList()[i]
+                notes.push([oldNotes[i][0], newNote.range.from,
+                            oldNotes[i][1], newNote.range.to,
+                            oldNotes[i][2], newNote.key,
+                            oldNotes[i][3], newNote.velocity,
+                            oldNotes[i][4], newNote.tuning])
+            }
+            console.debug(notes)
+            actionsManager.push(ActionsManager.Action.MoveNotes,
+                            actionsManager.makeActionMoveNotes(partition, 0, 0, notes))
+            isMoving = false
             break
         default:
             break

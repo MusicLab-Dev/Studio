@@ -12,7 +12,8 @@
 #include "ActionsManager.hpp"
 #include "PartitionModel.hpp"
 
-ActionsManager::ActionsManager(void) noexcept
+ActionsManager::ActionsManager(QObject *parent)
+    : QObject(parent)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
@@ -58,12 +59,12 @@ bool ActionsManager::process(const Event &event, const Type type) noexcept
 {
     switch (event.action)
     {
-        case Action::AddNote:
-            return actionAddNote(type, event.data.value<ActionAddNote>());
-        case Action::RemoveNote:
-            return actionRemoveNote(type, event.data.value<ActionRemoveNote>());
-        case Action::MoveNote:
-            return actionMoveNote(type, event.data.value<ActionMoveNote>());
+        case Action::AddNotes:
+            return actionAddNotes(type, event.data.value<ActionAddNotes>());
+        case Action::RemoveNotes:
+            return actionRemoveNotes(type, event.data.value<ActionRemoveNotes>());
+        case Action::MoveNotes:
+            return actionMoveNotes(type, event.data.value<ActionMoveNotes>());
         default:
             return false;
     }
@@ -71,118 +72,155 @@ bool ActionsManager::process(const Event &event, const Type type) noexcept
     return false;
 }
 
-bool ActionsManager::actionAddNote(const Type type, const ActionAddNote &action)
+bool ActionsManager::actionAddNotes(const Type type, const ActionAddNotes &action)
 {
-    auto &note = action.note;
+    auto &notes = action.notes;
 
     if (type == Type::Undo) {
-        int idx = action.partition->findExact(Note(BeatRange(note.range.from, note.range.to), note.key, note.velocity, note.tuning));
-        if (idx == -1) {
-            qDebug() << "UNDO: actionAddNote error (idx == -1)";
-            return false;
+        for (auto &note : notes) {
+            int idx = action.partition->findExact(Note(BeatRange(note.range.from, note.range.to), note.key, note.velocity, note.tuning));
+            if (idx == -1) {
+                qDebug() << "UNDO: actionAddNote error (idx == -1)";
+                continue;
+            }
+            action.partition->remove(idx);
         }
-        action.partition->remove(idx);
         qDebug() << "UNDO: actionAddNote success";
         return true;
     }
 
     if (type == Type::Redo) {
-        action.partition->add({{Audio::Beat(note.range.from), Audio::Beat(note.range.to)},
-                        Audio::Key(note.key),
-                        Audio::Velocity(note.velocity),
-                        Audio::Tuning(note.tuning)});
+        for (auto &note : notes) {
+            action.partition->add({{Audio::Beat(note.range.from), Audio::Beat(note.range.to)},
+                            Audio::Key(note.key),
+                            Audio::Velocity(note.velocity),
+                            Audio::Tuning(note.tuning)});
+        }
         qDebug() << "REDO: actionAddNote success";
         return true;
     }
     return false;
 }
 
-bool ActionsManager::actionRemoveNote(const Type type, const ActionRemoveNote &action)
+bool ActionsManager::actionRemoveNotes(const Type type, const ActionRemoveNotes &action)
 {
-    auto &note = action.note;
+    auto &notes = action.notes;
+
     if (type == Type::Undo) {
-        action.partition->add({{Audio::Beat(note.range.from), Audio::Beat(note.range.to)},
-                        Audio::Key(note.key),
-                        Audio::Velocity(note.velocity),
-                        Audio::Tuning(note.tuning)});
+        for (auto &note : notes) {
+            action.partition->add({{Audio::Beat(note.range.from), Audio::Beat(note.range.to)},
+                            Audio::Key(note.key),
+                            Audio::Velocity(note.velocity),
+                            Audio::Tuning(note.tuning)});
+        }
         qDebug() << "UNDO: actionRemoveNote success";
         return true;
     }
 
     if (type == Type::Redo) {
-        int idx = action.partition->findExact(Note(BeatRange(note.range.from, note.range.to), note.key, note.velocity, note.tuning));
-        if (idx == -1) {
-            qDebug() << "REDO: actionRemoveNote error (idx == -1)";
-            return false;
+        for (auto &note : notes) {
+            int idx = action.partition->findExact(Note(BeatRange(note.range.from, note.range.to), note.key, note.velocity, note.tuning));
+            if (idx == -1) {
+                qDebug() << "REDO: actionRemoveNote error (idx == -1)";
+                continue;
+            }
+            action.partition->remove(idx);
         }
-        action.partition->remove(idx);
         qDebug() << "REDO: actionRemoveNote success";
         return true;
     }
-    return true;
+    return false;
 }
 
-bool ActionsManager::actionMoveNote(const Type type, const ActionMoveNote &action)
+bool ActionsManager::actionMoveNotes(const Type type, const ActionMoveNotes &action)
 {
-    auto &note = action.note;
-    auto &oldNote = action.oldNote;
+    auto &notes = action.notes;
+    auto &oldNotes = action.oldNotes;
 
     if (type == Type::Undo) {
-        int idx = action.partition->findExact(Note(BeatRange(note.range.from, note.range.to), note.key, note.velocity, note.tuning));
-        if (idx == -1) {
-            qDebug() << "UNDO: actionMoveNote error (idx == -1)";
-            return false;
+        for (int i = 0; i < notes.size() && i < oldNotes.size(); i++) {
+            auto &note = notes[i];
+            auto &oldNote = oldNotes[i];
+            int idx = action.partition->findExact(Note(BeatRange(note.range.from, note.range.to), note.key, note.velocity, note.tuning));
+            if (idx == -1) {
+                qDebug() << "UNDO: actionMoveNote error (idx == -1)";
+                continue;
+            }
+            action.partition->set(idx, {
+                               {Audio::Beat(oldNote.range.from), Audio::Beat(oldNote.range.to)},
+                                Audio::Key(oldNote.key),
+                                Audio::Velocity(oldNote.velocity),
+                                Audio::Tuning(oldNote.tuning)});
         }
-        action.partition->set(idx, {
-                           {Audio::Beat(oldNote.range.from), Audio::Beat(oldNote.range.to)},
-                            Audio::Key(oldNote.key),
-                            Audio::Velocity(oldNote.velocity),
-                            Audio::Tuning(oldNote.tuning)});
+        qDebug() << "UNDO: actionMoveNote success";
+        return true;
     }
 
     if (type == Type::Redo) {
-        int idx = action.partition->findExact(Note(BeatRange(oldNote.range.from, oldNote.range.to), oldNote.key, oldNote.velocity, oldNote.tuning));
-        if (idx == -1) {
-            qDebug() << "UNDO: actionMoveNote error (idx == -1)";
-            return false;
+        for (int i = 0; i < notes.size() && i < oldNotes.size(); i++) {
+            auto &note = notes[i];
+            auto &oldNote = oldNotes[i];
+            int idx = action.partition->findExact(Note(BeatRange(oldNote.range.from, oldNote.range.to), oldNote.key, oldNote.velocity, oldNote.tuning));
+            if (idx == -1) {
+                qDebug() << "REDO: actionMoveNote error (idx == -1)";
+                return false;
+            }
+            action.partition->set(idx, {
+                               {Audio::Beat(note.range.from), Audio::Beat(note.range.to)},
+                                Audio::Key(note.key),
+                                Audio::Velocity(note.velocity),
+                                Audio::Tuning(note.tuning)});
         }
-        action.partition->set(idx, {
-                           {Audio::Beat(note.range.from), Audio::Beat(note.range.to)},
-                            Audio::Key(note.key),
-                            Audio::Velocity(note.velocity),
-                            Audio::Tuning(note.tuning)});
-
+        qDebug() << "REDO: actionMoveNote success";
+        return true;
     }
-    return true;
+    return false;
 }
 
-ActionAddNote ActionsManager::makeActionAddNote(PartitionModel *partition, int nodeID, int partitionID, const int from, const int to, const int key, const int velocity, const int tuning) const noexcept
+ActionAddNotes ActionsManager::makeActionAddNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept
 {
-    ActionAddNote action;
+    ActionAddNotes action;
     action.partition = partition;
     action.nodeID = nodeID;
     action.partitionID = partitionID;
-    action.note = Note({BeatRange(Audio::Beat(from), Audio::Beat(to)), Audio::Key(key), Audio::Velocity(velocity), Audio::Tuning(tuning)});
+
+    for (auto &elem : args) {
+        action.notes.push_back(
+            Note({BeatRange(Audio::Beat(elem[0].toInt()), Audio::Beat(elem[1].toInt())), Audio::Key(elem[2].toInt()), Audio::Velocity(elem[3].toInt()), Audio::Tuning(elem[4].toInt())})
+        );
+    }
     return action;
 }
 
-ActionRemoveNote ActionsManager::makeActionRemoveNote(PartitionModel *partition, int nodeID, int partitionID, const int from, const int to, const int key, const int velocity, const int tuning) const noexcept
+ActionRemoveNotes ActionsManager::makeActionRemoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept
 {
-    ActionRemoveNote action;
+    ActionRemoveNotes action;
     action.partition = partition;
     action.nodeID = nodeID;
     action.partitionID = partitionID;
-    action.note = Note({BeatRange(Audio::Beat(from), Audio::Beat(to)), Audio::Key(key), Audio::Velocity(velocity), Audio::Tuning(tuning)});
+
+    for (auto &elem : args) {
+        action.notes.push_back(
+            Note({BeatRange(Audio::Beat(elem[0].toInt()), Audio::Beat(elem[1].toInt())), Audio::Key(elem[2].toInt()), Audio::Velocity(elem[3].toInt()), Audio::Tuning(elem[4].toInt())})
+        );
+    }
     return action;
 }
 
-ActionMoveNote ActionsManager::makeActionMoveNote(PartitionModel *partition, int nodeID, int partitionID, const int oldFrom, const int from, const int oldTo, const int to, const int oldKey, const int key, const int oldVelocity, const int velocity, const int oldTuning, const int tuning) const noexcept
+ActionMoveNotes ActionsManager::makeActionMoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept
 {
-    ActionMoveNote action;
+    ActionMoveNotes action;
     action.partition = partition;
     action.nodeID = nodeID;
     action.partitionID = partitionID;
-    action.oldNote = Note({BeatRange(Audio::Beat(oldFrom), Audio::Beat(oldTo)), Audio::Key(oldKey), Audio::Velocity(oldVelocity), Audio::Tuning(oldTuning)});
-    action.note = Note({BeatRange(Audio::Beat(from), Audio::Beat(to)), Audio::Key(key), Audio::Velocity(velocity), Audio::Tuning(tuning)});
+
+    for (auto &elem : args) {
+        action.oldNotes.push_back(
+            Note({BeatRange(Audio::Beat(elem[0].toInt()), Audio::Beat(elem[2].toInt())), Audio::Key(elem[4].toInt()), Audio::Velocity(elem[6].toInt()), Audio::Tuning(elem[8].toInt())})
+        );
+        action.notes.push_back(
+            Note({BeatRange(Audio::Beat(elem[1].toInt()), Audio::Beat(elem[3].toInt())), Audio::Key(elem[5].toInt()), Audio::Velocity(elem[7].toInt()), Audio::Tuning(elem[9].toInt())})
+        );
+    }
     return action;
 }

@@ -51,10 +51,10 @@ void Studio::InitResources(void)
     qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
     qRegisterMetaType<ActionNodeBase>("ActionNodeBase");
     qRegisterMetaType<ActionPartitionBase>("ActionPartitionBase");
-    qRegisterMetaType<ActionNoteBase>("ActionNoteBase");
-    qRegisterMetaType<ActionAddNote>("ActionAddNote");
-    qRegisterMetaType<ActionMoveNote>("ActionMoveNote");
-    qRegisterMetaType<ActionRemoveNote>("ActionRemoveNote");
+    qRegisterMetaType<ActionNotesBase>("ActionNoteBase");
+    qRegisterMetaType<ActionAddNotes>("ActionAddNotes");
+    qRegisterMetaType<ActionMoveNotes>("ActionMoveNotes");
+    qRegisterMetaType<ActionRemoveNotes>("ActionRemoveNotes");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
