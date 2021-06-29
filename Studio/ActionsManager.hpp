@@ -5,37 +5,77 @@
 
 #pragma once
 
+#include <QObject>
+
+#include "Note.hpp"
+#include "PartitionModel.hpp"
+
+struct ActionNodeBase
+{
+    int nodeID;
+};
+Q_DECLARE_METATYPE(ActionNodeBase)
+
+struct ActionPartitionBase : public ActionNodeBase
+{
+    int partitionID;
+
+    //DEBUG
+    PartitionModel *partition;
+};
+Q_DECLARE_METATYPE(ActionPartitionBase)
+
+struct ActionNoteBase : public ActionPartitionBase
+{
+    Note note;
+};
+Q_DECLARE_METATYPE(ActionNoteBase)
+
+using ActionAddNote = ActionNoteBase;
+using ActionRemoveNote = ActionNoteBase;
+
+struct ActionMoveNote : public ActionNoteBase
+{
+    Note oldNote;
+};
+Q_DECLARE_METATYPE(ActionMoveNote)
+
+
 /** @brief Actions Manager class */
 class ActionsManager : public QObject
 {
     Q_OBJECT
-    
+
 public:
     enum class Action {
-        NOTHING,
+        None = 0,
 
-        ADD_NOTE,
-        ADD_PARTITION,
-        ADD_NODE,
+        // Add
+        AddNote,
+        AddPartition,
+        AddNode,
 
-        REMOVE_NOTE,
-        REMOVE_PARTITION,
-        REMOVE_NODE,
+        // Remove
+        RemoveNote,
+        RemovePartition,
+        RemoveNode,
         
-        MOVE_NOTE,
-        MOVE_PARTITION,
-        MOVE_NODE,
+        // Move
+        MoveNote,
+        MovePartition,
+        MoveNode,
     };
     Q_ENUM(Action);
 
     enum class Type {
-        UNDO,
-        REDO
+        Undo,
+        Redo
     };
 
-    struct Event {
-        Action action {Action::NOTHING};
-        QVariantList args {};
+    struct Event
+    {
+        Action action { Action::None };
+        QVariant data {};
     };
 
     /** @brief Default constructor */
@@ -45,25 +85,27 @@ public:
     [[nodiscard]] const Event &current(void) const noexcept { return _events[_index - 1]; }
     [[nodiscard]] Event &current(void) noexcept { return _events[_index - 1]; }
 
-    /** @brief get after event */
-    [[nodiscard]] const Event &after(void) const { if (_index + 1 > _events.size()) throw std::range_error("ActionsManager::after idx out"); return _events[_index]; }
-    [[nodiscard]] Event &after(void) { if (_index + 1 > _events.size()) throw std::range_error("ActionsManager::after idx out"); return _events[_index]; }
-
 public slots:
     /** @brief Push a new event in the stack */
-    bool push(const Action &action, const QVariantList &args) noexcept;
+    bool push(const Action action, const QVariant &data) noexcept;
     
     /** @brief Process the undo */
-    bool undo(void);
+    bool undo(void) noexcept;
 
     /** @brief Process the redo */
-    bool redo(void);
+    bool redo(void) noexcept;
+
+    /** @brief Wrappers */
+    [[nodiscard]] ActionAddNote makeActionAddNote(PartitionModel *partition, int nodeID, int partitionID, const int from, const int to, const int key, const int velocity, const int tuning) const noexcept;
+    [[nodiscard]] ActionRemoveNote makeActionRemoveNote(PartitionModel *partition, int nodeID, int partitionID, const int from, const int to, const int key, const int velocity, const int tuning) const noexcept;
+    [[nodiscard]] ActionMoveNote makeActionMoveNote(PartitionModel *partition, int nodeID, int partitionID, const int oldFrom, const int from, const int oldTo, const int to, const int oldKey, const int key, const int oldVelocity, const int velocity, const int oldTuning, const int tuning) const noexcept;
 
 private:
     QVector<Event> _events {};
     int _index = 0;
 
-    bool actionAddNote(const Type &type, const QVariantList &args);
-    bool actionRemoveNote(const Type &type, const QVariantList &args);
-    bool actionMoveNote(const Type &type, const QVariantList &args);
+    bool process(const Event &event, const Type type) noexcept;
+    bool actionAddNote(const Type type, const ActionAddNote &action);
+    bool actionRemoveNote(const Type type, const ActionRemoveNote &action);
+    bool actionMoveNote(const Type type, const ActionMoveNote &action);
 };

@@ -49,6 +49,12 @@ void Studio::InitResources(void)
     qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
     qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");
     qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
+    qRegisterMetaType<ActionNodeBase>("ActionNodeBase");
+    qRegisterMetaType<ActionPartitionBase>("ActionPartitionBase");
+    qRegisterMetaType<ActionNoteBase>("ActionNoteBase");
+    qRegisterMetaType<ActionAddNote>("ActionAddNote");
+    qRegisterMetaType<ActionMoveNote>("ActionMoveNote");
+    qRegisterMetaType<ActionRemoveNote>("ActionRemoveNote");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
@@ -81,11 +87,8 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
     qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
-<<<<<<< HEAD
     qmlRegisterType<ActionsManager>("ActionsManager", 1, 0, "ActionsManager");
-=======
     qmlRegisterType<NodeListModel>("NodeListModel", 1, 0, "NodeListModel");
->>>>>>> 5d40a6a7485b95a6c42c933b2d3df9ab89f80a7a
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);

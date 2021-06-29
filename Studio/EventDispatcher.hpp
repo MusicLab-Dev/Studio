@@ -73,6 +73,10 @@ signals:
     void volumeContext(float ratio);
     void volumePlaylist(float ratio);
 
+    // Other
+    void undo(bool pressed);
+    void redo(bool pressed);
+
 private:
     KeyboardEventListener _keyboardListener;
     BoardEventListener _boardListener;
