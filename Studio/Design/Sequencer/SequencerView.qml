@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.15
 import NodeModel 1.0
 import PartitionModel 1.0
 import PluginTableModel 1.0
+import ActionsManager 1.0
+import AudioAPI 1.0
 
 Column {
     enum EditMode {
@@ -175,4 +177,16 @@ Column {
         width: parent.width
         height: parent.height * 0.15
     }
+
+    ActionsManager {
+        id: actionsManager
+    }
+
+    Connections {
+            target: eventDispatcher
+            enabled: moduleIndex === modulesView.selectedModule
+
+            function onUndo(pressed) { if (!pressed) return; actionsManager.undo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+            function onRedo(pressed) { if (!pressed) return; actionsManager.redo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+   }
 }

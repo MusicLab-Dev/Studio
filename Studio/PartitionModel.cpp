@@ -117,11 +117,23 @@ int PartitionModel::find(const quint8 key, const quint32 beat) const noexcept
     int idx = 0;
 
     for (const auto &note : _data->notes()) {
-        if (note.key != key || beat < note.range.from || beat > note.range.to) {
+        if (note.key != key || beat < note.range.from || beat >= note.range.to) {
             ++idx;
             continue;
         }
         return idx;
+    }
+    return -1;
+}
+
+int PartitionModel::findExact(const Note &note) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &elem : _data->notes()) {
+        if (elem == note)
+            return idx;
+        ++idx;
     }
     return -1;
 }
@@ -175,14 +187,15 @@ void PartitionModel::set(const int idx, const Note &range)
 
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("PartitionModel::move: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+
     Scheduler::Get()->addEvent(
         [this, range, idx] {
             _data->notes().assign(idx, range);
         },
         [this, idx, newIdx] {
             if (idx != newIdx) {
-                beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newIdx ? newIdx + 1 : 0);
-                endMoveRows();
+                beginResetModel(); // @todo fix all 'set'
+                endResetModel();
             } else {
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);

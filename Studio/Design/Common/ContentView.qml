@@ -305,7 +305,7 @@ Item {
     Rectangle {
         property color targetColor: "white"
 
-        function attach(newParent, newColor) {
+        function attach(newParent, newColor, isVoid) {
             parent = newParent
             targetColor = newColor
             visible = true
