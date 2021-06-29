@@ -1,6 +1,6 @@
 /**
  * @ Author: Cédric Lucchese
- * @ Description: Actions Manager
+ * @ Description: Actions Manager listener
  */
 
 #pragma once
@@ -79,7 +79,7 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit ActionsManager(QObject *parent = nullptr);
+    explicit ActionsManager(void);
 
     /** @brief get current event */
     [[nodiscard]] const Event &current(void) const noexcept { return _events[_index - 1]; }

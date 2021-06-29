@@ -305,10 +305,12 @@ Item {
     Rectangle {
         property color targetColor: "white"
 
-        function attach(newParent, newColor) {
+        function attach(newParent, newColor, isVoid) {
             parent = newParent
             targetColor = newColor
             visible = true
+            if (!isVoid)
+                actionsManager.push(["Attach", contentView.placementBeatPrecisionFrom, contentView.placementBeatPrecisionTo, contentView.placementKey, AudioAPI.velocityMax])
         }
 
         function attachPartition(newParent, newColor, partition) {

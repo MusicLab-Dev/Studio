@@ -1,18 +1,18 @@
 /**
  * @ Author: Cédric Lucchese
- * @ Description: Actions Manager
+ * @ Description: Actions Manager listener
  */
 
 #include <QVariant>
 #include <QQmlEngine>
+#include <QDebug>
 
 #include "Base.hpp"
 
 #include "ActionsManager.hpp"
 #include "PartitionModel.hpp"
 
-ActionsManager::ActionsManager(QObject *parent)
-    : QObject(parent)
+ActionsManager::ActionsManager(void) noexcept
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }

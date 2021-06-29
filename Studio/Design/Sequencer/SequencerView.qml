@@ -5,6 +5,12 @@ import NodeModel 1.0
 import PartitionModel 1.0
 import PluginTableModel 1.0
 import ActionsManager 1.0
+<<<<<<< HEAD:Studio/Design/Sequencer/SequencerView.qml
+=======
+import AudioAPI 1.0
+
+import "./SequencerContent/"
+>>>>>>> 973471a8dab1633cd4f3abfab3318b14b1a08e86:Studio/Design/SequencerView/SequencerView.qml
 
 Column {
     enum EditMode {
@@ -179,6 +185,7 @@ Column {
 
     ActionsManager {
         id: actionsManager
+<<<<<<< HEAD:Studio/Design/Sequencer/SequencerView.qml
     }
 
     Connections {
@@ -188,4 +195,70 @@ Column {
             function onUndo(pressed) { if (pressed) actionsManager.undo() }
             function onRedo(pressed) { if (pressed) actionsManager.redo() }
    }
+=======
+
+        onUndoProcess: {
+                /** Placement */
+            if (action[0] == "Attach") {
+                partition.add(
+                    AudioAPI.note(
+                        AudioAPI.beatRange(action[1], action[2]),
+                        action[3],
+                        action[4],
+                        0
+                    )
+                )
+                return
+            }
+            if (action[0] == "Detach") {
+                var idx = partition.find(action[3], action[1] + 1)
+                if (idx == -1) {
+                    undo()
+                    return
+                }
+                partition.remove(idx)
+                if (lastAction()[0] == "Attach")
+                    undo()
+                return
+            }
+            if (action[0] == "Brush") {
+                var idx = partition.find(action[3], action[1] + 1)
+                if (idx == -1) {
+                    undo()
+                    return
+                }
+                partition.remove(idx)
+                if (lastAction()[0] == "Brush")
+                    undo()
+                return
+            }
+            if (action[0] == "Remove") {
+                partition.add(
+                        AudioAPI.note(
+                            AudioAPI.beatRange(action[1], action[2]),
+                            action[3],
+                            action[4],
+                            0
+                        )
+                    )
+            }
+        }
+
+        onRedoProcess: {
+            /** Notes */
+                /** Placement */
+                /*if (action[1] == "Placement") {
+                    partition.add(
+                        AudioAPI.note(
+                            AudioAPI.beatRange(action[2], action[3]),
+                            action[4],
+                            action[5],
+                            0
+                        )
+                    )
+                }*/
+
+        }
+    }
+>>>>>>> 973471a8dab1633cd4f3abfab3318b14b1a08e86:Studio/Design/SequencerView/SequencerView.qml
 }

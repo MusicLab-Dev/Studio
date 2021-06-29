@@ -84,6 +84,8 @@ signals:
     /** @brief Notify that the project scheluder has changed */
     void schedulerChanged(void);
 
+    /** @brief Notify that the project scheluder has changed */
+    void actionsManagerChanged(void);
 
 private:
     /** @brief Setup the internal scheduler */

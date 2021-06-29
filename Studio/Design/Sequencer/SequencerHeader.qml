@@ -173,6 +173,12 @@ Rectangle {
                     Layout.preferredHeight: parent.height
                     Layout.preferredWidth: parent.width * 0.25
                     Layout.alignment: Qt.AlignHCenter
+
+                    prev.enabled: true// actionsManager.canUndo()
+                    next.enabled: true//actionsManager.canRedo()
+
+                    prev.onPressed: actionsManager.undo()
+                    next.onPressed: actionsManager.redo()
                 }
             }
         }
