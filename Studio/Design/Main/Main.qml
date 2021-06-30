@@ -12,8 +12,8 @@ import DevicesModel 1.0
 import ClipboardManager 1.0
 
 import "../Common"
-import "../ModulesView"
-import "../Modules/Workspaces"
+import "../Modules"
+import "../Workspaces"
 
 Window {
     function urlToPath(urlString) {
@@ -34,21 +34,26 @@ Window {
     minimumHeight: 600
 
     Component.onCompleted: {
-        width = Screen.desktopAvailableWidth * 0.85
-        height = Screen.desktopAvailableHeight * 0.85
-        x = Screen.desktopAvailableWidth / 2 - width / 2
-        y = Screen.desktopAvailableHeight / 2 - height / 2
+        Screen
+        width = Screen.width * 0.85
+        height = Screen.height * 0.85
+        x = Screen.width / 2 - width / 2
+        y = Screen.height / 2 - height / 2
     }
 
     Application {
         property NodeModel partitionNodeCache: null
         property int partitionIndexCache: -1
+        property NodeModel plannerNodeCache: null
+        property var plannerNodesCache: []
         property var currentPlayer: null
 
         id: app
     }
 
     ThemeManager {
+        property color semiAccentColor: "#338DCF" // @todo add this to ThemeManager
+
         id: themeManager
         theme: ThemeManager.Dark
     }

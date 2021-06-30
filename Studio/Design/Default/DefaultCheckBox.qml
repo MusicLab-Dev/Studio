@@ -19,7 +19,7 @@ CheckBox {
         radius: 5
         color: control.enabled ? "#001E36" : themeManager.disabledColor
         border.width: control.down ? 2 : control.hovered ? 1 : 0
-        border.color: "#31A8FF"
+        border.color: themeManager.accentColor
     }
 
     indicator: Image {
@@ -34,7 +34,7 @@ CheckBox {
         elide: elideText ? Text.ElideRight : Text.ElideNone
         font: control.font
         opacity: control.checked || control.hovered ? 1.0 : 0.42
-        color: control.checked || control.hovered ? "#31A8FF" : "#FFFFFF"
+        color: control.checked || control.hovered ? themeManager.accentColor : "#FFFFFF"
         verticalAlignment: Text.AlignVCenter
         leftPadding: control.background.width * 1.5
         width: control.width - control.background.width

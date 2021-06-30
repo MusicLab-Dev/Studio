@@ -9,12 +9,12 @@ DefaultTextInput {
     placeholderText: qsTr("Enter some text")
     placeholderTextColor: color
     hoverEnabled: true
-    color: control.hovered || control.focus ? "#31A8FF" : "#295F8B"
+    color: control.hovered || control.focus ? themeManager.accentColor : "#295F8B"
 
     background: Rectangle {
         anchors.fill: parent
         color: "transparent"
         border.width: 1
-        border.color: control.hovered || control.focus ? "#31A8FF" : "#295F8B"
+        border.color: control.hovered || control.focus ? themeManager.accentColor : "#295F8B"
     }
 }

@@ -22,7 +22,7 @@ Button {
 
         onPaint: {
             var ctx = getContext("2d")
-            ctx.strokeStyle = "#31A8FF"
+            ctx.strokeStyle = themeManager.accentColor
             ctx.lineWidth = 5;
             ctx.beginPath();
             ctx.moveTo(0, height / 2);

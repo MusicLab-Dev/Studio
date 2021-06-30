@@ -1,5 +1,5 @@
 /**
- * @ Author: Dorian Gonzalez
+ * @ Author: Cédric Lucchese
  * @ Description: PartitionModel class
  */
 

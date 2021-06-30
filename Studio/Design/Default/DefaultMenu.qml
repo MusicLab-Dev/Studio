@@ -8,7 +8,7 @@ Menu {
     delegate: DefaultMenuItem {}
 
     background: Rectangle {
-        border.color: "#338DCF"
+        border.color: themeManager.semiAccentColor
         border.width: 1
         z: 1
         color: "transparent"

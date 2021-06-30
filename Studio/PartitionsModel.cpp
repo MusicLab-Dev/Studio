@@ -1,5 +1,5 @@
 /**
- * @ Author: Dorian Gonzalez
+ * @ Author: Cédric Lucchese
  * @ Description: PartitionsModel class
  */
 
@@ -135,7 +135,21 @@ void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const 
         hasPaused = scheduler->pauseImpl();
     scheduler->addEvent(
         [this, note] {
-            _data->headerCustomType().push(note);
+            if (/* note.type != Audio::NoteEvent::EventType::OnOff && */ note.type != Audio::NoteEvent::EventType::PolyPressure) {
+                auto &onTheFly = _data->headerCustomType();
+                if (auto it = std::remove_if(onTheFly.begin(), onTheFly.end(), [note](const NoteEvent evt) {
+                    return (
+                        note.key == evt.key &&
+                        note.sampleOffset == evt.sampleOffset &&
+                        note.type != evt.type
+                    );
+                });     it == onTheFly.end()) {
+                    onTheFly.push(note);
+                } else {
+                    onTheFly.erase(it, onTheFly.end());
+                }
+            } else
+                _data->headerCustomType().push(note);
             Scheduler::Get()->resetOnTheFlyMiss();
         },
         [this, node, partitionIndex, isPlaying, graphChanged, hasPaused] {

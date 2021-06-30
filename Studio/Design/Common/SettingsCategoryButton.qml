@@ -15,8 +15,8 @@ Button {
         width: control.width
         height: control.height
         border.width: control.pressed ? (height / 20) : control.hovered ? (height / 24) : 0
-        border.color: control.pressed ? "#31A8FF" : control.hovered ? "#0D86CB" : ""
-        color: control.activated ? "#31A8FF" : "#001E36"
+        border.color: control.pressed ? themeManager.accentColor : control.hovered ? "#0D86CB" : ""
+        color: control.activated ? themeManager.accentColor : "#001E36"
         radius: width / 17
     }
 
@@ -27,7 +27,7 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         text: control.text
         font: control.font
-        color: control.pressed ? "#31A8FF" : control.hovered ? "#0D86CB" : "#295F8B"
+        color: control.pressed ? themeManager.accentColor : control.hovered ? "#0D86CB" : "#295F8B"
         elide: Text.ElideRight
     }
 

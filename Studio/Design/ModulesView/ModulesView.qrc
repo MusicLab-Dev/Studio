@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/ModulesView">
-        <file>ModulesView.qml</file>
-        <file>ModulesViewContent.qml</file>
-        <file>ModuleViewNewTabButton.qml</file>
-        <file>ModulesViewTab.qml</file>
-    </qresource>
-</RCC>

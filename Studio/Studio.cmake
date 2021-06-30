@@ -7,24 +7,26 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+find_package(Qt5QmlImportScanner REQUIRED)
 find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml REQUIRED)
 find_package(Threads)
+
+set(APP_ICON_RESOURCE_WINDOWS "${StudioRoot}/Lexo.rc")
 
 qt5_add_resources(QtResources
     ${StudioDir}/Resources/Resources.qrc
     ${StudioDir}/Design/Main/Main.qrc
     ${StudioDir}/Design/Default/Default.qrc
-    ${StudioDir}/Design/ModulesView/ModulesView.qrc
-    ${StudioDir}/Design/SequencerView/SequencerView.qrc
+    ${StudioDir}/Design/Modules/Modules.qrc
+    ${StudioDir}/Design/Sequencer/Sequencer.qrc
     ${StudioDir}/Design/Common/Common.qrc
-    ${StudioDir}/Design/PlaylistView/PlaylistView.qrc
-    ${StudioDir}/Design/EmptyView/EmptyView.qrc
-    ${StudioDir}/Design/BoardView/BoardView.qrc
-
-    # Modules
-    ${StudioDir}/Design/Modules/Plugins/Plugins.qrc
-    ${StudioDir}/Design/Modules/Workspaces/Workspaces.qrc
-    ${StudioDir}/Design/Modules/Settings/Settings.qrc
+    ${StudioDir}/Design/Tree/Tree.qrc
+    ${StudioDir}/Design/Playlist/Playlist.qrc
+    ${StudioDir}/Design/Planner/Planner.qrc
+    ${StudioDir}/Design/Boards/Boards.qrc
+    ${StudioDir}/Design/Plugins/Plugins.qrc
+    ${StudioDir}/Design/Workspaces/Workspaces.qrc
+    ${StudioDir}/Design/Settings/Settings.qrc
 )
 
 set(StudioSources
@@ -64,6 +66,8 @@ set(StudioSources
     ${StudioDir}/NetworkLog.hpp
     ${StudioDir}/NodeModel.cpp
     ${StudioDir}/NodeModel.hpp
+    ${StudioDir}/NodeListModel.cpp
+    ${StudioDir}/NodeListModel.hpp
     ${StudioDir}/Note.hpp
     ${StudioDir}/PartitionModel.cpp
     ${StudioDir}/PartitionModel.hpp
@@ -73,9 +77,12 @@ set(StudioSources
     ${StudioDir}/PartitionPreview.hpp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
+    ${StudioDir}/PluginModelProxy.cpp
+    ${StudioDir}/PluginModelProxy.hpp
     ${StudioDir}/PluginTableModel.cpp
     ${StudioDir}/PluginTableModel.hpp
     ${StudioDir}/PluginTableModelProxy.hpp
+    ${StudioDir}/PluginTableModelProxy.cpp
     ${StudioDir}/Point.hpp
     ${StudioDir}/Project.cpp
     ${StudioDir}/Project.hpp
@@ -118,6 +125,8 @@ set(StudioAppSources
 
 set(Application ${PROJECT_NAME}App)
 
-add_executable(${Application} ${StudioAppSources})
+add_executable(${Application} ${StudioAppSources} ${APP_ICON_RESOURCE_WINDOWS})
 
-target_link_libraries(${Application} Studio)
+target_link_libraries(${Application} PUBLIC Studio)
+
+qt5_import_qml_plugins(${Application})

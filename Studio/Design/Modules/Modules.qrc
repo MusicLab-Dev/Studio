@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/Modules">
+        <file>ModulesView.qml</file>
+        <file>ModulesContentView.qml</file>
+        <file>ModulesTabs.qml</file>
+        <file>ModulesTab.qml</file>
+        <file>ModulesStaticTab.qml</file>
+        <file>ModulesGlobalMenu.qml</file>
+        <file>ModulesNewTabButton.qml</file>
+        <file>ModulesExpandButton.qml</file>
+    </qresource>
+</RCC>

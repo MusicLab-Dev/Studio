@@ -17,7 +17,7 @@ RadioButton {
         radius: width * 0.5
         color: "#295F8B"
         border.width: control.down ? 2 : control.hovered ? 1 : 0
-        border.color: control.hovered ? "#31A8FF" : "transparent"
+        border.color: control.hovered ? themeManager.accentColor : "transparent"
     }
 
     indicator: Rectangle {
@@ -33,6 +33,6 @@ RadioButton {
         text: control.text
         elide: elideText ? Text.ElideRight : Text.ElideNone
         font: control.font
-        color: control.selected || control.hovered ? "#31A8FF" : "#295F8B"
+        color: control.selected || control.hovered ? themeManager.accentColor : "#295F8B"
     }
 }

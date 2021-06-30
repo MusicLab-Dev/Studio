@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/Default">
+        <file>DefaultToolTip.qml</file>
         <file>DefaultCheckBox.qml</file>
         <file>DefaultColoredImage.qml</file>
         <file>DefaultComboBox.qml</file>
@@ -18,8 +19,8 @@
         <file>DefaultSlider.qml</file>
         <file>DefaultSpinBox.qml</file>
         <file>DefaultImageButtonDefaultColor.qml</file>
-        <file>DefaultPotentiometer.qml</file>
         <file>DefaultMenu.qml</file>
+        <file>DefaultMenuSeparator.qml</file>
         <file>DefaultMenuItem.qml</file>
         <file>DefaultSectionWrapper.qml</file>
         <file>DefaultFileDialog.qml</file>
