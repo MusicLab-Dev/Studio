@@ -1,5 +1,7 @@
 import QtQuick 2.15
 
+import "../Default"
+
 Column {
     property string moduleName: "Planner"
     property int moduleIndex
@@ -44,17 +46,13 @@ Column {
         id: plannerFooter
         width: parent.width
         height: parent.height * 0.15
-
-        PlannerPartitionsPreview {
-            id: partitionsPreview
-            visible: contentView.lastSelectedNode
-            y: -height
-            width: contentView.width
-            height: contentView.rowHeight
-        }
     }
 
     PlannerNodeMenu {
         id: plannerNodeMenu
+    }
+
+    PlannerPartitionMenu {
+        id: plannerPartitionMenu
     }
 }

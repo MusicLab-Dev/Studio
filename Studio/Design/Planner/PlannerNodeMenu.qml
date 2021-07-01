@@ -45,6 +45,7 @@ DefaultMenu {
         onTriggered: {
             app.plannerNodeCache = targetNode
             plannerView.loadNode()
+            closeMenu()
         }
     }
 
@@ -56,6 +57,7 @@ DefaultMenu {
         onTriggered: {
             app.plannerNodeCache = targetNode.parentNode
             plannerView.loadNode()
+            closeMenu()
         }
     }
 
@@ -68,10 +70,13 @@ DefaultMenu {
         enabled: true
 
         function setName() {
-            targetNode.name = globalTextField.text;
+            targetNode.name = globalTextField.text
+            closeMenu()
         }
 
-        onTriggered: globalTextField.open(targetNode.name, setName);
+        onTriggered: {
+            globalTextField.open(targetNode.name, setName, function () { closeMenu() })
+        }
     }
 
     DefaultMenuSeparator {}

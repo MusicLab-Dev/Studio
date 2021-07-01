@@ -136,6 +136,7 @@ RowLayout {
         interval: 16
         repeat: true
         triggeredOnStart: true
+        running: false
 
         onTriggered: {
             var elapsed = app.scheduler.getAudioElapsedBeat()

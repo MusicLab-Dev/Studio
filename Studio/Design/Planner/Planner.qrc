@@ -12,5 +12,7 @@
         <file>PlannerNodeChildren.qml</file>
         <file>PlannerNodeMenu.qml</file>
         <file>PlannerPartitionsPreview.qml</file>
+        <file>PlannerPartitionsPreviewDelegate.qml</file>
+        <file>PlannerPartitionMenu.qml</file>
     </qresource>
 </RCC>

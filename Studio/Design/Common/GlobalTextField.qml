@@ -4,23 +4,36 @@ import QtQuick.Controls 2.15
 import "../Default"
 
 Item {
-    function open(initalText, callback) {
+    function open(initalText, callback, cancel) {
         textInput.text = initalText
         acceptedCallback = callback
+        canceledCallback = cancel
         globalTextField.visible = true
         textInput.forceActiveFocus()
         animOpen.start()
     }
-    function close() {
-        if (acceptedCallback) {
+
+    function acceptAndClose() {
+        if (acceptedCallback)
             acceptedCallback()
-        }
         textInput.text = ""
         animClose.start()
+        acceptedCallback = null
+        canceledCallback = null
+    }
+
+    function cancelAndClose() {
+        if (canceledCallback)
+            canceledCallback()
+        textInput.text = ""
+        animClose.start()
+        acceptedCallback = null
+        canceledCallback = null
     }
 
     property alias text: textInput.text;
     property var acceptedCallback: null
+    property var canceledCallback: null
 
     id: globalTextField
     anchors.fill: parent
@@ -29,7 +42,7 @@ Item {
     MouseArea {
         id: ms
         anchors.fill: parent
-        onReleased: { if (visible) close(); }
+        onReleased: { if (visible) cancelAndClose() }
     }
 
     Rectangle {
@@ -40,7 +53,7 @@ Item {
 
         OpacityAnimator {
             id: animOpen
-            target: rect;
+            target: rect
             from: 0;
             to: 0.85;
             duration: 200
@@ -67,6 +80,6 @@ Item {
         font.pixelSize: height * 0.3
         color: "white"
 
-        onAccepted: close()
+        onAccepted: acceptAndClose()
     }
 }

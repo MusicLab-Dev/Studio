@@ -5,8 +5,15 @@ import "../Common"
 
 import NodeModel 1.0
 import NodeListModel 1.0
+import PartitionModel 1.0
 
 ContentView {
+    function selectPartition(node, partition, partitionIndex) {
+        selectedPartitionNode = node
+        selectedPartition = partition
+        selectedPartitionIndex = partitionIndex
+    }
+
     readonly property real linkThickness: 4
     readonly property real linkHalfThickness: linkThickness / 2
     readonly property real headerMargin: 10
@@ -22,6 +29,10 @@ ContentView {
         id: nodeList
     }
     property var lastSelectedNode: null
+
+    property NodeModel selectedPartitionNode: null
+    property PartitionModel selectedPartition: null
+    property int selectedPartitionIndex: 0
 
     id: contentView
     enableRows: false
