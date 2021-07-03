@@ -5,6 +5,7 @@ import "../Default"
 Column {
     property string moduleName: "Planner"
     property int moduleIndex
+    property alias player: plannerFooter.player
 
     function onNodeDeleted(targetNode) {
         return false

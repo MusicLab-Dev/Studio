@@ -71,7 +71,7 @@ public slots:
     int find(const Beat beat) const noexcept;
 
     /** @brief Find an instance in the list using a two beat points */
-    int findOverlap(const PartitionInstance &instance) const noexcept;
+    int findOverlap(const BeatRange &range) const noexcept;
 
     /** @brief Remove instance at index */
     bool remove(const int index);

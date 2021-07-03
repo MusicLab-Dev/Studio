@@ -16,8 +16,12 @@ PlacementArea {
         return nodeInstances.instances.remove(targetIndex)
     }
 
-    function findTarget(targetBeatPrecision) {
+    function findTarget(targetBeatPrecision, targetKey) {
         return nodeInstances.instances.find(targetBeatPrecision)
+    }
+
+    function findOverlapTarget(targetBeatRange, targetKey) {
+        return nodeInstances.instances.findOverlap(targetBeatRange)
     }
 
     function getTargetBeatRange(targetIndex) {
@@ -47,6 +51,15 @@ PlacementArea {
 
     id: placementArea
     enabled: contentView.selectedPartition !== null
+
+    onCopyTarget: {
+        var instance = nodeInstances.instances.getInstance(targetIndex)
+        contentView.selectPartition(
+            nodeDelegate.node,
+            nodeDelegate.node.partitions.getPartition(instance.partitionIndex),
+            instance.partitionIndex
+        )
+    }
 
     PartitionPreview {
         id: placementPartitionPreview

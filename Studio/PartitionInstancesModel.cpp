@@ -85,12 +85,12 @@ int PartitionInstancesModel::find(const Beat beat) const noexcept
     return -1;
 }
 
-int PartitionInstancesModel::findOverlap(const PartitionInstance &instance) const noexcept
+int PartitionInstancesModel::findOverlap(const BeatRange &range) const noexcept
 {
     int idx = 0;
 
     for (const auto &elem : *_data) {
-        if (instance.range.to < elem.range.from || instance.range.from > elem.range.to) {
+        if (range.to < elem.range.from || range.from > elem.range.to) {
             ++idx;
             continue;
         }

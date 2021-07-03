@@ -58,6 +58,7 @@ Row {
     Item {
         width: contentView.rowDataWidth
         height: contentView.rowHeight
+        clip: true
 
         PlannerNodeInstancesRow {
             id: instancesView

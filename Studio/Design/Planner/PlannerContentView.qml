@@ -38,7 +38,7 @@ ContentView {
     enableRows: false
     xOffsetMin: app.project.master ? Math.max(app.project.master.latestInstance, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0
     yOffsetMin: nodeView.height > surfaceContentGrid.height ? surfaceContentGrid.height - nodeView.height : 0
-    // timelineBeatPrecision: playlistView.player.currentPlaybackBeat
+    timelineBeatPrecision: plannerView.player.currentPlaybackBeat
     audioProcessBeatPrecision: app.scheduler.productionCurrentBeat
     yZoom: 0.25
 

@@ -8,8 +8,6 @@ import PartitionPreview 1.0
 import AudioAPI 1.0
 
 Item {
-    clip: true
-
     Repeater {
         model: PartitionInstancesModelProxy {
             range: AudioAPI.beatRange(-contentView.xOffset / contentView.pixelsPerBeatPrecision, (width - contentView.xOffset) / contentView.pixelsPerBeatPrecision)

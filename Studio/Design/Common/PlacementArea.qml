@@ -146,14 +146,14 @@ MouseArea {
     function beginInsert(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getPlacementBeatPrecision(mouseBeatPrecision)
         attachPreview(
-            AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + placementBeatPrecisionLastWidth),
+            AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + contentView.placementBeatPrecisionLastWidth),
             mouseKey
         )
     }
     function updateInsert(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getPlacementBeatPrecision(mouseBeatPrecision)
         updatePreview(
-            AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + placementBeatPrecisionLastWidth),
+            AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + contentView.placementBeatPrecisionLastWidth),
             mouseKey
         )
     }
@@ -173,7 +173,7 @@ MouseArea {
     }
     function updateMove(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getPlacementBeatPrecision(mouseBeatPrecision)
-        var range = AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + placementBeatPrecisionLastWidth)
+        var range = AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + contentView.placementBeatPrecisionLastWidth)
         if (targetIsPartOfSelection && !moveSelection(range.from - previewRange.from, mouseKey - previewKey))
             return
         updatePreview(
@@ -219,7 +219,11 @@ MouseArea {
             return
         updatePreview(range, previewKey)
     }
-    function endResizeLeft(mouseBeatPrecision, mouseKey) { endMove(mouseBeatPrecision, mouseKey) }
+    function endResizeLeft(mouseBeatPrecision, mouseKey) {
+        // Copy resized width
+        contentView.placementBeatPrecisionLastWidth = previewRange.to - previewRange.from
+        endMove(mouseBeatPrecision, mouseKey)
+    }
 
     // Resize Right
     function beginResizeRight(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) { beginMove(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) }
@@ -236,18 +240,26 @@ MouseArea {
             return
         updatePreview(range, previewKey)
     }
-    function endResizeRight(mouseBeatPrecision, mouseKey) { endMove(mouseBeatPrecision, mouseKey) }
+    function endResizeRight(mouseBeatPrecision, mouseKey) {
+        // Copy resized width
+        contentView.placementBeatPrecisionLastWidth = previewRange.to - previewRange.from
+        endMove(mouseBeatPrecision, mouseKey)
+    }
 
     // Brush
-    function beginBrush(mouseBeatPrecision, mouseKey) { updateBrush() }
+    function beginBrush(mouseBeatPrecision, mouseKey) {
+        var placementBeatPrecision = getPlacementBeatPrecision(mouseBeatPrecision)
+        var range = AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + contentView.placementBeatPrecisionLastWidth)
+        addTarget(range, mouseKey)
+        brushLastBeatRange = AudioAPI.beatRange(range.from, range.to + contentView.placementBeatPrecisionBrushStep)
+    }
     function updateBrush(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getPlacementBeatPrecision(mouseBeatPrecision)
-        var range = AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + placementBeatPrecisionLastWidth)
         if (mouseBeatPrecision < brushLastBeatRange.from || mouseBeatPrecision > brushLastBeatRange.to) {
-            if (findTarget(placementBeatPrecision) === -1)
+            var range = AudioAPI.beatRange(brushLastBeatRange.to, brushLastBeatRange.to + contentView.placementBeatPrecisionLastWidth)
+            if (findOverlapTarget(AudioAPI.beatRange(range.from + 1, range.to - 1), mouseKey) === -1)
                 addTarget(range, mouseKey)
             brushLastBeatRange = AudioAPI.beatRange(range.from, range.to + contentView.placementBeatPrecisionBrushStep)
-            // @todo add preview of brush
         }
     }
     function endBrush(mouseBeatPrecision, mouseKey) {}
@@ -287,10 +299,10 @@ MouseArea {
         removeTargets(selection)
     }
 
+    signal copyTarget(int targetIndex)
+
     // General
     property int mode: PlacementArea.Mode.None
-    property int placementBeatPrecisionLastWidth: 0
-    property int placementBeatPrecisionDefaultWidth: AudioAPI.beatPrecision
 
     // Preview
     property var previewRange: AudioAPI.beatRange(0, 0)
@@ -358,8 +370,8 @@ MouseArea {
                     return
                 }
                 // If we don't have a copied beat precision we use default one
-                if (placementBeatPrecisionLastWidth === 0)
-                    placementBeatPrecisionLastWidth = placementBeatPrecisionDefaultWidth
+                if (contentView.placementBeatPrecisionLastWidth === 0)
+                    contentView.placementBeatPrecisionLastWidth = contentView.placementBeatPrecisionDefaultWidth
                 // Brush
                 if (contentView.editMode === ContentView.EditMode.Brush)
                     changeMode(PlacementArea.Mode.Brush, mouseBeatPrecision, mouseKey)
@@ -376,6 +388,10 @@ MouseArea {
                 var noteWidthBeatPrecision = (targetBeatRange.to - targetBeatRange.from)
                 var noteWidth = noteWidthBeatPrecision * contentView.pixelsPerBeatPrecision
                 var resizeThreshold = Math.min(noteWidth * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
+                // Copy target width
+                contentView.placementBeatPrecisionLastWidth = targetBeatRange.to - targetBeatRange.from        // Copy target width
+                // Emit the copy signal
+                copyTarget(targetIndex)
                 // Detect left resize
                 if ((mouseBeatPrecision - targetBeatRange.from) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
                     changeMode(PlacementArea.ResizeLeft, mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange)
@@ -383,10 +399,8 @@ MouseArea {
                 else if ((targetBeatRange.to - mouseBeatPrecision) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
                     changeMode(PlacementArea.ResizeRight, mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange)
                 // Move
-                else {
-                    placementBeatPrecisionLastWidth = targetBeatRange.to - targetBeatRange.from
+                else
                     changeMode(PlacementArea.Mode.Move, mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange)
-                }
             }
         }
     }
@@ -479,6 +493,16 @@ MouseArea {
         height: contentView.rowHeight
         visible: false
         color: nodeDelegate.color
+        border.color: nodeDelegate.accentColor
+        border.width: 2
+    }
+
+    Rectangle {
+        x: contentView.xOffset + brushLastBeatRange.from * contentView.pixelsPerBeatPrecision
+        width: (brushLastBeatRange.to - brushLastBeatRange.from) * contentView.pixelsPerBeatPrecision
+        height: contentView.rowHeight
+        // visible: previewRectangle.visible && contentView.editMode === ContentView.EditMode.Brush
+        color: "transparent"
         border.color: nodeDelegate.accentColor
         border.width: 2
     }
