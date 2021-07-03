@@ -2,7 +2,13 @@ import QtQuick 2.15
 
 import "../Default"
 
+import PartitionsModel 1.0
+import PartitionInstancesModel 1.0
+
 Row {
+    readonly property PartitionsModel partitions: nodeDelegate.node ? nodeDelegate.node.partitions : null
+    readonly property PartitionInstancesModel instances: partitions ? partitions.instances : null
+
     id: nodeInstances
 
     Item {
@@ -50,8 +56,19 @@ Row {
     }
 
     Item {
-        id: nodeInstancesData
         width: contentView.rowDataWidth
         height: contentView.rowHeight
+
+        PlannerNodeInstancesRow {
+            id: instancesView
+            width: contentView.rowDataWidth
+            height: contentView.rowHeight
+        }
+
+        PlannerNodeInstancesPlacementArea {
+            id: placementView
+            width: contentView.rowDataWidth
+            height: contentView.rowHeight
+        }
     }
 }

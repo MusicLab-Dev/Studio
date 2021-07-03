@@ -5,6 +5,7 @@
 
 #include <stdexcept>
 
+#include <QQmlEngine>
 #include <QHash>
 
 #include "Models.hpp"
@@ -13,6 +14,7 @@
 PartitionInstancesModel::PartitionInstancesModel(Audio::PartitionInstances *data, QObject *parent) noexcept
     : QAbstractListModel(parent), _data(data)
 {
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
 QHash<int, QByteArray> PartitionInstancesModel::roleNames(void) const noexcept
@@ -50,11 +52,12 @@ void PartitionInstancesModel::updateInternal(Audio::PartitionInstances *data)
 
 bool PartitionInstancesModel::add(const PartitionInstance &instance)
 {
-    const auto idx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(instance)));
+    const auto placement = _data->findSortedPlacement(instance);
+    const auto idx = static_cast<int>(std::distance(_data->begin(), placement));
 
     return Models::AddProtectedEvent(
-        [this, instance] {
-            _data->insert(instance);
+        [this, instance, placement] {
+            _data->insertAt(placement, instance);
         },
         [this, idx] {
             beginInsertRows(QModelIndex(), idx, idx);
@@ -217,13 +220,13 @@ bool PartitionInstancesModel::removeRange(const QVariantList &indexes)
     );
 }
 
-QVariantList PartitionInstancesModel::select(const PartitionInstance &instance)
+QVariantList PartitionInstancesModel::select(const BeatRange &range)
 {
     int idx = 0;
     QVariantList indexes;
 
     for (const auto &elem : *_data) {
-        if (elem.range.from <= instance.range.to && elem.range.to >= instance.range.from)
+        if (elem.range.from <= range.to && elem.range.to >= range.from)
             indexes.append(idx);
         ++idx;
     }

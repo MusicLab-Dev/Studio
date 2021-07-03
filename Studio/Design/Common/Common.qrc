@@ -6,10 +6,12 @@
         <file>CloseButton.qml</file>
         <file>SettingsButton.qml</file>
         <file>SettingsCategoryButton.qml</file>
-        <file>ModSelector.qml</file>
+        <file>ModeSelector.qml</file>
+        <file>EditionModeSelector.qml</file>
         <file>ArrowNextPrev.qml</file>
         <file>GestureArea.qml</file>
         <file>Player.qml</file>
+        <file>PlacementArea.qml</file>
         <file>Bpm.qml</file>
         <file>SurfaceContentGrid.qml</file>
         <file>ContentView.qml</file>

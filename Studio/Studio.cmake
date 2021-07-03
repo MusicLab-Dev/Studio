@@ -58,6 +58,7 @@ set(StudioSources
     ${StudioDir}/PartitionInstancesModel.cpp
     ${StudioDir}/PartitionInstancesModel.hpp
     ${StudioDir}/PartitionInstancesModelProxy.hpp
+    ${StudioDir}/PartitionInstancesModelProxy.cpp
     ${StudioDir}/KeyboardEventListener.cpp
     ${StudioDir}/KeyboardEventListener.hpp
     ${StudioDir}/Models.hpp

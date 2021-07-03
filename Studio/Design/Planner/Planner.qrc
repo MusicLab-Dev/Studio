@@ -8,6 +8,8 @@
         <file>PlannerNodeDelegate.qml</file>
         <file>PlannerNodeControls.qml</file>
         <file>PlannerNodeInstances.qml</file>
+        <file>PlannerNodeInstancesRow.qml</file>
+        <file>PlannerNodeInstancesPlacementArea.qml</file>
         <file>PlannerNodeAutomations.qml</file>
         <file>PlannerNodeChildren.qml</file>
         <file>PlannerNodeMenu.qml</file>

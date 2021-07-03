@@ -5,6 +5,27 @@ import AudioAPI 1.0
 import PartitionPreview 1.0
 
 Item {
+    enum EditMode {
+        Regular,
+        Brush,
+        Select,
+        Cut
+    }
+
+    function disableLoopRange() {
+        hasLoop = false
+        loopFrom = 0
+        loopTo = 0
+        app.scheduler.disableLoopRange()
+    }
+
+    signal timelineBeginMove(var target)
+    signal timelineMove(var target)
+    signal timelineEndMove()
+
+    signal timelineBeginLoopMove()
+    signal timelineEndLoopMove()
+
     // Content data placeholder
     default property alias placeholder: placeholder.data
 
@@ -79,7 +100,6 @@ Item {
     property real placementKey: -1 // Only used for notes
     property real placementBeatPrecisionFrom: 0
     property real placementBeatPrecisionTo: 0
-    property real placementBeatPrecisionMouseOffset: 0
 
     // Placement states in pixel precision
     readonly property real placementPixelFrom: xOffset + pixelsPerBeatPrecision * placementBeatPrecisionFrom
@@ -107,19 +127,8 @@ Item {
     property int loopTo: 0
     property int loopRange: loopTo - loopFrom
 
-    signal timelineBeginMove(var target)
-    signal timelineMove(var target)
-    signal timelineEndMove()
-
-    signal timelineBeginLoopMove()
-    signal timelineEndLoopMove()
-
-    function disableLoopRange() {
-        hasLoop = false
-        loopFrom = 0
-        loopTo = 0
-        app.scheduler.disableLoopRange()
-    }
+    // Edit tools
+    property int editMode: ContentView.EditMode.Regular
 
     id: contentView
 
@@ -319,7 +328,7 @@ Item {
 
         }
 
-        function detach(newParent) {
+        function detach() {
             parent = contentView
             visible = false
             placementPartitionPreview.target = null

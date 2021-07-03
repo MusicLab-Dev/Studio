@@ -33,6 +33,7 @@ MouseArea {
     property PartitionModel partition: null
     property int mode: SequencerNotesPlacementArea.Mode.None
     property int onTheFlyKey: -1
+    property real placementBeatPrecisionMouseOffset: 0
 
     // Brush
     property int brushKey: 0
@@ -112,7 +113,7 @@ MouseArea {
     }
 
     function getScopedBeatPrecision(realMouseBeatPrecision) {
-        var noteBeatPrecision = realMouseBeatPrecision - contentView.placementBeatPrecisionMouseOffset
+        var noteBeatPrecision = realMouseBeatPrecision - placementBeatPrecisionMouseOffset
         if (noteBeatPrecision < selectionMoveLeftOffset)
             noteBeatPrecision = selectionMoveLeftOffset
         return noteBeatPrecision
@@ -237,7 +238,7 @@ MouseArea {
             contentView.placementRectangle.attach(contentPlacementArea, themeManager.getColorFromChain(mouseKey))
             contentView.placementBeatPrecisionFrom = beatPrecisionRange.from
             contentView.placementBeatPrecisionTo = beatPrecisionRange.to
-            contentView.placementBeatPrecisionMouseOffset = mouseBeatPrecision - beatPrecisionRange.from
+            placementBeatPrecisionMouseOffset = mouseBeatPrecision - beatPrecisionRange.from
             contentView.placementKey = mouseKey
         }
 
@@ -352,7 +353,7 @@ MouseArea {
                     0
                 )
             )
-            contentView.placementBeatPrecisionMouseOffset = 0
+            placementBeatPrecisionMouseOffset = 0
             break
         case SequencerNotesPlacementArea.Mode.Select:
             // Select notes

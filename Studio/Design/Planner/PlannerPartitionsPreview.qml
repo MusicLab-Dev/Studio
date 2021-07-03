@@ -54,7 +54,13 @@ Rectangle {
             colorHovered: partitionsPreview.nodeHoveredColor
             colorOnPressed: partitionsPreview.nodePressedColor
 
-            onReleased: partitionsPreview.node.partitions.add()
+            onReleased: {
+                // Add a partition and select it on success
+                if (partitionsPreview.node.partitions.add()) {
+                    var idx = previewRepeater.count - 1
+                    contentView.selectPartition(partitionsPreview.node, partitionsPreview.node.partitions.getPartition(idx), idx)
+                }
+            }
         }
     }
 

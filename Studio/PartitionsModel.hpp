@@ -64,8 +64,8 @@ public:
 
 
     /** @brief Get the PartitionInstances model */
-    [[nodiscard]] PartitionInstancesModel *instances(void) noexcept { return &_instances; }
-    [[nodiscard]] const PartitionInstancesModel *instances(void) const noexcept { return &_instances; }
+    [[nodiscard]] PartitionInstancesModel *instances(void) noexcept { return _instances.get(); }
+    [[nodiscard]] const PartitionInstancesModel *instances(void) const noexcept { return _instances.get(); }
 
 
     /** @brief Get the backend data */
@@ -108,7 +108,7 @@ private:
     Audio::Partitions *_data { nullptr };
     Core::TinyVector<Core::UniqueAlloc<PartitionModel>> _partitions;
     Beat _latestInstance { 0u };
-    PartitionInstancesModel _instances;
+    Core::UniqueAlloc<PartitionInstancesModel> _instances;
 
     /** @brief Refresh internal models */
     void refreshPartitions(void);

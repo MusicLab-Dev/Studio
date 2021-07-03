@@ -3,6 +3,8 @@
  * @ Description: ThemeManager
  */
 
+#include <QQmlEngine>
+
 #include "ThemeManager.hpp"
 
 struct ThemePack
@@ -36,6 +38,7 @@ static const ThemePack DarkThemePack {
 ThemeManager::ThemeManager(QObject *parent)
     : QObject(parent)
 {
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
     updateThemeColors();
 }
 

@@ -28,7 +28,7 @@ Rectangle {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.width / 3
 
-            ModSelector {
+            ModeSelector {
                 id: tweaker
                 itemsPaths: [
                     "qrc:/Assets/EditMod.png",

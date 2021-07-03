@@ -11,6 +11,7 @@
 #include "Point.hpp"
 #include "ControlEvent.hpp"
 #include "Note.hpp"
+#include "PartitionInstance.hpp"
 
 /** @brief AudioAPI class */
 class AudioAPI : public QObject
@@ -57,6 +58,10 @@ public slots:
     /** @brief Create an audio point */
     QVariant point(const Beat beat, const GPoint::CurveType curveType, const GPoint::CurveRate curveRate, const ParamValue paramValue) const noexcept
         { return QVariant::fromValue(GPoint(beat, static_cast<Audio::Point::CurveType>(curveType), curveRate, paramValue)); }
+
+    /** @brief Create a partition instance */
+    QVariant partitionInstance(const quint32 partitionIndex, const Beat offset, const BeatRange &range) const noexcept
+        { return QVariant::fromValue(PartitionInstance(partitionIndex, offset, range)); }
 
 private:
     /** @brief Construct the API */

@@ -68,7 +68,7 @@ public slots:
     bool add(const PartitionInstance &instance);
 
     /** @brief Find an instance in the list using a single beat point */
-    int find(const quint32 beat) const noexcept;
+    int find(const Beat beat) const noexcept;
 
     /** @brief Find an instance in the list using a two beat points */
     int findOverlap(const PartitionInstance &instance) const noexcept;
@@ -89,7 +89,7 @@ public slots:
     bool removeRange(const QVariantList &indexes);
 
     /** @brief Select all notes within a specified range (returns indexes) */
-    QVariantList select(const PartitionInstance &instance);
+    QVariantList select(const BeatRange &range);
 
 signals:
     /** @brief Notify that the latest instance of the list has changed */

@@ -17,35 +17,15 @@ class PartitionInstancesModelProxy : public QSortFilterProxyModel
 
 public:
     /** @brief Constructor */
-    PartitionInstancesModelProxy(QObject *parent = nullptr) : QSortFilterProxyModel(parent) {}
+    PartitionInstancesModelProxy(QObject *parent = nullptr);
 
     /** @brief Destructor */
     ~PartitionInstancesModelProxy(void) override = default;
 
+
     /** @brief Get / Set the range property */
     [[nodiscard]] const BeatRange &range(void) noexcept { return _range; }
-    void setRange(const BeatRange &range)
-    {
-        if (_range == range)
-            return;
-        _range = range;
-        const auto rangeWidth = (_range.to - _range.from);
-        const auto usedRangeWidth = rangeWidth + (rangeWidth & 1u);
-        const auto rangeMargins = usedRangeWidth / 2u;
-        const auto totalLoadedWidth = usedRangeWidth * 2u;
-
-        if (_range.from < _filterRange.from || _range.to > _filterRange.to || totalLoadedWidth != _lastTheoricalFilterWidth) {
-            if (rangeMargins <= _range.from)
-                _filterRange.from = _range.from - rangeMargins;
-            else
-                _filterRange.from = 0u;
-            _filterRange.to = _range.to + rangeMargins;
-            _lastTheoricalFilterWidth = totalLoadedWidth;
-            invalidateFilter();
-        }
-
-        emit rangeChanged();
-    }
+    void setRange(const BeatRange &range);
 
 signals:
     /** @brief Notify that the range property has changed */
@@ -57,12 +37,5 @@ private:
     Beat _lastTheoricalFilterWidth {};
 
     /** @brief Reimplementation of the filter virtual function */
-    [[nodiscard]] bool filterAcceptsRow(int sourceRow, const QModelIndex &) const override
-    {
-        auto *source = reinterpret_cast<const PartitionInstancesModel *>(sourceModel());
-        if (!source)
-            return false;
-        const auto &instance = source->get(sourceRow);
-        return instance.range.from <= _filterRange.to && instance.range.to >= _filterRange.from;
-    }
+    [[nodiscard]] bool filterAcceptsRow(int sourceRow, const QModelIndex &) const override;
 };

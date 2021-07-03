@@ -73,7 +73,7 @@ Rectangle {
                 anchors.fill: parent
                 spacing: 10
 
-                ModSelector {
+                ModeSelector {
                     id: editModeSelector
                     Layout.preferredHeight: parent.height
                     Layout.preferredWidth: parent.width * 0.375

@@ -33,6 +33,10 @@ MouseArea {
         plannerPartitionMenu.y = mouse.y
     }
 
+    onDoubleClicked: {
+        modulesView.addSequencerWithExistingPartition(partitionsPreview.nodeDelegate.node, previewDelegate.partitionIndex)
+    }
+
     Timer {
         id: playbackTimer
         interval: 16

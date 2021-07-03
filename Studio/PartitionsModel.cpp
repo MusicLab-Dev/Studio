@@ -14,7 +14,7 @@ PartitionsModel::PartitionsModel(Audio::Partitions *partitions, NodeModel *paren
     : QAbstractListModel(parent), _data(partitions), _instances(&partitions->headerCustomType().instances, this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    _instances.connect(&_instances, &PartitionInstancesModel::latestInstanceChanged, this, &PartitionsModel::processLatestInstanceChange);
+    _instances->connect(_instances.get(), &PartitionInstancesModel::latestInstanceChanged, this, &PartitionsModel::processLatestInstanceChange);
     _partitions.reserve(_data->size());
     for (auto &partition : *_data)
         _partitions.push(&partition, this);
@@ -41,7 +41,7 @@ QVariant PartitionsModel::data(const QModelIndex &index, int role) const
 
 void PartitionsModel::processLatestInstanceChange(void)
 {
-    const Beat newInstance = _instances.count() ? _instances.audioInstances()->back().range.to : 0u;
+    const Beat newInstance = _instances->count() ? _instances->audioInstances()->back().range.to : 0u;
 
     if (_latestInstance < newInstance) {
         const auto oldLatest = _latestInstance;
@@ -67,12 +67,15 @@ bool PartitionsModel::add(void)
            _data->push();
         },
         [this, name = getAvailablePartitionName(), oldData] {
-            const auto idx = _partitions.size();
-            beginInsertRows(QModelIndex(), idx, idx);
-            _partitions.push(&_data->at(idx), this, name);
-            endInsertRows();
-            if (_data->data() != oldData)
+            if (_data->data() != oldData) {
                 refreshPartitions();
+                _partitions.back()->setName(name);
+            } else {
+                const auto idx = _partitions.size();
+                beginInsertRows(QModelIndex(), idx, idx);
+                _partitions.push(&_data->at(idx), this, name);
+                endInsertRows();
+            }
         }
     );
 }
@@ -157,6 +160,7 @@ void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const 
 void PartitionsModel::refreshPartitions(void)
 {
     Models::RefreshModels(this, _partitions, *_data, this);
+    _instances->updateInternal(&_data->headerCustomType().instances);
 }
 
 QString PartitionsModel::getAvailablePartitionName(void) const noexcept
