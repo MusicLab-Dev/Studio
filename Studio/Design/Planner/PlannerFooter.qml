@@ -8,6 +8,7 @@ import Scheduler 1.0
 
 Rectangle {
     property alias player: player
+    property alias partitionsPreview: partitionsPreview
 
     width: parent.width
     height: parent.width
@@ -16,11 +17,6 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
-    }
-
-    PlannerPartitionsPreview {
-        id: partitionsPreview
-        y: -height
     }
 
     RowLayout {
@@ -79,5 +75,10 @@ Rectangle {
                 onReleased: partitionsPreview.hide = false
             }
         }
+    }
+
+    PlannerPartitionsPreview {
+        id: partitionsPreview
+        y: -height
     }
 }

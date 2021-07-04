@@ -1,5 +1,5 @@
 /**
- * @ Author: Gonzalez Dorian
+ * @ Author: Matthieu Moinvaziri
  * @ Description: Automation Model class
  */
 
@@ -113,6 +113,27 @@ bool AutomationModel::set(const int idx, const GPoint &point)
             } else {
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);
+            }
+        }
+    );
+}
+
+bool AutomationModel::removeSelection(const BeatRange &range)
+{
+    if (!_data)
+        return false;
+    return Models::AddProtectedEvent(
+        [this, range] {
+            auto it = std::remove_if(_data->begin(), _data->end(), [&range](const auto &point) {
+                return point.beat >= range.from && point.beat <= range.to;
+            });
+            if (it != _data->end())
+                _data->erase(it, _data->end());
+        },
+        [this, oldCount = _data->size()] {
+            if (oldCount != _data->size()) {
+                beginResetModel();
+                endResetModel();
             }
         }
     );

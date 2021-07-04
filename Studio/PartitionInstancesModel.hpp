@@ -91,6 +91,12 @@ public slots:
     /** @brief Select all notes within a specified range (returns indexes) */
     QVariantList select(const BeatRange &range);
 
+    /** @brief Remove all instances of a given partition, doesn't update model (thread unsafe) */
+    void partitionRemovedUnsafe(const std::uint32_t partitionIndex);
+
+    /** @brief Notification that a partition has been removed */
+    void partitionRemovedNotify(void);
+
 signals:
     /** @brief Notify that the latest instance of the list has changed */
     void latestInstanceChanged(void);

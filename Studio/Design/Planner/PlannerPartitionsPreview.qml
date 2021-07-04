@@ -56,10 +56,10 @@ Rectangle {
 
             onReleased: {
                 // Add a partition and select it on success
-                if (partitionsPreview.node.partitions.add()) {
-                    var idx = previewRepeater.count - 1
-                    contentView.selectPartition(partitionsPreview.node, partitionsPreview.node.partitions.getPartition(idx), idx)
-                }
+                var partitions = partitionsPreview.node.partitions
+                var idx = partitions.count()
+                if (partitions.add())
+                    contentView.selectPartition(partitionsPreview.node, idx)
             }
         }
     }

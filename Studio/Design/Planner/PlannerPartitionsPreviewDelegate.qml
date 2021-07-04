@@ -19,12 +19,13 @@ MouseArea {
     acceptedButtons: Qt.LeftButton | Qt.RightButton
 
     onPressed: {
-        if (mouse.button & Qt.RightButton) {
+        if (mouse.button === Qt.RightButton) {
             plannerPartitionMenu.openMenu(previewDelegate, nodeDelegate.node, partition, partitionIndex)
             plannerPartitionMenu.x = mouse.x
             plannerPartitionMenu.y = mouse.y
-        } else
-            contentView.selectPartition(nodeDelegate.node, partition, partitionIndex)
+        } else {
+            contentView.selectPartition(nodeDelegate.node, partitionIndex)
+        }
     }
 
     onPressAndHold: {
@@ -33,7 +34,8 @@ MouseArea {
         plannerPartitionMenu.y = mouse.y
     }
 
-    onDoubleClicked: {
+    onDoubleClicked: { // @todo fix bug that cause pressed not being caugth
+    // @todo fix a crash when adding a partition
         modulesView.addSequencerWithExistingPartition(partitionsPreview.nodeDelegate.node, previewDelegate.partitionIndex)
     }
 

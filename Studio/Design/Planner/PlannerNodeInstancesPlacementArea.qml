@@ -56,7 +56,6 @@ PlacementArea {
         var instance = nodeInstances.instances.getInstance(targetIndex)
         contentView.selectPartition(
             nodeDelegate.node,
-            nodeDelegate.node.partitions.getPartition(instance.partitionIndex),
             instance.partitionIndex
         )
     }

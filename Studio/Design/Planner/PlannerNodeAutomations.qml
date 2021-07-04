@@ -4,8 +4,11 @@ import QtQuick.Controls 2.15
 import "../Default"
 
 import PluginModelProxy 1.0
+import AutomationsModel 1.0
+import AutomationModel 1.0
 
 Repeater {
+    property AutomationsModel automations: nodeDelegate.node.automations
     property real linkBottom: 0
     property alias pluginProxy: pluginProxy
 
@@ -22,6 +25,10 @@ Repeater {
     }
 
     delegate: Column {
+        property AutomationModel automation: nodeAutomations.automations.getAutomation(controlParamID)
+
+        id: automationDelegate
+
         Component.onCompleted: {
             if (index === nodeAutomations.count - 1)
                 nodeAutomations.linkBottom = Qt.binding(function() { return y + height / 2 })
@@ -91,8 +98,8 @@ Repeater {
                 }
             }
 
-            Item {
-                id: nodeAutomationData
+            PlannerNodeAutomationRow {
+                id: automationRow
                 width: contentView.rowDataWidth
                 height: contentView.rowHeight
             }

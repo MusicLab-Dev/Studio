@@ -30,6 +30,23 @@ Column {
     id: plannerView
     focus: true
 
+    Connections {
+        target: eventDispatcher
+        enabled: moduleIndex === modulesView.selectedModule
+
+        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
+        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
+        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
+    }
+
+    Connections {
+        target: eventDispatcher
+
+        function onPlayPlaylist(pressed) { if (!pressed) return; player.playOrPause() }
+        function onReplayPlaylist(pressed) { if (!pressed) return; player.replay(); }
+        function onStopPlaylist(pressed) { if (!pressed) return; player.stop(); }
+    }
+
     PlannerHeader {
         id: plannerHeader
         width: parent.width

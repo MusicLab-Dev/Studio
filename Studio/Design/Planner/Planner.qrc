@@ -11,6 +11,7 @@
         <file>PlannerNodeInstancesRow.qml</file>
         <file>PlannerNodeInstancesPlacementArea.qml</file>
         <file>PlannerNodeAutomations.qml</file>
+        <file>PlannerNodeAutomationRow.qml</file>
         <file>PlannerNodeChildren.qml</file>
         <file>PlannerNodeMenu.qml</file>
         <file>PlannerPartitionsPreview.qml</file>

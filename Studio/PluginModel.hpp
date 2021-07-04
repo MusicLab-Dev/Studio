@@ -27,7 +27,8 @@ class PluginModel : public QAbstractListModel
 public:
     /** @brief Roles of each controls */
     enum class Roles : int {
-        Type = Qt::UserRole + 1,
+        ParamID = Qt::UserRole + 1,
+        Type,
         MinValue,
         MaxValue,
         StepValue,

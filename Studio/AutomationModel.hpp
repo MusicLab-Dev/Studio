@@ -1,5 +1,5 @@
 /**
- * @ Author: Gonzalez Dorian
+ * @ Author: Matthieu Moinvaziri
  * @ Description: Automation Model class
  */
 
@@ -86,6 +86,9 @@ public slots:
 
     /** @brief Set point at index */
     bool set(const int index, const GPoint &point);
+
+    /** @brief Remove all points between a given range*/
+    bool removeSelection(const BeatRange &range);
 
 signals:
     /** @brief Notify that the muted property has changed */

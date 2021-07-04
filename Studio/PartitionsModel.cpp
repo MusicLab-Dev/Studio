@@ -87,6 +87,7 @@ bool PartitionsModel::remove(const int idx)
     return Models::AddProtectedEvent(
         [this, idx] {
             _data->erase(_data->begin() + idx);
+            _instances->partitionRemovedUnsafe(idx);
         },
         [this, idx] {
             beginRemoveRows(QModelIndex(), idx, idx);
@@ -95,6 +96,7 @@ bool PartitionsModel::remove(const int idx)
             const auto count = _partitions.size();
             for (auto i = static_cast<std::uint32_t>(idx); i < count; ++i)
                 _partitions.at(i)->updateInternal(&_data->at(i));
+            _instances->partitionRemovedNotify();
         }
     );
 }

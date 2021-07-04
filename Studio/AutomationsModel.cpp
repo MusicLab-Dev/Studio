@@ -1,5 +1,5 @@
 /**
- * @ Author: Gonzalez Dorian
+ * @ Author: Matthieu Moinvaziri
  * @ Description: Automations Model implementation
  */
 

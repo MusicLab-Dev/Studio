@@ -232,3 +232,23 @@ QVariantList PartitionInstancesModel::select(const BeatRange &range)
     }
     return indexes;
 }
+
+void PartitionInstancesModel::partitionRemovedUnsafe(const std::uint32_t partitionIndex)
+{
+    auto it = std::remove_if(_data->begin(), _data->end(), [partitionIndex](auto &instance) {
+        if (instance.partitionIndex > partitionIndex) {
+            --instance.partitionIndex;
+            return false;
+        } else
+            return instance.partitionIndex == partitionIndex;
+    });
+
+    if (it != _data->end())
+        _data->erase(it, _data->end());
+}
+
+void PartitionInstancesModel::partitionRemovedNotify(void)
+{
+    beginResetModel();
+    endResetModel();
+}

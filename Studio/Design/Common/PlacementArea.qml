@@ -388,10 +388,10 @@ MouseArea {
                 var noteWidthBeatPrecision = (targetBeatRange.to - targetBeatRange.from)
                 var noteWidth = noteWidthBeatPrecision * contentView.pixelsPerBeatPrecision
                 var resizeThreshold = Math.min(noteWidth * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
-                // Copy target width
-                contentView.placementBeatPrecisionLastWidth = targetBeatRange.to - targetBeatRange.from        // Copy target width
                 // Emit the copy signal
                 copyTarget(targetIndex)
+                // Copy target width
+                contentView.placementBeatPrecisionLastWidth = targetBeatRange.to - targetBeatRange.from        // Copy target width
                 // Detect left resize
                 if ((mouseBeatPrecision - targetBeatRange.from) * contentView.pixelsPerBeatPrecision <= resizeThreshold)
                     changeMode(PlacementArea.ResizeLeft, mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange)

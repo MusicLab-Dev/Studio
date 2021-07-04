@@ -44,6 +44,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<SampleRate>("SampleRate");
     qRegisterMetaType<NoteEvent::EventType>("NoteEvent::EventType");
     qRegisterMetaType<GPoint::CurveRate>("GPoint::CurveRate");
+    qRegisterMetaType<GPoint::CurveType>("GPoint::CurveType");
     qRegisterMetaType<PluginModel::ParamType>("PluginModel::ParamType");
     qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
     qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");

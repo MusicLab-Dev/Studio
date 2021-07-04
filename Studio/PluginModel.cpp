@@ -17,6 +17,7 @@ PluginModel::PluginModel(Audio::IPlugin *plugin, QObject *parent) noexcept
 QHash<int, QByteArray> PluginModel::roleNames(void) const noexcept
 {
     return QHash<int, QByteArray> {
+        { static_cast<int>(Roles::ParamID), "controlParamID"},
         { static_cast<int>(Roles::Type), "controlType"},
         { static_cast<int>(Roles::MinValue), "controlMinValue"},
         { static_cast<int>(Roles::MaxValue), "controlMaxValue"},
@@ -37,6 +38,8 @@ QVariant PluginModel::data(const QModelIndex &index, int role) const
         throw std::range_error("PartitionModel::data: Given index is not in range: " + std::to_string(index.row()) + " out of [0, " + std::to_string(count()) + "["));
     const auto &meta = _data->getMetaData().controls[index.row()];
     switch (static_cast<Roles>(role)) {
+        case Roles::ParamID:
+            return index.row();
         case Roles::Type:
             return static_cast<int>(meta.type);
         case Roles::MinValue:

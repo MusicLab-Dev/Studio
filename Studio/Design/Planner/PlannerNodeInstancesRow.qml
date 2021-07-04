@@ -5,6 +5,7 @@ import "../Default"
 import PartitionInstancesModel 1.0
 import PartitionInstancesModelProxy 1.0
 import PartitionPreview 1.0
+import PartitionModel 1.0
 import AudioAPI 1.0
 
 Item {
@@ -16,6 +17,7 @@ Item {
 
         delegate: Rectangle {
             property var instanceRange: range
+            property PartitionModel partition: nodeInstances.partitions.getPartition(partitionIndex)
 
             id: instanceDelegate
             x: contentView.xOffset + instanceRange.from * contentView.pixelsPerBeatPrecision
@@ -42,11 +44,22 @@ Item {
             }
 
             PartitionPreview {
+                id: preview
                 anchors.fill: parent
                 anchors.margins: 2
                 offset: 0
                 range: instanceDelegate.instanceRange
-                target: nodeInstances.partitions.getPartition(partitionIndex)
+                target: instanceDelegate.partition
+            }
+
+            DefaultText {
+                width: parent.width
+                height: parent.height * 0.3
+                color: nodeDelegate.accentColor
+                text: instanceDelegate.partition.name
+                fontSizeMode: Text.VerticalFit
+                font.pointSize: 30
+                elide: Text.ElideMiddle
             }
         }
     }
