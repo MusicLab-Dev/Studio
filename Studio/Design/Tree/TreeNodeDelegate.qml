@@ -30,7 +30,7 @@ Column {
             color: nodeDelegate.parentNode ? nodeDelegate.parentNode.color : "black"
             width: 3
             anchors.top: parent.top
-            anchors.bottom: nodeInstanceBackground.top
+            anchors.bottom: soundMeter.top
             anchors.horizontalCenter: parent.horizontalCenter
             visible: nodeDelegate.parentNode
         }
@@ -46,13 +46,27 @@ Column {
         }
 
         Rectangle {
+            id: soundMeter
+            anchors.top: parent.top
+            anchors.bottom: nodeInstanceBackground.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 8
+            // anchors.bottomMargin: 5
+            color: themeManager.backgroundColor
+            border.color: nodeInstanceBackground.border.color
+            border.width: 2
+            width: height / 2
+        }
+
+
+        Rectangle {
             id: nodeInstanceBackground
             width: treeSurface.instanceDefaultWidth
             height: treeSurface.instanceDefaultHeight
             radius: 15
             color: nodeDelegate.color
-            border.color: nodeMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeDelegate.hoveredColor
-            border.width: nodeMouseArea.containsMouse || nodeDelegate.isSelected ? 4 : 0
+            border.color: nodeMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeMouseArea.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
+            border.width: 4
             anchors.centerIn: parent
 
             DefaultText {
@@ -82,16 +96,22 @@ Column {
                         treeSurface.selectedNode = nodeDelegate.node
                 }
 
+                onPressAndHold: {
+                    treeNodeMenu.openMenu(nodeMouseArea, nodeDelegate.node)
+                    treeNodeMenu.x = mouseX
+                    treeNodeMenu.y = mouseY
+                }
+
                 onDoubleClicked: {
                     modulesView.addNewPlanner(nodeDelegate.node)
                 }
             }
 
             DefaultImageButton {
-                x: parent.width / 2 - width / 2
-                y: parent.height
+                anchors.left: parent.left
+                y: parent.height * 0.75 - height / 2
                 width: height
-                height: treeSurface.instanceDefaultHeight / 2
+                height: Math.min(parent.height / 2, 50)
                 source: "qrc:/Assets/Plus.png"
                 showBorder: false
                 scaleFactor: 1
@@ -99,9 +119,24 @@ Column {
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
 
-                onReleased: {
-                    // @todo
-                }
+                onClicked: pluginsView.prepareInsertNode(nodeDelegate.node)
+            }
+
+            DefaultImageButton {
+                readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
+
+                anchors.right: parent.right
+                y: parent.height * 0.75 - height / 2
+                width: height
+                height: Math.min(parent.height / 2, 50)
+                source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
+                showBorder: false
+                scaleFactor: 0.8
+                colorDefault: nodeDelegate.accentColor
+                colorHovered: nodeDelegate.hoveredColor
+                colorOnPressed: nodeDelegate.pressedColor
+
+                onReleased: nodeDelegate.node.muted = !isMuted
             }
         }
     }

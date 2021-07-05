@@ -1,7 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import '../Common'
+import "../Common"
+
+import NodeModel 1.0
+import PluginTableModel 1.0
 
 PluginsBackground {
     function open(accepted, canceled) {
@@ -28,6 +31,80 @@ PluginsBackground {
         canceledCallback = null
         if (canceled)
             canceled()
+    }
+
+    function prepareInsertNode(target) {
+        open(
+            // On plugin selection accepted
+            function() {
+                var externalInputType = pluginTable.getExternalInputType(pluginsView.selectedPath)
+                if (externalInputType === PluginTableModel.None) {
+                    // Add the node
+                    if (app.currentPlayer)
+                        app.currentPlayer.pause()
+                    if (!target.add(pluginsView.selectedPath))
+                        console.log("Couldn't create node")
+                } else {
+                    modulesView.workspacesView.open(externalInputType === PluginTableModel.Multiple,
+                        // On external inputs selection accepted
+                        function() {
+                            // Format the external input list
+                            var list = []
+                            for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
+                                list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
+                            // Add the node with external inputs
+                            if (app.currentPlayer)
+                                app.currentPlayer.pause()
+                            if (!target.addExternalInputs(pluginsView.selectedPath, list))
+                                console.log("Couldn't create node")
+                        },
+                        // On external inputs selection canceled
+                        function() {
+                        }
+                    )
+                }
+            },
+            // On plugin selection canceled
+            function() {
+            }
+        )
+    }
+
+    function prepareInsertParentNode(target) {
+        pluginsView.open(
+            // On plugin selection accepted
+            function() {
+                var externalInputType = pluginTable.getExternalInputType(pluginsView.selectedPath)
+                if (externalInputType === PluginTableModel.None) {
+                    // Add the node
+                    if (app.currentPlayer)
+                        app.currentPlayer.pause()
+                    if (target.addParent(pluginsView.selectedPath) === null)
+                        console.log("Couldn't create node")
+                } else {
+                    modulesView.workspacesView.open(externalInputType === PluginTableModel.Multiple,
+                        // On external inputs selection accepted
+                        function() {
+                            // Format the external input list
+                            var list = []
+                            for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
+                                list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
+                            // Add the node with external inputs
+                            if (app.currentPlayer)
+                                app.currentPlayer.pause()
+                            if (target.addParentExternalInputs(pluginsView.selectedPath, list) === null)
+                                console.log("Couldn't create node")
+                        },
+                        // On external inputs selection canceled
+                        function() {
+                        }
+                    )
+                }
+            },
+            // On plugin selection canceled
+            function() {
+            }
+        )
     }
 
     property var acceptedCallback: function() {}

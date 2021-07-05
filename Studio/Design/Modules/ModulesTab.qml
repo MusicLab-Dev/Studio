@@ -23,6 +23,7 @@ ModulesStaticTab {
 
     id: tab
     z: drag.active ? 10 : 0
+    acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
     drag.target: tab
     // drag.axis: Drag.XAxis
@@ -33,6 +34,11 @@ ModulesStaticTab {
     drag.maximumY: parent.height - modulesTabs.tabHeight
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
+
+    onClicked: {
+        if (mouse.button === Qt.MiddleButton)
+            modulesView.removeModule(tab.tabIndex)
+    }
 
     Binding on x {
         when: !drag.active
