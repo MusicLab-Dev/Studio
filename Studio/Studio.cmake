@@ -99,6 +99,7 @@ set(StudioSources
     ${StudioDir}/Studio.hpp
     ${StudioDir}/ThemeManager.cpp
     ${StudioDir}/ThemeManager.hpp
+    ${StudioDir}/ClipboardManager.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
