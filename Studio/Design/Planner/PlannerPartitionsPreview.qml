@@ -24,7 +24,14 @@ Rectangle {
     height: Math.max(baseHeight, previewFlow.height) + 20
     color: themeManager.foregroundColor
     visible: nodeDelegate && !hide
-    border.color: nodeColor
+    // border.color: nodeColor
+
+    Rectangle {
+        color: "white"
+        width: parent.width
+        height: 1
+        anchors.bottom: parent.bottom
+    }
 
     Row {
         id: headerRow
