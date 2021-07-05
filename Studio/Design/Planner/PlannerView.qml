@@ -3,9 +3,9 @@ import QtQuick 2.15
 import "../Default"
 
 Column {
-    property string moduleName: "Planner"
+    readonly property string moduleName: qsTr("Planner")
     property int moduleIndex
-    property alias player: plannerFooter.player
+    readonly property alias player: plannerFooter.player
 
     function onNodeDeleted(targetNode) {
         return false

@@ -142,7 +142,7 @@ MouseArea {
 
         resetBrush()
         // Right click on note -> delete
-        if (mouse.buttons & Qt.RightButton) {
+        if (mouse.button === Qt.RightButton) {
             resetSelection()
             mode = SequencerNotesPlacementArea.Mode.Remove
             if (isSelection) {

@@ -6,5 +6,6 @@
         <file>TreeContentView.qml</file>
         <file>TreeSurface.qml</file>
         <file>TreeNodeDelegate.qml</file>
+        <file>TreeNodeMenu.qml</file>
     </qresource>
 </RCC>

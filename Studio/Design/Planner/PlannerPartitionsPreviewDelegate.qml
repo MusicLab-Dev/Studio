@@ -18,8 +18,11 @@ MouseArea {
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-    onPressed: {
-        if (mouse.button === Qt.RightButton) {
+    // onClicked doesn't work because of onDoubleClicked event, so we use onReleased with containsMouse check
+    onReleased: {
+        if (!containsMouse)
+            return
+        else if (mouse.button === Qt.RightButton) {
             plannerPartitionMenu.openMenu(previewDelegate, nodeDelegate.node, partition, partitionIndex)
             plannerPartitionMenu.x = mouse.x
             plannerPartitionMenu.y = mouse.y
@@ -34,8 +37,7 @@ MouseArea {
         plannerPartitionMenu.y = mouse.y
     }
 
-    onDoubleClicked: { // @todo fix bug that cause pressed not being caugth
-    // @todo fix a crash when adding a partition
+    onDoubleClicked: {
         modulesView.addSequencerWithExistingPartition(partitionsPreview.nodeDelegate.node, previewDelegate.partitionIndex)
     }
 

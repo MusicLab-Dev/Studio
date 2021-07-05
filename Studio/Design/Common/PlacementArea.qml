@@ -338,7 +338,7 @@ MouseArea {
         var mouseBeatPrecision = getMouseBeatPrecision()
         var mouseKey = 0
         var isSelection = mouse.modifiers & (Qt.ControlModifier | Qt.ShiftModifier) || contentView.editMode === ContentView.EditMode.Select
-        var isRemove = mouse.buttons & Qt.RightButton
+        var isRemove = mouse.button === Qt.RightButton
 
         if (mode !== PlacementArea.Mode.None) {
             console.log("PlacementArea: An action is still not completed")

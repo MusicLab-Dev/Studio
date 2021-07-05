@@ -9,6 +9,14 @@ Column {
     property NodeModel node: null
     readonly property bool isSelected: node == treeSurface.selectedNode
 
+    // Colors
+    readonly property color color: node ? node.color : "black"
+    readonly property color darkColor: Qt.darker(color, 1.25)
+    readonly property color lightColor: Qt.lighter(color, 1.6)
+    readonly property color hoveredColor: Qt.darker(color, 1.8)
+    readonly property color pressedColor: Qt.darker(color, 2.2)
+    readonly property color accentColor: Qt.darker(color, 1.6)
+
     id: nodeDelegate
 
     Item {
@@ -16,27 +24,6 @@ Column {
         width: nodeInstanceBackground.width + treeSurface.instancePadding
         height: nodeInstanceBackground.height + treeSurface.instancePadding
         anchors.horizontalCenter: parent.horizontalCenter
-
-        Rectangle {
-            id: nodeInstanceBackground
-            width: nodeDelegate.isSelected ? treeSurface.instanceExpandedWidth : treeSurface.instanceDefaultWidth
-            height: nodeDelegate.isSelected ? treeSurface.instanceExpandedHeight : treeSurface.instanceDefaultHeight
-            color: nodeDelegate.node ? nodeDelegate.node.color : "black"
-            anchors.centerIn: parent
-            radius: 15
-
-            DefaultText {
-                anchors.centerIn: parent
-                text: nodeDelegate.node ? nodeDelegate.node.name : "Error"
-            }
-
-            MouseArea {
-                anchors.fill: parent
-
-                onClicked: treeSurface.selectedNode = nodeDelegate.node
-                onDoubleClicked: modulesView.addNewPlanner(nodeDelegate.node)
-            }
-        }
 
         Rectangle {
             id: verticalLinkUp
@@ -56,6 +43,66 @@ Column {
             anchors.horizontalCenter: parent.horizontalCenter
             width: 3
             visible: childrenRepeater.count
+        }
+
+        Rectangle {
+            id: nodeInstanceBackground
+            width: treeSurface.instanceDefaultWidth
+            height: treeSurface.instanceDefaultHeight
+            radius: 15
+            color: nodeDelegate.color
+            border.color: nodeMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeDelegate.hoveredColor
+            border.width: nodeMouseArea.containsMouse || nodeDelegate.isSelected ? 4 : 0
+            anchors.centerIn: parent
+
+            DefaultText {
+                x: 5
+                y: 5
+                width: parent.width - 10
+                height: parent.height / 2 - 10
+                text: nodeDelegate.node ? nodeDelegate.node.name : "Error"
+                color: nodeDelegate.accentColor
+                fontSizeMode: Text.Fit
+                font.pointSize: 28
+                elide: Text.ElideRight
+            }
+
+            MouseArea {
+                id: nodeMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                onClicked: {
+                    if (mouse.button === Qt.RightButton) {
+                        treeNodeMenu.openMenu(nodeMouseArea, nodeDelegate.node)
+                        treeNodeMenu.x = mouseX
+                        treeNodeMenu.y = mouseY
+                    } else
+                        treeSurface.selectedNode = nodeDelegate.node
+                }
+
+                onDoubleClicked: {
+                    modulesView.addNewPlanner(nodeDelegate.node)
+                }
+            }
+
+            DefaultImageButton {
+                x: parent.width / 2 - width / 2
+                y: parent.height
+                width: height
+                height: treeSurface.instanceDefaultHeight / 2
+                source: "qrc:/Assets/Plus.png"
+                showBorder: false
+                scaleFactor: 1
+                colorDefault: nodeDelegate.accentColor
+                colorHovered: nodeDelegate.hoveredColor
+                colorOnPressed: nodeDelegate.pressedColor
+
+                onReleased: {
+                    // @todo
+                }
+            }
         }
     }
 

@@ -35,7 +35,7 @@ MouseArea {
     acceptedButtons: Qt.LeftButton | Qt.RightButton
 
     onPressed: {
-        if (mouse.buttons & Qt.RightButton) {
+        if (mouse.button === Qt.RightButton) {
             isRemoving = true
             removeFromBeatPrecision = (contentView.xOffset + mouse.x) / contentView.pixelsPerBeatPrecision
             removeToBeatPrecision = removeFromBeatPrecision

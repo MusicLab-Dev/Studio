@@ -17,7 +17,8 @@ Item {
 
         delegate: Rectangle {
             property var instanceRange: range
-            property PartitionModel partition: nodeInstances.partitions.getPartition(partitionIndex)
+            readonly property int targetPartitionIndex: partitionIndex
+            property PartitionModel partition: nodeInstances.partitions.getPartition(targetPartitionIndex)
 
             id: instanceDelegate
             x: contentView.xOffset + instanceRange.from * contentView.pixelsPerBeatPrecision
@@ -56,7 +57,7 @@ Item {
                 width: parent.width
                 height: parent.height * 0.3
                 color: nodeDelegate.accentColor
-                text: instanceDelegate.partition.name
+                text: instanceDelegate.partition ? instanceDelegate.partition.name : "ERROR"
                 fontSizeMode: Text.VerticalFit
                 font.pointSize: 30
                 elide: Text.ElideMiddle

@@ -51,7 +51,11 @@ Item {
                     plannerNodeMenu.openMenu(nodeDelegate, nodeDelegate.node)
                     plannerNodeMenu.x = mouse.x
                     plannerNodeMenu.y = mouse.y
-                } else {
+                }
+            }
+
+            onClicked: {
+                if (mouse.button !== Qt.RightButton) {
                     if (isLastSelected) {
                         nodeDelegate.isSelected = !nodeDelegate.isSelected
                         if (!nodeDelegate.isSelected)
