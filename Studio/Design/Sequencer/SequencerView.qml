@@ -5,6 +5,8 @@ import NodeModel 1.0
 import PartitionModel 1.0
 import PluginTableModel 1.0
 
+import "../Common"
+
 ColumnLayout {
     enum EditMode {
         Regular,
@@ -133,17 +135,19 @@ ColumnLayout {
 
     SequencerHeader {
         id: sequencerViewHeader
-
         Layout.fillWidth: true
         Layout.preferredHeight: parent.height * 0.15
         z: 1
     }
 
-    SequencerControls {
+    ControlsFlow {
         id: sequencerControls
         Layout.fillWidth: true
         Layout.preferredHeight: height
         y: parent.height
+
+        model: sequencerView.node ? sequencerView.node.plugin : null
+        controlsColor: sequencerView.node ? sequencerView.node.color : "black"
     }
 
     Item {

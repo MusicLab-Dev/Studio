@@ -9,6 +9,9 @@ import "../Common/"
 import PluginModel 1.0
 
 Rectangle {
+    property alias model: nodeControlsRepeater.model
+    property color controlsColor: "black"
+
     color: themeManager.foregroundColor
     height: controlsColumn.height
 
@@ -25,12 +28,11 @@ Rectangle {
         Flow {
             id: nodeControlsFlow
             width: parent.width
-            padding: 5
+            padding: 20
             spacing: 20
 
             Repeater {
                 id: nodeControlsRepeater
-                model: sequencerView.node ? sequencerView.node.plugin : null
 
                 delegate: Loader {
                     id: delegateLoader
@@ -51,7 +53,7 @@ Rectangle {
                     }
 
                     onLoaded: {
-                        item.accentColor = sequencerView.node.color
+                        item.accentColor = color
                     }
                 }
             }
