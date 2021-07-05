@@ -38,7 +38,9 @@ public:
         ReplayPlaylist,
         StopPlaylist,
         VolumeContext,
-        VolumePlaylist
+        VolumePlaylist,
+        Undo,
+        Redo
     };
 
     Q_ENUM(EventTarget)

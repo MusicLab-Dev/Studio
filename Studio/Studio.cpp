@@ -24,6 +24,7 @@
 #include "DevicesModel.hpp"
 #include "PartitionPreview.hpp"
 #include "PartitionInstancesModelProxy.hpp"
+#include "ActionsManager.hpp"
 #include "NodeListModel.hpp"
 #include "PluginModelProxy.hpp"
 
@@ -49,6 +50,12 @@ void Studio::InitResources(void)
     qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
     qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");
     qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
+    qRegisterMetaType<ActionNodeBase>("ActionNodeBase");
+    qRegisterMetaType<ActionPartitionBase>("ActionPartitionBase");
+    qRegisterMetaType<ActionNotesBase>("ActionNoteBase");
+    qRegisterMetaType<ActionAddNotes>("ActionAddNotes");
+    qRegisterMetaType<ActionMoveNotes>("ActionMoveNotes");
+    qRegisterMetaType<ActionRemoveNotes>("ActionRemoveNotes");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
@@ -81,6 +88,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
     qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
+    qmlRegisterType<ActionsManager>("ActionsManager", 1, 0, "ActionsManager");
     qmlRegisterType<NodeListModel>("NodeListModel", 1, 0, "NodeListModel");
 
     Q_INIT_RESOURCE(Resources);

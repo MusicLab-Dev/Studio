@@ -91,6 +91,18 @@ int PartitionModel::find(const quint8 key, const quint32 beat) const noexcept
     return -1;
 }
 
+int PartitionModel::findExact(const Note &note) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &elem : *_data) {
+        if (elem == note)
+            return idx;
+        ++idx;
+    }
+    return -1;
+}
+
 int PartitionModel::findOverlap(const Key key, const BeatRange &range) const noexcept
 {
     int idx = 0;
@@ -140,14 +152,15 @@ void PartitionModel::set(const int idx, const Note &note)
 
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("PartitionModel::move: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+
     Scheduler::Get()->addEvent(
         [this, note, idx] {
             _data->assign(idx, note);
         },
         [this, idx, newIdx] {
             if (idx != newIdx) {
-                beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newIdx ? newIdx + 1 : 0);
-                endMoveRows();
+                beginResetModel(); // @todo fix all 'set'
+                endResetModel();
             } else {
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);
