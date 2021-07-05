@@ -100,6 +100,7 @@ set(StudioSources
     ${StudioDir}/ThemeManager.hpp
     ${StudioDir}/ActionsManager.cpp
     ${StudioDir}/ActionsManager.hpp
+    ${StudioDir}/ClipboardManager.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

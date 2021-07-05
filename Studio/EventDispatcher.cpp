@@ -30,6 +30,9 @@ QStringList EventDispatcher::targetEventList(void) const noexcept
         "Stop playlist",
         "Undo",
         "Redo"
+        "Copy",
+        "Paste",
+        "Cut"
     };
 
     return List;

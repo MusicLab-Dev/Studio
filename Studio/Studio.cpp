@@ -25,6 +25,7 @@
 #include "PartitionPreview.hpp"
 #include "PartitionInstancesModelProxy.hpp"
 #include "ActionsManager.hpp"
+#include "ClipboardManager.hpp"
 #include "NodeListModel.hpp"
 #include "PluginModelProxy.hpp"
 
@@ -89,6 +90,7 @@ void Studio::InitResources(void)
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
     qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
     qmlRegisterType<ActionsManager>("ActionsManager", 1, 0, "ActionsManager");
+    qmlRegisterType<ClipboardManager>("ClipboardManager", 1, 0, "ClipboardManager");
     qmlRegisterType<NodeListModel>("NodeListModel", 1, 0, "NodeListModel");
 
     Q_INIT_RESOURCE(Resources);
@@ -138,12 +140,6 @@ Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
 {
     setOrganizationName("Lexo");
     setOrganizationDomain("lexo-music.com");
-
-    /** DEBUG */
-    //SettingsListModel list("test.json", "values.json", nullptr);
-    //list.load();
-    //list.saveValues();
-    /* --- */
 
     const QUrl url(QStringLiteral("qrc:/Main/Main.qml"));
 

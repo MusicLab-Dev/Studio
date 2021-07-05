@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import "../Common"
 
 MouseArea {
+    property alias treeSurface: treeSurface
+
     function incrementXOffset(offset) {
         contentView.xOffset = Math.min(Math.max(contentView.xOffset + offset, contentView.xOffsetMin), contentView.xOffsetMax)
     }

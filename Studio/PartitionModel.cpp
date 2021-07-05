@@ -7,6 +7,9 @@
 
 #include <QHash>
 #include <QQmlEngine>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 #include "Models.hpp"
 #include "PartitionsModel.hpp"
@@ -175,16 +178,8 @@ void PartitionModel::set(const int idx, const Note &note)
     );
 }
 
-bool PartitionModel::addRange(const QVariantList &noteList)
+bool PartitionModel::addRangeProcess(const QVector<Note> notes)
 {
-    if (noteList.empty())
-        return true;
-    else if (noteList.size() == 1)
-        return add(noteList.front().value<Note>());
-    QVector<Note> notes;
-    notes.reserve(noteList.size());
-    for (const auto &n : noteList)
-        notes.append(n.value<Note>());
     return Models::AddProtectedEvent(
         [this, notes] {
             _data->insert(notes.begin(), notes.end());
@@ -200,6 +195,42 @@ bool PartitionModel::addRange(const QVariantList &noteList)
             emit notesChanged();
         }
     );
+}
+
+bool PartitionModel::addRange(const QVariantList &noteList)
+{
+    if (noteList.empty())
+        return true;
+    else if (noteList.size() == 1)
+        return add(noteList.front().value<Note>());
+    QVector<Note> notes;
+    notes.reserve(noteList.size());
+    for (const auto &n : noteList)
+        notes.append(n.value<Note>());
+    return addRangeProcess(notes);
+}
+
+bool PartitionModel::addJsonRange(const QString &json, int scale)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
+    QJsonObject obj = doc.object();
+    QJsonArray arr = obj["Notes"].toArray();
+    if (arr.size() <= 0)
+        return true;
+
+    QVector<Note> notes;
+    notes.reserve(arr.size());
+
+    auto offset = 0;
+    QJsonObject note = arr[0].toObject();
+    while ((find(note["key"].toInt(), note["from"].toInt() + 1 + offset) != -1))
+        offset += scale;
+    for (int idx = 0; idx < arr.size(); ++idx) {
+        QJsonObject note = arr[idx].toObject();
+        BeatRange range { static_cast<Audio::Beat>(note["from"].toInt() + offset), static_cast<Audio::Beat>(note["to"].toInt() + offset) };
+        notes.push_back({ range, static_cast<Audio::Key>(note["key"].toInt()), static_cast<Audio::Velocity>(note["velocity"].toInt()), static_cast<Audio::Tuning>(note["tuning"].toInt()) });
+    }
+    return addRangeProcess(notes);
 }
 
 bool PartitionModel::removeRange(const QVariantList &indexes)

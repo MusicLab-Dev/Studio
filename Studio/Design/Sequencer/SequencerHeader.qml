@@ -17,7 +17,6 @@ Rectangle {
     }
 
     SequencerEdition {
-
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter

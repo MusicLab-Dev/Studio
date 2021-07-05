@@ -138,7 +138,7 @@ ColumnLayout {
     SequencerHeader {
         id: sequencerViewHeader
         Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.15
+        Layout.preferredHeight: parent.height * 0.12
         z: 1
     }
 

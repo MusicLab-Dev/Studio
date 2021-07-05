@@ -549,4 +549,57 @@ MouseArea {
         border.color: "white"
         border.width: 1
     }
+
+    Connections {
+
+        id: selectionCopy
+        target: eventDispatcher
+        enabled: moduleIndex === componentSelected
+
+        function copyInClipboard(erase) {
+            var text = '{"Notes":[';
+            for (var i = 0; i < selectionListModel.length; i++) {
+                var note = partition.getNote(selectionListModel[i])
+                var json = '{'
+                        + '"from":' + (note.range.from) + ","
+                        + '"to":' + (note.range.to) + ","
+                        + '"key":' + note.key + ","
+                        + '"velocity":' + note.velocity + ","
+                        + '"tuning":' + note.tuning
+                        + "}";
+                if (i < selectionListModel.length - 1)
+                   json += ','
+                text += json
+            }
+            if (erase) {
+                partition.removeRange(selectionListModel)
+                resetSelection()
+            }
+            text += "]}"
+            clipboardManager.copy(text)
+        }
+
+        function onCopy(pressed) {
+            if (!pressed)
+                return
+            copyInClipboard(false)
+        }
+
+        function onCut(pressed) {
+            console.debug("cut")
+            if (!pressed)
+                return
+            copyInClipboard(true)
+        }
+
+        function onPaste(pressed) {
+            if (!pressed)
+                return
+            resetSelection()
+            partition.addJsonRange(clipboardManager.paste(true), placementBeatPrecisionScale)
+        }
+
+
+    }
+
 }
