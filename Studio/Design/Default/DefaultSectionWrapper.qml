@@ -5,12 +5,14 @@ Item {
     id: sectionWrapper
     default property alias placeholder: placeholder.data
     property string label: "section"
+    property real ratioheight: 0.8
+    property real ratioWidth: 0.95
 
     Rectangle {
         id: container
         anchors.centerIn: parent
-        height: parent.height * 0.8
-        width: parent.width * 0.95
+        height: parent.height * ratioheight
+        width: parent.width * ratioWidth
         color: themeManager.foregroundColor
         border.width: 1
         border.color: "white"
