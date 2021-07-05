@@ -16,160 +16,58 @@ Rectangle {
         onPressedChanged: forceActiveFocus()
     }
 
-    RowLayout {
-        anchors.fill: parent
-        spacing: 0
+    SequencerEdition {
 
-        DefaultSectionWrapper {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.6
-            label: sequencerView.node ? sequencerView.node.plugin.title : ""
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+
+        height: parent.height * 0.7
+        width: parent.width * 0.4
+    }
+
+
+    Item {
+        id: pluginButton
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: parent.width * 0.15
+        height: parent.height
+
+        Rectangle {
+            property color hoveredColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.8) : "black"
+            property color pressedColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 2.2) : "black"
+            property color accentColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.6) : "black"
+
+            id: rectPluginButton
+            anchors.centerIn: parent
+            width: parent.width
+            height: parent.height * 0.8
+            radius: 15
+            color: sequencerView.node ? sequencerView.node.color : "black"
+            border.color: mouse.containsPress ? pressedColor : hoveredColor
+            border.width: mouse.containsMouse ? 4 : 0
 
             MouseArea {
+                id: mouse
+                hoverEnabled: true
+
                 anchors.fill: parent
-                onPressedChanged: forceActiveFocus()
+
+                onPressed: sequencerControls.visible = !sequencerControls.visible
             }
 
-            Row {
-                id: controlsListView
-                anchors.fill: parent
-                clip: true
-                spacing: 2
-                padding: 2
-
-                Repeater {
-                    model: sequencerView.node ? sequencerView.node.plugin : null
-
-                    delegate: Loader {
-                        focus: true
-
-                        source: {
-                            switch (controlType) {
-                            case PluginModel.Boolean:
-                                return "qrc:/Common/PluginControls/BooleanControl.qml"
-                            case PluginModel.Integer:
-                                return "qrc:/Common/PluginControls/IntegerControl.qml"
-                            case PluginModel.Floating:
-                                return "qrc:/Common/PluginControls/FloatingControl.qml"
-                            case PluginModel.Enum:
-                                return "qrc:/Common/PluginControls/EnumControl.qml"
-                            default:
-                                return ""
-                            }
-                        }
-
-                        onLoaded: anchors.verticalCenter = parent.verticalCenter
-                    }
-                }
-            }
-        }
-
-        DefaultSectionWrapper {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.4
-            label: "Edition"
-
-            placeholder: RowLayout {
-                anchors.fill: parent
-                spacing: 10
-
-                ModeSelector {
-                    id: editModeSelector
-                    Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.375
-                    itemsPaths: [
-                        "qrc:/Assets/NormalMod.png",
-                        "qrc:/Assets/BrushMod.png",
-                        "qrc:/Assets/SelectorMod.png",
-                        "qrc:/Assets/CutMod.png",
-                    ]
-                    itemsNames: [
-                        "Standard",
-                        "Brush",
-                        "Selector",
-                        "CutMod",
-                    ]
-                    itemUsableTill: 2
-                    onItemSelectedChanged: sequencerView.editMode = itemSelected
-
-                    placeholder: Snapper {
-                        id: brushSnapper
-                        height: editModeSelector.height - editModeSelector.rowContainer.height
-                        width: editModeSelector.width
-                        visible: sequencerView.editMode === SequencerView.EditMode.Brush
-                        currentIndex: 0
-                        onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
-                        rectBackground.border.width: 0
-                        rectBackground.color: "transparent"
-                    }
-                }
-
-                Item {
-                    Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.375
-                    Layout.alignment: Qt.AlignHCenter
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        spacing: 3
-
-                        Item {
-                            Layout.preferredHeight: parent.height * 0.4
-                            Layout.preferredWidth: parent.width
-
-                            RowLayout {
-                                spacing: 5
-                                anchors.fill: parent
-
-                                PartitionComboBox {
-                                    id: partitionComboBox
-                                    Layout.preferredWidth: parent.width * 0.75
-                                    Layout.preferredHeight: parent.height
-                                    partitions: sequencerView.node ? sequencerView.node.partitions : null
-                                    currentIndex: sequencerView.partitionIndex
-
-                                    onActivated: {
-                                        sequencerView.partitionIndex = index
-                                        sequencerView.partition = sequencerView.node.partitions.getPartition(index)
-                                    }
-                                }
-
-                                AddButton {
-                                    id: addBtn
-                                    Layout.preferredWidth: parent.height
-                                    Layout.preferredHeight: parent.height
-
-                                    onReleased: {
-                                        sequencerView.player.stop()
-                                        if (sequencerView.node.partitions.add()) {
-                                            sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
-                                            sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        Snapper {
-                            id: snapper
-                            Layout.preferredHeight: parent.height * 0.4
-                            Layout.preferredWidth: parent.width
-                            currentIndex: 2
-
-                            onActivated: {
-                                contentView.placementBeatPrecisionScale = currentValue
-                                contentView.placementBeatPrecisionLastWidth = 0
-                            }
-                        }
-                    }
-                }
-
-                ArrowNextPrev {
-                    Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.25
-                    Layout.alignment: Qt.AlignHCenter
-                }
+            DefaultText {
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignLeft
+                fontSizeMode: Text.HorizontalFit
+                font.pointSize: 20
+                color: rectPluginButton.accentColor
+                text: sequencerView.node ? sequencerView.node.name : "ERROR"
+                wrapMode: Text.Wrap
             }
         }
     }
+
 }

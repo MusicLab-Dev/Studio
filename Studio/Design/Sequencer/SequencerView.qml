@@ -5,7 +5,9 @@ import NodeModel 1.0
 import PartitionModel 1.0
 import PluginTableModel 1.0
 
-Column {
+import "../Common"
+
+ColumnLayout {
     enum EditMode {
         Regular,
         Brush,
@@ -133,18 +135,30 @@ Column {
 
     SequencerHeader {
         id: sequencerViewHeader
-        width: parent.width
-        height: parent.height * 0.15
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height * 0.15
         z: 1
+    }
+
+    ControlsFlow {
+        id: sequencerControls
+        Layout.fillWidth: true
+        Layout.preferredHeight: height
+        y: parent.height
+
+        model: sequencerView.node ? sequencerView.node.plugin : null
+        controlsColor: sequencerView.node ? sequencerView.node.color : "black"
     }
 
     Item {
         id: contentArea
-        width: parent.width
-        height: parent.height * 0.7
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
         SequencerContentView {
             id: contentView
+            width: parent.width
+            height: parent.height
             anchors.fill: parent
 
             // When we use loadPartitionNode, contentView.height === 0 so we need to center the view once it is updated
@@ -160,6 +174,7 @@ Column {
             onTimelineEndMove: player.timelineEndMove()
             onTimelineBeginLoopMove: player.timelineBeginLoopMove()
             onTimelineEndLoopMove: player.timelineEndLoopMove()
+
         }
 
         SequencerContentTweakView {
@@ -172,7 +187,7 @@ Column {
 
     SequencerFooter {
         id: sequencerViewFooter
-        width: parent.width
-        height: parent.height * 0.15
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height * 0.12
     }
 }
