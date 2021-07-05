@@ -8,57 +8,53 @@ import "../Common/"
 
 import PluginModel 1.0
 
-Item {
+Rectangle {
+    color: themeManager.foregroundColor
+    height: controlsColumn.height
 
-    MouseArea {
-        anchors.fill: parent
-        onPressedChanged: forceActiveFocus()
-    }
-
-    Rectangle {
-        color: "white"
-        height: 1
+    Column {
+        id: controlsColumn
         width: parent.width
-        anchors.top: parent.top
-    }
 
+        Rectangle {
+            color: "white"
+            width: parent.width
+            height: 1
+        }
 
-    ListView {
-        id: listView
-        anchors.centerIn: parent
-        width: parent.width * 0.95
-        height: parent.height * 0.5
-        orientation: ListView.Horizontal
+        Flow {
+            id: nodeControlsFlow
+            width: parent.width
+            padding: 5
+            spacing: 20
 
-        spacing: 20
+            Repeater {
+                id: nodeControlsRepeater
+                model: sequencerView.node ? sequencerView.node.plugin : null
 
-        model: sequencerView.node ? sequencerView.node.plugin : null
+                delegate: Loader {
+                    id: delegateLoader
 
+                    source: {
+                        switch (controlType) {
+                        case PluginModel.Boolean:
+                            return "qrc:/Common/PluginControls/BooleanControl.qml"
+                        case PluginModel.Integer:
+                            return "qrc:/Common/PluginControls/IntegerControl.qml"
+                        case PluginModel.Floating:
+                            return "qrc:/Common/PluginControls/FloatingControl.qml"
+                        case PluginModel.Enum:
+                            return "qrc:/Common/PluginControls/EnumControl.qml"
+                        default:
+                            return ""
+                        }
+                    }
 
-            delegate: Loader {
-                focus: true
-
-                source: {
-                    switch (controlType) {
-                    case PluginModel.Boolean:
-                        return "qrc:/Common/PluginControls/BooleanControl.qml"
-                    case PluginModel.Integer:
-                        return "qrc:/Common/PluginControls/IntegerControl.qml"
-                    case PluginModel.Floating:
-                        return "qrc:/Common/PluginControls/FloatingControl.qml"
-                    case PluginModel.Enum:
-                        return "qrc:/Common/PluginControls/EnumControl.qml"
-                    default:
-                        return ""
+                    onLoaded: {
+                        item.accentColor = sequencerView.node.color
                     }
                 }
             }
-
+        }
     }
-
-
-
-
-
 }
-

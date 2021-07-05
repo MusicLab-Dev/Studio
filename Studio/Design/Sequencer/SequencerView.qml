@@ -135,18 +135,15 @@ ColumnLayout {
         id: sequencerViewHeader
 
         Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.1
-
-        width: parent.width
-        height: parent.height * 0.1
+        Layout.preferredHeight: parent.height * 0.15
         z: 1
     }
 
     SequencerControls {
         id: sequencerControls
-
         Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.1
+        Layout.preferredHeight: height
+        y: parent.height
     }
 
     Item {

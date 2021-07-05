@@ -18,20 +18,19 @@ Rectangle {
 
     SequencerEdition {
 
-        anchors.left: parent.left
-        anchors.leftMargin: parent.width * 0.01
+        anchors.right: parent.right
+        anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
 
         height: parent.height * 0.7
         width: parent.width * 0.4
-
     }
 
 
     Item {
         id: pluginButton
-        anchors.right: parent.right
-        anchors.rightMargin: parent.width * 0.01
+        anchors.left: parent.left
+        anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width * 0.15
         height: parent.height
