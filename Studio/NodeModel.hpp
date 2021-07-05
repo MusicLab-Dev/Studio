@@ -177,6 +177,9 @@ public slots:
     /** @brief Remove a children node */
     bool remove(const int index);
 
+    /** @brief Move a node into self children */
+    bool moveToChildren(NodeModel *target);
+
 
     /** @todo Move this in pluginmodel */
     bool needSingleExternalInput(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::SingleExternalInput); }

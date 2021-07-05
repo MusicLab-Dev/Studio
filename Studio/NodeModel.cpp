@@ -256,6 +256,23 @@ bool NodeModel::remove(const int idx)
     );
 }
 
+bool NodeModel::moveToChildren(NodeModel *target)
+{
+    const auto targetParent = target->parentNode();
+
+    // if (targetParent) {
+    //     const auto targetIndex = getChildIndex(target);
+
+    //     return Models::AddProtectedEvent(
+    //         [this, targetTargetIndex] {
+
+    //         }
+    //     )
+    // } else {
+
+    // }
+}
+
 bool NodeModel::isAParent(NodeModel *node) const noexcept
 {
     auto *p = parentNode();

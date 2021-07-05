@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQml 2.15
 
 import NodeModel 1.0
 
@@ -32,7 +33,7 @@ Column {
             anchors.top: parent.top
             anchors.bottom: soundMeter.top
             anchors.horizontalCenter: parent.horizontalCenter
-            visible: nodeDelegate.parentNode
+            visible: nodeDelegate.parentNode && !nodeInstanceBackground.drag.active
         }
 
         Rectangle {
@@ -42,32 +43,111 @@ Column {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             width: 3
-            visible: childrenRepeater.count
+            visible: childrenRepeater.count && !nodeInstanceBackground.drag.active
         }
 
         Rectangle {
             id: soundMeter
+            visible: !nodeInstanceBackground.drag.active
             anchors.top: parent.top
             anchors.bottom: nodeInstanceBackground.top
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: 8
             // anchors.bottomMargin: 5
             color: themeManager.backgroundColor
-            border.color: nodeInstanceBackground.border.color
+            border.color: nodeInstanceBackgroundRect.border.color
             border.width: 2
             width: height / 2
         }
 
+        MouseArea {
+            property bool containsDrag: false
 
-        Rectangle {
             id: nodeInstanceBackground
+            x: parent.width / 2 - width / 2
+            y: parent.height / 2 - height / 2
             width: treeSurface.instanceDefaultWidth
             height: treeSurface.instanceDefaultHeight
-            radius: 15
-            color: nodeDelegate.color
-            border.color: nodeMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeMouseArea.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
-            border.width: 4
-            anchors.centerIn: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            drag.target: nodeInstanceBackground
+            drag.smoothed: true
+            Drag.hotSpot.x: width / 2
+            Drag.hotSpot.y: height / 2
+            opacity: drag.active ? 0.75 : 1
+
+            onClicked: {
+                if (mouse.button === Qt.RightButton) {
+                    treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate.node)
+                    treeNodeMenu.x = mouseX
+                    treeNodeMenu.y = mouseY
+                } else
+                    treeSurface.selectedNode = nodeDelegate.node
+            }
+
+            onPressAndHold: {
+                treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate.node)
+                treeNodeMenu.x = mouseX
+                treeNodeMenu.y = mouseY
+            }
+
+            onDoubleClicked: {
+                modulesView.addNewPlanner(nodeDelegate.node)
+            }
+
+            drag.onActiveChanged: {
+                if (drag.active) {
+                    treeSurface.startDrag(nodeDelegate.node, treeSurface.mapFromItem(nodeInstanceBackground, mouseX, mouseY))
+                    parent = treeSurface
+                } else {
+                    treeSurface.endDrag()
+                    parent = nodeInstance
+                    x = Qt.binding(function() {
+                        return parent.width / 2 - width / 2
+                    })
+                    y = Qt.binding(function() {
+                        return parent.height / 2 - height / 2
+                    })
+                }
+            }
+
+            Connections {
+                enabled: nodeInstanceBackground.drag.active
+                target: nodeInstanceBackground
+
+                function onXChanged() {
+                    treeSurface.updateDrag(treeSurface.mapFromItem(nodeInstanceBackground, nodeInstanceBackground.mouseX, nodeInstanceBackground.mouseY))
+                }
+
+                function onYChanged() {
+                    treeSurface.updateDrag(treeSurface.mapFromItem(nodeInstanceBackground, nodeInstanceBackground.mouseX, nodeInstanceBackground.mouseY))
+                }
+            }
+
+            Connections {
+                enabled: treeSurface.dragActive && !nodeInstanceBackground.drag.active
+                target: treeSurface
+
+                function onDragPointChanged() {
+                    nodeInstanceBackground.containsDrag = nodeInstanceBackground.contains(nodeInstanceBackground.mapFromItem(treeSurface, treeSurface.dragPoint))
+                }
+
+                function onTargetDropped() {
+                    if (nodeInstanceBackground.containsDrag) {
+                        nodeInstanceBackground.containsDrag = false
+                        nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
+                    }
+                }
+            }
+
+            Rectangle {
+                id: nodeInstanceBackgroundRect
+                anchors.fill: parent
+                radius: 15
+                color: nodeInstanceBackground.containsDrag ? nodeDelegate.lightColor : nodeDelegate.color
+                border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
+                border.width: 4
+            }
 
             DefaultText {
                 x: 5
@@ -79,32 +159,6 @@ Column {
                 fontSizeMode: Text.Fit
                 font.pointSize: 28
                 elide: Text.ElideRight
-            }
-
-            MouseArea {
-                id: nodeMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-                onClicked: {
-                    if (mouse.button === Qt.RightButton) {
-                        treeNodeMenu.openMenu(nodeMouseArea, nodeDelegate.node)
-                        treeNodeMenu.x = mouseX
-                        treeNodeMenu.y = mouseY
-                    } else
-                        treeSurface.selectedNode = nodeDelegate.node
-                }
-
-                onPressAndHold: {
-                    treeNodeMenu.openMenu(nodeMouseArea, nodeDelegate.node)
-                    treeNodeMenu.x = mouseX
-                    treeNodeMenu.y = mouseY
-                }
-
-                onDoubleClicked: {
-                    modulesView.addNewPlanner(nodeDelegate.node)
-                }
             }
 
             DefaultImageButton {
@@ -166,8 +220,11 @@ Column {
 
             delegate: Loader {
                 source: "qrc:/Tree/TreeNodeDelegate.qml"
+                focus: true
 
                 onLoaded: {
+                    focus = true
+                    item.focus = true
                     item.node = nodeInstance.instance
                     item.parentNode = nodeDelegate.node
                     if (index === 0) {
