@@ -62,6 +62,7 @@ Column {
 
         MouseArea {
             property bool containsDrag: false
+            property bool validDrag: false
 
             id: nodeInstanceBackground
             x: parent.width / 2 - width / 2
@@ -129,7 +130,14 @@ Column {
                 target: treeSurface
 
                 function onDragPointChanged() {
-                    nodeInstanceBackground.containsDrag = nodeInstanceBackground.contains(nodeInstanceBackground.mapFromItem(treeSurface, treeSurface.dragPoint))
+                    var hover = nodeInstanceBackground.contains(nodeInstanceBackground.mapFromItem(treeSurface, treeSurface.dragPoint))
+                    if (nodeInstanceBackground.containsDrag !== hover) {
+                        if (hover && !nodeDelegate.node.isAParent(treeSurface.dragTarget))
+                            nodeInstanceBackground.validDrag = true
+                        else
+                            nodeInstanceBackground.validDrag = false
+                        nodeInstanceBackground.containsDrag = hover
+                    }
                 }
 
                 function onTargetDropped() {
@@ -144,7 +152,7 @@ Column {
                 id: nodeInstanceBackgroundRect
                 anchors.fill: parent
                 radius: 15
-                color: nodeInstanceBackground.containsDrag ? nodeDelegate.lightColor : nodeDelegate.color
+                color: nodeInstanceBackground.containsDrag ? nodeInstanceBackground.validDrag ? nodeDelegate.lightColor : nodeDelegate.pressedColor : nodeDelegate.color
                 border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
                 border.width: 4
             }
@@ -218,6 +226,13 @@ Column {
             id: childrenRepeater
             model: nodeDelegate.node
 
+            onCountChanged: {
+                if (!count) {
+                    childrenRow.leftMargin = Qt.binding(function() { return 0 })
+                    childrenRow.rightMargin = Qt.binding(function() { return 0 })
+                }
+            }
+
             delegate: Loader {
                 source: "qrc:/Tree/TreeNodeDelegate.qml"
                 focus: true
@@ -227,14 +242,21 @@ Column {
                     item.focus = true
                     item.node = nodeInstance.instance
                     item.parentNode = nodeDelegate.node
-                    if (index === 0) {
-                        childrenRow.leftMargin = Qt.binding(function() {
-                            return item.width / 2
-                        })
-                    } else if (index === childrenRepeater.count - 1) {
-                        childrenRow.rightMargin = Qt.binding(function() {
-                            return item.width / 2
-                        })
+                }
+
+                Connections {
+                    target: childrenRepeater
+
+                    function onCountChanged() {
+                        if (index === 0) {
+                            childrenRow.leftMargin = Qt.binding(function() {
+                                return item.width / 2
+                            })
+                        } else if (index === childrenRepeater.count - 1) {
+                            childrenRow.rightMargin = Qt.binding(function() {
+                                return item.width / 2
+                            })
+                        }
                     }
                 }
             }

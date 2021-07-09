@@ -260,17 +260,40 @@ bool NodeModel::moveToChildren(NodeModel *target)
 {
     const auto targetParent = target->parentNode();
 
-    // if (targetParent) {
-    //     const auto targetIndex = getChildIndex(target);
+    if (targetParent) {
+        const auto targetIndex = targetParent->getChildIndex(target);
 
-    //     return Models::AddProtectedEvent(
-    //         [this, targetTargetIndex] {
+        if (isAParent(target)) {
+            qDebug() << "NodeModel::moveToChildren: Node is a parent of move target";
+            return false;
+        }
 
-    //         }
-    //     )
-    // } else {
+        return Models::AddProtectedEvent(
+            [this, target, targetIndex] {
+                auto parentNode = target->parentNode();
+                auto audioParent = parentNode->audioNode();
+                auto audioPtr = std::move(audioParent->children().at(targetIndex));
+                auto ptr = std::move(parentNode->_children.at(targetIndex));
 
-    // }
+                parentNode->beginRemoveRows(QModelIndex(), targetIndex, targetIndex);
+                audioParent->children().erase(audioParent->children().begin() + targetIndex);
+                parentNode->_children.erase(parentNode->_children.begin() + targetIndex);
+                parentNode->endRemoveRows();
+
+                audioNode()->children().push(std::move(audioPtr));
+                target->setParent(this);
+
+                beginInsertRows(QModelIndex(), count(), count());
+                _children.push(std::move(ptr));
+                endInsertRows();
+
+                Scheduler::Get()->invalidateCurrentGraph();
+            }
+        );
+    } else {
+        qDebug() << "NodeModel: Cannot move a children that has no parent";
+        return false;
+    }
 }
 
 bool NodeModel::isAParent(NodeModel *node) const noexcept

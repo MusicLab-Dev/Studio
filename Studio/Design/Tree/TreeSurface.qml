@@ -4,7 +4,6 @@ import NodeModel 1.0
 
 Item {
     function startDrag(targetNode, targetPoint) {
-        console.log("Drag started", targetNode.name, targetPoint)
         dragTarget = targetNode
         dragPoint = targetPoint
         dragActive = true
