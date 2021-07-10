@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import NodeModel 1.0
-import PluginTableModel 1.0
 
 import "../Default"
 
@@ -73,40 +72,7 @@ DefaultMenu {
         onTriggered: {
             var target = targetNode
             closeMenu()
-            pluginsView.open(
-                // On plugin selection accepted
-                function() {
-                    var externalInputType = pluginTable.getExternalInputType(pluginsView.selectedPath)
-                    if (externalInputType === PluginTableModel.None) {
-                        // Add the node
-                        if (app.currentPlayer)
-                            app.currentPlayer.pause()
-                        if (target.add(pluginsView.selectedPath) === null)
-                            console.log("Couldn't create node")
-                    } else {
-                        modulesView.workspacesView.open(externalInputType === PluginTableModel.Multiple,
-                            // On external inputs selection accepted
-                            function() {
-                                // Format the external input list
-                                var list = []
-                                for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
-                                    list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
-                                // Add the node with external inputs
-                                if (app.currentPlayer)
-                                    app.currentPlayer.pause()
-                                if (target.addExternalInputs(pluginsView.selectedPath, list) === null)
-                                    console.log("Couldn't create node")
-                            },
-                            // On external inputs selection canceled
-                            function() {
-                            }
-                        )
-                    }
-                },
-                // On plugin selection canceled
-                function() {
-                }
-            )
+            pluginsView.prepareInsertNode(target)
         }
     }
 
@@ -117,40 +83,7 @@ DefaultMenu {
         onTriggered: {
             var target = targetNode
             closeMenu()
-            pluginsView.open(
-                // On plugin selection accepted
-                function() {
-                    var externalInputType = pluginTable.getExternalInputType(pluginsView.selectedPath)
-                    if (externalInputType === PluginTableModel.None) {
-                        // Add the node
-                        if (app.currentPlayer)
-                            app.currentPlayer.pause()
-                        if (target.addParent(pluginsView.selectedPath) === null)
-                            console.log("Couldn't create node")
-                    } else {
-                        modulesView.workspacesView.open(externalInputType === PluginTableModel.Multiple,
-                            // On external inputs selection accepted
-                            function() {
-                                // Format the external input list
-                                var list = []
-                                for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
-                                    list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
-                                // Add the node with external inputs
-                                if (app.currentPlayer)
-                                    app.currentPlayer.pause()
-                                if (target.addParentExternalInputs(pluginsView.selectedPath, list) === null)
-                                    console.log("Couldn't create node")
-                            },
-                            // On external inputs selection canceled
-                            function() {
-                            }
-                        )
-                    }
-                },
-                // On plugin selection canceled
-                function() {
-                }
-            )
+            pluginsView.prepareInsertParentNode(target)
         }
     }
 

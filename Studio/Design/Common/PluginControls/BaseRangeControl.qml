@@ -35,7 +35,7 @@ MouseArea {
     property real valueRatio: 0
     readonly property real rangeValue: maximumValue - minimumValue
     readonly property real valueRealRatio: (value - minimumValue) / rangeValue
-    readonly property real pixelsRange: 600 // Represent the total range as pixels to travel
+    readonly property real pixelsRange: (rangeValue / stepSize) * 2 // Represent the total range as pixels to travel
 
     // Tooltip
     readonly property string tooltipPrefixText: longName + ": "
@@ -77,7 +77,7 @@ MouseArea {
 
     onPositionChanged: {
         if (tracking && !preventNoiseEvents) {
-            var speedMultiplier = mouse.modifiers & Qt.ControlModifier ? 0.5 : mouse.modifiers & Qt.ShiftModifier ? 2 : 1
+            var speedMultiplier = mouse.modifiers & Qt.ControlModifier ? 0.25 : mouse.modifiers & Qt.ShiftModifier ? 4 : 1
             var offset = -(mouseY - lastTrackingPos.y) * speedMultiplier
             if (offset !== 0) {
                 preventNoiseEvents = true
