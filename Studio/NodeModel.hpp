@@ -177,8 +177,11 @@ public slots:
     /** @brief Remove a children node */
     bool remove(const int index);
 
-    /** @brief Move a node into self children */
+    /** @brief Move a node into children */
     bool moveToChildren(NodeModel *target);
+
+    /** @brief Make a node the new parent */
+    bool moveToParent(NodeModel *target);
 
 
     /** @todo Move this in pluginmodel */

@@ -71,7 +71,7 @@ Column {
             height: treeSurface.instanceDefaultHeight
             hoverEnabled: true
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-            drag.target: nodeInstanceBackground
+            drag.target: nodeDelegate.node && nodeDelegate.node.parentNode ? nodeInstanceBackground : null
             drag.smoothed: true
             Drag.hotSpot.x: width / 2
             Drag.hotSpot.y: height / 2
@@ -143,7 +143,10 @@ Column {
                 function onTargetDropped() {
                     if (nodeInstanceBackground.containsDrag) {
                         nodeInstanceBackground.containsDrag = false
-                        nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
+                        if (nodeInstanceBackground.validDrag)
+                            nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
+                        else
+                            nodeDelegate.node.moveToParent(treeSurface.dragTarget)
                     }
                 }
             }
