@@ -38,6 +38,7 @@ ColumnLayout {
     function onNodeDeleted(targetNode) {
         if (node === targetNode || node.isAParent(targetNode)) {
             modulesView.removeModule(moduleIndex)
+            actionsManager.nodeDeleted(targetNode)
             return true
         }
         return false
@@ -46,6 +47,7 @@ ColumnLayout {
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
         if (node === targetNode && partitionIndex === targetPartitionIndex) {
             modulesView.removeModule(moduleIndex)
+            actionsManager.nodePartitionDeleted(targetNode, targetPartitionIndex)
             return true
         }
         return false
@@ -148,8 +150,7 @@ ColumnLayout {
         Layout.preferredHeight: height
         y: parent.height
 
-        model: sequencerView.node ? sequencerView.node.plugin : null
-        controlsColor: sequencerView.node ? sequencerView.node.color : "black"
+        node: sequencerView.node
     }
 
     Item {
@@ -195,6 +196,8 @@ ColumnLayout {
 
     ActionsManager {
         id: actionsManager
+
+
     }
 
     Connections {

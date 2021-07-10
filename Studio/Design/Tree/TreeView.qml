@@ -34,8 +34,7 @@ ColumnLayout {
         y: parent.height
         visible: contentView.treeSurface.selectedNode
 
-        model: contentView.treeSurface.selectedNode ? contentView.treeSurface.selectedNode.plugin : null
-        controlsColor: contentView.treeSurface.selectedNode ? contentView.treeSurface.selectedNode.color : "black"
+        node: contentView.treeSurface.selectedNode
     }
 
     TreeContentView {

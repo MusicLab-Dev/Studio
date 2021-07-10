@@ -3,6 +3,7 @@
  * @ Description: Actions Manager listener
  */
 
+#include <iostream>
 #include <QVariant>
 #include <QQmlEngine>
 #include <QDebug>
@@ -181,8 +182,7 @@ ActionAddNotes ActionsManager::makeActionAddNotes(PartitionModel *partition, int
 {
     ActionAddNotes action;
     action.partition = partition;
-    action.nodeID = nodeID;
-    action.partitionID = partitionID;
+    action.node = partition->parentPartitions()->parentNode();
 
     for (auto &elem : args) {
         action.notes.push_back(
@@ -196,8 +196,7 @@ ActionRemoveNotes ActionsManager::makeActionRemoveNotes(PartitionModel *partitio
 {
     ActionRemoveNotes action;
     action.partition = partition;
-    action.nodeID = nodeID;
-    action.partitionID = partitionID;
+    action.node = partition->parentPartitions()->parentNode();
 
     for (auto &elem : args) {
         action.notes.push_back(
@@ -211,8 +210,7 @@ ActionMoveNotes ActionsManager::makeActionMoveNotes(PartitionModel *partition, i
 {
     ActionMoveNotes action;
     action.partition = partition;
-    action.nodeID = nodeID;
-    action.partitionID = partitionID;
+    action.node = partition->parentPartitions()->parentNode();
 
     for (auto &elem : args) {
         action.oldNotes.push_back(
@@ -223,4 +221,40 @@ ActionMoveNotes ActionsManager::makeActionMoveNotes(PartitionModel *partition, i
         );
     }
     return action;
+}
+
+void ActionsManager::nodeDeleted(NodeModel *node) noexcept
+{
+    const auto it = std::remove_if(_events.begin(), _events.end(), [node](const Event &elem) {
+        switch (elem.action) {
+        case Action::MoveNode:
+            return false;
+        default:
+            const auto *it = reinterpret_cast<const ActionNodeBase *>(elem.data.data());
+            return it->node == node || node->isAParent(it->node);
+        }
+    });
+    if (it != _events.end())
+        _events.erase(it, _events.end());
+}
+
+void ActionsManager::nodePartitionDeleted(NodeModel *node, int partitionIndex) noexcept
+{
+    const auto partition = node->partitions()->getPartition(partitionIndex);
+    const auto it = std::remove_if(_events.begin(), _events.end(), [node, partition](const Event &elem) {
+        switch (elem.action) {
+        case Action::AddNotes:
+        case Action::AddPartition:
+        case Action::RemoveNotes:
+        case Action::RemovePartition:
+        case Action::MoveNotes:
+        case Action::MovePartition:
+            const auto *it = reinterpret_cast<const ActionPartitionBase *>(elem.data.data());
+            return it->node == node && it->partition == partition;
+        }
+        return false;
+    });
+
+    if (it != _events.end())
+        _events.erase(it, _events.end());
 }

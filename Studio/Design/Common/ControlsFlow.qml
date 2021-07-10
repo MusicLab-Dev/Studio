@@ -3,14 +3,15 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import ThemeManager 1.0
 
+import NodeModel 1.0
+
 import "../Default/"
 import "../Common/"
 
 import PluginModel 1.0
 
 Rectangle {
-    property alias model: nodeControlsRepeater.model
-    property color controlsColor: "black"
+    property NodeModel node
 
     color: themeManager.foregroundColor
     height: controlsColumn.height
@@ -33,6 +34,7 @@ Rectangle {
 
             Repeater {
                 id: nodeControlsRepeater
+                model: node.plugin
 
                 delegate: Loader {
                     id: delegateLoader
@@ -53,7 +55,7 @@ Rectangle {
                     }
 
                     onLoaded: {
-                        item.accentColor = color
+                        item.accentColor = node.color
                     }
                 }
             }

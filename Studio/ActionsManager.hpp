@@ -8,20 +8,18 @@
 #include <QObject>
 
 #include "Note.hpp"
+#include "NodeModel.hpp"
 #include "PartitionModel.hpp"
 
 struct ActionNodeBase
-{
-    int nodeID;
+{ 
+    NodeModel *node { nullptr };
 };
 Q_DECLARE_METATYPE(ActionNodeBase)
 
 struct ActionPartitionBase : public ActionNodeBase
 {
-    int partitionID;
-
-    //DEBUG
-    PartitionModel *partition;
+    PartitionModel *partition { nullptr };
 };
 Q_DECLARE_METATYPE(ActionPartitionBase)
 
@@ -53,13 +51,11 @@ public:
         // Add
         AddNotes,
         AddPartition,
-        AddNode,
 
         // Remove
         RemoveNotes,
         RemovePartition,
-        RemoveNode,
-        
+
         // Move
         MoveNotes,
         MovePartition,
@@ -99,6 +95,12 @@ public slots:
     [[nodiscard]] ActionAddNotes makeActionAddNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept;
     [[nodiscard]] ActionRemoveNotes makeActionRemoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept;
     [[nodiscard]] ActionMoveNotes makeActionMoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept;
+
+    /** @brief Slot On Node Deleted */
+    void nodeDeleted(NodeModel *node) noexcept;
+
+    /** @brief Slot On Partition Deleted */
+    void nodePartitionDeleted(NodeModel *node, int partitionIndex) noexcept;
 
 private:
     QVector<Event> _events {};
