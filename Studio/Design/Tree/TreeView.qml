@@ -1,9 +1,6 @@
 import QtQuick 2.15
 
 Column {
-    property string moduleName: "Project"
-    property int moduleIndex
-
     function onNodeDeleted(targetNode) {
         return false
     }
@@ -12,8 +9,26 @@ Column {
         return false
     }
 
+    property string moduleName: "Project"
+    property int moduleIndex
+
     id: treeView
     focus: true
+
+    Connections {
+        target: eventDispatcher
+        enabled: moduleIndex === modulesView.selectedModule
+
+        function onAction(pressed) {
+            if (!pressed)
+                return
+            contentView.actionEvent()
+        }
+
+        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
+        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
+        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
+    }
 
     TreeHeader {
         id: treeHeader

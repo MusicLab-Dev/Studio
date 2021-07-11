@@ -22,6 +22,12 @@ struct PartitionInstance : public Audio::PartitionInstance
 public:
     using Audio::PartitionInstance::PartitionInstance;
     using Audio::PartitionInstance::operator=;
+    using Audio::PartitionInstance::operator==;
+    using Audio::PartitionInstance::operator!=;
+    using Audio::PartitionInstance::operator<;
+    using Audio::PartitionInstance::operator>;
+    using Audio::PartitionInstance::operator<=;
+    using Audio::PartitionInstance::operator>=;
 
     template<typename ...Args>
     PartitionInstance(Args &&...args) noexcept : Audio::PartitionInstance({ std::forward<Args>(args)... }) {}

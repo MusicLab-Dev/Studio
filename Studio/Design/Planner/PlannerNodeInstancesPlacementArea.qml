@@ -20,6 +20,10 @@ PlacementArea {
         return nodeInstances.instances.find(targetBeatPrecision)
     }
 
+    function findExactTarget(target) {
+        return nodeInstances.instances.findExact(target)
+    }
+
     function findOverlapTarget(targetBeatRange, targetKey) {
         return nodeInstances.instances.findOverlap(targetBeatRange)
     }
@@ -51,6 +55,8 @@ PlacementArea {
 
     id: placementArea
     enabled: contentView.selectedPartition !== null
+    color: nodeDelegate.color
+    accentColor: nodeDelegate.accentColor
 
     onCopyTarget: {
         var instance = nodeInstances.instances.getInstance(targetIndex)
@@ -58,6 +64,15 @@ PlacementArea {
             nodeDelegate.node,
             instance.partitionIndex
         )
+    }
+
+    Connections {
+        target: nodeInstances.instances
+        enabled: placementArea.selectionInsertCache !== null
+
+        function onInstancesChanged() {
+            placementArea.retreiveInsertedSelection()
+        }
     }
 
     PartitionPreview {

@@ -20,17 +20,6 @@ Column {
         AfterTouch
     }
 
-    property string moduleName: node && partition ? node.name + " - " + partition.name : "Selecting plugin"
-    property int moduleIndex
-    property NodeModel node: null
-    property PartitionModel partition: null
-    property int partitionIndex: 0
-    property alias player: sequencerViewFooter.player
-    property int editMode: SequencerView.EditMode.Regular
-    property int tweakMode: SequencerView.TweakMode.Regular
-    property alias tweaker: sequencerViewFooter.tweaker
-    property bool mustCenter: false
-
     function onNodeDeleted(targetNode) {
         if (node === targetNode || node.isAParent(targetNode)) {
             modulesView.removeModule(moduleIndex)
@@ -107,14 +96,16 @@ Column {
         sequencerView.enabled = true
     }
 
-    Connections {
-        target: eventDispatcher
-        enabled: moduleIndex === modulesView.selectedModule
-
-        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
-        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
-        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
-    }
+    property string moduleName: node && partition ? node.name + " - " + partition.name : "Selecting plugin"
+    property int moduleIndex
+    property NodeModel node: null
+    property PartitionModel partition: null
+    property int partitionIndex: 0
+    property alias player: sequencerViewFooter.player
+    property int editMode: SequencerView.EditMode.Regular
+    property int tweakMode: SequencerView.TweakMode.Regular
+    property alias tweaker: sequencerViewFooter.tweaker
+    property bool mustCenter: false
 
     id: sequencerView
     spacing: 0
@@ -129,6 +120,15 @@ Column {
             else
                 contentView.yOffset = ((contentView.pianoView.keys - (69 - contentView.pianoView.keyOffset)) * -contentView.rowHeight) + contentView.height / 2
         }
+    }
+
+    Connections {
+        target: eventDispatcher
+        enabled: moduleIndex === modulesView.selectedModule
+
+        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
+        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
+        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
     }
 
     SequencerHeader {

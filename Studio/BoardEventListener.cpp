@@ -29,7 +29,7 @@ QVariant BoardEventListener::data(const QModelIndex &index, int role) const
         case Roles::Input:
             return event.desc.input;
         case Roles::Event:
-            return event.event;
+            return static_cast<int>(event.event);
         default:
             return QVariant();
     }
@@ -117,78 +117,21 @@ bool BoardEventListener::boardEventFilter(int board, int input, float value)
 
 bool BoardEventListener::sendSignals(const KeyDescriptor &desc, float value)
 {
-    const bool boolValue = static_cast<bool>(value);
     auto idx = find(desc);
     if (idx == -1)
         return false;
     const auto &event = _events[static_cast<std::uint32_t>(idx)];
     switch (event.event) {
-    case EventTarget::Note0:
-        emit _dispatcher->note0(boolValue);
-        break;
-    case EventTarget::Note1:
-        emit _dispatcher->note1(boolValue);
-        break;
-    case EventTarget::Note2:
-        emit _dispatcher->note2(boolValue);
-        break;
-    case EventTarget::Note3:
-        emit _dispatcher->note3(boolValue);
-        break;
-    case EventTarget::Note4:
-        emit _dispatcher->note4(boolValue);
-        break;
-    case EventTarget::Note5:
-        emit _dispatcher->note5(boolValue);
-        break;
-    case EventTarget::Note6:
-        emit _dispatcher->note6(boolValue);
-        break;
-    case EventTarget::Note7:
-        emit _dispatcher->note7(boolValue);
-        break;
-    case EventTarget::Note8:
-        emit _dispatcher->note8(boolValue);
-        break;
-    case EventTarget::Note9:
-        emit _dispatcher->note9(boolValue);
-        break;
-    case EventTarget::Note10:
-        emit _dispatcher->note10(boolValue);
-        break;
-    case EventTarget::Note11:
-        emit _dispatcher->note11(boolValue);
-        break;
     case EventTarget::OctaveUp:
         stopAllPlayingNotes();
-        emit _dispatcher->octaveUp(boolValue);
         break;
     case EventTarget::OctaveDown:
         stopAllPlayingNotes();
-        emit _dispatcher->octaveDown(boolValue);
-        break;
-    case EventTarget::PlayContext:
-        emit _dispatcher->playContext(boolValue);
-        break;
-    case EventTarget::ReplayContext:
-        emit _dispatcher->replayContext(boolValue);
-        break;
-    case EventTarget::StopContext:
-        emit _dispatcher->stopContext(boolValue);
-        break;
-    case EventTarget::PlayPlaylist:
-        emit _dispatcher->playPlaylist(boolValue);
-        break;
-    case EventTarget::ReplayPlaylist:
-        emit _dispatcher->replayPlaylist(boolValue);
-        break;
-    case EventTarget::StopPlaylist:
-        emit _dispatcher->stopPlaylist(boolValue);
         break;
     default:
-        return false;
+        break;
     }
-    return true;
+    return _dispatcher->sendSignals(event.event, value);
 }
 
 void BoardEventListener::stopAllPlayingNotes(void)

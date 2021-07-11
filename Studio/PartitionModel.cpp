@@ -91,6 +91,18 @@ int PartitionModel::find(const quint8 key, const quint32 beat) const noexcept
     return -1;
 }
 
+int PartitionModel::findExact(const Note &note) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &n : *_data) {
+        if (n == note)
+            return idx;
+        ++idx;
+    }
+    return -1;
+}
+
 int PartitionModel::findOverlap(const Key key, const BeatRange &range) const noexcept
 {
     int idx = 0;

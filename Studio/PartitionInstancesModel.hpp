@@ -70,6 +70,9 @@ public slots:
     /** @brief Find an instance in the list using a single beat point */
     int find(const Beat beat) const noexcept;
 
+    /** @brief Find an instance in the list using a single beat point */
+    int findExact(const PartitionInstance &instance) const noexcept;
+
     /** @brief Find an instance in the list using a two beat points */
     int findOverlap(const BeatRange &range) const noexcept;
 
@@ -100,6 +103,9 @@ public slots:
 signals:
     /** @brief Notify that the latest instance of the list has changed */
     void latestInstanceChanged(void);
+
+    /** @brief Notify that internal instances has changed */
+    void instancesChanged(void);
 
 private:
     Audio::PartitionInstances *_data { nullptr };
