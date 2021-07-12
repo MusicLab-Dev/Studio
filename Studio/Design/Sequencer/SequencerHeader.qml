@@ -46,7 +46,7 @@ Rectangle {
             radius: 15
             color: sequencerView.node ? sequencerView.node.color : "black"
             border.color: mouse.containsPress ? pressedColor : hoveredColor
-            border.width: mouse.containsMouse ? 4 : 0
+            border.width: mouse.containsMouse ? 3 : 0
 
             MouseArea {
                 id: mouse

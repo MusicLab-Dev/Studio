@@ -136,4 +136,8 @@ MouseArea {
                 contentView.xOffset = contentView.xOffsetMin + contentView.xOffsetWidth * position / (1 - size)
         }
     }
+
+    TreeComponentsPanel {
+        anchors.fill: parent
+    }
 }

@@ -13,7 +13,7 @@ import PluginModel 1.0
 Rectangle {
     property NodeModel node
 
-    color: themeManager.foregroundColor
+    color: Qt.darker(themeManager.foregroundColor, 1.1)
     height: controlsColumn.height
 
     Column {
@@ -21,7 +21,7 @@ Rectangle {
         width: parent.width
 
         Rectangle {
-            color: "white"
+            color: "black"
             width: parent.width
             height: 1
         }
@@ -29,7 +29,7 @@ Rectangle {
         Flow {
             id: nodeControlsFlow
             width: parent.width
-            padding: 20
+            padding: 15
             spacing: 20
 
             Repeater {

@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQml 2.15
+import QtGraphicalEffects 1.15
 
 import NodeModel 1.0
 
@@ -155,6 +156,15 @@ Column {
                 color: nodeInstanceBackground.containsDrag ? nodeInstanceBackground.validDrag ? nodeDelegate.lightColor : nodeDelegate.pressedColor : nodeDelegate.color
                 border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
                 border.width: 4
+            }
+
+            Glow {
+                visible: nodeDelegate.isSelected
+                anchors.fill: nodeInstanceBackgroundRect
+                radius: 12
+                samples: 25
+                color: "white"
+                source: nodeInstanceBackgroundRect
             }
 
             DefaultText {
