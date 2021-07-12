@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import "../Common"
 
 MouseArea {
+    property alias treeSurface: treeSurface
+
     function incrementXOffset(offset) {
         contentView.xOffset = Math.min(Math.max(contentView.xOffset + offset, contentView.xOffsetMin), contentView.xOffsetMax)
     }
@@ -70,6 +72,7 @@ MouseArea {
             treeSurface.endSelection()
         else
             treeSurface.resetSelection()
+        treeComponentsPanel.close()
     }
 
     onXOffsetMinChanged: {
@@ -127,6 +130,29 @@ MouseArea {
         scale: contentView.zoomMin + contentView.zoom * contentView.zoomWidth
     }
 
+
+    ControlsFlow {
+        PropertyAnimation {id: openAnim; target: treeControls; property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic}
+        function open(newNode) {
+            node = newNode
+            visible = true
+            openAnim.start()
+        }
+
+        function close() {
+            node = null
+            visible = false
+        }
+
+        id: treeControls
+        anchors.top: parent.top
+        width: parent.width
+        y: parent.height
+
+        node: null
+        visible: false
+    }
+
     ScrollBar {
         anchors.top: parent.top
         anchors.right: parent.right
@@ -157,5 +183,10 @@ MouseArea {
             if (Math.abs(position - contentView.xScrollIndicatorPos) > Number.EPSILON)
                 contentView.xOffset = contentView.xOffsetMin + contentView.xOffsetWidth * position / (1 - size)
         }
+    }
+
+    TreeComponentsPanel {
+        id: treeComponentsPanel
+        anchors.fill: parent
     }
 }

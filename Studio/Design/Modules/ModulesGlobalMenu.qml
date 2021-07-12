@@ -51,6 +51,11 @@ DefaultMenuButton {
             onTriggered: loadFileDialog.open()
         }
 
+        Action {
+            text: qsTr("Export")
+            onTriggered: exportManager.open()
+        }
+
         DefaultMenu {
 
             title: "Open Template..."

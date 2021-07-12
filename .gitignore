@@ -43,3 +43,4 @@ coverage.info
 *.app
 
 CMakeLists.txt.user
+*.autosave

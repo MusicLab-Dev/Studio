@@ -38,8 +38,13 @@ public:
         PlayPlaylist,
         ReplayPlaylist,
         StopPlaylist,
+        Copy,
+        Paste,
+        Cut,
         VolumeContext,
-        VolumePlaylist
+        VolumePlaylist,
+        Undo,
+        Redo
     };
 
     Q_ENUM(EventTarget)

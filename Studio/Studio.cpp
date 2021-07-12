@@ -24,6 +24,8 @@
 #include "DevicesModel.hpp"
 #include "PartitionPreview.hpp"
 #include "PartitionInstancesModelProxy.hpp"
+#include "ActionsManager.hpp"
+#include "ClipboardManager.hpp"
 #include "NodeListModel.hpp"
 #include "PluginModelProxy.hpp"
 
@@ -49,6 +51,15 @@ void Studio::InitResources(void)
     qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
     qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");
     qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
+    qRegisterMetaType<ActionNodeBase>("ActionNodeBase");
+    qRegisterMetaType<ActionPartitionBase>("ActionPartitionBase");
+    qRegisterMetaType<ActionNotesBase>("ActionNoteBase");
+    qRegisterMetaType<ActionAddNotes>("ActionAddNotes");
+    qRegisterMetaType<ActionMoveNotes>("ActionMoveNotes");
+    qRegisterMetaType<ActionRemoveNotes>("ActionRemoveNotes");
+    qRegisterMetaType<ActionAddPartitions>("ActionAddPartitions");
+    qRegisterMetaType<ActionMovePartitions>("ActionMovePartitions");
+    qRegisterMetaType<ActionRemovePartitions>("ActionRemovePartitions");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
@@ -81,6 +92,8 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
     qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
+    qmlRegisterType<ActionsManager>("ActionsManager", 1, 0, "ActionsManager");
+    qmlRegisterType<ClipboardManager>("ClipboardManager", 1, 0, "ClipboardManager");
     qmlRegisterType<NodeListModel>("NodeListModel", 1, 0, "NodeListModel");
 
     Q_INIT_RESOURCE(Resources);
@@ -95,6 +108,7 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Plugins);
     Q_INIT_RESOURCE(Workspaces);
     Q_INIT_RESOURCE(Settings);
+    Q_INIT_RESOURCE(Export);
 }
 
 void Studio::DestroyResources(void)
@@ -111,6 +125,7 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Plugins);
     Q_CLEANUP_RESOURCE(Workspaces);
     Q_CLEANUP_RESOURCE(Settings);
+    Q_CLEANUP_RESOURCE(Export);
 
     Audio::PluginTable::Destroy();
     Audio::Device::ReleaseDriver();
@@ -130,12 +145,6 @@ Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
 {
     setOrganizationName("Lexo");
     setOrganizationDomain("lexo-music.com");
-
-    /** DEBUG */
-    //SettingsListModel list("test.json", "values.json", nullptr);
-    //list.load();
-    //list.saveValues();
-    /* --- */
 
     const QUrl url(QStringLiteral("qrc:/Main/Main.qml"));
 

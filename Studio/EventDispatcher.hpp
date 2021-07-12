@@ -78,9 +78,17 @@ signals:
     void replayPlaylist(bool pressed);
     void stopPlaylist(bool pressed);
 
+    void copy(bool pressed);
+    void paste(bool pressed);
+    void cut(bool pressed);
+
     // Floating controls
     void volumeContext(float ratio);
     void volumePlaylist(float ratio);
+
+    // Other
+    void undo(bool pressed);
+    void redo(bool pressed);
 
 private:
     KeyboardEventListener _keyboardListener;

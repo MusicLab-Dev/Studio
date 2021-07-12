@@ -7,5 +7,7 @@
         <file>TreeSurface.qml</file>
         <file>TreeNodeDelegate.qml</file>
         <file>TreeNodeMenu.qml</file>
+        <file>TreeComponentsPanel.qml</file>
+        <file>TreeComponent.qml</file>
     </qresource>
 </RCC>

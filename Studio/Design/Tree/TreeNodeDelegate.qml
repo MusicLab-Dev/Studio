@@ -91,6 +91,8 @@ Column {
                     if (index === -1) {
                         treeSurface.selectionList.push(nodeDelegate)
                         nodeDelegate.isSelected = true
+                        last = nodeDelegate.node
+                        treeControls.open(last)
                     } else if (isAlt) {
                         treeSurface.selectionList.splice(index, 1)
                         nodeDelegate.isSelected = false
