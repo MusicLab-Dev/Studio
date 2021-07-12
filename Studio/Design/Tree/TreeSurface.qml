@@ -42,6 +42,7 @@ Item {
         for (var i = 0; i < selectionList.length; ++i)
             selectionList[i].isSelected = false
         selectionList = []
+        last = null
     }
 
     signal targetDropped
@@ -59,6 +60,7 @@ Item {
 
     // List of selected TreeNodeDelegate
     property var selectionList: []
+    property NodeModel last: null
 
     id: treeSurface
     width: Math.max(masterNodeDelegate.width, parent.width)

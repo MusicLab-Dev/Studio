@@ -17,6 +17,7 @@ ColumnLayout {
 
     id: treeView
     focus: true
+    spacing: 0
 
     Connections {
         target: eventDispatcher
@@ -45,9 +46,9 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: height
         y: parent.height
-        visible: contentView.treeSurface.selectedNode
+        visible: contentView.treeSurface.last
 
-        node: contentView.treeSurface.selectedNode
+        node: contentView.treeSurface.last
     }
 
     TreeContentView {

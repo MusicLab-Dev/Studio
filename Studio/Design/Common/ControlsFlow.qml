@@ -34,7 +34,7 @@ Rectangle {
 
             Repeater {
                 id: nodeControlsRepeater
-                model: node.plugin
+                model: node ? node.plugin : null
 
                 delegate: Loader {
                     id: delegateLoader
