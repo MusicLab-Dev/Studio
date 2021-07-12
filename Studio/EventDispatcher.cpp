@@ -37,3 +37,77 @@ QStringList EventDispatcher::targetEventList(void) const noexcept
 
     return List;
 }
+
+bool EventDispatcher::sendSignals(const AEventListener::EventTarget event, const float value) noexcept
+{
+    const bool booleanValue = static_cast<bool>(value);
+
+    switch (event) {
+    case AEventListener::EventTarget::Action:
+        emit action(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note0:
+        emit note0(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note1:
+        emit note1(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note2:
+        emit note2(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note3:
+        emit note3(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note4:
+        emit note4(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note5:
+        emit note5(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note6:
+        emit note6(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note7:
+        emit note7(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note8:
+        emit note8(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note9:
+        emit note9(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note10:
+        emit note10(booleanValue);
+        break;
+    case AEventListener::EventTarget::Note11:
+        emit note11(booleanValue);
+        break;
+    case AEventListener::EventTarget::OctaveUp:
+        emit octaveUp(booleanValue);
+        break;
+    case AEventListener::EventTarget::OctaveDown:
+        emit octaveDown(booleanValue);
+        break;
+    case AEventListener::EventTarget::PlayContext:
+        emit playContext(booleanValue);
+        break;
+    case AEventListener::EventTarget::ReplayContext:
+        emit replayContext(booleanValue);
+        break;
+    case AEventListener::EventTarget::StopContext:
+        emit stopContext(booleanValue);
+        break;
+    case AEventListener::EventTarget::PlayPlaylist:
+        emit playPlaylist(booleanValue);
+        break;
+    case AEventListener::EventTarget::ReplayPlaylist:
+        emit replayPlaylist(booleanValue);
+        break;
+    case AEventListener::EventTarget::StopPlaylist:
+        emit stopPlaylist(booleanValue);
+        break;
+    default:
+        return false;
+    }
+    return true;
+}

@@ -24,6 +24,11 @@ public:
     using Audio::Note::Note;
     using Audio::Note::operator=;
     using Audio::Note::operator==;
+    using Audio::Note::operator!=;
+    using Audio::Note::operator<;
+    using Audio::Note::operator>;
+    using Audio::Note::operator<=;
+    using Audio::Note::operator>=;
 
     template<typename ...Args>
     Note(Args &&...args) noexcept : Audio::Note({ std::forward<Args>(args)... }) {}

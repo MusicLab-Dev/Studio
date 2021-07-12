@@ -107,7 +107,7 @@ public slots:
     /** @brief Find a note in the list using a single beat point */
     int find(const Key key, const Beat beat) const noexcept;
 
-    /** @brief Find an exact note in the list */
+    /** @brief Find an exact note */
     int findExact(const Note &note) const noexcept;
 
     /** @brief Find a note in the list using a two beat points */

@@ -67,6 +67,7 @@ bool PartitionInstancesModel::add(const PartitionInstance &instance)
                 _latestInstance = last;
                 emit latestInstanceChanged();
             }
+            emit instancesChanged();
         }
     );
 }
@@ -81,6 +82,18 @@ int PartitionInstancesModel::find(const Beat beat) const noexcept
             continue;
         }
         return idx;
+    }
+    return -1;
+}
+
+int PartitionInstancesModel::findExact(const PartitionInstance &instance) const noexcept
+{
+    int idx = 0;
+
+    for (const auto &inst : *_data) {
+        if (inst == instance)
+            return idx;
+        ++idx;
     }
     return -1;
 }
@@ -120,6 +133,7 @@ bool PartitionInstancesModel::remove(const int idx)
                 _latestInstance = 0u;
                 emit latestInstanceChanged();
             }
+            emit instancesChanged();
         }
     );
 }
@@ -155,6 +169,7 @@ void PartitionInstancesModel::set(const int idx, const PartitionInstance &instan
                     emit latestInstanceChanged();
                 }
             }
+            emit instancesChanged();
         }
     );
 }
@@ -181,6 +196,7 @@ bool PartitionInstancesModel::addRange(const QVariantList &instanceList)
                 _latestInstance = last;
                 emit latestInstanceChanged();
             }
+            emit instancesChanged();
         }
     );
 }
@@ -216,6 +232,7 @@ bool PartitionInstancesModel::removeRange(const QVariantList &indexes)
                 _latestInstance = last;
                 emit latestInstanceChanged();
             }
+            emit instancesChanged();
         }
     );
 }
@@ -251,4 +268,5 @@ void PartitionInstancesModel::partitionRemovedNotify(void)
 {
     beginResetModel();
     endResetModel();
+    emit instancesChanged();
 }

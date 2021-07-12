@@ -260,40 +260,116 @@ bool NodeModel::moveToChildren(NodeModel *target)
 {
     const auto targetParent = target->parentNode();
 
-    if (targetParent) {
-        const auto targetIndex = targetParent->getChildIndex(target);
-
-        if (isAParent(target)) {
-            qDebug() << "NodeModel::moveToChildren: Node is a parent of move target";
-            return false;
-        }
-
-        return Models::AddProtectedEvent(
-            [this, target, targetIndex] {
-                auto parentNode = target->parentNode();
-                auto audioParent = parentNode->audioNode();
-                auto audioPtr = std::move(audioParent->children().at(targetIndex));
-                auto ptr = std::move(parentNode->_children.at(targetIndex));
-
-                parentNode->beginRemoveRows(QModelIndex(), targetIndex, targetIndex);
-                audioParent->children().erase(audioParent->children().begin() + targetIndex);
-                parentNode->_children.erase(parentNode->_children.begin() + targetIndex);
-                parentNode->endRemoveRows();
-
-                audioNode()->children().push(std::move(audioPtr));
-                target->setParent(this);
-
-                beginInsertRows(QModelIndex(), count(), count());
-                _children.push(std::move(ptr));
-                endInsertRows();
-
-                Scheduler::Get()->invalidateCurrentGraph();
-            }
-        );
-    } else {
+    if (!targetParent) {
         qDebug() << "NodeModel: Cannot move a children that has no parent";
         return false;
     }
+
+    const auto targetIndex = targetParent->getChildIndex(target);
+
+    if (isAParent(target)) {
+        qDebug() << "NodeModel: Cannot move a parent node to children";
+        moveToParent(target);
+        return false;
+    }
+
+    const bool hasPaused = Scheduler::Get()->pauseImpl();
+
+    return Models::AddProtectedEvent(
+        [this, target, targetIndex, hasPaused] {
+            auto parentNode = target->parentNode();
+            auto audioParent = parentNode->audioNode();
+            auto audioPtr = std::move(audioParent->children().at(targetIndex));
+            auto ptr = std::move(parentNode->_children.at(targetIndex));
+
+            // Remove target node
+            parentNode->beginRemoveRows(QModelIndex(), targetIndex, targetIndex);
+            audioParent->children().erase(audioParent->children().begin() + targetIndex);
+            parentNode->_children.erase(parentNode->_children.begin() + targetIndex);
+            parentNode->endRemoveRows();
+
+            // Insert target into children
+            beginInsertRows(QModelIndex(), count(), count());
+            audioNode()->children().push(std::move(audioPtr));
+            _children.push(std::move(ptr));
+            endInsertRows();
+
+            target->setParent(this);
+        },
+        [hasPaused] {
+            if (hasPaused) {
+                Scheduler::Get()->getCurrentGraph().wait();
+                Scheduler::Get()->invalidateCurrentGraph();
+                Scheduler::Get()->playImpl();
+            } else
+                Scheduler::Get()->invalidateCurrentGraph();
+        }
+    );
+}
+
+bool NodeModel::moveToParent(NodeModel *target)
+{
+    if (parentNode() == nullptr) {
+        qDebug() << "NodeModel: Cannot swap parent of a node that has no parent";
+        return false;
+    }
+
+    const auto targetParent = target->parentNode();
+
+    if (!targetParent) {
+        qDebug() << "NodeModel: Cannot move a children that has no parent";
+        return false;
+    }
+
+    const auto targetIndex = targetParent->getChildIndex(target);
+    const bool hasPaused = Scheduler::Get()->pauseImpl();
+
+    return Models::AddProtectedEvent(
+        [this, target, targetIndex, hasPaused] {
+            const auto targetParent = target->parentNode();
+            auto audioPtr = std::move(targetParent->audioNode()->children().at(static_cast<std::uint32_t>(targetIndex)));
+            auto ptr = std::move(targetParent->_children.at(targetIndex));
+
+            // Remove target node
+            targetParent->beginRemoveRows(QModelIndex(), targetIndex, targetIndex);
+            targetParent->audioNode()->children().erase(targetParent->audioNode()->children().begin() + targetIndex);
+            targetParent->_children.erase(targetParent->_children.begin() + targetIndex);
+            targetParent->endRemoveRows();
+
+            const auto selfParent = this->parentNode();
+            const auto selfIndex = selfParent->getChildIndex(this);
+            auto selfAudioPtr = std::move(selfParent->audioNode()->children().at(static_cast<std::uint32_t>(selfIndex)));
+            auto selfPtr = std::move(selfParent->_children.at(selfIndex));
+
+            // Remove this from self parent
+            selfParent->beginRemoveRows(QModelIndex(), selfParent->count() - 1, selfParent->count() - 1);
+            selfParent->audioNode()->children().erase(selfParent->audioNode()->children().begin() + selfIndex);
+            selfParent->_children.erase(selfParent->_children.begin() + selfIndex);
+            selfParent->endRemoveRows();
+
+            // Insert target into this
+            beginInsertRows(QModelIndex(), count(), count());
+            audioNode()->children().push(std::move(audioPtr));
+            _children.push(std::move(ptr));
+            endInsertRows();
+            target->setParent(this);
+
+            // Insert this into target parent
+            targetParent->beginInsertRows(QModelIndex(), targetParent->count(), targetParent->count());
+            targetParent->audioNode()->children().push(std::move(selfAudioPtr));
+            targetParent->_children.push(std::move(selfPtr));
+            targetParent->endInsertRows();
+            setParent(targetParent);
+        },
+        [hasPaused] {
+            if (hasPaused) {
+                Scheduler::Get()->getCurrentGraph().wait();
+                Scheduler::Get()->invalidateCurrentGraph();
+                Scheduler::Get()->playImpl();
+            } else
+                Scheduler::Get()->invalidateCurrentGraph();
+        }
+    );
 }
 
 bool NodeModel::isAParent(NodeModel *node) const noexcept

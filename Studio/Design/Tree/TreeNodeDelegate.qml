@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQml 2.15
-import QtGraphicalEffects 1.15
 
 import NodeModel 1.0
 
@@ -9,7 +8,8 @@ import "../Default"
 Column {
     property NodeModel parentNode: null
     property NodeModel node: null
-    readonly property bool isSelected: node == treeSurface.selectedNode
+    property bool isSelected: false
+    property bool inMultipleSelection: false
 
     // Colors
     readonly property color color: node ? node.color : "black"
@@ -72,7 +72,7 @@ Column {
             height: treeSurface.instanceDefaultHeight
             hoverEnabled: true
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-            drag.target: nodeInstanceBackground
+            drag.target: nodeDelegate.node && nodeDelegate.node.parentNode ? nodeInstanceBackground : null
             drag.smoothed: true
             Drag.hotSpot.x: width / 2
             Drag.hotSpot.y: height / 2
@@ -83,8 +83,19 @@ Column {
                     treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate.node)
                     treeNodeMenu.x = mouseX
                     treeNodeMenu.y = mouseY
-                } else
-                    treeSurface.selectedNode = nodeDelegate.node
+                } else {
+                    var isAlt = mouse.modifiers & Qt.ControlModifier
+                    if (!isAlt)
+                        treeSurface.resetSelection()
+                    var index = treeSurface.selectionList.indexOf(nodeDelegate)
+                    if (index === -1) {
+                        treeSurface.selectionList.push(nodeDelegate)
+                        nodeDelegate.isSelected = true
+                    } else if (isAlt) {
+                        treeSurface.selectionList.splice(index, 1)
+                        nodeDelegate.isSelected = false
+                    }
+                }
             }
 
             onPressAndHold: {
@@ -144,7 +155,24 @@ Column {
                 function onTargetDropped() {
                     if (nodeInstanceBackground.containsDrag) {
                         nodeInstanceBackground.containsDrag = false
-                        nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
+                        if (nodeInstanceBackground.validDrag)
+                            nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
+                        else
+                            nodeDelegate.node.moveToParent(treeSurface.dragTarget)
+                    }
+                }
+            }
+
+            Connections {
+                target: treeSurface
+                enabled: treeSurface.selectionActive
+
+                function onSelectionFinished(from, to) {
+                    var min = nodeInstanceBackground.mapToItem(treeSurface, 0, 0)
+                    var max = nodeInstanceBackground.mapToItem(treeSurface, nodeInstanceBackground.width, nodeInstanceBackground.height)
+                    if (from.x <= min.x && from.y <= min.y && to.x >= max.x && to.y >= max.y) {
+                        nodeDelegate.isSelected = true
+                        treeSurface.selectionList.push(nodeDelegate)
                     }
                 }
             }
@@ -156,15 +184,6 @@ Column {
                 color: nodeInstanceBackground.containsDrag ? nodeInstanceBackground.validDrag ? nodeDelegate.lightColor : nodeDelegate.pressedColor : nodeDelegate.color
                 border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
                 border.width: 4
-            }
-
-            Glow {
-                visible: nodeDelegate.isSelected
-                anchors.fill: nodeInstanceBackgroundRect
-                radius: 12
-                samples: 25
-                color: "white"
-                source: nodeInstanceBackgroundRect
             }
 
             DefaultText {

@@ -16,8 +16,9 @@ class AEventListener : public QAbstractListModel
     Q_OBJECT
 
 public:
-    enum EventTarget {
-        Note0 = 0,
+    enum class EventTarget {
+        Action = 0,
+        Note0,
         Note1,
         Note2,
         Note3,

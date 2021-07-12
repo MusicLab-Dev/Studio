@@ -39,6 +39,13 @@ public:
     [[nodiscard]] BoardEventListener *boardListener(void) noexcept { return &_boardListener; }
     [[nodiscard]] const BoardEventListener *boardListener(void) const noexcept { return &_boardListener; }
 
+    /** @brief Send boolean signals */
+    bool sendSignals(const AEventListener::EventTarget event, const bool value) noexcept
+        { return sendSignals(event, static_cast<float>(value)); }
+
+    /** @brief Send floating signals */
+    bool sendSignals(const AEventListener::EventTarget event, const float value) noexcept;
+
 signals:
     /** @brief Notify that keyboard listener has changed */
     void keyboardListenerChanged(void);
@@ -46,7 +53,9 @@ signals:
     /** @brief Notify that board listener has changed */
     void boardListenerChanged(void);
 
-    // Boolean controls
+    // Events
+    void action(bool pressed);
+
     void note0(bool pressed);
     void note1(bool pressed);
     void note2(bool pressed);

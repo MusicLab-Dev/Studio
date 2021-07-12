@@ -14,6 +14,15 @@ MouseArea {
         contentView.yOffset = Math.min(Math.max(contentView.yOffset + offset, contentView.yOffsetMin), contentView.yOffsetMax)
     }
 
+    function actionEvent() {
+        if (treeSurface.selectionList.length) {
+            var nodes = []
+            for (var i = 0; i < treeSurface.selectionList.length; ++i)
+                nodes.push(treeSurface.selectionList[i].node)
+            modulesView.addNewPlannerWithMultipleNodes(nodes)
+        }
+    }
+
     // Horizontal scroll
     property real xOffset: 0
     readonly property real xOffsetMin: Math.min(-treeSurface.scaledWidth / 2, -width / 2)
@@ -48,7 +57,22 @@ MouseArea {
 
     id: contentView
 
-    onClicked: treeSurface.selectedNode = null
+    onPressed: {
+        if (mouse.modifiers & (Qt.ControlModifier | Qt.ShiftModifier))
+            treeSurface.beginSelection(treeSurface.mapFromItem(contentView, Qt.point(mouse.x, mouse.y)))
+    }
+
+    onPositionChanged: {
+        if (treeSurface.selectionActive)
+            treeSurface.updateSelection(treeSurface.mapFromItem(contentView, Qt.point(mouse.x, mouse.y)))
+    }
+
+    onReleased: {
+        if (treeSurface.selectionActive)
+            treeSurface.endSelection()
+        else
+            treeSurface.resetSelection()
+    }
 
     onXOffsetMinChanged: {
         if (xOffset < xOffsetMin)

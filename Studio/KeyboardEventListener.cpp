@@ -11,6 +11,8 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher)
     QGuiApplication::instance()->installEventFilter(this);
 
     /**  -- DEBUG -- */
+    add(Qt::Key_Enter,      0, EventTarget::Action          );
+    add(Qt::Key_Return,     0, EventTarget::Action          );
     add(Qt::Key_Q,          0, EventTarget::Note0           );
     add(Qt::Key_S,          0, EventTarget::Note1           );
     add(Qt::Key_D,          0, EventTarget::Note2           );
@@ -62,7 +64,7 @@ QVariant KeyboardEventListener::data(const QModelIndex &index, int role) const
         case Roles::Modifiers:
             return event.desc.modifiers;
         case Roles::Event:
-            return event.event;
+            return static_cast<int>(event.event);
         default:
             return QVariant();
     }
@@ -149,67 +151,11 @@ bool KeyboardEventListener::sendSignals(const KeyDescriptor &desc, bool value)
         return false;
     const auto &event = _events[static_cast<std::uint32_t>(idx)];
     switch (event.event) {
-    case EventTarget::Note0:
-        emit _dispatcher->note0(value);
-        break;
-    case EventTarget::Note1:
-        emit _dispatcher->note1(value);
-        break;
-    case EventTarget::Note2:
-        emit _dispatcher->note2(value);
-        break;
-    case EventTarget::Note3:
-        emit _dispatcher->note3(value);
-        break;
-    case EventTarget::Note4:
-        emit _dispatcher->note4(value);
-        break;
-    case EventTarget::Note5:
-        emit _dispatcher->note5(value);
-        break;
-    case EventTarget::Note6:
-        emit _dispatcher->note6(value);
-        break;
-    case EventTarget::Note7:
-        emit _dispatcher->note7(value);
-        break;
-    case EventTarget::Note8:
-        emit _dispatcher->note8(value);
-        break;
-    case EventTarget::Note9:
-        emit _dispatcher->note9(value);
-        break;
-    case EventTarget::Note10:
-        emit _dispatcher->note10(value);
-        break;
-    case EventTarget::Note11:
-        emit _dispatcher->note11(value);
-        break;
     case EventTarget::OctaveUp:
         stopAllPlayingNotes();
-        emit _dispatcher->octaveUp(value);
         break;
     case EventTarget::OctaveDown:
         stopAllPlayingNotes();
-        emit _dispatcher->octaveDown(value);
-        break;
-    case EventTarget::PlayContext:
-        emit _dispatcher->playContext(value);
-        break;
-    case EventTarget::ReplayContext:
-        emit _dispatcher->replayContext(value);
-        break;
-    case EventTarget::StopContext:
-        emit _dispatcher->stopContext(value);
-        break;
-    case EventTarget::PlayPlaylist:
-        emit _dispatcher->playPlaylist(value);
-        break;
-    case EventTarget::ReplayPlaylist:
-        emit _dispatcher->replayPlaylist(value);
-        break;
-    case EventTarget::StopPlaylist:
-        emit _dispatcher->stopPlaylist(value);
         break;
     case EventTarget::Undo:
         emit _dispatcher->undo(value);
@@ -226,9 +172,9 @@ bool KeyboardEventListener::sendSignals(const KeyDescriptor &desc, bool value)
         emit _dispatcher->cut(value);
         break;
     default:
-        return false;
+        break;
     }
-    return true;
+    return _dispatcher->sendSignals(event.event, value);
 }
 
 void KeyboardEventListener::stopAllPlayingNotes(void)

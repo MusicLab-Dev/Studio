@@ -22,6 +22,24 @@ MouseArea {
         SelectRemove
     }
 
+    // Implementer must call this function whener the selection could be refreshed
+    function retreiveInsertedSelection() {
+        if (!selectionInsertCache)
+            return
+        resetSelection()
+        var list = []
+        for (var i = 0; i < selectionInsertCache.length; ++i) {
+            var index = findExactTarget(selectionInsertCache[i])
+            if (index !== -1)
+                list.push(index)
+            else
+                console.log("PlacementArea: Couldn't retreive inserted target")
+        }
+        selectionListModel = list
+        selectionInsertCache = null
+        refreshSelectionCache()
+    }
+
     // Mouse to beat
     function getMouseBeatPrecision() {
         return Math.max(Math.floor((mouseX - contentView.xOffset) / contentView.pixelsPerBeatPrecision), 0)
@@ -36,19 +54,24 @@ MouseArea {
     }
     function getResizeLeftBeatPrecision(mouseBeatPrecision) {
         var scopedBeatPrecision = mouseBeatPrecision
-        if (contentView.placementBeatPrecisionScale >= AudioAPI.beatPrecision)
-            scopedBeatPrecision = scopedBeatPrecision - (scopedBeatPrecision % AudioAPI.beatPrecision)
-        else if (contentView.placementBeatPrecisionScale !== 0)
-            scopedBeatPrecision = scopedBeatPrecision - (scopedBeatPrecision % contentView.placementBeatPrecisionScale)
+        if (contentView.placementBeatPrecisionScale !== 0)
+            scopedBeatPrecision = scopedBeatPrecision - (scopedBeatPrecision % contentView.placementBeatPrecisionScale) + (previewRange.to % contentView.placementBeatPrecisionScale)
+        if (previewRange.to <= scopedBeatPrecision)
+            scopedBeatPrecision = previewRange.to - contentView.placementBeatPrecisionScale
         return Math.max(scopedBeatPrecision, 0)
     }
     function getResizeRightBeatPrecision(mouseBeatPrecision) {
         var scopedBeatPrecision = mouseBeatPrecision
-        if (contentView.placementBeatPrecisionScale >= AudioAPI.beatPrecision)
-            scopedBeatPrecision = scopedBeatPrecision + (AudioAPI.beatPrecision - (scopedBeatPrecision % AudioAPI.beatPrecision))
-        else if (contentView.placementBeatPrecisionScale !== 0)
-            scopedBeatPrecision = scopedBeatPrecision - (contentView.placementBeatPrecisionScale - (scopedBeatPrecision % contentView.placementBeatPrecisionScale))
+        if (contentView.placementBeatPrecisionScale !== 0)
+            scopedBeatPrecision = scopedBeatPrecision + (contentView.placementBeatPrecisionScale - (scopedBeatPrecision % contentView.placementBeatPrecisionScale)) + (previewRange.from % contentView.placementBeatPrecisionScale)
+        if (previewRange.from >= scopedBeatPrecision)
+            scopedBeatPrecision = previewRange.from + contentView.placementBeatPrecisionScale
         return Math.max(scopedBeatPrecision, 0)
+    }
+
+    // Mouse to key
+    function getMouseKey() {
+        return keyOffset + Math.max(Math.min(Math.floor((height - mouseY) / contentView.rowHeight), keyCount - 1), 0)
     }
 
     // Event begin rooting
@@ -89,36 +112,52 @@ MouseArea {
         previewRange = targetRange
         previewKey = targetKey
         previewRectangle.visible = true
+        attachTargetPreview()
     }
     function updatePreview(targetRange, targetKey) {
+        var offsetBeatPrecision = targetRange.from - previewRange.from
+        var offsetKey = targetKey - previewKey
         previewRange = targetRange
         previewKey = targetKey
+        moveTargetPreview(offsetBeatPrecision, offsetKey)
     }
     function detachPreview() {
+        detachTargetPreview()
         previewRectangle.visible = false
     }
 
     // Selection
-    function moveSelection(offsetBeatPrecision, offsetKey) {
-        var offset = selectionMoveBeatPrecision + offsetBeatPrecision
-        var key = selectionMoveKeyOffset + offsetKey
-        if (offset < -selectionFirstBeatPrecision)
-            return false
-        selectionMoveBeatPrecision = offset
-        selectionMoveKeyOffset = key
-        return true
+    function moveSelectionBeat(offsetBeatPrecision) {
+        // Compute beat offset
+        if (selectionMinBeatPrecision + offsetBeatPrecision < 0)
+            offsetBeatPrecision = -selectionMinBeatPrecision
+        selectionMinBeatPrecision += offsetBeatPrecision
+        selectionMoveBeatPrecision = selectionMoveBeatPrecision + offsetBeatPrecision
+        return offsetBeatPrecision
+    }
+    function moveSelectionKey(offsetKey) {
+        // Compute key offset
+        if (selectionMinKey + offsetKey < keyOffset)
+            offsetKey = keyOffset - selectionMinKey
+        else if (selectionMaxKey + offsetKey >= keyOffset + keyCount)
+            offsetKey = keyOffset + keyCount - selectionMaxKey - 1
+        selectionMinKey += offsetKey
+        selectionMaxKey += offsetKey
+        selectionMoveKeyOffset = selectionMoveKeyOffset + offsetKey
+        return offsetKey
     }
     function resizeLeftSelection(offsetBeatPrecision) {
         var offset = selectionResizeLeftBeatPrecision + offsetBeatPrecision
-        var realMinWidth = selectionMinimumWidthBeatPrecision + selectionResizeRightBeatPrecision
-        if (offset >= realMinWidth || offset < -selectionFirstBeatPrecision)
+        var realMinWidth = selectionMinWidthBeatPrecision + selectionResizeRightBeatPrecision
+        if (offset >= realMinWidth || selectionMinBeatPrecision + offsetBeatPrecision < 0)
             return false
+        selectionMinBeatPrecision += offsetBeatPrecision
         selectionResizeLeftBeatPrecision = offset
         return true
     }
     function resizeRightSelection(offsetBeatPrecision) {
         var offset = selectionResizeRightBeatPrecision + offsetBeatPrecision
-        var realMinWidth = selectionMinimumWidthBeatPrecision - selectionResizeLeftBeatPrecision
+        var realMinWidth = selectionMinWidthBeatPrecision - selectionResizeLeftBeatPrecision
         if (offset <= -realMinWidth)
             return false
         selectionResizeRightBeatPrecision = offset
@@ -128,16 +167,19 @@ MouseArea {
         var ranges = []
         for (var i = 0; i < selectionList.count; ++i) {
             var item = selectionList.itemAt(i)
-            ranges.push(constructTarget(item.realRange, item.key))
+            ranges.push(constructTarget(item.realRange, item.realKey))
         }
         return ranges
     }
     function resetSelection() {
         selectionListModel = null
         selectionMoveKeyOffset = 0
-        selectionMinimumWidthBeatPrecision = 0
-        selectionFirstBeatPrecision = 0
+        selectionMinWidthBeatPrecision = 0
+        selectionMinBeatPrecision = 0
+        selectionMinKey = 0
+        selectionMaxKey = 0
         selectionMoveBeatPrecision = 0
+        selectionMoveKeyOffset = 0
         selectionResizeLeftBeatPrecision = 0
         selectionResizeRightBeatPrecision = 0
     }
@@ -152,6 +194,7 @@ MouseArea {
     }
     function updateInsert(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getPlacementBeatPrecision(mouseBeatPrecision)
+        var offsetBeatPrecision = placementBeatPrecision - previewRange.from
         updatePreview(
             AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + contentView.placementBeatPrecisionLastWidth),
             mouseKey
@@ -173,17 +216,29 @@ MouseArea {
     }
     function updateMove(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getPlacementBeatPrecision(mouseBeatPrecision)
-        var range = AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + contentView.placementBeatPrecisionLastWidth)
-        if (targetIsPartOfSelection && !moveSelection(range.from - previewRange.from, mouseKey - previewKey))
+        var beatMoved = placementBeatPrecision !== previewRange.from
+        var keyMoved = mouseKey !== previewKey
+        if (!beatMoved && !keyMoved)
             return
-        updatePreview(
-            range,
-            mouseKey
-        )
+        else if (targetIsPartOfSelection) {
+            // Compute both beat & key selection move
+            var offsetBeatPrecision = beatMoved ? moveSelectionBeat(placementBeatPrecision - previewRange.from) : 0
+            var offsetKey = keyMoved ? moveSelectionKey(mouseKey - previewKey) : 0
+            updatePreview(
+                AudioAPI.beatRange(previewRange.from + offsetBeatPrecision, previewRange.to + offsetBeatPrecision),
+                previewKey + offsetKey
+            )
+        } else {
+            updatePreview(
+                AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + contentView.placementBeatPrecisionLastWidth),
+                mouseKey
+            )
+        }
     }
     function endMove(mouseBeatPrecision, mouseKey) {
         if (targetIsPartOfSelection) {
-            addTargets(constructSelectionTargets())
+            selectionInsertCache = constructSelectionTargets()
+            addTargets(selectionInsertCache)
         } else
             addTarget(previewRange, previewKey)
         detachPreview()
@@ -191,12 +246,12 @@ MouseArea {
 
     // Remove
     function beginRemove(mouseBeatPrecision, mouseKey) {
-        var targetIndex = findTarget(mouseBeatPrecision)
+        var targetIndex = findTarget(mouseBeatPrecision, mouseKey)
         if (targetIndex !== -1)
             removeTarget(targetIndex)
     }
     function updateRemove(mouseBeatPrecision, mouseKey) {
-        var targetIndex = findTarget(mouseBeatPrecision)
+        var targetIndex = findTarget(mouseBeatPrecision, mouseKey)
         if (targetIndex !== -1)
             removeTarget(targetIndex)
     }
@@ -206,18 +261,10 @@ MouseArea {
     function beginResizeLeft(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) { beginMove(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) }
     function updateResizeLeft(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getResizeLeftBeatPrecision(mouseBeatPrecision)
-        var range = AudioAPI.beatRange(previewRange.from, previewRange.to) // Deep copy the preview range
-        if (range.from === placementBeatPrecision)
+        if (previewRange.from === placementBeatPrecision ||
+                (targetIsPartOfSelection && !resizeLeftSelection(placementBeatPrecision - previewRange.from)))
             return
-        else if (placementBeatPrecision < range.from)
-            range.from += placementBeatPrecision - range.from
-        else if (placementBeatPrecision < range.to)
-            range.from -= range.from - placementBeatPrecision
-        else
-            return
-        if (targetIsPartOfSelection && !resizeLeftSelection(range.from - previewRange.from))
-            return
-        updatePreview(range, previewKey)
+        updatePreview(AudioAPI.beatRange(placementBeatPrecision, previewRange.to), previewKey)
     }
     function endResizeLeft(mouseBeatPrecision, mouseKey) {
         // Copy resized width
@@ -229,16 +276,10 @@ MouseArea {
     function beginResizeRight(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) { beginMove(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) }
     function updateResizeRight(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getResizeRightBeatPrecision(mouseBeatPrecision)
-        var range = AudioAPI.beatRange(previewRange.from, previewRange.to) // Deep copy the preview range
-        if (range.to === placementBeatPrecision)
+        if (previewRange.to === placementBeatPrecision ||
+                (targetIsPartOfSelection && !resizeRightSelection(placementBeatPrecision - previewRange.to)))
             return
-        else if (placementBeatPrecision > range.from)
-            range.to = placementBeatPrecision
-        else
-            return
-        if (targetIsPartOfSelection && !resizeRightSelection(range.to - previewRange.to))
-            return
-        updatePreview(range, previewKey)
+        updatePreview(AudioAPI.beatRange(previewRange.from, placementBeatPrecision), previewKey)
     }
     function endResizeRight(mouseBeatPrecision, mouseKey) {
         // Copy resized width
@@ -268,25 +309,43 @@ MouseArea {
     function beginSelect(mouseBeatPrecision, mouseKey) {
         selectionBeatPrecisionFrom = mouseBeatPrecision
         selectionBeatPrecisionTo = mouseBeatPrecision
+        selectionKeyFrom = mouseKey
+        selectionKeyTo = mouseKey
     }
     function updateSelect(mouseBeatPrecision, mouseKey) {
         selectionBeatPrecisionTo = mouseBeatPrecision
+        selectionKeyTo = mouseKey
     }
     function endSelect(mouseBeatPrecision, mouseKey) {
         var min = Math.min(selectionBeatPrecisionFrom, selectionBeatPrecisionTo)
         var max = Math.max(selectionBeatPrecisionFrom, selectionBeatPrecisionTo)
-        selectionListModel = selectTargets(AudioAPI.beatRange(min, max), 0, 0)
+        var minKey = Math.min(selectionKeyFrom, selectionKeyTo)
+        var maxKey = Math.max(selectionKeyFrom, selectionKeyTo)
+        selectionListModel = selectTargets(AudioAPI.beatRange(min, max), minKey, maxKey)
+        refreshSelectionCache()
+    }
+
+    function refreshSelectionCache() {
         if (!selectionList.count)
             return
-        var firstRange = selectionList.itemAt(0).range
+        var firstItem = selectionList.itemAt(0)
+        var firstRange = firstItem.range
         var firstBeat = firstRange.from
-        var minimumWidth = firstRange.to - firstRange.from
+        var minWidth = firstRange.to - firstRange.from
+        var minKey = firstItem.key
+        var maxKey = firstItem.key
         for (var i = 1; i < selectionList.count; ++i) {
-            var range = selectionList.itemAt(i).range
-            minimumWidth = Math.min(minimumWidth, range.to - range.from)
+            var item = selectionList.itemAt(i)
+            var range = item.realRange
+            var key = item.realKey
+            minWidth = Math.min(minWidth, range.to - range.from)
+            minKey = Math.min(minKey, key)
+            maxKey = Math.max(maxKey, key)
         }
-        selectionMinimumWidthBeatPrecision = minimumWidth
-        selectionFirstBeatPrecision = firstBeat
+        selectionMinWidthBeatPrecision = minWidth
+        selectionMinBeatPrecision = firstBeat
+        selectionMinKey = minKey
+        selectionMaxKey = maxKey
     }
 
     // Select Remove
@@ -295,19 +354,26 @@ MouseArea {
     function endSelectRemove(mouseBeatPrecision, mouseKey) {
         var min = Math.min(selectionBeatPrecisionFrom, selectionBeatPrecisionTo)
         var max = Math.max(selectionBeatPrecisionFrom, selectionBeatPrecisionTo)
-        var selection = selectTargets(AudioAPI.beatRange(min, max), 0, 0)
+        var minKey = Math.min(selectionKeyFrom, selectionKeyTo)
+        var maxKey = Math.max(selectionKeyFrom, selectionKeyTo)
+        var selection = selectTargets(AudioAPI.beatRange(min, max), minKey, maxKey)
         removeTargets(selection)
     }
 
     signal copyTarget(int targetIndex)
+    signal attachTargetPreview()
+    signal moveTargetPreview(int offsetBeatPrecision, int offsetKey)
+    signal detachTargetPreview()
 
     // General
     property int mode: PlacementArea.Mode.None
+    property int keyOffset: 0
+    property int keyCount: 1
 
     // Preview
     property var previewRange: AudioAPI.beatRange(0, 0)
     property int previewKey: 0
-    property int previewMouseBeatPrecisionOffset: 0
+    property real previewMouseBeatPrecisionOffset: 0
     property alias previewRectangle: previewRectangle
 
     // Brush
@@ -316,12 +382,17 @@ MouseArea {
     // Selection overlay
     property int selectionBeatPrecisionFrom: 0
     property int selectionBeatPrecisionTo: 0
+    property int selectionKeyFrom: 0
+    property int selectionKeyTo: 0
 
     // Selection
     property var selectionListModel: null
+    property var selectionInsertCache: null
     property bool targetIsPartOfSelection: false
-    property int selectionMinimumWidthBeatPrecision: 0
-    property int selectionFirstBeatPrecision: 0
+    property int selectionMinWidthBeatPrecision: 0
+    property int selectionMinBeatPrecision: 0
+    property int selectionMinKey: 0
+    property int selectionMaxKey: 0
 
     // Selection - Move
     property int selectionMoveBeatPrecision: 0
@@ -331,12 +402,15 @@ MouseArea {
     property int selectionResizeLeftBeatPrecision: 0
     property int selectionResizeRightBeatPrecision: 0
 
+    property color color: "red"
+    property color accentColor: "yellow"
+
     id: placementArea
     acceptedButtons: Qt.LeftButton | Qt.RightButton
 
     onPressed: {
         var mouseBeatPrecision = getMouseBeatPrecision()
-        var mouseKey = 0
+        var mouseKey = getMouseKey()
         var isSelection = mouse.modifiers & (Qt.ControlModifier | Qt.ShiftModifier) || contentView.editMode === ContentView.EditMode.Select
         var isRemove = mouse.button === Qt.RightButton
 
@@ -345,8 +419,8 @@ MouseArea {
             return
         }
 
-        targetIsPartOfSelection = false
         previewMouseBeatPrecisionOffset = 0
+        targetIsPartOfSelection = false
         brushLastBeatRange = AudioAPI.beatRange(0, 0)
         // Selection
         if (isSelection) {
@@ -361,7 +435,7 @@ MouseArea {
             changeMode(PlacementArea.Mode.Remove, mouseBeatPrecision, mouseKey)
         // Insert, Move, Brush or Resize
         } else {
-            var targetIndex = findTarget(mouseBeatPrecision)
+            var targetIndex = findTarget(mouseBeatPrecision, mouseKey)
             // Insert or Brush
             if (targetIndex === -1) {
                 // Discard the selection
@@ -407,7 +481,7 @@ MouseArea {
 
     onPositionChanged: {
         var mouseBeatPrecision = getMouseBeatPrecision()
-        var mouseKey = 0
+        var mouseKey = getMouseKey()
 
         switch (mode) {
         case PlacementArea.Mode.Insert:
@@ -441,7 +515,7 @@ MouseArea {
 
     onReleased: {
         var mouseBeatPrecision = getMouseBeatPrecision()
-        var mouseKey = 0
+        var mouseKey = getMouseKey()
 
         switch (mode) {
         case PlacementArea.Mode.Insert:
@@ -478,8 +552,9 @@ MouseArea {
         id: selectionOverlay
         visible: mode === PlacementArea.Mode.Select || mode === PlacementArea.Mode.SelectRemove
         x: contentView.xOffset + Math.min(selectionBeatPrecisionFrom, selectionBeatPrecisionTo) * contentView.pixelsPerBeatPrecision
+        y: parent.height - (Math.max(selectionKeyFrom, selectionKeyTo) - keyOffset + 1) * contentView.rowHeight
         width: Math.abs(selectionBeatPrecisionTo - selectionBeatPrecisionFrom) * contentView.pixelsPerBeatPrecision
-        height: contentView.rowHeight
+        height: (Math.abs(selectionKeyTo - selectionKeyFrom) + 1) * contentView.rowHeight
         color: "grey"
         opacity: 0.5
         border.color: "white"
@@ -489,11 +564,12 @@ MouseArea {
     Rectangle {
         id: previewRectangle
         x: contentView.xOffset + previewRange.from * contentView.pixelsPerBeatPrecision
+        y: (keyCount - 1 - (previewKey - keyOffset)) * rowHeight
         width: (previewRange.to - previewRange.from) * contentView.pixelsPerBeatPrecision
         height: contentView.rowHeight
         visible: false
-        color: nodeDelegate.color
-        border.color: nodeDelegate.accentColor
+        color: placementArea.color
+        border.color: placementArea.accentColor
         border.width: 2
     }
 
@@ -503,7 +579,7 @@ MouseArea {
         height: contentView.rowHeight
         // visible: previewRectangle.visible && contentView.editMode === ContentView.EditMode.Brush
         color: "transparent"
-        border.color: nodeDelegate.accentColor
+        border.color: placementArea.accentColor
         border.width: 2
     }
 
@@ -520,8 +596,10 @@ MouseArea {
                     range.to + placementArea.selectionResizeRightBeatPrecision + placementArea.selectionMoveBeatPrecision
                 )
             }
+            property int realKey: key + selectionMoveKeyOffset
 
             x: contentView.xOffset + realRange.from * contentView.pixelsPerBeatPrecision
+            y: (keyCount - 1 - (realKey - keyOffset)) * rowHeight
             width: (realRange.to - realRange.from) * contentView.pixelsPerBeatPrecision
             height: contentView.rowHeight
             color: "white"

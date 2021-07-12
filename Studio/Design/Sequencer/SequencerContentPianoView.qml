@@ -188,8 +188,6 @@ Item {
             id: notesPlacementArea
 
             anchors.fill: parent
-            partition: sequencerView.partition
-            brushStep: contentView.placementBeatPrecisionBrushStep
         }
     }
 }

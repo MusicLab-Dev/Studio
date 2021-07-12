@@ -17,11 +17,13 @@ ColumnLayout {
     }
 
     function loadNode() {
+        contentView.showChildren = true
         nodeList.loadNode(app.plannerNodeCache)
         app.plannerNodeCache = null
     }
 
     function loadMultipleNodes() {
+        contentView.showChildren = false
         nodeList.loadNodes(app.plannerNodesCache)
         app.plannerNodesCache = []
     }

@@ -4,9 +4,6 @@ import QtQuick.Layouts 1.15
 import "../Common"
 
 ColumnLayout {
-    property string moduleName: "Project"
-    property int moduleIndex
-
     function onNodeDeleted(targetNode) {
         return false
     }
@@ -15,10 +12,26 @@ ColumnLayout {
         return false
     }
 
+    property string moduleName: "Project"
+    property int moduleIndex
+
     id: treeView
     focus: true
 
-    spacing: 0
+    Connections {
+        target: eventDispatcher
+        enabled: moduleIndex === modulesView.selectedModule
+
+        function onAction(pressed) {
+            if (!pressed)
+                return
+            contentView.actionEvent()
+        }
+
+        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
+        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
+        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
+    }
 
     TreeHeader {
         id: treeHeader

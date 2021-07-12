@@ -98,8 +98,8 @@ int PartitionModel::findExact(const Note &note) const noexcept
 {
     int idx = 0;
 
-    for (const auto &elem : *_data) {
-        if (elem == note)
+    for (const auto &n : *_data) {
+        if (n == note)
             return idx;
         ++idx;
     }
