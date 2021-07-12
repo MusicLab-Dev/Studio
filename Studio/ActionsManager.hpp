@@ -10,6 +10,8 @@
 #include "Note.hpp"
 #include "NodeModel.hpp"
 #include "PartitionModel.hpp"
+#include "PartitionsModel.hpp"
+#include "PartitionInstancesModel.hpp"
 
 struct ActionNodeBase
 { 
@@ -17,6 +19,7 @@ struct ActionNodeBase
 };
 Q_DECLARE_METATYPE(ActionNodeBase)
 
+/** -- notes */
 struct ActionPartitionBase : public ActionNodeBase
 {
     PartitionModel *partition { nullptr };
@@ -38,6 +41,28 @@ struct ActionMoveNotes : public ActionNotesBase
 };
 Q_DECLARE_METATYPE(ActionMoveNotes)
 
+/** -- Partitions -- */
+struct ActionPartitionsBase : public ActionNodeBase
+{
+    PartitionsModel *partitions { nullptr };
+};
+Q_DECLARE_METATYPE(ActionPartitionsBase)
+
+struct ActionInstancesBase : public ActionPartitionsBase
+{
+    QVector<PartitionInstance> instances;
+};
+Q_DECLARE_METATYPE(ActionInstancesBase)
+
+using ActionAddPartitions = ActionInstancesBase;
+using ActionRemovePartitions = ActionInstancesBase;
+
+struct ActionMovePartitions : public ActionInstancesBase
+{
+    QVector<PartitionInstance> oldInstances;
+};
+Q_DECLARE_METATYPE(ActionMovePartitions)
+
 
 /** @brief Actions Manager class */
 class ActionsManager : public QObject
@@ -50,15 +75,15 @@ public:
 
         // Add
         AddNotes,
-        AddPartition,
+        AddPartitions,
 
         // Remove
         RemoveNotes,
-        RemovePartition,
+        RemovePartitions,
 
         // Move
         MoveNotes,
-        MovePartition,
+        MovePartitions,
         MoveNode,
     };
     Q_ENUM(Action);
@@ -92,9 +117,12 @@ public slots:
     bool redo(void) noexcept;
 
     /** @brief Wrappers */
-    [[nodiscard]] ActionAddNotes makeActionAddNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept;
-    [[nodiscard]] ActionRemoveNotes makeActionRemoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept;
-    [[nodiscard]] ActionMoveNotes makeActionMoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept;
+    [[nodiscard]] ActionAddNotes makeActionAddNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept;
+    [[nodiscard]] ActionRemoveNotes makeActionRemoveNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept;
+    [[nodiscard]] ActionMoveNotes makeActionMoveNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept;
+    [[nodiscard]] ActionAddPartitions makeActionAddPartitions(PartitionsModel *instances, const QVector<QVariantList> &args) const noexcept;
+    [[nodiscard]] ActionRemovePartitions makeActionRemovePartitions(PartitionsModel *instances, const QVector<PartitionInstance> &args) const noexcept;
+    [[nodiscard]] ActionMovePartitions makeActionMovePartitions(PartitionsModel *instances, const QVector<QVariantList> &args) const noexcept;
 
     /** @brief Slot On Node Deleted */
     void nodeDeleted(NodeModel *node) noexcept;
@@ -110,4 +138,7 @@ private:
     bool actionAddNotes(const Type type, const ActionAddNotes &action);
     bool actionRemoveNotes(const Type type, const ActionRemoveNotes &action);
     bool actionMoveNotes(const Type type, const ActionMoveNotes &action);
+    bool actionAddPartitions(const Type type, const ActionAddPartitions &action);
+    bool actionRemovePartitions(const Type type, const ActionRemovePartitions &action);
+    bool actionMovePartitions(const Type type, const ActionMovePartitions &action);
 };

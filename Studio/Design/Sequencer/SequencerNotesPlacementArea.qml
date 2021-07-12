@@ -4,14 +4,20 @@ import "../Common"
 
 import AudioAPI 1.0
 import PartitionModel 1.0
+import ActionsManager 1.0
 
 PlacementArea {
     function addTarget(targetBeatRange, targetKey) {
         removeOnTheFly(onTheFlyKey)
+        actionsManager.push(ActionsManager.AddNotes, actionsManager.makeActionAddNotes(
+                                partition, [[targetBeatRange.from, targetBeatRange.to, targetKey, AudioAPI.velocityMax, 0]]))
         return sequencerView.partition.add(AudioAPI.note(targetBeatRange, targetKey, AudioAPI.velocityMax, 0))
     }
 
     function removeTarget(targetIndex) {
+        var note = sequencerView.partition.getNote(targetIndex)
+        actionsManager.push(ActionsManager.RemoveNotes, actionsManager.makeActionAddNotes(
+                                partition, [[note.range.from, note.range.to, note.key, note.velocity, note.tuning]]))
         return sequencerView.partition.remove(targetIndex)
     }
 

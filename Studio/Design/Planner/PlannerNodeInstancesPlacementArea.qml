@@ -4,15 +4,21 @@ import "../Common"
 
 import AudioAPI 1.0
 import PartitionPreview 1.0
+import ActionsManager 1.0
 
 PlacementArea {
     function addTarget(targetBeatRange, targetKey) {
+        actionsManager.push(ActionsManager.AddPartitions, actionsManager.makeActionAddPartitions(
+                                nodeInstances.partitions, [[contentView.selectedPartitionIndex, 0, targetBeatRange.from, targetBeatRange.to]]))
         return nodeDelegate.node == contentView.selectedPartitionNode && nodeInstances.instances.add(
             AudioAPI.partitionInstance(contentView.selectedPartitionIndex, 0, targetBeatRange)
         )
     }
 
     function removeTarget(targetIndex) {
+        var partition = nodeInstances.instances.getInstance(targetIndex)
+        actionsManager.push(ActionsManager.RemovePartitions, actionsManager.makeActionRemovePartitions(
+                                nodeInstances.partitions, [partition]))
         return nodeInstances.instances.remove(targetIndex)
     }
 

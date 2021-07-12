@@ -66,6 +66,12 @@ bool ActionsManager::process(const Event &event, const Type type) noexcept
             return actionRemoveNotes(type, event.data.value<ActionRemoveNotes>());
         case Action::MoveNotes:
             return actionMoveNotes(type, event.data.value<ActionMoveNotes>());
+        case Action::AddPartitions:
+            return actionAddPartitions(type, event.data.value<ActionAddPartitions>());
+        case Action::RemovePartitions:
+            return actionRemovePartitions(type, event.data.value<ActionRemovePartitions>());
+        case Action::MovePartitions:
+            return actionMovePartitions(type, event.data.value<ActionMovePartitions>());
         default:
             return false;
     }
@@ -178,7 +184,101 @@ bool ActionsManager::actionMoveNotes(const Type type, const ActionMoveNotes &act
     return false;
 }
 
-ActionAddNotes ActionsManager::makeActionAddNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept
+bool ActionsManager::actionAddPartitions(const Type type, const ActionAddPartitions &action)
+{
+    auto &instances = action.instances;
+
+    if (type == Type::Undo) {
+        for (auto &instance : instances) {
+            auto idx = action.partitions->instances()->findExact(instance);
+            action.partitions->instances()->remove(idx);
+        }
+        qDebug() << "UNDO: actionAddPartitions success";
+        return true;
+    }
+
+    if (type == Type::Redo) {
+        for (auto &instance : instances) {
+            action.partitions->instances()->add(instance);
+        }
+        qDebug() << "REDO: actionAddPartitions success";
+        return true;
+    }
+    return false;
+}
+
+bool ActionsManager::actionRemovePartitions(const Type type, const ActionRemovePartitions &action)
+{
+    auto &instances = action.instances;
+
+    if (type == Type::Undo) {
+        for (auto &instance : instances) {
+            action.partitions->instances()->add(instance);
+        }
+        qDebug() << "UNDO: actionRemovePartitions success";
+        return true;
+    }
+
+    if (type == Type::Redo) {
+        for (auto &instance : instances) {
+            auto idx = action.partitions->instances()->findExact(instance);
+            action.partitions->instances()->remove(idx);
+        }
+        qDebug() << "REDO: actionRemovePartitions success";
+        return true;
+    }
+    return false;
+}
+
+bool ActionsManager::actionMovePartitions(const Type type, const ActionMovePartitions &action)
+{
+    /*
+    auto &notes = action.notes;
+    auto &oldNotes = action.oldNotes;
+
+    if (type == Type::Undo) {
+        for (int i = 0; i < notes.size() && i < oldNotes.size(); i++) {
+            auto &note = notes[i];
+            auto &oldNote = oldNotes[i];
+            int idx = action.partition->findExact(Note(BeatRange(note.range.from, note.range.to), note.key, note.velocity, note.tuning));
+            if (idx == -1) {
+                qDebug() << "UNDO: actionMoveNote error (idx == -1)";
+                continue;
+            }
+            action.partition->set(idx, {
+                               {Audio::Beat(oldNote.range.from), Audio::Beat(oldNote.range.to)},
+                                Audio::Key(oldNote.key),
+                                Audio::Velocity(oldNote.velocity),
+                                Audio::Tuning(oldNote.tuning)});
+        }
+        qDebug() << "UNDO: actionMoveNote success";
+        return true;
+    }
+
+    if (type == Type::Redo) {
+        for (int i = 0; i < notes.size() && i < oldNotes.size(); i++) {
+            auto &note = notes[i];
+            auto &oldNote = oldNotes[i];
+            int idx = action.partition->findExact(Note(BeatRange(oldNote.range.from, oldNote.range.to), oldNote.key, oldNote.velocity, oldNote.tuning));
+            if (idx == -1) {
+                qDebug() << "REDO: actionMoveNote error (idx == -1)";
+                return false;
+            }
+            action.partition->set(idx, {
+                               {Audio::Beat(note.range.from), Audio::Beat(note.range.to)},
+                                Audio::Key(note.key),
+                                Audio::Velocity(note.velocity),
+                                Audio::Tuning(note.tuning)});
+        }
+        qDebug() << "REDO: actionMoveNote success";
+        return true;
+    }
+    */
+    return false;
+}
+
+
+ActionAddNotes ActionsManager::makeActionAddNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept
 {
     ActionAddNotes action;
     action.partition = partition;
@@ -192,7 +292,7 @@ ActionAddNotes ActionsManager::makeActionAddNotes(PartitionModel *partition, int
     return action;
 }
 
-ActionRemoveNotes ActionsManager::makeActionRemoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept
+ActionRemoveNotes ActionsManager::makeActionRemoveNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept
 {
     ActionRemoveNotes action;
     action.partition = partition;
@@ -206,7 +306,7 @@ ActionRemoveNotes ActionsManager::makeActionRemoveNotes(PartitionModel *partitio
     return action;
 }
 
-ActionMoveNotes ActionsManager::makeActionMoveNotes(PartitionModel *partition, int nodeID, int partitionID, const QVector<QVariantList> &args) const noexcept
+ActionMoveNotes ActionsManager::makeActionMoveNotes(PartitionModel *partition,  const QVector<QVariantList> &args) const noexcept
 {
     ActionMoveNotes action;
     action.partition = partition;
@@ -222,6 +322,55 @@ ActionMoveNotes ActionsManager::makeActionMoveNotes(PartitionModel *partition, i
     }
     return action;
 }
+
+ActionAddPartitions ActionsManager::makeActionAddPartitions(PartitionsModel *partitions, const QVector<QVariantList> &args) const noexcept
+{
+    ActionAddPartitions action;
+    action.partitions = partitions;
+    action.node = partitions->parentNode();
+
+    for (auto &elem : args) {
+        action.instances.push_back(
+            PartitionInstance({
+                                  quint32(elem[0].toInt()),
+                                  Audio::Beat(elem[1].toInt()),
+                                  Audio::BeatRange({
+                                      Audio::Beat(elem[2].toInt()), Audio::Beat(elem[3].toInt())
+                                  })
+                              })
+        );
+    }
+    return action;
+}
+
+ActionRemovePartitions ActionsManager::makeActionRemovePartitions(PartitionsModel *partitions, const QVector<PartitionInstance> &args) const noexcept
+{
+    ActionAddPartitions action;
+    action.partitions = partitions;
+    action.node = partitions->parentNode();
+
+    for (auto &elem : args)
+        action.instances.push_back(elem);
+    return action;
+}
+
+ActionMovePartitions ActionsManager::makeActionMovePartitions(PartitionsModel *partitionInstances,  const QVector<QVariantList> &args) const noexcept
+{
+    ActionMovePartitions action;
+    /*action.partition = partition;
+    action.node = partition->parentPartitions()->parentNode();
+
+    for (auto &elem : args) {
+        action.oldNotes.push_back(
+            Note({BeatRange(Audio::Beat(elem[0].toInt()), Audio::Beat(elem[2].toInt())), Audio::Key(elem[4].toInt()), Audio::Velocity(elem[6].toInt()), Audio::Tuning(elem[8].toInt())})
+        );
+        action.notes.push_back(
+            Note({BeatRange(Audio::Beat(elem[1].toInt()), Audio::Beat(elem[3].toInt())), Audio::Key(elem[5].toInt()), Audio::Velocity(elem[7].toInt()), Audio::Tuning(elem[9].toInt())})
+        );
+    }*/
+    return action;
+}
+
 
 void ActionsManager::nodeDeleted(NodeModel *node) noexcept
 {
@@ -244,11 +393,11 @@ void ActionsManager::nodePartitionDeleted(NodeModel *node, int partitionIndex) n
     const auto it = std::remove_if(_events.begin(), _events.end(), [node, partition](const Event &elem) {
         switch (elem.action) {
         case Action::AddNotes:
-        case Action::AddPartition:
+        case Action::AddPartitions:
         case Action::RemoveNotes:
-        case Action::RemovePartition:
+        case Action::RemovePartitions:
         case Action::MoveNotes:
-        case Action::MovePartition:
+        case Action::MovePartitions:
             const auto *it = reinterpret_cast<const ActionPartitionBase *>(elem.data.data());
             return it->node == node && it->partition == partition;
         }

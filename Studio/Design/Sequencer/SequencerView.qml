@@ -206,8 +206,6 @@ ColumnLayout {
 
     ActionsManager {
         id: actionsManager
-
-
     }
 
     Connections {

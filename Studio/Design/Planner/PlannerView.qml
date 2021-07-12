@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import ActionsManager 1.0
+
 import "../Default"
 
 ColumnLayout {
@@ -77,4 +79,16 @@ ColumnLayout {
     PlannerPartitionMenu {
         id: plannerPartitionMenu
     }
+
+    ActionsManager {
+        id: actionsManager
+    }
+
+    Connections {
+        target: eventDispatcher
+        enabled: moduleIndex === modulesView.selectedModule
+
+        function onUndo(pressed) { if (!pressed) return; actionsManager.undo(); }
+        function onRedo(pressed) { if (!pressed) return; actionsManager.redo(); }
+   }
 }
