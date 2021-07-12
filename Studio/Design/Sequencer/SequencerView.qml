@@ -145,6 +145,16 @@ ColumnLayout {
     }
 
     ControlsFlow {
+        PropertyAnimation {id: openAnim; target: sequencerControls; property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic}
+        function open() {
+            visible = true
+            openAnim.start()
+        }
+
+        function close() {
+            visible = false
+        }
+
         id: sequencerControls
         Layout.fillWidth: true
         Layout.preferredHeight: height

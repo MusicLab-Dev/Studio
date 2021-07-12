@@ -54,7 +54,12 @@ Rectangle {
 
                 anchors.fill: parent
 
-                onPressed: sequencerControls.visible = !sequencerControls.visible
+                onPressed: {
+                    if (!sequencerControls.visible)
+                        sequencerControls.open()
+                    else
+                        sequencerControls.close()
+                }
             }
 
             DefaultText {

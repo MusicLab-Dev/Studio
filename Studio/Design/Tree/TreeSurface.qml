@@ -42,7 +42,7 @@ Item {
         for (var i = 0; i < selectionList.length; ++i)
             selectionList[i].isSelected = false
         selectionList = []
-        last = null
+        treeControls.close()
     }
 
     signal targetDropped

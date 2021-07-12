@@ -72,6 +72,7 @@ MouseArea {
             treeSurface.endSelection()
         else
             treeSurface.resetSelection()
+        treeComponentsPanel.close()
     }
 
     onXOffsetMinChanged: {
@@ -129,6 +130,29 @@ MouseArea {
         scale: contentView.zoomMin + contentView.zoom * contentView.zoomWidth
     }
 
+
+    ControlsFlow {
+        PropertyAnimation {id: openAnim; target: treeControls; property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic}
+        function open(newNode) {
+            node = newNode
+            visible = true
+            openAnim.start()
+        }
+
+        function close() {
+            node = null
+            visible = false
+        }
+
+        id: treeControls
+        anchors.top: parent.top
+        width: parent.width
+        y: parent.height
+
+        node: null
+        visible: false
+    }
+
     ScrollBar {
         anchors.top: parent.top
         anchors.right: parent.right
@@ -162,6 +186,7 @@ MouseArea {
     }
 
     TreeComponentsPanel {
+        id: treeComponentsPanel
         anchors.fill: parent
     }
 }

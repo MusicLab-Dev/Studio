@@ -41,16 +41,6 @@ ColumnLayout {
         z: 1
     }
 
-    ControlsFlow {
-        id: treeControls
-        Layout.fillWidth: true
-        Layout.preferredHeight: height
-        y: parent.height
-        visible: contentView.treeSurface.last
-
-        node: contentView.treeSurface.last
-    }
-
     TreeContentView {
         id: contentView
         Layout.fillWidth: true
