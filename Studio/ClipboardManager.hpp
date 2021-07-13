@@ -8,6 +8,8 @@
 #include <QGuiApplication>
 #include <QClipboard>
 
+#include "Note.hpp"
+
 /** @brief Manage the clipboard to the qml */
 class ClipboardManager : public QObject
 {
@@ -43,4 +45,8 @@ public slots:
     {
         QGuiApplication::clipboard()->clear();
     }
+
+    /** @brief Wrapper JSON */
+    QString transformNotesInJson(const QVector<Note> &notes) const noexcept;
+    QVector<Note> transformJsonInNotes(const QString &json) const noexcept;
 };

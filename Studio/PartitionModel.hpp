@@ -124,6 +124,7 @@ public slots:
 
     /** @brief Add a group of notes */
     bool addRange(const QVariantList &notes);
+    bool addRange(const QVector<Note> &notes);
 
     /** @brief Add a group of notes by a Json format */
     bool addJsonRange(const QString &json, int scale);

@@ -44,7 +44,8 @@ public:
         VolumeContext,
         VolumePlaylist,
         Undo,
-        Redo
+        Redo,
+        Erase
     };
 
     Q_ENUM(EventTarget)

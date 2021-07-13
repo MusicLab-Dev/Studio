@@ -100,7 +100,6 @@ Window {
         anchors.fill: parent
 
         id: exportManager
-
     }
 
 }

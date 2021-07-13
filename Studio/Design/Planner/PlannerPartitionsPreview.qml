@@ -22,12 +22,12 @@ Rectangle {
     id: partitionsPreview
     width: contentView.width
     height: Math.max(baseHeight, previewFlow.height) + 20
-    color: themeManager.foregroundColor
+    color: Qt.darker(themeManager.foregroundColor, 1.1)
     visible: nodeDelegate && !hide
     // border.color: nodeColor
 
     Rectangle {
-        color: "white"
+        color: "black"
         width: parent.width
         height: 1
         anchors.bottom: parent.bottom

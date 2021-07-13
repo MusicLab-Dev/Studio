@@ -32,7 +32,8 @@ QStringList EventDispatcher::targetEventList(void) const noexcept
         "Redo"
         "Copy",
         "Paste",
-        "Cut"
+        "Cut",
+        "Erase"
     };
 
     return List;

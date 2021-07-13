@@ -23,12 +23,14 @@ Item {
     ParallelAnimation {
         id: openAnim
         PropertyAnimation { target: panel; property: "x"; to: width - panel.width; duration: durationAnimation; easing.type: Easing.OutCubic }
+        PropertyAnimation { target: panel; property: "opacity"; from: 0; to: 1; duration: durationAnimation; easing.type: Easing.OutCubic }
         PropertyAnimation { target: buttonPanel; property: "opacity"; to: 0; duration: durationAnimation; easing.type: Easing.OutCubic }
     }
 
     ParallelAnimation {
         id: closeAnim
         PropertyAnimation { target: panel; property: "x"; to: width; duration: durationAnimation; easing.type: Easing.OutCubic }
+        PropertyAnimation { target: panel; property: "opacity"; from: 1; to: 0; duration: durationAnimation; easing.type: Easing.OutCubic }
         PropertyAnimation { target: buttonPanel; property: "opacity"; to: 0.6; duration: durationAnimation; easing.type: Easing.OutCubic }
     }
 
@@ -78,8 +80,7 @@ Item {
         width: parent.width * 0.15
         height: parent.height * 0.9
 
-        opacity: 0.6
-        color: "black"
+        color: themeManager.foregroundColor
 
         ColumnLayout {
             anchors.centerIn: parent

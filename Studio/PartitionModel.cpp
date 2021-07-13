@@ -210,6 +210,13 @@ bool PartitionModel::addRange(const QVariantList &noteList)
     return addRangeProcess(notes);
 }
 
+bool PartitionModel::addRange(const QVector<Note> &noteList)
+{
+    if (noteList.empty())
+        return true;
+    return addRangeProcess(noteList);
+}
+
 bool PartitionModel::addJsonRange(const QString &json, int scale)
 {
     QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());

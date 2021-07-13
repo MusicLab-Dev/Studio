@@ -81,6 +81,7 @@ signals:
     void copy(bool pressed);
     void paste(bool pressed);
     void cut(bool pressed);
+    void erase(bool pressed);
 
     // Floating controls
     void volumeContext(float ratio);

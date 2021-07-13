@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQml 2.15
 
 import NodeModel 1.0
+import PluginModel 1.0
 
 import "../Default"
 
@@ -50,15 +51,17 @@ Column {
         Rectangle {
             id: soundMeter
             visible: !nodeInstanceBackground.drag.active
-            anchors.top: parent.top
-            anchors.bottom: nodeInstanceBackground.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 8
-            // anchors.bottomMargin: 5
+            anchors.top: nodeInstanceBackground.top
+            anchors.topMargin: 10
+            anchors.bottom: nodeInstanceBackground.bottom
+            anchors.bottomMargin: 10
+            anchors.left: nodeInstanceBackground.right
+            anchors.leftMargin: nodeInstanceBackground.width * 0.05
             color: themeManager.backgroundColor
             border.color: nodeInstanceBackgroundRect.border.color
             border.width: 2
-            width: height / 2
+            width: height / 4
+            radius: 5
         }
 
         MouseArea {
@@ -179,6 +182,33 @@ Column {
                 }
             }
 
+
+            Rectangle {
+                width: parent.width * 0.6
+                height: parent.height * 0.4
+                color: Qt.lighter(themeManager.foregroundColor, 1.2)
+                anchors.horizontalCenter: parent.horizontalCenter
+                y: - height / 2
+                radius: 30
+
+                Item {
+                    height: parent.height * 0.5
+                    width: parent.width
+                    anchors.top: parent.top
+
+                    DefaultText {
+                        anchors.fill: parent
+                        text: nodeDelegate.node ? nodeDelegate.node.plugin.title : "Error"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: nodeDelegate.accentColor
+                        fontSizeMode: Text.Fit
+                        font.pointSize: 8
+                        elide: Text.ElideRight
+                    }
+                }
+            }
+
             Rectangle {
                 id: nodeInstanceBackgroundRect
                 anchors.fill: parent
@@ -188,23 +218,31 @@ Column {
                 border.width: 4
             }
 
-            DefaultText {
-                x: 5
-                y: 5
-                width: parent.width - 10
-                height: parent.height / 2 - 10
-                text: nodeDelegate.node ? nodeDelegate.node.name : "Error"
-                color: nodeDelegate.accentColor
-                fontSizeMode: Text.Fit
-                font.pointSize: 28
-                elide: Text.ElideRight
+
+            Item {
+                anchors.top: parent.top
+                anchors.topMargin: parent.height * 0.2
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width * 0.75
+                height: parent.height * 0.4
+                DefaultText {
+                    anchors.fill: parent
+
+                    text: nodeDelegate.node ? nodeDelegate.node.name : "Error"
+                    color: nodeDelegate.accentColor
+                    fontSizeMode: Text.Fit
+                    font.pointSize: 20
+                    elide: Text.ElideRight
+                }
             }
 
             DefaultImageButton {
                 anchors.left: parent.left
-                y: parent.height * 0.75 - height / 2
+                anchors.leftMargin: parent.width * 0.02
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: parent.height * 0.02
                 width: height
-                height: Math.min(parent.height / 2, 50)
+                height: Math.min(parent.height / 2, 35)
                 source: "qrc:/Assets/Plus.png"
                 showBorder: false
                 scaleFactor: 1
@@ -219,9 +257,11 @@ Column {
                 readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
 
                 anchors.right: parent.right
-                y: parent.height * 0.75 - height / 2
+                anchors.rightMargin: parent.width * 0.02
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: parent.height * 0.02
                 width: height
-                height: Math.min(parent.height / 2, 50)
+                height: Math.min(parent.height / 2, 35)
                 source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
                 showBorder: false
                 scaleFactor: 0.8
@@ -231,6 +271,7 @@ Column {
 
                 onReleased: nodeDelegate.node.muted = !isMuted
             }
+
         }
     }
 

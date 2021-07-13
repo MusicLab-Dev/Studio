@@ -71,12 +71,15 @@ Row {
         }
     }
 
-    Rectangle {
-        id: nodeControlsData
-        width: contentView.rowDataWidth
-        height: nodeControlsFlow.height
-        color: themeManager.foregroundColor
-        opacity: 0.75
+    Item {
+
+        Rectangle {
+            id: nodeControlsData
+            width: contentView.rowDataWidth
+            height: nodeControlsFlow.height
+            color: Qt.darker(nodeDelegate.node.color, 1.5)
+            opacity: 0.7
+        }
 
         Flow {
             id: nodeControlsFlow

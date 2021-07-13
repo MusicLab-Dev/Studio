@@ -172,16 +172,12 @@ Rectangle {
 
     PluginsView {
         id: pluginsView
-        width: parent.width * 0.9
-        height: parent.height * 0.9
-        anchors.centerIn: parent
+        anchors.fill: parent
     }
 
     WorkspacesView {
         id: workspacesView
-        width: parent.width * 0.9
-        height: parent.height * 0.9
-        anchors.centerIn: parent
+        anchors.fill: parent
     }
 
     SettingsView {

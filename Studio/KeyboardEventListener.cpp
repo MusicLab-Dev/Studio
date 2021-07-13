@@ -42,6 +42,7 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher)
     add(Qt::Key_C,          Qt::CTRL, EventTarget::Copy     );
     add(Qt::Key_V,          Qt::CTRL, EventTarget::Paste    );
     add(Qt::Key_X,          Qt::CTRL, EventTarget::Cut      );
+    add(Qt::Key_Delete,     0,        EventTarget::Erase    );
 }
 
 
@@ -162,6 +163,7 @@ bool KeyboardEventListener::sendSignals(const KeyDescriptor &desc, bool value)
         break;
     case EventTarget::Redo:
         emit _dispatcher->redo(value);
+        break;
     case EventTarget::Copy:
         emit _dispatcher->copy(value);
         break;
@@ -170,6 +172,9 @@ bool KeyboardEventListener::sendSignals(const KeyDescriptor &desc, bool value)
         break;
     case EventTarget::Cut:
         emit _dispatcher->cut(value);
+        break;
+    case EventTarget::Erase:
+        emit _dispatcher->erase(value);
         break;
     default:
         break;

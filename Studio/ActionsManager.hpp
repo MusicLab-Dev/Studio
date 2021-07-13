@@ -118,6 +118,7 @@ public slots:
 
     /** @brief Wrappers */
     [[nodiscard]] ActionAddNotes makeActionAddNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept;
+    [[nodiscard]] ActionAddNotes makeActionAddRealNotes(PartitionModel *partition, const QVector<Note> &args) const noexcept;
     [[nodiscard]] ActionRemoveNotes makeActionRemoveNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept;
     [[nodiscard]] ActionMoveNotes makeActionMoveNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept;
     [[nodiscard]] ActionAddPartitions makeActionAddPartitions(PartitionsModel *instances, const QVector<QVariantList> &args) const noexcept;

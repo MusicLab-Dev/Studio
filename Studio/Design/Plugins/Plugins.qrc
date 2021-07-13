@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/Plugins">
-        <file>PluginsBackground.qml</file>
         <file>PluginsContentArea.qml</file>
         <file>PluginsForeground.qml</file>
         <file>PluginsSquareComponent.qml</file>

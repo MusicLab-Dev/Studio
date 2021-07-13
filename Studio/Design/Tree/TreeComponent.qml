@@ -28,7 +28,6 @@ Rectangle {
         drag.onActiveChanged: {
             if (drag.active) {
                 console.log("ok")
-
             } else {
 
             }
@@ -36,7 +35,8 @@ Rectangle {
 
         onPressed: {
             close()
-            pressedCallBack()
+            if (pressedCallBack != null)
+                pressedCallBack()
         }
     }
 

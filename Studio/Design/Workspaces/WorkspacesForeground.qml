@@ -17,7 +17,7 @@ Rectangle {
     }
 
     id: workspaceForeground
-    color: "#0D2D47"
+    color: Qt.lighter(themeManager.foregroundColor, 1.2)
     radius: 30
 
     Rectangle {
@@ -29,10 +29,11 @@ Rectangle {
 
     Item {
         id: workspaceResearchTextInput
-        width: parent.width * 0.8
+        anchors.top: parent.top
+        anchors.topMargin: parent.height * 0.1
+        anchors.horizontalCenter: parent.horizontalCenter
         height : parent.height * 0.05
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 10
+        width: parent.width * 0.8
 
         DefaultTextInput {
             id: searchBar
