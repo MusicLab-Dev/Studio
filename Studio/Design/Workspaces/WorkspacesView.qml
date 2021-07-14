@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
+import QtGraphicalEffects 1.15
 
 import "../Default"
 import "../Common"
@@ -47,12 +47,24 @@ Item {
     ParallelAnimation {
         id: openAnim
         PropertyAnimation { target: workspaceWindow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
-        PropertyAnimation { target: background; property: "opacity"; from: 0; to: background.opacityMax; duration: 100; }
+        PropertyAnimation { target: shadow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
     }
 
     BackgroundPopup {
         id: background
         anchors.fill: parent
+        opacity: opacityMax
+    }
+
+    DropShadow {
+        id: shadow
+        anchors.fill: workspaceWindow
+        horizontalOffset: 4
+        verticalOffset: 4
+        radius: 8
+        samples: 17
+        color: "#80000000"
+        source: workspaceWindow
     }
 
     ContentPopup {

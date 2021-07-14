@@ -73,17 +73,20 @@ Row {
 
     Item {
 
+        width: contentView.rowDataWidth
+        height: nodeControlsFlow.height
+
         Rectangle {
             id: nodeControlsData
-            width: contentView.rowDataWidth
-            height: nodeControlsFlow.height
-            color: Qt.darker(nodeDelegate.node.color, 1.5)
-            opacity: 0.7
+            anchors.fill: parent
+            color: themeManager.backgroundColor
+            opacity: 0.9
         }
 
         Flow {
             id: nodeControlsFlow
-            width: contentView.rowDataWidth
+            anchors.centerIn: parent
+            width: parent.width * 0.995
             padding: 5
             spacing: 20
 
@@ -147,5 +150,7 @@ Row {
                 }
             }
         }
+
     }
+
 }

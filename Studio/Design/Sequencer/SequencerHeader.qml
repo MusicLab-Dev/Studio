@@ -9,6 +9,10 @@ import "../Common/"
 import PluginModel 1.0
 
 Rectangle {
+    property color hoveredColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.8) : "black"
+    property color pressedColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 2.2) : "black"
+    property color accentColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.6) : "black"
+
     color: themeManager.foregroundColor
 
     MouseArea {
@@ -21,10 +25,9 @@ Rectangle {
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
 
-        height: parent.height * 0.7
+        height: parent.height * 0.75
         width: parent.width * 0.4
     }
-
 
     Item {
         id: pluginButton
@@ -32,24 +35,18 @@ Rectangle {
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width * 0.15
-        height: parent.height
+        height: parent.height * 0.75
 
         Rectangle {
-            property color hoveredColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.8) : "black"
-            property color pressedColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 2.2) : "black"
-            property color accentColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.6) : "black"
-
             id: rectPluginButton
-            anchors.centerIn: parent
-            width: parent.width
-            height: parent.height * 0.8
+            anchors.fill: parent
             radius: 15
             color: sequencerView.node ? sequencerView.node.color : "black"
-            border.color: mouse.containsPress ? pressedColor : hoveredColor
-            border.width: mouse.containsMouse ? 3 : 0
+            border.color: mousePluginButton.containsPress ? pressedColor : hoveredColor
+            border.width: mousePluginButton.containsMouse ? 3 : 0
 
             MouseArea {
-                id: mouse
+                id: mousePluginButton
                 hoverEnabled: true
 
                 anchors.fill: parent
@@ -59,6 +56,7 @@ Rectangle {
                         sequencerControls.open()
                     else
                         sequencerControls.close()
+
                 }
             }
 
@@ -67,8 +65,86 @@ Rectangle {
                 horizontalAlignment: Text.AlignLeft
                 fontSizeMode: Text.HorizontalFit
                 font.pointSize: 20
-                color: rectPluginButton.accentColor
+                color: accentColor
                 text: sequencerView.node ? sequencerView.node.name : "ERROR"
+                wrapMode: Text.Wrap
+            }
+        }
+    }
+
+
+    Item {
+        id: plannerButton
+
+        anchors.left: pluginButton.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: height
+        height: parent.height * 0.7
+
+        Rectangle {
+            id: rectPlannerButton
+            anchors.fill: parent
+            radius: 15
+            color: sequencerView.node ? sequencerView.node.color : "black"
+            border.color: mousePlannerButton.containsPress ? pressedColor : hoveredColor
+            border.width: mousePlannerButton.containsMouse ? 3 : 0
+
+            MouseArea {
+                id: mousePlannerButton
+                hoverEnabled: true
+
+                anchors.fill: parent
+
+                onPressed: {
+                    modulesView.addNewPlanner(sequencerView.node)
+                }
+            }
+
+            DefaultText {
+                anchors.fill: parent
+                fontSizeMode: Text.HorizontalFit
+                font.pointSize: 20
+                color: accentColor
+                text: "<"
+                wrapMode: Text.Wrap
+            }
+        }
+    }
+
+    Item {
+        id: helpButton
+
+        anchors.left: plannerButton.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: height
+        height: parent.height * 0.7
+
+        Rectangle {
+            id: rectHelpButton
+            anchors.fill: parent
+            radius: 15
+            color: sequencerView.node ? sequencerView.node.color : "black"
+            border.color: mouseHelpButton.containsPress ? pressedColor : hoveredColor
+            border.width: mouseHelpButton.containsMouse ? 3 : 0
+
+            MouseArea {
+                id: mouseHelpButton
+                hoverEnabled: true
+
+                anchors.fill: parent
+
+                onPressed: {
+                }
+            }
+
+            DefaultText {
+                anchors.fill: parent
+                fontSizeMode: Text.HorizontalFit
+                font.pointSize: 20
+                color: accentColor
+                text: "?"
                 wrapMode: Text.Wrap
             }
         }

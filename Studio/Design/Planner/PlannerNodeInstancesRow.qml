@@ -59,7 +59,7 @@ Item {
                 color: nodeDelegate.accentColor
                 text: instanceDelegate.partition ? instanceDelegate.partition.name : "ERROR"
                 fontSizeMode: Text.VerticalFit
-                font.pointSize: 30
+                font.pointSize: 12
                 elide: Text.ElideMiddle
             }
         }

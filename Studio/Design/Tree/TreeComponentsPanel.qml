@@ -22,7 +22,7 @@ Item {
 
     ParallelAnimation {
         id: openAnim
-        PropertyAnimation { target: panel; property: "x"; to: width - panel.width; duration: durationAnimation; easing.type: Easing.OutCubic }
+        PropertyAnimation { target: panel; property: "x"; to: (width - panel.width) - 32; duration: durationAnimation; easing.type: Easing.OutCubic }
         PropertyAnimation { target: panel; property: "opacity"; from: 0; to: 1; duration: durationAnimation; easing.type: Easing.OutCubic }
         PropertyAnimation { target: buttonPanel; property: "opacity"; to: 0; duration: durationAnimation; easing.type: Easing.OutCubic }
     }
@@ -31,21 +31,22 @@ Item {
         id: closeAnim
         PropertyAnimation { target: panel; property: "x"; to: width; duration: durationAnimation; easing.type: Easing.OutCubic }
         PropertyAnimation { target: panel; property: "opacity"; from: 1; to: 0; duration: durationAnimation; easing.type: Easing.OutCubic }
-        PropertyAnimation { target: buttonPanel; property: "opacity"; to: 0.6; duration: durationAnimation; easing.type: Easing.OutCubic }
+        PropertyAnimation { target: buttonPanel; property: "opacity"; to: 0.7; duration: durationAnimation; easing.type: Easing.OutCubic }
     }
 
     Rectangle {
         id: buttonPanel
 
         anchors.right: panel.left
-        anchors.rightMargin: 8
+        anchors.rightMargin: 32
         anchors.top: parent.top
         anchors.topMargin: parent.height / 2 - height / 2
 
         width: parent.width * 0.04
         height: width
-        opacity: 0.6
-        color: "black"
+        opacity: 0.7
+        color: themeManager.foregroundColor
+        radius: 1000
 
         Image {
             id: plus
@@ -72,15 +73,21 @@ Item {
 
     }
 
-    Rectangle {
-        anchors.verticalCenter: parent.verticalCenter
-
+    Item {
         id: panel
-        x: parent.width
+        anchors.verticalCenter: parent.verticalCenter
         width: parent.width * 0.15
         height: parent.height * 0.9
+        x: parent.width
 
-        color: themeManager.foregroundColor
+        Rectangle {
+
+            id: panelBackground
+            anchors.fill: parent
+            radius: 32
+            color: themeManager.foregroundColor
+            opacity: 0.7
+        }
 
         ColumnLayout {
             anchors.centerIn: parent
