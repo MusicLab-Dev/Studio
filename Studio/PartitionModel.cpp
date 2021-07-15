@@ -76,6 +76,7 @@ bool PartitionModel::add(const Note &note)
                 emit latestNoteChanged();
             }
             emit notesChanged();
+            qDebug() << "ok";
         }
     );
 }

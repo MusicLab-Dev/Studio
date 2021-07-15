@@ -11,8 +11,9 @@ PlacementArea {
     property var cacheMove: []
 
     function addTarget(targetBeatRange, targetKey) {
-        removeOnTheFly(onTheFlyKey)
-        if (mode === PlacementArea.Mode.Move) {
+        if (onTheFlyKey !== -1 && targetKey !== onTheFlyKey)
+            removeOnTheFly(onTheFlyKey)
+        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
             var cacheNote = cacheMove[0]
             actionsManager.push(ActionsManager.MoveNotes, actionsManager.makeActionMoveNotes(
                                     partition, [[cacheNote[0], targetBeatRange.from, cacheNote[1], targetBeatRange.to, cacheNote[2], targetKey, cacheNote[3], AudioAPI.velocityMax, cacheNote[4], 0]]))
@@ -20,12 +21,14 @@ PlacementArea {
             actionsManager.push(ActionsManager.AddNotes, actionsManager.makeActionAddNotes(
                                     partition, [[targetBeatRange.from, targetBeatRange.to, targetKey, AudioAPI.velocityMax, 0]]))
         }
+        console.debug(targetKey)
         return sequencerView.partition.add(AudioAPI.note(targetBeatRange, targetKey, AudioAPI.velocityMax, 0))
     }
 
     function removeTarget(targetIndex) {
         var note = sequencerView.partition.getNote(targetIndex)
-        if (mode === PlacementArea.Mode.Move) {
+        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
+            cacheMove = []
             cacheMove.push([note.range.from, note.range.to, note.key, note.velocity, note.tuning])
         } else {
             actionsManager.push(ActionsManager.RemoveNotes, actionsManager.makeActionRemoveNotes(
@@ -60,7 +63,7 @@ PlacementArea {
 
     function addTargets(targets) {
         var notes = []
-        if (mode === PlacementArea.Mode.Move) {
+        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
             for (var i = 0; i < targets.length; i++) {
                 var note = targets[i]
                 notes.push([cacheMove[0], note.range.from, cacheMove[1], note.range.to, cacheMove[2], note.key, cacheMove[3], note.velocity, cacheMove[4], note.tuning])
@@ -79,7 +82,7 @@ PlacementArea {
     }
 
     function removeTargets(targets) {
-        if (mode === PlacementArea.Mode.Move) {
+        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
             cacheMove = []
             for (var i = 0; i < targets.length; i++) {
                 var note = partition.getNote(targets[i])

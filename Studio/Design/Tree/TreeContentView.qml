@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import "../Default"
 import "../Common"
 
 MouseArea {
@@ -130,6 +131,38 @@ MouseArea {
         scale: contentView.zoomMin + contentView.zoom * contentView.zoomWidth
     }
 
+    Item {
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.top: parent.top
+        anchors.topMargin: 20 + ( treeControls.node != null ? treeControls.height : 0 )
+        width: parent.width * 0.1
+        height: parent.height * 0.1
+
+        Rectangle {
+            anchors.fill: parent
+            radius: 16
+            opacity: overviewMouse.containsMouse ? 1 : 0.6
+            color: overviewMouse.containsMouse ? app.project.master.color : themeManager.foregroundColor
+        }
+
+        MouseArea {
+            id: overviewMouse
+            hoverEnabled: true
+            anchors.fill: parent
+            onPressed: modulesView.addNewPlanner(app.project.master)
+        }
+
+        DefaultText {
+            anchors.fill: parent
+            fontSizeMode: Text.Fit
+            font.pixelSize: 30
+            text: qsTr("Overview")
+            color: overviewMouse.containsMouse ? themeManager.foregroundColor : app.project.master.color
+
+        }
+
+    }
 
     ControlsFlow {
         PropertyAnimation {id: openAnim; target: treeControls; property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic}

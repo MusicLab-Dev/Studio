@@ -45,6 +45,10 @@ Item {
         treeControls.close()
     }
 
+    function selectAll() {
+
+    }
+
     signal targetDropped
     signal selectionFinished(point from, point to)
 

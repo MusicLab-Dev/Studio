@@ -1,11 +1,12 @@
 import QtQuick 2.15
 import QtQml 2.15
 import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.15
 
 import "../Default"
 import "../Common"
 
-Rectangle {
+Item {
     readonly property int totalTabCount: staticTabCount + modulesView.modules.count
     readonly property int tabRows: 1 + (totalTabCount / tabsPerRow)
     readonly property int tabsPerRow: Math.round(tabArea.width / 200)
@@ -25,7 +26,12 @@ Rectangle {
     width: parent.width
     height: expanded ? tabArea.height : tabHeight
     clip: true
-    color: themeManager.foregroundColor
+
+    Rectangle {
+        id: backgroundTabs
+        anchors.fill: parent
+        color: Qt.lighter(themeManager.foregroundColor, 1.2)
+    }
 
     ModulesGlobalMenu {
         id: globalMenu

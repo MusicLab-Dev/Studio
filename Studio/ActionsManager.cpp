@@ -141,12 +141,12 @@ bool ActionsManager::actionMoveNotes(const Type type, const ActionMoveNotes &act
     if (type == Type::Undo) {
         for (int i = 0; i < notes.size() && i < oldNotes.size(); i++) {
             auto &note = notes[i];
-            auto &oldNote = oldNotes[i];
             int idx = action.partition->findExact(note);
             if (idx == -1) {
                 qDebug() << "UNDO: actionMoveNote error (idx == -1)";
                 continue;
             }
+            auto &oldNote = oldNotes[i];
             action.partition->set(idx, oldNote);
         }
         qDebug() << "UNDO: actionMoveNote success";
@@ -196,7 +196,7 @@ bool ActionsManager::actionAddPartitions(const Type type, const ActionAddPartiti
 
     if (type == Type::Redo) {
         action.partitions->instances()->addRealRange(instances);
-        qDebug() << "UNDO: actionRemoveNote success";
+        qDebug() << "REDO: actionAddPartitions success";
         return true;
     }
     return false;
@@ -225,29 +225,25 @@ bool ActionsManager::actionRemovePartitions(const Type type, const ActionRemoveP
 
 bool ActionsManager::actionMovePartitions(const Type type, const ActionMovePartitions &action)
 {
-    /*
-    auto &notes = action.notes;
-    auto &oldNotes = action.oldNotes;
+    auto &instances = action.instances;
+    auto &oldInstances = action.oldInstances;
 
     if (type == Type::Undo) {
-        for (int i = 0; i < notes.size() && i < oldNotes.size(); i++) {
-            auto &note = notes[i];
-            auto &oldNote = oldNotes[i];
-            int idx = action.partition->findExact(Note(BeatRange(note.range.from, note.range.to), note.key, note.velocity, note.tuning));
+        for (int i = 0; i < instances.size() && i < oldInstances.size(); i++) {
+            auto &instance = instances[i];
+            auto idx = action.partitions->instances()->findExact(instance);
             if (idx == -1) {
-                qDebug() << "UNDO: actionMoveNote error (idx == -1)";
+                qDebug() << "UNDO: actionMovePartitions error (idx == -1)";
                 continue;
             }
-            action.partition->set(idx, {
-                               {Audio::Beat(oldNote.range.from), Audio::Beat(oldNote.range.to)},
-                                Audio::Key(oldNote.key),
-                                Audio::Velocity(oldNote.velocity),
-                                Audio::Tuning(oldNote.tuning)});
+            auto &oldInstance = oldInstances[i];
+            action.partitions->instances()->set(idx, oldInstance);
         }
-        qDebug() << "UNDO: actionMoveNote success";
+        qDebug() << "UNDO: actionMovePartitions success";
         return true;
     }
 
+/*
     if (type == Type::Redo) {
         for (int i = 0; i < notes.size() && i < oldNotes.size(); i++) {
             auto &note = notes[i];
@@ -356,20 +352,20 @@ ActionRemovePartitions ActionsManager::makeActionRemovePartitions(PartitionsMode
     return action;
 }
 
-ActionMovePartitions ActionsManager::makeActionMovePartitions(PartitionsModel *partitionInstances,  const QVector<QVariantList> &args) const noexcept
+ActionMovePartitions ActionsManager::makeActionMovePartitions(PartitionsModel *partitions,  const QVector<QVariantList> &args) const noexcept
 {
     ActionMovePartitions action;
-    /*action.partition = partition;
-    action.node = partition->parentPartitions()->parentNode();
+    action.partitions = partitions;
+    action.node = partitions->parentNode();
 
     for (auto &elem : args) {
-        action.oldNotes.push_back(
-            Note({BeatRange(Audio::Beat(elem[0].toInt()), Audio::Beat(elem[2].toInt())), Audio::Key(elem[4].toInt()), Audio::Velocity(elem[6].toInt()), Audio::Tuning(elem[8].toInt())})
+        action.oldInstances.push_back(
+            PartitionInstance({quint32(elem[0].toInt()), Audio::Beat(elem[2].toInt()), Audio::BeatRange({Audio::Beat(elem[4].toInt()), Audio::Beat(elem[6].toInt())})})
         );
-        action.notes.push_back(
-            Note({BeatRange(Audio::Beat(elem[1].toInt()), Audio::Beat(elem[3].toInt())), Audio::Key(elem[5].toInt()), Audio::Velocity(elem[7].toInt()), Audio::Tuning(elem[9].toInt())})
+        action.instances.push_back(
+            PartitionInstance({quint32(elem[1].toInt()), Audio::Beat(elem[3].toInt()), Audio::BeatRange({Audio::Beat(elem[5].toInt()), Audio::Beat(elem[7].toInt())})})
         );
-    }*/
+    }
     return action;
 }
 

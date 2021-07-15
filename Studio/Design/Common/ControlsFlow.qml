@@ -26,39 +26,70 @@ Rectangle {
             height: 1
         }
 
-        Flow {
-            id: nodeControlsFlow
+        Item {
+
+            height: nodeControlsFlow.height
             width: parent.width
-            padding: 15
-            spacing: 20
 
-            Repeater {
-                id: nodeControlsRepeater
-                model: node ? node.plugin : null
+            RowLayout {
+                anchors.fill: parent
+                spacing: 0
 
-                delegate: Loader {
-                    id: delegateLoader
+                Item {
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: parent.width * 0.07
 
-                    source: {
-                        switch (controlType) {
-                        case PluginModel.Boolean:
-                            return "qrc:/Common/PluginControls/BooleanControl.qml"
-                        case PluginModel.Integer:
-                            return "qrc:/Common/PluginControls/IntegerControl.qml"
-                        case PluginModel.Floating:
-                            return "qrc:/Common/PluginControls/FloatingControl.qml"
-                        case PluginModel.Enum:
-                            return "qrc:/Common/PluginControls/EnumControl.qml"
-                        default:
-                            return ""
-                        }
-                    }
-
-                    onLoaded: {
-                        item.accentColor = node.color
+                    DefaultText {
+                        anchors.fill: parent
+                        text: node ? node.plugin.title : ""
+                        color: node ? node.color : "white"
+                        font.pixelSize: 30
+                        fontSizeMode: Text.Fit
                     }
                 }
+
+                Item {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+
+                    Flow {
+                        id: nodeControlsFlow
+                        width: parent.width
+                        padding: 15
+                        spacing: 20
+
+                        Repeater {
+                            id: nodeControlsRepeater
+                            model: node ? node.plugin : null
+
+                            delegate: Loader {
+                                id: delegateLoader
+
+                                source: {
+                                    switch (controlType) {
+                                    case PluginModel.Boolean:
+                                        return "qrc:/Common/PluginControls/BooleanControl.qml"
+                                    case PluginModel.Integer:
+                                        return "qrc:/Common/PluginControls/IntegerControl.qml"
+                                    case PluginModel.Floating:
+                                        return "qrc:/Common/PluginControls/FloatingControl.qml"
+                                    case PluginModel.Enum:
+                                        return "qrc:/Common/PluginControls/EnumControl.qml"
+                                    default:
+                                        return ""
+                                    }
+                                }
+
+                                onLoaded: {
+                                    item.accentColor = node.color
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
+
         }
     }
 }
