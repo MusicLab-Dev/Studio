@@ -35,7 +35,7 @@ Row {
                 fontSizeMode: Text.HorizontalFit
                 font.pointSize: 20
                 color: nodeDelegate.accentColor
-                text: "Controls"
+                text: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
                 wrapMode: Text.Wrap
             }
 

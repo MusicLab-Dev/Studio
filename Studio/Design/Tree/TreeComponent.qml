@@ -6,11 +6,12 @@ import "../Default"
 Rectangle {
     property alias mouseArea: dragHandler
     property alias text: text
-    property var pressedCallBack: null
 
-    anchors.centerIn: parent
+    property int filter: 0
+
+    anchors.horizontalCenter: parent.horizontalCenter
     width: parent.width * 0.7
-    height: parent.height * 0.5
+    height: width * 1.5
     radius: 15
 
     DefaultText {
@@ -22,21 +23,10 @@ Rectangle {
     MouseArea {
         id: dragHandler
         anchors.fill: parent
-        drag.target: dragHandler
-        drag.smoothed: true
-
-        drag.onActiveChanged: {
-            if (drag.active) {
-                console.log("ok")
-            } else {
-
-            }
-        }
+        hoverEnabled: true
 
         onPressed: {
-            close()
-            if (pressedCallBack != null)
-                pressedCallBack()
+            open(filter)
         }
     }
 
