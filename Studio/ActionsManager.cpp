@@ -20,10 +20,10 @@ ActionsManager::ActionsManager(QObject *parent)
 }
 
 bool ActionsManager::push(const Action action, const QVariant &data) noexcept
-{ 
+{
     if (_events.size() > _index + 1)
         _events.remove(_index, _events.size() - _index);
-    
+
     qDebug() << _events.size() << action << data;
 
     _events.push_back({action, data});
@@ -377,8 +377,10 @@ void ActionsManager::nodeDeleted(NodeModel *node) noexcept
         case Action::MoveNode:
             return false;
         default:
+        {
             const auto *it = reinterpret_cast<const ActionNodeBase *>(elem.data.data());
             return it->node == node || node->isAParent(it->node);
+        }
         }
     });
     if (it != _events.end())
@@ -396,10 +398,13 @@ void ActionsManager::nodePartitionDeleted(NodeModel *node, int partitionIndex) n
         case Action::RemovePartitions:
         case Action::MoveNotes:
         case Action::MovePartitions:
+        {
             const auto *it = reinterpret_cast<const ActionPartitionBase *>(elem.data.data());
             return it->node == node && it->partition == partition;
         }
-        return false;
+        default:
+            return false;
+        }
     });
 
     if (it != _events.end())

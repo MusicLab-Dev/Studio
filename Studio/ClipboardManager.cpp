@@ -3,8 +3,6 @@
  * @ Description: Clipboard Manager
  */
 
-#pragma once
-
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -44,10 +42,10 @@ QVector<Note> ClipboardManager::transformJsonInNotes(const QString &json) const 
     for (const auto &note : obj["notes"].toArray()) {
         auto noteObj = note.toObject();
         Note n {
-            Audio::BeatRange(Audio::Beat(noteObj["from"].toInt()), Audio::Beat(noteObj["to"].toInt())),
-            Audio::Key(noteObj["key"].toInt()),
-            Audio::Velocity(noteObj["velocity"].toInt()),
-            Audio::Tuning(noteObj["tuning"].toInt())
+            static_cast<BeatRange>(static_cast<Beat>(noteObj["from"].toInt()), static_cast<Beat>(noteObj["to"].toInt())),
+            static_cast<Key>(noteObj["key"].toInt()),
+            static_cast<Velocity>(noteObj["velocity"].toInt()),
+            static_cast<Tuning>(noteObj["tuning"].toInt())
         };
         notes.push_back(n);
     }

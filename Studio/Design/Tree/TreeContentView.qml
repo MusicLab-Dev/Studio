@@ -5,8 +5,6 @@ import "../Default"
 import "../Common"
 
 MouseArea {
-    property alias treeSurface: treeSurface
-
     function incrementXOffset(offset) {
         contentView.xOffset = Math.min(Math.max(contentView.xOffset + offset, contentView.xOffsetMin), contentView.xOffsetMax)
     }
@@ -23,6 +21,9 @@ MouseArea {
             modulesView.addNewPlannerWithMultipleNodes(nodes)
         }
     }
+
+    // Alias
+    property alias treeSurface: treeSurface
 
     // Horizontal scroll
     property real xOffset: 0
@@ -150,7 +151,9 @@ MouseArea {
             id: overviewMouse
             hoverEnabled: true
             anchors.fill: parent
-            onPressed: modulesView.addNewPlanner(app.project.master)
+            onPressed: {
+                modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
+            }
         }
 
         DefaultText {
@@ -159,7 +162,6 @@ MouseArea {
             font.pixelSize: 30
             text: qsTr("Overview")
             color: overviewMouse.containsMouse ? themeManager.foregroundColor : app.project.master.color
-
         }
 
     }
