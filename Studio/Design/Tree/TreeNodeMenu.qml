@@ -60,6 +60,16 @@ DefaultMenu {
         }
     }
 
+    Action {
+        id: focusAllChildrenAction
+        text: qsTr("Open all chilren in planner")
+
+        onTriggered: {
+            modulesView.addNewPlannerWithMultipleNodes(targetNode.getAllChildren())
+            closeMenu()
+        }
+    }
+
     DefaultMenuSeparator {
         enabled: focusAction.enabled || focusParentAction.enabled
     }
