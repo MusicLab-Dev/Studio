@@ -37,6 +37,12 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher)
     add(Qt::Key_I,          0, EventTarget::PlayPlaylist    );
     add(Qt::Key_O,          0, EventTarget::ReplayPlaylist  );
     add(Qt::Key_P,          0, EventTarget::StopPlaylist    );
+    add(Qt::Key_Z,   Qt::CTRL, EventTarget::Undo            );
+    add(Qt::Key_Y,   Qt::CTRL, EventTarget::Redo            );   
+    add(Qt::Key_C,          Qt::CTRL, EventTarget::Copy     );
+    add(Qt::Key_V,          Qt::CTRL, EventTarget::Paste    );
+    add(Qt::Key_X,          Qt::CTRL, EventTarget::Cut      );
+    add(Qt::Key_Delete,     0,        EventTarget::Erase    );
 }
 
 
@@ -151,6 +157,24 @@ bool KeyboardEventListener::sendSignals(const KeyDescriptor &desc, bool value)
         break;
     case EventTarget::OctaveDown:
         stopAllPlayingNotes();
+        break;
+    case EventTarget::Undo:
+        emit _dispatcher->undo(value);
+        break;
+    case EventTarget::Redo:
+        emit _dispatcher->redo(value);
+        break;
+    case EventTarget::Copy:
+        emit _dispatcher->copy(value);
+        break;
+    case EventTarget::Paste:
+        emit _dispatcher->paste(value);
+        break;
+    case EventTarget::Cut:
+        emit _dispatcher->cut(value);
+        break;
+    case EventTarget::Erase:
+        emit _dispatcher->erase(value);
         break;
     default:
         break;

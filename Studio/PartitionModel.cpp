@@ -7,6 +7,9 @@
 
 #include <QHash>
 #include <QQmlEngine>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 #include "Models.hpp"
 #include "PartitionsModel.hpp"
@@ -73,6 +76,7 @@ bool PartitionModel::add(const Note &note)
                 emit latestNoteChanged();
             }
             emit notesChanged();
+            qDebug() << "ok";
         }
     );
 }
@@ -152,14 +156,15 @@ void PartitionModel::set(const int idx, const Note &note)
 
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("PartitionModel::move: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+
     Scheduler::Get()->addEvent(
         [this, note, idx] {
             _data->assign(idx, note);
         },
         [this, idx, newIdx] {
             if (idx != newIdx) {
-                beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newIdx ? newIdx + 1 : 0);
-                endMoveRows();
+                beginResetModel(); // @todo fix all 'set'
+                endResetModel();
             } else {
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);
@@ -168,6 +173,25 @@ void PartitionModel::set(const int idx, const Note &note)
                     _latestNote = last;
                     emit latestNoteChanged();
                 }
+            }
+            emit notesChanged();
+        }
+    );
+}
+
+bool PartitionModel::addRangeProcess(const QVector<Note> notes)
+{
+    return Models::AddProtectedEvent(
+        [this, notes] {
+            _data->insert(notes.begin(), notes.end());
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+            const auto last = _data->back().range.to;
+            if (last > _latestNote) {
+                _latestNote = last;
+                emit latestNoteChanged();
             }
             emit notesChanged();
         }
@@ -184,21 +208,37 @@ bool PartitionModel::addRange(const QVariantList &noteList)
     notes.reserve(noteList.size());
     for (const auto &n : noteList)
         notes.append(n.value<Note>());
-    return Models::AddProtectedEvent(
-        [this, notes] {
-            _data->insert(notes.begin(), notes.end());
-        },
-        [this] {
-            beginResetModel();
-            endResetModel();
-            const auto last = _data->back().range.to;
-            if (last > _latestNote) {
-                _latestNote = last;
-                emit latestNoteChanged();
-            }
-            emit notesChanged();
-        }
-    );
+    return addRangeProcess(notes);
+}
+
+bool PartitionModel::addRange(const QVector<Note> &noteList)
+{
+    if (noteList.empty())
+        return true;
+    return addRangeProcess(noteList);
+}
+
+bool PartitionModel::addJsonRange(const QString &json, int scale)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
+    QJsonObject obj = doc.object();
+    QJsonArray arr = obj["Notes"].toArray();
+    if (arr.size() <= 0)
+        return true;
+
+    QVector<Note> notes;
+    notes.reserve(arr.size());
+
+    auto offset = 0;
+    QJsonObject note = arr[0].toObject();
+    while ((find(static_cast<Key>(note["key"].toInt()), static_cast<Beat>(note["from"].toInt()) + 1 + offset) != -1))
+        offset += scale;
+    for (int idx = 0; idx < arr.size(); ++idx) {
+        QJsonObject note = arr[idx].toObject();
+        BeatRange range { static_cast<Beat>(note["from"].toInt() + offset), static_cast<Beat>(note["to"].toInt() + offset) };
+        notes.push_back({ range, static_cast<Key>(note["key"].toInt()), static_cast<Velocity>(note["velocity"].toInt()), static_cast<Tuning>(note["tuning"].toInt()) });
+    }
+    return addRangeProcess(notes);
 }
 
 bool PartitionModel::removeRange(const QVariantList &indexes)

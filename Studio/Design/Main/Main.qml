@@ -9,10 +9,12 @@ import NodeModel 1.0
 import BoardManager 1.0
 import EventDispatcher 1.0
 import DevicesModel 1.0
+import ClipboardManager 1.0
 
 import "../Common"
 import "../Modules"
 import "../Workspaces"
+import "../Export"
 
 Window {
     function urlToPath(urlString) {
@@ -89,4 +91,15 @@ Window {
     GlobalTextField {
         id: globalTextField
     }
+
+    ClipboardManager {
+        id: clipboardManager
+    }
+
+    Export {
+        anchors.fill: parent
+
+        id: exportManager
+    }
+
 }

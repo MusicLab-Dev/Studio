@@ -46,6 +46,30 @@ DefaultMenu {
         }
     }
 
+    Action {
+        id: focusSelectionAction
+        enabled: contentView.treeSurface.selectionCount > 1
+        text: qsTr("Open selection in planner")
+
+        onTriggered: {
+            var nodes = []
+            for (var i = 0; i < contentView.treeSurface.selectionList.length; ++i)
+                nodes.push(contentView.treeSurface.selectionList[i].node)
+            modulesView.addNewPlannerWithMultipleNodes(nodes)
+            closeMenu()
+        }
+    }
+
+    Action {
+        id: focusAllChildrenAction
+        text: qsTr("Open all chilren in planner")
+
+        onTriggered: {
+            modulesView.addNewPlannerWithMultipleNodes(targetNode.getAllChildren())
+            closeMenu()
+        }
+    }
+
     DefaultMenuSeparator {
         enabled: focusAction.enabled || focusParentAction.enabled
     }

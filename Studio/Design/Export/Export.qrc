@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/Export">
+        <file>Export.qml</file>
+        <file>ExportDelegates/ExportComboBox.qml</file>
+    </qresource>
+</RCC>

@@ -15,6 +15,7 @@
 // #include "PluginTableModel.hpp"
 #include "Scheduler.hpp"
 #include "SettingsListModel.hpp"
+#include "ActionsManager.hpp"
 
 /** @brief Application class */
 class Application : public QObject
@@ -83,6 +84,8 @@ signals:
     /** @brief Notify that the project scheluder has changed */
     void schedulerChanged(void);
 
+    /** @brief Notify that the project scheluder has changed */
+    void actionsManagerChanged(void);
 
 private:
     /** @brief Setup the internal scheduler */

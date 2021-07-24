@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import "../Default"
 import "../Common"
 
 MouseArea {
@@ -20,6 +21,9 @@ MouseArea {
             modulesView.addNewPlannerWithMultipleNodes(nodes)
         }
     }
+
+    // Alias
+    property alias treeSurface: treeSurface
 
     // Horizontal scroll
     property real xOffset: 0
@@ -70,6 +74,7 @@ MouseArea {
             treeSurface.endSelection()
         else
             treeSurface.resetSelection()
+        treeComponentsPanel.close()
     }
 
     onXOffsetMinChanged: {
@@ -127,6 +132,62 @@ MouseArea {
         scale: contentView.zoomMin + contentView.zoom * contentView.zoomWidth
     }
 
+    Item {
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.top: parent.top
+        anchors.topMargin: 20 + ( treeControls.node != null ? treeControls.height : 0 )
+        width: parent.width * 0.1
+        height: parent.height * 0.1
+
+        Rectangle {
+            anchors.fill: parent
+            radius: 16
+            opacity: overviewMouse.containsMouse ? 1 : 0.6
+            color: overviewMouse.containsMouse ? app.project.master.color : themeManager.foregroundColor
+        }
+
+        MouseArea {
+            id: overviewMouse
+            hoverEnabled: true
+            anchors.fill: parent
+            onPressed: {
+                modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
+            }
+        }
+
+        DefaultText {
+            anchors.fill: parent
+            fontSizeMode: Text.Fit
+            font.pixelSize: 30
+            text: qsTr("Overview")
+            color: overviewMouse.containsMouse ? themeManager.foregroundColor : app.project.master.color
+        }
+
+    }
+
+    ControlsFlow {
+        PropertyAnimation {id: openAnim; target: treeControls; property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic}
+        function open(newNode) {
+            node = newNode
+            visible = true
+            openAnim.start()
+        }
+
+        function close() {
+            node = null
+            visible = false
+        }
+
+        id: treeControls
+        anchors.top: parent.top
+        width: parent.width
+        y: parent.height
+
+        node: null
+        visible: false
+    }
+
     ScrollBar {
         anchors.top: parent.top
         anchors.right: parent.right
@@ -157,5 +218,10 @@ MouseArea {
             if (Math.abs(position - contentView.xScrollIndicatorPos) > Number.EPSILON)
                 contentView.xOffset = contentView.xOffsetMin + contentView.xOffsetWidth * position / (1 - size)
         }
+    }
+
+    TreeComponentsPanel {
+        id: treeComponentsPanel
+        anchors.fill: parent
     }
 }

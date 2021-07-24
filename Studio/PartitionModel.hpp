@@ -124,6 +124,10 @@ public slots:
 
     /** @brief Add a group of notes */
     bool addRange(const QVariantList &notes);
+    bool addRange(const QVector<Note> &notes);
+
+    /** @brief Add a group of notes by a Json format */
+    bool addJsonRange(const QString &json, int scale);
 
     /** @brief Remove a group of notes */
     bool removeRange(const QVariantList &indexes);
@@ -145,4 +149,6 @@ private:
     Audio::Partition *_data { nullptr };
     QString _name {};
     Beat _latestNote { 0u };
+
+    bool addRangeProcess(const QVector<Note> notes);
 };

@@ -5,14 +5,13 @@ import QtQuick.Dialogs 1.3
 
 import '../Default'
 
-Rectangle {
+Item {
     property int selectedIndex: -1
     property string selectedPath: ""
     property bool selectedIndexIsDir: true
     property int hoveredIndex: -1
 
     id: workspaceBackground
-    color: "#001E36"
 
     GridView {
         anchors.fill: parent

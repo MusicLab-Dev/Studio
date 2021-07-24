@@ -201,6 +201,9 @@ public slots:
     /** @brief Get the index of a children node */
     int getChildIndex(NodeModel *node) const noexcept;
 
+    /** @brief Retreive a list of all children (close and far) */
+    QVariant getAllChildren(void) noexcept;
+
 signals:
     /** @brief Notify that muted property has changed */
     void mutedChanged(void);
@@ -242,4 +245,7 @@ private:
 
     /** @brief Create a node */
     [[nodiscard]] NodeModel *addParentNodeImpl(const QString &pluginPath, const bool addPartition, const QStringList &paths);
+
+    /** @brief Collect all children */
+    void getAllChildrenImpl(QVector<NodeModel *> &res) noexcept;
 };

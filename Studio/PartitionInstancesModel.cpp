@@ -201,6 +201,29 @@ bool PartitionInstancesModel::addRange(const QVariantList &instanceList)
     );
 }
 
+bool PartitionInstancesModel::addRealRange(const QVector<PartitionInstance> &instances)
+{
+    if (instances.empty())
+        return true;
+    else if (instances.size() == 1)
+        return add(instances.front());
+    return Models::AddProtectedEvent(
+        [this, instances] {
+            _data->insert(instances.begin(), instances.end());
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+            const auto last = _data->back().range.to;
+            if (last > _latestInstance) {
+                _latestInstance = last;
+                emit latestInstanceChanged();
+            }
+            emit instancesChanged();
+        }
+    );
+}
+
 bool PartitionInstancesModel::removeRange(const QVariantList &indexes)
 {
     if (indexes.empty())

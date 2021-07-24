@@ -1,16 +1,17 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
+import QtGraphicalEffects 1.15
 
 import "../Default"
 import "../Common"
 
-WorkspacesBackground {
+Item {
     function open(multiplePath, accepted, canceled) {
         acceptedCallback = accepted
         canceledCallback = canceled
         fileUrl = ""
         visible = true
+        openAnim.start()
     }
 
     function acceptAndClose() {
@@ -43,107 +44,140 @@ WorkspacesBackground {
     id: workspaceView
     visible: false
 
-    Text {
-        id: workspaceViewTitle
-        x: (workspaceForeground.width + (parent.width - workspaceForeground.width) / 2) - width / 2
-        y: height
-        color: "lightgrey"
-        font.pointSize: 34
-        text: lastSelectedWorkspace
+    ParallelAnimation {
+        id: openAnim
+        PropertyAnimation { target: workspaceWindow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
+        PropertyAnimation { target: shadow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
     }
 
-    TextRoundedButton {
-        visible: workspaceContentArea.selectedIndex !== -1 && !workspaceContentArea.selectedIndexIsDir
-        id: workspacesViewAcceptButtonText
-        x: workspacesViewCloseButtonText.x - width - height
-        y: height
-        text: "Accept"
-        hoverOnText: false
+    BackgroundPopup {
+        id: background
+        anchors.fill: parent
+        opacity: opacityMax
+    }
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
+    DropShadow {
+        id: shadow
+        anchors.fill: workspaceWindow
+        horizontalOffset: 4
+        verticalOffset: 4
+        radius: 8
+        samples: 17
+        color: "#80000000"
+        source: workspaceWindow
+    }
 
-            onEntered: { workspacesViewAcceptButtonText.buttonHovered = true }
+    ContentPopup {
+        id: workspaceWindow
 
-            onExited: { workspacesViewAcceptButtonText.buttonHovered = false }
+        Text {
+            id: workspaceViewTitle
+            x: (workspaceForeground.width + (parent.width - workspaceForeground.width) / 2) - width / 2
+            y: height
+            color: "lightgrey"
+            font.pointSize: 34
+            text: lastSelectedWorkspace
+        }
 
-            onReleased: {
-                workspaceView.fileUrl = workspaceContentArea.selectedPath
-                workspaceView.acceptAndClose()
+        TextRoundedButton {
+            visible: workspaceContentArea.selectedIndex !== -1 && !workspaceContentArea.selectedIndexIsDir
+            id: workspacesViewAcceptButtonText
+            x: workspacesViewCloseButtonText.x - width - height
+            y: height
+            text: "Accept"
+            hoverOnText: false
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+
+                onEntered: { workspacesViewAcceptButtonText.buttonHovered = true }
+
+                onExited: { workspacesViewAcceptButtonText.buttonHovered = false }
+
+                onReleased: {
+                    workspaceView.fileUrl = workspaceContentArea.selectedPath
+                    workspaceView.acceptAndClose()
+                }
             }
         }
-    }
 
-    TextRoundedButton {
-        id: workspacesViewBackButtonText
-        visible: workspaceForeground.parentDepth !== 0
-        width: workspacesViewCloseButtonText.width
-        height: workspacesViewCloseButtonText.height
-        x: workspaceForeground.width + height
-        y: height
-        text: "Back"
+        TextRoundedButton {
+            id: workspacesViewBackButtonText
+            visible: workspaceForeground.parentDepth !== 0
+            width: workspacesViewCloseButtonText.width
+            height: workspacesViewCloseButtonText.height
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.right: workspacesViewCloseButtonText.right
+            anchors.rightMargin: 30
+            text: "Back"
 
-        onReleased: {
-            workspaceForeground.actualPath += "/.."
-            workspaceForeground.parentDepth -= 1
+            onReleased: {
+                workspaceForeground.actualPath += "/.."
+                workspaceForeground.parentDepth -= 1
+            }
         }
-    }
 
-    TextRoundedButton {
-        id: workspacesViewCloseButtonText
-        x: workspaceView.width - width - height
-        y: height
-        text: "Close"
+        TextRoundedButton {
+            id: workspacesViewCloseButtonText
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.right: parent.right
+            anchors.rightMargin: 30
+            text: "Close"
 
-        onReleased: workspaceView.cancelAndClose()
-    }
-
-    WorkspacesForeground {
-        id: workspaceForeground
-        x: parent.parent.x
-        y: parent.parent.y
-        width: Math.max(parent.width * 0.2, 350)
-        height: parent.height
-
-        workspacesModel: app.settings.get("workspacePaths")
-    }
-
-    WorkspacesContentArea {
-        id: workspaceContentArea
-        anchors.top: workspaceViewTitle.bottom
-        anchors.left: workspaceForeground.right
-        anchors.right: workspaceView.right
-        anchors.bottom: workspaceView.bottom
-        anchors.margins: parent.width * 0.05
-    }
-
-
-    DefaultFileDialog {
-        readonly property bool cancelKeyboardEventsOnFocus: true
-
-        id: folderPicker
-        title: "Please choose a workspace folder"
-        folder: shortcuts.documents
-        selectFolder: true
-
-        onAccepted: {
-            var tmp = workspacesModel
-            if (tmp === undefined)
-                tmp = []
-            var path = folderPicker.fileUrl.toString()
-            var nameStartIdx = path.lastIndexOf('/')
-            var name = ""
-            if (nameStartIdx === path.length - 1)
-                nameStartIdx = path.lastIndexOf('/', 1)
-            if (nameStartIdx === -1)
-                name = path
-            else
-                name = path.substr(nameStartIdx + 1)
-            tmp.push([name, path])
-            app.settings.set("workspacePaths", tmp);
-            workspacesModel = app.settings.get("workspacePaths")
-            app.settings.saveValues()
+            onReleased: workspaceView.cancelAndClose()
         }
+
+        WorkspacesForeground {
+            id: workspaceForeground
+            anchors.top: parent.top
+            anchors.left: parent.left
+            width: Math.max(parent.width * 0.2, 350)
+            height: parent.height
+
+            workspacesModel: app.settings.get("workspacePaths")
+        }
+
+        WorkspacesContentArea {
+            id: workspaceContentArea
+            anchors.top: workspaceViewTitle.top
+            anchors.topMargin: parent.height * 0.15
+            anchors.left: workspaceForeground.right
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.margins: parent.width * 0.05
+        }
+
+
+        DefaultFileDialog {
+            readonly property bool cancelKeyboardEventsOnFocus: true
+
+            id: folderPicker
+            title: "Please choose a workspace folder"
+            folder: shortcuts.documents
+            selectFolder: true
+
+            onAccepted: {
+                var tmp = workspacesModel
+                if (tmp === undefined)
+                    tmp = []
+                var path = folderPicker.fileUrl.toString()
+                var nameStartIdx = path.lastIndexOf('/')
+                var name = ""
+                if (nameStartIdx === path.length - 1)
+                    nameStartIdx = path.lastIndexOf('/', 1)
+                if (nameStartIdx === -1)
+                    name = path
+                else
+                    name = path.substr(nameStartIdx + 1)
+                tmp.push([name, path])
+                app.settings.set("workspacePaths", tmp);
+                workspacesModel = app.settings.get("workspacePaths")
+                app.settings.saveValues()
+            }
+        }
+
     }
 }

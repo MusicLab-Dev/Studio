@@ -29,5 +29,8 @@
         <file>PluginControls/EnumControl.qml</file>
         <file>PluginControls/FloatingControl.qml</file>
         <file>PluginControls/IntegerControl.qml</file>
+        <file>ControlsFlow.qml</file>
+        <file>ContentPopup.qml</file>
+        <file>BackgroundPopup.qml</file>
     </qresource>
 </RCC>

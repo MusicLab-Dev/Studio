@@ -1,17 +1,20 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.15
 
 import "../Common"
 
 import NodeModel 1.0
 import PluginTableModel 1.0
 
-PluginsBackground {
+Item {
+
     function open(accepted, canceled) {
         acceptedCallback = accepted
         canceledCallback = canceled
         selectedPath = ""
         visible = true
+        openAnim.start()
     }
 
     function acceptAndClose(path) {
@@ -116,35 +119,67 @@ PluginsBackground {
     id: pluginsView
     visible: false
 
-    PluginsViewTitle {
-        id: pluginsViewTitle
-        x: (pluginsForeground.width + (parent.width - pluginsForeground.width) / 2) - width / 2
-        y: height
+    ParallelAnimation {
+        id: openAnim
+        PropertyAnimation { target: pluginsWindow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
+        PropertyAnimation { target: shadow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
+        PropertyAnimation { target: background; property: "opacity"; from: 0; to: background.opacityMax; duration: 100; }
     }
 
-    TextRoundedButton {
-        id: pluginsViewCloseButtonText
-        text: "Close"
-        x: pluginsView.width - width - height
-        y: height
-
-        onReleased: pluginsView.cancelAndClose()
+    BackgroundPopup {
+        anchors.fill: parent
+        id: background
     }
 
-    PluginsForeground {
-        id: pluginsForeground
-        x: parent.parent.x
-        y: parent.parent.y
-        width: Math.max(parent.width * 0.2, 350)
-        height: parent.height
+    DropShadow {
+        id: shadow
+        anchors.fill: pluginsWindow
+        horizontalOffset: 4
+        verticalOffset: 4
+        radius: 8
+        samples: 17
+        color: "#80000000"
+        source: pluginsWindow
     }
 
-    PluginsContentArea {
-        id: pluginsContentArea
-        anchors.top: pluginsViewTitle.bottom
-        anchors.left: pluginsForeground.right
-        anchors.right: pluginsView.right
-        anchors.bottom: pluginsView.bottom
-        anchors.margins: parent.width * 0.05
+    ContentPopup {
+        id: pluginsWindow
+
+        PluginsViewTitle {
+            id: pluginsViewTitle
+            x: (pluginsForeground.width + (parent.width - pluginsForeground.width) / 2) - width / 2
+            y: height
+        }
+
+        TextRoundedButton {
+            id: pluginsViewCloseButtonText
+            text: "Close"
+            anchors.top: pluginsWindow.top
+            anchors.topMargin: 30
+            anchors.right: pluginsWindow.right
+            anchors.rightMargin: 30
+
+            onReleased: pluginsView.cancelAndClose()
+        }
+
+        PluginsForeground {
+            id: pluginsForeground
+            anchors.left: pluginsWindow.left
+            anchors.top: pluginsWindow.top
+            width: Math.max(parent.width * 0.2, 350)
+            height: pluginsWindow.height
+        }
+
+        PluginsContentArea {
+            id: pluginsContentArea
+            anchors.top: pluginsViewTitle.top
+            anchors.topMargin: pluginsViewTitle.height * 1.6
+            anchors.left: pluginsForeground.right
+            anchors.right: pluginsWindow.right
+            anchors.bottom: pluginsWindow.bottom
+            anchors.margins: pluginsWindow.width * 0.05
+        }
     }
+
+
 }

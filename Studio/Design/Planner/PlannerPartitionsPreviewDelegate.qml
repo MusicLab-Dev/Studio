@@ -58,7 +58,8 @@ MouseArea {
         anchors.fill: parent
         color: themeManager.backgroundColor
         border.color: previewDelegate.isSelected ? partitionsPreview.nodeColor : partitionsPreview.nodeAccentColor
-        border.width: previewDelegate.isSelected || previewDelegate.containsMouse ? 2 : 0
+        border.width: previewDelegate.isSelected || previewDelegate.containsMouse ? 1 : 0
+        radius: 12
     }
 
     PartitionPreview {
@@ -81,7 +82,8 @@ MouseArea {
         anchors.leftMargin: 10 + playbackButton.width
         anchors.right: playbackButton.left
         fontSizeMode: Text.Fit
-        font.pointSize: 38
+        font.pointSize: 12
+        opacity: 0.8
         wrapMode: Text.Wrap
         text: previewDelegate.partition ? previewDelegate.partition.name : "ERROR"
         color: previewDelegate.containsPress ? partitionsPreview.nodePressedColor : partitionsPreview.nodeColor

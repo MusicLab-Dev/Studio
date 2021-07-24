@@ -85,10 +85,11 @@ public slots:
     /** @brief Set instance at index */
     void set(const int index, const PartitionInstance &instance);
 
-    /** @brief Add a group of notes */
-    bool addRange(const QVariantList &notes);
+    /** @brief Add a group of instances */
+    bool addRange(const QVariantList &instances);
+    bool addRealRange(const QVector<PartitionInstance> &instances);
 
-    /** @brief Remove a group of notes */
+    /** @brief Remove a group of instances */
     bool removeRange(const QVariantList &indexes);
 
     /** @brief Select all notes within a specified range (returns indexes) */

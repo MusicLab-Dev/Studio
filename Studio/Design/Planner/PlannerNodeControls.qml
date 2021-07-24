@@ -35,7 +35,7 @@ Row {
                 fontSizeMode: Text.HorizontalFit
                 font.pointSize: 20
                 color: nodeDelegate.accentColor
-                text: "Controls"
+                text: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
                 wrapMode: Text.Wrap
             }
 
@@ -71,16 +71,22 @@ Row {
         }
     }
 
-    Rectangle {
-        id: nodeControlsData
+    Item {
+
         width: contentView.rowDataWidth
         height: nodeControlsFlow.height
-        color: themeManager.foregroundColor
-        opacity: 0.75
+
+        Rectangle {
+            id: nodeControlsData
+            anchors.fill: parent
+            color: themeManager.backgroundColor
+            opacity: 0.9
+        }
 
         Flow {
             id: nodeControlsFlow
-            width: contentView.rowDataWidth
+            anchors.centerIn: parent
+            width: parent.width * 0.995
             padding: 5
             spacing: 20
 
@@ -144,5 +150,7 @@ Row {
                 }
             }
         }
+
     }
+
 }
