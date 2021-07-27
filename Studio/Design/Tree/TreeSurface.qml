@@ -42,11 +42,8 @@ Item {
         for (var i = 0; i < selectionList.length; ++i)
             selectionList[i].isSelected = false
         selectionList = []
+        selectionCount = 0
         treeControls.close()
-    }
-
-    function selectAll() {
-
     }
 
     signal targetDropped
@@ -64,6 +61,7 @@ Item {
 
     // List of selected TreeNodeDelegate
     property var selectionList: []
+    property int selectionCount: 0
     property NodeModel last: null
 
     id: treeSurface

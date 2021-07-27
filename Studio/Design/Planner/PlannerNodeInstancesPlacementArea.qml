@@ -82,13 +82,13 @@ PlacementArea {
         if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
             cacheMove = []
             for (var i = 0; targets.length; i++) {
-                var instance = nodeInstances.instances.getInstance(i)
+                var instance = nodeInstances.instances.getInstance(targets[i])
                 cacheMove.push([instance.partitionIndex, instance.offset, instance.range.from, instance.range.to])
             }
         } else {
             var instances = []
             for (i = 0; targets.length; i++) {
-                instance = nodeInstances.instances.getInstance(i)
+                instance = nodeInstances.instances.getInstance(targets[i])
                 instances.push([instance.partitionIndex, instance.offset, instance.range.from, instance.range.to])
             }
             actionsManager.push(ActionsManager.RemovePartitions, actionsManager.makeActionRemovePartitions(

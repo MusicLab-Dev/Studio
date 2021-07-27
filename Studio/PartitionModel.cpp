@@ -231,12 +231,12 @@ bool PartitionModel::addJsonRange(const QString &json, int scale)
 
     auto offset = 0;
     QJsonObject note = arr[0].toObject();
-    while ((find(note["key"].toInt(), note["from"].toInt() + 1 + offset) != -1))
+    while ((find(static_cast<Key>(note["key"].toInt()), static_cast<Beat>(note["from"].toInt()) + 1 + offset) != -1))
         offset += scale;
     for (int idx = 0; idx < arr.size(); ++idx) {
         QJsonObject note = arr[idx].toObject();
-        BeatRange range { static_cast<Audio::Beat>(note["from"].toInt() + offset), static_cast<Audio::Beat>(note["to"].toInt() + offset) };
-        notes.push_back({ range, static_cast<Audio::Key>(note["key"].toInt()), static_cast<Audio::Velocity>(note["velocity"].toInt()), static_cast<Audio::Tuning>(note["tuning"].toInt()) });
+        BeatRange range { static_cast<Beat>(note["from"].toInt() + offset), static_cast<Beat>(note["to"].toInt() + offset) };
+        notes.push_back({ range, static_cast<Key>(note["key"].toInt()), static_cast<Velocity>(note["velocity"].toInt()), static_cast<Tuning>(note["tuning"].toInt()) });
     }
     return addRangeProcess(notes);
 }

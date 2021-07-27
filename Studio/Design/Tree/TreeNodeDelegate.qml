@@ -93,11 +93,13 @@ Column {
                     var index = treeSurface.selectionList.indexOf(nodeDelegate)
                     if (index === -1) {
                         treeSurface.selectionList.push(nodeDelegate)
+                        ++treeSurface.selectionCount
                         nodeDelegate.isSelected = true
                         last = nodeDelegate.node
                         treeControls.open(last)
                     } else if (isAlt) {
                         treeSurface.selectionList.splice(index, 1)
+                        --treeSurface.selectionCount
                         nodeDelegate.isSelected = false
                     }
                 }
@@ -178,6 +180,7 @@ Column {
                     if (from.x <= min.x && from.y <= min.y && to.x >= max.x && to.y >= max.y) {
                         nodeDelegate.isSelected = true
                         treeSurface.selectionList.push(nodeDelegate)
+                        ++treeSurface.selectionCount
                     }
                 }
             }
