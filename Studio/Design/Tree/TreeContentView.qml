@@ -131,6 +131,12 @@ MouseArea {
         scale: contentView.zoomMin + contentView.zoom * contentView.zoomWidth
     }
 
+    TreeComponentsPanel {
+        id: treeComponentsPanel
+        anchors.fill: parent
+        anchors.topMargin: ( treeControls.node != null ? treeControls.height : 0 )
+    }
+
     Item {
         anchors.left: parent.left
         anchors.leftMargin: 20
@@ -216,10 +222,5 @@ MouseArea {
             if (Math.abs(position - contentView.xScrollIndicatorPos) > Number.EPSILON)
                 contentView.xOffset = contentView.xOffsetMin + contentView.xOffsetWidth * position / (1 - size)
         }
-    }
-
-    TreeComponentsPanel {
-        id: treeComponentsPanel
-        anchors.fill: parent
     }
 }

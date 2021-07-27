@@ -8,6 +8,7 @@
         <file>TreeNodeDelegate.qml</file>
         <file>TreeNodeMenu.qml</file>
         <file>TreeComponentsPanel.qml</file>
-        <file>TreeComponent.qml</file>
+        <file>TreeComponentCategory.qml</file>
+        <file>TreeComponentDelegate.qml</file>
     </qresource>
 </RCC>

@@ -105,10 +105,9 @@ Item {
 
     Item {
 
-        property real widthContentRatio: 0.5
-        property real rad: 32
-        property real xClose: parent.width - panelCategory.width + rad
-        property real xOpen: parent.width - width + rad
+        property real widthContentRatio: 0.6
+        property real xClose: parent.width - panelCategory.width
+        property real xOpen: parent.width - width
 
         id: panel
         anchors.verticalCenter: parent.verticalCenter
@@ -119,44 +118,34 @@ Item {
         Item {
             id: panelCategory
             anchors.left: parent.left
-            anchors.top: parent.top
+            anchors.verticalCenter: parent.verticalCenter
             width: parent.width - parent.width * panel.widthContentRatio
             height: parent.height
 
-            Rectangle {
-                id: panelCategoryBackground
-                anchors.fill: parent
-                radius: panel.rad
-                color: Qt.lighter(themeManager.foregroundColor, 1.1)
-                opacity: 0.8
-            }
 
-            Item {
-                width: parent.width - panel.rad
+            Column {
                 height: parent.height
+                width: parent.width
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: parent.height * 0.005
 
-                Column {
-                    height: parent.height * 0.95
-                    width: parent.width
-                    anchors.centerIn: parent
-                    spacing: parent.height * 0.05
-
-                    TreeComponent {
-                        text.text: "Mixer"
-                        filter: TreeComponentsPanel.Type.Mixer
-                    }
-
-                    TreeComponent {
-                        text.text: "Sources"
-                        filter: TreeComponentsPanel.Type.Mixer
-                    }
-
-                    TreeComponent {
-                        text.text: "Effects"
-                        filter: TreeComponentsPanel.Type.Mixer
-                    }
-
+                TreeComponentCategory {
+                    text.text: "Mixer"
+                    filter: TreeComponentsPanel.Type.Mixer
                 }
+
+                TreeComponentCategory {
+                    text.text: "Sources"
+                    filter: TreeComponentsPanel.Type.Sources
+                }
+
+                TreeComponentCategory {
+                    text.text: "Effects"
+                    filter: TreeComponentsPanel.Type.Effects
+                }
+
+
             }
         }
 
@@ -168,8 +157,6 @@ Item {
             anchors.top: parent.top
             width: parent.width * panel.widthContentRatio
             height: parent.height
-
-            anchors.leftMargin: -panel.rad
 
             Rectangle {
                 id: panelContentBackground
@@ -187,39 +174,7 @@ Item {
                 model: pluginTable
                 clip: true
 
-                delegate: Rectangle {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: parent.width * 0.7
-                    height: width
-                    color: "transparent"
-                    border.width: 2
-                    border.color: mouseArea.containsMouse ? themeManager.accentColor : "white"
-                    radius: 12
-
-                    Image {
-                        id: image
-                        anchors.centerIn: parent
-                        width: parent.width * 0.7
-                        height: width
-                        source: factoryName ? "qrc:/Assets/Plugins/" + factoryName + ".png" : "qrc:/Assets/Plugins/Default.png"
-                    }
-
-                    Glow {
-                        anchors.fill: image
-                        radius: 2
-                        opacity: 0.3
-                        samples: 17
-                        color: mouseArea.containsMouse ? "white" : "transparent"
-                        source: image
-                    }
-
-                    MouseArea {
-                        id: mouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-
-
-                    }
+                delegate: TreeComponentDelegate {
                 }
             }
         }

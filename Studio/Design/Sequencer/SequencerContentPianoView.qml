@@ -129,6 +129,7 @@ Item {
                 Text {
                     anchors.verticalCenter: key.isInMiddleOfHashKeys ? parent.verticalCenter : key.isDownHashKey ? parent.TopRight : parent.verticalCenter
                     anchors.right: parent.right
+                    anchors.rightMargin: 5
                     text: pianoView.keyNames[key.keyOctaveIndex] + (key.currentOctave - 1) // Minus one to display the standard A4 middle key
                     color: !key.isHashKey ? "#7B7B7B" : "#E7E7E7"
                     z: 1
@@ -141,9 +142,10 @@ Item {
         y: totalHeight - height - (notesConnections.targetOctave - octaveOffset) * contentView.rowHeight * keysPerOctave
         width: contentView.rowHeaderWidth
         height: contentView.rowHeight * keysPerOctave
-        color: "transparent"
-        border.color: themeManager.accentColor
-        border.width: 2
+        color: themeManager.accentColor
+        opacity: 0.1
+        //border.color: themeManager.accentColor
+        //border.width: 1
         z: 10
     }
 
