@@ -63,7 +63,7 @@ DefaultMenu {
         }
 
         onTriggered: {
-            globalTextField.open(targetPartition.name, setName, function () { closeMenu() });
+            globalTextField.open(targetPartition.name, setName, function () { closeMenu() }, false, null);
         }
     }
 

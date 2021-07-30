@@ -18,7 +18,7 @@ Rectangle {
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
 
-        height: parent.height * 0.7
+        height: parent.height * 0.75
         width: parent.width * 0.4
     }
 }

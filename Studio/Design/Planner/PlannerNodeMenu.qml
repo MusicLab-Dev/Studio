@@ -74,7 +74,7 @@ DefaultMenu {
         }
 
         onTriggered: {
-            globalTextField.open(targetNode.name, setName, function () { closeMenu() })
+            globalTextField.open(targetNode.name, setName, function () { closeMenu() }, false, null)
         }
     }
 

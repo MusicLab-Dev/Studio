@@ -185,6 +185,7 @@ bool ActionsManager::actionAddPartitions(const Type type, const ActionAddPartiti
             int idx = action.partitions->instances()->findExact(instance);
             if (idx == -1) {
                 qDebug() << "UNDO: actionAddPartitions error (idx == -1)";
+                qDebug() << instance.range.from << instance.range.to;
                 continue;
             }
             indexes.push_back(idx);
@@ -234,6 +235,7 @@ bool ActionsManager::actionMovePartitions(const Type type, const ActionMoveParti
             auto idx = action.partitions->instances()->findExact(instance);
             if (idx == -1) {
                 qDebug() << "UNDO: actionMovePartitions error (idx == -1)";
+                qDebug() << instance.range.from << instance.range.to;
                 continue;
             }
             auto &oldInstance = oldInstances[i];
@@ -301,6 +303,16 @@ ActionRemoveNotes ActionsManager::makeActionRemoveNotes(PartitionModel *partitio
             Note({BeatRange(Audio::Beat(elem[0].toInt()), Audio::Beat(elem[1].toInt())), Audio::Key(elem[2].toInt()), Audio::Velocity(elem[3].toInt()), Audio::Tuning(elem[4].toInt())})
         );
     }
+    return action;
+}
+
+
+ActionRemoveNotes ActionsManager::makeActionRemoveRealNotes(PartitionModel *partition, const QVector<Note> &args) const noexcept
+{
+    ActionRemoveNotes action;
+    action.partition = partition;
+    action.node = partition->parentPartitions()->parentNode();
+    action.notes = args;
     return action;
 }
 

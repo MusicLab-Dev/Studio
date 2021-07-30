@@ -28,13 +28,13 @@ Item {
             border.color: nodeDelegate.accentColor
             border.width: 2
 
-            Rectangle {
+            /*Rectangle {
                 x: Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
                 y: parent.height / 8
                 width: 1
                 height: contentView.rowHeight * 3 / 4
                 color: nodeDelegate.accentColor
-            }
+            }*/
 
             Rectangle {
                 x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)

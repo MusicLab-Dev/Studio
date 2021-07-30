@@ -150,6 +150,22 @@ const Note &PartitionModel::get(const int idx) const noexcept_ndebug
     return reinterpret_cast<const Note &>(_data->at(idx));
 }
 
+int PartitionModel::getDistance(const QVector<Note> &notes) const noexcept
+{
+    if (notes.isEmpty())
+        return -1;
+    int from = notes[0].range.from;
+    int to = notes[0].range.to;
+
+    for (Note note : notes) {
+        if (note.range.from < from)
+            from = note.range.from;
+        if (note.range.to > to)
+            to = note.range.to;
+    }
+    return to - from;
+}
+
 void PartitionModel::set(const int idx, const Note &note)
 {
     auto newIdx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(note)));

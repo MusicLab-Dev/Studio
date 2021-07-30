@@ -1,6 +1,7 @@
 import QtQuick 2.15
 
 import AudioAPI 1.0
+import CursorManager 1.0
 
 /*
     User of this class must implement the following "override" functions:
@@ -207,6 +208,7 @@ MouseArea {
 
     // Move
     function beginMove(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) {
+        cursorManager.set(CursorManager.Type.Move)
         attachPreview(targetBeatRange, mouseKey)
         previewMouseBeatPrecisionOffset = mouseBeatPrecision - targetBeatRange.from
         if (targetIsPartOfSelection) {
@@ -236,6 +238,7 @@ MouseArea {
         }
     }
     function endMove(mouseBeatPrecision, mouseKey) {
+        cursorManager.set(CursorManager.Type.Normal)
         if (targetIsPartOfSelection) {
             selectionInsertCache = constructSelectionTargets()
             addTargets(selectionInsertCache)
@@ -246,6 +249,7 @@ MouseArea {
 
     // Remove
     function beginRemove(mouseBeatPrecision, mouseKey) {
+        cursorManager.set(CursorManager.Type.Erase);
         var targetIndex = findTarget(mouseBeatPrecision, mouseKey)
         if (targetIndex !== -1)
             removeTarget(targetIndex)
@@ -255,7 +259,9 @@ MouseArea {
         if (targetIndex !== -1)
             removeTarget(targetIndex)
     }
-    function endRemove(mouseBeatPrecision, mouseKey) {}
+    function endRemove(mouseBeatPrecision, mouseKey) {
+        cursorManager.set(CursorManager.Type.Normal);
+    }
 
     // Resize Left
     function beginResizeLeft(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) { beginMove(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) }
@@ -273,7 +279,7 @@ MouseArea {
     }
 
     // Resize Right
-    function beginResizeRight(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) { beginMove(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) }
+    function beginResizeRight(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) { cursorManager.set(CursorManager.Type.ResizeHorizontal); beginMove(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) }
     function updateResizeRight(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getResizeRightBeatPrecision(mouseBeatPrecision)
         if (previewRange.to === placementBeatPrecision ||
@@ -282,6 +288,7 @@ MouseArea {
         updatePreview(AudioAPI.beatRange(previewRange.from, placementBeatPrecision), previewKey)
     }
     function endResizeRight(mouseBeatPrecision, mouseKey) {
+        cursorManager.set(CursorManager.Type.Normal);
         // Copy resized width
         contentView.placementBeatPrecisionLastWidth = previewRange.to - previewRange.from
         endMove(mouseBeatPrecision, mouseKey)

@@ -191,6 +191,39 @@ PlacementArea {
                     return
                 var notes = clipboardManager.transformJsonInNotes(clipboardManager.paste())
                 placementArea.selectionInsertCache = notes
+
+                var deltaFrom = 2147483647
+                var deltaTo = 0
+                for (var i = 0; i < notes.length; i++) {
+                    if (deltaFrom > notes[i].range.from)
+                        deltaFrom = notes[i].range.from
+                    if (deltaTo < notes[i].range.to)
+                        deltaTo = notes[i].range.to
+                    var noteDelta = notes[i].range.to - notes[i].range.from
+                    while (true) {
+                        console.debug("from")
+                        var noteOverlapIdx = partition.find(notes[i].key, notes[i].range.from + noteDelta + 1)
+                        if (noteOverlapIdx !== -1) {
+                            var noteOverlap = partition.getNote(noteOverlapIdx)
+                            var distance = partition.getDistance([noteOverlap])
+                            if (deltaFrom > noteOverlap.range.from)
+                                deltaFrom = noteOverlap.range.from
+                            if (deltaTo < noteOverlap.range.to)
+                                deltaTo = noteOverlap.range.to
+                            noteDelta += distance
+                            continue
+                        }
+                        break
+                    }
+                    console.debug("end", deltaFrom, deltaTo)
+
+                }
+                for (i = 0; i < notes.length; i++) {
+                    var note = notes[i]
+                    note.add(deltaTo - deltaFrom)
+                    notes[i] = note
+                }
+
                 partition.addRange(notes)
                 actionsManager.push(ActionsManager.AddNotes, actionsManager.makeActionAddRealNotes(partition, notes))
             }
@@ -201,15 +234,20 @@ PlacementArea {
                 var list = []
                 for (var i = 0; i < selectionListModel.length; i++)
                     list.push(partition.getNote(selectionListModel[i]))
+                actionsManager.push(ActionsManager.RemoveNotes, actionsManager.makeActionRemoveRealNotes(partition, list))
                 clipboardManager.copy(clipboardManager.transformNotesInJson(list))
                 partition.removeRange(selectionListModel)
                 resetSelection()
             }
 
             function onErase(pressed) {
-                if (!pressed)
+                if (!pressed || selectionListModel == null)
                     return
-                //actionsManager.push(ActionsManager.RemoveNotes, actionsManager.makeActionRemoveNotes(partition, selectionListModel))
+                var list = []
+                console.debug(selectionListModel.length)
+                for (var i = 0; i < selectionListModel.length; i++)
+                    list.push(partition.getNote(selectionListModel[i]))
+                actionsManager.push(ActionsManager.RemoveNotes, actionsManager.makeActionRemoveRealNotes(partition, list))
                 partition.removeRange(selectionListModel)
                 resetSelection()
             }

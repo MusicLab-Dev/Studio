@@ -128,7 +128,7 @@ Item {
                 width: parent.width
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: parent.height * 0.005
+                //spacing: parent.height * 0.005
 
                 TreeComponentCategory {
                     text.text: "Mixer"
@@ -169,13 +169,26 @@ Item {
                 anchors.centerIn: parent
                 width: parent.width
                 height: parent.height * 0.95
-
-                spacing: 20
-                model: pluginTable
                 clip: true
+                spacing: 20
+                model: PluginTableModelProxy {
+                    id: pluginTableProxy
+                    sourceModel: pluginTable
+                    tagsFilter: {
+                        if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Sources)
+                            return PluginTableModel.Tags.Synth | PluginTableModel.Tags.Sampler | PluginTableModel.Tags.Piano
+                        if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Effects)
+                            return PluginTableModel.Tags.Analyzer | PluginTableModel.Tags.Delay | PluginTableModel.Tags.Distortion |
+                                   PluginTableModel.Tags.EQ | PluginTableModel.Tags.Filter | PluginTableModel.Tags.Distortion
+                        if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Mixer)
+                            return PluginTableModel.Tags.Mastering
+                        return 0;
 
-                delegate: TreeComponentDelegate {
+                    }
+                    //nameFilter: pluginsForeground.currentSearchText
                 }
+
+                delegate: TreeComponentDelegate {}
             }
         }
 
