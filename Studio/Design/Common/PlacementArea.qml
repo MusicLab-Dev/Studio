@@ -3,12 +3,19 @@ import QtQuick 2.15
 import AudioAPI 1.0
 import CursorManager 1.0
 
-/*
-    User of this class must implement the following "override" functions:
+/*  User of this class must implement the following "override" functions:
 
-    bool addTarget(targetBeatRange, targetKey) {}
-    bool removeTarget(targetIndex) {}
-    BeatRange getTargetBeatRange(targetIndex) {}
+    bool addTarget(BeatRange targetBeatRange, Key targetKey)
+    bool removeTarget(int targetIndex)
+    int findTarget(Beat targetBeatPrecision, Key targetKey)
+    int findExactTarget(var target)
+    int findOverlapTarget(BeatRange targetBeatRange, Key targetKey)
+    BeatRange getTargetBeatRange(int targetIndex)
+    Key getTargetKey(int targetIndex)
+    var constructTarget(BeatRange targetRange, Key targetKey)
+    vector<int> addTargets(vector<var> targets)
+    bool removeTargets(vector<int> targets)
+    vector<int> selectTargets(BeatRange targetBeatRange, Key targetKeyFrom, Key targetKeyTo)
 */
 MouseArea {
     enum Mode {
@@ -298,19 +305,31 @@ MouseArea {
     function beginBrush(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getPlacementBeatPrecision(mouseBeatPrecision)
         var range = AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + contentView.placementBeatPrecisionLastWidth)
-        addTarget(range, mouseKey)
         brushLastBeatRange = AudioAPI.beatRange(range.from, range.to + contentView.placementBeatPrecisionBrushStep)
+        brushKey = mouseKey
+        addTarget(range, brushKey)
+        brushInserted(brushKey)
     }
     function updateBrush(mouseBeatPrecision, mouseKey) {
         var placementBeatPrecision = getPlacementBeatPrecision(mouseBeatPrecision)
-        if (mouseBeatPrecision < brushLastBeatRange.from || mouseBeatPrecision > brushLastBeatRange.to) {
-            var range = AudioAPI.beatRange(brushLastBeatRange.to, brushLastBeatRange.to + contentView.placementBeatPrecisionLastWidth)
-            if (findOverlapTarget(AudioAPI.beatRange(range.from + 1, range.to - 1), mouseKey) === -1)
-                addTarget(range, mouseKey)
+        var isLower = mouseBeatPrecision < brushLastBeatRange.from
+        var isHigher = mouseBeatPrecision > brushLastBeatRange.to
+        if (isLower || isHigher) {
+            var range = undefined
+            if (isHigher)
+                range = AudioAPI.beatRange(brushLastBeatRange.to, brushLastBeatRange.to + contentView.placementBeatPrecisionLastWidth)
+            else
+                range = AudioAPI.beatRange(brushLastBeatRange.from - contentView.placementBeatPrecisionLastWidth, brushLastBeatRange.from)
+            if (findOverlapTarget(AudioAPI.beatRange(range.from + 1, range.to - 1), brushKey) === -1) {
+                addTarget(range, brushKey)
+                brushInserted(brushKey)
+            }
             brushLastBeatRange = AudioAPI.beatRange(range.from, range.to + contentView.placementBeatPrecisionBrushStep)
         }
     }
-    function endBrush(mouseBeatPrecision, mouseKey) {}
+    function endBrush(mouseBeatPrecision, mouseKey) {
+        brushEnded()
+    }
 
     // Select
     function beginSelect(mouseBeatPrecision, mouseKey) {
@@ -371,6 +390,8 @@ MouseArea {
     signal attachTargetPreview()
     signal moveTargetPreview(int offsetBeatPrecision, int offsetKey)
     signal detachTargetPreview()
+    signal brushInserted(int insertedKey)
+    signal brushEnded()
 
     // General
     property int mode: PlacementArea.Mode.None
@@ -385,6 +406,7 @@ MouseArea {
 
     // Brush
     property var brushLastBeatRange: AudioAPI.beatRange(0, 0)
+    property int brushKey: 0
 
     // Selection overlay
     property int selectionBeatPrecisionFrom: 0
@@ -429,6 +451,7 @@ MouseArea {
         previewMouseBeatPrecisionOffset = 0
         targetIsPartOfSelection = false
         brushLastBeatRange = AudioAPI.beatRange(0, 0)
+        brushKey = 0
         // Selection
         if (isSelection) {
             resetSelection()

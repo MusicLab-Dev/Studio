@@ -12,7 +12,7 @@ PlacementArea {
 
     function addTarget(targetBeatRange, targetKey) {
         if (onTheFlyKey !== -1 && targetKey !== onTheFlyKey)
-            removeOnTheFly(onTheFlyKey)
+            removeOnTheFly()
         if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
             var cacheNote = cacheMove[0]
             actionsManager.push(ActionsManager.MoveNotes, actionsManager.makeActionMoveNotes(
@@ -109,7 +109,7 @@ PlacementArea {
     // On the fly
     function addOnTheFly(targetKey) {
         if (onTheFlyKey !== -1 && onTheFlyKey !== targetKey)
-            removeOnTheFly(onTheFlyKey)
+            removeOnTheFly()
         onTheFlyKey = targetKey
         sequencerView.node.partitions.addOnTheFly(
             AudioAPI.noteEvent(
@@ -122,11 +122,11 @@ PlacementArea {
             sequencerView.partitionIndex
         )
     }
-    function removeOnTheFly(targetKey) {
+    function removeOnTheFly() {
         sequencerView.node.partitions.addOnTheFly(
             AudioAPI.noteEvent(
                 NoteEvent.Off,
-                targetKey,
+                onTheFlyKey,
                 0,
                 0
             ),
@@ -155,13 +155,15 @@ PlacementArea {
     }
 
     onAttachTargetPreview: addOnTheFly(previewKey)
-
     onMoveTargetPreview: {
         if (offsetKey !== 0)
             addOnTheFly(previewKey)
     }
+    onDetachTargetPreview: removeOnTheFly()
 
-    onDetachTargetPreview: removeOnTheFly(onTheFlyKey)
+    onBrushInserted: addOnTheFly(insertedKey)
+    onBrushEnded: removeOnTheFly()
+
 
     Connections {
         target: partition

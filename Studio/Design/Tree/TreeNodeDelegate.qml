@@ -3,6 +3,7 @@ import QtQml 2.15
 
 import NodeModel 1.0
 import PluginModel 1.0
+import PluginTableModel 1.0
 
 import "../Default"
 
@@ -151,7 +152,7 @@ Column {
                 function onDragPointChanged() {
                     var hover = nodeInstanceBackground.contains(nodeInstanceBackground.mapFromItem(treeSurface, treeSurface.dragPoint))
                     if (nodeInstanceBackground.containsDrag !== hover) {
-                        if (hover && !nodeDelegate.node.isAParent(treeSurface.dragTarget))
+                        if (!treeSurface.dragTarget || (hover && !nodeDelegate.node.isAParent(treeSurface.dragTarget)))
                             nodeInstanceBackground.validDrag = true
                         else
                             nodeInstanceBackground.validDrag = false
@@ -166,6 +167,36 @@ Column {
                             nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
                         else
                             nodeDelegate.node.moveToParent(treeSurface.dragTarget)
+                    }
+                }
+
+                function onTargetPluginDropped() {
+                    if (!nodeInstanceBackground.containsDrag)
+                        return
+                    nodeInstanceBackground.containsDrag = false
+                    var pluginPath = treeSurface.dragTargetPlugin
+                    var externalInputType = pluginTable.getExternalInputType(pluginPath)
+                    if (externalInputType === PluginTableModel.None) {
+                        // Add the node
+                        if (app.currentPlayer)
+                            app.currentPlayer.pause()
+                        nodeDelegate.node.add(pluginPath)
+                    } else {
+                        modulesView.workspacesView.open(externalInputType === PluginTableModel.Multiple,
+                            // On external inputs selection accepted
+                            function() {
+                                // Format the external input list
+                                var list = []
+                                for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
+                                    list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
+                                // Add the node with a partition and external inputs
+                                if (app.currentPlayer)
+                                    app.currentPlayer.pause()
+                                nodeDelegate.node.addExternalInputs(pluginPath, list)
+                            },
+                            // On external inputs selection canceled
+                            function() {}
+                        )
                     }
                 }
             }

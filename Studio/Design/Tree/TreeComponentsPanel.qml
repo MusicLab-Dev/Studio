@@ -7,7 +7,6 @@ import PluginTableModel 1.0
 import "../Default"
 
 Item {
-
     enum Type {
         Mixer,
         Sources,
@@ -104,7 +103,6 @@ Item {
     */
 
     Item {
-
         property real widthContentRatio: 0.6
         property real xClose: parent.width - panelCategory.width
         property real xOpen: parent.width - width
@@ -144,8 +142,6 @@ Item {
                     text.text: "Effects"
                     filter: TreeComponentsPanel.Type.Effects
                 }
-
-
             }
         }
 
@@ -166,6 +162,7 @@ Item {
             }
 
             ListView {
+                id: treeComponentsListView
                 anchors.centerIn: parent
                 width: parent.width
                 height: parent.height * 0.95
@@ -188,10 +185,11 @@ Item {
                     //nameFilter: pluginsForeground.currentSearchText
                 }
 
-                delegate: TreeComponentDelegate {}
+                delegate: TreeComponentDelegate {
+                    width: treeComponentsListView.width
+                    height: width
+                }
             }
         }
-
     }
-
 }

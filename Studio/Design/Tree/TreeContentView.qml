@@ -14,7 +14,7 @@ MouseArea {
     }
 
     function actionEvent() {
-        if (treeSurface.selectionList.length) {
+        if (!globalTextField.visible && treeSurface.selectionList.length) {
             var nodes = []
             for (var i = 0; i < treeSurface.selectionList.length; ++i)
                 nodes.push(treeSurface.selectionList[i].node)

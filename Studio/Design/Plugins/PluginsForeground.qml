@@ -62,8 +62,6 @@ Rectangle {
         }
     }
 
-
-
     Item {
         id: pluginsCheckBoxes
         width: parent.width * 0.9
@@ -76,6 +74,7 @@ Rectangle {
             id: listView
             anchors.fill: parent
             spacing: parent.height * 0.04
+
             ScrollBar.vertical: DefaultScrollBar {
                 color: themeManager.accentColor
                 opacity: 0.3

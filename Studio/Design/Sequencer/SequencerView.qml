@@ -10,13 +10,6 @@ import AudioAPI 1.0
 import "../Common"
 
 ColumnLayout {
-    enum EditMode {
-        Regular,
-        Brush,
-        Select,
-        Cut
-    }
-
     enum TweakMode {
         Regular,
         Velocity,
@@ -108,7 +101,6 @@ ColumnLayout {
     property PartitionModel partition: null
     property int partitionIndex: 0
     property alias player: sequencerViewFooter.player
-    property int editMode: SequencerView.EditMode.Regular
     property int tweakMode: SequencerView.TweakMode.Regular
     property alias tweaker: sequencerViewFooter.tweaker
     property bool mustCenter: false

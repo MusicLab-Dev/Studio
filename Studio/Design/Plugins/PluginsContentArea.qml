@@ -66,7 +66,7 @@ GridView {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            ToolTip {
+            DefaultToolTip {
                 id: toolTip
                 text: factoryDescription
                 visible: pluginsSquareComponentArea.containsMouse && description.truncated

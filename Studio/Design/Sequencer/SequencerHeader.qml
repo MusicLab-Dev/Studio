@@ -75,7 +75,6 @@ Rectangle {
 
     Item {
         id: plannerButton
-
         anchors.left: pluginButton.right
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
