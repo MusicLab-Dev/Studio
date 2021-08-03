@@ -7,7 +7,6 @@ import PluginTableModel 1.0
 import "../Default"
 
 Item {
-
     enum Type {
         Mixer,
         Sources,
@@ -104,11 +103,9 @@ Item {
     */
 
     Item {
-
-        property real widthContentRatio: 0.5
-        property real rad: 32
-        property real xClose: parent.width - panelCategory.width + rad
-        property real xOpen: parent.width - width + rad
+        property real widthContentRatio: 0.6
+        property real xClose: parent.width - panelCategory.width
+        property real xOpen: parent.width - width
 
         id: panel
         anchors.verticalCenter: parent.verticalCenter
@@ -119,43 +116,31 @@ Item {
         Item {
             id: panelCategory
             anchors.left: parent.left
-            anchors.top: parent.top
+            anchors.verticalCenter: parent.verticalCenter
             width: parent.width - parent.width * panel.widthContentRatio
             height: parent.height
 
-            Rectangle {
-                id: panelCategoryBackground
-                anchors.fill: parent
-                radius: panel.rad
-                color: Qt.lighter(themeManager.foregroundColor, 1.1)
-                opacity: 0.8
-            }
 
-            Item {
-                width: parent.width - panel.rad
+            Column {
                 height: parent.height
+                width: parent.width
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                //spacing: parent.height * 0.005
 
-                Column {
-                    height: parent.height * 0.95
-                    width: parent.width
-                    anchors.centerIn: parent
-                    spacing: parent.height * 0.05
+                TreeComponentCategory {
+                    text.text: "Mixer"
+                    filter: TreeComponentsPanel.Type.Mixer
+                }
 
-                    TreeComponent {
-                        text.text: "Mixer"
-                        filter: TreeComponentsPanel.Type.Mixer
-                    }
+                TreeComponentCategory {
+                    text.text: "Sources"
+                    filter: TreeComponentsPanel.Type.Sources
+                }
 
-                    TreeComponent {
-                        text.text: "Sources"
-                        filter: TreeComponentsPanel.Type.Mixer
-                    }
-
-                    TreeComponent {
-                        text.text: "Effects"
-                        filter: TreeComponentsPanel.Type.Mixer
-                    }
-
+                TreeComponentCategory {
+                    text.text: "Effects"
+                    filter: TreeComponentsPanel.Type.Effects
                 }
             }
         }
@@ -169,8 +154,6 @@ Item {
             width: parent.width * panel.widthContentRatio
             height: parent.height
 
-            anchors.leftMargin: -panel.rad
-
             Rectangle {
                 id: panelContentBackground
                 width: parent.width + panelContent.widthOffset
@@ -179,51 +162,34 @@ Item {
             }
 
             ListView {
+                id: treeComponentsListView
                 anchors.centerIn: parent
                 width: parent.width
                 height: parent.height * 0.95
-
-                spacing: 20
-                model: pluginTable
                 clip: true
+                spacing: 20
+                model: PluginTableModelProxy {
+                    id: pluginTableProxy
+                    sourceModel: pluginTable
+                    tagsFilter: {
+                        if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Sources)
+                            return PluginTableModel.Tags.Synth | PluginTableModel.Tags.Sampler | PluginTableModel.Tags.Piano
+                        if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Effects)
+                            return PluginTableModel.Tags.Analyzer | PluginTableModel.Tags.Delay | PluginTableModel.Tags.Distortion |
+                                   PluginTableModel.Tags.EQ | PluginTableModel.Tags.Filter | PluginTableModel.Tags.Distortion
+                        if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Mixer)
+                            return PluginTableModel.Tags.Mastering
+                        return 0;
 
-                delegate: Rectangle {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: parent.width * 0.7
+                    }
+                    //nameFilter: pluginsForeground.currentSearchText
+                }
+
+                delegate: TreeComponentDelegate {
+                    width: treeComponentsListView.width
                     height: width
-                    color: "transparent"
-                    border.width: 2
-                    border.color: mouseArea.containsMouse ? themeManager.accentColor : "white"
-                    radius: 12
-
-                    Image {
-                        id: image
-                        anchors.centerIn: parent
-                        width: parent.width * 0.7
-                        height: width
-                        source: factoryName ? "qrc:/Assets/Plugins/" + factoryName + ".png" : "qrc:/Assets/Plugins/Default.png"
-                    }
-
-                    Glow {
-                        anchors.fill: image
-                        radius: 2
-                        opacity: 0.3
-                        samples: 17
-                        color: mouseArea.containsMouse ? "white" : "transparent"
-                        source: image
-                    }
-
-                    MouseArea {
-                        id: mouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-
-
-                    }
                 }
             }
         }
-
     }
-
 }

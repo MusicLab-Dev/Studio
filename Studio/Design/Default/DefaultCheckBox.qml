@@ -1,8 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import CursorManager 1.0
 
 CheckBox {
     property bool elideText: false
+    property color enabledColor: "#001E36"
+    property color disabledColor: themeManager.disabledColor
+    property color borderColor: themeManager.accentColor
 
     id: control
     text: qsTr("CheckBox")
@@ -11,15 +15,23 @@ CheckBox {
     implicitWidth: 80
     implicitHeight: 30
 
+    onHoveredChanged: {
+        if (hovered)
+            cursorManager.set(CursorManager.Type.Clickable)
+        else
+            cursorManager.set(CursorManager.Type.Normal)
+    }
+
     background: Rectangle {
+        id: rect
         width: Math.min(control.width, control.height)
         height: width
         x: control.leftPadding
         y: control.height / 2 - height / 2
         radius: 5
-        color: control.enabled ? "#001E36" : themeManager.disabledColor
+        color: control.checked ? enabledColor : disabledColor
         border.width: control.down ? 2 : control.hovered ? 1 : 0
-        border.color: themeManager.accentColor
+        border.color: borderColor
     }
 
     indicator: Image {

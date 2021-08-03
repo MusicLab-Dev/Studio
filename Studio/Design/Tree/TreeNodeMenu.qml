@@ -78,13 +78,14 @@ DefaultMenu {
         text: qsTr("Edit name")
         enabled: true
 
-        function setName() {
+        function setNameColor() {
             targetNode.name = globalTextField.text
+            targetNode.color = globalTextField.colorPicked;
             closeMenu()
         }
 
         onTriggered: {
-            globalTextField.open(targetNode.name, setName, function () { closeMenu() })
+            globalTextField.open(targetNode.name, setNameColor, function () { closeMenu() }, true, targetNode.color)
         }
     }
 

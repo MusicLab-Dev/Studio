@@ -28,6 +28,7 @@
 #include "ClipboardManager.hpp"
 #include "NodeListModel.hpp"
 #include "PluginModelProxy.hpp"
+#include "CursorManager.hpp"
 
 void Studio::InitResources(void)
 {
@@ -95,6 +96,7 @@ void Studio::InitResources(void)
     qmlRegisterType<ActionsManager>("ActionsManager", 1, 0, "ActionsManager");
     qmlRegisterType<ClipboardManager>("ClipboardManager", 1, 0, "ClipboardManager");
     qmlRegisterType<NodeListModel>("NodeListModel", 1, 0, "NodeListModel");
+    qmlRegisterType<CursorManager>("CursorManager", 1, 0, "CursorManager");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);

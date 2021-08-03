@@ -6,6 +6,7 @@
 #pragma once
 
 #include <QObject>
+#include <QDebug>
 
 #include <Audio/Base.hpp>
 
@@ -30,6 +31,7 @@ struct BeatRange : public Audio::BeatRange
 public:
     using Audio::BeatRange::BeatRange;
     using Audio::BeatRange::operator=;
+    using Audio::BeatRange::operator+=; 
 
     template<typename ...Args>
     BeatRange(Args &&...args) noexcept : Audio::BeatRange({ std::forward<Args>(args)... }) {}

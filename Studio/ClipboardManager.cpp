@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QDebug>
 
 #include "ClipboardManager.hpp"
 
@@ -42,10 +43,10 @@ QVector<Note> ClipboardManager::transformJsonInNotes(const QString &json) const 
     for (const auto &note : obj["notes"].toArray()) {
         auto noteObj = note.toObject();
         Note n {
-            static_cast<BeatRange>(static_cast<Beat>(noteObj["from"].toInt()), static_cast<Beat>(noteObj["to"].toInt())),
-            static_cast<Key>(noteObj["key"].toInt()),
-            static_cast<Velocity>(noteObj["velocity"].toInt()),
-            static_cast<Tuning>(noteObj["tuning"].toInt())
+            BeatRange(Beat(noteObj["from"].toInt()), Beat(noteObj["to"].toInt())),
+            Key(noteObj["key"].toInt()),
+            Velocity(noteObj["velocity"].toInt()),
+            Tuning(noteObj["tuning"].toInt())
         };
         notes.push_back(n);
     }

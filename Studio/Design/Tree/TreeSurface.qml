@@ -5,6 +5,7 @@ import NodeModel 1.0
 Item {
     function startDrag(targetNode, targetPoint) {
         dragTarget = targetNode
+        dragTargetPlugin = ""
         dragPoint = targetPoint
         dragActive = true
     }
@@ -17,6 +18,22 @@ Item {
         targetDropped()
         dragActive = false
         dragTarget = null
+        dragTargetPlugin = ""
+        dragPoint = Qt.point(0, 0)
+    }
+
+    function startPluginDrag(pluginPath, targetPoint) {
+        dragTarget = null
+        dragTargetPlugin = pluginPath
+        dragPoint = targetPoint
+        dragActive = true
+    }
+
+    function endPluginDrag() {
+        targetPluginDropped()
+        dragActive = false
+        dragTarget = null
+        dragTargetPlugin = ""
         dragPoint = Qt.point(0, 0)
     }
 
@@ -47,6 +64,7 @@ Item {
     }
 
     signal targetDropped
+    signal targetPluginDropped
     signal selectionFinished(point from, point to)
 
     property real instanceDefaultWidth: 150
@@ -55,6 +73,7 @@ Item {
     property bool dragActive: false
     property point dragPoint: Qt.point(0, 0)
     property NodeModel dragTarget: null
+    property string dragTargetPlugin: ""
     property bool selectionActive: false
     property point selectionFrom: Qt.point(0, 0)
     property point selectionTo: Qt.point(0, 0)

@@ -62,8 +62,6 @@ Rectangle {
         }
     }
 
-
-
     Item {
         id: pluginsCheckBoxes
         width: parent.width * 0.9
@@ -76,6 +74,7 @@ Rectangle {
             id: listView
             anchors.fill: parent
             spacing: parent.height * 0.04
+
             ScrollBar.vertical: DefaultScrollBar {
                 color: themeManager.accentColor
                 opacity: 0.3
@@ -118,6 +117,8 @@ Rectangle {
                     width: parent.width * 0.85
                     height: 20
                     font.weight: Font.Light
+                    borderColor: "white"
+                    enabledColor: "black"
                     onCheckedChanged: {
                         if (checked)
                             pluginsView.currentFilter |= modelData

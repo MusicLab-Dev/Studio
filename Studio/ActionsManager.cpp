@@ -21,7 +21,9 @@ ActionsManager::ActionsManager(QObject *parent)
 
 bool ActionsManager::push(const Action action, const QVariant &data) noexcept
 {
-    if (_events.size() > _index + 1)
+    if (reinterpret_cast<const ActionNodeBase *>(data.data())->node == nullptr)
+        return false;
+    else if (_events.size() > _index + 1)
         _events.remove(_index, _events.size() - _index);
 
     qDebug() << _events.size() << action << data;
@@ -138,6 +140,8 @@ bool ActionsManager::actionMoveNotes(const Type type, const ActionMoveNotes &act
     auto &notes = action.notes;
     auto &oldNotes = action.oldNotes;
 
+    if (notes.empty())
+        return false;
     if (type == Type::Undo) {
         for (int i = 0; i < notes.size() && i < oldNotes.size(); i++) {
             auto &note = notes[i];
@@ -185,6 +189,7 @@ bool ActionsManager::actionAddPartitions(const Type type, const ActionAddPartiti
             int idx = action.partitions->instances()->findExact(instance);
             if (idx == -1) {
                 qDebug() << "UNDO: actionAddPartitions error (idx == -1)";
+                qDebug() << instance.range.from << instance.range.to;
                 continue;
             }
             indexes.push_back(idx);
@@ -234,6 +239,7 @@ bool ActionsManager::actionMovePartitions(const Type type, const ActionMoveParti
             auto idx = action.partitions->instances()->findExact(instance);
             if (idx == -1) {
                 qDebug() << "UNDO: actionMovePartitions error (idx == -1)";
+                qDebug() << instance.range.from << instance.range.to;
                 continue;
             }
             auto &oldInstance = oldInstances[i];
@@ -304,6 +310,16 @@ ActionRemoveNotes ActionsManager::makeActionRemoveNotes(PartitionModel *partitio
     return action;
 }
 
+
+ActionRemoveNotes ActionsManager::makeActionRemoveRealNotes(PartitionModel *partition, const QVector<Note> &args) const noexcept
+{
+    ActionRemoveNotes action;
+    action.partition = partition;
+    action.node = partition->parentPartitions()->parentNode();
+    action.notes = args;
+    return action;
+}
+
 ActionMoveNotes ActionsManager::makeActionMoveNotes(PartitionModel *partition,  const QVector<QVariantList> &args) const noexcept
 {
     ActionMoveNotes action;
@@ -311,13 +327,15 @@ ActionMoveNotes ActionsManager::makeActionMoveNotes(PartitionModel *partition,  
     action.node = partition->parentPartitions()->parentNode();
 
     for (auto &elem : args) {
-        action.oldNotes.push_back(
-            Note({BeatRange(Audio::Beat(elem[0].toInt()), Audio::Beat(elem[2].toInt())), Audio::Key(elem[4].toInt()), Audio::Velocity(elem[6].toInt()), Audio::Tuning(elem[8].toInt())})
-        );
-        action.notes.push_back(
-            Note({BeatRange(Audio::Beat(elem[1].toInt()), Audio::Beat(elem[3].toInt())), Audio::Key(elem[5].toInt()), Audio::Velocity(elem[7].toInt()), Audio::Tuning(elem[9].toInt())})
-        );
+        const Note oldNote { BeatRange(static_cast<Beat>(elem[0].toInt()), static_cast<Beat>(elem[2].toInt())), static_cast<Key>(elem[4].toInt()), static_cast<Velocity>(elem[6].toInt()), static_cast<Tuning>(elem[8].toInt()) };
+        const Note newNote { BeatRange(static_cast<Beat>(elem[1].toInt()), static_cast<Beat>(elem[3].toInt())), static_cast<Key>(elem[5].toInt()), static_cast<Velocity>(elem[7].toInt()), static_cast<Tuning>(elem[9].toInt()) };
+        if (oldNote != newNote) {
+            action.oldNotes.push_back(oldNote);
+            action.notes.push_back(newNote);
+        }
     }
+    if (action.oldNotes.empty())
+        return ActionMoveNotes();
     return action;
 }
 

@@ -1,46 +1,49 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import ThemeManager 1.0
 
 import "../Default/"
 import "../Common/"
 
+import ThemeManager 1.0
 import PluginModel 1.0
 
 RowLayout {
-
     spacing: 10
 
     ModeSelector {
         id: editModeSelector
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * 0.375
+        itemUsableTill: 2
+
         itemsPaths: [
             "qrc:/Assets/NormalMod.png",
             "qrc:/Assets/BrushMod.png",
             "qrc:/Assets/SelectorMod.png",
             "qrc:/Assets/CutMod.png",
         ]
+
         itemsNames: [
             "Standard",
             "Brush",
             "Selector",
             "CutMod",
         ]
-        itemUsableTill: 2
-        onItemSelectedChanged: sequencerView.editMode = itemSelected
 
         placeholder: Snapper {
             id: brushSnapper
             height: editModeSelector.height - editModeSelector.rowContainer.height
             width: editModeSelector.width
-            visible: sequencerView.editMode === SequencerView.EditMode.Brush
+            visible: contentView.editMode === ContentView.EditMode.Brush
             currentIndex: 0
-            onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
             rectBackground.border.width: 0
             rectBackground.color: "transparent"
+
+            onActivated: contentView.placementBeatPrecisionBrushStep = currentValue
         }
+
+        onItemSelectedChanged: contentView.editMode = itemSelected
     }
 
     Item {
@@ -114,5 +117,3 @@ RowLayout {
         prev.enabled: true
     }
 }
-
-
