@@ -150,20 +150,23 @@ const Note &PartitionModel::get(const int idx) const noexcept_ndebug
     return reinterpret_cast<const Note &>(_data->at(idx));
 }
 
-int PartitionModel::getDistance(const QVector<Note> &notes) const noexcept
+Beat PartitionModel::getDistance(const QVector<Note> &notes) const noexcept
 {
     if (notes.isEmpty())
         return -1;
-    int from = notes[0].range.from;
-    int to = notes[0].range.to;
+    Beat from = notes[0].range.from;
+    Beat to = notes[0].range.to;
 
-    for (Note note : notes) {
+    for (const Note &note : notes) {
         if (note.range.from < from)
             from = note.range.from;
         if (note.range.to > to)
             to = note.range.to;
     }
-    return to - from;
+    if (to >= from)
+        return to - from;
+    else
+        return from - to;
 }
 
 void PartitionModel::set(const int idx, const Note &note)
