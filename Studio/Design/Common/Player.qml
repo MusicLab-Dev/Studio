@@ -9,16 +9,6 @@ import NodeModel 1.0
 import AudioAPI 1.0
 
 RowLayout {
-    property int targetPlaybackMode: Scheduler.Production
-    property bool isPartitionPlayer: false
-    property NodeModel targetNode: null
-    property int targetPartitionIndex: 0
-    property int currentPlaybackBeat: 0
-    property int beginPlaybackBeat: 0
-    property alias isPlayerRunning: timer.running
-    property bool isSchedulerRunning: app.scheduler.playbackMode === targetPlaybackMode && app.scheduler.running
-    property bool timelineMoveWhilePlaying: false
-
     function timelineBeginMove(target) {
         if (isPlayerRunning) {
             timelineMoveWhilePlaying = true
@@ -104,10 +94,15 @@ RowLayout {
         currentPlaybackBeat = contentView.loopFrom
     }
 
-    // function prepareForBPMChange() {
-    //     if (isSchedulerRunning)
-    //         pause()
-    // }
+    property int targetPlaybackMode: Scheduler.Production
+    property bool isPartitionPlayer: false
+    property NodeModel targetNode: null
+    property int targetPartitionIndex: 0
+    property int currentPlaybackBeat: 0
+    property int beginPlaybackBeat: 0
+    property alias isPlayerRunning: timer.running
+    property bool isSchedulerRunning: app.scheduler.playbackMode === targetPlaybackMode && app.scheduler.running
+    property bool timelineMoveWhilePlaying: false
 
     id: player
     spacing: 0

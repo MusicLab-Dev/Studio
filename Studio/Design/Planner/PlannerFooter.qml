@@ -34,7 +34,7 @@ Rectangle {
 
             RowLayout {
                 anchors.fill: parent
-                spacing: 20
+                spacing: 10
 
                 TimerView {
                     Layout.alignment: Qt.AlignVCenter

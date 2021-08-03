@@ -62,7 +62,7 @@ DefaultMenu {
 
     Action {
         id: focusAllChildrenAction
-        text: qsTr("Open all chilren in planner")
+        text: qsTr("Open all children in planner")
 
         onTriggered: {
             modulesView.addNewPlannerWithMultipleNodes(targetNode.getAllChildren())

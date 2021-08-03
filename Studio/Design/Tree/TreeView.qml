@@ -14,10 +14,16 @@ ColumnLayout {
 
     property string moduleName: "Project"
     property int moduleIndex
+    property alias player: treeFooter.player
 
     id: treeView
     focus: true
     spacing: 0
+
+    onVisibleChanged: {
+        if (visible)
+            treeFooter.projectPreview.requestUpdate()
+    }
 
     Connections {
         target: eventDispatcher

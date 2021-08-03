@@ -22,6 +22,7 @@
 #include "BoardManager.hpp"
 #include "EventDispatcher.hpp"
 #include "DevicesModel.hpp"
+#include "ProjectPreview.hpp"
 #include "PartitionPreview.hpp"
 #include "PartitionInstancesModelProxy.hpp"
 #include "ActionsManager.hpp"
@@ -93,6 +94,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
     qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
+    qmlRegisterType<ProjectPreview>("ProjectPreview", 1, 0, "ProjectPreview");
     qmlRegisterType<ActionsManager>("ActionsManager", 1, 0, "ActionsManager");
     qmlRegisterType<ClipboardManager>("ClipboardManager", 1, 0, "ClipboardManager");
     qmlRegisterType<NodeListModel>("NodeListModel", 1, 0, "NodeListModel");

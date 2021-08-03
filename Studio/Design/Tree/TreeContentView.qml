@@ -57,6 +57,13 @@ MouseArea {
     readonly property real wheelsPerZoomRange: 3
     readonly property real zoomFactor: 1 / (wheelsPerZoomRange * 360 * 8)
 
+    // Timeline
+    readonly property int timelineHeight: 10
+    property bool hasLoop: false
+    property int loopFrom: 0
+    property int loopTo: 0
+    property int loopRange: loopTo - loopFrom
+
     id: contentView
 
     onPressed: {

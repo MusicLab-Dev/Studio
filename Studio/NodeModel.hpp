@@ -102,7 +102,7 @@ public:
 
 
     /** @brief Get the node's color */
-    [[nodiscard]] QColor color(void) noexcept { return QColor(static_cast<QRgb>(_data->color())); }
+    [[nodiscard]] QColor color(void) const noexcept { return QColor(static_cast<QRgb>(_data->color())); }
 
     /** @brief Set the node's color */
     void setColor(const QColor &color);
@@ -118,12 +118,15 @@ public:
 
     /** @brief Get the partitions model */
     [[nodiscard]] PartitionsModel *partitions(void) noexcept { return _partitions.get(); }
+    [[nodiscard]] const PartitionsModel *partitions(void) const noexcept { return _partitions.get(); }
 
     /** @brief Get the automations model */
     [[nodiscard]] AutomationsModel *automations(void) noexcept { return _automations.get(); }
+    [[nodiscard]] const AutomationsModel *automations(void) const noexcept { return _automations.get(); }
 
     /** @brief Get the plugin model */
     [[nodiscard]] PluginModel *plugin(void) noexcept { return _plugin.get(); }
+    [[nodiscard]] const PluginModel *plugin(void) const noexcept { return _plugin.get(); }
 
     /** @brief Get the node children */
     [[nodiscard]] Core::FlatVector<NodePtr> &children(void) noexcept { return _children; }

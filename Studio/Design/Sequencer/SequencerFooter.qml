@@ -58,7 +58,7 @@ Rectangle {
 
         RowLayout {
             anchors.fill: parent
-            spacing: 20
+            spacing: 10
 
             TimerView {
                 currentPlaybackBeat: sequencerView.player.currentPlaybackBeat
