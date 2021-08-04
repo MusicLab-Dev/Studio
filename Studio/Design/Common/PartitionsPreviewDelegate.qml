@@ -23,18 +23,18 @@ MouseArea {
         if (!containsMouse)
             return
         else if (mouse.button === Qt.RightButton) {
-            plannerPartitionMenu.openMenu(previewDelegate, nodeDelegate.node, partition, partitionIndex)
-            plannerPartitionMenu.x = mouse.x
-            plannerPartitionMenu.y = mouse.y
+            partitionMenu.openMenu(previewDelegate, nodeDelegate.node, partition, partitionIndex)
+            partitionMenu.x = mouse.x
+            partitionMenu.y = mouse.y
         } else {
             contentView.selectPartition(nodeDelegate.node, partitionIndex)
         }
     }
 
     onPressAndHold: {
-        plannerPartitionMenu.openMenu(previewDelegate, nodeDelegate.node, partition, partitionIndex)
-        plannerPartitionMenu.x = mouse.x
-        plannerPartitionMenu.y = mouse.y
+        partitionMenu.openMenu(previewDelegate, nodeDelegate.node, partition, partitionIndex)
+        partitionMenu.x = mouse.x
+        partitionMenu.y = mouse.y
     }
 
     onDoubleClicked: {

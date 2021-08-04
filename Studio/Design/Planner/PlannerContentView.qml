@@ -52,6 +52,14 @@ ContentView {
             id: nodeViewRepeater
             model: contentView.nodeList
 
+            onCountChanged: {
+                if (count === 1) {
+                    var item = itemAt(0)
+                    item.isSelected = true
+                    contentView.lastSelectedNode = item
+                }
+            }
+
             delegate: PlannerNodeDelegate {
                 showChildren: contentView.showChildren
             }

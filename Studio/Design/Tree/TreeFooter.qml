@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.15
 import ProjectPreview 1.0
 import Scheduler 1.0
 
+import "../Default"
 import "../Common"
 
 Rectangle {
@@ -75,5 +76,25 @@ Rectangle {
             Layout.preferredHeight: parent.height * 0.5
             Layout.preferredWidth: parent.width * 0.25
         }
+    }
+
+    DefaultImageButton {
+        visible: contentView.lastSelectedNode && partitionsPreview.hide
+        anchors.right: parent.right
+        anchors.bottom: parent.top
+        anchors.rightMargin: 10
+        anchors.bottomMargin: 10
+        width: height
+        height: parent.height * 0.5
+        showBorder: false
+        scaleFactor: 1
+        source: "qrc:/Assets/Note.png"
+
+        onReleased: partitionsPreview.hide = false
+    }
+
+    PartitionsPreview {
+        id: partitionsPreview
+        y: -height
     }
 }

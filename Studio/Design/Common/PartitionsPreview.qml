@@ -26,6 +26,33 @@ Rectangle {
     visible: nodeDelegate && !hide
     // border.color: nodeColor
 
+    onVisibleChanged: {
+        if (visible)
+            openAnim.start()
+        else
+            closeAnim.start()
+    }
+
+    PropertyAnimation {
+        id: openAnim
+        target: partitionsPreview
+        property: "opacity"
+        from: 0
+        to: 1
+        duration: 300
+        easing.type: Easing.OutCubic
+    }
+
+    PropertyAnimation {
+        id: closeAnim
+        target: partitionsPreview
+        property: "opacity"
+        from: 1
+        to: 0
+        duration: 300
+        easing.type: Easing.OutCubic
+    }
+
     Rectangle {
         color: "black"
         width: parent.width
@@ -84,7 +111,7 @@ Rectangle {
             id: previewRepeater
             model: partitionsPreview.node ? partitionsPreview.node.partitions : null
 
-            delegate: PlannerPartitionsPreviewDelegate {
+            delegate: PartitionsPreviewDelegate {
                 id: previewDelegate
                 width: partitionsPreview.previewWidth
                 height: partitionsPreview.baseHeight

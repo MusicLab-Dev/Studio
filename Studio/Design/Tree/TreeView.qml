@@ -62,4 +62,8 @@ ColumnLayout {
     TreeNodeMenu {
         id: treeNodeMenu
     }
+
+    PartitionMenu {
+        id: partitionMenu
+    }
 }

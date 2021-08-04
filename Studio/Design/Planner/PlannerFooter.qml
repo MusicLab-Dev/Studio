@@ -77,7 +77,7 @@ Rectangle {
         }
     }
 
-    PlannerPartitionsPreview {
+    PartitionsPreview {
         id: partitionsPreview
         y: -height
     }

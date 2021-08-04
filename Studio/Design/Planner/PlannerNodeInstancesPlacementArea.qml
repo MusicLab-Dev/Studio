@@ -106,7 +106,7 @@ PlacementArea {
     property var previewInstanceOffset: 0
 
     id: placementArea
-    enabled: contentView.selectedPartition !== null
+    allowInsert: contentView.selectedPartition !== null
     color: nodeDelegate.color
     accentColor: nodeDelegate.accentColor
 

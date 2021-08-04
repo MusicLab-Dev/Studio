@@ -4,12 +4,9 @@ import QtQuick.Layouts 1.15
 import ActionsManager 1.0
 
 import "../Default"
+import "../Common"
 
 ColumnLayout {
-    readonly property string moduleName: qsTr("Planner")
-    property int moduleIndex
-    readonly property alias player: plannerFooter.player
-
     function onNodeDeleted(targetNode) {
         return false
     }
@@ -30,6 +27,9 @@ ColumnLayout {
         app.plannerNodesCache = []
     }
 
+    readonly property string moduleName: qsTr("Planner")
+    property int moduleIndex
+    readonly property alias player: plannerFooter.player
     property alias nodeList: contentView.nodeList
 
     id: plannerView
@@ -76,8 +76,8 @@ ColumnLayout {
         id: plannerNodeMenu
     }
 
-    PlannerPartitionMenu {
-        id: plannerPartitionMenu
+    PartitionMenu {
+        id: partitionMenu
     }
 
     ActionsManager {

@@ -21,6 +21,9 @@
         <file>ContentViewTimeline.qml</file>
         <file>TextRoundedButton.qml</file>
         <file>PartitionComboBox.qml</file>
+        <file>PartitionsPreview.qml</file>
+        <file>PartitionsPreviewDelegate.qml</file>
+        <file>PartitionMenu.qml</file>
         <file>ContentViewTimelineBarCursor.qml</file>
         <file>GlobalTextField.qml</file>
         <file>TimerView.qml</file>

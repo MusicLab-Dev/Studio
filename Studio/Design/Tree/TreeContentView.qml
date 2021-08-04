@@ -4,6 +4,9 @@ import QtQuick.Controls 2.15
 import "../Default"
 import "../Common"
 
+import NodeModel 1.0
+import PartitionModel 1.0
+
 MouseArea {
     function incrementXOffset(offset) {
         contentView.xOffset = Math.min(Math.max(contentView.xOffset + offset, contentView.xOffsetMin), contentView.xOffsetMax)
@@ -20,6 +23,12 @@ MouseArea {
                 nodes.push(treeSurface.selectionList[i].node)
             modulesView.addNewPlannerWithMultipleNodes(nodes)
         }
+    }
+
+    function selectPartition(node, partitionIndex) {
+        selectedPartitionNode = node
+        selectedPartition = node.partitions.getPartition(partitionIndex)
+        selectedPartitionIndex = partitionIndex
     }
 
     // Alias
@@ -63,6 +72,15 @@ MouseArea {
     property int loopFrom: 0
     property int loopTo: 0
     property int loopRange: loopTo - loopFrom
+
+    // Partition selection
+    property var lastSelectedNode: null
+    property NodeModel selectedPartitionNode: null
+    property PartitionModel selectedPartition: null
+    property int selectedPartitionIndex: 0
+
+    // Pixels per beat precision used for partition preview
+    property real pixelsPerBeatPrecision: 1 / 8
 
     id: contentView
 
@@ -180,7 +198,6 @@ MouseArea {
     }
 
     ControlsFlow {
-        PropertyAnimation {id: openAnim; target: treeControls; property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic}
         function open(newNode) {
             node = newNode
             visible = true
@@ -188,6 +205,7 @@ MouseArea {
         }
 
         function close() {
+            closeAnim.start()
             node = null
             visible = false
         }
@@ -196,9 +214,28 @@ MouseArea {
         anchors.top: parent.top
         width: parent.width
         y: parent.height
-
         node: null
         visible: false
+
+        PropertyAnimation {
+            id: openAnim
+            target: treeControls
+            property: "opacity"
+            from: 0
+            to: 1
+            duration: 300
+            easing.type: Easing.OutCubic
+        }
+
+        PropertyAnimation {
+            id: closeAnim
+            target: treeControls
+            property: "opacity"
+            from: 1
+            to: 0
+            duration: 300
+            easing.type: Easing.OutCubic
+        }
     }
 
     ScrollBar {

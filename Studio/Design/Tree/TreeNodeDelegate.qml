@@ -88,21 +88,25 @@ Column {
                     treeNodeMenu.x = mouseX
                     treeNodeMenu.y = mouseY
                 } else {
-                    var isAlt = mouse.modifiers & Qt.ControlModifier
-                    if (!isAlt)
+                    var hasModifier = mouse.modifiers & Qt.ControlModifier
+                    if (!hasModifier)
                         treeSurface.resetSelection()
                     var index = treeSurface.selectionList.indexOf(nodeDelegate)
                     if (index === -1) {
+                        contentView.lastSelectedNode = nodeDelegate
                         treeSurface.selectionList.push(nodeDelegate)
                         ++treeSurface.selectionCount
                         nodeDelegate.isSelected = true
                         last = nodeDelegate.node
                         treeControls.open(last)
-                    } else if (isAlt) {
+                    } else if (hasModifier) {
                         treeSurface.selectionList.splice(index, 1)
                         --treeSurface.selectionCount
                         nodeDelegate.isSelected = false
-                    }
+                        if (contentView.lastSelectedNode == nodeDelegate)
+                            contentView.lastSelectedNode = null
+                    } else
+                        contentView.lastSelectedNode = nodeDelegate
                 }
             }
 

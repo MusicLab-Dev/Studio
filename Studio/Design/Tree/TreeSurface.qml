@@ -56,6 +56,7 @@ Item {
     }
 
     function resetSelection() {
+        contentView.lastSelectedNode = null
         for (var i = 0; i < selectionList.length; ++i)
             selectionList[i].isSelected = false
         selectionList = []

@@ -87,7 +87,11 @@ MouseArea {
         mode = targetMode
         switch (mode) {
         case PlacementArea.Mode.Insert:
-            beginInsert(mouseBeatPrecision, mouseKey)
+            if (!allowInsert) {
+                mode = PlacementArea.Mode.None
+                break
+            } else
+                beginInsert(mouseBeatPrecision, mouseKey)
             break
         case PlacementArea.Mode.Move:
             beginMove(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange)
@@ -397,6 +401,7 @@ MouseArea {
     property int mode: PlacementArea.Mode.None
     property int keyOffset: 0
     property int keyCount: 1
+    property bool allowInsert: true
 
     // Preview
     property var previewRange: AudioAPI.beatRange(0, 0)
