@@ -4,14 +4,36 @@ import "../Common"
 
 import AudioAPI 1.0
 import PartitionModel 1.0
+import ActionsManager 1.0
 
 PlacementArea {
+
+    property var cacheMove: []
+
     function addTarget(targetBeatRange, targetKey) {
-        removeOnTheFly(onTheFlyKey)
+        if (onTheFlyKey !== -1 && targetKey !== onTheFlyKey)
+            removeOnTheFly()
+        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
+            var cacheNote = cacheMove[0]
+            actionsManager.push(ActionsManager.MoveNotes, actionsManager.makeActionMoveNotes(
+                                    partition, [[cacheNote[0], targetBeatRange.from, cacheNote[1], targetBeatRange.to, cacheNote[2], targetKey, cacheNote[3], AudioAPI.velocityMax, cacheNote[4], 0]]))
+        } else {
+            actionsManager.push(ActionsManager.AddNotes, actionsManager.makeActionAddNotes(
+                                    partition, [[targetBeatRange.from, targetBeatRange.to, targetKey, AudioAPI.velocityMax, 0]]))
+        }
+        console.debug(targetKey)
         return sequencerView.partition.add(AudioAPI.note(targetBeatRange, targetKey, AudioAPI.velocityMax, 0))
     }
 
     function removeTarget(targetIndex) {
+        var note = sequencerView.partition.getNote(targetIndex)
+        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
+            cacheMove = []
+            cacheMove.push([note.range.from, note.range.to, note.key, note.velocity, note.tuning])
+        } else {
+            actionsManager.push(ActionsManager.RemoveNotes, actionsManager.makeActionRemoveNotes(
+                                    partition, [[note.range.from, note.range.to, note.key, note.velocity, note.tuning]]))
+        }
         return sequencerView.partition.remove(targetIndex)
     }
 
@@ -40,10 +62,42 @@ PlacementArea {
     }
 
     function addTargets(targets) {
+        var notes = []
+        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
+            for (var i = 0; i < targets.length; i++) {
+                var note = targets[i]
+                notes.push([cacheMove[0], note.range.from, cacheMove[1], note.range.to, cacheMove[2], note.key, cacheMove[3], note.velocity, cacheMove[4], note.tuning])
+            }
+            actionsManager.push(ActionsManager.MoveNotes, actionsManager.makeActionMoveNotes(partition, notes))
+        } else {
+            for (i = 0; i < targets.length; i++) {
+                note = targets[i]
+                notes.push([note.range.from, note.range.to, note.key, note.velocity, note.tuning])
+            }
+            actionsManager.push(ActionsManager.AddNotes, actionsManager.makeActionAddNotes(
+                                    partition, notes))
+        }
+
         return sequencerView.partition.addRange(targets)
     }
 
     function removeTargets(targets) {
+        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
+            cacheMove = []
+            for (var i = 0; i < targets.length; i++) {
+                var note = partition.getNote(targets[i])
+                cacheMove.push([note.range.from, note.range.to, note.key, note.velocity, note.tuning])
+            }
+        } else {
+            var notes = []
+            for (i = 0; i < targets.length; i++) {
+                note = partition.getNote(targets[i])
+                notes.push([note.range.from, note.range.to, note.key, note.velocity, note.tuning])
+            }
+            actionsManager.push(ActionsManager.RemoveNotes, actionsManager.makeActionRemoveNotes(
+                                    partition, notes))
+        }
+
         return sequencerView.partition.removeRange(targets)
     }
 
@@ -55,7 +109,7 @@ PlacementArea {
     // On the fly
     function addOnTheFly(targetKey) {
         if (onTheFlyKey !== -1 && onTheFlyKey !== targetKey)
-            removeOnTheFly(onTheFlyKey)
+            removeOnTheFly()
         onTheFlyKey = targetKey
         sequencerView.node.partitions.addOnTheFly(
             AudioAPI.noteEvent(
@@ -68,11 +122,11 @@ PlacementArea {
             sequencerView.partitionIndex
         )
     }
-    function removeOnTheFly(targetKey) {
+    function removeOnTheFly() {
         sequencerView.node.partitions.addOnTheFly(
             AudioAPI.noteEvent(
                 NoteEvent.Off,
-                targetKey,
+                onTheFlyKey,
                 0,
                 0
             ),
@@ -101,13 +155,15 @@ PlacementArea {
     }
 
     onAttachTargetPreview: addOnTheFly(previewKey)
-
     onMoveTargetPreview: {
         if (offsetKey !== 0)
             addOnTheFly(previewKey)
     }
+    onDetachTargetPreview: removeOnTheFly()
 
-    onDetachTargetPreview: removeOnTheFly(onTheFlyKey)
+    onBrushInserted: addOnTheFly(insertedKey)
+    onBrushEnded: removeOnTheFly()
+
 
     Connections {
         target: partition
@@ -117,4 +173,85 @@ PlacementArea {
             placementArea.retreiveInsertedSelection()
         }
     }
+
+    Connections {
+            target: eventDispatcher
+            enabled: moduleIndex === modulesView.selectedModule
+
+            function onCopy(pressed) {
+                if (!pressed || selectionListModel == null)
+                    return
+                var list = []
+                for (var i = 0; i < selectionListModel.length; i++)
+                    list.push(partition.getNote(selectionListModel[i]))
+                clipboardManager.copy(clipboardManager.transformNotesInJson(list))
+                resetSelection()
+            }
+
+            function onPaste(pressed) {
+                if (!pressed)
+                    return
+                var notes = clipboardManager.transformJsonInNotes(clipboardManager.paste())
+                placementArea.selectionInsertCache = notes
+
+                var deltaFrom = 2147483647
+                var deltaTo = 0
+                for (var i = 0; i < notes.length; i++) {
+                    if (deltaFrom > notes[i].range.from)
+                        deltaFrom = notes[i].range.from
+                    if (deltaTo < notes[i].range.to)
+                        deltaTo = notes[i].range.to
+                    var noteDelta = notes[i].range.to - notes[i].range.from
+                    while (true) {
+                        console.debug("from")
+                        var noteOverlapIdx = partition.find(notes[i].key, notes[i].range.from + noteDelta + 1)
+                        if (noteOverlapIdx !== -1) {
+                            var noteOverlap = partition.getNote(noteOverlapIdx)
+                            var distance = partition.getDistance([noteOverlap])
+                            if (deltaFrom > noteOverlap.range.from)
+                                deltaFrom = noteOverlap.range.from
+                            if (deltaTo < noteOverlap.range.to)
+                                deltaTo = noteOverlap.range.to
+                            noteDelta += distance
+                            continue
+                        }
+                        break
+                    }
+                    console.debug("end", deltaFrom, deltaTo)
+
+                }
+                for (i = 0; i < notes.length; i++) {
+                    var note = notes[i]
+                    note.add(deltaTo - deltaFrom)
+                    notes[i] = note
+                }
+
+                partition.addRange(notes)
+                actionsManager.push(ActionsManager.AddNotes, actionsManager.makeActionAddRealNotes(partition, notes))
+            }
+
+            function onCut(pressed) {
+                if (!pressed || selectionListModel == null)
+                    return
+                var list = []
+                for (var i = 0; i < selectionListModel.length; i++)
+                    list.push(partition.getNote(selectionListModel[i]))
+                actionsManager.push(ActionsManager.RemoveNotes, actionsManager.makeActionRemoveRealNotes(partition, list))
+                clipboardManager.copy(clipboardManager.transformNotesInJson(list))
+                partition.removeRange(selectionListModel)
+                resetSelection()
+            }
+
+            function onErase(pressed) {
+                if (!pressed || selectionListModel == null)
+                    return
+                var list = []
+                console.debug(selectionListModel.length)
+                for (var i = 0; i < selectionListModel.length; i++)
+                    list.push(partition.getNote(selectionListModel[i]))
+                actionsManager.push(ActionsManager.RemoveNotes, actionsManager.makeActionRemoveRealNotes(partition, list))
+                partition.removeRange(selectionListModel)
+                resetSelection()
+            }
+   }
 }

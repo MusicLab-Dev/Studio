@@ -17,5 +17,6 @@
         <file>PlannerPartitionsPreview.qml</file>
         <file>PlannerPartitionsPreviewDelegate.qml</file>
         <file>PlannerPartitionMenu.qml</file>
+        <file>PlannerEdition.qml</file>
     </qresource>
 </RCC>

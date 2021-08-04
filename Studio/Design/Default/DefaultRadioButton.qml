@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import CursorManager 1.0
 
 RadioButton {
     property bool elideText: false
@@ -8,6 +9,13 @@ RadioButton {
     text: qsTr("RadioButton")
     hoverEnabled: true
     down: true
+
+    onHoveredChanged: {
+        if (hovered)
+            cursorManager.set(CursorManager.Type.Clickable)
+        else
+            cursorManager.set(CursorManager.Type.Normal)
+    }
 
     background: Rectangle {
         implicitHeight: 25

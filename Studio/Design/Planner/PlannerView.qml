@@ -1,8 +1,11 @@
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
+
+import ActionsManager 1.0
 
 import "../Default"
 
-Column {
+ColumnLayout {
     readonly property string moduleName: qsTr("Planner")
     property int moduleIndex
     readonly property alias player: plannerFooter.player
@@ -31,6 +34,7 @@ Column {
 
     id: plannerView
     focus: true
+    spacing: 0
 
     Connections {
         target: eventDispatcher
@@ -51,21 +55,21 @@ Column {
 
     PlannerHeader {
         id: plannerHeader
-        width: parent.width
-        height: parent.height * 0.15
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height * 0.12
         z: 1
     }
 
     PlannerContentView {
         id: contentView
-        width: parent.width
-        height: parent.height * 0.7
+        Layout.fillWidth: true
+        Layout.fillHeight: true
     }
 
     PlannerFooter {
         id: plannerFooter
-        width: parent.width
-        height: parent.height * 0.15
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height * 0.12
     }
 
     PlannerNodeMenu {
@@ -75,4 +79,16 @@ Column {
     PlannerPartitionMenu {
         id: plannerPartitionMenu
     }
+
+    ActionsManager {
+        id: actionsManager
+    }
+
+    Connections {
+        target: eventDispatcher
+        enabled: moduleIndex === modulesView.selectedModule
+
+        function onUndo(pressed) { if (!pressed) return; actionsManager.undo(); }
+        function onRedo(pressed) { if (!pressed) return; actionsManager.redo(); }
+   }
 }

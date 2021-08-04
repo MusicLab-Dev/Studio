@@ -5,6 +5,8 @@ import "../Common"
 import AudioAPI 1.0
 
 Item {
+    property alias notesPlacementArea: notesPlacementArea
+
     readonly property var keyNames: [
         qsTr("C"), qsTr("C#"), qsTr("D"), qsTr("D#"), qsTr("E"), qsTr("F"),
         qsTr("F#"), qsTr("G"), qsTr("G#"), qsTr("A"), qsTr("A#"), qsTr("B"),
@@ -127,6 +129,7 @@ Item {
                 Text {
                     anchors.verticalCenter: key.isInMiddleOfHashKeys ? parent.verticalCenter : key.isDownHashKey ? parent.TopRight : parent.verticalCenter
                     anchors.right: parent.right
+                    anchors.rightMargin: 5
                     text: pianoView.keyNames[key.keyOctaveIndex] + (key.currentOctave - 1) // Minus one to display the standard A4 middle key
                     color: !key.isHashKey ? "#7B7B7B" : "#E7E7E7"
                     z: 1
@@ -139,9 +142,10 @@ Item {
         y: totalHeight - height - (notesConnections.targetOctave - octaveOffset) * contentView.rowHeight * keysPerOctave
         width: contentView.rowHeaderWidth
         height: contentView.rowHeight * keysPerOctave
-        color: "transparent"
-        border.color: themeManager.accentColor
-        border.width: 2
+        color: themeManager.accentColor
+        opacity: 0.1
+        //border.color: themeManager.accentColor
+        //border.width: 1
         z: 10
     }
 
@@ -165,14 +169,6 @@ Item {
                 border.width: 2
 
                 Rectangle {
-                    x: Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
-                    y: parent.height / 8
-                    width: 1
-                    height: contentView.rowHeight * 3 / 4
-                    color: parent.border.color
-                }
-
-                Rectangle {
                     x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
                     y: parent.height / 8
                     width: 1
@@ -183,6 +179,8 @@ Item {
         }
 
         SequencerNotesPlacementArea {
+            id: notesPlacementArea
+
             anchors.fill: parent
         }
     }

@@ -395,3 +395,18 @@ int NodeModel::getChildIndex(NodeModel *node) const noexcept
     }
     return -1;
 }
+
+QVariant NodeModel::getAllChildren(void) noexcept
+{
+    QVector<NodeModel *> res;
+
+    getAllChildrenImpl(res);
+    return QVariant::fromValue(res);
+}
+
+void NodeModel::getAllChildrenImpl(QVector<NodeModel *> &res) noexcept
+{
+    res.push_back(this);
+    for (auto &child : _children)
+        child->getAllChildrenImpl(res);
+}

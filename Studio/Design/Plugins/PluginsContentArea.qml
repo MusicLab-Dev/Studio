@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import "../Default"
 
 import PluginTableModel 1.0
+import CursorManager 1.0
 
 GridView {
     property alias pluginTableProxy: pluginTableProxy
@@ -65,7 +66,7 @@ GridView {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            ToolTip {
+            DefaultToolTip {
                 id: toolTip
                 text: factoryDescription
                 visible: pluginsSquareComponentArea.containsMouse && description.truncated
@@ -76,6 +77,13 @@ GridView {
             id: pluginsSquareComponentArea
             anchors.fill: parent
             hoverEnabled: true
+
+            onHoveredChanged: {
+                if (containsMouse)
+                    cursorManager.set(CursorManager.Type.Clickable)
+                else
+                    cursorManager.set(CursorManager.Type.Normal)
+            }
 
             onReleased: {
                 pluginsView.acceptAndClose(factoryPath)

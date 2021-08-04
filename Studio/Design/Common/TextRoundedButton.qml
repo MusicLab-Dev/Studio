@@ -1,16 +1,22 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
+import CursorManager 1.0
 
 MouseArea {
     property bool hoverOnText: true
-    property bool containsMouse: false
     property alias text: textRoundedButtonText.text
 
     id: textRoundedButton
     width: 70
     height: 30
     hoverEnabled: true
+
+    onHoveredChanged: {
+        if (containsMouse)
+            cursorManager.set(CursorManager.Type.Clickable)
+        else
+            cursorManager.set(CursorManager.Type.Normal)
+    }
 
     Rectangle {
         anchors.fill: parent

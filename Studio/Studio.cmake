@@ -26,6 +26,7 @@ qt5_add_resources(QtResources
     ${StudioDir}/Design/Plugins/Plugins.qrc
     ${StudioDir}/Design/Workspaces/Workspaces.qrc
     ${StudioDir}/Design/Settings/Settings.qrc
+    ${StudioDir}/Design/Export/Export.qrc
 )
 
 set(StudioSources
@@ -98,6 +99,12 @@ set(StudioSources
     ${StudioDir}/Studio.hpp
     ${StudioDir}/ThemeManager.cpp
     ${StudioDir}/ThemeManager.hpp
+    ${StudioDir}/ActionsManager.cpp
+    ${StudioDir}/ActionsManager.hpp
+    ${StudioDir}/ClipboardManager.hpp
+    ${StudioDir}/ClipboardManager.cpp
+    ${StudioDir}/CursorManager.hpp
+    ${StudioDir}/CursorManager.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})

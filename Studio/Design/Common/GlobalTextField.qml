@@ -1,13 +1,17 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.3
 
 import "../Default"
 
 Item {
-    function open(initalText, callback, cancel) {
+    function open(initalText, callback, cancel, isColorBox, initialColor) {
+        if (isColorBox)
+            colorPicked = initialColor
         textInput.text = initalText
         acceptedCallback = callback
         canceledCallback = cancel
+        colorBox = isColorBox
         globalTextField.visible = true
         textInput.forceActiveFocus()
         animOpen.start()
@@ -32,8 +36,10 @@ Item {
     }
 
     property alias text: textInput.text;
+    property alias colorPicked: colorDialog.color
     property var acceptedCallback: null
     property var canceledCallback: null
+    property bool colorBox: false
 
     id: globalTextField
     anchors.fill: parent
@@ -78,8 +84,30 @@ Item {
         width: parent.width * 0.6
         height: parent.height * 0.25
         font.pixelSize: height * 0.3
-        color: "white"
+        color: globalTextField.colorBox ? colorDialog.color : "white"
 
         onAccepted: acceptAndClose()
+    }
+
+    DefaultTextButton {
+        anchors.left: textInput.right
+        width: 50
+        height: width
+        visible: globalTextField.colorBox
+        anchors.verticalCenter: textInput.verticalCenter
+        text: "color"
+        onPressed: colorDialog.open()
+    }
+
+    ColorDialog {
+        id: colorDialog
+        title: "Please choose a color"
+        onAccepted: {
+            close()
+        }
+        onRejected: {
+            close()
+        }
+        Component.onCompleted: color = "white"
     }
 }

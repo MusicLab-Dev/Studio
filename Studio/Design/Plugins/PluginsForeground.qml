@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.3
 
 import PluginTableModel 1.0
 
@@ -34,7 +35,7 @@ Rectangle {
     property alias currentSearchText: searchText.text
 
     id: pluginsForeground
-    color: "#0D2D47"
+    color: Qt.lighter(themeManager.foregroundColor, 1.2)
     radius: 30
 
     Rectangle {
@@ -46,31 +47,34 @@ Rectangle {
 
     Item {
         id: pluginsResearchTextInput
+        anchors.top: parent.top
+        anchors.topMargin: parent.height * 0.1
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: parent.height * 0.05
         width: parent.width * 0.8
-        height : parent.height * 0.05
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 7
 
         DefaultTextInput {
             id: searchText
             anchors.fill: parent
             color: "white"
             opacity: 0.42
+            placeholderText: qsTr("Research")
         }
     }
-
 
     Item {
         id: pluginsCheckBoxes
         width: parent.width * 0.9
         height: parent.height - (parent.height / 7) * 2
-        x: (parent.width - width) / 2
-        y: pluginsResearchTextInput.y + pluginsResearchTextInput.height * 2
+        anchors.top: pluginsResearchTextInput.top
+        anchors.topMargin: parent.height * 0.1
+        anchors.horizontalCenter: parent.horizontalCenter
 
         ListView {
             id: listView
             anchors.fill: parent
             spacing: parent.height * 0.04
+
             ScrollBar.vertical: DefaultScrollBar {
                 color: themeManager.accentColor
                 opacity: 0.3
@@ -113,6 +117,8 @@ Rectangle {
                     width: parent.width * 0.85
                     height: 20
                     font.weight: Font.Light
+                    borderColor: "white"
+                    enabledColor: "black"
                     onCheckedChanged: {
                         if (checked)
                             pluginsView.currentFilter |= modelData

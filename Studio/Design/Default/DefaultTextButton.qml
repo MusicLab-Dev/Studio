@@ -1,9 +1,17 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import CursorManager 1.0
 
 Button {
     id: control
     hoverEnabled: true
+
+    onHoveredChanged: {
+        if (hovered)
+            cursorManager.set(CursorManager.Type.Clickable)
+        else
+            cursorManager.set(CursorManager.Type.Normal)
+    }
 
     contentItem: Text {
         text: control.text

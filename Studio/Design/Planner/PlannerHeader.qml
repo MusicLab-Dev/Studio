@@ -13,55 +13,12 @@ Rectangle {
         onPressedChanged: forceActiveFocus()
     }
 
-    RowLayout {
-        anchors.fill: parent
-        spacing: 0
+    PlannerEdition {
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
 
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.6
-        }
-
-        DefaultSectionWrapper {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.4
-            label: "Edition"
-
-            placeholder: RowLayout {
-                anchors.fill: parent
-                spacing: 10
-
-                EditionModeSelector {
-                    id: editModeSelector
-                    Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.375
-                }
-
-                Item {
-                    Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.375
-                    Layout.alignment: Qt.AlignHCenter
-
-                    Snapper {
-                        id: snapper
-                        height: parent.height * 0.4
-                        width: parent.width
-                        currentIndex: 4
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        onActivated: {
-                            contentView.placementBeatPrecisionScale = currentValue
-                            contentView.placementBeatPrecisionLastWidth = 0
-                        }
-                    }
-                }
-
-                ArrowNextPrev {
-                    Layout.preferredHeight: parent.height
-                    Layout.preferredWidth: parent.width * 0.25
-                    Layout.alignment: Qt.AlignHCenter
-                }
-            }
-        }
+        height: parent.height * 0.75
+        width: parent.width * 0.4
     }
 }

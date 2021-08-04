@@ -4,15 +4,12 @@ import QtQuick.Layouts 1.15
 import NodeModel 1.0
 import PartitionModel 1.0
 import PluginTableModel 1.0
+import ActionsManager 1.0
+import AudioAPI 1.0
 
-Column {
-    enum EditMode {
-        Regular,
-        Brush,
-        Select,
-        Cut
-    }
+import "../Common"
 
+ColumnLayout {
     enum TweakMode {
         Regular,
         Velocity,
@@ -23,6 +20,7 @@ Column {
     function onNodeDeleted(targetNode) {
         if (node === targetNode || node.isAParent(targetNode)) {
             modulesView.removeModule(moduleIndex)
+            actionsManager.nodeDeleted(targetNode)
             return true
         }
         return false
@@ -31,6 +29,7 @@ Column {
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
         if (node === targetNode && partitionIndex === targetPartitionIndex) {
             modulesView.removeModule(moduleIndex)
+            actionsManager.nodePartitionDeleted(targetNode, targetPartitionIndex)
             return true
         }
         return false
@@ -102,7 +101,6 @@ Column {
     property PartitionModel partition: null
     property int partitionIndex: 0
     property alias player: sequencerViewFooter.player
-    property int editMode: SequencerView.EditMode.Regular
     property int tweakMode: SequencerView.TweakMode.Regular
     property alias tweaker: sequencerViewFooter.tweaker
     property bool mustCenter: false
@@ -133,18 +131,39 @@ Column {
 
     SequencerHeader {
         id: sequencerViewHeader
-        width: parent.width
-        height: parent.height * 0.15
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height * 0.12
         z: 1
+    }
+
+    ControlsFlow {
+        PropertyAnimation {id: openAnim; target: sequencerControls; property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic}
+        function open() {
+            visible = true
+            openAnim.start()
+        }
+
+        function close() {
+            visible = false
+        }
+
+        id: sequencerControls
+        Layout.fillWidth: true
+        Layout.preferredHeight: height
+        y: parent.height
+
+        node: sequencerView.node
     }
 
     Item {
         id: contentArea
-        width: parent.width
-        height: parent.height * 0.7
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
         SequencerContentView {
             id: contentView
+            width: parent.width
+            height: parent.height
             anchors.fill: parent
 
             // When we use loadPartitionNode, contentView.height === 0 so we need to center the view once it is updated
@@ -160,6 +179,7 @@ Column {
             onTimelineEndMove: player.timelineEndMove()
             onTimelineBeginLoopMove: player.timelineBeginLoopMove()
             onTimelineEndLoopMove: player.timelineEndLoopMove()
+
         }
 
         SequencerContentTweakView {
@@ -172,7 +192,19 @@ Column {
 
     SequencerFooter {
         id: sequencerViewFooter
-        width: parent.width
-        height: parent.height * 0.15
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height * 0.12
     }
+
+    ActionsManager {
+        id: actionsManager
+    }
+
+    Connections {
+            target: eventDispatcher
+            enabled: moduleIndex === modulesView.selectedModule
+
+            function onUndo(pressed) { if (!pressed) return; actionsManager.undo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+            function onRedo(pressed) { if (!pressed) return; actionsManager.redo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+   }
 }

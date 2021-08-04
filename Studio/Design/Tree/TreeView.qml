@@ -1,6 +1,9 @@
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
-Column {
+import "../Common"
+
+ColumnLayout {
     function onNodeDeleted(targetNode) {
         return false
     }
@@ -14,6 +17,7 @@ Column {
 
     id: treeView
     focus: true
+    spacing: 0
 
     Connections {
         target: eventDispatcher
@@ -32,21 +36,21 @@ Column {
 
     TreeHeader {
         id: treeHeader
-        width: parent.width
-        height: parent.height * 0.15
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height * 0.12
         z: 1
     }
 
     TreeContentView {
         id: contentView
-        width: parent.width
-        height: parent.height * 0.7
+        Layout.fillWidth: true
+        Layout.fillHeight: true
     }
 
     TreeFooter {
         id: treeFooter
-        width: parent.width
-        height: parent.height * 0.15
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height * 0.12
     }
 
     TreeNodeMenu {

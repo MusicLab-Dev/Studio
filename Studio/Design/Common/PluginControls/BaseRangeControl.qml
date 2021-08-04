@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 
 import "../../Default"
 
+import CursorManager 1.0
+
 MouseArea {
     function incrementValue(offset) {
         valueRatio = Math.max(Math.min(valueRatio + offset / pixelsRange, 1), 0)
@@ -55,6 +57,15 @@ MouseArea {
     width: 40
     height: 40
     hoverEnabled: !tracking
+
+    onHoveredChanged: {
+        if (pressed)
+            return
+        if (containsMouse)
+            cursorManager.set(CursorManager.Type.Pressable)
+        else
+            cursorManager.set(CursorManager.Type.Normal)
+    }
 
     Component.onCompleted: valueRatio = (value - minimumValue) / rangeValue
 
