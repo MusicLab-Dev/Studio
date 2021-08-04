@@ -19,7 +19,7 @@ public:
 
     /** @brief Build the studio application */
     Studio(void);
-    Studio(int argc, char *argv[]);
+    Studio(int &argc, char *argv[]);
 
     /** @brief Destroy the studio application */
     virtual ~Studio(void) override;

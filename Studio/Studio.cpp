@@ -145,7 +145,7 @@ Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
     setWindowIcon(QIcon(":/Assets/Logo.png"));
 }
 
-Studio::Studio(int argc, char *argv[]) : QGuiApplication(argc, argv)
+Studio::Studio(int &argc, char *argv[]) : QGuiApplication(argc, argv)
 {
     setOrganizationName("Lexo");
     setOrganizationDomain("lexo-music.com");
