@@ -52,7 +52,12 @@ namespace Models
     {
         if (!EventGuard::Dirty) {
             EventGuard::Dirty = true;
-            Scheduler::Get()->addEvent(std::forward<Event>(event), []{ EventGuard::Dirty = false; });
+            Scheduler::Get()->addEvent(
+                [event = std::forward<Event>(event)](void) mutable {
+                    EventGuard::Dirty = false;
+                    event();
+                }
+            );
             return true;
         } else {
             qWarning() << "Models::AddProtectedEvent: A protected event is already registered for this generation !";
@@ -66,10 +71,13 @@ namespace Models
     {
         if (!EventGuard::Dirty) {
             EventGuard::Dirty = true;
-            Scheduler::Get()->addEvent(std::forward<Event>(event), [notify = std::forward<Notify>(notify)](void) mutable {
-                EventGuard::Dirty = false;
-                notify();
-            });
+            Scheduler::Get()->addEvent(
+                [event = std::forward<Event>(event)](void) mutable {
+                    EventGuard::Dirty = false;
+                    event();
+                },
+                std::forward<Notify>(notify)
+            );
             return true;
         } else {
             qWarning() << "Models::AddProtectedEvent: A protected event is already registered for this generation !";

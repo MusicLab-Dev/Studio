@@ -91,6 +91,9 @@ public slots:
     /** @brief Adds a note event on the fly */
     void addOnTheFly(const NoteEvent &note, NodeModel *node, const quint32 partitionIndex);
 
+    /** @brief Copy a partition instance that belongs to another PartitionsModel instance */
+    bool foreignPartitionInstanceCopy(PartitionModel *partition, const PartitionInstance &instance);
+
 signals:
     /** @brief Notify that the latest instance of partitions has changed */
     void latestInstanceChanged(void);

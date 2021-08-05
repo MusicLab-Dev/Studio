@@ -159,6 +159,32 @@ void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const 
     );
 }
 
+bool PartitionsModel::foreignPartitionInstanceCopy(PartitionModel *partition, const PartitionInstance &instance)
+{
+    QString name = getAvailablePartitionName() + " (" + partition->parentPartitions()->parentNode()->name() + " - " + partition->name() + ")";
+    const auto oldData = _data->data();
+
+    return Models::AddProtectedEvent(
+        [this, partition] {
+            _data->push(*partition->audioPartition());
+        },
+        [this, oldData, partition, instance, name] {
+            if (_data->data() != oldData) {
+                refreshPartitions();
+                _partitions.back()->setName(name);
+            } else {
+                const auto idx = _partitions.size();
+                beginInsertRows(QModelIndex(), idx, idx);
+                _partitions.push(&_data->at(idx), this, name);
+                endInsertRows();
+            }
+            auto newInstance = instance;
+            newInstance.partitionIndex = _partitions.size() - 1;
+            _instances->add(newInstance);
+        }
+    );
+}
+
 void PartitionsModel::refreshPartitions(void)
 {
     Models::RefreshModels(this, _partitions, *_data, this);

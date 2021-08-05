@@ -18,6 +18,8 @@ PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *par
     : QAbstractListModel(parent), _data(partition), _name(name)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
+    if (_data && !_data->empty())
+        _latestNote = _data->back().range.to;
 }
 
 QHash<int, QByteArray> PartitionModel::roleNames(void) const noexcept

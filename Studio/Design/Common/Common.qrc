@@ -35,5 +35,6 @@
         <file>ControlsFlow.qml</file>
         <file>ContentPopup.qml</file>
         <file>BackgroundPopup.qml</file>
+        <file>InstanceCopyPopup.qml</file>
     </qresource>
 </RCC>

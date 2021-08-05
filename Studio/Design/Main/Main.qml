@@ -16,6 +16,7 @@ import "../Common"
 import "../Modules"
 import "../Workspaces"
 import "../Export"
+import "../Common"
 
 Window {
     function urlToPath(urlString) {
@@ -91,6 +92,10 @@ Window {
 
     GlobalTextField {
         id: globalTextField
+    }
+
+    InstanceCopyPopup {
+        id: instanceCopyPopup
     }
 
     ClipboardManager {

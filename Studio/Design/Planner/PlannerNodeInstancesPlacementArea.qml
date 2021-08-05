@@ -20,9 +20,19 @@ PlacementArea {
                                     nodeInstances.partitions, [[contentView.selectedPartitionIndex, 0, targetBeatRange.from, targetBeatRange.to]]))
         }
 
-        return nodeDelegate.node == contentView.selectedPartitionNode && nodeInstances.instances.add(
-            AudioAPI.partitionInstance(contentView.selectedPartitionIndex, 0, targetBeatRange)
-        )
+        if (!contentView.selectedPartitionNode)
+            return false
+        else if (nodeDelegate.node != contentView.selectedPartitionNode) {
+            instanceCopyPopup.open(
+                nodeDelegate.node,
+                contentView.selectedPartition,
+                AudioAPI.partitionInstance(contentView.selectedPartitionIndex, 0, targetBeatRange)
+            )
+            return false
+        } else
+            return nodeInstances.instances.add(
+                AudioAPI.partitionInstance(contentView.selectedPartitionIndex, 0, targetBeatRange)
+            )
     }
 
     function removeTarget(targetIndex) {
@@ -134,5 +144,6 @@ PlacementArea {
         offset: placementArea.previewInstanceOffset
         range: placementArea.previewRange
         target: previewRectangle.visible ? contentView.selectedPartition : null
+        visible: previewRectangle.visible
     }
 }

@@ -71,7 +71,9 @@ void NodeModel::setMuted(const bool muted)
 void NodeModel::setName(const QString &name)
 {
     Models::AddProtectedEvent(
-        [this, name = Core::FlatString(name.toStdString())](void) mutable { _data->setName(std::move(name)); },
+        [this, name = Core::FlatString(name.toStdString())](void) mutable {
+            _data->setName(std::move(name));
+        },
         [this, name = _data->name()] {
             if (name != _data->name())
                 emit nameChanged();

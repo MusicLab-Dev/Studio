@@ -81,7 +81,6 @@ Item {
 
     // Global access data
     property alias surfaceContentGrid: surfaceContentGrid
-    property alias placementRectangle: placementRectangle
     property alias gestureArea: gestureArea
     property alias timelineBar: timelineBar
 
@@ -309,47 +308,5 @@ Item {
         x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1
-    }
-
-    Rectangle {
-        property color targetColor: "white"
-
-        function attach(newParent, newColor, isVoid) {
-            parent = newParent
-            targetColor = newColor
-            visible = true
-        }
-
-        function attachPartition(newParent, newColor, partition) {
-            parent = newParent
-            targetColor = newColor
-            visible = true
-            placementPartitionPreview.target = partition
-
-        }
-
-        function detach() {
-            parent = contentView
-            visible = false
-            placementPartitionPreview.target = null
-        }
-
-        id: placementRectangle
-        x: contentView.placementPixelFrom
-        y: contentView.placementPixelY
-        width: contentView.placementPixelWidth
-        height: contentView.rowHeight
-        visible: false
-        color: Qt.lighter(targetColor, 1.3)
-        border.color: Qt.darker(targetColor, 1.25)
-        border.width: 2
-
-
-        PartitionPreview {
-            id: placementPartitionPreview
-            anchors.fill: parent
-            anchors.margins: 2
-            range: AudioAPI.beatRange(placementBeatPrecisionFrom, placementBeatPrecisionTo)
-        }
     }
 }

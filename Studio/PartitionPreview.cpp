@@ -49,7 +49,7 @@ void PartitionPreview::paint(QPainter *painter)
     constexpr int NotesPerOctave = 12;
 
     if (!_target || _target->audioPartition()->empty()) {
-        // painter->fillRect(0, 0, static_cast<int>(width()), static_cast<int>(height()), QColorConstants::Transparent);
+        // painter->fillRect(0, 0, static_cast<int>(width()), static_cast<int>(height()), QColorConstants::Blue);
         return;
     }
 
