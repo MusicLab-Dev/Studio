@@ -207,4 +207,8 @@ ColumnLayout {
             function onUndo(pressed) { if (pressed) actionsManager.undo(); contentView.pianoView.notesPlacementArea.resetSelection() }
             function onRedo(pressed) { if (pressed) actionsManager.redo(); contentView.pianoView.notesPlacementArea.resetSelection() }
    }
+
+    FMDebugWindow {
+        node: sequencerView.node
+    }
 }
