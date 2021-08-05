@@ -25,6 +25,7 @@ PlacementArea {
         else if (nodeDelegate.node != contentView.selectedPartitionNode) {
             instanceCopyPopup.open(
                 nodeDelegate.node,
+                contentView.selectedPartitionNode,
                 contentView.selectedPartition,
                 AudioAPI.partitionInstance(contentView.selectedPartitionIndex, 0, targetBeatRange)
             )

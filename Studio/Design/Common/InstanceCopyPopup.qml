@@ -1,18 +1,19 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
+import QtGraphicalEffects 1.15
 
 import "../Default"
+import "../Common"
 
 import AudioAPI 1.0
 import NodeModel 1.0
 import PartitionModel 1.0
 
 Item {
-    function open(node, partition, instance) {
-        console.log("Open", node.name, partition.name)
-        animOpen.start()
+    function open(node, partitionNode, partition, instance) {
+        openAnim.start()
         targetNode = node
+        targetPartitionNode = partitionNode
         targetPartition = partition
         targetInstance = instance
         visible = true
@@ -21,19 +22,22 @@ Item {
     function acceptAndClose() {
         targetNode.partitions.foreignPartitionInstanceCopy(targetPartition, targetInstance)
         targetNode = null
+        targetPartitionNode = null
         targetPartition = null
         targetInstance = undefined
-        animClose.start()
+        visible = false
     }
 
     function cancelAndClose() {
         targetNode = null
+        targetPartitionNode = null
         targetPartition = null
         targetInstance = undefined
-        animClose.start()
+        visible = false
     }
 
     property NodeModel targetNode: null
+    property NodeModel targetPartitionNode: null
     property PartitionModel targetPartition: null
     property var targetInstance: undefined
 
@@ -42,69 +46,80 @@ Item {
     height: parent.height
     visible: false
 
+    ParallelAnimation {
+        id: openAnim
+        PropertyAnimation { target: window; property: "opacity"; from: 0.1; to: 1; duration: 500; easing.type: Easing.Linear }
+        PropertyAnimation { target: shadow; property: "opacity"; from: 0.1; to: 1; duration: 500; easing.type: Easing.Linear }
+        PropertyAnimation { target: background; property: "opacity"; from: 0.1; to: 0.5; duration: 300; easing.type: Easing.Linear }
+    }
+
+    Rectangle {
+        id: background
+        anchors.fill: parent
+        color: "grey"
+        opacity: 0.5
+    }
+
+    DropShadow {
+        id: shadow
+        anchors.fill: window
+        horizontalOffset: 4
+        verticalOffset: 4
+        radius: 8
+        samples: 17
+        color: "#80000000"
+        source: window
+    }
+
     MouseArea {
         id: ms
         anchors.fill: parent
         onReleased: { if (visible) cancelAndClose() }
     }
 
-    Rectangle {
-        id: rect
-        anchors.fill: parent
-        opacity: 0
-        color: "grey"
+    ContentPopup {
+        id: window
+        width: Math.max(parent.width * 0.3, 400)
+        height: Math.max(parent.height * 0.25, 250)
 
-        OpacityAnimator {
-            id: animOpen
-            target: rect
-            from: 0
-            to: 0.85
-            duration: 200
-        }
+        Item {
+            id: windowArea
+            anchors.fill: parent
+            anchors.margins: 30
 
-        OpacityAnimator {
-            id: animClose
-            target: rect
-            from: 0.85
-            to: 0
-            duration: 100
-
-            onFinished: instanceCopyPopup.visible = false
-        }
-    }
-
-    Rectangle {
-        id: popupBackground
-        anchors.centerIn: parent
-        width: parent.width * 0.5
-        height: parent.height * 0.5
-
-        Column {
-
-            DefaultText {
-                text: targetNode && targetPartition ? qsTr("Do you want to copy partition '") + targetPartition.name + qsTr("' from node '") + targetNode.name + "'" : ""
-                width: popupBackground.width
-                height: popupBackground.height * 0.6
-            }
-
-            Row {
-                DefaultTextButton {
-                    width: popupBackground.width / 2
-                    height: popupBackground.height * 0.4
-                    text: qsTr("Yes")
-
-                    onClicked: {
-                        acceptAndClose()
+            Column {
+                DefaultText {
+                    text: {
+                        if (!targetNode || !targetPartitionNode || !targetPartition)
+                            return ""
+                        return qsTr("Do you want to copy partition '") + targetPartition.name + qsTr("' from '")
+                            + targetPartitionNode.name + qsTr("' into '") + targetNode.name + "' ?"
                     }
+                    width: windowArea.width
+                    height: windowArea.height - confirmRow.height
+                    wrapMode: Text.Wrap
+                    font.pixelSize: 20
+                    fontSizeMode: Text.Fit
+                    color: "white"
                 }
 
-                DefaultTextButton {
-                    width: popupBackground.width / 2
-                    height: popupBackground.height * 0.4
-                    text: qsTr("No")
+                Row {
+                    id: confirmRow
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 30
 
-                    onClicked: {
-                        cancelAndClose()
+                    TextRoundedButton {
+                        text: qsTr("Yes")
+                        hoverOnText: false
+
+                        onReleased: acceptAndClose()
+                    }
+
+                    TextRoundedButton {
+                        id: noButton
+                        text: qsTr("No")
+
+                        onReleased: cancelAndClose()
                     }
                 }
             }

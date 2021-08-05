@@ -87,9 +87,15 @@ signals:
     void volumeContext(float ratio);
     void volumePlaylist(float ratio);
 
-    // Other
+    // Undo / Redo
     void undo(bool pressed);
     void redo(bool pressed);
+
+    // Project
+    void openProject(bool pressed);
+    void exportProject(bool pressed);
+    void save(bool pressed);
+    void saveAs(bool pressed);
 
 private:
     KeyboardEventListener _keyboardListener;

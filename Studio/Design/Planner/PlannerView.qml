@@ -27,7 +27,7 @@ ColumnLayout {
         app.plannerNodesCache = []
     }
 
-    readonly property string moduleName: qsTr("Planner")
+    readonly property string moduleName: contentView.nodeViewRepeater.count ? nodeList.getListName() : qsTr("Planner")
     property int moduleIndex
     readonly property alias player: plannerFooter.player
     property alias nodeList: contentView.nodeList
@@ -40,17 +40,17 @@ ColumnLayout {
         target: eventDispatcher
         enabled: moduleIndex === modulesView.selectedModule
 
-        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
-        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
-        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
+        function onPlayContext(pressed) { if (pressed) player.playOrPause() }
+        function onReplayContext(pressed) { if (pressed) player.replay() }
+        function onStopContext(pressed) { if (pressed) player.stop() }
     }
 
     Connections {
         target: eventDispatcher
 
-        function onPlayPlaylist(pressed) { if (!pressed) return; player.playOrPause() }
-        function onReplayPlaylist(pressed) { if (!pressed) return; player.replay(); }
-        function onStopPlaylist(pressed) { if (!pressed) return; player.stop(); }
+        function onPlayPlaylist(pressed) { if (pressed) player.playOrPause() }
+        function onReplayPlaylist(pressed) { if (pressed) player.replay() }
+        function onStopPlaylist(pressed) { if (pressed) player.stop() }
     }
 
     PlannerHeader {
@@ -88,7 +88,7 @@ ColumnLayout {
         target: eventDispatcher
         enabled: moduleIndex === modulesView.selectedModule
 
-        function onUndo(pressed) { if (!pressed) return; actionsManager.undo(); }
-        function onRedo(pressed) { if (!pressed) return; actionsManager.redo(); }
+        function onUndo(pressed) { if (pressed) actionsManager.undo() }
+        function onRedo(pressed) { if (pressed) actionsManager.redo() }
    }
 }

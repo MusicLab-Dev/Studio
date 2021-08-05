@@ -36,16 +36,16 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
 
-                onPressed: player.timelineBeginMove(mouseX / projectPreview.pixelsPerBeatPrecision)
-                onPositionChanged: player.timelineMove(mouseX / projectPreview.pixelsPerBeatPrecision)
+                onPressed: player.timelineBeginMove(Math.min(Math.max(mouseX, 0), width) / projectPreview.pixelsPerBeatPrecision)
+                onPositionChanged: player.timelineMove(Math.min(Math.max(mouseX, 0), width) / projectPreview.pixelsPerBeatPrecision)
                 onReleased: player.timelineEndMove()
             }
 
             Rectangle {
-                width: 2
+                width: 4
                 height: parent.height
                 color: "white"
-                x: projectPreview.pixelsPerBeatPrecision * player.currentPlaybackBeat
+                x: projectPreview.pixelsPerBeatPrecision * player.currentPlaybackBeat - 2
             }
         }
     }
@@ -62,6 +62,7 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredHeight: parent.height * 0.5
             Layout.preferredWidth: parent.width * 0.25
+            currentPlaybackBeat: player.currentPlaybackBeat
         }
 
         Player {

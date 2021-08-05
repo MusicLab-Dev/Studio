@@ -2,38 +2,17 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import CursorManager 1.0
 
-MouseArea {
+import "../Default"
+
+DefaultTextButton {
     property bool hoverOnText: true
-    property alias text: textRoundedButtonText.text
 
     id: textRoundedButton
+    showBorder: true
     width: 70
     height: 30
-    hoverEnabled: true
-
-    onHoveredChanged: {
-        if (containsMouse)
-            cursorManager.set(CursorManager.Type.Clickable)
-        else
-            cursorManager.set(CursorManager.Type.Normal)
-    }
-
-    Rectangle {
-        anchors.fill: parent
-        color: textRoundedButton.hoverOnText ? "transparent" : (textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0")
-        radius: 5
-        border.color: textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0"
-        border.width: textRoundedButton.hoverOnText ? 1 : 0
-
-        Text {
-            id: textRoundedButtonText
-            anchors.fill: parent
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            font.pointSize: 10
-            color: "#FFFFFF"
-            opacity: textRoundedButton.hoverOnText ? (textRoundedButton.containsMouse ? 1 : 0.7) : 1
-        }
-    }
-
+    rectItem.color: textRoundedButton.hoverOnText ? "transparent" : (textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0")
+    rectItem.radius: 5
+    rectItem.border.color: textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0"
+    rectItem.border.width: textRoundedButton.hoverOnText ? 1 : 0
 }

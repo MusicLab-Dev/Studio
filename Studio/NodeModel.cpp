@@ -13,6 +13,7 @@
 
 #include <Audio/PluginTable.hpp>
 
+#include "Application.hpp"
 #include "Models.hpp"
 #include "NodeModel.hpp"
 #include "ThemeManager.hpp"
@@ -182,6 +183,7 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
                     Scheduler::Get()->playImpl();
                 } else
                     Scheduler::Get()->invalidateCurrentGraph();
+                processGraphChange();
             }
         ))
         return nullptr;
@@ -228,6 +230,7 @@ NodeModel *NodeModel::addParentNodeImpl(const QString &pluginPath, const bool ad
                     Scheduler::Get()->playImpl();
                 } else
                     Scheduler::Get()->invalidateCurrentGraph();
+                processGraphChange();
             }
         ))
         return nullptr;
@@ -254,6 +257,7 @@ bool NodeModel::remove(const int idx)
                 scheduler->playImpl();
             } else
                 scheduler->invalidateCurrentGraph();
+            processGraphChange();
         }
     );
 }
@@ -298,13 +302,14 @@ bool NodeModel::moveToChildren(NodeModel *target)
 
             target->setParent(this);
         },
-        [hasPaused] {
+        [this, hasPaused] {
             if (hasPaused) {
                 Scheduler::Get()->getCurrentGraph().wait();
                 Scheduler::Get()->invalidateCurrentGraph();
                 Scheduler::Get()->playImpl();
             } else
                 Scheduler::Get()->invalidateCurrentGraph();
+            processGraphChange();
         }
     );
 }
@@ -363,13 +368,14 @@ bool NodeModel::moveToParent(NodeModel *target)
             targetParent->endInsertRows();
             setParent(targetParent);
         },
-        [hasPaused] {
+        [this, hasPaused] {
             if (hasPaused) {
                 Scheduler::Get()->getCurrentGraph().wait();
                 Scheduler::Get()->invalidateCurrentGraph();
                 Scheduler::Get()->playImpl();
             } else
                 Scheduler::Get()->invalidateCurrentGraph();
+            processGraphChange();
         }
     );
 }
@@ -411,4 +417,9 @@ void NodeModel::getAllChildrenImpl(QVector<NodeModel *> &res) noexcept
     res.push_back(this);
     for (auto &child : _children)
         child->getAllChildrenImpl(res);
+}
+
+void NodeModel::processGraphChange(void) const noexcept
+{
+    emit Application::Get()->project()->master()->graphChanged();
 }

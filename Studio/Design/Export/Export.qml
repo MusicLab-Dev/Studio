@@ -70,7 +70,7 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
 
-                    text: "Export"
+                    text: qsTr("Export")
                 }
             }
 
@@ -87,7 +87,7 @@ Item {
                         Layout.preferredHeight: parent.height * 0.15
                         Layout.fillWidth: true
 
-                        text.text: "Type"
+                        text.text: qsTr("Type")
 
                         comboBox.model: ListModel {
                             ListElement { text: "16" }
@@ -151,7 +151,7 @@ Item {
                         TextRoundedButton {
                             anchors.fill: parent
 
-                            text: inProcess ? "Abort" : "Launch"
+                            text: inProcess ? qsTr("Abort") : qsTr("Launch")
 
                             onClicked: {
                                 inProcess = !inProcess
@@ -171,7 +171,7 @@ Item {
                         TextRoundedButton {
                             anchors.fill: parent
 
-                            text: "Close"
+                            text: qsTr("Close")
 
                             onClicked: {
                                 stop()

@@ -124,9 +124,9 @@ ColumnLayout {
         target: eventDispatcher
         enabled: moduleIndex === modulesView.selectedModule
 
-        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
-        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
-        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
+        function onPlayContext(pressed) { if (pressed) player.playOrPause() }
+        function onReplayContext(pressed) { if (pressed) player.replay() }
+        function onStopContext(pressed) { if (pressed) player.stop() }
     }
 
     SequencerHeader {
@@ -204,7 +204,7 @@ ColumnLayout {
             target: eventDispatcher
             enabled: moduleIndex === modulesView.selectedModule
 
-            function onUndo(pressed) { if (!pressed) return; actionsManager.undo(); contentView.pianoView.notesPlacementArea.resetSelection() }
-            function onRedo(pressed) { if (!pressed) return; actionsManager.redo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+            function onUndo(pressed) { if (pressed) actionsManager.undo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+            function onRedo(pressed) { if (pressed) actionsManager.redo(); contentView.pianoView.notesPlacementArea.resetSelection() }
    }
 }

@@ -161,6 +161,12 @@ Item {
                 color: Qt.darker(themeManager.foregroundColor, 1.1)
             }
 
+            MouseArea {
+                anchors.fill: parent
+                onPressedChanged: forceActiveFocus()
+                onWheel: {} // Steal wheel events
+            }
+
             ListView {
                 id: treeComponentsListView
                 anchors.centerIn: parent

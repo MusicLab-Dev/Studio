@@ -33,6 +33,9 @@ public:
     static constexpr auto DefaultPlaybackMode = Audio::PlaybackMode::Production;
 
 
+    /** @brief Get the application instance */
+    [[nodiscard]] static inline Application *Get(void) noexcept { return _Instance; }
+
     /** @brief Construct a new application */
     explicit Application(QObject *parent = nullptr);
 
@@ -97,4 +100,6 @@ private:
     Scheduler _scheduler;
     Project _project;
     // std::unique_ptr<PluginTableModel> _plugins;
+
+    static inline Application *_Instance { nullptr };
 };

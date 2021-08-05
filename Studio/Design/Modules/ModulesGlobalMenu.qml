@@ -10,6 +10,25 @@ DefaultMenuButton {
         app.project.loadFrom(path)
     }
 
+    function openProject() {
+        loadFileDialog.open()
+    }
+
+    function exportProject() {
+        exportManager.open()
+    }
+
+    function save() {
+        if (app.project.path === "")
+            saveAs()
+        else
+            app.project.save()
+    }
+
+    function saveAs() {
+        saveFileDialog.open()
+    }
+
     id: menuButton
     height: parent.height * 0.05
     width: parent.height * 0.05
@@ -19,6 +38,15 @@ DefaultMenuButton {
     rect.border.width: 1
 
     onReleased: globalMenu.popup()
+
+    Connections {
+        target: eventDispatcher
+
+        function onOpenProject(pressed) { if (pressed) menuButton.openProject() }
+        function onExportProject(pressed) { if (pressed) menuButton.exportProject() }
+        function onSave(pressed) { if (pressed) menuButton.save(); }
+        function onSaveAs(pressed) { if (pressed) menuButton.saveAs(); }
+    }
 
     DefaultMenu {
         id: globalMenu
@@ -33,31 +61,25 @@ DefaultMenuButton {
 
         Action {
             text: qsTr("Save")
-            onTriggered: {
-                if (app.project.path === "")
-                    saveFileDialog.open()
-                else
-                    app.project.save()
-            }
+            onTriggered: menuButton.save()
         }
 
         Action {
             text: qsTr("Save Project As...")
-            onTriggered: saveFileDialog.open()
+            onTriggered: menuButton.saveAs()
         }
 
         Action {
             text: qsTr("Open Project File...")
-            onTriggered: loadFileDialog.open()
+            onTriggered: openProject()
         }
 
         Action {
             text: qsTr("Export")
-            onTriggered: exportManager.open()
+            onTriggered: menuButton.exportProject()
         }
 
         DefaultMenu {
-
             title: "Open Template..."
 
             Action {
@@ -104,7 +126,7 @@ DefaultMenuButton {
 
     DefaultFileDialog {
         id: loadFileDialog
-        title: qsTr("Choose a file")
+        title: qsTr("Load a project file")
         folder: shortcuts.home
         nameFilters: [ "All files (*)" ]
         selectExisting: true

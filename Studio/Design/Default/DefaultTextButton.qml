@@ -3,8 +3,13 @@ import QtQuick.Controls 2.15
 import CursorManager 1.0
 
 Button {
+    property alias textItem: textItem
+    property alias rectItem: rectItem
+    property alias showBorder: rectItem.visible
+
     id: control
     hoverEnabled: true
+    font.pointSize: 20
 
     onHoveredChanged: {
         if (hovered)
@@ -14,15 +19,28 @@ Button {
     }
 
     contentItem: Text {
+        id: textItem
+        width: control.width
+        height: control.height
+        verticalAlignment: Qt.AlignVCenter
+        horizontalAlignment: Qt.AlignHCenter
         text: control.text
         font: control.font
-        color: control.pressed ? themeManager.accentColor : control.hovered ? themeManager.accentColor : control.enabled ? "#FFFFFF" : "#FFFFFF"
-        // the component is invisible because it is design to be on dark background and its color is based on white
-        opacity: control.pressed ? 1.0 : control.hovered ? 0.51 : control.enabled ? 0.71 : 0.44
-        elide: Text.ElideRight
-        verticalAlignment: Qt.AlignVCenter
-        horizontalAlignment: Qt.AlignLeft
+        color: control.hovered || control.pressed ? themeManager.accentColor : "#FFFFFF"
+        opacity: control.pressed ? 1.0 : control.hovered ? 0.85 : control.enabled ? 0.7 : 0.5
+        // elide: Text.ElideRight
+        fontSizeMode: Text.Fit
+        wrapMode: Text.Wrap
      }
 
-    background: Item {}
+    background: Rectangle {
+        id: rectItem
+        width: control.width
+        height: control.height
+        color: "transparent"
+        radius: 40
+        visible: false
+        border.width: 1
+        border.color: textItem.color
+    }
 }

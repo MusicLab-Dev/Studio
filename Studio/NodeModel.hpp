@@ -232,6 +232,9 @@ signals:
     /** @brief Notify that the latest instance of the node has changed */
     void latestInstanceChanged(void);
 
+    /** @brief Notify that the node graph has changed */
+    void graphChanged(void);
+
 private:
     Audio::Node *_data { nullptr };
     Core::FlatVector<NodePtr> _children {};
@@ -251,4 +254,7 @@ private:
 
     /** @brief Collect all children */
     void getAllChildrenImpl(QVector<NodeModel *> &res) noexcept;
+
+    /** @brief Emit master's graphChanged signal */
+    void processGraphChange(void) const noexcept;
 };

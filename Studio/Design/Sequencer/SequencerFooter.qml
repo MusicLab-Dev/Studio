@@ -61,10 +61,10 @@ Rectangle {
             spacing: 10
 
             TimerView {
-                currentPlaybackBeat: sequencerView.player.currentPlaybackBeat
                 Layout.alignment: Qt.AlignVCenter
                 Layout.preferredHeight: parent.height * 0.5
                 Layout.preferredWidth: parent.width * 0.25
+                currentPlaybackBeat: player.currentPlaybackBeat
             }
 
             Player {

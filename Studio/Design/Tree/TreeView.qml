@@ -26,18 +26,22 @@ ColumnLayout {
     }
 
     Connections {
+        target: app.project.master
+        enabled: treeView.visible
+
+        function onGraphChanged() {
+            treeFooter.projectPreview.requestUpdate()
+        }
+    }
+
+    Connections {
         target: eventDispatcher
         enabled: moduleIndex === modulesView.selectedModule
 
-        function onAction(pressed) {
-            if (!pressed)
-                return
-            contentView.actionEvent()
-        }
-
-        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
-        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
-        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
+        function onAction(pressed) { if (pressed) contentView.actionEvent() }
+        function onPlayContext(pressed) { if (pressed) player.playOrPause() }
+        function onReplayContext(pressed) { if (pressed) player.replay() }
+        function onStopContext(pressed) { if (pressed) player.stop() }
     }
 
     TreeHeader {

@@ -26,6 +26,7 @@ ContentView {
     readonly property real linkChildWidth: childOffset - linkOffset
     readonly property real selectedRowHeight: rowHeight * 1.25
     property bool showChildren: true
+    property alias nodeViewRepeater: nodeViewRepeater
     property NodeListModel nodeList: NodeListModel {
         id: nodeList
     }

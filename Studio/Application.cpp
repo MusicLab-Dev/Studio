@@ -16,6 +16,7 @@ Application::Application(QObject *parent)
         _scheduler(Audio::ProjectPtr(_backendProject), this),
         _project(_backendProject.get(), this)
 {
+    _Instance = this;
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 

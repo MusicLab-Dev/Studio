@@ -121,14 +121,16 @@ Item {
 
     ParallelAnimation {
         id: openAnim
-        PropertyAnimation { target: pluginsWindow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
-        PropertyAnimation { target: shadow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
-        PropertyAnimation { target: background; property: "opacity"; from: 0; to: background.opacityMax; duration: 100; }
+        PropertyAnimation { target: pluginsWindow; property: "opacity"; from: 0.1; to: 1; duration: 500; easing.type: Easing.Linear }
+        PropertyAnimation { target: shadow; property: "opacity"; from: 0.1; to: 1; duration: 500; easing.type: Easing.Linear }
+        PropertyAnimation { target: background; property: "opacity"; from: 0.1; to: 0.5; duration: 300; easing.type: Easing.Linear }
     }
 
-    BackgroundPopup {
-        anchors.fill: parent
+    Rectangle {
         id: background
+        anchors.fill: parent
+        color: "grey"
+        opacity: 0.5
     }
 
     DropShadow {

@@ -28,17 +28,17 @@ ColumnLayout {
         target: eventDispatcher
         enabled: moduleIndex === modulesView.selectedModule
 
-        function onPlayContext(pressed) { if (!pressed) return; player.playOrPause() }
-        function onReplayContext(pressed) { if (!pressed) return; player.replay(); }
-        function onStopContext(pressed) { if (!pressed) return; player.stop(); }
+        function onPlayContext(pressed) { if (pressed) player.playOrPause() }
+        function onReplayContext(pressed) { if (pressed) player.replay() }
+        function onStopContext(pressed) { if (pressed) player.stop() }
     }
 
     Connections {
         target: eventDispatcher
 
-        function onPlayPlaylist(pressed) { if (!pressed) return; player.playOrPause() }
-        function onReplayPlaylist(pressed) { if (!pressed) return; player.replay(); }
-        function onStopPlaylist(pressed) { if (!pressed) return; player.stop(); }
+        function onPlayPlaylist(pressed) { if (pressed) player.playOrPause() }
+        function onReplayPlaylist(pressed) { if (pressed) player.replay() }
+        function onStopPlaylist(pressed) { if (pressed) player.stop() }
     }
 
     PlaylistHeader {

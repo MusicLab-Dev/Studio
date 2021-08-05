@@ -74,6 +74,8 @@ Rectangle {
     }
 
     DefaultTextButton {
+        width: parent.width
+        height: 30
         text: qsTr("+ NEW WORKSPACE")
 
         anchors.top: workspacesForegroundScrollView.bottom

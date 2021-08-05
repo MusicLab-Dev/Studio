@@ -33,7 +33,10 @@ QStringList EventDispatcher::targetEventList(void) const noexcept
         "Copy",
         "Paste",
         "Cut",
-        "Erase"
+        "Erase",
+        "OpenProject",
+        "Save",
+        "SaveAs"
     };
 
     return List;
@@ -106,6 +109,36 @@ bool EventDispatcher::sendSignals(const AEventListener::EventTarget event, const
         break;
     case AEventListener::EventTarget::StopPlaylist:
         emit stopPlaylist(booleanValue);
+        break;
+    case AEventListener::EventTarget::Undo:
+        emit undo(booleanValue);
+        break;
+    case AEventListener::EventTarget::Redo:
+        emit redo(booleanValue);
+        break;
+    case AEventListener::EventTarget::Copy:
+        emit copy(booleanValue);
+        break;
+    case AEventListener::EventTarget::Paste:
+        emit paste(booleanValue);
+        break;
+    case AEventListener::EventTarget::Cut:
+        emit cut(booleanValue);
+        break;
+    case AEventListener::EventTarget::Erase:
+        emit erase(booleanValue);
+        break;
+    case AEventListener::EventTarget::OpenProject:
+        emit openProject(booleanValue);
+        break;
+    case AEventListener::EventTarget::ExportProject:
+        emit exportProject(booleanValue);
+        break;
+    case AEventListener::EventTarget::Save:
+        emit save(booleanValue);
+        break;
+    case AEventListener::EventTarget::SaveAs:
+        emit saveAs(booleanValue);
         break;
     default:
         return false;

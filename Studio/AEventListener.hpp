@@ -45,7 +45,11 @@ public:
         VolumePlaylist,
         Undo,
         Redo,
-        Erase
+        Erase,
+        OpenProject,
+        ExportProject,
+        Save,
+        SaveAs
     };
 
     Q_ENUM(EventTarget)

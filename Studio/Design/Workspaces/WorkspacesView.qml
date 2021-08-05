@@ -46,14 +46,16 @@ Item {
 
     ParallelAnimation {
         id: openAnim
-        PropertyAnimation { target: workspaceWindow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
-        PropertyAnimation { target: shadow; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.OutCirc }
+        PropertyAnimation { target: workspaceWindow; property: "opacity"; from: 0.1; to: 1; duration: 500; easing.type: Easing.Linear }
+        PropertyAnimation { target: shadow; property: "opacity"; from: 0.1; to: 1; duration: 500; easing.type: Easing.Linear }
+        PropertyAnimation { target: background; property: "opacity"; from: 0.1; to: 0.5; duration: 300; easing.type: Easing.Linear }
     }
 
-    BackgroundPopup {
+    Rectangle {
         id: background
         anchors.fill: parent
-        opacity: opacityMax
+        color: "grey"
+        opacity: 0.5
     }
 
     DropShadow {
@@ -82,36 +84,29 @@ Item {
         TextRoundedButton {
             visible: workspaceContentArea.selectedIndex !== -1 && !workspaceContentArea.selectedIndexIsDir
             id: workspacesViewAcceptButtonText
-            x: workspacesViewCloseButtonText.x - width - height
-            y: height
-            text: "Accept"
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.right: workspacesViewBackButtonText.visible ? workspacesViewBackButtonText.left : workspacesViewCloseButtonText.left
+            anchors.rightMargin: 30
+            text: qsTr("Accept")
             hoverOnText: false
 
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-
-                onEntered: { workspacesViewAcceptButtonText.buttonHovered = true }
-
-                onExited: { workspacesViewAcceptButtonText.buttonHovered = false }
-
-                onReleased: {
-                    workspaceView.fileUrl = workspaceContentArea.selectedPath
-                    workspaceView.acceptAndClose()
-                }
+            onReleased: {
+                workspaceView.fileUrl = workspaceContentArea.selectedPath
+                workspaceView.acceptAndClose()
             }
         }
 
         TextRoundedButton {
             id: workspacesViewBackButtonText
             visible: workspaceForeground.parentDepth !== 0
-            width: workspacesViewCloseButtonText.width
-            height: workspacesViewCloseButtonText.height
             anchors.top: parent.top
             anchors.topMargin: 30
-            anchors.right: workspacesViewCloseButtonText.right
+            anchors.right: workspacesViewCloseButtonText.left
             anchors.rightMargin: 30
-            text: "Back"
+            width: 70
+            height: 30
+            text: qsTr("Back")
 
             onReleased: {
                 workspaceForeground.actualPath += "/.."
@@ -125,7 +120,9 @@ Item {
             anchors.topMargin: 30
             anchors.right: parent.right
             anchors.rightMargin: 30
-            text: "Close"
+            width: 70
+            height: 30
+            text: qsTr("Close")
 
             onReleased: workspaceView.cancelAndClose()
         }

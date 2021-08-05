@@ -25,6 +25,20 @@ QVariant NodeListModel::data(const QModelIndex &index, int role) const
     }
 }
 
+QString NodeListModel::getListName(void) const noexcept
+{
+    switch (_models.size()) {
+    case 0:
+        return QString();
+    case 1:
+        return _models[0]->name();
+    case 2:
+        return _models[0]->name() + ", " + _models[1]->name();
+    default:
+        return _models[0]->name() + ", " + _models[1]->name() + ", ... (" + QString::number(_models.size()) + ")";
+    }
+}
+
 void NodeListModel::loadNode(NodeModel *node)
 {
     beginResetModel();
