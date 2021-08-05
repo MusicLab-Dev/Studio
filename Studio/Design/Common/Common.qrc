@@ -36,5 +36,6 @@
         <file>ContentPopup.qml</file>
         <file>BackgroundPopup.qml</file>
         <file>InstanceCopyPopup.qml</file>
+        <file>FMDebugWindow.qml</file>
     </qresource>
 </RCC>
