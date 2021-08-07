@@ -18,6 +18,7 @@
         <file>MuteButton.qml</file>
         <file>ContentViewTimelineBar.qml</file>
         <file>Snapper.qml</file>
+        <file>SoundMeter.qml</file>
         <file>ContentViewTimeline.qml</file>
         <file>TextRoundedButton.qml</file>
         <file>PartitionComboBox.qml</file>

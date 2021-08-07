@@ -40,6 +40,17 @@
         ]
     },
     "General": {
+        "Performance": [
+            {
+                "id": "soundMeterTickRate",
+                "name": "Sound meter tick rate (audio frame interval)",
+                "help": "Change the tick rate of sound meters in milliseconds",
+                "tags": ["sound", "meter", "tick", "rate"],
+                "type": "ComboBox",
+                "values": [0, 1, 2, 3, 4, 5],
+                "start": 1
+            }
+        ],
         "Workspaces": [
             {
                 "id": "workspacePaths",

@@ -42,6 +42,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<Key>("Key");
     qRegisterMetaType<Velocity>("Velocity");
     qRegisterMetaType<Tuning>("Tuning");
+    qRegisterMetaType<DB>("DB");
     qRegisterMetaType<BPM>("BPM");
     qRegisterMetaType<MidiChannels>("MidiChannels");
     qRegisterMetaType<BlockSize>("BlockSize");
@@ -66,6 +67,7 @@ void Studio::InitResources(void)
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
     qmlRegisterUncreatableType<Note>("AudioAPI", 1, 0, "Note", "Cannot construct Note");
+    qmlRegisterUncreatableType<VolumeCache>("AudioAPI", 1, 0, "VolumeCache", "Cannot construct VolumeCache");
     qmlRegisterUncreatableType<NoteEvent>("AudioAPI", 1, 0, "NoteEvent", "Cannot construct NoteEvent");
     qmlRegisterUncreatableType<PartitionInstance>("AudioAPI", 1, 0, "PartitionInstance", "Cannot construct PartitionInstance");
     qmlRegisterUncreatableType<GPoint>("AudioAPI", 1, 0, "Point", "Cannot construct Point");

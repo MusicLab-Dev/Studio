@@ -21,10 +21,8 @@ SettingsBackground {
 
         TextRoundedButton {
             id: settingsViewDefaultsButtonText
-            text: "Defaults"
+            text: qsTr("Defaults")
             y: height
-            width: settingsViewReloadButtonText.width
-            height: settingsViewReloadButtonText.height
             anchors.right: settingsViewReloadButtonText.left
             anchors.rightMargin: height
 
@@ -33,10 +31,10 @@ SettingsBackground {
 
         TextRoundedButton {
             id: settingsViewReloadButtonText
-            text: "Reload"
+            text: qsTr("Reload")
             y: height
-            width: settingsViewCloseButtonText.width
-            height: settingsViewCloseButtonText.height
+            width: settingsViewDefaultsButtonText.width
+            height: settingsViewDefaultsButtonText.height
             anchors.right: settingsViewCloseButtonText.left
             anchors.rightMargin: height
 
@@ -47,7 +45,9 @@ SettingsBackground {
             id: settingsViewCloseButtonText
             x: parent.width - width - height
             y: height
-            text: "Done"
+            width: settingsViewDefaultsButtonText.width
+            height: settingsViewDefaultsButtonText.height
+            text: qsTr("Done")
 
             onReleased: {
                 app.settings.saveValues()

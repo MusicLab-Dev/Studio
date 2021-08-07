@@ -29,6 +29,10 @@ DefaultMenuButton {
         saveFileDialog.open()
     }
 
+    function settings() {
+        modulesView.settingsView.open()
+    }
+
     id: menuButton
     height: parent.height * 0.05
     width: parent.height * 0.05
@@ -46,6 +50,7 @@ DefaultMenuButton {
         function onExportProject(pressed) { if (pressed) menuButton.exportProject() }
         function onSave(pressed) { if (pressed) menuButton.save(); }
         function onSaveAs(pressed) { if (pressed) menuButton.saveAs(); }
+        function onSettings(pressed) { if (pressed) menuButton.settings(); }
     }
 
     DefaultMenu {
@@ -71,7 +76,7 @@ DefaultMenuButton {
 
         Action {
             text: qsTr("Open Project File...")
-            onTriggered: openProject()
+            onTriggered: menuButton.openProject()
         }
 
         Action {
@@ -94,7 +99,7 @@ DefaultMenuButton {
 
         Action {
             text: qsTr("Preferences")
-            onTriggered: modulesView.settingsView.open()
+            onTriggered: menuButton.settings()
         }
 
         Action {

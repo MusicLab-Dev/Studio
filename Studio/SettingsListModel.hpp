@@ -96,6 +96,9 @@ signals:
     /** @brief Notify when the categories change */
     void categoriesChanged(void);
 
+    /** @brief Notify when a value has been set */
+    void valueChanged(const QString &id, const QVariant &value);
+
 private:
     QFile _jsonSettingsFile, _jsonValuesFile;
     QString _jsonSettingsStr, _jsonValuesStr;

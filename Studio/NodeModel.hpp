@@ -17,6 +17,7 @@
 #include "PartitionsModel.hpp"
 #include "AutomationsModel.hpp"
 #include "PluginModel.hpp"
+#include "VolumeCache.hpp"
 
 class NodeModel;
 
@@ -206,6 +207,13 @@ public slots:
 
     /** @brief Retreive a list of all children (close and far) */
     QVariant getAllChildren(void) noexcept;
+
+    /** @brief Get the internal buffer volume cache */
+    QVariant getVolumeCache(void) const noexcept;
+
+    /** @brief In/Decrement analysis request count */
+    void incrementAnalysisRequestCount(void) { ++_data->analysisRequestCount(); }
+    void decrementAnalysisRequestCount(void) { --_data->analysisRequestCount(); }
 
 signals:
     /** @brief Notify that muted property has changed */

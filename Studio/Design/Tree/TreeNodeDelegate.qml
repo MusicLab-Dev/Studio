@@ -6,6 +6,7 @@ import PluginModel 1.0
 import PluginTableModel 1.0
 
 import "../Default"
+import "../Common"
 
 Column {
     property NodeModel parentNode: null
@@ -49,8 +50,12 @@ Column {
             visible: childrenRepeater.count && !nodeInstanceBackground.drag.active
         }
 
-        Rectangle {
+        SoundMeter {
             id: soundMeter
+            enabled: plannerView.visible
+            // color: nodeInstanceBackgroundRect.border.color
+            targetPlayer: treeView.player
+            targetNode: nodeDelegate.node
             visible: !nodeInstanceBackground.drag.active
             anchors.top: nodeInstanceBackground.top
             anchors.topMargin: 10
@@ -58,9 +63,6 @@ Column {
             anchors.bottomMargin: 10
             anchors.left: nodeInstanceBackground.right
             anchors.leftMargin: nodeInstanceBackground.width * 0.05
-            color: themeManager.backgroundColor
-            border.color: nodeInstanceBackgroundRect.border.color
-            border.width: 2
             width: height / 4
             radius: 5
         }

@@ -12,6 +12,7 @@
 #include "ControlEvent.hpp"
 #include "Note.hpp"
 #include "PartitionInstance.hpp"
+#include "VolumeCache.hpp"
 
 /** @brief AudioAPI class */
 class AudioAPI : public QObject
@@ -62,6 +63,15 @@ public slots:
     /** @brief Create a partition instance */
     QVariant partitionInstance(const quint32 partitionIndex, const Beat offset, const BeatRange &range) const noexcept
         { return QVariant::fromValue(PartitionInstance(partitionIndex, offset, range)); }
+
+    /** @brief Create a volume cache */
+    QVariant volumeCache(const DB peak, const DB rms) const noexcept
+        { return QVariant::fromValue(VolumeCache(peak, rms)); }
+
+
+    /** @brief Convert a decibel volume into a ratio */
+    DB decibelToRatio(const DB volume) const noexcept
+        { return Audio::ConvertDecibelToRatio(volume); }
 
 private:
     /** @brief Construct the API */

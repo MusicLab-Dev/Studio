@@ -107,15 +107,16 @@ void PluginModel::setControl(const ControlEvent &event)
             _data->getControl(event.paramID) = event.value;
         },
         [this, paramID = event.paramID] {
-            controlValueChanged(paramID);
+            processControlValueChanged(paramID);
         }
     );
 }
 
-void PluginModel::controlValueChanged(const ParamID paramID)
+void PluginModel::processControlValueChanged(const ParamID paramID)
 {
     const auto modelIndex = index(paramID);
     emit dataChanged(modelIndex, modelIndex, { static_cast<int>(Roles::Value) });
+    emit controlValueChanged(paramID);
 }
 
 QString PluginModel::title(void) const noexcept

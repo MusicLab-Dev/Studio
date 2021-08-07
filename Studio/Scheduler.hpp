@@ -26,11 +26,12 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
     Q_PROPERTY(PlaybackMode playbackMode READ playbackMode NOTIFY playbackModeChanged)
     Q_PROPERTY(bool running READ running NOTIFY runningChanged)
-    Q_PROPERTY(Beat productionCurrentBeat READ productionCurrentBeat WRITE setProductionCurrentBeat NOTIFY productionCurrentBeatChanged)
-    Q_PROPERTY(Beat liveCurrentBeat READ liveCurrentBeat WRITE setLiveCurrentBeat NOTIFY liveCurrentBeatChanged)
-    Q_PROPERTY(Beat partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat NOTIFY partitionCurrentBeatChanged)
-    Q_PROPERTY(Beat onTheFlyCurrentBeat READ onTheFlyCurrentBeat WRITE setOnTheFlyCurrentBeat NOTIFY onTheFlyCurrentBeatChanged)
+    Q_PROPERTY(Beat productionCurrentBeat READ productionCurrentBeat WRITE setProductionCurrentBeat)
+    Q_PROPERTY(Beat liveCurrentBeat READ liveCurrentBeat WRITE setLiveCurrentBeat)
+    Q_PROPERTY(Beat partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat)
+    Q_PROPERTY(Beat onTheFlyCurrentBeat READ onTheFlyCurrentBeat WRITE setOnTheFlyCurrentBeat)
     Q_PROPERTY(BPM bpm READ bpm WRITE setBPM NOTIFY bpmChanged)
+    Q_PROPERTY(quint32 analysisTickRate READ analysisTickRate WRITE setAnalysisTickRate NOTIFY analysisTickRateChanged)
 
 public:
     /** @brief The different types of playback mode */
@@ -113,6 +114,11 @@ public:
     /** @brief Set the BPM */
     void setBPM(const BPM bpm) noexcept;
 
+    /** @brief Get / Set the analysis tick rate */
+    [[nodiscard]] quint32 analysisTickRate(void) const noexcept { return _analysisTickRate; }
+    void setAnalysisTickRate(const quint32 tickRate) noexcept;
+
+
     /** @brief Reset the on the fly miss count */
     void resetOnTheFlyMiss(void) noexcept { _onTheFlyMissCount = 0u; }
 
@@ -155,18 +161,6 @@ signals:
     void playbackModeChanged(void);
 
 
-    /** @brief Notify that production current beat property has changed */
-    void productionCurrentBeatChanged(void);
-
-    /** @brief Notify that live current beat property has changed */
-    void liveCurrentBeatChanged(void);
-
-    /** @brief Notify that partition current beat property has changed */
-    void partitionCurrentBeatChanged(void);
-
-    /** @brief Notify that on the fly current beat property has changed */
-    void onTheFlyCurrentBeatChanged(void);
-
     /** @brief Notify that the running state has changed */
     void runningChanged(void);
 
@@ -175,6 +169,12 @@ signals:
 
     /** @brief Notify that the device has changed */
     void deviceChanged(void);
+
+    /** @brief Notify that the analysis cache has changed */
+    void analysisCacheUpdated(void);
+
+    /** @brief Notify that the analysis tick rate has changed */
+    void analysisTickRateChanged(void);
 
 // Harmful functions, do not use
 public:
@@ -194,6 +194,8 @@ private:
     alignas_cacheline std::atomic<bool> _blockGenerated { false };
     alignas_cacheline std::atomic<std::size_t> _onTheFlyMissCount { false };
     bool _isOnTheFlyMode { false };
+    quint32 _analysisTickRate { 0 };
+    quint32 _currentAnalysisTick { 0 };
 
     static inline Scheduler *_Instance { nullptr };
 

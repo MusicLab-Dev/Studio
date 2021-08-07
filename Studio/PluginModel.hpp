@@ -89,9 +89,13 @@ public:
     [[nodiscard]] const Audio::IPlugin *audioPlugin(void) const noexcept { return _data; }
 
     /** @brief Notify that a control's value has changed */
-    void controlValueChanged(const ParamID paramID);
+    void processControlValueChanged(const ParamID paramID);
 
 public slots:
+    /** @brief Get a control's value */
+    ParamValue getControl(const ParamID paramID) const noexcept
+        { return _data->getControl(paramID); }
+
     /** @brief Set a control on the fly */
     void setControl(const ControlEvent &event);
 
@@ -101,6 +105,9 @@ signals:
 
     /** @brief Notify that the description has changed */
     void descriptionChanged(void);
+
+    /** @brief Notify that a control has changed */
+    void controlValueChanged(const ParamID paramID);
 
 private:
     Audio::IPlugin *_data { nullptr };

@@ -34,9 +34,10 @@ QStringList EventDispatcher::targetEventList(void) const noexcept
         "Paste",
         "Cut",
         "Erase",
-        "OpenProject",
+        "Open project",
         "Save",
-        "SaveAs"
+        "Save As",
+        "Settings",
     };
 
     return List;
@@ -139,6 +140,9 @@ bool EventDispatcher::sendSignals(const AEventListener::EventTarget event, const
         break;
     case AEventListener::EventTarget::SaveAs:
         emit saveAs(booleanValue);
+        break;
+    case AEventListener::EventTarget::Settings:
+        emit settings(booleanValue);
         break;
     default:
         return false;

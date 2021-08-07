@@ -16,6 +16,7 @@ using Beat = Audio::Beat;
 using Key = Audio::Key;
 using Velocity = Audio::Velocity;
 using Tuning = Audio::Tuning;
+using DB = Audio::DB;
 using BPM = Audio::BPM;
 using MidiChannels = Audio::MidiChannels;
 using BlockSize = Audio::BlockSize;
@@ -31,7 +32,7 @@ struct BeatRange : public Audio::BeatRange
 public:
     using Audio::BeatRange::BeatRange;
     using Audio::BeatRange::operator=;
-    using Audio::BeatRange::operator+=; 
+    using Audio::BeatRange::operator+=;
 
     template<typename ...Args>
     BeatRange(Args &&...args) noexcept : Audio::BeatRange({ std::forward<Args>(args)... }) {}

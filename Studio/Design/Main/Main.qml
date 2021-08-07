@@ -52,6 +52,12 @@ Window {
         property var currentPlayer: null
 
         id: app
+        scheduler.analysisTickRate: app.settings.getDefault("soundMeterTickRate", 20)
+
+        settings.onValueChanged: {
+            if (id === "soundMeterTickRate")
+                scheduler.analysisTickRate = value
+        }
     }
 
     ThemeManager {
@@ -111,5 +117,4 @@ Window {
 
         id: exportManager
     }
-
 }

@@ -49,7 +49,8 @@ public:
         OpenProject,
         ExportProject,
         Save,
-        SaveAs
+        SaveAs,
+        Settings
     };
 
     Q_ENUM(EventTarget)

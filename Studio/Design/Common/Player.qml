@@ -94,6 +94,9 @@ RowLayout {
         currentPlaybackBeat = contentView.loopFrom
     }
 
+    signal updateVolumeCache
+    signal stopVolumeCache
+
     property int targetPlaybackMode: Scheduler.Production
     property bool isPartitionPlayer: false
     property NodeModel targetNode: null

@@ -67,8 +67,10 @@ bool SettingsListModel::setData(const QModelIndex &index, const QVariant &value,
         default:
             break;
     }
-    if (changed)
+    if (changed) {
         emit dataChanged(index, index, { role });
+        emit valueChanged(model.id, model.currentValue);
+    }
     return true;
 }
 
@@ -203,9 +205,10 @@ bool SettingsListModel::set(const QString &id, const QVariant &value) noexcept
 {
     auto i = 0;
     for (auto it = _models.begin(); it != _models.end(); it++) {
-        if (it->id == id) {
+        if (it->id == id && it->currentValue != value) {
             it->currentValue = value;
             emit dataChanged(index(i), index(i), { static_cast<int>(Roles::CurrentValue) });
+            emit valueChanged(id, it->currentValue);
             return true;
         }
         ++i;

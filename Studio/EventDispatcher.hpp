@@ -97,6 +97,9 @@ signals:
     void save(bool pressed);
     void saveAs(bool pressed);
 
+    // Settings
+    void settings(bool pressed);
+
 private:
     KeyboardEventListener _keyboardListener;
     BoardEventListener _boardListener;

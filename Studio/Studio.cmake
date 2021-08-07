@@ -68,6 +68,7 @@ set(StudioSources
     ${StudioDir}/NodeModel.hpp
     ${StudioDir}/NodeListModel.cpp
     ${StudioDir}/NodeListModel.hpp
+    ${StudioDir}/VolumeCache.hpp
     ${StudioDir}/Note.hpp
     ${StudioDir}/PartitionModel.cpp
     ${StudioDir}/PartitionModel.hpp

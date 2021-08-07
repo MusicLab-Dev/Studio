@@ -201,11 +201,11 @@ ColumnLayout {
     }
 
     Connections {
-            target: eventDispatcher
-            enabled: moduleIndex === modulesView.selectedModule
+        target: eventDispatcher
+        enabled: moduleIndex === modulesView.selectedModule
 
-            function onUndo(pressed) { if (pressed) actionsManager.undo(); contentView.pianoView.notesPlacementArea.resetSelection() }
-            function onRedo(pressed) { if (pressed) actionsManager.redo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+        function onUndo(pressed) { if (pressed) actionsManager.undo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+        function onRedo(pressed) { if (pressed) actionsManager.redo(); contentView.pianoView.notesPlacementArea.resetSelection() }
    }
 
     FMDebugWindow {

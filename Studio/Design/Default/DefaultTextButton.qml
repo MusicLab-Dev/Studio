@@ -28,9 +28,9 @@ Button {
         font: control.font
         color: control.hovered || control.pressed ? themeManager.accentColor : "#FFFFFF"
         opacity: control.pressed ? 1.0 : control.hovered ? 0.85 : control.enabled ? 0.7 : 0.5
-        // elide: Text.ElideRight
         fontSizeMode: Text.Fit
-        wrapMode: Text.Wrap
+        // wrapMode: Text.Wrap
+        // elide: Text.ElideRight
      }
 
     background: Rectangle {

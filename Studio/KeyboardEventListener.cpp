@@ -47,6 +47,7 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher)
     add(Qt::Key_E,   Qt::CTRL,                  EventTarget::ExportProject);
     add(Qt::Key_S,   Qt::CTRL,                  EventTarget::Save);
     add(Qt::Key_S,   Qt::CTRL | Qt::SHIFT,      EventTarget::SaveAs);
+    add(Qt::Key_P,   Qt::CTRL,                  EventTarget::Settings);
 }
 
 

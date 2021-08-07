@@ -101,10 +101,6 @@ void Scheduler::setProductionCurrentBeat(const Beat beat)
             auto &range = currentBeatRange<Audio::PlaybackMode::Production>();
             range.to = beat + processBeatSize();
             range.from = beat;
-        },
-        [this, currentBeat] {
-            if (currentBeat != productionCurrentBeat())
-                emit productionCurrentBeatChanged();
         }
     );
 }
@@ -120,10 +116,6 @@ void Scheduler::setLiveCurrentBeat(const Beat beat)
             auto &range = currentBeatRange<Audio::PlaybackMode::Live>();
             range.to = beat + processBeatSize();
             range.from = beat;
-        },
-        [this, currentBeat] {
-            if (currentBeat != liveCurrentBeat())
-                emit liveCurrentBeatChanged();
         }
     );
 }
@@ -139,10 +131,6 @@ void Scheduler::setPartitionCurrentBeat(const Beat beat)
             auto &range = currentBeatRange<Audio::PlaybackMode::Partition>();
             range.to = beat + processBeatSize();
             range.from = beat;
-        },
-        [this, currentBeat] {
-            if (currentBeat != partitionCurrentBeat())
-                emit partitionCurrentBeatChanged();
         }
     );
 }
@@ -158,10 +146,6 @@ void Scheduler::setOnTheFlyCurrentBeat(const Beat beat)
             auto &range = currentBeatRange<Audio::PlaybackMode::OnTheFly>();
             range.to = beat + processBeatSize();
             range.from = beat;
-        },
-        [this, currentBeat] {
-            if (currentBeat != onTheFlyCurrentBeat())
-                emit onTheFlyCurrentBeatChanged();
         }
     );
 }
@@ -178,6 +162,14 @@ void Scheduler::setBPM(const BPM value) noexcept
             emit bpmChanged();
         }
     );
+}
+
+void Scheduler::setAnalysisTickRate(const quint32 tickRate) noexcept
+{
+    if (_analysisTickRate == tickRate)
+        return;
+    _analysisTickRate = tickRate;
+    emit analysisTickRateChanged();
 }
 
 bool Scheduler::onAudioBlockGenerated(void)
@@ -220,20 +212,6 @@ void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat
     if (range.from != startingBeat) {
         range.to = startingBeat + processBeatSize();
         range.from = startingBeat;
-        switch (Audio::AScheduler::playbackMode()) {
-        case Audio::PlaybackMode::Production:
-            emit productionCurrentBeatChanged();
-            break;
-        case Audio::PlaybackMode::Live:
-            emit liveCurrentBeatChanged();
-            break;
-        case Audio::PlaybackMode::Partition:
-            emit partitionCurrentBeatChanged();
-            break;
-        case Audio::PlaybackMode::OnTheFly:
-            emit onTheFlyCurrentBeatChanged();
-            break;
-        }
     }
 
     playImpl();
@@ -262,20 +240,6 @@ void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *nod
     if (range.from != startingBeat) {
         range.from = startingBeat;
         range.to = startingBeat + processBeatSize();
-        switch (Audio::AScheduler::playbackMode()) {
-        case Audio::PlaybackMode::Production:
-            emit productionCurrentBeatChanged();
-            break;
-        case Audio::PlaybackMode::Live:
-            emit liveCurrentBeatChanged();
-            break;
-        case Audio::PlaybackMode::Partition:
-            emit partitionCurrentBeatChanged();
-            break;
-        case Audio::PlaybackMode::OnTheFly:
-            emit onTheFlyCurrentBeatChanged();
-            break;
-        }
     }
 
     if (graphChanged) // @todo: Only invalidate the current
@@ -428,19 +392,13 @@ void Scheduler::onCatchingAudioThread(void)
         graphExited();
     }
     AScheduler::dispatchNotifyEvents();
-    switch (playbackMode()) {
-    case PlaybackMode::Production:
-        emit productionCurrentBeatChanged();
-        break;
-    case PlaybackMode::Live:
-        emit liveCurrentBeatChanged();
-        break;
-    case PlaybackMode::Partition:
-        emit partitionCurrentBeatChanged();
-        break;
-    case PlaybackMode::OnTheFly:
-        emit onTheFlyCurrentBeatChanged();
-        break;
+
+    if (!_busy) {
+        if (_currentAnalysisTick >= _analysisTickRate) {
+            _currentAnalysisTick = 0u;
+            emit analysisCacheUpdated();
+        } else
+            ++_currentAnalysisTick;
     }
 }
 
