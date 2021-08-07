@@ -52,7 +52,7 @@ Column {
 
         SoundMeter {
             id: soundMeter
-            enabled: plannerView.visible
+            enabled: treeView.visible
             // color: nodeInstanceBackgroundRect.border.color
             targetPlayer: treeView.player
             targetNode: nodeDelegate.node

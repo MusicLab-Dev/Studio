@@ -100,10 +100,7 @@ QVariant NodeModel::getVolumeCache(void) const noexcept
     if (_data && _data->cache())
         return QVariant::fromValue(VolumeCache(_data->cache().volumeCache()));
     else
-        return QVariant::fromValue(VolumeCache(
-            -std::numeric_limits<DB>::infinity(),
-            -std::numeric_limits<DB>::infinity()
-        ));
+        return QVariant::fromValue(VolumeCache{});
 }
 
 void NodeModel::processLatestInstanceChange(const Beat oldInstance, const Beat newInstance)

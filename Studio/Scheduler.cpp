@@ -376,7 +376,7 @@ void Scheduler::onCatchingAudioThread(void)
     _exitGraph = state() == Scheduler::State::Pause;
 
     // Check if we should stop on the fly graph
-    if (playbackMode() == PlaybackMode::OnTheFly && _onTheFlyMissCount > OnTheFlyMissThreshold) {
+    if (!_busy && playbackMode() == PlaybackMode::OnTheFly && _onTheFlyMissCount > OnTheFlyMissThreshold) {
         std::cout << "Missed" << std::endl;
         _onTheFlyMissCount = 0u;
         pauseImpl();
