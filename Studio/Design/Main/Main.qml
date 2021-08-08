@@ -57,6 +57,8 @@ Window {
         settings.onValueChanged: {
             if (id === "soundMeterTickRate")
                 scheduler.analysisTickRate = value
+            else if (id === "outputDevice" || id === "sampleRate" || id === "blockSize" || id === "cachedAudioFrames")
+                scheduler.reloadAudioSpecs()
         }
     }
 

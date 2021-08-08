@@ -13,7 +13,7 @@
             {
                 "id": "sampleRate",
                 "name": "Sample Rate (Hz)",
-                "help": "The sample rate represent the number of samples encoded per second\nA higher value allow better performances while a lower value allow better precision",
+                "help": "The sample rate represent the number of samples encoded per second\nHigher is faster but less precise",
                 "tags": ["sample", "rate", "Hz"],
                 "type": "ComboBox",
                 "values": [22050, 44100, 88200],
@@ -22,20 +22,20 @@
             {
                 "id": "blockSize",
                 "name": "Block Size",
-                "help": "The block size represent the number of samples the output device will take each time plays audio",
+                "help": "The block size represent the number of samples the output device will take each time plays audio\nHigher is faster but less precise",
                 "tags": ["size", "block"],
                 "type": "ComboBox",
-                "values": [512, 1024, 2048, 4096],
+                "values": [256, 512, 1024, 2048, 4096],
                 "start": 2048
             },
             {
-                "id": "processBlockSize",
-                "name": "Process Block Size",
-                "help": "The process block size represent the number of samples for each process frame\nA higher value allow better performances while a lower value allow better precision",
-                "tags": ["process", "size", "block"],
+                "id": "cachedAudioFrames",
+                "name": "Latency",
+                "help": "The number of cached audio frames used to reduce input lag\nHigher is faster but less precise",
+                "tags": ["cache", "block"],
                 "type": "ComboBox",
-                "values": [128, 256, 512, 1024, 2048, 4096],
-                "start": 1024
+                "values": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                "start": 3
             }
         ]
     },
@@ -43,8 +43,8 @@
         "Performance": [
             {
                 "id": "soundMeterTickRate",
-                "name": "Sound meter tick rate (audio frame interval)",
-                "help": "Change the tick rate of sound meters in milliseconds",
+                "name": "Sound meter tick rate",
+                "help": "Change the tick rate of sound meters in audio frame interval\nHigher is faster but less precise",
                 "tags": ["sound", "meter", "tick", "rate"],
                 "type": "ComboBox",
                 "values": [0, 1, 2, 3, 4, 5],

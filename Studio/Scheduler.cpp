@@ -5,6 +5,8 @@
 
 #include <QQmlEngine>
 
+#include <Audio/PluginTable.hpp>
+
 #include "Application.hpp"
 #include "Models.hpp"
 
@@ -31,24 +33,25 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
     :   QObject(parent),
         Audio::AScheduler(std::move(project)),
         _device(getDeviceDescriptor(), [this](std::uint8_t *data, const std::size_t size) { consumeAudioData(data, size); }, this),
-        _timer(this),
-        _audioSpecs(Audio::AudioSpecs {
-            _device.sampleRate(),
-            static_cast<Audio::ChannelArrangement>(_device.channelArrangement()),
-            static_cast<Audio::Format>(_device.format()),
-            0
-        }
-    )
+        _timer(this)
 {
+    // Setup scheduler instance
     if (_Instance)
         throw std::runtime_error("Scheduler::Scheduler: An instance of the scheduler already exists");
     _Instance = this;
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
-    setProcessParamByBlockSize(static_cast<BlockSize>(parentApp()->settings()->getDefault("processBlockSize", 1024u).toUInt()), _audioSpecs.sampleRate);
-    setAudioBlockSize(_device.blockSize());
-    _audioSpecs.processBlockSize = processBlockSize();
-    // connect(&_device, &Device::sampleRateChanged, this, &Scheduler::refreshAudioSpecs);
+    // Setup process params
+    const std::uint32_t cachedAudioFrames = parentApp()->settings()->getDefault("cachedAudioFrames", 3u).toUInt();
+    setProcessParams(_device.blockSize(), _device.sampleRate(), cachedAudioFrames);
+    _audioSpecs = Audio::AudioSpecs {
+        _device.sampleRate(),
+        static_cast<Audio::ChannelArrangement>(_device.channelArrangement()),
+        static_cast<Audio::Format>(_device.format()),
+        processBlockSize()
+    };
+
+    // Setup tick timer
     _timer.setTimerType(Qt::PreciseTimer);
     connect(&_timer, &QTimer::timeout, this, &Scheduler::onCatchingAudioThread);
 }
@@ -170,28 +173,6 @@ void Scheduler::setAnalysisTickRate(const quint32 tickRate) noexcept
         return;
     _analysisTickRate = tickRate;
     emit analysisTickRateChanged();
-}
-
-bool Scheduler::onAudioBlockGenerated(void)
-{
-    _busy = false;
-    _blockGenerated = true;
-    std::atomic_notify_one(&_blockGenerated);
-    while (_blockGenerated) {
-        std::this_thread::yield();
-    }
-    return _exitGraph;
-}
-
-bool Scheduler::onAudioQueueBusy(void)
-{
-    _busy = true;
-    _blockGenerated = true;
-    std::atomic_notify_one(&_blockGenerated);
-    while (_blockGenerated) {
-        std::this_thread::yield();
-    }
-    return _exitGraph;
 }
 
 void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat, const BeatRange &loopRange)
@@ -362,21 +343,60 @@ void Scheduler::stopAndWait(void)
     }
 }
 
-void Scheduler::reloadDevice(const QString &name)
+void Scheduler::changeDevice(const QString &name)
 {
     stopAndWait();
     _device.setName(name);
+}
+
+void Scheduler::reloadAudioSpecs(void)
+{
+    stopAndWait();
+    _device.setLogicalDescriptor(getDeviceDescriptor());
+    const std::uint32_t cachedAudioFrames = parentApp()->settings()->getDefault("cachedAudioFrames", 3u).toUInt();
+    setProcessParams(_device.blockSize(), _device.sampleRate(), cachedAudioFrames);
+    _audioSpecs = Audio::AudioSpecs {
+        _device.sampleRate(),
+        static_cast<Audio::ChannelArrangement>(_device.channelArrangement()),
+        static_cast<Audio::Format>(_device.format()),
+        processBlockSize()
+    };
+    Audio::PluginTable::Get().updateAudioSpecs(_audioSpecs);
+    prepareCache(_audioSpecs);
+}
+
+bool Scheduler::onAudioBlockGenerated(void)
+{
+    _busy = false;
+    _blockGenerated = true;
+    std::atomic_notify_one(&_blockGenerated);
+    while (_blockGenerated) {
+        std::this_thread::yield();
+    }
+    return _exitGraph;
+}
+
+bool Scheduler::onAudioQueueBusy(void)
+{
+    _busy = true;
+    _blockGenerated = true;
+    std::atomic_notify_one(&_blockGenerated);
+    while (_blockGenerated) {
+        std::this_thread::yield();
+    }
+    return _exitGraph;
 }
 
 void Scheduler::onCatchingAudioThread(void)
 {
     if (!_blockGenerated)
         return;
+    const bool busy = _busy;
     AScheduler::dispatchApplyEvents();
     _exitGraph = state() == Scheduler::State::Pause;
 
     // Check if we should stop on the fly graph
-    if (!_busy && playbackMode() == PlaybackMode::OnTheFly && _onTheFlyMissCount > OnTheFlyMissThreshold) {
+    if (!busy && playbackMode() == PlaybackMode::OnTheFly && _onTheFlyMissCount > OnTheFlyMissThreshold) {
         std::cout << "Missed" << std::endl;
         _onTheFlyMissCount = 0u;
         pauseImpl();
@@ -393,12 +413,13 @@ void Scheduler::onCatchingAudioThread(void)
     }
     AScheduler::dispatchNotifyEvents();
 
-    if (!_busy) {
+    if (!busy) {
         if (_currentAnalysisTick >= _analysisTickRate) {
             _currentAnalysisTick = 0u;
             emit analysisCacheUpdated();
-        } else
+        } else {
             ++_currentAnalysisTick;
+        }
     }
 }
 

@@ -25,7 +25,7 @@ Row {
             if (app.currentPlayer) {
                 app.currentPlayer.stop()
             }
-            app.scheduler.reloadDevice(roleValue)
+            app.scheduler.changeDevice(roleValue)
         }
 
         Component.onCompleted: {

@@ -17,11 +17,11 @@ class Device : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString name READ name CONSTANT)
-    Q_PROPERTY(SampleRate sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
-    Q_PROPERTY(Format format READ format WRITE setFormat NOTIFY formatChanged)
-    Q_PROPERTY(ChannelArrangement channelArrangement READ channelArrangement WRITE setChannelArrangement NOTIFY channelArrangementChanged)
-    Q_PROPERTY(MidiChannels midiChannels READ midiChannels WRITE setMidiChannels NOTIFY midiChannelsChanged)
-    Q_PROPERTY(BlockSize blockSize READ blockSize WRITE setBlockSize NOTIFY blockSizeChanged)
+    Q_PROPERTY(SampleRate sampleRate READ sampleRate NOTIFY sampleRateChanged)
+    Q_PROPERTY(Format format READ format NOTIFY formatChanged)
+    Q_PROPERTY(ChannelArrangement channelArrangement READ channelArrangement NOTIFY channelArrangementChanged)
+    Q_PROPERTY(MidiChannels midiChannels READ midiChannels NOTIFY midiChannelsChanged)
+    Q_PROPERTY(BlockSize blockSize READ blockSize NOTIFY blockSizeChanged)
 
 public:
     enum class Format : int {
@@ -46,48 +46,32 @@ public:
     /** @brief Destruct the instance */
     ~Device(void) noexcept = default;
 
+    /** @brief Set the logical descriptor, the scheduler must be off ! (reload device) */
+    void setLogicalDescriptor(const Audio::Device::LogicalDescriptor &descriptor) noexcept;
+
 
     /** @brief Get the name property */
     [[nodiscard]] QString name(void) const noexcept
         { return QString::fromLocal8Bit(_data.name().data(), static_cast<int>(_data.name().size())); }
 
-    /** @brief Set the device name (reload device) */
-    void setName(const QString &name);
+    /** @brief Set the device name, the scheduler must be off !  (reload device) */
+    void setName(const QString &name) noexcept;
 
 
     /** @brief Get the sample rate */
     [[nodiscard]] SampleRate sampleRate(void) const noexcept { return _data.sampleRate(); }
 
-    /** @brief SET the sample rate */
-    void setSampleRate(const SampleRate sampleRate) noexcept;
-
-
     /** @brief Get the format */
     [[nodiscard]] Format format(void) const noexcept { return static_cast<Format>(_data.format()); }
-
-    /** @brief Set the format */
-    void setFormat(const Format format) noexcept;
-
 
     /** @brief Get the channels */
     [[nodiscard]] ChannelArrangement channelArrangement(void) const noexcept { return static_cast<ChannelArrangement>(_data.channelArrangement()); }
 
-    /** @brief Set the channels */
-    void setChannelArrangement(const ChannelArrangement channels) noexcept;
-
-
     /** @brief Get the record */
     [[nodiscard]] MidiChannels midiChannels(void) const noexcept { return _data.midiChannels(); }
 
-    /** @brief Set the record */
-    void setMidiChannels(const MidiChannels midiChannels) noexcept;
-
-
     /** @brief Get the record */
     [[nodiscard]] BlockSize blockSize(void) const noexcept { return _data.blockSize(); }
-
-    /** @brief Set the record */
-    void setBlockSize(const BlockSize blockSize) noexcept;
 
 
     /** @brief Register the audio callback */
@@ -96,6 +80,7 @@ public:
     /** @brief Unregister the audio callback */
     void stop(void) { _data.stop(); }
 
+    /** @brief Get the internal audio device */
     [[nodiscard]] Audio::Device *audioDevice(void) noexcept { return &_data; }
     [[nodiscard]] const Audio::Device *audioDevice(void) const noexcept { return &_data; }
 

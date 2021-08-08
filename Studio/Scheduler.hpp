@@ -154,7 +154,10 @@ public slots:
     Beat getAudioElapsedBeat(void) const noexcept { return audioElapsedBeat(); }
 
     /** @brief Reload the device */
-    void reloadDevice(const QString &name);
+    void changeDevice(const QString &name);
+
+    /** @brief Reload the audio specs and the device */
+    void reloadAudioSpecs(void);
 
 signals:
     /** @brief Notify when playback mode changed */

@@ -21,7 +21,7 @@ Rectangle {
     }
 
     function disableAnalysis() {
-        if (analysisRequested) {
+        if (analysisRequested && targetNode) {
             targetNode.decrementAnalysisRequestCount()
             analysisRequested = false
         }
