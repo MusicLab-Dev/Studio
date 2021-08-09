@@ -45,7 +45,7 @@ Item {
         id: nodeHeaderBackground
         x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
         y: contentView.headerHalfMargin
-        width: contentView.rowHeaderWidth - x - contentView.headerMargin - soundMeter.width - 15
+        width: contentView.rowHeaderWidth - x - contentView.headerMargin - soundMeter.width - 12
         height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodeInstances.height) - contentView.headerHalfMargin
         radius: 15
         color: nodeDelegate.color

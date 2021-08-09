@@ -182,7 +182,6 @@ bool Scheduler::pauseImpl(void)
 {
     if (setState(Audio::AScheduler::State::Pause)) {
         _device.stop();
-        _pausing = true;
         emit runningChanged();
         return true;
     } else {
@@ -237,12 +236,9 @@ void Scheduler::disableLoopRange(void)
 
 void Scheduler::stopAndWait(void)
 {
-    const bool wasPausing = _pausing;
-    if (wasPausing || pauseImpl()) {
-        if (!wasPausing) {
-            std::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
-            onCatchingAudioThread();
-        }
+    if (pauseImpl()) {
+        std::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
+        onCatchingAudioThread();
         wait();
         invalidateCurrentGraph<true>();
         setCurrentBeat(0u);
@@ -312,7 +308,6 @@ void Scheduler::onCatchingAudioThread(void)
 
     _blockGenerated = false;
     std::atomic_notify_one(&_blockGenerated);
-    _pausing = false;
 
     if (_exitGraph) {
         _timer.stop();

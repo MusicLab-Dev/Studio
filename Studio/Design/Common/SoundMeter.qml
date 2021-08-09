@@ -25,6 +25,8 @@ Rectangle {
             targetNode.decrementAnalysisRequestCount()
             analysisRequested = false
         }
+        peakPosition = 0
+        rmsPosition = 0
     }
 
     property NodeModel targetNode
@@ -76,7 +78,7 @@ Rectangle {
     }
 
     Connections {
-        enabled: analysisRequested
+        // enabled: analysisRequested
         target: targetNode ? targetNode.plugin : null
 
         function onControlValueChanged(paramId) {
