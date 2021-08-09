@@ -116,7 +116,7 @@ MouseArea {
                 )
                 playbackTimer.start()
             } else {
-                app.scheduler.stop(Scheduler.PlaybackMode.Partition)
+                app.scheduler.stop()
                 playbackTimer.stop()
                 previewDelegate.playbackBeatPrecision = 0
                 previewDelegate.playing = false

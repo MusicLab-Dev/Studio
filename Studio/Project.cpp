@@ -69,6 +69,7 @@ bool Project::loadFrom(const QString &path) noexcept
     recreateMasterMixer();
     ProjectSave psave(this);
     setPath(path);
+    emit nameChanged();
     return psave.load();
 }
 

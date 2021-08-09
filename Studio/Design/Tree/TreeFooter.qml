@@ -80,7 +80,7 @@ Rectangle {
     }
 
     DefaultImageButton {
-        visible: contentView.lastSelectedNode && partitionsPreview.hide
+        visible: contentView.lastSelectedNode && contentView.partitionsPreview.hide
         anchors.right: parent.right
         anchors.bottom: parent.top
         anchors.rightMargin: 10
@@ -91,11 +91,6 @@ Rectangle {
         scaleFactor: 1
         source: "qrc:/Assets/Note.png"
 
-        onReleased: partitionsPreview.hide = false
-    }
-
-    PartitionsPreview {
-        id: partitionsPreview
-        y: -height
+        onReleased: contentView.partitionsPreview.hide = false
     }
 }

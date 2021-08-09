@@ -10,5 +10,6 @@
         <file>TreeComponentsPanel.qml</file>
         <file>TreeComponentCategory.qml</file>
         <file>TreeComponentDelegate.qml</file>
+        <file>TreeNodeTrashArea.qml</file>
     </qresource>
 </RCC>

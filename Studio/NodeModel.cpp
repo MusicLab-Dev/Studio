@@ -186,7 +186,7 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
                 _children.push(std::move(node));
                 endInsertRows();
                 if (hasPaused) {
-                    Scheduler::Get()->getCurrentGraph().wait();
+                    Scheduler::Get()->graph().wait();
                     Scheduler::Get()->invalidateCurrentGraph();
                     Scheduler::Get()->playImpl();
                 } else
@@ -233,7 +233,7 @@ NodeModel *NodeModel::addParentNodeImpl(const QString &pluginPath, const bool ad
                 self->children().push(std::move(node));
                 parent->dataChanged(parent->index(i), parent->index(i), { static_cast<int>(Roles::NodeInstance) });
                 if (hasPaused) {
-                    Scheduler::Get()->getCurrentGraph().wait();
+                    Scheduler::Get()->graph().wait();
                     Scheduler::Get()->invalidateCurrentGraph();
                     Scheduler::Get()->playImpl();
                 } else
@@ -260,7 +260,7 @@ bool NodeModel::remove(const int idx)
             _children.erase(_children.begin() + idx);
             endRemoveRows();
             if (hasPaused) {
-                scheduler->getCurrentGraph().wait();
+                scheduler->graph().wait();
                 scheduler->invalidateCurrentGraph();
                 scheduler->playImpl();
             } else
@@ -312,7 +312,7 @@ bool NodeModel::moveToChildren(NodeModel *target)
         },
         [this, hasPaused] {
             if (hasPaused) {
-                Scheduler::Get()->getCurrentGraph().wait();
+                Scheduler::Get()->graph().wait();
                 Scheduler::Get()->invalidateCurrentGraph();
                 Scheduler::Get()->playImpl();
             } else
@@ -378,7 +378,7 @@ bool NodeModel::moveToParent(NodeModel *target)
         },
         [this, hasPaused] {
             if (hasPaused) {
-                Scheduler::Get()->getCurrentGraph().wait();
+                Scheduler::Get()->graph().wait();
                 Scheduler::Get()->invalidateCurrentGraph();
                 Scheduler::Get()->playImpl();
             } else

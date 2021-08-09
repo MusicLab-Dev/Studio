@@ -50,7 +50,7 @@ RowLayout {
         if (isPartitionPlayer && !targetNode)
             return;
         timer.stopAndRecordPlaybackBeat()
-        app.scheduler.pause(targetPlaybackMode)
+        app.scheduler.pause()
         app.currentPlayer = player
     }
 
@@ -87,7 +87,7 @@ RowLayout {
     function stop() {
         if (isPartitionPlayer && !targetNode)
             return;
-        app.scheduler.stop(targetPlaybackMode)
+        app.scheduler.stop()
         app.currentPlayer = player
         timer.stop()
         beginPlaybackBeat = contentView.loopFrom

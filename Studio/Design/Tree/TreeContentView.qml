@@ -33,6 +33,7 @@ MouseArea {
 
     // Alias
     property alias treeSurface: treeSurface
+    property alias partitionsPreview: partitionsPreview
 
     // Horizontal scroll
     property real xOffset: 0
@@ -236,6 +237,19 @@ MouseArea {
             duration: 300
             easing.type: Easing.OutCubic
         }
+    }
+
+    PartitionsPreview {
+        id: partitionsPreview
+        anchors.bottom: parent.bottom
+    }
+
+    TreeNodeTrashArea {
+        width: 60
+        height: width
+        visible: treeSurface.dragTarget
+        x: 5
+        y: parent.height - (partitionsPreview.visible ? partitionsPreview.height : 0) - height - 5
     }
 
     ScrollBar {

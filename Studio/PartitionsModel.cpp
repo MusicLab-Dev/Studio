@@ -152,7 +152,7 @@ void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const 
         [this, node, partitionIndex, isPlaying, graphChanged, hasPaused] {
             const auto scheduler = Scheduler::Get();
             if (hasPaused)
-                scheduler->getCurrentGraph().wait();
+                scheduler->graph().wait();
             if (!isPlaying || graphChanged)
                 scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, partitionIndex, 0);
         }

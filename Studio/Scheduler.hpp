@@ -26,10 +26,7 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
     Q_PROPERTY(PlaybackMode playbackMode READ playbackMode NOTIFY playbackModeChanged)
     Q_PROPERTY(bool running READ running NOTIFY runningChanged)
-    Q_PROPERTY(Beat productionCurrentBeat READ productionCurrentBeat WRITE setProductionCurrentBeat)
-    Q_PROPERTY(Beat liveCurrentBeat READ liveCurrentBeat WRITE setLiveCurrentBeat)
-    Q_PROPERTY(Beat partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat)
-    Q_PROPERTY(Beat onTheFlyCurrentBeat READ onTheFlyCurrentBeat WRITE setOnTheFlyCurrentBeat)
+    Q_PROPERTY(Beat currentBeat READ currentBeat WRITE setCurrentBeat NOTIFY currentBeatChanged)
     Q_PROPERTY(BPM bpm READ bpm WRITE setBPM NOTIFY bpmChanged)
     Q_PROPERTY(quint32 analysisTickRate READ analysisTickRate WRITE setAnalysisTickRate NOTIFY analysisTickRateChanged)
 
@@ -57,7 +54,7 @@ public:
     using Audio::AScheduler::project;
     using Audio::AScheduler::setProject;
     using Audio::AScheduler::invalidateCurrentGraph;
-    using Audio::AScheduler::getCurrentGraph;
+    using Audio::AScheduler::graph;
     using Audio::AScheduler::partitionNode;
     using Audio::AScheduler::partitionIndex;
     using Audio::AScheduler::hasExitedGraph;
@@ -91,18 +88,10 @@ public:
 
 
     /** @brief Get the current beat of a given mode */
-    [[nodiscard]] Beat currentBeat(void) const noexcept;
-    [[nodiscard]] Beat productionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Production>().from; }
-    [[nodiscard]] Beat liveCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Live>().from; }
-    [[nodiscard]] Beat partitionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Partition>().from; }
-    [[nodiscard]] Beat onTheFlyCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::OnTheFly>().from; }
+    [[nodiscard]] Beat currentBeat(void) const noexcept { return currentBeatRange().from; }
 
     /** @brief Set the current beat of a given mode */
     void setCurrentBeat(const Beat beat);
-    void setProductionCurrentBeat(const Beat beat);
-    void setLiveCurrentBeat(const Beat beat);
-    void setPartitionCurrentBeat(const Beat beat);
-    void setOnTheFlyCurrentBeat(const Beat beat);
 
     /** @brief Get the current device */
     [[nodiscard]] const Device *device(void) const noexcept { return &_device; }
@@ -130,10 +119,10 @@ public slots:
     void playPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex, const Beat startingBeat, const BeatRange &loopRange = BeatRange{});
 
     /** @brief Pause the scheduler */
-    void pause(const Scheduler::PlaybackMode mode);
+    void pause(void);
 
     /** @brief Stop the scheduler (pause + reset beat) */
-    void stop(const Scheduler::PlaybackMode mode);
+    void stop(void);
 
     /** @brief Callback that must be called after a node has been deleted */
     void onNodeDeleted(NodeModel *targetNode);
@@ -166,6 +155,9 @@ signals:
 
     /** @brief Notify that the running state has changed */
     void runningChanged(void);
+
+    /** @brief Notify that the current beat range has changed */
+    void currentBeatChanged(void);
 
     /** @brief Notify that the bpm has changed */
     void bpmChanged(void);

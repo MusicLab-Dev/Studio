@@ -12,7 +12,7 @@ ColumnLayout {
         return false
     }
 
-    property string moduleName: "Project"
+    property string moduleName: app.project.name
     property int moduleIndex
     property alias player: treeFooter.player
 

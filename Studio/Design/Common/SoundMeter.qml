@@ -60,15 +60,17 @@ Rectangle {
         target: app.scheduler
 
         function onAnalysisCacheUpdated() {
-            var volume = targetNode.getVolumeCache()
-            peakPosition = getDecibelRatio(volume.peak)
-            rmsPosition = getDecibelRatio(volume.rms)
+            if (app.scheduler.running) {
+                var volume = targetNode.getVolumeCache()
+                peakPosition = getDecibelRatio(volume.peak)
+                rmsPosition = getDecibelRatio(volume.rms)
+            }
         }
 
         function onRunningChanged() {
             if (!app.scheduler.running) {
-                rmsPosition = 0
                 peakPosition = 0
+                rmsPosition = 0
             }
         }
     }

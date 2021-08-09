@@ -65,13 +65,13 @@ DefaultMenu {
     }
 
     Action {
-        text: qsTr("Edit name")
-        enabled: true
-
         function setName() {
             targetNode.name = globalTextField.text
             closeMenu()
         }
+
+        text: qsTr("Edit name")
+        enabled: true
 
         onTriggered: {
             globalTextField.open(targetNode.name, setName, function () { closeMenu() }, false, null)
