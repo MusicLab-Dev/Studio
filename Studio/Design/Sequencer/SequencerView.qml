@@ -137,7 +137,6 @@ ColumnLayout {
     }
 
     ControlsFlow {
-        PropertyAnimation {id: openAnim; target: sequencerControls; property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic}
         function open() {
             visible = true
             openAnim.start()
@@ -148,11 +147,20 @@ ColumnLayout {
         }
 
         id: sequencerControls
+        y: parent.height
+        node: sequencerView.node
         Layout.fillWidth: true
         Layout.preferredHeight: height
-        y: parent.height
 
-        node: sequencerView.node
+        PropertyAnimation {
+            id: openAnim
+            target: sequencerControls
+            property: "opacity"
+            from: 0
+            to: 1
+            duration: 300
+            easing.type: Easing.OutCubic
+        }
     }
 
     Item {

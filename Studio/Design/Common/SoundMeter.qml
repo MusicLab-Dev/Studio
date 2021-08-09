@@ -27,7 +27,6 @@ Rectangle {
         }
     }
 
-    property Player targetPlayer
     property NodeModel targetNode
     property real peakPosition: 0
     property real rmsPosition: 0
@@ -41,8 +40,9 @@ Rectangle {
 
     onTargetNodeChanged: {
         if (targetNode) {
-            enableAnalysis()
             gainPosition = getDecibelRatio(targetNode.plugin.getControl(0))
+            if (enabled)
+                enableAnalysis()
         }
     }
 

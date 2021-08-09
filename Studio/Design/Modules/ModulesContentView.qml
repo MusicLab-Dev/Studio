@@ -66,10 +66,8 @@ Item {
             id: moduleLoader
             visible: isSelectedModule
             enabled: isSelectedModule
-            focus: true
+            focus: isSelectedModule
             source: path
-
-            onVisibleChanged: focus = true
 
             onModuleIndexChanged: {
                 if (item)
@@ -80,6 +78,7 @@ Item {
                 if (path === "")
                     return
                 item.moduleIndex = moduleIndex
+                item.visible = Qt.binding(function() { return isSelectedModule })
                 callback.target = item
                 callback.trigger()
                 focus = true

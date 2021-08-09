@@ -78,19 +78,4 @@ Rectangle {
             Layout.preferredWidth: parent.width * 0.25
         }
     }
-
-    DefaultImageButton {
-        visible: contentView.lastSelectedNode && contentView.partitionsPreview.hide
-        anchors.right: parent.right
-        anchors.bottom: parent.top
-        anchors.rightMargin: 10
-        anchors.bottomMargin: 10
-        width: height
-        height: parent.height * 0.5
-        showBorder: false
-        scaleFactor: 1
-        source: "qrc:/Assets/Note.png"
-
-        onReleased: contentView.partitionsPreview.hide = false
-    }
 }

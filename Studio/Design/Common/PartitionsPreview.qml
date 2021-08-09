@@ -29,8 +29,11 @@ Rectangle {
     onVisibleChanged: {
         if (visible)
             openAnim.start()
-        else
-            closeAnim.start()
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onPressedChanged: forceActiveFocus()
     }
 
     PropertyAnimation {
@@ -39,16 +42,6 @@ Rectangle {
         property: "opacity"
         from: 0
         to: 1
-        duration: 300
-        easing.type: Easing.OutCubic
-    }
-
-    PropertyAnimation {
-        id: closeAnim
-        target: partitionsPreview
-        property: "opacity"
-        from: 1
-        to: 0
         duration: 300
         easing.type: Easing.OutCubic
     }
@@ -67,17 +60,18 @@ Rectangle {
         spacing: 10
 
         DefaultText {
-            width: contentView.rowHeaderWidth / 2
+            width: contentView.width * 0.1
             anchors.verticalCenter: parent.verticalCenter
             horizontalAlignment: Text.AlignLeft
-            fontSizeMode: Text.HorizontalFit
-            font.pointSize: 38
+            fontSizeMode: Text.Fit
+            font.pixelSize: 30
             color: partitionsPreview.nodeColor
             text: partitionsPreview.nodeName
             wrapMode: Text.Wrap
         }
 
         DefaultImageButton {
+            id: addPartitionButton
             width: height
             height: Math.min(parent.height / 2, partitionsPreview.baseHeight)
             anchors.verticalCenter: parent.verticalCenter
@@ -119,22 +113,13 @@ Rectangle {
         }
     }
 
-    DefaultColoredImage {
-        id: trashButton
-        visible: false
+    DefaultImageButton {
+        id: closeButton
         width: height
         height: Math.min(parent.height / 2, partitionsPreview.baseHeight)
         anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/Assets/Close.png"
         anchors.right: parent.right
         anchors.rightMargin: 10
-        color: "red"
-    }
-
-    DefaultImageButton {
-        id: closeButton
-        visible: !trashButton.visible
-        anchors.fill: trashButton
         source: "qrc:/Assets/Close.png"
         showBorder: false
         scaleFactor: 1

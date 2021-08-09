@@ -3,6 +3,7 @@ import QtQuick 2.15
 import NodeModel 1.0
 
 import "../Default"
+import "../Common"
 
 Item {
     property NodeModel node: nodeInstance.instance
@@ -29,11 +30,22 @@ Item {
     width: nodeDelegateCol.width
     height: nodeDelegateCol.height
 
+    SoundMeter {
+        id: soundMeter
+        enabled: plannerView.visible
+        targetNode: nodeDelegate.node
+        width: height / 5
+        height: nodeHeaderBackground.height
+        anchors.left: nodeHeaderBackground.right
+        anchors.top: nodeHeaderBackground.top
+        anchors.leftMargin: 5
+    }
+
     Rectangle {
         id: nodeHeaderBackground
         x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
         y: contentView.headerHalfMargin
-        width: contentView.rowHeaderWidth - x - contentView.headerMargin
+        width: contentView.rowHeaderWidth - x - contentView.headerMargin - soundMeter.width - 15
         height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodeInstances.height) - contentView.headerHalfMargin
         radius: 15
         color: nodeDelegate.color
