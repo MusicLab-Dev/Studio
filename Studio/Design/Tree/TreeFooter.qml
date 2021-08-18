@@ -36,6 +36,7 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
 
+                enabled: app.project.master.latestInstance !== 0
                 onPressed: player.timelineBeginMove(Math.min(Math.max(mouseX, 0), width) / projectPreview.pixelsPerBeatPrecision)
                 onPositionChanged: player.timelineMove(Math.min(Math.max(mouseX, 0), width) / projectPreview.pixelsPerBeatPrecision)
                 onReleased: player.timelineEndMove()
@@ -46,6 +47,7 @@ Rectangle {
                 height: parent.height
                 color: "white"
                 x: projectPreview.pixelsPerBeatPrecision * player.currentPlaybackBeat - 2
+                visible: app.project.master.latestInstance !== 0
             }
         }
     }
