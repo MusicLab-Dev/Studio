@@ -239,6 +239,16 @@ Item {
             //     color: "red"
             //     opacity: 0.5
             // }
+        }
+
+        // Content view data
+        Item {
+            id: placeholder
+            anchors.fill: parent
+        }
+
+        Item {
+            anchors.fill: surfaceContentGrid
 
             Rectangle {
                 x: contentViewTimeline.loopFromIndicatorX
@@ -255,16 +265,6 @@ Item {
                 color: themeManager.accentColor
                 visible: contentView.hasLoop
             }
-        }
-
-        // Content view data
-        Item {
-            id: placeholder
-            anchors.fill: parent
-        }
-
-        Item {
-            anchors.fill: surfaceContentGrid
 
             ScrollBar {
                 anchors.top: parent.top

@@ -36,7 +36,8 @@ public:
         Production = static_cast<int>(Audio::PlaybackMode::Production),
         Live = static_cast<int>(Audio::PlaybackMode::Live),
         Partition = static_cast<int>(Audio::PlaybackMode::Partition),
-        OnTheFly = static_cast<int>(Audio::PlaybackMode::OnTheFly)
+        OnTheFly = static_cast<int>(Audio::PlaybackMode::OnTheFly),
+        Export = static_cast<int>(Audio::PlaybackMode::Export)
     };
     Q_ENUM(PlaybackMode)
 
@@ -49,6 +50,8 @@ public:
         /*.midiChannels =       */ 2u,
         /*.channelArrangement = */ Audio::ChannelArrangement::Mono
     };
+
+    static constexpr std::size_t OutOfRangeExportFrameAllocationCount = 15u;
 
     using Audio::AScheduler::addEvent;
     using Audio::AScheduler::project;
@@ -148,6 +151,10 @@ public slots:
     /** @brief Reload the audio specs and the device */
     void reloadAudioSpecs(void);
 
+
+    /** @brief Export project to given path */
+    void exportProject(const QString &path);
+
 signals:
     /** @brief Notify when playback mode changed */
     void playbackModeChanged(void);
@@ -190,6 +197,9 @@ private:
     quint32 _currentAnalysisTick { 0 };
     alignas_cacheline std::atomic<bool> _blockGenerated { false };
     alignas_cacheline std::atomic<std::size_t> _onTheFlyMissCount { false };
+    Audio::Buffer _exportBuffer {};
+    std::size_t _exportIndex { 0u };
+    QString _exportPath {};
 
     static inline Scheduler *_Instance { nullptr };
 
@@ -197,15 +207,29 @@ private:
     [[nodiscard]] Audio::Device::LogicalDescriptor getDeviceDescriptor(void);
 
 
+    /** @brief Audio block generated event */
+    [[nodiscard]] bool onAudioBlockGenerated(void) final;
+
+    /** @brief Audio queue busy event */
+    [[nodiscard]] bool onAudioQueueBusy(void) final;
+
+    /** @brief Export block generated event */
+    [[nodiscard]] bool onExportBlockGenerated(void) final;
+
+
     /** @brief Try to intercept the audio thread lock */
     void onCatchingAudioThread(void);
 
+    /** @brief Callback called whenever an export frame is ready */
+    void onExportFrameReceived(void);
 
-    /** @brief Audio block generated event */
-    [[nodiscard]] bool onAudioBlockGenerated(void) override final;
 
-    /** @brief Audio block generated event */
-    [[nodiscard]] bool onAudioQueueBusy(void) override final;
+    /** @brief Export completed */
+    void onExportCompleted(void);
+
+    /** @brief Export canceled */
+    void onExportCanceled(void);
+
 
     /** @brief Audio callback */
     void consumeAudioData(std::uint8_t *data, const std::size_t size) noexcept;

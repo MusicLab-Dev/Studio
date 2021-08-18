@@ -147,6 +147,7 @@ ColumnLayout {
         }
 
         id: sequencerControls
+        closeable: false
         y: parent.height
         node: sequencerView.node
         Layout.fillWidth: true

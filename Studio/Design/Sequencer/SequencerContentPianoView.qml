@@ -167,6 +167,7 @@ Item {
                 color: themeManager.getColorFromChain(key)
                 border.color: Qt.darker(color, 1.25)
                 border.width: 2
+                opacity: 0.9
 
                 Rectangle {
                     x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)

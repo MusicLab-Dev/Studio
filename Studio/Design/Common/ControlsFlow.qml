@@ -21,6 +21,7 @@ Rectangle {
     readonly property color nodePressedColor: Qt.darker(nodeColor, 2.2)
     readonly property color nodeAccentColor: Qt.darker(nodeColor, 1.6)
     property bool hide: false
+    property bool closeable: true
 
     id: controlsFlow
     color: Qt.darker(themeManager.foregroundColor, 1.1)
@@ -109,6 +110,7 @@ Rectangle {
         colorDefault: controlsFlow.nodeColor
         colorHovered: controlsFlow.nodeHoveredColor
         colorOnPressed: controlsFlow.nodePressedColor
+        visible: controlsFlow.closeable
 
         onReleased: controlsFlow.hide = true
     }

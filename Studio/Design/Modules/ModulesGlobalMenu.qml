@@ -98,6 +98,13 @@ DefaultMenuButton {
                 }
             }
 
+            Action {
+                text: "Demo"
+                onTriggered: {
+                    menuButton.load(":/Templates/TEMPLATE_demo")
+                    app.project.path = ""
+                }
+            }
         }
 
         Action {

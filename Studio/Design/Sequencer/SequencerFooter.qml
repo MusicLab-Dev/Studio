@@ -85,26 +85,26 @@ Rectangle {
         }
     }
 
-    Item {
-        anchors.right: parent.right
-        anchors.rightMargin: parent.width * 0.05
-        anchors.verticalCenter: parent.verticalCenter
-        width: height
-        height: parent.height * 0.5
+    // Item {
+    //     anchors.right: parent.right
+    //     anchors.rightMargin: parent.width * 0.05
+    //     anchors.verticalCenter: parent.verticalCenter
+    //     width: height
+    //     height: parent.height * 0.5
 
-        AddButton {
-            id: addBtn
-            anchors.fill: parent
+    //     AddButton {
+    //         id: addBtn
+    //         anchors.fill: parent
 
-            onReleased: {
-                sequencerView.player.stop()
-                if (sequencerView.node.partitions.add()) {
-                    sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
-                    sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
-                }
-            }
-        }
-    }
+    //         onReleased: {
+    //             sequencerView.player.stop()
+    //             if (sequencerView.node.partitions.add()) {
+    //                 sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
+    //                 sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
+    //             }
+    //         }
+    //     }
+    // }
 
 }
 
