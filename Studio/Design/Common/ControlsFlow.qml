@@ -41,7 +41,7 @@ Rectangle {
 
     Row {
         id: headerRow
-        height: parent.height
+        height: nodeControlsFlow.height
         spacing: 10
         padding: 10
 

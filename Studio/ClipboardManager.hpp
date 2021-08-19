@@ -9,6 +9,7 @@
 #include <QClipboard>
 
 #include "Note.hpp"
+#include "PartitionInstance.hpp"
 
 /** @brief Manage the clipboard to the qml */
 class ClipboardManager : public QObject
@@ -24,10 +25,10 @@ public:
     ~ClipboardManager(void) override = default;
 
 public slots:
-    /** @brief Return the clipboard data 
+    /** @brief Return the clipboard data
      *   if format == true, return "{}" if the string format is wrong (not '{' at the beginning, not the '}' at the end)
      *   else, return the brut clipboard
-     */ 
+     */
     QString paste(bool format = true) noexcept
     {
         QString text = QGuiApplication::clipboard()->text();
@@ -47,6 +48,10 @@ public slots:
     }
 
     /** @brief Wrapper JSON */
-    QString transformNotesInJson(const QVector<Note> &notes) const noexcept;
-    QVector<Note> transformJsonInNotes(const QString &json) const noexcept;
+    QString notesToJson(const QVector<Note> &notes) const noexcept;
+    QVector<Note> jsonToNotes(const QString &json) const noexcept;
+
+    /** @brief Wrapper JSON */
+    QString partitionInstancesToJson(const QVector<PartitionInstance> &instances) const noexcept;
+    QVector<PartitionInstance> jsonToPartitionInstances(const QString &json) const noexcept;
 };

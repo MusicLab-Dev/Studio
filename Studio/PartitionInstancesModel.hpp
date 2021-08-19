@@ -11,6 +11,22 @@
 
 class PartitionsModel;
 
+struct PartitionInstancesAnalysis
+{
+    Q_GADGET
+
+    Q_PROPERTY(Beat from MEMBER from)
+    Q_PROPERTY(Beat to MEMBER to)
+    Q_PROPERTY(Beat distance MEMBER distance)
+public:
+
+    Beat from { 0u };
+    Beat to { 0u };
+    Beat distance { 0u };
+};
+
+Q_DECLARE_METATYPE(PartitionInstancesAnalysis)
+
 /** @brief The studio is the instance running the application process */
 class PartitionInstancesModel : public QAbstractListModel
 {
@@ -56,6 +72,14 @@ public:
     /** @brief Get instance at index */
     [[nodiscard]] const PartitionInstance &get(const int idx) const noexcept_ndebug;
 
+
+    /** @brief Remove all instances of a given partition, doesn't update model (thread unsafe) */
+    void partitionRemovedUnsafe(const std::uint32_t partitionIndex);
+
+    /** @brief Notification that a partition has been removed */
+    void partitionRemovedNotify(void);
+
+
     /** @brief Update internal data pointer if it changed */
     void updateInternal(Audio::PartitionInstances *data);
 
@@ -82,24 +106,31 @@ public slots:
     /** @brief Get instance at index */
     QVariant getInstance(const int index) const { return QVariant::fromValue(get(index)); }
 
+    /** @brief Get a list of notes using a list of indexes */
+    QVector<PartitionInstance> getInstances(const QVector<int> &indexes) const noexcept;
+
     /** @brief Set instance at index */
     void set(const int index, const PartitionInstance &instance);
 
+    /** @brief Set a range of instances */
+    bool setRange(const QVector<PartitionInstance> &before, const QVector<PartitionInstance> &after);
+
     /** @brief Add a group of instances */
-    bool addRange(const QVariantList &instances);
-    bool addRealRange(const QVector<PartitionInstance> &instances);
+    bool addRange(const QVector<PartitionInstance> &instances);
 
     /** @brief Remove a group of instances */
-    bool removeRange(const QVariantList &indexes);
+    bool removeRange(const QVector<int> &indexes);
+    bool removeExactRange(const QVector<PartitionInstance> &instances);
 
     /** @brief Select all notes within a specified range (returns indexes) */
     QVariantList select(const BeatRange &range);
 
-    /** @brief Remove all instances of a given partition, doesn't update model (thread unsafe) */
-    void partitionRemovedUnsafe(const std::uint32_t partitionIndex);
 
-    /** @brief Notification that a partition has been removed */
-    void partitionRemovedNotify(void);
+    /** @brief Get an analysis of the given notes */
+    PartitionInstancesAnalysis getPartitionInstancesAnalysis(const QVector<PartitionInstance> &instances) const noexcept;
+
+    /** @brief Overlap test in given range */
+    bool hasOverlap(const PartitionInstancesAnalysis &analysis) const noexcept;
 
 signals:
     /** @brief Notify that the latest instance of the list has changed */
@@ -111,4 +142,7 @@ signals:
 private:
     Audio::PartitionInstances *_data { nullptr };
     Beat _latestInstance { 0u };
+
+    /** @brief Perform checks after instances have changed */
+    void onInstancesChanged(void);
 };

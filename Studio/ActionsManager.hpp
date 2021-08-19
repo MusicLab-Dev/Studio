@@ -14,12 +14,16 @@
 #include "PartitionInstancesModel.hpp"
 
 struct ActionNodeBase
-{ 
+{
     NodeModel *node { nullptr };
+
+    /** @brief Dirty state used to discard an action when pushed */
+    [[nodiscard]] bool isDirty(void) const noexcept { return !node; }
+    void setDirty(void) noexcept { node = nullptr; }
 };
 Q_DECLARE_METATYPE(ActionNodeBase)
 
-/** -- notes */
+/** -- Notes --  */
 struct ActionPartitionBase : public ActionNodeBase
 {
     PartitionModel *partition { nullptr };
@@ -32,8 +36,11 @@ struct ActionNotesBase : public ActionPartitionBase
 };
 Q_DECLARE_METATYPE(ActionNotesBase)
 
-using ActionAddNotes = ActionNotesBase;
-using ActionRemoveNotes = ActionNotesBase;
+struct ActionAddNotes : public ActionNotesBase {};
+Q_DECLARE_METATYPE(ActionAddNotes)
+
+struct ActionRemoveNotes : public ActionNotesBase {};
+Q_DECLARE_METATYPE(ActionRemoveNotes)
 
 struct ActionMoveNotes : public ActionNotesBase
 {
@@ -54,8 +61,11 @@ struct ActionInstancesBase : public ActionPartitionsBase
 };
 Q_DECLARE_METATYPE(ActionInstancesBase)
 
-using ActionAddPartitions = ActionInstancesBase;
-using ActionRemovePartitions = ActionInstancesBase;
+struct ActionAddPartitions : public ActionInstancesBase {};
+Q_DECLARE_METATYPE(ActionAddPartitions)
+
+struct ActionRemovePartitions : public ActionInstancesBase {};
+Q_DECLARE_METATYPE(ActionRemovePartitions)
 
 struct ActionMovePartitions : public ActionInstancesBase
 {
@@ -84,14 +94,9 @@ public:
         // Move
         MoveNotes,
         MovePartitions,
-        MoveNode,
+        MoveNode
     };
     Q_ENUM(Action);
-
-    enum class Type {
-        Undo,
-        Redo
-    };
 
     struct Event
     {
@@ -103,28 +108,28 @@ public:
     explicit ActionsManager(QObject *parent = nullptr);
 
     /** @brief get current event */
-    [[nodiscard]] const Event &current(void) const noexcept { return _events[_index - 1]; }
-    [[nodiscard]] Event &current(void) noexcept { return _events[_index - 1]; }
+    [[nodiscard]] const Event &current(void) const noexcept { return _events[_backwardCount - 1]; }
+    [[nodiscard]] Event &current(void) noexcept { return _events[_backwardCount - 1]; }
 
 public slots:
     /** @brief Push a new event in the stack */
-    bool push(const Action action, const QVariant &data) noexcept;
-    
+    bool push(const QVariant &data) noexcept;
+
     /** @brief Process the undo */
-    bool undo(void) noexcept;
+    bool undo(void);
 
     /** @brief Process the redo */
-    bool redo(void) noexcept;
+    bool redo(void);
 
-    /** @brief Wrappers */
-    [[nodiscard]] ActionAddNotes makeActionAddNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept;
-    [[nodiscard]] ActionAddNotes makeActionAddRealNotes(PartitionModel *partition, const QVector<Note> &args) const noexcept;
-    [[nodiscard]] ActionRemoveNotes makeActionRemoveNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept;
-    [[nodiscard]] ActionRemoveNotes makeActionRemoveRealNotes(PartitionModel *partition, const QVector<Note> &args) const noexcept;
-    [[nodiscard]] ActionMoveNotes makeActionMoveNotes(PartitionModel *partition, const QVector<QVariantList> &args) const noexcept;
-    [[nodiscard]] ActionAddPartitions makeActionAddPartitions(PartitionsModel *instances, const QVector<QVariantList> &args) const noexcept;
-    [[nodiscard]] ActionRemovePartitions makeActionRemovePartitions(PartitionsModel *instances, const QVector<PartitionInstance> &args) const noexcept;
-    [[nodiscard]] ActionMovePartitions makeActionMovePartitions(PartitionsModel *instances, const QVector<QVariantList> &args) const noexcept;
+    /** @brief Notes wrappers */
+    [[nodiscard]] ActionAddNotes makeActionAddNotes(PartitionModel *partition, const QVector<Note> &notes) const noexcept;
+    [[nodiscard]] ActionRemoveNotes makeActionRemoveNotes(PartitionModel *partition, const QVector<Note> &notes) const noexcept;
+    [[nodiscard]] ActionMoveNotes makeActionMoveNotes(PartitionModel *partition, const QVector<Note> &before, const QVector<Note> &after) const noexcept;
+
+    /** @brief Partition instances wrappers */
+    [[nodiscard]] ActionAddPartitions makeActionAddPartitions(PartitionsModel *partitions, const QVector<PartitionInstance> &instances) const noexcept;
+    [[nodiscard]] ActionRemovePartitions makeActionRemovePartitions(PartitionsModel *partitions, const QVector<PartitionInstance> &instances) const noexcept;
+    [[nodiscard]] ActionMovePartitions makeActionMovePartitions(PartitionsModel *partitions, const QVector<PartitionInstance> &before, const QVector<PartitionInstance> &after) const noexcept;
 
     /** @brief Slot On Node Deleted */
     void nodeDeleted(NodeModel *node) noexcept;
@@ -134,13 +139,19 @@ public slots:
 
 private:
     QVector<Event> _events {};
-    int _index = 0;
+    int _backwardCount = 0;
 
-    bool process(const Event &event, const Type type) noexcept;
-    bool actionAddNotes(const Type type, const ActionAddNotes &action);
-    bool actionRemoveNotes(const Type type, const ActionRemoveNotes &action);
-    bool actionMoveNotes(const Type type, const ActionMoveNotes &action);
-    bool actionAddPartitions(const Type type, const ActionAddPartitions &action);
-    bool actionRemovePartitions(const Type type, const ActionRemovePartitions &action);
-    bool actionMovePartitions(const Type type, const ActionMovePartitions &action);
+    /** @brief Action handlers */
+    [[nodiscard]] bool undoAddNotes(const ActionAddNotes &action);
+    [[nodiscard]] bool redoAddNotes(const ActionAddNotes &action);
+    [[nodiscard]] bool undoRemoveNotes(const ActionRemoveNotes &action);
+    [[nodiscard]] bool redoRemoveNotes(const ActionRemoveNotes &action);
+    [[nodiscard]] bool undoMoveNotes(const ActionMoveNotes &action);
+    [[nodiscard]] bool redoMoveNotes(const ActionMoveNotes &action);
+    [[nodiscard]] bool undoAddPartitions(const ActionAddPartitions &action);
+    [[nodiscard]] bool redoAddPartitions(const ActionAddPartitions &action);
+    [[nodiscard]] bool undoRemovePartitions(const ActionRemovePartitions &action);
+    [[nodiscard]] bool redoRemovePartitions(const ActionRemovePartitions &action);
+    [[nodiscard]] bool undoMovePartitions(const ActionMovePartitions &action);
+    [[nodiscard]] bool redoMovePartitions(const ActionMovePartitions &action);
 };

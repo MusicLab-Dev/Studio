@@ -36,6 +36,8 @@ ContentView {
     property PartitionModel selectedPartition: null
     property int selectedPartitionIndex: 0
 
+    signal resetPlacementAreaSelection
+
     id: contentView
     enableRows: false
     xOffsetMin: app.project.master ? Math.max(app.project.master.latestInstance, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0

@@ -5,7 +5,7 @@ import "../Common"
 import AudioAPI 1.0
 
 Item {
-    property alias notesPlacementArea: notesPlacementArea
+    property alias placementArea: placementArea
 
     readonly property var keyNames: [
         qsTr("C"), qsTr("C#"), qsTr("D"), qsTr("D#"), qsTr("E"), qsTr("F"),
@@ -180,7 +180,7 @@ Item {
         }
 
         SequencerNotesPlacementArea {
-            id: notesPlacementArea
+            id: placementArea
 
             anchors.fill: parent
         }

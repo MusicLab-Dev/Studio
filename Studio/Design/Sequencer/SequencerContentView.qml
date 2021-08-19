@@ -7,6 +7,7 @@ import "../Common"
 
 ContentView {
     property alias pianoView: pianoView
+    property alias placementArea: pianoView.placementArea
 
     id: contentView
     xOffsetMin: sequencerView.partition ? Math.max(sequencerView.partition.latestNote, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0

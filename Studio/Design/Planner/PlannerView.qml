@@ -88,7 +88,18 @@ ColumnLayout {
         target: eventDispatcher
         enabled: moduleIndex === modulesView.selectedModule
 
-        function onUndo(pressed) { if (pressed) actionsManager.undo() }
-        function onRedo(pressed) { if (pressed) actionsManager.redo() }
+        function onUndo(pressed) {
+            if (pressed) {
+                actionsManager.undo()
+                contentView.resetPlacementAreaSelection()
+            }
+        }
+
+        function onRedo(pressed) {
+            if (pressed) {
+                actionsManager.redo()
+                contentView.resetPlacementAreaSelection()
+            }
+        }
    }
 }

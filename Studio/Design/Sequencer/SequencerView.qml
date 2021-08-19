@@ -151,7 +151,6 @@ ColumnLayout {
         y: parent.height
         node: sequencerView.node
         Layout.fillWidth: true
-        Layout.preferredHeight: height
 
         PropertyAnimation {
             id: openAnim
@@ -211,10 +210,21 @@ ColumnLayout {
 
     Connections {
         target: eventDispatcher
-        enabled: moduleIndex === modulesView.selectedModule
+        enabled: moduleIndex === modulesView.selectedModule && contentView.placementArea.mode === PlacementArea.None
 
-        function onUndo(pressed) { if (pressed) actionsManager.undo(); contentView.pianoView.notesPlacementArea.resetSelection() }
-        function onRedo(pressed) { if (pressed) actionsManager.redo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+        function onUndo(pressed) {
+            if (pressed) {
+                actionsManager.undo()
+                contentView.placementArea.resetSelection()
+            }
+        }
+
+        function onRedo(pressed) {
+            if (pressed) {
+                actionsManager.redo()
+                contentView.placementArea.resetSelection()
+            }
+        }
    }
 
     FMDebugWindow {

@@ -8,18 +8,8 @@ import PartitionPreview 1.0
 import ActionsManager 1.0
 
 PlacementArea {
-    property var cacheMove: []
-
     function addTarget(targetBeatRange, targetKey) {
-        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
-            var cache = cacheMove[0]
-            actionsManager.push(ActionsManager.MovePartitions, actionsManager.makeActionMovePartitions(
-                                    nodeInstances.partitions, [[cache[0], contentView.selectedPartitionIndex, cache[1], 0, cache[2], targetBeatRange.from, cache[3], targetBeatRange.to]]))
-        } else {
-            actionsManager.push(ActionsManager.AddPartitions, actionsManager.makeActionAddPartitions(
-                                    nodeInstances.partitions, [[contentView.selectedPartitionIndex, 0, targetBeatRange.from, targetBeatRange.to]]))
-        }
-
+        var partitionInstance = AudioAPI.partitionInstance(contentView.selectedPartitionIndex, 0, targetBeatRange)
         if (!contentView.selectedPartitionNode)
             return false
         else if (nodeDelegate.node != contentView.selectedPartitionNode) {
@@ -27,24 +17,26 @@ PlacementArea {
                 nodeDelegate.node,
                 contentView.selectedPartitionNode,
                 contentView.selectedPartition,
-                AudioAPI.partitionInstance(contentView.selectedPartitionIndex, 0, targetBeatRange)
+                partitionInstance
             )
             return false
-        } else
-            return nodeInstances.instances.add(
-                AudioAPI.partitionInstance(contentView.selectedPartitionIndex, 0, targetBeatRange)
-            )
+        } else {
+            var action = undefined
+            if (isInMoveMode)
+                action = actionsManager.makeActionMovePartitions(nodeInstances.partitions, moveCache, [partitionInstance])
+            else
+                action = actionsManager.makeActionAddPartitions(nodeInstances.partitions, [partitionInstance])
+            actionsManager.push(action)
+            return nodeInstances.instances.add(partitionInstance)
+        }
     }
 
     function removeTarget(targetIndex) {
-        var partition = nodeInstances.instances.getInstance(targetIndex)
-        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
-            cacheMove = []
-            cacheMove.push([partition.partitionIndex, partition.offset, partition.range.from, partition.range.to])
-        } else {
-            actionsManager.push(ActionsManager.RemovePartitions, actionsManager.makeActionRemovePartitions(
-                                nodeInstances.partitions, [partition]))
-        }
+        var partitionInstance = nodeInstances.instances.getInstance(targetIndex)
+        if (isInMoveMode)
+            moveCache = [partitionInstance]
+        else
+            actionsManager.push(actionsManager.makeActionRemovePartitions(nodeInstances.partitions, [partitionInstance]))
         return nodeInstances.instances.remove(targetIndex)
     }
 
@@ -71,40 +63,25 @@ PlacementArea {
     }
 
     function addTargets(targets) {
-        var instances = []
-        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
-            for (var i = 0; i < cacheMove.length; i++) {
-                var cache = cacheMove[i]
-                instances.push([cache[0], contentView.selectedPartitionIndex, cache[1], 0, cache[2], targetBeatRange.from, cache[3], targetBeatRange.to])
-            }
-            actionsManager.push(ActionsManager.MovePartitions, actionsManager.makeActionMovePartitions(
-                                    nodeInstances.partitions, instances))
-        } else {
-            for (i = 0; i < cacheMove.length; i++) {
-                cache = cacheMove[i]
-                instances.push([cache[0], cache[1], cache[2], cache[3]])
-            }
-            actionsManager.push(ActionsManager.AddPartitions, actionsManager.makeActionAddPartitions(
-                                    nodeInstances.partitions, instances))
-        }
+        var action = undefined
+        if (isInMoveMode) {
+            action = actionsManager.makeActionMovePartitions(nodeInstances.partitions, moveCache, targets)
+            moveCache = []
+        } else
+            action = actionsManager.makeActionAddPartitions(nodeInstances.partitions, targets)
+        actionsManager.push(action)
         return nodeInstances.instances.addRange(targets)
     }
 
     function removeTargets(targets) {
-        if (mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.ResizeRight) {
-            cacheMove = []
-            for (var i = 0; targets.length; i++) {
-                var instance = nodeInstances.instances.getInstance(targets[i])
-                cacheMove.push([instance.partitionIndex, instance.offset, instance.range.from, instance.range.to])
-            }
+        var instances = nodeInstances.instances.getInstances(targets)
+        if (isInMoveMode) {
+            moveCache = instances
         } else {
-            var instances = []
-            for (i = 0; targets.length; i++) {
-                instance = nodeInstances.instances.getInstance(targets[i])
-                instances.push([instance.partitionIndex, instance.offset, instance.range.from, instance.range.to])
-            }
-            actionsManager.push(ActionsManager.RemovePartitions, actionsManager.makeActionRemovePartitions(
-                                nodeInstances.partitions, [instances]))
+            actionsManager.push(actionsManager.makeActionRemovePartitions(
+                nodeInstances.partitions,
+                instances
+            ))
         }
         return nodeInstances.instances.removeRange(targets)
     }
@@ -115,6 +92,7 @@ PlacementArea {
 
     // Preview extension
     property var previewInstanceOffset: 0
+    property var moveCache: []
 
     id: placementArea
     allowInsert: contentView.selectedPartition !== null
@@ -123,19 +101,7 @@ PlacementArea {
 
     onCopyTarget: {
         var instance = nodeInstances.instances.getInstance(targetIndex)
-        contentView.selectPartition(
-            nodeDelegate.node,
-            instance.partitionIndex
-        )
-    }
-
-    Connections {
-        target: nodeInstances.instances
-        enabled: placementArea.selectionInsertCache !== null
-
-        function onInstancesChanged() {
-            placementArea.retreiveInsertedSelection()
-        }
+        contentView.selectPartition(nodeDelegate.node, instance.partitionIndex)
     }
 
     PartitionPreview {
@@ -147,4 +113,68 @@ PlacementArea {
         target: previewRectangle.visible ? contentView.selectedPartition : null
         visible: previewRectangle.visible
     }
+
+    Connections {
+        target: nodeInstances.instances
+        enabled: placementArea.selectionInsertCache !== null
+
+        function onInstancesChanged() {
+            placementArea.retreiveInsertedSelection()
+        }
+    }
+
+    Connections {
+        target: contentView
+
+        function onResetPlacementAreaSelection() {
+            placementArea.resetSelection()
+        }
+    }
+
+    Connections {
+        target: eventDispatcher
+        enabled: plannerView.moduleIndex === modulesView.selectedModule
+
+        function onCopy(pressed) {
+            if (!pressed || selectionListModel == null)
+                return
+            var instances = nodeInstances.instances.getInstances(selectionListModel)
+            clipboardManager.copy(clipboardManager.partitionInstancesToJson(instances))
+        }
+
+        function onPaste(pressed) {
+            if (!pressed)
+                return
+            var instances = clipboardManager.jsonToPartitionInstances(clipboardManager.paste())
+            var analysis = nodeInstances.instances.getPartitionInstancesAnalysis(instances)
+            placementArea.selectionInsertCache = instances
+            while (nodeInstances.instances.hasOverlap(analysis)) {
+                for (var i = 0; i < instances.length; i++)
+                    instances[i].add(analysis.distance)
+                analysis.from += analysis.distance
+                analysis.to += analysis.distance
+            }
+            nodeInstances.instances.addRange(instances)
+            actionsManager.push(actionsManager.makeActionAddPartitions(nodeInstances.partitions, instances))
+        }
+
+        function onCut(pressed) {
+            if (!pressed || selectionListModel == null)
+                return
+            var instances = nodeInstances.instances.getInstances(selectionListModel)
+            clipboardManager.copy(clipboardManager.partitionInstancesToJson(instances))
+            nodeInstances.instances.removeRange(selectionListModel)
+            actionsManager.push(actionsManager.makeActionRemovePartitions(nodeInstances.partitions, instances))
+            resetSelection()
+        }
+
+        function onErase(pressed) {
+            if (!pressed || selectionListModel == null)
+                return
+            var instances = nodeInstances.instances.getInstances(selectionListModel)
+            nodeInstances.instances.removeRange(selectionListModel)
+            actionsManager.push(actionsManager.makeActionRemovePartitions(nodeInstances.instances, instances))
+            resetSelection()
+        }
+   }
 }
