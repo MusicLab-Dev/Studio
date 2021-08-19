@@ -152,6 +152,15 @@ const Note &PartitionModel::get(const int idx) const noexcept_ndebug
     return reinterpret_cast<const Note &>(_data->at(idx));
 }
 
+QVariantList PartitionModel::getNotes(void) const noexcept
+{
+    QVariantList list;
+
+    for (int i = 0; i < count(); i++)
+        list.push_back(QVariant::fromValue(get(i)));
+    return list;
+}
+
 Beat PartitionModel::getDistance(const QVector<Note> &notes) const noexcept
 {
     if (notes.isEmpty())

@@ -119,9 +119,12 @@ public slots:
     /** @brief Get note at index */
     QVariant getNote(const int index) const { return QVariant::fromValue(get(index)); }
 
+    /** @brief Get all notes */
+    QVariantList getNotes(void) const noexcept;
+
     /** @brief calcul the distance between the smaller from to the latest to */
     Beat getDistance(const QVector<Note> &notes) const noexcept;
-
+    
     /** @brief Set note at index */
     void set(const int idx, const Note &range);
 

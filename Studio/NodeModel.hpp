@@ -187,6 +187,9 @@ public slots:
     /** @brief Make a node the new parent */
     bool moveToParent(NodeModel *target);
 
+    /** @brief Duplicate the node */
+    bool duplicate(void);
+
 
     /** @todo Move this in pluginmodel */
     bool needSingleExternalInput(void) const noexcept { return static_cast<std::uint32_t>(_data->flags()) & static_cast<std::uint32_t>(Audio::IPlugin::Flags::SingleExternalInput); }

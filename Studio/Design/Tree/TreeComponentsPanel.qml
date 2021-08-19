@@ -60,48 +60,6 @@ Item {
         }
     }
 
-
-    /*
-    Rectangle {
-        id: buttonPanel
-
-        anchors.right: panel.left
-        anchors.rightMargin: 32
-        anchors.top: parent.top
-        anchors.topMargin: parent.height / 2 - height / 2
-
-        width: parent.width * 0.04
-        height: width
-        opacity: 0.7
-        color: themeManager.foregroundColor
-        radius: 1000
-
-        Image {
-            id: plus
-            anchors.centerIn: parent
-            width: parent.width * 0.6
-            height: parent.height * 0.6
-            source: "qrc:/Assets/Plus.png"
-        }
-
-        ColorOverlay {
-                anchors.fill: plus
-                source: plus
-                color: "white"
-            }
-
-        MouseArea {
-            anchors.fill: parent
-
-            onPressed: {
-                open()
-            }
-
-        }
-
-    }
-    */
-
     Item {
         property real widthContentRatio: 0.6
         property real xClose: parent.width - panelCategory.width

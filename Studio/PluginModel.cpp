@@ -130,3 +130,8 @@ QString PluginModel::description(void) const noexcept
     const auto &cache = _data->getMetaData().translations.getName(Audio::English);
     return QString::fromLocal8Bit(cache.data(), static_cast<int>(cache.size()));
 }
+
+QString PluginModel::path(void) const noexcept
+{
+    return audioPlugin()->factory()->getPath().data();
+}
