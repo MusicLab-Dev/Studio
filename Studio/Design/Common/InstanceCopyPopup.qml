@@ -6,12 +6,14 @@ import "../Default"
 import "../Common"
 
 import AudioAPI 1.0
+import ActionsManager 1.0
 import NodeModel 1.0
 import PartitionModel 1.0
 
 Item {
-    function open(node, partitionNode, partition, instance) {
+    function open(actionsManager, node, partitionNode, partition, instance) {
         openAnim.start()
+        targetActionsManager = actionsManager
         targetNode = node
         targetPartitionNode = partitionNode
         targetPartition = partition
@@ -20,7 +22,14 @@ Item {
     }
 
     function acceptAndClose() {
-        targetNode.partitions.foreignPartitionInstanceCopy(targetPartition, targetInstance)
+        var idx = targetNode.partitions.count()
+        if (targetNode.partitions.foreignPartitionInstanceCopy(targetPartition, targetInstance)) {
+            targetInstance.partitionIndex = idx
+            targetActionsManager.push(
+                targetActionsManager.makeActionAddPartitions(targetNode.partitions, [targetInstance])
+            )
+        }
+        targetActionsManager = null
         targetNode = null
         targetPartitionNode = null
         targetPartition = null
@@ -29,6 +38,7 @@ Item {
     }
 
     function cancelAndClose() {
+        targetActionsManager = null
         targetNode = null
         targetPartitionNode = null
         targetPartition = null
@@ -36,6 +46,7 @@ Item {
         visible = false
     }
 
+    property ActionsManager targetActionsManager: null
     property NodeModel targetNode: null
     property NodeModel targetPartitionNode: null
     property PartitionModel targetPartition: null

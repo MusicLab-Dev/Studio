@@ -14,6 +14,7 @@ PlacementArea {
             return false
         else if (nodeDelegate.node != contentView.selectedPartitionNode) {
             instanceCopyPopup.open(
+                actionsManager,
                 nodeDelegate.node,
                 contentView.selectedPartitionNode,
                 contentView.selectedPartition,
