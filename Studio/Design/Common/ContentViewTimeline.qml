@@ -13,7 +13,7 @@ Item {
     }
 
     function ensureTimelineBeatPrecision(beat) {
-        return beat + (beat % (AudioAPI.beatPrecision / 4))
+        return beat - (beat % (AudioAPI.beatPrecision / 4))
     }
 
     property int editMode: ContentViewTimeline.EditMode.None
@@ -50,10 +50,15 @@ Item {
             }
 
             id: timelineMouseArea
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
             anchors.fill: parent
 
             onPressed: {
                 forceActiveFocus()
+                if (mouse.buttons & Qt.RightButton) {
+                    player.disableLoopRange()
+                    return
+                }
                 var beat = getMouseBeatPrecision()
                 if (mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier) {
                     if (beat >= player.playFrom) {
@@ -70,7 +75,7 @@ Item {
             }
 
             onPositionChanged: {
-                if (!pressed)
+                if (!pressed || mouse.buttons & Qt.RightButton)
                     return
                 var beat = getMouseBeatPrecision()
                 switch (editMode) {
@@ -95,6 +100,8 @@ Item {
             }
 
             onReleased: {
+                if (mouse.buttons & Qt.RightButton)
+                    return
                 switch (editMode) {
                 case ContentViewTimeline.EditMode.Playback:
                     player.timelineEndMove()
@@ -162,7 +169,6 @@ Item {
                 drag.axis: Drag.XAxis
                 drag.minimumX: -width / 2
                 drag.maximumX: loopToIndicator.x
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
 
                 drag.onActiveChanged: {
                     if (drag.active)
@@ -175,11 +181,6 @@ Item {
                 }
 
                 onPressedChanged: forceActiveFocus()
-
-                onPressed: {
-                    if (mouse.button & Qt.RightButton)
-                        player.disableLoopRange()
-                }
             }
         }
 
@@ -207,24 +208,18 @@ Item {
                 drag.axis: Drag.XAxis
                 drag.minimumX: loopFromIndicator.x
                 drag.maximumX: timelineArea.width - width / 2
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
 
                 drag.onActiveChanged: {
                     if (drag.active)
                         player.timelineBeginLoopMove(player.loopFrom, player.loopTo)
                     else {
-                        var beat = (loopFromIndicator.x - contentView.xOffset + loopFromIndicator.width / 2) / contentView.pixelsPerBeatPrecision
+                        var beat = (loopToIndicator.x - contentView.xOffset + loopToIndicator.width / 2) / contentView.pixelsPerBeatPrecision
                         player.timelineLoopMove(ensureTimelineBeatPrecision(beat))
                         player.timelineEndLoopMove()
                     }
                 }
 
                 onPressedChanged: forceActiveFocus()
-
-                onPressed: {
-                    if (mouse.button & Qt.RightButton)
-                        player.disableLoopRange()
-                }
             }
         }
 

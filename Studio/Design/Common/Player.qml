@@ -52,7 +52,7 @@ RowLayout {
     }
 
     function timelineEndLoopMove() {
-        if (player.loopFrom == player.loopTo)
+        if (player.loopFrom === player.loopTo)
             player.disableLoopRange()
         else if (timelineMoveWhilePlaying) {
             timelineMoveWhilePlaying = false

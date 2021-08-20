@@ -47,3 +47,19 @@ void Device::setName(const QString &name) noexcept
     _data.reloadDevice();
     emit nameChanged();
 }
+
+void Device::start(void)
+{
+    if (!running()) {
+        _data.start();
+        emit runningChanged();
+    }
+}
+
+void Device::stop(void)
+{
+    if (running()) {
+        _data.stop();
+        emit runningChanged();
+    }
+}

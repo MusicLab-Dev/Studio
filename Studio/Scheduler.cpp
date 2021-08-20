@@ -125,12 +125,12 @@ void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat
 
 void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *node, const quint32 partition, const Beat startingBeat, const BeatRange &loopRange)
 {
-    const bool graphChanged = partitionNode() != node->audioNode();
-    // const bool partitionChanged = graphChanged || partitionIndex() != partition;
+    bool graphChanged = partitionNode() != node->audioNode();
 
     stopAndWait();
 
     if (mode != Scheduler::playbackMode()) {
+        graphChanged = true;
         setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
         emit playbackModeChanged();
     }
@@ -148,7 +148,7 @@ void Scheduler::playPartition(const Scheduler::PlaybackMode mode, NodeModel *nod
         range.to = startingBeat + processBeatSize();
     }
 
-    if (graphChanged) // @todo: Only invalidate the current
+    if (graphChanged)
         invalidateCurrentGraph();
 
     playImpl();
@@ -170,8 +170,8 @@ bool Scheduler::playImpl(void)
     if (setState(Audio::AScheduler::State::Play)) {
         _onTheFlyMissCount = 0u;
         _isOnTheFlyMode = playbackMode() == PlaybackMode::OnTheFly;
-        _device.start();
         _timer.start();
+        _device.start();
         emit runningChanged();
         return true;
     } else
@@ -326,7 +326,7 @@ void Scheduler::onCatchingAudioThread(void)
         onExportFrameReceived();
     // Check if we should stop on the fly graph
     } else if (!busy && mode == PlaybackMode::OnTheFly && _onTheFlyMissCount > OnTheFlyMissThreshold) {
-        qDebug() << "Missed";
+        qDebug() << "[Audio Graph] On the fly autostop";
         _onTheFlyMissCount = 0u;
         pauseImpl();
         _exitGraph = true;
@@ -339,6 +339,7 @@ void Scheduler::onCatchingAudioThread(void)
         _timer.stop();
         graphExited();
     }
+
     AScheduler::dispatchNotifyEvents();
 
     emit currentBeatChanged();
@@ -351,6 +352,10 @@ void Scheduler::onCatchingAudioThread(void)
             ++_currentAnalysisTick;
         }
     }
+    // Can be used to delay the device start until the queue is busy
+    // else if (!_exitGraph && !_device.running()) {
+    //     _device.start();
+    // }
 }
 
 void Scheduler::onExportFrameReceived(void)
