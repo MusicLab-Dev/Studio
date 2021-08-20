@@ -16,13 +16,9 @@ Item {
     }
 
     function open(filt) {
-        filterTemp = filt
-        if (launched)
-            restartAnim.start()
-        else {
-            filter = filt
+        filter = filt
+        if (!launched)
             openAnim.start()
-        }
         launched = true
     }
 
@@ -32,7 +28,6 @@ Item {
         closeAnim.start()
     }
 
-    property int filterTemp: TreeComponentsPanel.Type.Void
     property int filter: TreeComponentsPanel.Type.Void
     property bool launched: false
     property real durationAnimation: 300
@@ -47,17 +42,6 @@ Item {
     ParallelAnimation {
         id: closeAnim
         PropertyAnimation { target: panel; property: "x"; to: panel.xClose; duration: durationAnimation; easing.type: Easing.OutBack; }
-    }
-
-    SequentialAnimation {
-        id: restartAnim
-        ParallelAnimation {
-            PropertyAnimation { target: panel; property: "x"; to: panel.xClose; duration: durationAnimation; easing.type: Easing.OutCubic; }
-        }
-        ScriptAction { script: treeComponentsPanel.filter = treeComponentsPanel.filterTemp }
-        ParallelAnimation {
-            PropertyAnimation { target: panel; property: "x"; to: panel.xOpen; duration: durationAnimation; easing.type: Easing.InCubic }
-        }
     }
 
 
@@ -129,17 +113,17 @@ Item {
                 //spacing: parent.height * 0.005
 
                 TreeComponentCategory {
-                    text.text: "Mixer"
+                    text.text: qsTr("Mixer")
                     filter: TreeComponentsPanel.Type.Mixer
                 }
 
                 TreeComponentCategory {
-                    text.text: "Sources"
+                    text.text: qsTr("Sources")
                     filter: TreeComponentsPanel.Type.Sources
                 }
 
                 TreeComponentCategory {
-                    text.text: "Effects"
+                    text.text: qsTr("Effects")
                     filter: TreeComponentsPanel.Type.Effects
                 }
             }
