@@ -69,10 +69,6 @@ MouseArea {
 
     // Timeline
     readonly property int timelineHeight: 10
-    property bool hasLoop: false
-    property int loopFrom: 0
-    property int loopTo: 0
-    property int loopRange: loopTo - loopFrom
 
     // Partition selection
     property var lastSelectedNode: null

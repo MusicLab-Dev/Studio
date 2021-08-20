@@ -123,7 +123,7 @@ public slots:
     bool removeExactRange(const QVector<PartitionInstance> &instances);
 
     /** @brief Select all notes within a specified range (returns indexes) */
-    QVariantList select(const BeatRange &range);
+    QVector<int> select(const BeatRange &range);
 
 
     /** @brief Get an analysis of the given notes */

@@ -162,7 +162,7 @@ public slots:
     bool removeExactRange(const QVector<Note> &notes);
 
     /** @brief Select all notes within a specified range (returns indexes) */
-    QVariantList select(const BeatRange &range, const Key keyFrom, const Key keyTo);
+    QVector<int> select(const BeatRange &range, const Key keyFrom, const Key keyTo);
 
 
     /** @brief Get an analysis of the given notes */

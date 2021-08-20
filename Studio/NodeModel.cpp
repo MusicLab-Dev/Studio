@@ -95,12 +95,12 @@ void NodeModel::setColor(const QColor &color)
     );
 }
 
-QVariant NodeModel::getVolumeCache(void) const noexcept
+VolumeCache NodeModel::getVolumeCache(void) const noexcept
 {
     if (_data && _data->cache())
-        return QVariant::fromValue(VolumeCache(_data->cache().volumeCache()));
+        return VolumeCache(_data->cache().volumeCache());
     else
-        return QVariant::fromValue(VolumeCache{});
+        return VolumeCache{};
 }
 
 void NodeModel::processLatestInstanceChange(const Beat oldInstance, const Beat newInstance)
@@ -412,12 +412,12 @@ int NodeModel::getChildIndex(NodeModel *node) const noexcept
     return -1;
 }
 
-QVariant NodeModel::getAllChildren(void) noexcept
+QVector<NodeModel *> NodeModel::getAllChildren(void) noexcept
 {
     QVector<NodeModel *> res;
 
     getAllChildrenImpl(res);
-    return QVariant::fromValue(res);
+    return res;
 }
 
 void NodeModel::getAllChildrenImpl(QVector<NodeModel *> &res) noexcept

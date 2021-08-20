@@ -65,6 +65,15 @@ void Studio::InitResources(void)
     qRegisterMetaType<ActionRemovePartitions>("ActionRemovePartitions");
     qRegisterMetaType<NotesAnalysis>("NotesAnalysis");
     qRegisterMetaType<PartitionInstancesAnalysis>("PartitionInstancesAnalysis");
+    qRegisterMetaType<BeatRange>("BeatRange");
+    qRegisterMetaType<Note>("Note");
+    qRegisterMetaType<NoteEvent>("NoteEvent");
+    qRegisterMetaType<VolumeCache>("VolumeCache");
+    qRegisterMetaType<PartitionInstance>("PartitionInstance");
+    qRegisterMetaType<ControlEvent>("ControlEvent");
+    qRegisterMetaType<QVector<Note>>("QVector<Note>");
+    qRegisterMetaType<QVector<PartitionInstance>>("QVector<PartitionInstance>");
+    qRegisterMetaType<QVector<NodeModel *>>("QVector<NodeModel *>");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");

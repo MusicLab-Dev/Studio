@@ -181,13 +181,6 @@ ColumnLayout {
                     mustCenter = false
                 }
             }
-
-            onTimelineBeginMove: player.timelineBeginMove(target)
-            onTimelineMove: player.timelineMove(target)
-            onTimelineEndMove: player.timelineEndMove()
-            onTimelineBeginLoopMove: player.timelineBeginLoopMove()
-            onTimelineEndLoopMove: player.timelineEndLoopMove()
-
         }
 
         SequencerContentTweakView {

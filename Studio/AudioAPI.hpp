@@ -6,7 +6,6 @@
 #pragma once
 
 #include <QObject>
-#include <QVariant>
 
 #include "Point.hpp"
 #include "ControlEvent.hpp"
@@ -41,32 +40,32 @@ public:
 
 public slots:
     /** @brief Create an audio beat range */
-    QVariant beatRange(const Beat from, const Beat to) const noexcept
-        { return QVariant::fromValue(BeatRange(from, to)); }
+    BeatRange beatRange(const Beat from, const Beat to) const noexcept
+        { return BeatRange(from, to); }
 
     /** @brief Create an audio note */
-    QVariant note(const BeatRange &range, const Key key, const Velocity velocity, const Tuning tuning) const noexcept
-        { return QVariant::fromValue(Note(range, key, velocity, tuning)); }
+    Note note(const BeatRange &range, const Key key, const Velocity velocity, const Tuning tuning) const noexcept
+        { return Note(range, key, velocity, tuning); }
 
     /** @brief Create an audio note event */
-    QVariant noteEvent(const NoteEvent::EventType type, const Key key, const Velocity velocity, const Tuning tuning) const noexcept
-        { return QVariant::fromValue(NoteEvent(static_cast<Audio::NoteEvent::EventType>(type), key, velocity, tuning)); }
+    NoteEvent noteEvent(const NoteEvent::EventType type, const Key key, const Velocity velocity, const Tuning tuning) const noexcept
+        { return NoteEvent(static_cast<Audio::NoteEvent::EventType>(type), key, velocity, tuning); }
 
     /** @brief Create a control event */
-    QVariant controlEvent(const ParamID paramID, const ParamValue value) const noexcept
-        { return QVariant::fromValue(ControlEvent(paramID, value)); }
+    ControlEvent controlEvent(const ParamID paramID, const ParamValue value) const noexcept
+        { return ControlEvent(paramID, value); }
 
     /** @brief Create an audio point */
-    QVariant point(const Beat beat, const GPoint::CurveType curveType, const GPoint::CurveRate curveRate, const ParamValue paramValue) const noexcept
-        { return QVariant::fromValue(GPoint(beat, static_cast<Audio::Point::CurveType>(curveType), curveRate, paramValue)); }
+    GPoint point(const Beat beat, const GPoint::CurveType curveType, const GPoint::CurveRate curveRate, const ParamValue paramValue) const noexcept
+        { return GPoint(beat, static_cast<Audio::Point::CurveType>(curveType), curveRate, paramValue); }
 
     /** @brief Create a partition instance */
-    QVariant partitionInstance(const quint32 partitionIndex, const Beat offset, const BeatRange &range) const noexcept
-        { return QVariant::fromValue(PartitionInstance(partitionIndex, offset, range)); }
+    PartitionInstance partitionInstance(const quint32 partitionIndex, const Beat offset, const BeatRange &range) const noexcept
+        { return PartitionInstance(partitionIndex, offset, range); }
 
     /** @brief Create a volume cache */
-    QVariant volumeCache(const DB peak, const DB rms) const noexcept
-        { return QVariant::fromValue(VolumeCache(peak, rms)); }
+    VolumeCache volumeCache(const DB peak, const DB rms) const noexcept
+        { return VolumeCache(peak, rms); }
 
 
     /** @brief Convert a decibel volume into a ratio */

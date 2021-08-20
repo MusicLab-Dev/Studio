@@ -621,11 +621,12 @@ MouseArea {
 
     Repeater {
         id: selectionList
-        model: selectionListModel
+        model: selectionListModel ? selectionListModel.length : 0
 
         delegate: Rectangle {
-            property var range: getTargetBeatRange(modelData)
-            property int key: getTargetKey(modelData)
+            property var data: selectionListModel[index]
+            property var range: getTargetBeatRange(data)
+            property int key: getTargetKey(data)
             property var realRange: {
                 return AudioAPI.beatRange(
                     range.from + placementArea.selectionResizeLeftBeatPrecision + placementArea.selectionMoveBeatPrecision,

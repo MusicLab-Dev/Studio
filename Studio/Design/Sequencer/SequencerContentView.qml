@@ -10,6 +10,7 @@ ContentView {
     property alias placementArea: pianoView.placementArea
 
     id: contentView
+    player: sequencerView.player
     xOffsetMin: sequencerView.partition ? Math.max(sequencerView.partition.latestNote, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0
     yOffsetMin: pianoView.totalHeight > surfaceContentGrid.height ? surfaceContentGrid.height - pianoView.totalHeight : 0
     xZoom: 0.025
@@ -20,8 +21,6 @@ ContentView {
     clip: true
     placementKeyCount: pianoView.keys
     placementKeyOffset: pianoView.keyOffset
-    timelineBeatPrecision: sequencerView.player.currentPlaybackBeat
-    audioProcessBeatPrecision: 0 //app.scheduler.partitionCurrentBeat
     placementBeatPrecisionScale: AudioAPI.beatPrecision / 4
 
     SequencerContentPianoView {

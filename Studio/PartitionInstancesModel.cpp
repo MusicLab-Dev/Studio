@@ -259,14 +259,14 @@ bool PartitionInstancesModel::removeExactRange(const QVector<PartitionInstance> 
     return removeRange(indexes);
 }
 
-QVariantList PartitionInstancesModel::select(const BeatRange &range)
+QVector<int> PartitionInstancesModel::select(const BeatRange &range)
 {
     int idx = 0;
-    QVariantList indexes;
+    QVector<int> indexes;
 
     for (const auto &elem : *_data) {
         if (elem.range.from <= range.to && elem.range.to >= range.from)
-            indexes.append(idx);
+            indexes.push_back(idx);
         ++idx;
     }
     return indexes;

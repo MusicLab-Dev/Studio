@@ -331,14 +331,14 @@ bool PartitionModel::removeExactRange(const QVector<Note> &notes)
     return removeRange(indexes);
 }
 
-QVariantList PartitionModel::select(const BeatRange &range, const Key keyFrom, const Key keyTo)
+QVector<int> PartitionModel::select(const BeatRange &range, const Key keyFrom, const Key keyTo)
 {
     int idx = 0;
-    QVariantList indexes;
+    QVector<int> indexes;
 
     for (const auto &note : *_data) {
         if (note.key >= keyFrom && note.key <= keyTo && note.range.from <= range.to && note.range.to >= range.from)
-            indexes.append(idx);
+            indexes.push_back(idx);
         ++idx;
     }
     return indexes;

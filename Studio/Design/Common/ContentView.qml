@@ -12,22 +12,11 @@ Item {
         Cut
     }
 
-    function disableLoopRange() {
-        hasLoop = false
-        loopFrom = 0
-        loopTo = 0
-        app.scheduler.disableLoopRange()
-    }
-
-    signal timelineBeginMove(var target)
-    signal timelineMove(var target)
-    signal timelineEndMove()
-
-    signal timelineBeginLoopMove()
-    signal timelineEndLoopMove()
-
     // Content data placeholder
     default property alias placeholder: placeholder.data
+
+    // Inputs
+    property Player player
 
     // Display inputs
     property alias enableRows: surfaceContentGrid.enableRows
@@ -113,18 +102,9 @@ Item {
     // Scale used to perfectly fit placements in beat
     property int placementBeatPrecisionScale: AudioAPI.beatPrecision
 
-    // Timeline bar
-    property real timelineBeatPrecision: 0
-    property real audioProcessBeatPrecision: 0
-
-    property alias timelineCursor: contentViewTimeline.timelineCursor
-
     // Timeline
     readonly property int timelineHeight: 25
-    property bool hasLoop: false
-    property int loopFrom: 0
-    property int loopTo: 0
-    property int loopRange: loopTo - loopFrom
+    property alias timelineCursor: contentViewTimeline.timelineCursor
 
     // Edit tools
     property int editMode: ContentView.EditMode.Regular
@@ -188,6 +168,7 @@ Item {
 
     ContentViewTimeline {
         id: contentViewTimeline
+        player: contentView.player
         height: timelineHeight
         width: contentView.width
         z: 1
@@ -199,19 +180,19 @@ Item {
         height: parent.height
 
         Rectangle {
-            x: contentView.xOffset + contentView.loopFrom * contentView.pixelsPerBeatPrecision
+            x: contentView.xOffset + player.loopFrom * contentView.pixelsPerBeatPrecision
             width: 1
             height: contentView.height
             color: themeManager.accentColor
-            visible: contentView.hasLoop
+            visible: player.hasLoop
         }
 
         Rectangle {
-            x: contentView.xOffset + contentView.loopTo * contentView.pixelsPerBeatPrecision
+            x: contentView.xOffset + player.loopTo * contentView.pixelsPerBeatPrecision
             width: 1
             height: contentView.height
             color: themeManager.accentColor
-            visible: contentView.hasLoop
+            visible: player.hasLoop
         }
     }
 
@@ -231,14 +212,6 @@ Item {
             rowHeight: contentView.rowHeight
             beatsPerRow: contentView.beatsPerRow
             z: 0
-
-            // Rectangle {
-            //     width: 4
-            //     height: surfaceContentGrid.height
-            //     x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
-            //     color: "red"
-            //     opacity: 0.5
-            // }
         }
 
         // Content view data
@@ -255,7 +228,7 @@ Item {
                 width: 1
                 height: contentView.height
                 color: themeManager.accentColor
-                visible: contentView.hasLoop
+                visible: player.hasLoop
             }
 
             Rectangle {
@@ -263,7 +236,7 @@ Item {
                 width: 1
                 height: contentView.height
                 color: themeManager.accentColor
-                visible: contentView.hasLoop
+                visible: player.hasLoop
             }
 
             ScrollBar {
@@ -303,9 +276,22 @@ Item {
     ContentViewTimelineBar {
         id: timelineBar
         visible: x >= rowHeaderWidth
+        color: "#00ECBA"
         width: 1
         height: parent.height - timelineCursor.height
-        x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision
+        x: rowHeaderWidth + xOffset + player.currentPlaybackBeat * contentView.pixelsPerBeatPrecision
+        y: timelineCursor.height
+        z: contentViewTimeline.z + 1
+    }
+
+    ContentViewTimelineBar {
+        id: playFromBar
+        visible: x >= rowHeaderWidth
+        color: themeManager.accentColor
+        opacity: 0.5
+        width: 1
+        height: parent.height - timelineCursor.height
+        x: rowHeaderWidth + xOffset + player.playFrom * contentView.pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1
     }
