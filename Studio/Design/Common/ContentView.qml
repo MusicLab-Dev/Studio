@@ -175,28 +175,6 @@ Item {
     }
 
     Item {
-        x: contentView.rowHeaderWidth
-        width: contentView.width - x
-        height: parent.height
-
-        Rectangle {
-            x: contentView.xOffset + player.loopFrom * contentView.pixelsPerBeatPrecision
-            width: 1
-            height: contentView.height
-            color: themeManager.accentColor
-            visible: player.hasLoop
-        }
-
-        Rectangle {
-            x: contentView.xOffset + player.loopTo * contentView.pixelsPerBeatPrecision
-            width: 1
-            height: contentView.height
-            color: themeManager.accentColor
-            visible: player.hasLoop
-        }
-    }
-
-    Item {
         width: parent.width
         height: contentView.height - contentViewTimeline.height
         y: contentViewTimeline.height
@@ -224,6 +202,25 @@ Item {
             anchors.fill: surfaceContentGrid
 
             Rectangle {
+                visible: player.hasLoop
+                color: "grey"
+                opacity: 0.6
+                anchors.left: parent.left
+                anchors.right: loopFromBar.left
+                height: contentView.height
+            }
+
+            Rectangle {
+                visible: player.hasLoop
+                color: "grey"
+                opacity: 0.6
+                anchors.left: loopToBar.right
+                anchors.right: parent.right
+                height: contentView.height
+            }
+
+            Rectangle {
+                id: loopFromBar
                 x: contentViewTimeline.loopFromIndicatorX
                 width: 1
                 height: contentView.height
@@ -232,6 +229,7 @@ Item {
             }
 
             Rectangle {
+                id: loopToBar
                 x: contentViewTimeline.loopToIndicatorX
                 width: 1
                 height: contentView.height
