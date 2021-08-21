@@ -6,6 +6,7 @@
 #include <QQmlEngine>
 
 #include <Audio/PluginTable.hpp>
+#include <Audio/SampleFile/SampleManager.hpp>
 
 #include "Application.hpp"
 #include "Models.hpp"
@@ -102,9 +103,12 @@ void Scheduler::setAnalysisTickRate(const quint32 tickRate) noexcept
 
 void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat, const BeatRange &loopRange)
 {
+    bool graphChanged = false;
+
     stopAndWait();
 
     if (mode != Scheduler::playbackMode()) {
+        graphChanged = true;
         setPlaybackMode(static_cast<Audio::PlaybackMode>(mode));
         emit playbackModeChanged();
     }
@@ -119,6 +123,9 @@ void Scheduler::play(const Scheduler::PlaybackMode mode, const Beat startingBeat
         range.to = startingBeat + processBeatSize();
         range.from = startingBeat;
     }
+
+    if (graphChanged)
+        invalidateCurrentGraph();
 
     playImpl();
 }
@@ -171,7 +178,8 @@ bool Scheduler::playImpl(void)
         _onTheFlyMissCount = 0u;
         _isOnTheFlyMode = playbackMode() == PlaybackMode::OnTheFly;
         _timer.start();
-        _device.start();
+        if (playbackMode() != PlaybackMode::Export)
+            _device.start();
         emit runningChanged();
         return true;
     } else
@@ -268,15 +276,20 @@ void Scheduler::reloadAudioSpecs(void)
     prepareCache(_audioSpecs);
 }
 
-void Scheduler::exportProject(const QString &path)
+bool Scheduler::exportProject(const QString &path)
 {
+    // @todo check file path and return false on error
     stopAndWait();
-    const auto estimatedEndBeat = static_cast<float>(Application::Get()->project()->master()->latestInstance()) * 1.1f;
-    const auto estimatedChannelSize = static_cast<std::size_t>((estimatedEndBeat / (tempo() * Audio::BeatPrecision)) * static_cast<float>(_audioSpecs.sampleRate));
-    _exportBuffer = Audio::Buffer(estimatedChannelSize, _audioSpecs.sampleRate, _audioSpecs.channelArrangement, _audioSpecs.format);
+    const auto latestBeat = Application::Get()->project()->master()->latestInstance();
+    const auto latestBlock = ComputeSampleSize(latestBeat, tempo(), _audioSpecs.sampleRate, 0.0, 0.0);
+    const auto estimatedChannelByteSize = (latestBlock + _audioSpecs.sampleRate) * sizeof(float);
+
+    _exportBuffer = Audio::Buffer(estimatedChannelByteSize, _audioSpecs.sampleRate, _audioSpecs.channelArrangement, _audioSpecs.format);
     _exportPath = path;
     _exportIndex = 0u;
     AScheduler::exportProject();
+    playImpl();
+    return true;
 }
 
 bool Scheduler::onAudioBlockGenerated(void)
@@ -328,7 +341,6 @@ void Scheduler::onCatchingAudioThread(void)
     } else if (!busy && mode == PlaybackMode::OnTheFly && _onTheFlyMissCount > OnTheFlyMissThreshold) {
         qDebug() << "[Audio Graph] On the fly autostop";
         _onTheFlyMissCount = 0u;
-        pauseImpl();
         _exitGraph = true;
     }
 
@@ -336,6 +348,7 @@ void Scheduler::onCatchingAudioThread(void)
     std::atomic_notify_one(&_blockGenerated);
 
     if (_exitGraph) {
+        pauseImpl();
         _timer.stop();
         graphExited();
     }
@@ -344,7 +357,7 @@ void Scheduler::onCatchingAudioThread(void)
 
     emit currentBeatChanged();
 
-    if (!busy) {
+    if (!busy && mode != PlaybackMode::Export) {
         if (_currentAnalysisTick >= _analysisTickRate) {
             _currentAnalysisTick = 0u;
             emit analysisCacheUpdated();
@@ -362,36 +375,47 @@ void Scheduler::onExportFrameReceived(void)
 {
     if (!_exitGraph) {
         const auto *master = Application::Get()->project()->master();
-        const auto begin = master->audioNode()->cache().data<float>();
-        const auto end = begin + master->audioNode()->cache().size<float>();
-        if (currentBeat() > master->latestInstance()) {
-            if (std::all_of(begin, end, [](const auto &x) { return x == 0.0f; }))
+        if (currentBeat() >= master->latestInstance()) {
+            if (master->getVolumeCache().peak < -60.0)
                 _exitGraph = true;
         }
         if (!_exitGraph) {
             const auto size = _exportBuffer.size<float>();
-            if (_exportIndex >= size) {
-                _exportBuffer.grow(size + processBlockSize() * OutOfRangeExportFrameAllocationCount);
+            if (_exportIndex + processBlockSize() > size) {
+                _exportBuffer.grow((size * sizeof(float)) + processBlockSize() * OutOfRangeExportFrameAllocationCount);
             }
+            const auto begin = master->audioNode()->cache().data<float>();
+            const auto end = begin + master->audioNode()->cache().size<float>();
             std::copy(begin, end, _exportBuffer.data<float>() + _exportIndex);
             _exportIndex += processBlockSize();
-        } else
+        } else {
+            _exportBuffer.grow(_exportIndex * sizeof(float));
             onExportCompleted();
+        }
     } else
         onExportCanceled();
 }
 
 void Scheduler::onExportCompleted(void)
 {
-    qDebug() << "Export completed, writing audio into" << _exportPath;
+    qDebug() << "[Export] Generation completed, writing audio into" << _exportPath;
+    if (!Audio::SampleManager<float>::WriteSampleFile(_exportPath.toStdString(), _exportBuffer)) {
+        qDebug() << "[Export] File write failed" << _exportPath;
+        emit exportFailed();
+    } else {
+        qDebug() << "[Export] File write success" << _exportPath;
+        emit exportCompleted();
+    }
+
 }
 
 void Scheduler::onExportCanceled(void)
 {
-    qDebug() << "Export canceled";
+    qDebug() << "[Export] Generation canceled";
     _exportBuffer.release();
     _exportIndex = 0u;
     _exportPath = QString();
+    emit exportCanceled();
 }
 
 void Scheduler::consumeAudioData(std::uint8_t *data, const std::size_t size) noexcept
@@ -403,5 +427,5 @@ void Scheduler::consumeAudioData(std::uint8_t *data, const std::size_t size) noe
             _onTheFlyMissCount = 0u;
     }
     if (!Audio::AScheduler::consumeAudioData(data, size))
-        qDebug() << "Audio callback miss";
+        qDebug() << "[Audio device] Audio callback miss";
 }

@@ -153,7 +153,7 @@ public slots:
 
 
     /** @brief Export project to given path */
-    void exportProject(const QString &path);
+    bool exportProject(const QString &path);
 
 signals:
     /** @brief Notify when playback mode changed */
@@ -177,6 +177,15 @@ signals:
 
     /** @brief Notify that the analysis tick rate has changed */
     void analysisTickRateChanged(void);
+
+    /** @brief Notify that the export has been completed */
+    void exportCompleted(void);
+
+    /** @brief Notify that the export has been canceled */
+    void exportCanceled(void);
+
+    /** @brief Notify that the export has failed */
+    void exportFailed(void);
 
 // Harmful functions, do not use
 public:

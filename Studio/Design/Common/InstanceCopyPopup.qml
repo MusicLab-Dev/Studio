@@ -93,6 +93,10 @@ Item {
         width: Math.max(parent.width * 0.3, 400)
         height: Math.max(parent.height * 0.25, 250)
 
+        MouseArea { // Used to prevent missclic from closing the window
+            anchors.fill: parent
+        }
+
         Item {
             id: windowArea
             anchors.fill: parent
