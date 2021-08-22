@@ -149,4 +149,15 @@ Rectangle {
         }
     }
 
+    SoundMeter {
+        anchors.left: helpButton.right
+        anchors.leftMargin: 10
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.topMargin: 5
+        anchors.bottomMargin: 5
+        width: height / 3
+        targetNode: sequencerView.node
+        enabled: sequencerView.visible
+    }
 }

@@ -26,10 +26,7 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
     Q_PROPERTY(PlaybackMode playbackMode READ playbackMode NOTIFY playbackModeChanged)
     Q_PROPERTY(bool running READ running NOTIFY runningChanged)
-    Q_PROPERTY(Beat productionCurrentBeat READ productionCurrentBeat WRITE setProductionCurrentBeat)
-    Q_PROPERTY(Beat liveCurrentBeat READ liveCurrentBeat WRITE setLiveCurrentBeat)
-    Q_PROPERTY(Beat partitionCurrentBeat READ partitionCurrentBeat WRITE setPartitionCurrentBeat)
-    Q_PROPERTY(Beat onTheFlyCurrentBeat READ onTheFlyCurrentBeat WRITE setOnTheFlyCurrentBeat)
+    Q_PROPERTY(Beat currentBeat READ currentBeat WRITE setCurrentBeat NOTIFY currentBeatChanged)
     Q_PROPERTY(BPM bpm READ bpm WRITE setBPM NOTIFY bpmChanged)
     Q_PROPERTY(quint32 analysisTickRate READ analysisTickRate WRITE setAnalysisTickRate NOTIFY analysisTickRateChanged)
 
@@ -39,7 +36,8 @@ public:
         Production = static_cast<int>(Audio::PlaybackMode::Production),
         Live = static_cast<int>(Audio::PlaybackMode::Live),
         Partition = static_cast<int>(Audio::PlaybackMode::Partition),
-        OnTheFly = static_cast<int>(Audio::PlaybackMode::OnTheFly)
+        OnTheFly = static_cast<int>(Audio::PlaybackMode::OnTheFly),
+        Export = static_cast<int>(Audio::PlaybackMode::Export)
     };
     Q_ENUM(PlaybackMode)
 
@@ -53,11 +51,13 @@ public:
         /*.channelArrangement = */ Audio::ChannelArrangement::Mono
     };
 
+    static constexpr std::size_t OutOfRangeExportFrameAllocationCount = 15u;
+
     using Audio::AScheduler::addEvent;
     using Audio::AScheduler::project;
     using Audio::AScheduler::setProject;
     using Audio::AScheduler::invalidateCurrentGraph;
-    using Audio::AScheduler::getCurrentGraph;
+    using Audio::AScheduler::graph;
     using Audio::AScheduler::partitionNode;
     using Audio::AScheduler::partitionIndex;
     using Audio::AScheduler::hasExitedGraph;
@@ -91,18 +91,10 @@ public:
 
 
     /** @brief Get the current beat of a given mode */
-    [[nodiscard]] Beat currentBeat(void) const noexcept;
-    [[nodiscard]] Beat productionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Production>().from; }
-    [[nodiscard]] Beat liveCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Live>().from; }
-    [[nodiscard]] Beat partitionCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::Partition>().from; }
-    [[nodiscard]] Beat onTheFlyCurrentBeat(void) const noexcept { return currentBeatRange<Audio::PlaybackMode::OnTheFly>().from; }
+    [[nodiscard]] Beat currentBeat(void) const noexcept { return currentBeatRange().from; }
 
     /** @brief Set the current beat of a given mode */
     void setCurrentBeat(const Beat beat);
-    void setProductionCurrentBeat(const Beat beat);
-    void setLiveCurrentBeat(const Beat beat);
-    void setPartitionCurrentBeat(const Beat beat);
-    void setOnTheFlyCurrentBeat(const Beat beat);
 
     /** @brief Get the current device */
     [[nodiscard]] const Device *device(void) const noexcept { return &_device; }
@@ -130,10 +122,10 @@ public slots:
     void playPartition(const Scheduler::PlaybackMode mode, NodeModel *partitionNode, const quint32 partitionIndex, const Beat startingBeat, const BeatRange &loopRange = BeatRange{});
 
     /** @brief Pause the scheduler */
-    void pause(const Scheduler::PlaybackMode mode);
+    void pause(void);
 
     /** @brief Stop the scheduler (pause + reset beat) */
-    void stop(const Scheduler::PlaybackMode mode);
+    void stop(void);
 
     /** @brief Callback that must be called after a node has been deleted */
     void onNodeDeleted(NodeModel *targetNode);
@@ -159,6 +151,10 @@ public slots:
     /** @brief Reload the audio specs and the device */
     void reloadAudioSpecs(void);
 
+
+    /** @brief Export project to given path */
+    bool exportProject(const QString &path);
+
 signals:
     /** @brief Notify when playback mode changed */
     void playbackModeChanged(void);
@@ -166,6 +162,9 @@ signals:
 
     /** @brief Notify that the running state has changed */
     void runningChanged(void);
+
+    /** @brief Notify that the current beat range has changed */
+    void currentBeatChanged(void);
 
     /** @brief Notify that the bpm has changed */
     void bpmChanged(void);
@@ -178,6 +177,15 @@ signals:
 
     /** @brief Notify that the analysis tick rate has changed */
     void analysisTickRateChanged(void);
+
+    /** @brief Notify that the export has been completed */
+    void exportCompleted(void);
+
+    /** @brief Notify that the export has been canceled */
+    void exportCanceled(void);
+
+    /** @brief Notify that the export has failed */
+    void exportFailed(void);
 
 // Harmful functions, do not use
 public:
@@ -193,12 +201,14 @@ private:
     Audio::AudioSpecs _audioSpecs;
     bool _exitGraph { false };
     bool _busy { false };
-    bool _pausing { false };
-    alignas_cacheline std::atomic<bool> _blockGenerated { false };
-    alignas_cacheline std::atomic<std::size_t> _onTheFlyMissCount { false };
     bool _isOnTheFlyMode { false };
     quint32 _analysisTickRate { 0 };
     quint32 _currentAnalysisTick { 0 };
+    alignas_cacheline std::atomic<bool> _blockGenerated { false };
+    alignas_cacheline std::atomic<std::size_t> _onTheFlyMissCount { false };
+    Audio::Buffer _exportBuffer {};
+    std::size_t _exportIndex { 0u };
+    QString _exportPath {};
 
     static inline Scheduler *_Instance { nullptr };
 
@@ -206,15 +216,29 @@ private:
     [[nodiscard]] Audio::Device::LogicalDescriptor getDeviceDescriptor(void);
 
 
+    /** @brief Audio block generated event */
+    [[nodiscard]] bool onAudioBlockGenerated(void) final;
+
+    /** @brief Audio queue busy event */
+    [[nodiscard]] bool onAudioQueueBusy(void) final;
+
+    /** @brief Export block generated event */
+    [[nodiscard]] bool onExportBlockGenerated(void) final;
+
+
     /** @brief Try to intercept the audio thread lock */
     void onCatchingAudioThread(void);
 
+    /** @brief Callback called whenever an export frame is ready */
+    void onExportFrameReceived(void);
 
-    /** @brief Audio block generated event */
-    [[nodiscard]] bool onAudioBlockGenerated(void) override final;
 
-    /** @brief Audio block generated event */
-    [[nodiscard]] bool onAudioQueueBusy(void) override final;
+    /** @brief Export completed */
+    void onExportCompleted(void);
+
+    /** @brief Export canceled */
+    void onExportCanceled(void);
+
 
     /** @brief Audio callback */
     void consumeAudioData(std::uint8_t *data, const std::size_t size) noexcept;

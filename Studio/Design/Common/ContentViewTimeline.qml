@@ -5,10 +5,22 @@ import QtQuick.Shapes 1.15
 import AudioAPI 1.0
 
 Item {
-    property bool isEditingLoop: false
+    enum EditMode {
+        None,
+        Playback,
+        Loop,
+        InvertedLoop
+    }
+
+    function ensureTimelineBeatPrecision(beat) {
+        return beat - (beat % (AudioAPI.beatPrecision / 4))
+    }
+
+    property int editMode: ContentViewTimeline.EditMode.None
     property alias timelineCursor: timelineCursor
     readonly property real loopFromIndicatorX: loopFromIndicator.x + loopFromIndicator.width / 2
     readonly property real loopToIndicatorX: loopToIndicator.x + loopToIndicator.width / 2
+    property Player player
 
     id: timeline
 
@@ -31,48 +43,77 @@ Item {
         id: timelineArea
 
         MouseArea {
+            function getMouseBeatPrecision() {
+                return ensureTimelineBeatPrecision(
+                    (Math.abs(contentView.xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
+                )
+            }
+
+            id: timelineMouseArea
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
             anchors.fill: parent
 
-            onPressedChanged: {
+            onPressed: {
                 forceActiveFocus()
-                if (pressed) {
-                    contentView.timelineBeginMove((Math.abs(contentView.xOffset) + mouseX) / contentView.pixelsPerBeatPrecision)
+                if (mouse.buttons & Qt.RightButton) {
+                    player.disableLoopRange()
+                    return
+                }
+                var beat = getMouseBeatPrecision()
+                if (mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier) {
+                    if (beat >= player.playFrom) {
+                        editMode = ContentViewTimeline.EditMode.Loop
+                        player.timelineBeginLoopMove(player.playFrom, beat)
+                    } else {
+                        editMode = ContentViewTimeline.EditMode.InvertedLoop
+                        player.timelineBeginLoopMove(beat, player.playFrom)
+                    }
                 } else {
-                    isEditingLoop = false
-                    if (contentView.hasLoop && contentView.loopFrom == contentView.loopTo) {
-                        contentView.disableLoopRange()
-                    } else
-                        contentView.timelineEndMove()
+                    editMode = ContentViewTimeline.EditMode.Playback
+                    player.timelineBeginMove(beat)
                 }
             }
 
             onPositionChanged: {
-                if (!containsPress)
+                if (!pressed || mouse.buttons & Qt.RightButton)
                     return
-                var beat = (Math.abs(contentView.xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
-                if (isEditingLoop) {
-                    if (beat < contentView.loopFrom)
-                        contentView.loopFrom = beat
-                    else {
-                        contentView.loopTo = beat
-                    }
-                } else
-                    contentView.timelineMove(beat)
+                var beat = getMouseBeatPrecision()
+                switch (editMode) {
+                case ContentViewTimeline.EditMode.Playback:
+                    player.timelineMove(beat)
+                    break
+                case ContentViewTimeline.EditMode.Loop:
+                    if (beat >= player.loopFrom)
+                        player.timelineLoopMove(beat)
+                    else
+                        player.timelineLoopMove(player.loopFrom)
+                    break
+                case ContentViewTimeline.EditMode.InvertedLoop:
+                    if (beat <= player.loopTo)
+                        player.timelineInvertedLoopMove(beat)
+                    else
+                        player.timelineInvertedLoopMove(player.loopTo)
+                    break
+                default:
+                    break
+                }
             }
 
             onReleased: {
-                if (contentView.hasLoop && contentView.loopFrom == contentView.loopTo) {
-                    contentView.disableLoopRange()
-                } else
-                    contentView.timelineEndMove()
-            }
-
-            onDoubleClicked: {
-                isEditingLoop = true
-                var beat = (Math.abs(contentView.xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
-                contentView.hasLoop = true
-                contentView.loopFrom = beat
-                contentView.loopTo = beat
+                if (mouse.buttons & Qt.RightButton)
+                    return
+                switch (editMode) {
+                case ContentViewTimeline.EditMode.Playback:
+                    player.timelineEndMove()
+                    break
+                case ContentViewTimeline.EditMode.Loop:
+                case ContentViewTimeline.EditMode.InvertedLoop:
+                    player.timelineEndLoopMove()
+                    break
+                default:
+                    break
+                }
+                editMode = ContentViewTimeline.EditMode.None
             }
         }
 
@@ -84,6 +125,14 @@ Item {
 
             ContentViewTimelineBarCursor {
                 id: timelineCursor
+                x: timelineBar.x - actionBox.width - width / 2
+            }
+
+            ContentViewTimelineBarCursor {
+                id: playFromCursor
+                color: themeManager.accentColor
+                x: playFromBar.x - actionBox.width - width / 2
+                opacity: 0.6
             }
         }
 
@@ -100,18 +149,18 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.right: loopFromIndicator.left
-            visible: contentView.hasLoop
+            visible: player.hasLoop
             height: Math.max(parent.height * 0.1, 4)
             color: "grey"
         }
 
         Rectangle {
             id: loopFromIndicator
-            x: contentView.xOffset + contentView.loopFrom * contentView.pixelsPerBeatPrecision - width / 2
+            x: contentView.xOffset + player.loopFrom * contentView.pixelsPerBeatPrecision - width / 2
             width: height
             height: parent.height
             radius: width / 2
-            visible: contentView.hasLoop
+            visible: player.hasLoop
             color: themeManager.accentColor
 
             MouseArea {
@@ -123,10 +172,11 @@ Item {
 
                 drag.onActiveChanged: {
                     if (drag.active)
-                        contentView.timelineBeginLoopMove()
-                   else {
-                        contentView.loopFrom = (loopFromIndicator.x - contentView.xOffset + loopFromIndicator.width / 2) / contentView.pixelsPerBeatPrecision
-                        contentView.timelineEndLoopMove()
+                        player.timelineBeginLoopMove(player.loopFrom, player.loopTo)
+                    else {
+                        var beat = (loopFromIndicator.x - contentView.xOffset + loopFromIndicator.width / 2) / contentView.pixelsPerBeatPrecision
+                        player.timelineInvertedLoopMove(ensureTimelineBeatPrecision(beat))
+                        player.timelineEndLoopMove()
                     }
                 }
 
@@ -145,11 +195,11 @@ Item {
 
         Rectangle {
             id: loopToIndicator
-            x: contentView.xOffset + contentView.loopTo * contentView.pixelsPerBeatPrecision - width / 2
+            x: contentView.xOffset + player.loopTo * contentView.pixelsPerBeatPrecision - width / 2
             width: height
             height: parent.height
             radius: width / 2
-            visible: contentView.hasLoop
+            visible: player.hasLoop
             color: themeManager.accentColor
 
             MouseArea {
@@ -161,10 +211,11 @@ Item {
 
                 drag.onActiveChanged: {
                     if (drag.active)
-                        contentView.timelineBeginLoopMove()
-                   else {
-                        contentView.loopTo = (loopToIndicator.x - contentView.xOffset + loopToIndicator.width / 2) / contentView.pixelsPerBeatPrecision
-                        contentView.timelineEndLoopMove()
+                        player.timelineBeginLoopMove(player.loopFrom, player.loopTo)
+                    else {
+                        var beat = (loopToIndicator.x - contentView.xOffset + loopToIndicator.width / 2) / contentView.pixelsPerBeatPrecision
+                        player.timelineLoopMove(ensureTimelineBeatPrecision(beat))
+                        player.timelineEndLoopMove()
                     }
                 }
 
@@ -177,7 +228,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: loopToIndicator.right
             anchors.right: parent.right
-            visible: contentView.hasLoop
+            visible: player.hasLoop
             height: Math.max(parent.height * 0.1, 4)
             color: "grey"
         }

@@ -13,6 +13,6 @@ DefaultTextButton {
     height: 35
     rectItem.color: textRoundedButton.hoverOnText ? "transparent" : (textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0")
     rectItem.radius: 5
-    rectItem.border.color: textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0"
+    rectItem.border.color: !enabled ? themeManager.disabledColor : textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0"
     rectItem.border.width: textRoundedButton.hoverOnText ? 1 : 0
 }

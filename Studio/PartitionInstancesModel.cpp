@@ -62,12 +62,7 @@ bool PartitionInstancesModel::add(const PartitionInstance &instance)
         [this, idx] {
             beginInsertRows(QModelIndex(), idx, idx);
             endInsertRows();
-            const auto last = _data->back().range.to;
-            if (last > _latestInstance) {
-                _latestInstance = last;
-                emit latestInstanceChanged();
-            }
-            emit instancesChanged();
+            onInstancesChanged();
         }
     );
 }
@@ -103,7 +98,7 @@ int PartitionInstancesModel::findOverlap(const BeatRange &range) const noexcept
     int idx = 0;
 
     for (const auto &elem : *_data) {
-        if (range.to < elem.range.from || range.from > elem.range.to) {
+        if (range.to <= elem.range.from || range.from >= elem.range.to) {
             ++idx;
             continue;
         }
@@ -123,17 +118,7 @@ bool PartitionInstancesModel::remove(const int idx)
         },
         [this] {
             endRemoveRows();
-            if (!_data->empty()) {
-                const auto last = _data->back().range.to;
-                if (last > _latestInstance) {
-                    _latestInstance = last;
-                    emit latestInstanceChanged();
-                }
-            } else if (_latestInstance != 0u) {
-                _latestInstance = 0u;
-                emit latestInstanceChanged();
-            }
-            emit instancesChanged();
+            onInstancesChanged();
         }
     );
 }
@@ -144,6 +129,17 @@ const PartitionInstance &PartitionInstancesModel::get(const int idx) const noexc
         throw std::range_error("PartitionInstancesModel::get: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
 
     return reinterpret_cast<const PartitionInstance &>(_data->at(idx));
+}
+
+QVector<PartitionInstance> PartitionInstancesModel::getInstances(const QVector<int> &indexes) const noexcept
+{
+    QVector<PartitionInstance> instances;
+
+    instances.reserve(indexes.size());
+    for (const auto idx : indexes) {
+        instances.push_back(get(idx));
+    }
+    return instances;
 }
 
 void PartitionInstancesModel::set(const int idx, const PartitionInstance &instance)
@@ -163,45 +159,46 @@ void PartitionInstancesModel::set(const int idx, const PartitionInstance &instan
             } else {
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);
-                const auto last = _data->back().range.to;
-                if (last > _latestInstance) {
-                    _latestInstance = last;
-                    emit latestInstanceChanged();
-                }
             }
-            emit instancesChanged();
+            onInstancesChanged();
         }
     );
 }
 
-bool PartitionInstancesModel::addRange(const QVariantList &instanceList)
+bool PartitionInstancesModel::setRange(const QVector<PartitionInstance> &before, const QVector<PartitionInstance> &after)
 {
-    if (instanceList.empty())
+    coreAssert(before.size() == after.size(),
+        throw std::logic_error("PartitionInstancesModel::setRange: Invalid mismatch count of before / after notes"));
+
+    QVector<int> indexes;
+    QVector<PartitionInstance> res;
+    indexes.reserve(before.size());
+    res.reserve(indexes.size());
+    for (int i = 0; i < before.size(); ++i) {
+        int idx = findExact(before[i]);
+        if (idx != -1) {
+            indexes.push_back(idx);
+            res.push_back(after[i]);
+        }
+    }
+    if (indexes.isEmpty())
         return true;
-    else if (instanceList.size() == 1)
-        return add(instanceList.front().value<PartitionInstance>());
-    QVector<PartitionInstance> instances;
-    instances.reserve(instanceList.size());
-    for (const auto &instance : instanceList)
-        instances.append(instance.value<PartitionInstance>());
+
     return Models::AddProtectedEvent(
-        [this, instances] {
-            _data->insert(instances.begin(), instances.end());
+        [this, indexes, res] {
+            for (auto i = 0; i < indexes.size(); ++i)
+                _data->at(static_cast<std::uint32_t>(indexes[i])) = res[i];
+            _data->sort();
         },
         [this] {
             beginResetModel();
             endResetModel();
-            const auto last = _data->back().range.to;
-            if (last > _latestInstance) {
-                _latestInstance = last;
-                emit latestInstanceChanged();
-            }
-            emit instancesChanged();
+            onInstancesChanged();
         }
     );
 }
 
-bool PartitionInstancesModel::addRealRange(const QVector<PartitionInstance> &instances)
+bool PartitionInstancesModel::addRange(const QVector<PartitionInstance> &instances)
 {
     if (instances.empty())
         return true;
@@ -214,28 +211,23 @@ bool PartitionInstancesModel::addRealRange(const QVector<PartitionInstance> &ins
         [this] {
             beginResetModel();
             endResetModel();
-            const auto last = _data->back().range.to;
-            if (last > _latestInstance) {
-                _latestInstance = last;
-                emit latestInstanceChanged();
-            }
-            emit instancesChanged();
+            onInstancesChanged();
         }
     );
 }
 
-bool PartitionInstancesModel::removeRange(const QVariantList &indexes)
+bool PartitionInstancesModel::removeRange(const QVector<int> &indexes)
 {
     if (indexes.empty())
         return true;
     else if (indexes.size() == 1)
-        return remove(indexes.front().toInt());
+        return remove(indexes.front());
     return Models::AddProtectedEvent(
         [this, indexes] {
             int idx = 0;
             auto it = std::remove_if(_data->begin(), _data->end(), [&idx, &indexes](const auto &) {
                 for (const auto &i : indexes) {
-                    if (i.toInt() == idx) {
+                    if (i == idx) {
                         ++idx;
                         return true;
                     }
@@ -250,27 +242,58 @@ bool PartitionInstancesModel::removeRange(const QVariantList &indexes)
         [this] {
             beginResetModel();
             endResetModel();
-            const Beat last = _data->empty() ? 0u : _data->back().range.to;
-            if (last > _latestInstance) {
-                _latestInstance = last;
-                emit latestInstanceChanged();
-            }
-            emit instancesChanged();
+            onInstancesChanged();
         }
     );
 }
 
-QVariantList PartitionInstancesModel::select(const BeatRange &range)
+bool PartitionInstancesModel::removeExactRange(const QVector<PartitionInstance> &instances)
+{
+    QVector<int> indexes;
+
+    for (const auto &instance : instances) {
+        int idx = findExact(instance);
+        if (idx != -1)
+            indexes.push_back(idx);
+    }
+    return removeRange(indexes);
+}
+
+QVector<int> PartitionInstancesModel::select(const BeatRange &range)
 {
     int idx = 0;
-    QVariantList indexes;
+    QVector<int> indexes;
 
     for (const auto &elem : *_data) {
         if (elem.range.from <= range.to && elem.range.to >= range.from)
-            indexes.append(idx);
+            indexes.push_back(idx);
         ++idx;
     }
     return indexes;
+}
+
+PartitionInstancesAnalysis PartitionInstancesModel::getPartitionInstancesAnalysis(const QVector<PartitionInstance> &instances) const noexcept
+{
+    if (instances.empty())
+        return PartitionInstancesAnalysis {};
+
+    PartitionInstancesAnalysis analysis {
+        /* from: */         std::numeric_limits<Beat>::max(),
+        /* to: */           0u,
+        /* distance: */     0u,
+    };
+
+    for (const auto &instance : instances) {
+        analysis.from = std::min(analysis.from, instance.range.from);
+        analysis.to = std::max(analysis.to, instance.range.to);
+    }
+    analysis.distance = analysis.to - analysis.from;
+    return analysis;
+}
+
+bool PartitionInstancesModel::hasOverlap(const PartitionInstancesAnalysis &analysis) const noexcept
+{
+    return findOverlap(BeatRange(analysis.from, analysis.to)) != -1;
 }
 
 void PartitionInstancesModel::partitionRemovedUnsafe(const std::uint32_t partitionIndex)
@@ -291,5 +314,16 @@ void PartitionInstancesModel::partitionRemovedNotify(void)
 {
     beginResetModel();
     endResetModel();
+    emit instancesChanged();
+}
+
+void PartitionInstancesModel::onInstancesChanged(void)
+{
+    const Beat last = !_data->empty() ? _data->back().range.to : 0u;
+
+    if (last > _latestInstance) {
+        _latestInstance = last;
+        emit latestInstanceChanged();
+    }
     emit instancesChanged();
 }

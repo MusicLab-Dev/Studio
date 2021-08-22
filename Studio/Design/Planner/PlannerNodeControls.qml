@@ -16,9 +16,9 @@ Row {
 
         Item {
             id: nodePartitionsBackground
-            x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
+            x: nodeHeaderBackground.x
             y: contentView.headerHalfMargin
-            width: contentView.rowHeaderWidth - x - contentView.headerMargin
+            width: nodeHeaderBackground.width
             height: nodeControlsFlow.height - contentView.headerMargin
 
             Rectangle {

@@ -33,6 +33,8 @@
         <file>Assets/Disabled.png</file>
         <file>Assets/TestImage1.png</file>
         <file>Assets/TestImage2.png</file>
+        <file>Assets/Trash.png</file>
+        <file>Assets/Controls.png</file>
         <file>Assets/EditWorkspaceName.png</file>
         <file>Assets/TestImage3.png</file>
         <file>Assets/TestImage4.png</file>
@@ -59,6 +61,7 @@
         <file>Assets/Plugins/Delay.png</file>
         <file>Assets/Plugins/Sampler.png</file>
         <file>Assets/Plugins/Arpeggiator.png</file>
+        <file>Assets/Plugins/Kick.png</file>
         <file>Templates/SettingsModel.json</file>
         <file>Templates/TEMPLATE_basic</file>
     </qresource>

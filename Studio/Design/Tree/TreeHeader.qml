@@ -11,14 +11,19 @@ Rectangle {
         onPressedChanged: forceActiveFocus()
     }
 
-    Item {
+    DefaultTextButton {
         anchors.fill: parent
+        text: app.project.name
+        font.pixelSize: 35
 
-        DefaultText {
-            anchors.fill: parent
-            text: app.project.name
-            color: "white"
-            font.pixelSize: 35
+        onReleased: {
+            globalTextField.open(
+                app.project.name,
+                function() { app.project.name = globalTextField.text },
+                function () {},
+                false,
+                null
+            );
         }
     }
 }

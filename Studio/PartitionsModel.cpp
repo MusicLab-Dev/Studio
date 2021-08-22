@@ -96,12 +96,12 @@ bool PartitionsModel::duplicate(const int idx)
             if (_data->data() != oldData) {
                 refreshPartitions();
                 _partitions.back()->setName(partition->name());
-                _partitions.back()->addRange(partition->getNotes());
+                _partitions.back()->addRange(partition->getAllNotes());
             } else {
                 const auto idx = _partitions.size();
                 beginInsertRows(QModelIndex(), idx, idx);
                 _partitions.push(&_data->at(idx), this, partition->name());
-                _partitions.back()->addRange(partition->getNotes());
+                _partitions.back()->addRange(partition->getAllNotes());
                 endInsertRows();
             }
         }
@@ -180,7 +180,7 @@ void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const 
         [this, node, partitionIndex, isPlaying, graphChanged, hasPaused] {
             const auto scheduler = Scheduler::Get();
             if (hasPaused)
-                scheduler->getCurrentGraph().wait();
+                scheduler->graph().wait();
             if (!isPlaying || graphChanged)
                 scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, partitionIndex, 0);
         }

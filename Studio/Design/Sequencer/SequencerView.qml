@@ -137,7 +137,6 @@ ColumnLayout {
     }
 
     ControlsFlow {
-        PropertyAnimation {id: openAnim; target: sequencerControls; property: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic}
         function open() {
             visible = true
             openAnim.start()
@@ -148,11 +147,20 @@ ColumnLayout {
         }
 
         id: sequencerControls
-        Layout.fillWidth: true
-        Layout.preferredHeight: height
+        closeable: false
         y: parent.height
-
         node: sequencerView.node
+        Layout.fillWidth: true
+
+        PropertyAnimation {
+            id: openAnim
+            target: sequencerControls
+            property: "opacity"
+            from: 0
+            to: 1
+            duration: 300
+            easing.type: Easing.OutCubic
+        }
     }
 
     Item {
@@ -173,13 +181,6 @@ ColumnLayout {
                     mustCenter = false
                 }
             }
-
-            onTimelineBeginMove: player.timelineBeginMove(target)
-            onTimelineMove: player.timelineMove(target)
-            onTimelineEndMove: player.timelineEndMove()
-            onTimelineBeginLoopMove: player.timelineBeginLoopMove()
-            onTimelineEndLoopMove: player.timelineEndLoopMove()
-
         }
 
         SequencerContentTweakView {
@@ -202,10 +203,21 @@ ColumnLayout {
 
     Connections {
         target: eventDispatcher
-        enabled: moduleIndex === modulesView.selectedModule
+        enabled: moduleIndex === modulesView.selectedModule && contentView.placementArea.mode === PlacementArea.None
 
-        function onUndo(pressed) { if (pressed) actionsManager.undo(); contentView.pianoView.notesPlacementArea.resetSelection() }
-        function onRedo(pressed) { if (pressed) actionsManager.redo(); contentView.pianoView.notesPlacementArea.resetSelection() }
+        function onUndo(pressed) {
+            if (pressed) {
+                actionsManager.undo()
+                contentView.placementArea.resetSelection()
+            }
+        }
+
+        function onRedo(pressed) {
+            if (pressed) {
+                actionsManager.redo()
+                contentView.placementArea.resetSelection()
+            }
+        }
    }
 
     FMDebugWindow {

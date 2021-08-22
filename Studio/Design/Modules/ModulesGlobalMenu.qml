@@ -5,6 +5,12 @@ import QtQuick.Controls 2.15
 import "../Default"
 
 DefaultMenuButton {
+    function newProject() {
+        modulesView.removeAllModules()
+        app.project.clear()
+        app.project.name = qsTr("My Project")
+    }
+
     function load(path) {
         modulesView.removeAllModules()
         app.project.loadFrom(path)
@@ -58,10 +64,7 @@ DefaultMenuButton {
 
         Action {
             text: qsTr("New Project")
-            onTriggered: {
-                modulesView.removeAllModules()
-                app.project.clear()
-            }
+            onTriggered: menuButton.newProject()
         }
 
         Action {
@@ -95,6 +98,13 @@ DefaultMenuButton {
                 }
             }
 
+            Action {
+                text: "Demo"
+                onTriggered: {
+                    menuButton.load(":/Templates/TEMPLATE_demo")
+                    app.project.path = ""
+                }
+            }
         }
 
         Action {

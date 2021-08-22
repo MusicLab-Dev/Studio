@@ -27,6 +27,26 @@ public:
 
 Q_DECLARE_METATYPE(PartitionWrapper)
 
+struct NotesAnalysis
+{
+    Q_GADGET
+
+    Q_PROPERTY(Beat from MEMBER from)
+    Q_PROPERTY(Beat to MEMBER to)
+    Q_PROPERTY(Beat distance MEMBER distance)
+    Q_PROPERTY(Key min MEMBER min)
+    Q_PROPERTY(Key max MEMBER max)
+public:
+
+    Beat from { 0u };
+    Beat to { 0u };
+    Beat distance { 0u };
+    Key min { 0u };
+    Key max { 0u };
+};
+
+Q_DECLARE_METATYPE(NotesAnalysis)
+
 /** @brief Class that exposes a list of note in audio backend */
 class PartitionModel : public QAbstractListModel
 {
@@ -113,33 +133,49 @@ public slots:
     /** @brief Find a note in the list using a two beat points */
     int findOverlap(const Key key, const BeatRange &range) const noexcept;
 
+
     /** @brief Remove note at index */
     bool remove(const int index);
+
 
     /** @brief Get note at index */
     QVariant getNote(const int index) const { return QVariant::fromValue(get(index)); }
 
     /** @brief Get all notes */
-    QVariantList getNotes(void) const noexcept;
+    QVariantList getAllNotes(void) const noexcept;
 
     /** @brief calcul the distance between the smaller from to the latest to */
     Beat getDistance(const QVector<Note> &notes) const noexcept;
     
+    /** @brief Get a list of notes using a list of indexes */
+    QVector<Note> getNotes(const QVector<int> &indexes) const noexcept;
+
+
     /** @brief Set note at index */
     void set(const int idx, const Note &range);
 
+    /** @brief Set a range of notes */
+    bool setRange(const QVector<Note> &before, const QVector<Note> &after);
+
     /** @brief Add a group of notes */
-    bool addRange(const QVariantList &notes);
     bool addRange(const QVector<Note> &notes);
 
     /** @brief Add a group of notes by a Json format */
     bool addJsonRange(const QString &json, int scale);
 
     /** @brief Remove a group of notes */
-    bool removeRange(const QVariantList &indexes);
+    bool removeRange(const QVector<int> &indexes);
+    bool removeExactRange(const QVector<Note> &notes);
 
     /** @brief Select all notes within a specified range (returns indexes) */
-    QVariantList select(const BeatRange &range, const Key keyFrom, const Key keyTo);
+    QVector<int> select(const BeatRange &range, const Key keyFrom, const Key keyTo);
+
+
+    /** @brief Get an analysis of the given notes */
+    NotesAnalysis getNotesAnalysis(const QVector<Note> &notes) const noexcept;
+
+    /** @brief Overlap test in given range */
+    bool hasOverlap(const NotesAnalysis &analysis) const noexcept;
 
 signals:
     /** @brief Notify that the channel has changed */
@@ -156,5 +192,6 @@ private:
     QString _name {};
     Beat _latestNote { 0u };
 
-    bool addRangeProcess(const QVector<Note> notes);
+    /** @brief Perform checks after notes have changed */
+    void onNotesChanged(void);
 };

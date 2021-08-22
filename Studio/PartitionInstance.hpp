@@ -31,6 +31,13 @@ public:
 
     template<typename ...Args>
     PartitionInstance(Args &&...args) noexcept : Audio::PartitionInstance({ std::forward<Args>(args)... }) {}
+
+public slots:
+    void add(const Beat beat) noexcept
+    {
+        range.from += beat;
+        range.to += beat;
+    }
 };
 
 Q_DECLARE_METATYPE(PartitionInstance)

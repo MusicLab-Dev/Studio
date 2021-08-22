@@ -54,13 +54,13 @@ DefaultMenu {
     DefaultMenuSeparator {}
 
     Action {
-        text: qsTr("Edit name")
-        enabled: true
-
         function setName() {
             targetPartition.name = globalTextField.text
             closeMenu()
         }
+
+        text: qsTr("Edit name")
+        enabled: true
 
         onTriggered: {
             globalTextField.open(targetPartition.name, setName, function () { closeMenu() }, false, null);

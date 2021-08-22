@@ -18,9 +18,9 @@ Row {
 
         Item {
             id: nodeInstancesBackground
-            x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
-            y: contentView.headerHalfMargin
-            width: contentView.rowHeaderWidth - x - contentView.headerMargin
+            x: nodeHeaderBackground.x
+            y: nodeHeaderBackground.y
+            width: nodeHeaderBackground.width
             height: nodeInstancesHeader.height
 
             DefaultText {

@@ -209,10 +209,10 @@ public slots:
     int getChildIndex(NodeModel *node) const noexcept;
 
     /** @brief Retreive a list of all children (close and far) */
-    QVariant getAllChildren(void) noexcept;
+    QVector<NodeModel *> getAllChildren(void) noexcept;
 
     /** @brief Get the internal buffer volume cache */
-    QVariant getVolumeCache(void) const noexcept;
+    VolumeCache getVolumeCache(void) const noexcept;
 
     /** @brief In/Decrement analysis request count */
     void incrementAnalysisRequestCount(void) { ++_data->analysisRequestCount(); }

@@ -5,13 +5,15 @@ import QtQuick.Shapes 1.15
 import AudioAPI 1.0
 
 Shape {
+    property alias color: path.fillColor
+
     id: timelineCursor
     height: parent.height
     width: 15
-    x: timelineBar.x - actionBox.width - width / 2
 
     ShapePath {
-        fillColor: Qt.lighter(themeManager.foregroundColor, 1.5)
+        id: path
+        fillColor: themeManager.foregroundColor
         strokeColor: "transparent"
 
         PathLine {

@@ -34,20 +34,10 @@ public:
     Note(Args &&...args) noexcept : Audio::Note({ std::forward<Args>(args)... }) {}
 
 public slots:
-    void add(const Beat &beat)
+    void add(const Beat beat) noexcept
     {
         range.from += beat;
         range.to += beat;
-    }
-
-    BeatRange getAdd(const Beat &beat)
-    {
-        return (BeatRange({range.from + beat, range.to + beat}));
-    }
-
-    BeatRange getSet(const Beat &from, const Beat &to)
-    {
-        return (BeatRange({range.from + from, range.to + to}));
     }
 };
 Q_DECLARE_METATYPE(Note)

@@ -12,22 +12,11 @@ Item {
         Cut
     }
 
-    function disableLoopRange() {
-        hasLoop = false
-        loopFrom = 0
-        loopTo = 0
-        app.scheduler.disableLoopRange()
-    }
-
-    signal timelineBeginMove(var target)
-    signal timelineMove(var target)
-    signal timelineEndMove()
-
-    signal timelineBeginLoopMove()
-    signal timelineEndLoopMove()
-
     // Content data placeholder
     default property alias placeholder: placeholder.data
+
+    // Inputs
+    property Player player
 
     // Display inputs
     property alias enableRows: surfaceContentGrid.enableRows
@@ -113,18 +102,9 @@ Item {
     // Scale used to perfectly fit placements in beat
     property int placementBeatPrecisionScale: AudioAPI.beatPrecision
 
-    // Timeline bar
-    property real timelineBeatPrecision: 0
-    property real audioProcessBeatPrecision: 0
-
-    property alias timelineCursor: contentViewTimeline.timelineCursor
-
     // Timeline
     readonly property int timelineHeight: 25
-    property bool hasLoop: false
-    property int loopFrom: 0
-    property int loopTo: 0
-    property int loopRange: loopTo - loopFrom
+    property alias timelineCursor: contentViewTimeline.timelineCursor
 
     // Edit tools
     property int editMode: ContentView.EditMode.Regular
@@ -188,31 +168,10 @@ Item {
 
     ContentViewTimeline {
         id: contentViewTimeline
+        player: contentView.player
         height: timelineHeight
         width: contentView.width
         z: 1
-    }
-
-    Item {
-        x: contentView.rowHeaderWidth
-        width: contentView.width - x
-        height: parent.height
-
-        Rectangle {
-            x: contentView.xOffset + contentView.loopFrom * contentView.pixelsPerBeatPrecision
-            width: 1
-            height: contentView.height
-            color: themeManager.accentColor
-            visible: contentView.hasLoop
-        }
-
-        Rectangle {
-            x: contentView.xOffset + contentView.loopTo * contentView.pixelsPerBeatPrecision
-            width: 1
-            height: contentView.height
-            color: themeManager.accentColor
-            visible: contentView.hasLoop
-        }
     }
 
     Item {
@@ -231,30 +190,6 @@ Item {
             rowHeight: contentView.rowHeight
             beatsPerRow: contentView.beatsPerRow
             z: 0
-
-            // Rectangle {
-            //     width: 4
-            //     height: surfaceContentGrid.height
-            //     x: xOffset + audioProcessBeatPrecision * pixelsPerBeatPrecision
-            //     color: "red"
-            //     opacity: 0.5
-            // }
-
-            Rectangle {
-                x: contentViewTimeline.loopFromIndicatorX
-                width: 1
-                height: contentView.height
-                color: themeManager.accentColor
-                visible: contentView.hasLoop
-            }
-
-            Rectangle {
-                x: contentViewTimeline.loopToIndicatorX
-                width: 1
-                height: contentView.height
-                color: themeManager.accentColor
-                visible: contentView.hasLoop
-            }
         }
 
         // Content view data
@@ -265,6 +200,42 @@ Item {
 
         Item {
             anchors.fill: surfaceContentGrid
+
+            Rectangle {
+                visible: player.hasLoop
+                color: "grey"
+                opacity: 0.6
+                anchors.left: parent.left
+                anchors.right: loopFromBar.left
+                height: contentView.height
+            }
+
+            Rectangle {
+                visible: player.hasLoop
+                color: "grey"
+                opacity: 0.6
+                anchors.left: loopToBar.right
+                anchors.right: parent.right
+                height: contentView.height
+            }
+
+            Rectangle {
+                id: loopFromBar
+                x: contentViewTimeline.loopFromIndicatorX
+                width: 1
+                height: contentView.height
+                color: themeManager.accentColor
+                visible: player.hasLoop
+            }
+
+            Rectangle {
+                id: loopToBar
+                x: contentViewTimeline.loopToIndicatorX
+                width: 1
+                height: contentView.height
+                color: themeManager.accentColor
+                visible: player.hasLoop
+            }
 
             ScrollBar {
                 anchors.top: parent.top
@@ -303,9 +274,22 @@ Item {
     ContentViewTimelineBar {
         id: timelineBar
         visible: x >= rowHeaderWidth
+        color: "#00ECBA"
         width: 1
         height: parent.height - timelineCursor.height
-        x: rowHeaderWidth + xOffset + timelineBeatPrecision * pixelsPerBeatPrecision
+        x: rowHeaderWidth + xOffset + player.currentPlaybackBeat * contentView.pixelsPerBeatPrecision
+        y: timelineCursor.height
+        z: contentViewTimeline.z + 1
+    }
+
+    ContentViewTimelineBar {
+        id: playFromBar
+        visible: x >= rowHeaderWidth
+        color: themeManager.accentColor
+        opacity: 0.5
+        width: 1
+        height: parent.height - timelineCursor.height
+        x: rowHeaderWidth + xOffset + player.playFrom * contentView.pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1
     }

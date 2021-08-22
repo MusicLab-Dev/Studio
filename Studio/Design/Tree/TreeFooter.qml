@@ -36,6 +36,7 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
 
+                enabled: app.project.master.latestInstance !== 0
                 onPressed: player.timelineBeginMove(Math.min(Math.max(mouseX, 0), width) / projectPreview.pixelsPerBeatPrecision)
                 onPositionChanged: player.timelineMove(Math.min(Math.max(mouseX, 0), width) / projectPreview.pixelsPerBeatPrecision)
                 onReleased: player.timelineEndMove()
@@ -46,6 +47,7 @@ Rectangle {
                 height: parent.height
                 color: "white"
                 x: projectPreview.pixelsPerBeatPrecision * player.currentPlaybackBeat - 2
+                visible: app.project.master.latestInstance !== 0
             }
         }
     }
@@ -77,25 +79,5 @@ Rectangle {
             Layout.preferredHeight: parent.height * 0.5
             Layout.preferredWidth: parent.width * 0.25
         }
-    }
-
-    DefaultImageButton {
-        visible: contentView.lastSelectedNode && partitionsPreview.hide
-        anchors.right: parent.right
-        anchors.bottom: parent.top
-        anchors.rightMargin: 10
-        anchors.bottomMargin: 10
-        width: height
-        height: parent.height * 0.5
-        showBorder: false
-        scaleFactor: 1
-        source: "qrc:/Assets/Note.png"
-
-        onReleased: partitionsPreview.hide = false
-    }
-
-    PartitionsPreview {
-        id: partitionsPreview
-        y: -height
     }
 }

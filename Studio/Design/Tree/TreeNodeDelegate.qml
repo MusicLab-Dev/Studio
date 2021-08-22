@@ -54,7 +54,6 @@ Column {
             id: soundMeter
             enabled: treeView.visible
             // color: nodeInstanceBackgroundRect.border.color
-            targetPlayer: treeView.player
             targetNode: nodeDelegate.node
             visible: !nodeInstanceBackground.drag.active
             anchors.top: nodeInstanceBackground.top
@@ -64,7 +63,6 @@ Column {
             anchors.left: nodeInstanceBackground.right
             anchors.leftMargin: nodeInstanceBackground.width * 0.05
             width: height / 4
-            radius: 5
         }
 
         MouseArea {

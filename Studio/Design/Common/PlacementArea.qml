@@ -399,6 +399,7 @@ MouseArea {
 
     // General
     property int mode: PlacementArea.Mode.None
+    readonly property bool isInMoveMode: mode === PlacementArea.Mode.Move || mode === PlacementArea.Mode.LeftRight || mode === PlacementArea.Mode.ResizeRight
     property int keyOffset: 0
     property int keyCount: 1
     property bool allowInsert: true
@@ -612,7 +613,7 @@ MouseArea {
         x: contentView.xOffset + brushLastBeatRange.from * contentView.pixelsPerBeatPrecision
         width: (brushLastBeatRange.to - brushLastBeatRange.from) * contentView.pixelsPerBeatPrecision
         height: contentView.rowHeight
-        // visible: previewRectangle.visible && contentView.editMode === ContentView.EditMode.Brush
+        visible: previewRectangle.visible && contentView.editMode === ContentView.EditMode.Brush
         color: "transparent"
         border.color: placementArea.accentColor
         border.width: 2
@@ -620,11 +621,12 @@ MouseArea {
 
     Repeater {
         id: selectionList
-        model: selectionListModel
+        model: selectionListModel ? selectionListModel.length : 0
 
         delegate: Rectangle {
-            property var range: getTargetBeatRange(modelData)
-            property int key: getTargetKey(modelData)
+            property var data: selectionListModel[index]
+            property var range: getTargetBeatRange(data)
+            property int key: getTargetKey(data)
             property var realRange: {
                 return AudioAPI.beatRange(
                     range.from + placementArea.selectionResizeLeftBeatPrecision + placementArea.selectionMoveBeatPrecision,

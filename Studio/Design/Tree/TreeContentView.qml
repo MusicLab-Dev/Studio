@@ -33,6 +33,7 @@ MouseArea {
 
     // Alias
     property alias treeSurface: treeSurface
+    property alias partitionsPreview: partitionsPreview
 
     // Horizontal scroll
     property real xOffset: 0
@@ -68,10 +69,6 @@ MouseArea {
 
     // Timeline
     readonly property int timelineHeight: 10
-    property bool hasLoop: false
-    property int loopFrom: 0
-    property int loopTo: 0
-    property int loopRange: loopTo - loopFrom
 
     // Partition selection
     property var lastSelectedNode: null
@@ -160,14 +157,14 @@ MouseArea {
     TreeComponentsPanel {
         id: treeComponentsPanel
         anchors.fill: parent
-        anchors.topMargin: ( treeControls.node != null ? treeControls.height : 0 )
+        anchors.topMargin: (treeControls.node != null ? treeControls.height : 0)
     }
 
     Item {
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.top: parent.top
-        anchors.topMargin: 20 + ( treeControls.node != null ? treeControls.height : 0 )
+        anchors.topMargin: 20 + (treeControls.node && !treeControls.hide ? treeControls.height : 0)
         width: parent.width * 0.1
         height: parent.height * 0.1
 
@@ -200,14 +197,11 @@ MouseArea {
     ControlsFlow {
         function open(newNode) {
             node = newNode
-            visible = true
             openAnim.start()
         }
 
         function close() {
-            closeAnim.start()
             node = null
-            visible = false
         }
 
         id: treeControls
@@ -215,7 +209,6 @@ MouseArea {
         width: parent.width
         y: parent.height
         node: null
-        visible: false
 
         PropertyAnimation {
             id: openAnim
@@ -226,16 +219,19 @@ MouseArea {
             duration: 300
             easing.type: Easing.OutCubic
         }
+    }
 
-        PropertyAnimation {
-            id: closeAnim
-            target: treeControls
-            property: "opacity"
-            from: 1
-            to: 0
-            duration: 300
-            easing.type: Easing.OutCubic
-        }
+    PartitionsPreview {
+        id: partitionsPreview
+        anchors.bottom: parent.bottom
+    }
+
+    TreeNodeTrashArea {
+        width: 60
+        height: width
+        visible: treeSurface.dragTarget
+        x: 5
+        y: parent.height - (partitionsPreview.visible ? partitionsPreview.height : 0) - height - 5
     }
 
     ScrollBar {
@@ -250,7 +246,8 @@ MouseArea {
 
         onPositionChanged: {
             if (Math.abs(position - contentView.yScrollIndicatorPos) > Number.EPSILON)
-                contentView.yOffset = contentView.yOffsetMin + contentView.yOffsetWidth * position / (1 - size)
+                contentView.yOffset = ((1 - (position / (1 - size))) * contentView.yOffsetWidth) + contentView.yOffsetMin
+                // contentView.yOffset = contentView.yOffsetMin + contentView.yOffsetWidth * position / (1 - size)
         }
     }
 
@@ -265,8 +262,53 @@ MouseArea {
         policy: ScrollBar.AlwaysOn
 
         onPositionChanged: {
+            // position = (1 - size) *  (1 - ((xOffset - xOffsetMin) / xOffsetWidth))
+            // position / (1 - size) = 1 - ((xOffset - xOffsetMin) / xOffsetWidth)
+            // (position / (1 - size)) + ((xOffset - xOffsetMin) / xOffsetWidth) = 1
+            // ((xOffset - xOffsetMin) / xOffsetWidth) = 1 - (position / (1 - size))
+            // xOffset - xOffsetMin = (1 - (position / (1 - size))) * xOffsetWidth
+            // xOffset = ((1 - (position / (1 - size))) * xOffsetWidth) + xOffsetMin
+
+
+            // position / (1 - size) = -((xOffset - xOffsetMin) / xOffsetWidth) + 1
+            // (position / (1 - size)) - 1 = -((xOffset - xOffsetMin) / xOffsetWidth)
+            // -((position / (1 - size)) - 1) = (xOffset - xOffsetMin) / xOffsetWidth
+            // -((position / (1 - size)) - 1) * xOffsetWidth = xOffset - xOffsetMin
+
             if (Math.abs(position - contentView.xScrollIndicatorPos) > Number.EPSILON)
-                contentView.xOffset = contentView.xOffsetMin + contentView.xOffsetWidth * position / (1 - size)
+                contentView.xOffset = ((1 - (position / (1 - size))) * contentView.xOffsetWidth) + contentView.xOffsetMin
+                // contentView.xOffset = (-((position / (1 - size)) - 1) * contentView.xOffsetWidth) - contentView.xOffsetMin
+                // contentView.xOffset = contentView.xOffsetWidth * position / (1 - size)
         }
+    }
+
+    DefaultImageButton {
+        visible: contentView.lastSelectedNode && partitionsPreview.hide
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 10
+        anchors.rightMargin: 10
+        width: height
+        height: treeFooter.height / 2
+        showBorder: false
+        scaleFactor: 1
+        source: "qrc:/Assets/Note.png"
+
+        onReleased: partitionsPreview.hide = false
+    }
+
+    DefaultImageButton {
+        visible: contentView.lastSelectedNode && treeControls.hide
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.rightMargin: 10
+        width: height
+        height: treeFooter.height / 2
+        showBorder: false
+        scaleFactor: 1
+        source: "qrc:/Assets/Controls.png"
+
+        onReleased: treeControls.hide = false
     }
 }

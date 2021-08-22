@@ -25,9 +25,10 @@ Rectangle {
             targetNode.decrementAnalysisRequestCount()
             analysisRequested = false
         }
+        peakPosition = 0
+        rmsPosition = 0
     }
 
-    property Player targetPlayer
     property NodeModel targetNode
     property real peakPosition: 0
     property real rmsPosition: 0
@@ -41,8 +42,9 @@ Rectangle {
 
     onTargetNodeChanged: {
         if (targetNode) {
-            enableAnalysis()
             gainPosition = getDecibelRatio(targetNode.plugin.getControl(0))
+            if (enabled)
+                enableAnalysis()
         }
     }
 
@@ -60,21 +62,23 @@ Rectangle {
         target: app.scheduler
 
         function onAnalysisCacheUpdated() {
-            var volume = targetNode.getVolumeCache()
-            peakPosition = getDecibelRatio(volume.peak)
-            rmsPosition = getDecibelRatio(volume.rms)
+            if (app.scheduler.running) {
+                var volume = targetNode.getVolumeCache()
+                peakPosition = getDecibelRatio(volume.peak)
+                rmsPosition = getDecibelRatio(volume.rms)
+            }
         }
 
         function onRunningChanged() {
             if (!app.scheduler.running) {
-                rmsPosition = 0
                 peakPosition = 0
+                rmsPosition = 0
             }
         }
     }
 
     Connections {
-        enabled: analysisRequested
+        // enabled: analysisRequested
         target: targetNode ? targetNode.plugin : null
 
         function onControlValueChanged(paramId) {

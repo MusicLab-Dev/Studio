@@ -36,12 +36,13 @@ ContentView {
     property PartitionModel selectedPartition: null
     property int selectedPartitionIndex: 0
 
+    signal resetPlacementAreaSelection
+
     id: contentView
+    player: plannerView.player
     enableRows: false
     xOffsetMin: app.project.master ? Math.max(app.project.master.latestInstance, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0
     yOffsetMin: nodeView.height > surfaceContentGrid.height - plannerFooter.partitionsPreview.height ? surfaceContentGrid.height - plannerFooter.partitionsPreview.height - nodeView.height : 0
-    timelineBeatPrecision: plannerView.player.currentPlaybackBeat
-    audioProcessBeatPrecision: 0 //app.scheduler.productionCurrentBeat
     yZoom: 0.25
 
     Column {

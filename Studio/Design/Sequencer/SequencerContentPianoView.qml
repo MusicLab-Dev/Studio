@@ -5,7 +5,7 @@ import "../Common"
 import AudioAPI 1.0
 
 Item {
-    property alias notesPlacementArea: notesPlacementArea
+    property alias placementArea: placementArea
 
     readonly property var keyNames: [
         qsTr("C"), qsTr("C#"), qsTr("D"), qsTr("D#"), qsTr("E"), qsTr("F"),
@@ -167,6 +167,7 @@ Item {
                 color: themeManager.getColorFromChain(key)
                 border.color: Qt.darker(color, 1.25)
                 border.width: 2
+                opacity: 0.9
 
                 Rectangle {
                     x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
@@ -179,7 +180,7 @@ Item {
         }
 
         SequencerNotesPlacementArea {
-            id: notesPlacementArea
+            id: placementArea
 
             anchors.fill: parent
         }

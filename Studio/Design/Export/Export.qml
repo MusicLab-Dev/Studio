@@ -1,190 +1,175 @@
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.15
 
 import "../Default"
 import "../Common"
-import "ExportDelegates"
+
+import Scheduler 1.0
 
 Item {
     function open() {
+        openAnim.start()
         visible = true
-        inProcess = false
-        openOpacity.start()
     }
 
     function close() {
-        closeOpacity.start()
+        visible = false
     }
 
-    function launch() {
-
+    function start() {
+        exporting = true
+        var path = app.project.path
+        if (!path.length)
+            path = app.project.name
+        app.scheduler.exportProject(path + ".wav")
     }
 
-    function stop() {
-
+    function cancel() {
+        exporting = false
+        app.scheduler.stop()
     }
 
-    property bool inProcess: false
+    property bool exporting: false
 
-    id: exportWindow
-
+    id: exportPopup
+    width: parent.width
+    height: parent.height
     visible: false
 
-    Rectangle {
-        id: exportPopup
-        anchors.centerIn: parent
+    Connections {
+        target: app.scheduler
+        enabled: exportPopup.exporting
 
-        width: parent.width * 0.6
-        height: parent.height * 0.5
-        color: "grey"
-        opacity: 0
-
-        OpacityAnimator on opacity{
-                id: openOpacity
-                from: 0;
-                to: 1;
-                duration: 100
-            }
-
-        OpacityAnimator on opacity{
-                id: closeOpacity
-                from: 1;
-                to: 0;
-                duration: 100
-                onFinished: exportWindow.visible = false
-            }
-
-        ColumnLayout {
-            anchors.fill: parent
-            spacing: 0
-
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: parent.height * 0.1
-                id: title
-
-                DefaultText {
-
-                    anchors.fill: parent
-
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-
-                    text: qsTr("Export")
-                }
-            }
-
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                id: options
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    spacing: 0
-
-                    ExportComboBox {
-                        Layout.preferredHeight: parent.height * 0.15
-                        Layout.fillWidth: true
-
-                        text.text: qsTr("Type")
-
-                        comboBox.model: ListModel {
-                            ListElement { text: "16" }
-                            ListElement { text: "24" }
-                            ListElement { text: "32" }
-                        }
-                        comboBox.height: exportPopup.height * 0.1
-                        comboBox.width: width * 0.4
-
-                    }
-
-                    ExportComboBox {
-                        Layout.preferredHeight: parent.height * 0.15
-                        Layout.fillWidth: true
-
-                        text.text: "Hz"
-
-                        comboBox.model: ListModel {
-                            ListElement { text: "44100" }
-                            ListElement { text: "88200" }
-                        }
-                        comboBox.height: exportPopup.height * 0.1
-                        comboBox.width: width * 0.4
-
-                    }
-
-                }
-            }
-
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: parent.height * 0.1
-
-                id: progressBar
-
-                visible: inProcess
-
-            }
-
-            Item {
-
-                Layout.fillWidth: true
-                Layout.preferredHeight: parent.height * 0.15
-                id: buttons
-
-                RowLayout {
-                    anchors.centerIn: parent
-                    width: parent.width * 0.95
-                    height: parent.height
-                    spacing: 10
-
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                    }
-
-                    Item {
-                        Layout.preferredHeight: parent.height * 0.8
-                        Layout.preferredWidth: parent.width * 0.2
-
-                        TextRoundedButton {
-                            anchors.fill: parent
-
-                            text: inProcess ? qsTr("Abort") : qsTr("Launch")
-
-                            onClicked: {
-                                inProcess = !inProcess
-                                if (inProcess)
-                                    launch()
-                                else
-                                    stop()
-                            }
-                        }
-
-                    }
-
-                    Item {
-                        Layout.preferredHeight: parent.height * 0.8
-                        Layout.preferredWidth: parent.width * 0.2
-
-                        TextRoundedButton {
-                            anchors.fill: parent
-
-                            text: qsTr("Close")
-
-                            onClicked: {
-                                stop()
-                                close()
-                            }
-                        }
-
-                    }
-                }
-            }
-
+        function onExportCompleted() {
+            exporting = false
+            close()
         }
 
+        function onExportCanceled() {
+            exporting = false
+            close()
+        }
+
+        function onExportFailed() {
+            exporting = false
+        }
     }
 
+    ParallelAnimation {
+        id: openAnim
+        PropertyAnimation { target: window; property: "opacity"; from: 0.1; to: 1; duration: 500; easing.type: Easing.Linear }
+        PropertyAnimation { target: shadow; property: "opacity"; from: 0.1; to: 1; duration: 500; easing.type: Easing.Linear }
+        PropertyAnimation { target: background; property: "opacity"; from: 0.1; to: 0.5; duration: 300; easing.type: Easing.Linear }
+    }
+
+    Rectangle {
+        id: background
+        anchors.fill: parent
+        color: "grey"
+        opacity: 0.5
+    }
+
+    DropShadow {
+        id: shadow
+        anchors.fill: window
+        horizontalOffset: 4
+        verticalOffset: 4
+        radius: 8
+        samples: 17
+        color: "#80000000"
+        source: window
+    }
+
+    MouseArea {
+        id: ms
+        anchors.fill: parent
+        onReleased: { if (visible && !exporting) close() }
+    }
+
+    ContentPopup {
+        id: window
+        width: Math.max(parent.width * 0.3, 400)
+        height: windowCol.height + 2 * windowArea.anchors.margins
+
+        MouseArea { // Used to prevent missclic from closing the window
+            anchors.fill: parent
+        }
+
+        Item {
+            id: windowArea
+            anchors.fill: parent
+            anchors.margins: 30
+
+            Column {
+                id: windowCol
+                width: windowArea.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 10
+
+                DefaultText {
+                    text: qsTr("Export project '") + app.project.name + qsTr("' ?")
+                    width: windowArea.width
+                    height: 30
+                    wrapMode: Text.Wrap
+                    font.pixelSize: 20
+                    fontSizeMode: Text.Fit
+                    color: "white"
+                }
+
+                Row {
+                    id: progressRow
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 10
+                    width: windowArea.width
+                    height: cancelButton.height
+
+                    Rectangle {
+                        id: progressBar
+                        width: progressRow.width - cancelButton.width - progressRow.spacing
+                        height: cancelButton.height
+                        border.color: exportPopup.exporting ? themeManager.foregroundColor : themeManager.disabledColor
+                        border.width: 2
+                        color: "transparent"
+
+                        Rectangle {
+                            anchors.fill: parent
+                            anchors.margins: parent.border.width
+                            color: themeManager.accentColor
+                        }
+                    }
+
+                    TextRoundedButton {
+                        id: cancelButton
+                        text: qsTr("Cancel")
+                        enabled: exportPopup.exporting
+
+                        onReleased: exportPopup.cancel()
+                    }
+                }
+
+                Row {
+                    id: confirmRow
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    height: noButton.height
+                    spacing: 30
+                    visible: !exportPopup.exporting
+
+                    TextRoundedButton {
+                        text: qsTr("Yes")
+                        hoverOnText: false
+
+                        onReleased: exportPopup.start()
+                    }
+
+                    TextRoundedButton {
+                        id: noButton
+                        text: qsTr("No")
+
+                        onReleased: exportPopup.close()
+                    }
+                }
+            }
+        }
+    }
 }

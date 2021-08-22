@@ -16,6 +16,7 @@ class Device : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool running READ running CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(SampleRate sampleRate READ sampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(Format format READ format NOTIFY formatChanged)
@@ -73,12 +74,15 @@ public:
     /** @brief Get the record */
     [[nodiscard]] BlockSize blockSize(void) const noexcept { return _data.blockSize(); }
 
+    /** @brief Get the running state of the device */
+    [[nodiscard]] bool running(void) const noexcept { return _data.running(); }
+
 
     /** @brief Register the audio callback */
-    void start(void) { _data.start(); }
+    void start(void);
 
     /** @brief Unregister the audio callback */
-    void stop(void) { _data.stop(); }
+    void stop(void);
 
     /** @brief Get the internal audio device */
     [[nodiscard]] Audio::Device *audioDevice(void) noexcept { return &_data; }
@@ -102,6 +106,9 @@ signals:
 
     /** @brief Notify that block sized property has changed */
     void blockSizeChanged(void);
+
+    /** @brief Notify that running state has changed */
+    void runningChanged(void);
 
 private:
     Audio::Device _data;

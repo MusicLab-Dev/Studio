@@ -95,12 +95,12 @@ void NodeModel::setColor(const QColor &color)
     );
 }
 
-QVariant NodeModel::getVolumeCache(void) const noexcept
+VolumeCache NodeModel::getVolumeCache(void) const noexcept
 {
     if (_data && _data->cache())
-        return QVariant::fromValue(VolumeCache(_data->cache().volumeCache()));
+        return VolumeCache(_data->cache().volumeCache());
     else
-        return QVariant::fromValue(VolumeCache{});
+        return VolumeCache{};
 }
 
 void NodeModel::processLatestInstanceChange(const Beat oldInstance, const Beat newInstance)
@@ -186,7 +186,7 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
                 _children.push(std::move(node));
                 endInsertRows();
                 if (hasPaused) {
-                    Scheduler::Get()->getCurrentGraph().wait();
+                    Scheduler::Get()->graph().wait();
                     Scheduler::Get()->invalidateCurrentGraph();
                     Scheduler::Get()->playImpl();
                 } else
@@ -233,7 +233,7 @@ NodeModel *NodeModel::addParentNodeImpl(const QString &pluginPath, const bool ad
                 self->children().push(std::move(node));
                 parent->dataChanged(parent->index(i), parent->index(i), { static_cast<int>(Roles::NodeInstance) });
                 if (hasPaused) {
-                    Scheduler::Get()->getCurrentGraph().wait();
+                    Scheduler::Get()->graph().wait();
                     Scheduler::Get()->invalidateCurrentGraph();
                     Scheduler::Get()->playImpl();
                 } else
@@ -260,7 +260,7 @@ bool NodeModel::remove(const int idx)
             _children.erase(_children.begin() + idx);
             endRemoveRows();
             if (hasPaused) {
-                scheduler->getCurrentGraph().wait();
+                scheduler->graph().wait();
                 scheduler->invalidateCurrentGraph();
                 scheduler->playImpl();
             } else
@@ -312,7 +312,7 @@ bool NodeModel::moveToChildren(NodeModel *target)
         },
         [this, hasPaused] {
             if (hasPaused) {
-                Scheduler::Get()->getCurrentGraph().wait();
+                Scheduler::Get()->graph().wait();
                 Scheduler::Get()->invalidateCurrentGraph();
                 Scheduler::Get()->playImpl();
             } else
@@ -378,7 +378,7 @@ bool NodeModel::moveToParent(NodeModel *target)
         },
         [this, hasPaused] {
             if (hasPaused) {
-                Scheduler::Get()->getCurrentGraph().wait();
+                Scheduler::Get()->graph().wait();
                 Scheduler::Get()->invalidateCurrentGraph();
                 Scheduler::Get()->playImpl();
             } else
@@ -425,12 +425,12 @@ int NodeModel::getChildIndex(NodeModel *node) const noexcept
     return -1;
 }
 
-QVariant NodeModel::getAllChildren(void) noexcept
+QVector<NodeModel *> NodeModel::getAllChildren(void) noexcept
 {
     QVector<NodeModel *> res;
 
     getAllChildrenImpl(res);
-    return QVariant::fromValue(res);
+    return res;
 }
 
 void NodeModel::getAllChildrenImpl(QVector<NodeModel *> &res) noexcept
