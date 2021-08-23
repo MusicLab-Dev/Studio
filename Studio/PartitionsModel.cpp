@@ -80,6 +80,35 @@ bool PartitionsModel::add(void)
     );
 }
 
+bool PartitionsModel::duplicate(const int idx)
+{
+    coreAssert(idx >= 0 && idx < count(),
+        throw std::range_error("PartitionsModel::remove: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
+
+    const auto oldData = _data->data();
+
+    return Models::AddProtectedEvent(
+        [this, idx] {
+           auto &partition = _data->push();
+           auto &source = _data->at(static_cast<std::uint32_t>(idx));
+           partition = source;
+        },
+        [this, oldData, idx] {
+            PartitionModel *partition = getPartition(idx);
+            QString name = partition->name() + tr(" Copy");
+            if (_data->data() != oldData) {
+                refreshPartitions();
+                _partitions.back()->setName(name);
+            } else {
+                const auto idx = _partitions.size();
+                beginInsertRows(QModelIndex(), idx, idx);
+                _partitions.push(&_data->at(idx), this, name);
+                endInsertRows();
+            }
+        }
+    );
+}
+
 bool PartitionsModel::remove(const int idx)
 {
     coreAssert(idx >= 0 && idx < count(),

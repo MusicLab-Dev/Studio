@@ -44,47 +44,16 @@ Item {
         PropertyAnimation { target: panel; property: "x"; to: panel.xClose; duration: durationAnimation; easing.type: Easing.OutBack; }
     }
 
-
-    /*
-    Rectangle {
-        id: buttonPanel
-
-        anchors.right: panel.left
-        anchors.rightMargin: 32
-        anchors.top: parent.top
-        anchors.topMargin: parent.height / 2 - height / 2
-
-        width: parent.width * 0.04
-        height: width
-        opacity: 0.7
-        color: themeManager.foregroundColor
-        radius: 1000
-
-        Image {
-            id: plus
-            anchors.centerIn: parent
-            width: parent.width * 0.6
-            height: parent.height * 0.6
-            source: "qrc:/Assets/Plus.png"
+    SequentialAnimation {
+        id: restartAnim
+        ParallelAnimation {
+            PropertyAnimation { target: panel; property: "x"; to: panel.xClose; duration: durationAnimation; easing.type: Easing.OutCubic; }
         }
-
-        ColorOverlay {
-                anchors.fill: plus
-                source: plus
-                color: "white"
-            }
-
-        MouseArea {
-            anchors.fill: parent
-
-            onPressed: {
-                open()
-            }
-
+        ScriptAction { script: treeComponentsPanel.filter = treeComponentsPanel.filterTemp }
+        ParallelAnimation {
+            PropertyAnimation { target: panel; property: "x"; to: panel.xOpen; duration: durationAnimation; easing.type: Easing.InCubic }
         }
-
     }
-    */
 
     Item {
         property real widthContentRatio: 0.6

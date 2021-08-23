@@ -388,6 +388,19 @@ bool NodeModel::moveToParent(NodeModel *target)
     );
 }
 
+bool NodeModel::duplicate(void)
+{
+    NodeModel *parent = parentNode();
+
+    if (!parent)
+        return false;
+    NodeModel *node = parent->add(plugin()->path());
+    node->setName(name());
+    node->setColor(color());
+    return true;
+
+}
+
 bool NodeModel::isAParent(NodeModel *node) const noexcept
 {
     auto *p = parentNode();

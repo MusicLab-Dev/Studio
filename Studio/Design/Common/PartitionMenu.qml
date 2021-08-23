@@ -70,6 +70,16 @@ DefaultMenu {
     DefaultMenuSeparator {}
 
     Action {
+        id: duplicateAction
+        text: qsTr("Duplicate")
+
+        onTriggered: {
+            targetNode.partitions.duplicate(targetPartitionIndex)
+            closeMenu()
+        }
+    }
+
+    Action {
         id: removeAction
         text: qsTr("Remove")
 
