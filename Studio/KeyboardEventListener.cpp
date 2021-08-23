@@ -56,7 +56,8 @@ QHash<int, QByteArray> KeyboardEventListener::roleNames(void) const noexcept
     return QHash<int, QByteArray> {
         { static_cast<int>(Roles::Key), "eventKey" },
         { static_cast<int>(Roles::Modifiers), "eventModifiers" },
-        { static_cast<int>(Roles::Event), "eventType" }
+        { static_cast<int>(Roles::Event), "eventType" },
+        { static_cast<int>(Roles::Event), "repeat" }
     };
 }
 
@@ -71,9 +72,49 @@ QVariant KeyboardEventListener::data(const QModelIndex &index, int role) const
             return event.desc.modifiers;
         case Roles::Event:
             return static_cast<int>(event.event);
+        case Roles::Repeat:
+            return event.repeat;
         default:
             return QVariant();
     }
+}
+
+bool KeyboardEventListener::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    auto &event = _events[index.row()];
+    bool changed = false;
+
+    switch (static_cast<Roles>(role)) {
+    case Roles::Key:
+        if (const auto keyValue = value.toInt(); event.desc.key != keyValue) {
+            event.desc.key = keyValue;
+            changed = true;
+        }
+        break;
+    case Roles::Modifiers:
+        if (const auto modifiersValue = value.toInt(); event.desc.modifiers != modifiersValue) {
+            event.desc.modifiers = modifiersValue;
+            changed = true;
+        }
+        break;
+    case Roles::Event:
+        if (const auto eventValue = static_cast<EventTarget>(value.toInt()); event.event != eventValue) {
+            event.event = eventValue;
+            changed = true;
+        }
+        break;
+    case Roles::Repeat:
+        if (const auto repeatValue = value.toBool(); event.repeat != repeatValue) {
+            event.repeat = repeatValue;
+            changed = true;
+        }
+        break;
+    default:
+        break;
+    }
+    if (changed)
+        emit dataChanged(index, index, { role });
+    return true;
 }
 
 void KeyboardEventListener::setEnabled(const bool value) noexcept
@@ -86,7 +127,17 @@ void KeyboardEventListener::setEnabled(const bool value) noexcept
     emit enabledChanged();
 }
 
-void KeyboardEventListener::add(int key, int modifiers, EventTarget event)
+void KeyboardEventListener::setDetection(const bool value) noexcept
+{
+    if (_detection == value)
+        return;
+    _detection = value;
+    if (_detection)
+        stopAllPlayingNotes();
+    emit detectionChanged();
+}
+
+void KeyboardEventListener::add(const int key, const int modifiers, const EventTarget event)
 {
     const KeyDescriptor desc { key, modifiers };
     auto idx = find(desc);
@@ -95,7 +146,8 @@ void KeyboardEventListener::add(int key, int modifiers, EventTarget event)
         beginInsertRows(QModelIndex(), count(), count());
         _events.push(KeyAssignment {
             desc,
-            event
+            event,
+            false
         });
         endInsertRows();
     } else {
@@ -135,9 +187,14 @@ bool KeyboardEventListener::eventFilter(QObject *object, QEvent *event)
     if ((type != QEvent::KeyPress && type != QEvent::KeyRelease))
         return QObject::eventFilter(object, event);
     QKeyEvent *keyEvent = reinterpret_cast<QKeyEvent*>(event);
+    const KeyDescriptor desc { keyEvent->key(), static_cast<int>(keyEvent->modifiers()) };
+
+    if (_detection) {
+        emit keyPressDetected(desc.key, desc.modifiers);
+        return true;
+    }
     if (keyEvent->isAutoRepeat())
         return true;
-    const KeyDescriptor desc { keyEvent->key(), static_cast<int>(keyEvent->modifiers()) };
     const auto it = _activeKeys.find(desc);
     bool catched = false;
     if (event->type() == QEvent::KeyPress && it == _activeKeys.end()) {

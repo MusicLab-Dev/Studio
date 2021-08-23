@@ -126,6 +126,7 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Workspaces);
     Q_INIT_RESOURCE(Settings);
     Q_INIT_RESOURCE(Export);
+    Q_INIT_RESOURCE(KeyboardShortcuts);
 }
 
 void Studio::DestroyResources(void)
@@ -143,6 +144,7 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Workspaces);
     Q_CLEANUP_RESOURCE(Settings);
     Q_CLEANUP_RESOURCE(Export);
+    Q_CLEANUP_RESOURCE(KeyboardShortcuts);
 
     Audio::PluginTable::Destroy();
     Audio::Device::ReleaseDriver();

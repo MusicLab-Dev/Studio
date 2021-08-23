@@ -113,6 +113,11 @@ DefaultMenuButton {
         }
 
         Action {
+            text: qsTr("Keyboard shortcuts")
+            onTriggered: keyboardShortcutsView.open()
+        }
+
+        Action {
             text: qsTr("Boards")
             onTriggered: modulesView.boardsView.open()
         }

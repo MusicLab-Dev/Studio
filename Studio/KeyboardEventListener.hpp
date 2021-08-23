@@ -18,12 +18,14 @@ class KeyboardEventListener : public AEventListener
     Q_OBJECT
 
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool detection READ detection WRITE setDetection NOTIFY detectionChanged)
 
 public:
     enum class Roles {
         Key,
         Modifiers,
-        Event
+        Event,
+        Repeat,
     };
 
     /** @brief Describes a key */
@@ -41,6 +43,7 @@ public:
     {
         KeyDescriptor desc {};
         EventTarget event {};
+        bool repeat { false };
 
         [[nodiscard]] bool operator==(const KeyAssignment &other) const noexcept
             { return desc == other.desc && event == other.event; }
@@ -60,6 +63,9 @@ public:
     /** @brief Query data from model */
     QVariant data(const QModelIndex &index, int role) const override;
 
+    /** @brief Set a role */
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+
     /** @brief Get the roles names */
     QHash<int, QByteArray> roleNames(void) const noexcept override;
 
@@ -71,21 +77,32 @@ public:
     [[nodiscard]] bool enabled(void) const noexcept { return _enabled; }
     void setEnabled(const bool value) noexcept;
 
+    /** @brief Get / Set detection property */
+    [[nodiscard]] bool detection(void) const noexcept { return _detection; }
+    void setDetection(const bool value) noexcept;
+
 public slots:
     /** @brief Add new event in the list */
-    void add(int key, int modifiers, EventTarget event);
+    void add(const int key, const int modifiers, const EventTarget event);
 
     /** @brief Remove an event in the list */
-    void remove(int idx);
+    void remove(const int idx);
 
 signals:
     /** @brief Notify that the enabled property has changed */
     void enabledChanged(void);
 
+    /** @brief Notify that the detection property has changed */
+    void detectionChanged(void);
+
+    /** @brief Notify that a key has been detected (only emited when proprety detection is set to true */
+    void keyPressDetected(int key, int modifiers);
+
 private:
     Core::TinyVector<KeyAssignment> _events;
     Core::TinyVector<KeyDescriptor> _activeKeys {};
     bool _enabled { false };
+    bool _detection { false };
 
     /** @brief Send signals to dispatcher */
     bool sendSignals(const KeyDescriptor &desc, bool value);

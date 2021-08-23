@@ -17,6 +17,7 @@ import "../Modules"
 import "../Workspaces"
 import "../Export"
 import "../Common"
+import "../KeyboardShortcuts"
 
 Window {
     function urlToPath(urlString) {
@@ -64,6 +65,7 @@ Window {
 
     ThemeManager {
         property color semiAccentColor: "#338DCF" // @todo add this to ThemeManager
+        property color popupDropShadow: "#80000000"
 
         id: themeManager
         theme: ThemeManager.Dark
@@ -118,5 +120,11 @@ Window {
         anchors.fill: parent
 
         id: exportManager
+    }
+
+    KeyboardShortcutsView {
+        anchors.fill: parent
+
+        id: keyboardShortcutsView
     }
 }

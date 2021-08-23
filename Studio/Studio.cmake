@@ -27,6 +27,7 @@ qt5_add_resources(QtResources
     ${StudioDir}/Design/Workspaces/Workspaces.qrc
     ${StudioDir}/Design/Settings/Settings.qrc
     ${StudioDir}/Design/Export/Export.qrc
+    ${StudioDir}/Design/KeyboardShortcuts/KeyboardShortcuts.qrc
 )
 
 set(StudioSources

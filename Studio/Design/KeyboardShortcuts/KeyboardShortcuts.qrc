@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/KeyboardShortcuts">
+        <file>KeyboardShortcutsView.qml</file>
+    </qresource>
+</RCC>
