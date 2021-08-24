@@ -9,7 +9,7 @@ Button {
 
     id: control
     hoverEnabled: true
-    font.pointSize: 20
+    font.pointSize: 12
 
     onHoveredChanged: {
         if (hovered)
@@ -18,10 +18,13 @@ Button {
             cursorManager.set(CursorManager.Type.Normal)
     }
 
-    contentItem: Text {
+    contentItem: Item {
+
+    }
+
+    Text {
         id: textItem
-        width: control.width
-        height: control.height
+        anchors.fill: parent
         verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignHCenter
         text: control.text
@@ -31,7 +34,12 @@ Button {
         fontSizeMode: Text.Fit
         // wrapMode: Text.Wrap
         // elide: Text.ElideRight
+
+        onFontInfoChanged: console.log(width)
+
      }
+
+
 
     background: Rectangle {
         id: rectItem
