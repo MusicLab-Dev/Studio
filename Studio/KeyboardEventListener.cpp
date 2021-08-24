@@ -10,7 +10,15 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher)
 {
     QGuiApplication::instance()->installEventFilter(this);
 
-    /**  -- DEBUG -- */
+    resetShortcuts();
+}
+
+void KeyboardEventListener::resetShortcuts(void)
+{
+    beginResetModel();
+    _events.clear();
+    _activeKeys.clear();
+
     add(Qt::Key_Enter,      0,                  EventTarget::Action);
     add(Qt::Key_Return,     0,                  EventTarget::Action);
     add(Qt::Key_Q,          0,                  EventTarget::Note0);
@@ -34,9 +42,9 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher)
     add(Qt::Key_A,          0,                  EventTarget::ReplayContext);
     add(Qt::Key_Z,          0,                  EventTarget::StopContext);
 
-    add(Qt::Key_I,          0,                  EventTarget::PlayPlaylist);
-    add(Qt::Key_O,          0,                  EventTarget::ReplayPlaylist);
-    add(Qt::Key_P,          0,                  EventTarget::StopPlaylist);
+    add(Qt::Key_I,          0,                  EventTarget::PlayProject);
+    add(Qt::Key_O,          0,                  EventTarget::ReplayProject);
+    add(Qt::Key_P,          0,                  EventTarget::StopProject);
     add(Qt::Key_Z,   Qt::CTRL,                  EventTarget::Undo);
     add(Qt::Key_Y,   Qt::CTRL,                  EventTarget::Redo);
     add(Qt::Key_C,   Qt::CTRL,                  EventTarget::Copy);
@@ -48,6 +56,7 @@ KeyboardEventListener::KeyboardEventListener(EventDispatcher *dispatcher)
     add(Qt::Key_S,   Qt::CTRL,                  EventTarget::Save);
     add(Qt::Key_S,   Qt::CTRL | Qt::SHIFT,      EventTarget::SaveAs);
     add(Qt::Key_P,   Qt::CTRL,                  EventTarget::Settings);
+    endResetModel();
 }
 
 
@@ -57,7 +66,7 @@ QHash<int, QByteArray> KeyboardEventListener::roleNames(void) const noexcept
         { static_cast<int>(Roles::Key), "eventKey" },
         { static_cast<int>(Roles::Modifiers), "eventModifiers" },
         { static_cast<int>(Roles::Event), "eventType" },
-        { static_cast<int>(Roles::Event), "repeat" }
+        { static_cast<int>(Roles::Repeat), "eventRepeat" }
     };
 }
 
@@ -190,7 +199,8 @@ bool KeyboardEventListener::eventFilter(QObject *object, QEvent *event)
     const KeyDescriptor desc { keyEvent->key(), static_cast<int>(keyEvent->modifiers()) };
 
     if (_detection) {
-        emit keyPressDetected(desc.key, desc.modifiers);
+        if (type == QEvent::KeyPress)
+            emit keyPressDetected(desc.key, desc.modifiers);
         return true;
     }
     if (keyEvent->isAutoRepeat())
@@ -281,4 +291,9 @@ void KeyboardEventListener::stopAllPlayingNotes(void)
     });
     if (it != _activeKeys.end())
         _activeKeys.erase(it, _activeKeys.end());
+}
+
+QString KeyboardEventListener::keyToString(int key, int modifiers) const noexcept
+{
+    return QKeySequence(static_cast<Qt::Key>(key) + static_cast<Qt::Key>(modifiers)).toString();
 }

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 ScrollBar {
     property alias color: itemContent.color
+
     id: control
     active: true
     hoverEnabled: true

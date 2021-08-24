@@ -6,6 +6,7 @@ import "../Common"
 
 import NodeModel 1.0
 import PluginTableModel 1.0
+import KeyboardEventListener 1.0
 
 Item {
     function open() {
@@ -18,6 +19,7 @@ Item {
     }
 
     function reset() {
+         eventDispatcher.keyboardListener.resetShortcuts()
     }
 
     id: keyboardShortcutsView
@@ -52,6 +54,7 @@ Item {
         id: window
 
         Text {
+            id: title
             x: parent.width / 2 - width / 2
             y: height
             text: qsTr("Keyboard shortcuts")
@@ -79,7 +82,19 @@ Item {
 
             onReleased: keyboardShortcutsView.reset()
         }
+
+        KeyboardShortcutsContent {
+            id: keyboardShortcutsContent
+            anchors.top: title.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.margins: 50
+        }
     }
 
-
+    KeySequencePopup {
+        id: keySequencePopup
+        anchors.fill: parent
+    }
 }

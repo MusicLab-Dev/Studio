@@ -74,9 +74,9 @@ signals:
     void playContext(bool pressed);
     void replayContext(bool pressed);
     void stopContext(bool pressed);
-    void playPlaylist(bool pressed);
-    void replayPlaylist(bool pressed);
-    void stopPlaylist(bool pressed);
+    void playProject(bool pressed);
+    void replayProject(bool pressed);
+    void stopProject(bool pressed);
 
     void copy(bool pressed);
     void paste(bool pressed);
@@ -85,7 +85,7 @@ signals:
 
     // Floating controls
     void volumeContext(float ratio);
-    void volumePlaylist(float ratio);
+    void volumeProject(float ratio);
 
     // Undo / Redo
     void undo(bool pressed);

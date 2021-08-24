@@ -82,11 +82,17 @@ public:
     void setDetection(const bool value) noexcept;
 
 public slots:
+    /** @brief Reset all shortcuts */
+    void resetShortcuts(void);
+
     /** @brief Add new event in the list */
     void add(const int key, const int modifiers, const EventTarget event);
 
     /** @brief Remove an event in the list */
     void remove(const int idx);
+
+    /** @brief Get the string representation of a key */
+    QString keyToString(int key, int modifiers) const noexcept;
 
 signals:
     /** @brief Notify that the enabled property has changed */
