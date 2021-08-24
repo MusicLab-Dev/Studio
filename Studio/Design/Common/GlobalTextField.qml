@@ -95,7 +95,7 @@ Item {
         height: width
         visible: globalTextField.colorBox
         anchors.verticalCenter: textInput.verticalCenter
-        text: "color"
+        text: qsTr("color")
         onPressed: colorDialog.open()
     }
 

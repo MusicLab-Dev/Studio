@@ -236,7 +236,7 @@ Column {
 
                     DefaultText {
                         anchors.fill: parent
-                        text: nodeDelegate.node ? nodeDelegate.node.plugin.title : "Error"
+                        text: nodeDelegate.node ? nodeDelegate.node.plugin.title : qsTr("Error")
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: nodeDelegate.accentColor
@@ -266,7 +266,7 @@ Column {
                 DefaultText {
                     anchors.fill: parent
 
-                    text: nodeDelegate.node ? nodeDelegate.node.name : "Error"
+                    text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("Error")
                     color: nodeDelegate.accentColor
                     fontSizeMode: Text.Fit
                     font.pointSize: 20

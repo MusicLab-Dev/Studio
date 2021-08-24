@@ -31,7 +31,7 @@ Row {
                 fontSizeMode: Text.HorizontalFit
                 font.pointSize: 28
                 color: nodeDelegate.accentColor
-                text: nodeDelegate.node ? nodeDelegate.node.name : "ERROR"
+                text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("ERROR")
                 wrapMode: Text.Wrap
             }
 
