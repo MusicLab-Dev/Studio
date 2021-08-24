@@ -30,6 +30,9 @@ public:
     /** @brief On notify */
     virtual bool notify(QObject *receiver, QEvent *e) override;
 
+    /** @brief Get the QML engine */
+    [[nodiscard]] QQmlApplicationEngine *qmlEngine(void) noexcept { return &_engine; }
+
 private:
     QQmlApplicationEngine _engine;
 };

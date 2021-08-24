@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="fr_FR" sourcelanguage="en">
 <context>
     <name>BoardsTitle</name>
     <message>
@@ -19,7 +19,7 @@
     <message>
         <location filename="Studio/Design/Boards/BoardsView.qml" line="48"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Retour</translation>
     </message>
     <message>
         <location filename="Studio/Design/Boards/BoardsView.qml" line="71"/>
@@ -87,12 +87,12 @@
     <message>
         <location filename="Studio/Design/Export/Export.qml" line="159"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Oui</translation>
     </message>
     <message>
         <location filename="Studio/Design/Export/Export.qml" line="167"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Non</translation>
     </message>
 </context>
 <context>
@@ -123,12 +123,12 @@
     <message>
         <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="127"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oui</translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="135"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Non</translation>
     </message>
 </context>
 <context>
@@ -146,12 +146,12 @@
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="146"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oui</translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="154"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Non</translation>
     </message>
 </context>
 <context>
@@ -209,6 +209,14 @@
     <name>Main</name>
     <message>
         <location filename="Studio/Design/Main/Main.qml" line="36"/>
+        <source>Lexo</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MainGeneral</name>
+    <message>
+        <location filename="Studio/Design/Main/MainGeneral.qml" line="31"/>
         <source>Lexo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -735,7 +743,7 @@
     <message>
         <location filename="Studio/Design/Workspaces/WorkspacesView.qml" line="109"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Retour</translation>
     </message>
     <message>
         <location filename="Studio/Design/Workspaces/WorkspacesView.qml" line="125"/>

@@ -9,15 +9,10 @@ import NodeModel 1.0
 import BoardManager 1.0
 import EventDispatcher 1.0
 import DevicesModel 1.0
-import ClipboardManager 1.0
-import CursorManager 1.0
 
 import "../Common"
 import "../Modules"
 import "../Workspaces"
-import "../Export"
-import "../Common"
-import "../KeyboardShortcuts"
 
 Window {
     function urlToPath(urlString) {
@@ -53,21 +48,10 @@ Window {
         property var currentPlayer: null
 
         id: app
-        scheduler.analysisTickRate: app.settings.getDefault("soundMeterTickRate", 20)
-
-        settings.onValueChanged: {
-            if (id === "soundMeterTickRate")
-                scheduler.analysisTickRate = value
-            else if (id === "outputDevice" || id === "sampleRate" || id === "blockSize" || id === "cachedAudioFrames")
-                scheduler.reloadAudioSpecs()
-            else if (id === "language")
-                app.updateTranslations()
-        }
     }
 
     ThemeManager {
         property color semiAccentColor: "#338DCF" // @todo add this to ThemeManager
-        property color popupDropShadow: "#80000000"
 
         id: themeManager
         theme: ThemeManager.Dark
@@ -104,29 +88,5 @@ Window {
 
     GlobalTextField {
         id: globalTextField
-    }
-
-    InstanceCopyPopup {
-        id: instanceCopyPopup
-    }
-
-    ClipboardManager {
-        id: clipboardManager
-    }
-
-    CursorManager {
-        id: cursorManager
-    }
-
-    Export {
-        anchors.fill: parent
-
-        id: exportManager
-    }
-
-    KeyboardShortcutsView {
-        anchors.fill: parent
-
-        id: keyboardShortcutsView
     }
 }

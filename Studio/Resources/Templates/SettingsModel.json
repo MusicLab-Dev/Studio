@@ -61,6 +61,17 @@
                 "values": [],
                 "start": []
             }
+        ],
+        "Language": [
+            {
+                "id": "language",
+                "name": "Select desired language",
+                "help": "Choose the language you want to have on the software, you can change it at any time",
+                "tags": ["language", "english", "french"],
+                "type": "ComboBox",
+                "values": ["English", "French"],
+                "start": "English"
+            }
         ]
     }
 }

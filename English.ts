@@ -214,6 +214,14 @@
     </message>
 </context>
 <context>
+    <name>MainGeneral</name>
+    <message>
+        <location filename="Studio/Design/Main/MainGeneral.qml" line="31"/>
+        <source>Lexo</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ModulesGlobalMenu</name>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="11"/>
