@@ -8,10 +8,19 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 find_package(Qt5QmlImportScanner REQUIRED)
-find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml LinguistTools REQUIRED)
 find_package(Threads)
 
 set(APP_ICON_RESOURCE_WINDOWS "${StudioRoot}/Lexo.rc")
+
+set(AppTranslationFiles
+    English.ts
+    French.ts
+)
+
+qt5_create_translation(QM_FILES ${StudioDir} ${AppTranslationFiles})
+
+configure_file(${StudioDir}/Resources/Translations.qrc ${CMAKE_BINARY_DIR} COPYONLY)
 
 qt5_add_resources(QtResources
     ${StudioDir}/Resources/Resources.qrc
@@ -28,6 +37,7 @@ qt5_add_resources(QtResources
     ${StudioDir}/Design/Settings/Settings.qrc
     ${StudioDir}/Design/Export/Export.qrc
     ${StudioDir}/Design/KeyboardShortcuts/KeyboardShortcuts.qrc
+    ${CMAKE_BINARY_DIR}/Translations.qrc
 )
 
 set(StudioSources
@@ -111,7 +121,7 @@ set(StudioSources
     ${StudioDir}/CursorManager.cpp
 )
 
-add_library(${PROJECT_NAME} ${StudioSources} ${QtResources})
+add_library(${PROJECT_NAME} ${StudioSources} ${QM_FILES} ${QtResources})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${StudioDir}/..)
 
