@@ -7,7 +7,7 @@ TextField {
 
     id: control
     leftPadding: 0
-    placeholderTextColor: "lightgrey"
+    color: "white"
     hoverEnabled: true
 
     onHoveredChanged: {

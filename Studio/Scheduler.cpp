@@ -280,6 +280,7 @@ bool Scheduler::exportProject(const QString &path)
 {
     // @todo check file path and return false on error
     stopAndWait();
+    setCurrentBeat(0u);
     const auto latestBeat = Application::Get()->project()->master()->latestInstance();
     const auto latestBlock = ComputeSampleSize(latestBeat, tempo(), _audioSpecs.sampleRate, 0.0, 0.0);
     const auto estimatedChannelByteSize = (latestBlock + _audioSpecs.sampleRate) * sizeof(float);
@@ -398,15 +399,19 @@ void Scheduler::onExportFrameReceived(void)
 
 void Scheduler::onExportCompleted(void)
 {
-    qDebug() << "[Export] Generation completed, writing audio into" << _exportPath;
-    if (!Audio::SampleManager<float>::WriteSampleFile(_exportPath.toStdString(), _exportBuffer)) {
-        qDebug() << "[Export] File write failed" << _exportPath;
-        emit exportFailed();
-    } else {
-        qDebug() << "[Export] File write success" << _exportPath;
-        emit exportCompleted();
+    try {
+        qDebug() << "[Export] Generation completed, writing audio into" << _exportPath;
+        if (Audio::SampleManager<float>::WriteSampleFile(_exportPath.toStdString(), _exportBuffer)) {
+            qDebug() << "[Export] File write success" << _exportPath;
+            emit exportCompleted();
+            return;
+        }
+    } catch (const std::exception &e) {
+        qDebug() << "[Export] Exception thrown:" << e.what();
     }
 
+    qDebug() << "[Export] File write failed";
+    emit exportFailed();
 }
 
 void Scheduler::onExportCanceled(void)

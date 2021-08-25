@@ -96,6 +96,7 @@ Item {
 
         MouseArea { // Used to prevent missclic from closing the window
             anchors.fill: parent
+            onPressed: forceActiveFocus()
         }
 
         Item {

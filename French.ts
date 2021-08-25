@@ -70,29 +70,39 @@
 <context>
     <name>Export</name>
     <message>
-        <location filename="Studio/Design/Export/Export.qml" line="111"/>
+        <location filename="Studio/Design/Export/Export.qml" line="134"/>
         <source>Export project &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Export/Export.qml" line="111"/>
+        <location filename="Studio/Design/Export/Export.qml" line="134"/>
         <source>&apos; ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Export/Export.qml" line="144"/>
+        <location filename="Studio/Design/Export/Export.qml" line="161"/>
+        <source>Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Export/Export.qml" line="204"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Export/Export.qml" line="159"/>
+        <location filename="Studio/Design/Export/Export.qml" line="219"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Export/Export.qml" line="167"/>
+        <location filename="Studio/Design/Export/Export.qml" line="227"/>
         <source>No</source>
         <translation>Non</translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Export/Export.qml" line="238"/>
+        <source>Choose export path</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -106,27 +116,27 @@
 <context>
     <name>InstanceCopyPopup</name>
     <message>
-        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="110"/>
+        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="111"/>
         <source>Do you want to copy partition &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="110"/>
+        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="111"/>
         <source>&apos; from &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="111"/>
+        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="112"/>
         <source>&apos; into &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="127"/>
+        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="128"/>
         <source>Yes</source>
         <translation type="unfinished">Oui</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="135"/>
+        <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="136"/>
         <source>No</source>
         <translation type="unfinished">Non</translation>
     </message>
@@ -134,22 +144,22 @@
 <context>
     <name>KeySequencePopup</name>
     <message>
-        <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="113"/>
+        <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="114"/>
         <source>Press desired key combination and press &apos;Yes&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="132"/>
+        <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="133"/>
         <source>Undefined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="146"/>
+        <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="147"/>
         <source>Yes</source>
         <translation type="unfinished">Oui</translation>
     </message>
     <message>
-        <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="154"/>
+        <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="155"/>
         <source>No</source>
         <translation type="unfinished">Non</translation>
     </message>
@@ -595,7 +605,7 @@
 <context>
     <name>SequencerHeader</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="69"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="70"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -645,17 +655,17 @@
 <context>
     <name>TreeComponentsPanel</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="85"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="34"/>
         <source>Mixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="90"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="39"/>
         <source>Sources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="95"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="44"/>
         <source>Effects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -663,7 +673,7 @@
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="191"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="206"/>
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -671,8 +681,8 @@
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="239"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="269"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="242"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="272"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -717,6 +727,14 @@
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="131"/>
         <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TreeSamplesPanel</name>
+    <message>
+        <location filename="Studio/Design/Tree/TreeSamplesPanel.qml" line="25"/>
+        <source>Samples</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
