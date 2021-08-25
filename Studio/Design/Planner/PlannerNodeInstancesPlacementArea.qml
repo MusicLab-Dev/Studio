@@ -6,6 +6,7 @@ import "../Common"
 import AudioAPI 1.0
 import PartitionPreview 1.0
 import ActionsManager 1.0
+import ClipboardManager 1.0
 
 PlacementArea {
     function addTarget(targetBeatRange, targetKey) {
@@ -141,6 +142,8 @@ PlacementArea {
                 return
             var instances = nodeInstances.instances.getInstances(selectionListModel)
             clipboardManager.copy(clipboardManager.partitionInstancesToJson(instances))
+            clipboardManager.count = instances.length
+            clipboardManager.state = ClipboardManager.State.Partition
         }
 
         function onPaste(pressed) {

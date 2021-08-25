@@ -167,10 +167,13 @@ Column {
                 function onTargetDropped() {
                     if (nodeInstanceBackground.containsDrag) {
                         nodeInstanceBackground.containsDrag = false
+                        var lastParent = treeSurface.dragTarget.parentNode
                         if (nodeInstanceBackground.validDrag)
                             nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
                         else
                             nodeDelegate.node.moveToParent(treeSurface.dragTarget)
+                        var action = actionsManager.makeActionMoveNode(treeSurface.dragTarget, lastParent, nodeDelegate.node)
+                        actionsManager.push(action)
                     }
                 }
 

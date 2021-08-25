@@ -64,5 +64,6 @@
         <file>Assets/Plugins/Kick.png</file>
         <file>Templates/SettingsModel.json</file>
         <file>Templates/TEMPLATE_basic</file>
+        <file>Assets/presse-papiers.png</file>
     </qresource>
 </RCC>

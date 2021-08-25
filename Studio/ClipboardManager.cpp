@@ -10,7 +10,23 @@
 
 #include "ClipboardManager.hpp"
 
-QString ClipboardManager::notesToJson(const QVector<Note> &notes) const noexcept
+void ClipboardManager::setState(const State &state) noexcept
+{
+    if (_state == state)
+        return;
+    _state = state;
+    emit stateChanged();
+}
+
+void ClipboardManager::setCount(int count) noexcept
+{
+    if (_count == count)
+        return;
+    _count = count;
+    emit countChanged();
+}
+
+QString ClipboardManager::notesToJson(const QVector<Note> &notes) noexcept
 {
     QJsonDocument doc;
     QJsonObject master;
@@ -25,9 +41,9 @@ QString ClipboardManager::notesToJson(const QVector<Note> &notes) const noexcept
         obj.insert("tuning", static_cast<int>(note.tuning));
         arr.push_back(obj);
     }
-    master.insert("notes", arr);
+    master.insert("notes", arr); 
     doc.setObject(master);
-
+    
     return doc.toJson(QJsonDocument::Compact);
 }
 
@@ -57,7 +73,7 @@ QVector<Note> ClipboardManager::jsonToNotes(const QString &json) const noexcept
 }
 
 
-QString ClipboardManager::partitionInstancesToJson(const QVector<PartitionInstance> &instances) const noexcept
+QString ClipboardManager::partitionInstancesToJson(const QVector<PartitionInstance> &instances) noexcept
 {
     QJsonDocument doc;
     QJsonObject master;

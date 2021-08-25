@@ -5,6 +5,7 @@ import "../Common"
 import AudioAPI 1.0
 import PartitionModel 1.0
 import ActionsManager 1.0
+import ClipboardManager 1.0
 
 PlacementArea {
     function addTarget(targetBeatRange, targetKey) {
@@ -160,6 +161,9 @@ PlacementArea {
             if (!pressed || selectionListModel == null)
                 return
             var notes = partition.getNotes(selectionListModel)
+            clipboardManager.clear()
+            clipboardManager.state = ClipboardManager.State.Note
+            clipboardManager.count = notes.length
             clipboardManager.copy(clipboardManager.notesToJson(notes))
         }
 

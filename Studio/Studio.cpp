@@ -55,6 +55,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");
     qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
     qRegisterMetaType<ActionNodeBase>("ActionNodeBase");
+    qRegisterMetaType<ActionMoveNode>("ActionMoveNode");
     qRegisterMetaType<ActionPartitionBase>("ActionPartitionBase");
     qRegisterMetaType<ActionNotesBase>("ActionNoteBase");
     qRegisterMetaType<ActionAddNotes>("ActionAddNotes");

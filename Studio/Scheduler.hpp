@@ -27,6 +27,7 @@ class Scheduler : public QObject, private Audio::AScheduler
     Q_PROPERTY(PlaybackMode playbackMode READ playbackMode NOTIFY playbackModeChanged)
     Q_PROPERTY(bool running READ running NOTIFY runningChanged)
     Q_PROPERTY(Beat currentBeat READ currentBeat WRITE setCurrentBeat NOTIFY currentBeatChanged)
+    Q_PROPERTY(Beat maxBeat READ maxBeat NOTIFY maxBeatChanged)
     Q_PROPERTY(BPM bpm READ bpm WRITE setBPM NOTIFY bpmChanged)
     Q_PROPERTY(quint32 analysisTickRate READ analysisTickRate WRITE setAnalysisTickRate NOTIFY analysisTickRateChanged)
 
@@ -92,6 +93,9 @@ public:
 
     /** @brief Get the current beat of a given mode */
     [[nodiscard]] Beat currentBeat(void) const noexcept { return currentBeatRange().from; }
+
+    /** @brief Get the max beat of a given mode */
+    [[nodiscard]] Beat maxBeat(void) const noexcept { /*latest*/ return currentBeatRange().to; }
 
     /** @brief Set the current beat of a given mode */
     void setCurrentBeat(const Beat beat);
@@ -165,6 +169,9 @@ signals:
 
     /** @brief Notify that the current beat range has changed */
     void currentBeatChanged(void);
+
+    /** @brief Notify that the max beat range has changed */
+    void maxBeatChanged(void);
 
     /** @brief Notify that the bpm has changed */
     void bpmChanged(void);

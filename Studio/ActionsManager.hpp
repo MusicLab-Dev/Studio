@@ -23,6 +23,14 @@ struct ActionNodeBase
 };
 Q_DECLARE_METATYPE(ActionNodeBase)
 
+/** -- Nodes --  */
+struct ActionMoveNode : public ActionNodeBase
+{
+    NodeModel *lastParent { nullptr };
+    NodeModel *newParent { nullptr };
+};
+Q_DECLARE_METATYPE(ActionMoveNode)
+
 /** -- Notes --  */
 struct ActionPartitionBase : public ActionNodeBase
 {
@@ -121,6 +129,9 @@ public slots:
     /** @brief Process the redo */
     bool redo(void);
 
+    /** @brief Nodes wrappers */
+    [[nodiscard]] ActionMoveNode makeActionMoveNode(NodeModel *node, NodeModel *lastParent, NodeModel *newParent) const noexcept;
+
     /** @brief Notes wrappers */
     [[nodiscard]] ActionAddNotes makeActionAddNotes(PartitionModel *partition, const QVector<Note> &notes) const noexcept;
     [[nodiscard]] ActionRemoveNotes makeActionRemoveNotes(PartitionModel *partition, const QVector<Note> &notes) const noexcept;
@@ -142,6 +153,8 @@ private:
     int _backwardCount = 0;
 
     /** @brief Action handlers */
+    [[nodiscard]] bool undoMoveNode(const ActionMoveNode &action);
+    [[nodiscard]] bool redoMoveNode(const ActionMoveNode &action);
     [[nodiscard]] bool undoAddNotes(const ActionAddNotes &action);
     [[nodiscard]] bool redoAddNotes(const ActionAddNotes &action);
     [[nodiscard]] bool undoRemoveNotes(const ActionRemoveNotes &action);

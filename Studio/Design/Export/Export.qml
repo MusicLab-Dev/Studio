@@ -22,7 +22,7 @@ Item {
         var path = app.project.path
         if (!path.length)
             path = app.project.name
-        app.scheduler.exportProject(path + ".wav")
+        saveFileDialog.open()
     }
 
     function cancel() {
@@ -133,10 +133,23 @@ Item {
                         color: "transparent"
 
                         Rectangle {
-                            anchors.fill: parent
+                            anchors.left: parent.left
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            width: app.scheduler.currentBeat / app.scheduler.maxBeat * parent.width
                             anchors.margins: parent.border.width
                             color: themeManager.accentColor
                         }
+
+                        DefaultText {
+                            anchors.fill: parent
+
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pixelSize: 20
+                            text: app.scheduler.currentBeat / app.scheduler.maxBeat * 100 + "% (" + app.scheduler.currentBeat + " / " + app.scheduler.maxBeat + ")"
+                        }
+
                     }
 
                     TextRoundedButton {
@@ -172,4 +185,29 @@ Item {
             }
         }
     }
+
+    DefaultFileDialog {
+        id: saveFileDialog
+        title: qsTr("Save a project file")
+        folder: shortcuts.home
+        nameFilters: [ "All files (*)" ]
+        selectExisting: false
+        visible: false
+
+        onAccepted: {
+            app.scheduler.exportProject(fileUrl.toString() + ".wav")
+            saveFileDialog.close()
+        }
+
+        onRejected: saveFileDialog.close()
+    }
+
+    /*
+    Timer {
+        running: exporting
+
+        onTriggered: {
+            = currentBeat
+        }
+    }*/
 }
