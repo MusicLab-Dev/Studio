@@ -5,7 +5,7 @@ import "../../Default"
 
 Row {
     id: control
-    height: controlCol.height
+    height: 40
     spacing: 5
 
     DefaultText {

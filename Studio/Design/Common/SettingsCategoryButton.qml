@@ -20,8 +20,12 @@ Button {
         radius: width / 17
     }
 
-    contentItem: Text {
-        width: control.width - control.background.width
+    contentItem: Item {
+
+    }
+
+    Text {
+        width: control.width
         height: control.height
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

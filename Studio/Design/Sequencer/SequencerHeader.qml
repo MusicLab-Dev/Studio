@@ -67,7 +67,7 @@ Rectangle {
                 fontSizeMode: Text.HorizontalFit
                 font.pointSize: 20
                 color: accentColor
-                text: sequencerView.node ? sequencerView.node.name : "ERROR"
+                text: sequencerView.node ? sequencerView.node.name : qsTr("ERROR")
                 wrapMode: Text.Wrap
             }
         }

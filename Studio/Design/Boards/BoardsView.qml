@@ -45,7 +45,7 @@ BoardsBackground {
         id: closeBtn
         x: parent.width - width - height
         y: height
-        text: "Back"
+        text: qsTr("Back")
         font.pointSize: 14
         font.weight: Font.DemiBold
         color: closeBtn.closeButtonHovered ? themeManager.foreground : "#FFFFFF"
@@ -68,7 +68,7 @@ BoardsBackground {
         id: boardsViewCloseButtonText
         x: parent.width - width - height
         y: height
-        text: "Done"
+        text: qsTr("Done")
 
         onReleased: boardsView.close()
     }

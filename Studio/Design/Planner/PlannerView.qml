@@ -48,9 +48,9 @@ ColumnLayout {
     Connections {
         target: eventDispatcher
 
-        function onPlayPlaylist(pressed) { if (pressed) player.playOrPause() }
-        function onReplayPlaylist(pressed) { if (pressed) player.replay() }
-        function onStopPlaylist(pressed) { if (pressed) player.stop() }
+        function onPlayProject(pressed) { if (pressed) player.playOrPause() }
+        function onReplayProject(pressed) { if (pressed) player.replay() }
+        function onStopProject(pressed) { if (pressed) player.stop() }
     }
 
     PlannerHeader {

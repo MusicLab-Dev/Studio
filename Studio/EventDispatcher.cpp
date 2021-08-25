@@ -102,14 +102,14 @@ bool EventDispatcher::sendSignals(const AEventListener::EventTarget event, const
     case AEventListener::EventTarget::StopContext:
         emit stopContext(booleanValue);
         break;
-    case AEventListener::EventTarget::PlayPlaylist:
-        emit playPlaylist(booleanValue);
+    case AEventListener::EventTarget::PlayProject:
+        emit playProject(booleanValue);
         break;
-    case AEventListener::EventTarget::ReplayPlaylist:
-        emit replayPlaylist(booleanValue);
+    case AEventListener::EventTarget::ReplayProject:
+        emit replayProject(booleanValue);
         break;
-    case AEventListener::EventTarget::StopPlaylist:
-        emit stopPlaylist(booleanValue);
+    case AEventListener::EventTarget::StopProject:
+        emit stopProject(booleanValue);
         break;
     case AEventListener::EventTarget::Undo:
         emit undo(booleanValue);
