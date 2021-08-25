@@ -102,6 +102,11 @@
         <source>color</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="Studio/Design/Common/GlobalTextField.qml" line="104"/>
+        <source>Please choose a color</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InstanceCopyPopup</name>
@@ -251,6 +256,11 @@
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="86"/>
         <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="91"/>
+        <source>Open Template...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -748,6 +758,11 @@
     <message>
         <location filename="Studio/Design/Workspaces/WorkspacesView.qml" line="125"/>
         <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Workspaces/WorkspacesView.qml" line="155"/>
+        <source>Please choose a workspace folder</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
