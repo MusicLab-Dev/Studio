@@ -170,11 +170,11 @@ public slots:
     NodeModel *addPartitionNodeExternalInputs(const QString &pluginPath, const QStringList &paths)
         { return addNodeImpl(pluginPath, true, paths); }
 
-    /** @brief Add a new node in children vector using a plugin path */
+    /** @brief Add a new node as parent using a plugin path */
     NodeModel *addParent(const QString &pluginPath)
         { return addParentNodeImpl(pluginPath, false, QStringList()); }
 
-    /** @brief Add a new node in children vector using a plugin path */
+    /** @brief Add a new node as parent using a plugin path */
     NodeModel *addParentExternalInputs(const QString &pluginPath, QStringList &paths)
         { return addParentNodeImpl(pluginPath, true, paths); }
 
