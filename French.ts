@@ -113,9 +113,8 @@
         <translation>couleur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/GlobalTextField.qml" line="104"/>
         <source>Please choose a color</source>
-        <translation>Veuillez choisir une couleur</translation>
+        <translation type="vanished">Veuillez choisir une couleur</translation>
     </message>
 </context>
 <context>
@@ -269,9 +268,8 @@
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="91"/>
         <source>Open Template...</source>
-        <translation>Ouvrir un template...</translation>
+        <translation type="vanished">Ouvrir un template...</translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="94"/>
@@ -779,9 +777,8 @@
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Workspaces/WorkspacesView.qml" line="155"/>
         <source>Please choose a workspace folder</source>
-        <translation>Veuillez choisir un dossier d&apos;espace de travail</translation>
+        <translation type="vanished">Veuillez choisir un dossier d&apos;espace de travail</translation>
     </message>
 </context>
 </TS>

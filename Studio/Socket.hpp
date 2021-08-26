@@ -186,7 +186,11 @@ inline void setSocketDevice(const Socket socket, const InterfaceIndex interfaceI
         ret = ::setsockopt(
             socket,
             SOL_SOCKET,
+#ifdef __APPLE__
+            IP_BOUND_IF,
+#else
             SO_BINDTODEVICE,
+#endif
             interfaceName.c_str(),
             static_cast<Socklen>(interfaceName.length())
         );
@@ -222,7 +226,9 @@ inline void setSocketKeepAlive(const Socket socket)
     #endif
 
     ::setsockopt(socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int));
-    ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int));
+    #ifndef __APPLE__
+        ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int));
+    #endif
     ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int));
     ::setsockopt(socket, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int));
 }
@@ -349,8 +355,8 @@ inline NetworkAddress createNetworkAddress(const Port port, const std::string &a
         tcpAddress.sin_port = ::htons(port);
         tcpAddress.sin_addr.s_addr = ::inet_addr(address.c_str());
     #else
+        tcpAddress.sin_port = htons(port); // On Apple, its a macro, not a function !
         tcpAddress.sin_family = AF_INET;
-        tcpAddress.sin_port = ::htons(port);
         tcpAddress.sin_addr.s_addr = ::inet_addr(address.c_str());
     #endif
 
