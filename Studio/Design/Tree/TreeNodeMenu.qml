@@ -112,6 +112,16 @@ DefaultMenu {
         }
     }
 
+    Action {
+        text: qsTr("Duplicate (only plugin)")
+        enabled: true
+
+        onTriggered: {
+            targetNode.duplicate()
+            closeMenu()
+        }
+    }
+
     DefaultMenuSeparator {
         enabled: removeAction.enabled
     }

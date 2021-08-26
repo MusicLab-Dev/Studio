@@ -13,6 +13,14 @@ Rectangle {
         onPressedChanged: forceActiveFocus()
     }
 
+    ClipboardIndicator {
+        anchors.left: parent.left
+        anchors.leftMargin: parent.width * 0.01
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        width: parent.width * 0.1
+    }
+
     PlannerEdition {
         anchors.right: parent.right
         anchors.rightMargin: 10

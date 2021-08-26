@@ -245,7 +245,11 @@ void Scheduler::disableLoopRange(void)
 void Scheduler::stopAndWait(void)
 {
     if (pauseImpl()) {
-        std::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
+#ifdef __APPLE__
+        atomic_sync::atomic_wait_explicit(&_blockGenerated, false, std::memory_order_relaxed);
+#else
+        atomic_sync::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
+#endif
         onCatchingAudioThread();
         wait();
         invalidateCurrentGraph<true>();
@@ -280,6 +284,7 @@ bool Scheduler::exportProject(const QString &path)
 {
     // @todo check file path and return false on error
     stopAndWait();
+    setCurrentBeat(0u);
     const auto latestBeat = Application::Get()->project()->master()->latestInstance();
     const auto latestBlock = ComputeSampleSize(latestBeat, tempo(), _audioSpecs.sampleRate, 0.0, 0.0);
     const auto estimatedChannelByteSize = (latestBlock + _audioSpecs.sampleRate) * sizeof(float);
@@ -296,7 +301,7 @@ bool Scheduler::onAudioBlockGenerated(void)
 {
     _busy = false;
     _blockGenerated = true;
-    std::atomic_notify_one(&_blockGenerated);
+    atomic_sync::atomic_notify_one(&_blockGenerated);
     while (_blockGenerated) {
         std::this_thread::yield();
     }
@@ -307,7 +312,7 @@ bool Scheduler::onAudioQueueBusy(void)
 {
     _busy = true;
     _blockGenerated = true;
-    std::atomic_notify_one(&_blockGenerated);
+    atomic_sync::atomic_notify_one(&_blockGenerated);
     while (_blockGenerated) {
         std::this_thread::yield();
     }
@@ -318,7 +323,7 @@ bool Scheduler::onExportBlockGenerated(void)
 {
     _busy = false;
     _blockGenerated = true;
-    std::atomic_notify_one(&_blockGenerated);
+    atomic_sync::atomic_notify_one(&_blockGenerated);
     while (_blockGenerated) {
         std::this_thread::yield();
     }
@@ -345,7 +350,7 @@ void Scheduler::onCatchingAudioThread(void)
     }
 
     _blockGenerated = false;
-    std::atomic_notify_one(&_blockGenerated);
+    atomic_sync::atomic_notify_one(&_blockGenerated);
 
     if (_exitGraph) {
         pauseImpl();
@@ -398,15 +403,19 @@ void Scheduler::onExportFrameReceived(void)
 
 void Scheduler::onExportCompleted(void)
 {
-    qDebug() << "[Export] Generation completed, writing audio into" << _exportPath;
-    if (!Audio::SampleManager<float>::WriteSampleFile(_exportPath.toStdString(), _exportBuffer)) {
-        qDebug() << "[Export] File write failed" << _exportPath;
-        emit exportFailed();
-    } else {
-        qDebug() << "[Export] File write success" << _exportPath;
-        emit exportCompleted();
+    try {
+        qDebug() << "[Export] Generation completed, writing audio into" << _exportPath;
+        if (Audio::SampleManager<float>::WriteSampleFile(_exportPath.toStdString(), _exportBuffer)) {
+            qDebug() << "[Export] File write success" << _exportPath;
+            emit exportCompleted();
+            return;
+        }
+    } catch (const std::exception &e) {
+        qDebug() << "[Export] Exception thrown:" << e.what();
     }
 
+    qDebug() << "[Export] File write failed";
+    emit exportFailed();
 }
 
 void Scheduler::onExportCanceled(void)

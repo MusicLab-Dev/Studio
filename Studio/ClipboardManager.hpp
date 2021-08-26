@@ -16,13 +16,37 @@ class ClipboardManager : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(State state READ state WRITE setState NOTIFY stateChanged)
+    Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
+
 public:
+
+    enum class State : int {
+        Nothing = 0,
+        Note,
+        Partition
+    };
+    Q_ENUM(State)
+
     /** @brief Construct a new ClipboardManager */
     explicit ClipboardManager(QObject *parent = nullptr)
         : QObject(parent) {};
 
     /** @brief Destructor */
     ~ClipboardManager(void) override = default;
+
+    /** @brief Get the state */
+    [[nodiscard]] State state(void) const noexcept { return _state; }
+
+    /** @brief Set the state */
+    void setState(const State &state) noexcept;
+
+    /** @brief Get the count */
+    [[nodiscard]] int count(void) const noexcept { return _count; }
+
+    /** @brief Set the count */
+    void setCount(int count) noexcept;
+
 
 public slots:
     /** @brief Return the clipboard data
@@ -48,10 +72,21 @@ public slots:
     }
 
     /** @brief Wrapper JSON */
-    QString notesToJson(const QVector<Note> &notes) const noexcept;
+    QString notesToJson(const QVector<Note> &notes) noexcept;
     QVector<Note> jsonToNotes(const QString &json) const noexcept;
 
     /** @brief Wrapper JSON */
-    QString partitionInstancesToJson(const QVector<PartitionInstance> &instances) const noexcept;
+    QString partitionInstancesToJson(const QVector<PartitionInstance> &instances) noexcept;
     QVector<PartitionInstance> jsonToPartitionInstances(const QString &json) const noexcept;
+
+signals:
+    /** @brief Notify when state changed */
+    void stateChanged(void);
+
+    /** @brief Notify when count changed */
+    void countChanged(void);
+
+private:
+    int _count = 0;
+    State _state = State::Nothing;
 };

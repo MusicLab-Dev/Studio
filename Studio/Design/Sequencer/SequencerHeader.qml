@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import ThemeManager 1.0
+import ClipboardManager 1.0
 
 import "../Default/"
 import "../Common/"
@@ -66,7 +67,7 @@ Rectangle {
                 fontSizeMode: Text.HorizontalFit
                 font.pointSize: 20
                 color: accentColor
-                text: sequencerView.node ? sequencerView.node.name : "ERROR"
+                text: sequencerView.node ? sequencerView.node.name : qsTr("ERROR")
                 wrapMode: Text.Wrap
             }
         }
@@ -150,6 +151,7 @@ Rectangle {
     }
 
     SoundMeter {
+        id: soundMeter
         anchors.left: helpButton.right
         anchors.leftMargin: 10
         anchors.top: parent.top
@@ -159,5 +161,13 @@ Rectangle {
         width: height / 3
         targetNode: sequencerView.node
         enabled: sequencerView.visible
+    }
+
+    ClipboardIndicator {
+        anchors.bottom: parent.bottom
+        anchors.left: soundMeter.right
+        anchors.top: parent.top
+        anchors.leftMargin: parent.width * 0.01
+        width: parent.width * 0.1
     }
 }

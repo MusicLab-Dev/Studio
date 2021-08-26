@@ -57,7 +57,7 @@ Item {
                 width: parent.width
                 height: parent.height * 0.3
                 color: nodeDelegate.accentColor
-                text: instanceDelegate.partition ? instanceDelegate.partition.name : "ERROR"
+                text: instanceDelegate.partition ? instanceDelegate.partition.name : qsTr("ERROR")
                 fontSizeMode: Text.VerticalFit
                 font.pointSize: 12
                 elide: Text.ElideMiddle

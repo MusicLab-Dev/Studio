@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/KeyboardShortcuts">
+        <file>KeyboardShortcutsView.qml</file>
+        <file>KeyboardShortcutsContent.qml</file>
+        <file>EventTargetComboBox.qml</file>
+        <file>KeySequencePopup.qml</file>
+    </qresource>
+</RCC>

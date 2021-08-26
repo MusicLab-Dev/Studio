@@ -35,14 +35,14 @@ public:
         PlayContext,
         ReplayContext,
         StopContext,
-        PlayPlaylist,
-        ReplayPlaylist,
-        StopPlaylist,
+        PlayProject,
+        ReplayProject,
+        StopProject,
         Copy,
         Paste,
         Cut,
         VolumeContext,
-        VolumePlaylist,
+        VolumeProject,
         Undo,
         Redo,
         Erase,
@@ -50,7 +50,8 @@ public:
         ExportProject,
         Save,
         SaveAs,
-        Settings
+        Settings,
+        TotalEventTarget
     };
 
     Q_ENUM(EventTarget)
@@ -63,6 +64,13 @@ public:
 
     [[nodiscard]] EventDispatcher *dispatcher(void) { return _dispatcher; }
     [[nodiscard]] const EventDispatcher *dispatcher(void) const { return _dispatcher; }
+
+public slots:
+    /** @brief Convert an event target to its name as string */
+    QString eventTargetToString(const int eventTarget) const noexcept;
+
+    /** @brief Convert an event target to its description as string */
+    QString eventTargetToDescription(const int eventTarget) const noexcept;
 
 protected:
     EventDispatcher *_dispatcher { nullptr };

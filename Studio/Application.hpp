@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QPoint>
+#include <QTranslator>
 
 #include "Project.hpp"
 // #include "DevicesModel.hpp"
@@ -59,6 +60,9 @@ public:
     [[nodiscard]] Scheduler *scheduler(void) noexcept { return &_scheduler; }
 
 public slots:
+    /** @brief Update internal translations according to Settings */
+    void updateTranslations(void);
+
     /** @brief Get the list of devices able to output audio */
     // QStringList getOutputDeviceList(void) const noexcept;
 
@@ -96,6 +100,7 @@ private:
 
 private:
     SettingsListModel _settings;
+    std::unique_ptr<QTranslator> _translator;
     Audio::ProjectPtr _backendProject;
     Scheduler _scheduler;
     Project _project;

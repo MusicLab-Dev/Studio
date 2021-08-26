@@ -85,7 +85,7 @@ MouseArea {
         font.pointSize: 12
         opacity: 0.8
         wrapMode: Text.Wrap
-        text: previewDelegate.partition ? previewDelegate.partition.name : "ERROR"
+        text: previewDelegate.partition ? previewDelegate.partition.name : qsTr("ERROR")
         color: previewDelegate.containsPress ? partitionsPreview.nodePressedColor : partitionsPreview.nodeColor
     }
 

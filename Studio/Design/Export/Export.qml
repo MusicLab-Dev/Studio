@@ -9,6 +9,12 @@ import Scheduler 1.0
 
 Item {
     function open() {
+        progressRatio = 0
+        error = false
+        if (app.project.path.length)
+            selectedPath = app.project.path + ".wav"
+        else
+            selectedPath = app.project.name + ".wav"
         openAnim.start()
         visible = true
     }
@@ -19,23 +25,38 @@ Item {
 
     function start() {
         exporting = true
-        var path = app.project.path
-        if (!path.length)
-            path = app.project.name
-        app.scheduler.exportProject(path + ".wav")
+        error = false
+        app.scheduler.exportProject(selectedPath)
     }
 
     function cancel() {
         exporting = false
         app.scheduler.stop()
+        progressRatio = 0
     }
 
     property bool exporting: false
+    property real progressRatio: 0
+    property string selectedPath: ""
+    property bool error: false
 
     id: exportPopup
     width: parent.width
     height: parent.height
     visible: false
+
+    Timer {
+        running: exportPopup.exporting
+        repeat: true
+        interval: 16
+
+        onTriggered: {
+            if (app.project.master.latestInstance)
+                progressRatio = Math.min(app.scheduler.currentBeat / app.project.master.latestInstance, 1)
+            else
+                progressRatio = 1
+        }
+    }
 
     Connections {
         target: app.scheduler
@@ -52,6 +73,7 @@ Item {
         }
 
         function onExportFailed() {
+            error = true
             exporting = false
         }
     }
@@ -94,6 +116,7 @@ Item {
 
         MouseArea { // Used to prevent missclic from closing the window
             anchors.fill: parent
+            onPressed: forceActiveFocus()
         }
 
         Item {
@@ -118,6 +141,31 @@ Item {
                 }
 
                 Row {
+                    id: pathRow
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 10
+                    width: windowArea.width
+                    height: cancelButton.height
+
+                    DefaultTextInput {
+                        width: parent.width - openFileButton.width - pathRow.spacing
+                        height: cancelButton.height
+                        text: selectedPath
+                        enabled: !exportPopup.exporting
+
+                        onTextChanged: selectedPath = text
+                    }
+
+                    TextRoundedButton {
+                        id: openFileButton
+                        text: qsTr("Select")
+                        enabled: !exportPopup.exporting
+
+                        onReleased: saveFileDialog.open()
+                    }
+                }
+
+                Row {
                     id: progressRow
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 10
@@ -130,12 +178,24 @@ Item {
                         height: cancelButton.height
                         border.color: exportPopup.exporting ? themeManager.foregroundColor : themeManager.disabledColor
                         border.width: 2
-                        color: "transparent"
+                        color: exportPopup.error ? "red" : "transparent"
 
                         Rectangle {
-                            anchors.fill: parent
+                            anchors.left: parent.left
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            width: exportPopup.progressRatio * parent.width
                             anchors.margins: parent.border.width
-                            color: themeManager.accentColor
+                            color: exportPopup.error ? "darkred" : themeManager.accentColor
+                        }
+
+                        DefaultText {
+                            anchors.fill: parent
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pixelSize: 20
+                            text: (exportPopup.progressRatio * 100).toFixed() + "%"
+                            color: "white"
                         }
                     }
 
@@ -171,5 +231,23 @@ Item {
                 }
             }
         }
+    }
+
+    DefaultFileDialog {
+        id: saveFileDialog
+        title: qsTr("Choose export path")
+        folder: shortcuts.home
+        nameFilters: [ "All files (*)" ]
+        selectExisting: false
+        visible: false
+
+        onAccepted: {
+            exportPopup.selectedPath = mainWindow.urlToPath(fileUrl.toString())
+            if (!exportPopup.selectedPath.endsWith(".wav"))
+                exportPopup.selectedPath = exportPopup.selectedPath + ".wav"
+            saveFileDialog.close()
+        }
+
+        onRejected: saveFileDialog.close()
     }
 }

@@ -310,7 +310,7 @@ void BoardManager::discoveryEmit(void)
             Socket udpSocket { networkInterface.second.second };
             NetworkAddress broadcastAddress;
             broadcastAddress.sin_family = AF_INET;
-            broadcastAddress.sin_port = ::htons(LexoPort);
+            broadcastAddress.sin_port = htons(LexoPort); // On Apple, its a macro, not a function !
             broadcastAddress.sin_addr.s_addr = ::inet_addr("169.254.255.255");
 
             NETWORK_LOG("Sending discovery packet to ", ::inet_ntoa(broadcastAddress.sin_addr));
@@ -478,8 +478,12 @@ std::vector<std::pair<InterfaceIndex, std::string>> getLinuxNetworkInterfaces(vo
             if (ifa->ifa_addr == nullptr)
                 continue;
             family = ifa->ifa_addr->sa_family;
-            if (family == AF_INET && (ifa->ifa_flags & IFF_BROADCAST) && ifa->ifa_ifu.ifu_broadaddr != nullptr) {
-
+#ifdef __APPLE__
+            const auto cond = family == AF_INET && (ifa->ifa_flags & IFF_BROADCAST) && ifa->ifa_broadaddr != nullptr;
+#else
+            const auto cond = family == AF_INET && (ifa->ifa_flags & IFF_BROADCAST) && ifa->ifa_ifu.ifu_broadaddr != nullptr;
+#endif
+            if (cond) {
                 sockaddr_in *ifaceaddr = reinterpret_cast<sockaddr_in *>(ifa->ifa_addr);
                 std::string interfaceName(ifa->ifa_name);
                 InterfaceIndex interfaceIndex = if_nametoindex(ifa->ifa_name);

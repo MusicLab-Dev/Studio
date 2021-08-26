@@ -55,6 +55,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");
     qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
     qRegisterMetaType<ActionNodeBase>("ActionNodeBase");
+    qRegisterMetaType<ActionMoveNode>("ActionMoveNode");
     qRegisterMetaType<ActionPartitionBase>("ActionPartitionBase");
     qRegisterMetaType<ActionNotesBase>("ActionNoteBase");
     qRegisterMetaType<ActionAddNotes>("ActionAddNotes");
@@ -126,6 +127,8 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Workspaces);
     Q_INIT_RESOURCE(Settings);
     Q_INIT_RESOURCE(Export);
+    Q_INIT_RESOURCE(KeyboardShortcuts);
+    Q_INIT_RESOURCE(Translations);
 }
 
 void Studio::DestroyResources(void)
@@ -143,6 +146,8 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Workspaces);
     Q_CLEANUP_RESOURCE(Settings);
     Q_CLEANUP_RESOURCE(Export);
+    Q_CLEANUP_RESOURCE(KeyboardShortcuts);
+    Q_CLEANUP_RESOURCE(Translations);
 
     Audio::PluginTable::Destroy();
     Audio::Device::ReleaseDriver();
@@ -152,7 +157,8 @@ static int DefaultArgc = 1;
 static char DefaultArg[] = { 'S', 't', 'u', 'd', 'i', 'o', '\0' };
 static char *DefaultArgv[] = { DefaultArg, nullptr };
 
-Studio::Studio(void) : Studio(DefaultArgc, DefaultArgv)
+Studio::Studio(void)
+    : Studio(DefaultArgc, DefaultArgv)
 {
     QQuickStyle::setStyle("Default");
     setWindowIcon(QIcon(":/Assets/Logo.png"));

@@ -155,7 +155,7 @@ Item {
 
         TextRoundedButton {
             id: pluginsViewCloseButtonText
-            text: "Close"
+            text: qsTr("Close")
             anchors.top: pluginsWindow.top
             anchors.topMargin: 30
             anchors.right: pluginsWindow.right

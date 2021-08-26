@@ -23,6 +23,7 @@ class PluginModel : public QAbstractListModel
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
+    Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 
 public:
     /** @brief Roles of each controls */
@@ -84,6 +85,9 @@ public:
     /** @brief Get the description property */
     [[nodiscard]] QString description(void) const noexcept;
 
+    /** @brief Get the path property */
+    [[nodiscard]] QString path(void) const noexcept;
+
     /** @brief Get underlying audio plugin */
     [[nodiscard]] Audio::IPlugin *audioPlugin(void) noexcept { return _data; }
     [[nodiscard]] const Audio::IPlugin *audioPlugin(void) const noexcept { return _data; }
@@ -105,6 +109,9 @@ signals:
 
     /** @brief Notify that the description has changed */
     void descriptionChanged(void);
+
+    /** @brief Notify that the path has changed */
+    void pathChanged(void);
 
     /** @brief Notify that a control has changed */
     void controlValueChanged(const ParamID paramID);

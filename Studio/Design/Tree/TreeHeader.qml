@@ -7,12 +7,15 @@ Rectangle {
     color: themeManager.foregroundColor
 
     MouseArea {
-        anchors.fill: parent
+        anchors.fill: textButton
         onPressedChanged: forceActiveFocus()
     }
 
     DefaultTextButton {
-        anchors.fill: parent
+        id: textButton
+        anchors.centerIn: parent
+        width: parent.width * 0.3
+        height: parent.height
         text: app.project.name
         font.pixelSize: 35
 

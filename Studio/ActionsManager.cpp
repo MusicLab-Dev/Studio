@@ -35,8 +35,8 @@ bool ActionsManager::push(const QVariant &data) noexcept
         action = Action::MoveNotes;
     else if (data.userType() == qMetaTypeId<ActionMovePartitions>())
         action = Action::MovePartitions;
-    // else if (data.userType() == qMetaTypeId<ActionMoveNode>())
-    //     action = Action::MoveNode;
+    else if (data.userType() == qMetaTypeId<ActionMoveNode>())
+        action = Action::MoveNode;
     else {
         qDebug() << "ActionsManager::push: Invalid action type";
         return false;
@@ -84,6 +84,9 @@ bool ActionsManager::undo(void)
     case Action::MovePartitions:
         done = undoMovePartitions(event.data.value<ActionMovePartitions>());
         break;
+    case Action::MoveNode:
+        done = undoMoveNode(event.data.value<ActionMoveNode>());
+        break;
     default:
         return false;
     }
@@ -119,6 +122,9 @@ bool ActionsManager::redo(void)
         break;
     case Action::MovePartitions:
         done = redoMovePartitions(event.data.value<ActionMovePartitions>());
+        break;
+    case Action::MoveNode:
+        done = redoMoveNode(event.data.value<ActionMoveNode>());
         break;
     default:
         return false;
@@ -186,6 +192,16 @@ bool ActionsManager::undoMovePartitions(const ActionMovePartitions &action)
 bool ActionsManager::redoMovePartitions(const ActionMovePartitions &action)
 {
     return action.partitions->instances()->setRange(action.oldInstances, action.instances);
+}
+
+bool ActionsManager::undoMoveNode(const ActionMoveNode &action)
+{
+    return action.lastParent->moveToChildren(action.node);
+}
+
+bool ActionsManager::redoMoveNode(const ActionMoveNode &action)
+{
+    return action.newParent->moveToChildren(action.node);
 }
 
 ActionAddNotes ActionsManager::makeActionAddNotes(PartitionModel *partition, const QVector<Note> &notes) const noexcept
@@ -257,6 +273,18 @@ ActionMovePartitions ActionsManager::makeActionMovePartitions(PartitionsModel *p
     action.partitions = partitions;
     action.instances = after;
     action.oldInstances = before;
+    return action;
+}
+
+ActionMoveNode ActionsManager::makeActionMoveNode(NodeModel *node, NodeModel *lastParent, NodeModel *newParent) const noexcept
+{
+    ActionMoveNode action;
+
+    qDebug() << node->name() << lastParent->name() << newParent->name();
+
+    action.node = node;
+    action.lastParent = lastParent;
+    action.newParent = newParent;
     return action;
 }
 

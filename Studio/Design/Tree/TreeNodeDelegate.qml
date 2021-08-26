@@ -167,10 +167,13 @@ Column {
                 function onTargetDropped() {
                     if (nodeInstanceBackground.containsDrag) {
                         nodeInstanceBackground.containsDrag = false
+                        var lastParent = treeSurface.dragTarget.parentNode
                         if (nodeInstanceBackground.validDrag)
                             nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
                         else
                             nodeDelegate.node.moveToParent(treeSurface.dragTarget)
+                        var action = actionsManager.makeActionMoveNode(treeSurface.dragTarget, lastParent, nodeDelegate.node)
+                        actionsManager.push(action)
                     }
                 }
 
@@ -236,7 +239,7 @@ Column {
 
                     DefaultText {
                         anchors.fill: parent
-                        text: nodeDelegate.node ? nodeDelegate.node.plugin.title : "Error"
+                        text: nodeDelegate.node ? nodeDelegate.node.plugin.title : qsTr("Error")
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: nodeDelegate.accentColor
@@ -266,7 +269,7 @@ Column {
                 DefaultText {
                     anchors.fill: parent
 
-                    text: nodeDelegate.node ? nodeDelegate.node.name : "Error"
+                    text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("Error")
                     color: nodeDelegate.accentColor
                     fontSizeMode: Text.Fit
                     font.pointSize: 20

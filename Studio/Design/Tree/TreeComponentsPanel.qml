@@ -6,7 +6,7 @@ import PluginTableModel 1.0
 
 import "../Default"
 
-Item {
+TreePanel {
     enum Type {
         Mixer,
         Sources,
@@ -15,171 +15,91 @@ Item {
         Void
     }
 
-    function open(filt) {
-        filter = filt
-        if (!launched)
-            openAnim.start()
-        launched = true
-    }
 
-    function close() {
-        launched = false
-        filter = TreeComponentsPanel.Type.Void
-        closeAnim.start()
-    }
-
-    property int filter: TreeComponentsPanel.Type.Void
-    property bool launched: false
-    property real durationAnimation: 300
-
-    id: treeComponentsPanel
-
-    ParallelAnimation {
-        id: openAnim
-        PropertyAnimation { target: panel; property: "x"; to: panel.xOpen; duration: durationAnimation; easing.type: Easing.OutBack }
-    }
-
-    ParallelAnimation {
-        id: closeAnim
-        PropertyAnimation { target: panel; property: "x"; to: panel.xClose; duration: durationAnimation; easing.type: Easing.OutBack; }
-    }
+    Item {
+        id: panelCategory
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        width: panelCategoryWidth
+        height: parent.height
 
 
-    /*
-    Rectangle {
-        id: buttonPanel
+        Column {
+            height: parent.height
+            width: parent.width
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
 
-        anchors.right: panel.left
-        anchors.rightMargin: 32
-        anchors.top: parent.top
-        anchors.topMargin: parent.height / 2 - height / 2
-
-        width: parent.width * 0.04
-        height: width
-        opacity: 0.7
-        color: themeManager.foregroundColor
-        radius: 1000
-
-        Image {
-            id: plus
-            anchors.centerIn: parent
-            width: parent.width * 0.6
-            height: parent.height * 0.6
-            source: "qrc:/Assets/Plus.png"
-        }
-
-        ColorOverlay {
-                anchors.fill: plus
-                source: plus
-                color: "white"
+            TreeComponentCategory {
+                text.text: qsTr("Mixer")
+                filter: TreeComponentsPanel.Type.Mixer
             }
+
+            TreeComponentCategory {
+                text.text: qsTr("Sources")
+                filter: TreeComponentsPanel.Type.Sources
+            }
+
+            TreeComponentCategory {
+                text.text: qsTr("Effects")
+                filter: TreeComponentsPanel.Type.Effects
+            }
+        }
+    }
+
+    Item {
+        property real widthOffset: 50
+
+        id: panelContent
+        anchors.left: panelCategory.right
+        anchors.top: parent.top
+        width: panelContentWidth
+        height: parent.height
+
+        Rectangle {
+            id: panelContentBackground
+            width: parent.width + panelContent.widthOffset
+            height: parent.height
+            color: Qt.darker(themeManager.foregroundColor, 1.1)
+        }
 
         MouseArea {
             anchors.fill: parent
-
-            onPressed: {
-                open()
-            }
-
+            onPressedChanged: forceActiveFocus()
+            onWheel: {} // Steal wheel events
         }
 
-    }
-    */
+        ListView {
+            id: treeComponentsListView
+            anchors.centerIn: parent
+            width: parent.width
+            height: parent.height * 0.95
+            clip: true
+            spacing: 20
+            model: PluginTableModelProxy {
+                id: pluginTableProxy
+                sourceModel: pluginTable
+                tagsFilter: {
+                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Void)
+                        return -1
+                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Sources)
+                        return PluginTableModel.Tags.Synth | PluginTableModel.Tags.Sampler | PluginTableModel.Tags.Piano
+                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Effects)
+                        return PluginTableModel.Tags.Analyzer | PluginTableModel.Tags.Delay | PluginTableModel.Tags.Distortion |
+                               PluginTableModel.Tags.EQ | PluginTableModel.Tags.Filter | PluginTableModel.Tags.Distortion
+                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Mixer)
+                        return PluginTableModel.Tags.Mastering
+                    return 0;
 
-    Item {
-        property real widthContentRatio: 0.6
-        property real xClose: parent.width - panelCategory.width
-        property real xOpen: parent.width - width
-
-        id: panel
-        anchors.verticalCenter: parent.verticalCenter
-        width: parent.width * 0.15
-        height: parent.height * 0.9
-        x: xClose
-
-        Item {
-            id: panelCategory
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            width: parent.width - parent.width * panel.widthContentRatio
-            height: parent.height
-
-
-            Column {
-                height: parent.height
-                width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                //spacing: parent.height * 0.005
-
-                TreeComponentCategory {
-                    text.text: qsTr("Mixer")
-                    filter: TreeComponentsPanel.Type.Mixer
                 }
-
-                TreeComponentCategory {
-                    text.text: qsTr("Sources")
-                    filter: TreeComponentsPanel.Type.Sources
-                }
-
-                TreeComponentCategory {
-                    text.text: qsTr("Effects")
-                    filter: TreeComponentsPanel.Type.Effects
-                }
-            }
-        }
-
-        Item {
-            property real widthOffset: 50
-
-            id: panelContent
-            anchors.left: panelCategory.right
-            anchors.top: parent.top
-            width: parent.width * panel.widthContentRatio
-            height: parent.height
-
-            Rectangle {
-                id: panelContentBackground
-                width: parent.width + panelContent.widthOffset
-                height: parent.height
-                color: Qt.darker(themeManager.foregroundColor, 1.1)
+                //nameFilter: pluginsForeground.currentSearchText
             }
 
-            MouseArea {
-                anchors.fill: parent
-                onPressedChanged: forceActiveFocus()
-                onWheel: {} // Steal wheel events
-            }
-
-            ListView {
-                id: treeComponentsListView
-                anchors.centerIn: parent
-                width: parent.width
-                height: parent.height * 0.95
-                clip: true
-                spacing: 20
-                model: PluginTableModelProxy {
-                    id: pluginTableProxy
-                    sourceModel: pluginTable
-                    tagsFilter: {
-                        if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Sources)
-                            return PluginTableModel.Tags.Synth | PluginTableModel.Tags.Sampler | PluginTableModel.Tags.Piano
-                        if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Effects)
-                            return PluginTableModel.Tags.Analyzer | PluginTableModel.Tags.Delay | PluginTableModel.Tags.Distortion |
-                                   PluginTableModel.Tags.EQ | PluginTableModel.Tags.Filter | PluginTableModel.Tags.Distortion
-                        if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Mixer)
-                            return PluginTableModel.Tags.Mastering
-                        return 0;
-
-                    }
-                    //nameFilter: pluginsForeground.currentSearchText
-                }
-
-                delegate: TreeComponentDelegate {
-                    width: treeComponentsListView.width
-                    height: width
-                }
+            delegate: TreeComponentDelegate {
+                width: treeComponentsListView.width
+                height: width
             }
         }
     }
+
 }

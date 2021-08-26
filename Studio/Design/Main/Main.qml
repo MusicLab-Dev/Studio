@@ -17,6 +17,7 @@ import "../Modules"
 import "../Workspaces"
 import "../Export"
 import "../Common"
+import "../KeyboardShortcuts"
 
 Window {
     function urlToPath(urlString) {
@@ -59,11 +60,14 @@ Window {
                 scheduler.analysisTickRate = value
             else if (id === "outputDevice" || id === "sampleRate" || id === "blockSize" || id === "cachedAudioFrames")
                 scheduler.reloadAudioSpecs()
+            else if (id === "language")
+                app.updateTranslations()
         }
     }
 
     ThemeManager {
         property color semiAccentColor: "#338DCF" // @todo add this to ThemeManager
+        property color popupDropShadow: "#80000000"
 
         id: themeManager
         theme: ThemeManager.Dark
@@ -118,5 +122,11 @@ Window {
         anchors.fill: parent
 
         id: exportManager
+    }
+
+    KeyboardShortcutsView {
+        anchors.fill: parent
+
+        id: keyboardShortcutsView
     }
 }

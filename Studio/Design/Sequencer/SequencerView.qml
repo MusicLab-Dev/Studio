@@ -218,7 +218,7 @@ ColumnLayout {
                 contentView.placementArea.resetSelection()
             }
         }
-   }
+    }
 
     FMDebugWindow {
         node: sequencerView.node

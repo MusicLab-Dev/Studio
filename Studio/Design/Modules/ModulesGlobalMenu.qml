@@ -91,7 +91,7 @@ DefaultMenuButton {
             title: "Open Template..."
 
             Action {
-                text: "Basic"
+                text: qsTr("Basic")
                 onTriggered: {
                     menuButton.load(":/Templates/TEMPLATE_basic")
                     app.project.path = ""
@@ -99,7 +99,7 @@ DefaultMenuButton {
             }
 
             Action {
-                text: "Demo"
+                text: qsTr("Demo")
                 onTriggered: {
                     menuButton.load(":/Templates/TEMPLATE_demo")
                     app.project.path = ""
@@ -110,6 +110,11 @@ DefaultMenuButton {
         Action {
             text: qsTr("Preferences")
             onTriggered: menuButton.settings()
+        }
+
+        Action {
+            text: qsTr("Keyboard shortcuts")
+            onTriggered: keyboardShortcutsView.open()
         }
 
         Action {

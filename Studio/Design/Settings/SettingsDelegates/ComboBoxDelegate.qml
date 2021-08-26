@@ -9,9 +9,10 @@ Row {
 
     DefaultText {
         text: name
-        width: Math.max(parent.width * 0.15, 150)
+        width: Math.max(parent.width * 0.25, 150)
         height: parent.height
         color: "#295F8B"
+        horizontalAlignment: Text.AlignLeft
     }
 
     DefaultComboBox {
