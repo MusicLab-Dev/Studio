@@ -13,7 +13,7 @@ Rectangle {
     property int tags: 0
 
     width: parent.width
-    height: parent.height * 0.1
+    height: panelCategoryHeight
     color: treeComponentsPanel.filter === filter ? Qt.darker(themeManager.foregroundColor, 1.1) : mouseArea.containsMouse ? themeManager.accentColor : Qt.lighter(themeManager.foregroundColor, 1.2)
 
     DefaultText {
