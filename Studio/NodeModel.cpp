@@ -283,7 +283,6 @@ bool NodeModel::moveToChildren(NodeModel *target)
 
     if (isAParent(target)) {
         qDebug() << "NodeModel: Cannot move a parent node to children";
-        moveToParent(target);
         return false;
     }
 
@@ -302,13 +301,14 @@ bool NodeModel::moveToChildren(NodeModel *target)
             parentNode->_children.erase(parentNode->_children.begin() + targetIndex);
             parentNode->endRemoveRows();
 
+            audioPtr->setParent(audioParent);
+            target->setParent(this);
+
             // Insert target into children
             beginInsertRows(QModelIndex(), count(), count());
             audioNode()->children().push(std::move(audioPtr));
             _children.push(std::move(ptr));
             endInsertRows();
-
-            target->setParent(this);
         },
         [this, hasPaused] {
             if (hasPaused) {
