@@ -7,6 +7,7 @@ import Scheduler 1.0
 
 import "../Default"
 import "../Common"
+import "../Help"
 
 Rectangle {
     property alias projectPreview: projectPreview
@@ -27,6 +28,14 @@ Rectangle {
         anchors.margins: 10
         color: "#474747"
         clip: true
+
+        HelpArea {
+            name: qsTr("Project Preview")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Left | HelpHandler.Position.Top
+            externalDisplay: true
+            spacing: 20
+        }
 
         ProjectPreview {
             id: projectPreview
@@ -59,6 +68,13 @@ Rectangle {
         height: parent.height
         spacing: 10
         anchors.rightMargin: 10
+
+        HelpArea {
+            name: qsTr("Player Area")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Left | HelpHandler.Position.Top
+            externalDisplay: true
+        }
 
         TimerView {
             Layout.alignment: Qt.AlignVCenter

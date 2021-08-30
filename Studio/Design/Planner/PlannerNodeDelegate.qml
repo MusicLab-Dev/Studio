@@ -4,6 +4,7 @@ import NodeModel 1.0
 
 import "../Default"
 import "../Common"
+import "../Help"
 
 Item {
     property NodeModel node: nodeInstance.instance

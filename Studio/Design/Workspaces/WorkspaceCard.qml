@@ -105,7 +105,6 @@ Rectangle {
 
                 onReleased: {
                     var tmpModel = workspaceView.workspacesModel
-                    console.log(tmpModel)
                     tmpModel.splice(index, 1)
                     app.settings.set("workspacePaths", tmpModel);
                     app.settings.saveValues()

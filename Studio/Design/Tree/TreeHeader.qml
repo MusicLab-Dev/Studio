@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Default"
+import "../Help"
 
 Rectangle {
     color: themeManager.foregroundColor
@@ -28,5 +29,12 @@ Rectangle {
                 null
             );
         }
+    }
+
+    DefaultTextButton {
+        text: "?"
+        onReleased: helpHandler.open()
+        width: 50
+        height: 50
     }
 }

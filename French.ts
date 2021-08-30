@@ -28,6 +28,19 @@
     </message>
 </context>
 <context>
+    <name>ContentViewTimeline</name>
+    <message>
+        <location filename="Studio/Design/Common/ContentViewTimeline.qml" line="48"/>
+        <source>Timeline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Common/ContentViewTimeline.qml" line="49"/>
+        <source>Change the project name on clicked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DefaultCheckBox</name>
     <message>
         <location filename="Studio/Design/Default/DefaultCheckBox.qml" line="12"/>
@@ -113,9 +126,8 @@
         <translation>couleur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/GlobalTextField.qml" line="104"/>
         <source>Please choose a color</source>
-        <translation>Veuillez choisir une couleur</translation>
+        <translation type="vanished">Veuillez choisir une couleur</translation>
     </message>
 </context>
 <context>
@@ -269,9 +281,8 @@
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="91"/>
         <source>Open Template...</source>
-        <translation>Ouvrir un template...</translation>
+        <translation type="vanished">Ouvrir un template...</translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="94"/>
@@ -354,6 +365,55 @@
     </message>
 </context>
 <context>
+    <name>PlannerContentView</name>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="83"/>
+        <source>Change the project name on clicked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="82"/>
+        <source>Grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PlannerFooter</name>
+    <message>
+        <source>Description</source>
+        <translation type="obsolete">Description</translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="24"/>
+        <source>Planner Footer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="25"/>
+        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="94"/>
+        <source>Change the project name on clicked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="93"/>
+        <source>Partitions preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PlannerHeader</name>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerHeader.qml" line="34"/>
+        <source>Planner Header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerHeader.qml" line="35"/>
+        <source>Change the project name on clicked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PlannerNodeInstances</name>
     <message>
         <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="34"/>
@@ -405,9 +465,13 @@
 <context>
     <name>PlannerView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerView.qml" line="30"/>
+        <location filename="Studio/Design/Planner/PlannerView.qml" line="31"/>
         <source>Planner</source>
         <translation>Planificateur</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="obsolete">Description</translation>
     </message>
 </context>
 <context>
@@ -665,27 +729,74 @@
 <context>
     <name>TreeComponentsPanel</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="34"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="27"/>
+        <source>Tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="40"/>
         <source>Mixer</source>
         <translation>Mixeur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="39"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="45"/>
         <source>Sources</source>
         <translation>Sources</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="44"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="50"/>
         <source>Effects</source>
         <translation>Effets</translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="28"/>
+        <source>Description</source>
+        <translation type="unfinished">Description</translation>
     </message>
 </context>
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="206"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="148"/>
+        <source>Mastering</source>
+        <translation type="unfinished">Mastering</translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="213"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="217"/>
         <source>Overview</source>
         <translation>Vue d&apos;ensemble</translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="258"/>
+        <source>Partitions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="149"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="218"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="259"/>
+        <source>Description</source>
+        <translation type="unfinished">Description</translation>
+    </message>
+</context>
+<context>
+    <name>TreeFooter</name>
+    <message>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="33"/>
+        <source>Project Preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="34"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="74"/>
+        <source>Description</source>
+        <translation type="unfinished">Description</translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="73"/>
+        <source>Player Area</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -779,9 +890,8 @@
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Workspaces/WorkspacesView.qml" line="155"/>
         <source>Please choose a workspace folder</source>
-        <translation>Veuillez choisir un dossier d&apos;espace de travail</translation>
+        <translation type="vanished">Veuillez choisir un dossier d&apos;espace de travail</translation>
     </message>
 </context>
 </TS>

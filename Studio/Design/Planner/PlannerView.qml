@@ -5,8 +5,9 @@ import ActionsManager 1.0
 
 import "../Default"
 import "../Common"
+import "../Help"
 
-ColumnLayout {
+Item {
     function onNodeDeleted(targetNode) {
         return false
     }
@@ -34,7 +35,6 @@ ColumnLayout {
 
     id: plannerView
     focus: true
-    spacing: 0
 
     Connections {
         target: eventDispatcher
@@ -53,23 +53,38 @@ ColumnLayout {
         function onStopProject(pressed) { if (pressed) player.stop() }
     }
 
-    PlannerHeader {
-        id: plannerHeader
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.12
-        z: 1
+    ColumnLayout {
+        anchors.fill: parent
+
+        PlannerHeader {
+            id: plannerHeader
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.height * 0.12
+            z: 1
+
+            DefaultTextButton {
+                text: "?"
+                onReleased: helpHandler.open()
+                width: 50
+                height: 50
+            }
+        }
+
+        PlannerContentView {
+            id: contentView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+
+        PlannerFooter {
+            id: plannerFooter
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.height * 0.12
+        }
     }
 
-    PlannerContentView {
-        id: contentView
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    PlannerFooter {
-        id: plannerFooter
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.12
+    HelpHandler {
+        id: helpHandler
     }
 
     PlannerNodeMenu {

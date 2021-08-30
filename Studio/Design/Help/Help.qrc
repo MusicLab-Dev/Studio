@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/Help">
+        <file>HelpHandler.qml</file>
+        <file>HelpArea.qml</file>
+    </qresource>
+</RCC>

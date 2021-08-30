@@ -34,9 +34,6 @@ Button {
         fontSizeMode: Text.Fit
         // wrapMode: Text.Wrap
         // elide: Text.ElideRight
-
-        onFontInfoChanged: console.log(width)
-
      }
 
 

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 import "../Default"
 import "../Common"
+import "../Help"
 
 import NodeModel 1.0
 import PartitionModel 1.0
@@ -142,6 +143,12 @@ MouseArea {
             contentView.incrementXOffset(-oldXRatio * (treeSurface.scaledWidth - oldWidth))
             contentView.incrementYOffset(-oldYRatio * (treeSurface.scaledHeight - oldHeight))
         }
+
+        HelpArea {
+            name: qsTr("Mastering")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Top
+        }
     }
 
     TreeSurface {
@@ -157,7 +164,7 @@ MouseArea {
 
     TreeComponentsPanel {
         id: treeComponentsPanel
-        anchors.topMargin: (treeControls.node != null ? treeControls.height : 0)        
+        anchors.topMargin: (treeControls.node != null ? treeControls.height : 0)
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width * 0.15
         height: parent.height * 0.9
@@ -205,6 +212,13 @@ MouseArea {
             font.pixelSize: 30
             text: qsTr("Overview")
             color: overviewMouse.containsMouse ? themeManager.foregroundColor : app.project.master.color
+
+            HelpArea {
+                name: qsTr("Overview")
+                description: qsTr("Description")
+                position: HelpHandler.Position.Bottom
+                externalDisplay: true
+            }
         }
 
     }
@@ -239,6 +253,14 @@ MouseArea {
     PartitionsPreview {
         id: partitionsPreview
         anchors.bottom: parent.bottom
+
+        HelpArea {
+            name: qsTr("Partitions")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Top
+            externalDisplay: true
+            visible: partitionsPreview.visible
+        }
     }
 
     TreeNodeTrashArea {

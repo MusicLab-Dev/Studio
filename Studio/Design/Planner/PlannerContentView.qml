@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Common"
+import "../Help"
 
 import NodeModel 1.0
 import NodeListModel 1.0
@@ -63,8 +64,25 @@ ContentView {
             }
 
             delegate: PlannerNodeDelegate {
+                id: testa
                 showChildren: contentView.showChildren
             }
         }
+    }
+
+//    HelpArea {
+//        name: qsTr("Planner Node Instances")
+//        description: qsTr("Change the project name on clicked")
+//        position: HelpHandler.Position.Top | HelpHandler.Position.Left
+//        anchors.rightMargin: parent.width - contentView.rowHeaderWidth
+//        anchors.bottomMargin: plannerFooter.partitionsPreview.visible ? plannerFooter.partitionsPreview.height : 0
+//    }
+
+    HelpArea {
+        name: qsTr("Grid")
+        description: qsTr("Change the project name on clicked")
+        position: HelpHandler.Position.Top | HelpHandler.Position.Left
+        anchors.leftMargin:  contentView.rowDataWidth
+        anchors.bottomMargin: plannerFooter.partitionsPreview.visible ? plannerFooter.partitionsPreview.height : 0
     }
 }

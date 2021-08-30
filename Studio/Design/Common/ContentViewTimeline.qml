@@ -2,6 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 
+import "../Help"
+
 import AudioAPI 1.0
 
 Item {
@@ -41,6 +43,13 @@ Item {
         clip: true
 
         id: timelineArea
+
+        HelpArea {
+            name: qsTr("Timeline")
+            description: qsTr("Change the project name on clicked")
+            position: HelpHandler.Position.Bottom
+            externalDisplay: true
+        }
 
         MouseArea {
             function getMouseBeatPrecision() {

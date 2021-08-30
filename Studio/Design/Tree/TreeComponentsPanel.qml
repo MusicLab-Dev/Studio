@@ -5,6 +5,7 @@ import QtGraphicalEffects 1.0
 import PluginTableModel 1.0
 
 import "../Default"
+import "../Help"
 
 TreePanel {
     enum Type {
@@ -15,7 +16,6 @@ TreePanel {
         Void
     }
 
-
     Item {
         id: panelCategory
         anchors.left: parent.left
@@ -23,6 +23,12 @@ TreePanel {
         width: panelCategoryWidth
         height: parent.height
 
+        HelpArea {
+            name: qsTr("Tree")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Left | HelpHandler.Position.Top
+            externalDisplay: true
+        }
 
         Column {
             height: parent.height

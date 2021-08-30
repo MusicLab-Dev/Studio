@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 
 import "../Default"
 import "../Common"
+import "../Help"
 
 Rectangle {
     color: themeManager.foregroundColor
@@ -28,5 +29,12 @@ Rectangle {
 
         height: parent.height * 0.75
         width: parent.width * 0.4
+
+        HelpArea {
+            name: qsTr("Planner Header")
+            description: qsTr("Change the project name on clicked")
+            position: HelpHandler.Position.Left
+            externalDisplay: true
+        }
     }
 }

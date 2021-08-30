@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.15
 
 import "../Common"
 import "../Default"
+import "../Help"
 
 import Scheduler 1.0
 
@@ -17,6 +18,12 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
+    }
+
+    HelpArea {
+        name: qsTr("Planner Footer")
+        description: qsTr("Change the project name on clicked")
+        position: HelpHandler.Position.Top | HelpHandler.Position.Left
     }
 
     RowLayout {
@@ -81,5 +88,11 @@ Rectangle {
     PartitionsPreview {
         id: partitionsPreview
         y: -height
+
+        HelpArea {
+            name: qsTr("Partitions preview")
+            description: qsTr("Change the project name on clicked")
+            position: HelpHandler.Position.Top | HelpHandler.Position.Left
+        }
     }
 }
