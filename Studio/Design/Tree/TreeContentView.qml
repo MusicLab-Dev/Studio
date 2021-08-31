@@ -97,7 +97,7 @@ MouseArea {
         else
             treeSurface.resetSelection()
         treeComponentsPanel.close()
-        treeSamplesPanel.close()
+        //treeSamplesPanel.close()
     }
 
     onXOffsetMinChanged: {
@@ -157,15 +157,18 @@ MouseArea {
 
     TreeComponentsPanel {
         id: treeComponentsPanel
-        anchors.topMargin: (treeControls.node != null ? treeControls.height : 0)        
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 20 + (treeControls.node && !treeControls.hide ? treeControls.height : 0)
+        //anchors.verticalCenter: parent.verticalCenter
         width: parent.width * 0.15
-        height: parent.height * 0.9
+        panelCategoryHeight: parent.height * 0.1
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 20 + (partitionsPreview.visible ? partitionsPreview.height : 0)
         xBase: parent.width
         visible: !treeSamplesPanel.launched
     }
 
-    TreeSamplesPanel {
+    /*TreeSamplesPanel {
         id: treeSamplesPanel
         anchors.bottomMargin: partitionsPreview.visible ? partitionsPreview.height : 0
         anchors.verticalCenter: parent.verticalCenter
@@ -173,7 +176,7 @@ MouseArea {
         height: parent.height * 0.9
         xBase: parent.width
         visible: !treeComponentsPanel.launched
-    }
+    }*/
 
     Item {
         anchors.left: parent.left

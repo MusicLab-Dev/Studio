@@ -39,22 +39,33 @@ Rectangle {
         height: 1
     }
 
-    Row {
+    Item {
         id: headerRow
         height: nodeControlsFlow.height
-        spacing: 10
-        padding: 10
+        width: parent.width * 0.12
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
 
         DefaultText {
-            width: contentView.width * 0.1
-            anchors.verticalCenter: parent.verticalCenter
-            horizontalAlignment: Text.AlignLeft
+            anchors.centerIn: parent
+            width: parent.width * 0.8
+            height: parent.height
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             fontSizeMode: Text.HorizontalFit
-            font.pixelSize: 30
+            font.pixelSize: 25
             wrapMode: Text.Wrap
-            text: node ? node.plugin.title : ""
+            text: node ? qsTr(node.plugin.title + "'s controls") : ""
             color: controlsFlow.nodeColor
         }
+    }
+
+    Rectangle {
+        anchors.left: headerRow.right
+        anchors.verticalCenter: parent.verticalCenter
+        width: 2
+        height: parent.height * 0.8
+        color: "black"
     }
 
     Flow {
@@ -64,8 +75,7 @@ Rectangle {
         spacing: 20
         anchors.left: headerRow.right
         anchors.right: closeButton.left
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
+        anchors.leftMargin: parent.width * 0.01
         anchors.verticalCenter: parent.verticalCenter
 
         Repeater {

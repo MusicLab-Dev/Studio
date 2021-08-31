@@ -27,6 +27,7 @@ Item {
     property real durationAnimation: 300
     property real widthContentRatio: 0.6
     property real panelCategoryWidth: width - width * widthContentRatio
+    property real panelCategoryHeight: 100
     property real panelContentWidth: width * widthContentRatio
     property real xBase: 0
     property real xClose: xBase - panelCategoryWidth
