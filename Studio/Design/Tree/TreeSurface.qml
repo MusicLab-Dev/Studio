@@ -84,9 +84,26 @@ Item {
     property int selectionCount: 0
     property NodeModel last: null
 
+    // Animations
+    property int animationUpdateCount: 0
+
     id: treeSurface
     width: Math.max(masterNodeDelegate.width, parent.width)
     height: Math.max(masterNodeDelegate.height, parent.height)
+
+    Timer {
+        id: animationUpdateTimer
+        repeat: true
+        running: player.isPlayerRunning
+        interval: 40
+
+        onRunningChanged: treeSurface.animationUpdateCount = 0
+
+        onTriggered: {
+            if (++treeSurface.animationUpdateCount < 0)
+                treeSurface.animationUpdateCount = 0
+        }
+    }
 
     TreeNodeDelegate {
         id: masterNodeDelegate

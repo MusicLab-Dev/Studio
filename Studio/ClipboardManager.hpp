@@ -65,11 +65,11 @@ public slots:
         QGuiApplication::clipboard()->setText(data);
     }
 
-    /** @brief Clear the clipboard */
-    void clear(void) noexcept
-    {
-        QGuiApplication::clipboard()->clear();
-    }
+    // /** @brief Clear the clipboard */
+    // void clear(void) noexcept
+    // {
+    //     QGuiApplication::clipboard()->clear();
+    // }
 
     /** @brief Wrapper JSON */
     QString notesToJson(const QVector<Note> &notes) noexcept;

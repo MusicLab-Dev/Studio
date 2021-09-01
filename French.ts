@@ -681,7 +681,7 @@
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="206"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="209"/>
         <source>Overview</source>
         <translation>Vue d&apos;ensemble</translation>
     </message>
@@ -689,8 +689,8 @@
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="242"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="272"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="262"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="291"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>

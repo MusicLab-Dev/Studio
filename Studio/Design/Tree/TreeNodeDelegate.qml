@@ -38,6 +38,16 @@ Column {
             anchors.bottom: soundMeter.top
             anchors.horizontalCenter: parent.horizontalCenter
             visible: nodeDelegate.parentNode && !nodeInstanceBackground.drag.active
+
+            Rectangle {
+                y: parent.height - 5 - (parent.height / 25) * (treeSurface.animationUpdateCount % 25)
+                x: -5
+                width: 11
+                height: 11
+                radius: 5
+                color: verticalLinkUp.color
+                visible: treeView.player.isPlayerRunning
+            }
         }
 
         Rectangle {
@@ -48,6 +58,16 @@ Column {
             anchors.horizontalCenter: parent.horizontalCenter
             width: 3
             visible: childrenRepeater.count && !nodeInstanceBackground.drag.active
+
+            Rectangle {
+                y: parent.height - 5 - (parent.height / 25) * (treeSurface.animationUpdateCount % 25)
+                x: -5
+                width: 11
+                height: 11
+                radius: 5
+                color: verticalLinkDown.color
+                visible: treeView.player.isPlayerRunning
+            }
         }
 
         SoundMeter {
@@ -259,7 +279,6 @@ Column {
                 border.width: 4
             }
 
-
             Item {
                 anchors.top: parent.top
                 anchors.topMargin: parent.height * 0.2
@@ -294,6 +313,15 @@ Column {
                 onClicked: pluginsView.prepareInsertNode(nodeDelegate.node)
             }
 
+            Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: parent.height * 0.02
+                width: height
+                height: Math.min(parent.height / 2, 35)
+                source: "qrc:/Assets/Plugins/" + nodeDelegate.node.plugin.title + ".png"
+            }
+
             DefaultImageButton {
                 readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
 
@@ -321,11 +349,31 @@ Column {
         color: verticalLinkDown.color
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: childrenRow.leftMargin
-        anchors.rightMargin: childrenRow.rightMargin
+        anchors.leftMargin: childrenRow.leftMargin - 1.5
+        anchors.rightMargin: childrenRow.rightMargin - 1.5
         height: 3
         visible: childrenRepeater.count > 1
         // When visible is not turned off the tree is perfectly symetric (on selection) but I don't know why
+
+        Rectangle {
+            x: -5 + (parent.width / (2 * 25)) * (treeSurface.animationUpdateCount % 25)
+            y: -5
+            width: 11
+            height: 11
+            radius: 5
+            color: horizontalLinkDown.color
+            visible: treeView.player.isPlayerRunning
+        }
+
+        Rectangle {
+            x: parent.width - 5 - (parent.width / (2 * 25)) * (treeSurface.animationUpdateCount % 25)
+            y: -5
+            width: 11
+            height: 11
+            radius: 5
+            color: horizontalLinkDown.color
+            visible: treeView.player.isPlayerRunning
+        }
     }
 
     Row {
