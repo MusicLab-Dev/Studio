@@ -95,7 +95,7 @@ Item {
         id: animationUpdateTimer
         repeat: true
         running: player.isPlayerRunning
-        interval: 40
+        interval: 66
 
         onRunningChanged: treeSurface.animationUpdateCount = 0
 

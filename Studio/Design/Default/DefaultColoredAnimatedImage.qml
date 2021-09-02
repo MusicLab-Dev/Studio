@@ -11,7 +11,7 @@ Image {
     ColorOverlay {
         id: overlay
         anchors.fill: parent
-        cached: true
+        cached: false
 
         source: AnimatedImage {
             id: image

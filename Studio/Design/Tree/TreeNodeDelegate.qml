@@ -326,7 +326,7 @@ Column {
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
                 scaleFactor: 1
-                playing: hovered || treeView.player.isPlayerRunning
+                playing: hovered || (treeView.visible && treeView.player.isPlayerRunning)
 
                 onClicked: {
                     treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
