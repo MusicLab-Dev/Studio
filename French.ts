@@ -689,8 +689,8 @@
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="262"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="291"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="265"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="292"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -698,42 +698,42 @@
 <context>
     <name>TreeNodeMenu</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="41"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="44"/>
         <source>Open in planner</source>
         <translation>Ouvrir dans le planificateur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="52"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="55"/>
         <source>Open selection in planner</source>
         <translation>Ouvrir la sélection dans le planificateur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="65"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="68"/>
         <source>Open all children in planner</source>
         <translation>Ouvrir tous les enfants dans le planificateur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="84"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="87"/>
         <source>Edit name</source>
         <translation>Changer le nom</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="95"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="98"/>
         <source>Add child</source>
         <translation>Ajouter un enfant</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="105"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="109"/>
         <source>Add parent</source>
         <translation>Ajouter un parent</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="116"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="120"/>
         <source>Duplicate (only plugin)</source>
         <translation>Dupliquer (uniquement plugin)</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="131"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="135"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
