@@ -24,6 +24,7 @@ class PluginModel : public QAbstractListModel
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+    Q_PROPERTY(Flags flags READ flags NOTIFY flagsChanged)
 
 public:
     /** @brief Roles of each controls */
@@ -41,6 +42,19 @@ public:
         ShortName,
         UnitName
     };
+
+    /** @brief Flags of IPluginFactory::Flags */
+    enum class Flags : int {
+        None                    = static_cast<int>(Audio::IPluginFactory::Flags::None),
+        AudioInput              = static_cast<int>(Audio::IPluginFactory::Flags::AudioInput),
+        AudioOutput             = static_cast<int>(Audio::IPluginFactory::Flags::AudioOutput),
+        NoteInput               = static_cast<int>(Audio::IPluginFactory::Flags::NoteInput),
+        NoteOutput              = static_cast<int>(Audio::IPluginFactory::Flags::NoteOutput),
+        SingleExternalInput     = static_cast<int>(Audio::IPluginFactory::Flags::SingleExternalInput),
+        MultipleExternalInputs  = static_cast<int>(Audio::IPluginFactory::Flags::MultipleExternalInputs),
+        NoChildren              = static_cast<int>(Audio::IPluginFactory::Flags::NoChildren)
+    };
+    Q_ENUM(Flags)
 
     /** @brief Parameter type */
     enum class ParamType : int {
@@ -88,6 +102,10 @@ public:
     /** @brief Get the path property */
     [[nodiscard]] QString path(void) const noexcept;
 
+    /** @brief Get the path property */
+    [[nodiscard]] Flags flags(void) const noexcept
+        { return static_cast<Flags>(_data->getFlags()); }
+
     /** @brief Get underlying audio plugin */
     [[nodiscard]] Audio::IPlugin *audioPlugin(void) noexcept { return _data; }
     [[nodiscard]] const Audio::IPlugin *audioPlugin(void) const noexcept { return _data; }
@@ -112,6 +130,9 @@ signals:
 
     /** @brief Notify that the path has changed */
     void pathChanged(void);
+
+    /** @brief Notify that flags property has changed */
+    void flagsChanged(void);
 
     /** @brief Notify that a control has changed */
     void controlValueChanged(const ParamID paramID);

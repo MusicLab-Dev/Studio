@@ -14,6 +14,9 @@ Column {
     property bool isSelected: false
     property bool inMultipleSelection: false
 
+    // Flags
+    readonly property bool noChildrenFlag: node ? node.plugin.flags & PluginModel.Flags.NoChildren : false
+
     // Colors
     readonly property color color: node ? node.color : "black"
     readonly property color darkColor: Qt.darker(color, 1.25)
@@ -104,7 +107,7 @@ Column {
 
             onClicked: {
                 if (mouse.button === Qt.RightButton) {
-                    treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate.node)
+                    treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
                     treeNodeMenu.x = mouseX
                     treeNodeMenu.y = mouseY
                 } else {
@@ -131,7 +134,7 @@ Column {
             }
 
             onPressAndHold: {
-                treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate.node)
+                treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
                 treeNodeMenu.x = mouseX
                 treeNodeMenu.y = mouseY
             }
@@ -279,61 +282,70 @@ Column {
                 border.width: 4
             }
 
-            Item {
+            DefaultText {
+                id: nodeName
                 anchors.top: parent.top
-                anchors.topMargin: parent.height * 0.2
+                anchors.topMargin: nodeInstanceBackgroundRect.border.width * 2
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width * 0.75
-                height: parent.height * 0.4
-                DefaultText {
-                    anchors.fill: parent
-
-                    text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("Error")
-                    color: nodeDelegate.accentColor
-                    fontSizeMode: Text.Fit
-                    font.pointSize: 20
-                    elide: Text.ElideRight
-                }
+                width: parent.width * 0.9
+                height: parent.height * 0.45
+                text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("Error")
+                color: nodeDelegate.accentColor
+                fontSizeMode: Text.Fit
+                font.pointSize: 20
+                elide: Text.ElideRight
             }
 
             DefaultImageButton {
                 anchors.left: parent.left
-                anchors.leftMargin: parent.width * 0.02
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: parent.height * 0.02
-                width: height
-                height: Math.min(parent.height / 2, 35)
+                anchors.leftMargin: nodeInstanceBackgroundRect.border.width * 2
+                anchors.verticalCenter: factoryImageButton.verticalCenter
+                width: factoryImageButton.height
+                height: factoryImageButton.height
                 source: "qrc:/Assets/Plus.png"
                 showBorder: false
                 scaleFactor: 1
                 colorDefault: nodeDelegate.accentColor
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
+                visible: !nodeDelegate.noChildrenFlag
 
                 onClicked: pluginsView.prepareInsertNode(nodeDelegate.node)
             }
 
-            Image {
+            PluginFactoryImageButton {
+                id: factoryImageButton
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: nodeName.bottom
+                anchors.topMargin: nodeInstanceBackgroundRect.border.width
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: parent.height * 0.02
+                anchors.bottomMargin: nodeInstanceBackgroundRect.border.width * 2
                 width: height
-                height: Math.min(parent.height / 2, 35)
-                source: "qrc:/Assets/Plugins/" + nodeDelegate.node.plugin.title + ".png"
+                name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
+                colorDefault: nodeDelegate.accentColor
+                colorHovered: nodeDelegate.hoveredColor
+                colorOnPressed: nodeDelegate.pressedColor
+                scaleFactor: 1
+                playing: hovered || treeView.player.isPlayerRunning
+
+                onClicked: {
+                    treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
+                    treeNodeMenu.x = pressX
+                    treeNodeMenu.y = pressY
+                }
             }
 
             DefaultImageButton {
                 readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
 
                 anchors.right: parent.right
-                anchors.rightMargin: parent.width * 0.02
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: parent.height * 0.02
-                width: height
-                height: Math.min(parent.height / 2, 35)
+                anchors.rightMargin: nodeInstanceBackgroundRect.border.width * 2
+                anchors.verticalCenter: factoryImageButton.verticalCenter
+                width: factoryImageButton.height
+                height: factoryImageButton.height
                 source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
                 showBorder: false
-                scaleFactor: 0.8
+                scaleFactor: 1
                 colorDefault: nodeDelegate.accentColor
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor

@@ -3,6 +3,7 @@
         <file>DefaultToolTip.qml</file>
         <file>DefaultCheckBox.qml</file>
         <file>DefaultColoredImage.qml</file>
+        <file>DefaultColoredAnimatedImage.qml</file>
         <file>DefaultComboBox.qml</file>
         <file>DefaultFoldButton.qml</file>
         <file>DefaultMenuButton.qml</file>
@@ -12,6 +13,7 @@
         <file>DefaultTextButton.qml</file>
         <file>DefaultTextInput.qml</file>
         <file>DefaultImageButton.qml</file>
+        <file>DefaultAnimatedImageButton.qml</file>
         <file>DefaultRadioButton.qml</file>
         <file>DefaultTextBox.qml</file>
         <file>DefaultIntegerTextBox.qml</file>

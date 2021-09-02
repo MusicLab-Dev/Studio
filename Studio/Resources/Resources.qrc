@@ -50,18 +50,10 @@
         <file>Assets/Free.png</file>
         <file>Assets/BoardButton.png</file>
         <file>Assets/BoardPotentiometer.png</file>
-        <file>Assets/Plugins/Default.png</file>
-        <file>Assets/Plugins/Mixer.png</file>
-        <file>Assets/Plugins/Oscillator.png</file>
-        <file>Assets/Plugins/LambdaFilter.png</file>
-        <file>Assets/Plugins/BandFilter.png</file>
-        <file>Assets/Plugins/BasicFilter.png</file>
-        <file>Assets/Plugins/GammaEqualizer.png</file>
-        <file>Assets/Plugins/Equalizer.png</file>
-        <file>Assets/Plugins/Delay.png</file>
-        <file>Assets/Plugins/Sampler.png</file>
-        <file>Assets/Plugins/Arpeggiator.png</file>
-        <file>Assets/Plugins/Kick.png</file>
+        <file>Assets/Plugins/Mixer.gif</file>
+        <file>Assets/Plugins/Oscillator.gif</file>
+        <file>Assets/Plugins/Delay.gif</file>
+        <file>Assets/Plugins/Sampler.gif</file>
         <file>Templates/SettingsModel.json</file>
         <file>Templates/TEMPLATE_basic</file>
         <file>Assets/presse-papiers.png</file>

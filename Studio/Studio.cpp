@@ -75,6 +75,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<QVector<Note>>("QVector<Note>");
     qRegisterMetaType<QVector<PartitionInstance>>("QVector<PartitionInstance>");
     qRegisterMetaType<QVector<NodeModel *>>("QVector<NodeModel *>");
+    qRegisterMetaType<PluginModel::Flags>("PluginModel::Flags");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");

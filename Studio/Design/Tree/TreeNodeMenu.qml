@@ -6,24 +6,27 @@ import NodeModel 1.0
 import "../Default"
 
 DefaultMenu {
-    property var rootParent: null
-    property var targetItem: null
-    property NodeModel targetNode: null
-    property int targetNodeIndex: 0
-
-    function openMenu(newParent, node) {
+    function openMenu(newParent, nodeDelegate) {
         targetItem = newParent
-        targetNode = node
-        targetNodeIndex = node.parentNode ? node.parentNode.getChildIndex(node) : -1
+        targetNodeDelegate = nodeDelegate
+        targetNode = nodeDelegate.node
+        targetNodeIndex = targetNode.parentNode ? targetNode.parentNode.getChildIndex(targetNode) : -1
         open()
     }
 
     function closeMenu() {
         targetItem = null
+        targetNodeDelegate = null
         targetNode = null
         targetNodeIndex = 0
         close()
     }
+
+    property var rootParent: null
+    property var targetItem: null
+    property var targetNodeDelegate: null
+    property NodeModel targetNode: null
+    property int targetNodeIndex: 0
 
     Component.onCompleted: rootParent = parent
 
@@ -93,6 +96,7 @@ DefaultMenu {
 
     Action {
         text: qsTr("Add child")
+        enabled: targetNodeDelegate ? !targetNodeDelegate.noChildrenFlag : false
 
         onTriggered: {
             var target = targetNode

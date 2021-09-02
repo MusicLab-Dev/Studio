@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import CursorManager 1.0
 
 Button {
+    property alias playing: image.playing
     property alias source: image.source
     property alias fillMode: image.fillMode
     property color colorOnPressed: "#1A6DAA"
@@ -37,7 +38,7 @@ Button {
         border.color: "white"
     }
 
-    indicator: DefaultColoredImage {
+    indicator: DefaultColoredAnimatedImage {
         id: image
         anchors.centerIn: control
         width: control.width * scaleFactor

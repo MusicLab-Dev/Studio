@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Default"
+import "../Common"
 
 import PluginTableModel 1.0
 import CursorManager 1.0
@@ -43,12 +44,14 @@ GridView {
             x: 7
             y: 10
 
-            Image {
+            PluginFactoryImage {
+                id: pluginIcon
                 width: parent.width / 1.5
                 height: width
                 x: parent.width / 2 - width / 2
                 y: parent.height / 2 - height / 2
-                source: factoryName ? "qrc:/Assets/Plugins/" + factoryName + ".png" : "qrc:/Assets/Plugins/Default.png"
+                name: factoryName
+                playing: pluginsSquareComponentArea.containsMouse
             }
         }
 
