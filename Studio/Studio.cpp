@@ -68,6 +68,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<PartitionInstancesAnalysis>("PartitionInstancesAnalysis");
     qRegisterMetaType<BeatRange>("BeatRange");
     qRegisterMetaType<Note>("Note");
+    qRegisterMetaType<GPoint>("GPoint");
     qRegisterMetaType<NoteEvent>("NoteEvent");
     qRegisterMetaType<VolumeCache>("VolumeCache");
     qRegisterMetaType<PartitionInstance>("PartitionInstance");
