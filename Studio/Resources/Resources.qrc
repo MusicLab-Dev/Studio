@@ -58,5 +58,8 @@
         <file>Assets/Plugins/Oscillator.gif</file>
         <file>Assets/Plugins/Delay.gif</file>
         <file>Assets/Plugins/Sampler.gif</file>
+        <file>Assets/Plugins/Cutoff Filter.gif</file>
+        <file>Assets/Plugins/Band Filter.gif</file>
+        <file>Assets/Plugins/Piano.gif</file>
     </qresource>
 </RCC>
