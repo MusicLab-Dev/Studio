@@ -15,6 +15,10 @@ Image {
 
         source: AnimatedImage {
             id: image
+
+            onPlayingChanged: {
+                currentFrame = 0
+            }
         }
     }
 }

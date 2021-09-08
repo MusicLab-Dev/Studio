@@ -61,5 +61,7 @@
         <file>Assets/Plugins/Cutoff Filter.gif</file>
         <file>Assets/Plugins/Band Filter.gif</file>
         <file>Assets/Plugins/Piano.gif</file>
+        <file>Assets/Plugins/Arpeggiator.gif</file>
+        <file>Assets/Plugins/Equalizer.gif</file>
     </qresource>
 </RCC>
