@@ -2,10 +2,13 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
 
+import "../Default"
 import "../Common"
 
 import NodeModel 1.0
 import PluginTableModel 1.0
+import PluginModel 1.0
+import ThemeManager 1.0
 
 Item {
 
@@ -110,6 +113,20 @@ Item {
         )
     }
 
+    function tagsToColor(tags) {
+        if (tags & PluginModel.Tags.Instrument) {
+            return themeManager.getColorFromSubChain(ThemeManager.SubChain.Blue, blueColorIndex++)
+        } else if (tags & PluginModel.Tags.Effect) {
+            return themeManager.getColorFromSubChain(ThemeManager.SubChain.Red, redColorIndex++)
+        } else {
+            return themeManager.getColorFromSubChain(ThemeManager.SubChain.Green, greenColorIndex++)
+        }
+    }
+
+    property int redColorIndex: 0
+    property int greenColorIndex: 0
+    property int blueColorIndex: 0
+
     property var acceptedCallback: function() {}
     property var canceledCallback: function() {}
 
@@ -147,10 +164,13 @@ Item {
     ContentPopup {
         id: pluginsWindow
 
-        PluginsViewTitle {
+        DefaultText {
             id: pluginsViewTitle
             x: (pluginsForeground.width + (parent.width - pluginsForeground.width) / 2) - width / 2
             y: height
+            text: qsTr("Plugins")
+            color: "lightgrey"
+            font.pointSize: 34
         }
 
         TextRoundedButton {

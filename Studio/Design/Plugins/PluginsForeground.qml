@@ -2,35 +2,30 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
-import PluginTableModel 1.0
+import PluginModel 1.0
 
 import "../Default"
 
 Rectangle {
     readonly property var filterNames: [
-        qsTr("Effect"),
-        qsTr("Analyzer"),
-        qsTr("Delay"),
-        qsTr("Distortion"),
-        qsTr("Dynamics"),
-        qsTr("EQ"),
-        qsTr("Filter"),
-        qsTr("Spatial"),
-        qsTr("Generator"),
-        qsTr("Mastering"),
-        qsTr("Modulation"),
-        qsTr("PitchShift"),
-        qsTr("Restoration"),
-        qsTr("Reverb"),
-        qsTr("Surround"),
-        qsTr("Tools"),
-        qsTr("Network"),
-        qsTr("Drum"),
-        qsTr("Instrument"),
-        qsTr("Piano"),
-        qsTr("Sampler"),
-        qsTr("Synth"),
-        qsTr("External")
+        [
+            qsTr("Group"),
+            qsTr("Mastering"),
+            qsTr("Sequencer")
+        ],
+        [
+            qsTr("Instrument"),
+            qsTr("Synth"),
+            qsTr("Drum"),
+            qsTr("Sampler")
+        ],
+        [
+            qsTr("Effect"),
+            qsTr("Filter"),
+            qsTr("Reverb"),
+            qsTr("Delay"),
+            qsTr("Distortion")
+        ]
     ]
     property alias currentSearchText: searchText.text
 
@@ -82,29 +77,24 @@ Rectangle {
             }
 
             model: [
-                PluginTableModel.Tags.Effect,
-                PluginTableModel.Tags.Analyzer,
-                PluginTableModel.Tags.Delay,
-                PluginTableModel.Tags.Distortion,
-                PluginTableModel.Tags.Dynamics,
-                PluginTableModel.Tags.EQ,
-                PluginTableModel.Tags.Filter,
-                PluginTableModel.Tags.Spatial,
-                PluginTableModel.Tags.Generator,
-                PluginTableModel.Tags.Mastering,
-                PluginTableModel.Tags.Modulation,
-                PluginTableModel.Tags.PitchShift,
-                PluginTableModel.Tags.Restoration,
-                PluginTableModel.Tags.Reverb,
-                PluginTableModel.Tags.Surround,
-                PluginTableModel.Tags.Tools,
-                PluginTableModel.Tags.Network,
-                PluginTableModel.Tags.Drum,
-                PluginTableModel.Tags.Instrument,
-                PluginTableModel.Tags.Piano,
-                PluginTableModel.Tags.Sampler,
-                PluginTableModel.Tags.Synth,
-                PluginTableModel.Tags.External
+                [
+                    PluginModel.Tags.Group,
+                    PluginModel.Tags.Mastering,
+                    PluginModel.Tags.Sequencer
+                ],
+                [
+                    PluginModel.Tags.Instrument,
+                    PluginModel.Tags.Synth,
+                    PluginModel.Tags.Drum,
+                    PluginModel.Tags.Sampler
+                ],
+                [
+                    PluginModel.Tags.Effect,
+                    PluginModel.Tags.Filter,
+                    PluginModel.Tags.Reverb,
+                    PluginModel.Tags.Delay,
+                    PluginModel.Tags.Distortion
+                ]
             ]
 
             delegate: Row {
@@ -112,7 +102,7 @@ Rectangle {
 
                 DefaultCheckBox {
                     id: foregroundCheckBox
-                    text: pluginsForeground.filterNames[index]
+                    text: pluginsForeground.filterNames[index][0]
                     checked: false
                     width: parent.width * 0.85
                     height: 20
@@ -121,9 +111,9 @@ Rectangle {
                     enabledColor: "black"
                     onCheckedChanged: {
                         if (checked)
-                            pluginsView.currentFilter |= modelData
+                            pluginsView.currentFilter |= modelData[0]
                         else
-                            pluginsView.currentFilter &= ~modelData
+                            pluginsView.currentFilter &= ~modelData[0]
                     }
                 }
 
@@ -131,7 +121,7 @@ Rectangle {
                     x: parent.width
                     text: {
                         pluginsContentArea.count
-                        pluginsContentArea.pluginTableProxy.getPluginsCount(modelData)
+                        pluginsContentArea.pluginTableProxy.getPluginsCount(modelData[0])
                     }
                     color: foregroundCheckBox.hovered ? "#00A3FF" : "#FFFFFF"
                     opacity: foregroundCheckBox.hovered ? 1.0 :  0.42

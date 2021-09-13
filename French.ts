@@ -756,122 +756,119 @@
 <context>
     <name>PluginsForeground</name>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="11"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="23"/>
         <source>Effect</source>
         <translation>Effet</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="12"/>
         <source>Analyzer</source>
-        <translation>Analyseur</translation>
+        <translation type="vanished">Analyseur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="13"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="12"/>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="14"/>
+        <source>Sequencer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="26"/>
         <source>Delay</source>
         <translation>Délai</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="14"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="27"/>
         <source>Distortion</source>
         <translation>Distorsion</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="15"/>
         <source>Dynamics</source>
-        <translation>Dynamiques</translation>
+        <translation type="vanished">Dynamiques</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="16"/>
         <source>EQ</source>
-        <translation>EQ</translation>
+        <translation type="vanished">EQ</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="17"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="24"/>
         <source>Filter</source>
         <translation>Filtre</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="18"/>
         <source>Spatial</source>
-        <translation>Spatial</translation>
+        <translation type="vanished">Spatial</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="19"/>
         <source>Generator</source>
-        <translation>Générateur</translation>
+        <translation type="vanished">Générateur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="20"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="13"/>
         <source>Mastering</source>
         <translation>Mastering</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="21"/>
         <source>Modulation</source>
-        <translation>Modulation</translation>
+        <translation type="vanished">Modulation</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="22"/>
         <source>PitchShift</source>
-        <translation>Changement de tonalité</translation>
+        <translation type="vanished">Changement de tonalité</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="23"/>
         <source>Restoration</source>
-        <translation>Restoration</translation>
+        <translation type="vanished">Restoration</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="24"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="25"/>
         <source>Reverb</source>
         <translation>Reverb</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="25"/>
         <source>Surround</source>
-        <translation>Surround</translation>
+        <translation type="vanished">Surround</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="26"/>
         <source>Tools</source>
-        <translation>Outils</translation>
+        <translation type="vanished">Outils</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="27"/>
         <source>Network</source>
-        <translation>Réseau</translation>
+        <translation type="vanished">Réseau</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="28"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="19"/>
         <source>Drum</source>
         <translation>Drump</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="29"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="17"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="30"/>
         <source>Piano</source>
-        <translation>Piano</translation>
+        <translation type="vanished">Piano</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="31"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="20"/>
         <source>Sampler</source>
         <translation>Echantillonneur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="32"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="18"/>
         <source>Synth</source>
         <translation>Synthétiseur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="33"/>
         <source>External</source>
-        <translation>Externe</translation>
+        <translation type="vanished">Externe</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="61"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="56"/>
         <source>Research</source>
         <translation>Recherche</translation>
     </message>
@@ -879,7 +876,12 @@
 <context>
     <name>PluginsView</name>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsView.qml" line="158"/>
+        <location filename="Studio/Design/Plugins/PluginsView.qml" line="171"/>
+        <source>Plugins</source>
+        <translation type="unfinished">Plugins</translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsView.qml" line="178"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -887,9 +889,8 @@
 <context>
     <name>PluginsViewTitle</name>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsViewTitle.qml" line="6"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation type="vanished">Plugins</translation>
     </message>
 </context>
 <context>
@@ -1008,17 +1009,25 @@
 <context>
     <name>TreeComponentsPanel</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="34"/>
         <source>Mixer</source>
-        <translation>Mixeur</translation>
+        <translation type="vanished">Mixeur</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="39"/>
         <source>Sources</source>
-        <translation>Sources</translation>
+        <translation type="vanished">Sources</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="44"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="26"/>
+        <source>Groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="31"/>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="36"/>
         <source>Effects</source>
         <translation>Effets</translation>
     </message>

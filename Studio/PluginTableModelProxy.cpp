@@ -24,7 +24,7 @@ void PluginTableModelProxy::setNameFilter(const QString &nameFilter) noexcept
     invalidateFilter();
 }
 
-int PluginTableModelProxy::getPluginsCount(PluginTableModel::Tags tags) const noexcept
+int PluginTableModelProxy::getPluginsCount(PluginModel::Tags tags) const noexcept
 {
     auto *table = reinterpret_cast<const PluginTableModel *>(sourceModel());
     int count = 0;
@@ -34,7 +34,7 @@ int PluginTableModelProxy::getPluginsCount(PluginTableModel::Tags tags) const no
     for (auto i = 0, end = rowCount(); i < end; ++i) {
         QModelIndex proxyIdx = index(i, 0);
         QModelIndex sourceIdx = mapToSource(proxyIdx);
-        if (static_cast<quint32>(table->get(sourceIdx.row())->getTags()) & static_cast<quint32>(tags))
+        if (static_cast<int>(table->get(sourceIdx.row())->getTags()) & static_cast<int>(tags))
             ++count;
     }
     return count;

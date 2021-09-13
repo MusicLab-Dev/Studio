@@ -5,6 +5,7 @@ import QtGraphicalEffects 1.0
 import PluginTableModel 1.0
 
 import "../Default"
+import "../Common"
 
 Item {
     id: componentDelegate
@@ -54,12 +55,12 @@ Item {
             radius: 12
         }
 
-        Image {
+        PluginFactoryImageButton {
             id: image
+            name: factoryName
             anchors.centerIn: parent
             width: parent.width * 0.7
             height: width
-            source: factoryName ? "qrc:/Assets/Plugins/" + factoryName + ".png" : "qrc:/Assets/Plugins/Default.png"
         }
 
         Glow {

@@ -748,122 +748,67 @@
 <context>
     <name>PluginsForeground</name>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="11"/>
-        <source>Effect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="12"/>
-        <source>Analyzer</source>
+        <source>Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="13"/>
-        <source>Delay</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="14"/>
-        <source>Distortion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="15"/>
-        <source>Dynamics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="16"/>
-        <source>EQ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="17"/>
-        <source>Filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="18"/>
-        <source>Spatial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="19"/>
-        <source>Generator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="20"/>
         <source>Mastering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="21"/>
-        <source>Modulation</source>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="14"/>
+        <source>Sequencer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="22"/>
-        <source>PitchShift</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="23"/>
-        <source>Restoration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="24"/>
-        <source>Reverb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="25"/>
-        <source>Surround</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="26"/>
-        <source>Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="27"/>
-        <source>Network</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="28"/>
-        <source>Drum</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="29"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="17"/>
         <source>Instrument</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="30"/>
-        <source>Piano</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="31"/>
-        <source>Sampler</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="32"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="18"/>
         <source>Synth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="33"/>
-        <source>External</source>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="19"/>
+        <source>Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="61"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="20"/>
+        <source>Sampler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="23"/>
+        <source>Effect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="24"/>
+        <source>Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="25"/>
+        <source>Reverb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="26"/>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="27"/>
+        <source>Distortion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="56"/>
         <source>Research</source>
         <translation type="unfinished"></translation>
     </message>
@@ -871,16 +816,13 @@
 <context>
     <name>PluginsView</name>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsView.qml" line="158"/>
-        <source>Close</source>
+        <location filename="Studio/Design/Plugins/PluginsView.qml" line="171"/>
+        <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PluginsViewTitle</name>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsViewTitle.qml" line="6"/>
-        <source>Plugins</source>
+        <location filename="Studio/Design/Plugins/PluginsView.qml" line="178"/>
+        <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1000,17 +942,17 @@
 <context>
     <name>TreeComponentsPanel</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="34"/>
-        <source>Mixer</source>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="26"/>
+        <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="39"/>
-        <source>Sources</source>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="31"/>
+        <source>Instruments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="44"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="36"/>
         <source>Effects</source>
         <translation type="unfinished"></translation>
     </message>

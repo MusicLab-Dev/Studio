@@ -8,6 +8,7 @@
 #include <QSortFilterProxyModel>
 
 #include "PluginTableModel.hpp"
+#include "PluginModel.hpp"
 
 class PluginTableModelProxy : public QSortFilterProxyModel
 {
@@ -37,7 +38,7 @@ public:
 
 public slots:
     /** @brief Get the number of plugins that match a category */
-    int getPluginsCount(PluginTableModel::Tags tags) const noexcept;
+    int getPluginsCount(PluginModel::Tags tags) const noexcept;
 
 
 signals:

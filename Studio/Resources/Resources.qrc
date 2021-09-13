@@ -64,5 +64,6 @@
         <file>Assets/Plugins/Arpeggiator.gif</file>
         <file>Assets/Plugins/Equalizer.gif</file>
         <file>Assets/Plugins/Reverb.gif</file>
+        <file>Assets/Plugins/Snare.gif</file>
     </qresource>
 </RCC>

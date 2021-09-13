@@ -51,7 +51,6 @@ void Studio::InitResources(void)
     qRegisterMetaType<GPoint::CurveRate>("GPoint::CurveRate");
     qRegisterMetaType<GPoint::CurveType>("GPoint::CurveType");
     qRegisterMetaType<PluginModel::ParamType>("PluginModel::ParamType");
-    qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
     qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");
     qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
     qRegisterMetaType<ActionNodeBase>("ActionNodeBase");
@@ -77,6 +76,9 @@ void Studio::InitResources(void)
     qRegisterMetaType<QVector<PartitionInstance>>("QVector<PartitionInstance>");
     qRegisterMetaType<QVector<NodeModel *>>("QVector<NodeModel *>");
     qRegisterMetaType<PluginModel::Flags>("PluginModel::Flags");
+    qRegisterMetaType<PluginModel::Tags>("PluginModel::Tags");
+    qRegisterMetaType<ThemeManager::Theme>("ThemeManager::Theme");
+    qRegisterMetaType<ThemeManager::SubChain>("ThemeManager::SubChain");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");

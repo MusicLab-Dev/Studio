@@ -19,7 +19,9 @@
 #include "ThemeManager.hpp"
 
 // Current color index from color chain
-static quint32 CurrentColorIndex = 0u;
+static quint32 CurrentRedColorIndex = 0u;
+static quint32 CurrentGreenColorIndex = 0u;
+static quint32 CurrentBlueColorIndex = 0u;
 
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     :   QAbstractListModel(parent),
@@ -29,7 +31,21 @@ NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
         _plugin(node->plugin(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    _data->setColor(ThemeManager::GetColorFromChain(CurrentColorIndex++).rgba());
+
+    // Set color using plugin tags
+    ThemeManager::SubChain subChain {};
+    quint32 index = 0u;
+    if (static_cast<int>(_plugin->tags()) & static_cast<int>(PluginModel::Tags::Instrument)) {
+        subChain = ThemeManager::SubChain::Blue;
+        index = CurrentBlueColorIndex++;
+    } else if (static_cast<int>(_plugin->tags()) & static_cast<int>(PluginModel::Tags::Effect)) {
+        subChain = ThemeManager::SubChain::Red;
+        index = CurrentRedColorIndex++;
+    } else {
+        subChain = ThemeManager::SubChain::Green;
+        index = CurrentGreenColorIndex++;
+    }
+    _data->setColor(ThemeManager::GetColorFromSubChain(subChain, index).rgba());
 }
 
 NodeModel::~NodeModel(void) noexcept

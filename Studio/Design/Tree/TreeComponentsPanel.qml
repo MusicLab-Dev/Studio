@@ -3,19 +3,11 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 import PluginTableModel 1.0
+import PluginModel 1.0
 
 import "../Default"
 
 TreePanel {
-    enum Type {
-        Mixer,
-        Sources,
-        Effects,
-        Tools,
-        Void
-    }
-
-
     Item {
         id: panelCategory
         anchors.left: parent.left
@@ -31,18 +23,18 @@ TreePanel {
             anchors.horizontalCenter: parent.horizontalCenter
 
             TreeComponentCategory {
-                text.text: qsTr("Mixer")
-                filter: TreeComponentsPanel.Type.Mixer
+                text.text: qsTr("Groups")
+                filter: PluginModel.Tags.Group
             }
 
             TreeComponentCategory {
-                text.text: qsTr("Sources")
-                filter: TreeComponentsPanel.Type.Sources
+                text.text: qsTr("Instruments")
+                filter: PluginModel.Tags.Instrument
             }
 
             TreeComponentCategory {
                 text.text: qsTr("Effects")
-                filter: TreeComponentsPanel.Type.Effects
+                filter: PluginModel.Tags.Effect
             }
         }
     }
@@ -79,19 +71,7 @@ TreePanel {
             model: PluginTableModelProxy {
                 id: pluginTableProxy
                 sourceModel: pluginTable
-                tagsFilter: {
-                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Void)
-                        return -1
-                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Sources)
-                        return PluginTableModel.Tags.Synth | PluginTableModel.Tags.Sampler | PluginTableModel.Tags.Piano
-                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Effects)
-                        return PluginTableModel.Tags.Analyzer | PluginTableModel.Tags.Delay | PluginTableModel.Tags.Distortion |
-                               PluginTableModel.Tags.EQ | PluginTableModel.Tags.Filter | PluginTableModel.Tags.Distortion
-                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Mixer)
-                        return PluginTableModel.Tags.Mastering
-                    return 0;
-
-                }
+                tagsFilter: treeComponentsPanel.filter ? treeComponentsPanel.filter : -1
                 //nameFilter: pluginsForeground.currentSearchText
             }
 

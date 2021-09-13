@@ -28,9 +28,21 @@ public:
     };
     Q_ENUM(Theme)
 
+    /** @brief Preconfigured sub-color chains */
+    enum class SubChain {
+        Red,
+        Green,
+        Blue,
+        Total
+    };
+    Q_ENUM(SubChain)
 
-    /** @brief Get a color from color chain using an index (on overflow, index %= colorChainCount) */
+
+    /** @brief Get a color from color chain using an index (index %= colorChainCount) */
     [[nodiscard]] static QColor GetColorFromChain(const quint32 index) noexcept;
+
+    /** @brief Get a color from a color sub-chain using an index (index %= colorSubChainCount) */
+    [[nodiscard]] static QColor GetColorFromSubChain(const SubChain subChain, const quint32 index) noexcept;
 
 
     /** @brief Construct a theme manager */
@@ -54,8 +66,11 @@ public:
     [[nodiscard]] QColor disabledColor(void) const noexcept { return _disabledColor; }
 
 public slots:
-    /** @brief Get a color from color chain using an index (on overflow, index %= colorChainCount) */
+    /** @brief Get a color from color chain using an index (index %= colorChainCount) */
     QColor getColorFromChain(const quint32 index) noexcept { return GetColorFromChain(index); }
+
+    /** @brief Get a color from color sub-chain using an index (index %= colorSubChainCount) */
+    QColor getColorFromSubChain(const SubChain subChain, const quint32 index) noexcept { return GetColorFromSubChain(subChain, index); }
 
 signals:
     /** @brief Notify that theme has changed */

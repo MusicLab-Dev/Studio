@@ -165,7 +165,7 @@ MouseArea {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 20 + (partitionsPreview.visible ? partitionsPreview.height : 0)
         xBase: parent.width
-        visible: !treeSamplesPanel.launched
+        // visible: !treeSamplesPanel.launched
     }
 
     /*TreeSamplesPanel {

@@ -2,10 +2,7 @@
     <qresource prefix="/Plugins">
         <file>PluginsContentArea.qml</file>
         <file>PluginsForeground.qml</file>
-        <file>PluginsSquareComponent.qml</file>
-        <file>PluginsSquareComponentTitle.qml</file>
         <file>PluginsView.qml</file>
-        <file>PluginsViewTitle.qml</file>
-        <file>PluginsSquareComponentDescription.qml</file>
+        <file>PluginsDelegate.qml</file>
     </qresource>
 </RCC>
