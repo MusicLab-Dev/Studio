@@ -942,17 +942,17 @@
 <context>
     <name>TreeComponentsPanel</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="26"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="43"/>
         <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="31"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="48"/>
         <source>Instruments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="36"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="53"/>
         <source>Effects</source>
         <translation type="unfinished"></translation>
     </message>

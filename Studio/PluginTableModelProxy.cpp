@@ -6,7 +6,7 @@
 #include "PluginTableModelProxy.hpp"
 
 
-void PluginTableModelProxy::setTagsFilter(const quint32 tagsFilter) noexcept
+void PluginTableModelProxy::setTagsFilter(const int tagsFilter) noexcept
 {
     if (_tagsFilter == tagsFilter)
         return;
@@ -31,10 +31,14 @@ int PluginTableModelProxy::getPluginsCount(PluginModel::Tags tags) const noexcep
 
     if (!table)
         return 0;
-    for (auto i = 0, end = rowCount(); i < end; ++i) {
-        QModelIndex proxyIdx = index(i, 0);
-        QModelIndex sourceIdx = mapToSource(proxyIdx);
-        if (static_cast<int>(table->get(sourceIdx.row())->getTags()) & static_cast<int>(tags))
+    const int tagsBits = static_cast<int>(tags);
+    const int mask = (tagsBits & static_cast<int>(PluginModel::Tags::Group))
+            | (tagsBits & static_cast<int>(PluginModel::Tags::Instrument))
+            | (tagsBits & static_cast<int>(PluginModel::Tags::Effect));
+    const int tagsWithoutMask = tagsBits & ~mask;
+    for (int i = 0, end = table->count(); i < end; ++i) {
+        const auto elemTags = static_cast<int>(table->get(i)->getTags());
+        if (elemTags & mask && (!tagsWithoutMask || elemTags & tagsWithoutMask))
             ++count;
     }
     return count;
@@ -50,8 +54,14 @@ bool PluginTableModelProxy::filterAcceptsRow(int sourceRow, const QModelIndex &)
 
     if (!factory)
         return false;
-    if (_tagsFilter) {
-        if (!(static_cast<quint32>(factory->getTags()) & _tagsFilter))
+    if (_tagsFilter) {;
+        const int tagsBits = _tagsFilter;
+        const int mask = (tagsBits & static_cast<int>(PluginModel::Tags::Group))
+                | (tagsBits & static_cast<int>(PluginModel::Tags::Instrument))
+                | (tagsBits & static_cast<int>(PluginModel::Tags::Effect));
+        const int tagsWithoutMask = tagsBits & ~mask;
+        const int elemTags = static_cast<int>(factory->getTags());
+        if (!(elemTags & mask && (!tagsWithoutMask || elemTags & tagsWithoutMask)))
             return false;
     }
     if (!_nameFilter.isEmpty()) {

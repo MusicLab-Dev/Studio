@@ -14,7 +14,7 @@ class PluginTableModelProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(quint32 tagsFilter READ tagsFilter WRITE setTagsFilter NOTIFY tagsFilterChanged)
+    Q_PROPERTY(int tagsFilter READ tagsFilter WRITE setTagsFilter NOTIFY tagsFilterChanged)
     Q_PROPERTY(QString nameFilter READ nameFilter WRITE setNameFilter NOTIFY nameFilterChanged)
 
 public:
@@ -25,10 +25,10 @@ public:
     ~PluginTableModelProxy(void) override = default;
 
     /** @brief Get the tags filter property */
-    [[nodiscard]] quint32 tagsFilter(void) const noexcept { return _tagsFilter; }
+    [[nodiscard]] int tagsFilter(void) const noexcept { return _tagsFilter; }
 
     /** @brief Set the tags filter property */
-    void setTagsFilter(const quint32 tagsFilter) noexcept;
+    void setTagsFilter(const int tagsFilter) noexcept;
 
     /** @brief Get the name filter property */
     [[nodiscard]] const QString &nameFilter(void) const noexcept { return _nameFilter; }
@@ -49,7 +49,7 @@ signals:
     void nameFilterChanged(void);
 
 private:
-    quint32 _tagsFilter { 0 };
+    int _tagsFilter { 0 };
     QString _nameFilter {};
 
     /** @brief Reimplementation of the filter virtual function */

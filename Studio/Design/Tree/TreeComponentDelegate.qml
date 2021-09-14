@@ -8,7 +8,13 @@ import "../Default"
 import "../Common"
 
 Item {
+    property color color: "white"
+
     id: componentDelegate
+
+    Component.onCompleted: {
+        color = treeComponentsPanel.tagsToColor(treeComponentsPanel.filter)
+    }
 
     MouseArea {
         id: instanceBackground
@@ -50,26 +56,19 @@ Item {
             id: rect
             anchors.fill: parent
             color: "transparent"
-            border.width: 2
-            border.color: instanceBackground.containsPress ? Qt.lighter(themeManager.contentColor, 1.2) : instanceBackground.containsMouse ? themeManager.accentColor : "white"
-            radius: 12
-        }
+            border.color: instanceBackground.containsMouse ? componentDelegate.color : "white"
+            radius: width / 4
 
-        PluginFactoryImageButton {
-            id: image
-            name: factoryName
-            anchors.centerIn: parent
-            width: parent.width * 0.7
-            height: width
-        }
-
-        Glow {
-            anchors.fill: image
-            radius: 2
-            opacity: 0.3
-            samples: 17
-            color: instanceBackground.containsMouse ? "white" : "transparent"
-            source: image
+            PluginFactoryImage {
+                id: image
+                width: parent.width / 1.5
+                height: width
+                x: parent.width / 2 - width / 2
+                y: parent.height / 2 - height / 2
+                name: factoryName
+                playing: instanceBackground.containsMouse
+                color: componentDelegate.color
+            }
         }
     }
 
@@ -78,7 +77,7 @@ Item {
         anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
         text: factoryName
-        color: instanceBackground.containsMouse ? themeManager.accentColor : "white"
+        color: instanceBackground.containsMouse ? componentDelegate.color : "white"
     }
 
     DefaultToolTip { // @todo make this a unique instance

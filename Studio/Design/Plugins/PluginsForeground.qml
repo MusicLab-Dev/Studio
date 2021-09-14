@@ -97,38 +97,81 @@ Rectangle {
                 ]
             ]
 
-            delegate: Row {
+            delegate: Column {
+                property bool categoryChecked: false
+                property int categoryIndex: index
+                property int categoryFilter: modelData[0]
+
+                id: filterColumn
                 width: listView.width
+                spacing: listView.spacing / 2
 
-                DefaultCheckBox {
-                    id: foregroundCheckBox
-                    text: pluginsForeground.filterNames[index][0]
-                    checked: false
-                    width: parent.width * 0.85
-                    height: 20
-                    font.weight: Font.Light
-                    borderColor: "white"
-                    enabledColor: "black"
-                    onCheckedChanged: {
-                        if (checked)
-                            pluginsView.currentFilter |= modelData[0]
-                        else
-                            pluginsView.currentFilter &= ~modelData[0]
-                    }
-                }
+                Repeater {
+                    model: modelData
 
-                Text {
-                    x: parent.width
-                    text: {
-                        pluginsContentArea.count
-                        pluginsContentArea.pluginTableProxy.getPluginsCount(modelData[0])
+                    delegate: Item {
+                        width: listView.width
+                        height: foregroundCheckBox.height
+                        // visible: index === 0 || filterColumn.categoryChecked
+
+                        DefaultCheckBox {
+                            id: foregroundCheckBox
+                            x: index === 0 ? 0 : listView.spacing
+                            text: pluginsForeground.filterNames[filterColumn.categoryIndex][index]
+                            checked: false
+                            width: parent.width * 0.85 - x
+                            height: 20
+                            font.weight: Font.Light
+                            borderColor: "white"
+                            enabledColor: "black"
+
+                            Component.onCompleted: {
+                                if (index === 0)
+                                    checked = Qt.binding(function() { return filterColumn.categoryChecked })
+                            }
+
+                            Connections {
+                                target: filterColumn
+                                enabled: index !== 0
+                                function onCategoryCheckedChanged() {
+                                    if (!filterColumn.categoryChecked)
+                                        foregroundCheckBox.checked = false
+                                }
+                            }
+
+                            onCheckedChanged: {
+                                if (index === 0)
+                                    filterColumn.categoryChecked = checked
+                                else
+                                    filterColumn.categoryChecked = filterColumn.categoryChecked || checked
+
+                                if (checked) {
+                                    pluginsView.currentFilter |= modelData
+                                } else {
+                                    var filter = (pluginsView.currentFilter & ~modelData)
+                                    if (index !== 0)
+                                        filter |= filterColumn.categoryFilter
+                                    pluginsView.currentFilter = filter
+                                }
+                            }
+                        }
+
+                        Text {
+                            anchors.left: foregroundCheckBox.right
+                            anchors.right: parent.right
+                            height: parent.height
+                            fontSizeMode: Text.Fit
+                            text: {
+                                pluginsContentArea.count
+                                pluginsContentArea.pluginTableProxy.getPluginsCount(modelData)
+                            }
+                            color: foregroundCheckBox.hovered ? "#00A3FF" : "#FFFFFF"
+                            opacity: foregroundCheckBox.hovered ? 1.0 :  0.42
+                            // font.weight: Font.Thin
+                        }
                     }
-                    color: foregroundCheckBox.hovered ? "#00A3FF" : "#FFFFFF"
-                    opacity: foregroundCheckBox.hovered ? 1.0 :  0.42
-                    font.weight: Font.Thin
                 }
             }
         }
-
     }
 }

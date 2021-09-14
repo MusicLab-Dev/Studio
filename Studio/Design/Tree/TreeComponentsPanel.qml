@@ -4,10 +4,27 @@ import QtGraphicalEffects 1.0
 
 import PluginTableModel 1.0
 import PluginModel 1.0
+import ThemeManager 1.0
 
 import "../Default"
 
 TreePanel {
+    function tagsToColor(tags) {
+        if (tags & PluginModel.Tags.Instrument) {
+            return themeManager.getColorFromSubChain(ThemeManager.SubChain.Blue, blueColorIndex++)
+        } else if (tags & PluginModel.Tags.Effect) {
+            return themeManager.getColorFromSubChain(ThemeManager.SubChain.Red, redColorIndex++)
+        } else {
+            return themeManager.getColorFromSubChain(ThemeManager.SubChain.Green, greenColorIndex++)
+        }
+    }
+
+    property int redColorIndex: 0
+    property int greenColorIndex: 0
+    property int blueColorIndex: 0
+
+    id: treeComponentsPanel
+
     Item {
         id: panelCategory
         anchors.left: parent.left
