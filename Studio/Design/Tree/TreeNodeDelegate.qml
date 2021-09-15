@@ -36,20 +36,16 @@ Column {
         Rectangle {
             id: verticalLinkUp
             color: nodeDelegate.parentNode ? nodeDelegate.parentNode.color : "black"
-            width: 3
+            width: 2
             anchors.top: parent.top
             anchors.bottom: soundMeter.top
             anchors.horizontalCenter: parent.horizontalCenter
             visible: nodeDelegate.parentNode && !nodeInstanceBackground.drag.active
 
-            Rectangle {
+            TreeNote {
+                x: width / -2 + 1
                 y: parent.height - 5 - (parent.height / 25) * (treeSurface.animationUpdateCount % 25)
-                x: -5
-                width: 11
-                height: 11
-                radius: 5
                 color: verticalLinkUp.color
-                visible: treeView.player.isPlayerRunning
             }
         }
 
@@ -59,17 +55,13 @@ Column {
             anchors.top: nodeInstanceBackground.bottom
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            width: 3
+            width: 2
             visible: childrenRepeater.count && !nodeInstanceBackground.drag.active
 
-            Rectangle {
+            TreeNote {
+                x: width / -2 + 1
                 y: parent.height - 5 - (parent.height / 25) * (treeSurface.animationUpdateCount % 25)
-                x: -5
-                width: 11
-                height: 11
-                radius: 5
                 color: verticalLinkDown.color
-                visible: treeView.player.isPlayerRunning
             }
         }
 
@@ -361,31 +353,24 @@ Column {
         color: verticalLinkDown.color
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: childrenRow.leftMargin - 1.5
+        anchors.leftMargin: childrenRow.leftMargin - 1
         anchors.rightMargin: childrenRow.rightMargin - 1.5
-        height: 3
+        height: 2
         visible: childrenRepeater.count > 1
         // When visible is not turned off the tree is perfectly symetric (on selection) but I don't know why
 
-        Rectangle {
+        TreeNote {
             x: -5 + (parent.width / (2 * 25)) * (treeSurface.animationUpdateCount % 25)
-            y: -5
-            width: 11
-            height: 11
-            radius: 5
+            y: width / -2 + 1
             color: horizontalLinkDown.color
-            visible: treeView.player.isPlayerRunning
         }
 
-        Rectangle {
-            x: parent.width - 5 - (parent.width / (2 * 25)) * (treeSurface.animationUpdateCount % 25)
-            y: -5
-            width: 11
-            height: 11
-            radius: 5
+        TreeNote {
+            x:  parent.width - 5 - (parent.width / (2 * 25)) * (treeSurface.animationUpdateCount % 25)
+            y: width / -2 + 1
             color: horizontalLinkDown.color
-            visible: treeView.player.isPlayerRunning
         }
+
     }
 
     Row {

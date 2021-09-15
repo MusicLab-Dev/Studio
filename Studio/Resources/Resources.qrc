@@ -57,5 +57,6 @@
         <file>Templates/SettingsModel.json</file>
         <file>Templates/TEMPLATE_basic</file>
         <file>Assets/presse-papiers.png</file>
+        <file>Assets/musical-note.png</file>
     </qresource>
 </RCC>
