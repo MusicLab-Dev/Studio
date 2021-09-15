@@ -120,6 +120,46 @@ MouseArea {
             yOffset = yOffsetMax
     }
 
+    ParallelAnimation {
+        id: downOverlays
+        PropertyAnimation {
+            target: treeComponentsPanel
+            property: "y"
+            from: treeComponentsPanel.yBase
+            to: treeComponentsPanel.yOpen
+            duration: 300
+            easing.type: Easing.OutCubic
+        }
+        PropertyAnimation {
+            target: overview
+            property: "y"
+            from: overview.yBase
+            to: overview.yOpen
+            duration: 300
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    ParallelAnimation {
+        id: upOverlays
+        PropertyAnimation {
+            target: treeComponentsPanel
+            property: "y"
+            from: treeComponentsPanel.yOpen
+            to: treeComponentsPanel.yBase
+            duration: 300
+            easing.type: Easing.OutCubic
+        }
+        PropertyAnimation {
+            target: overview
+            property: "y"
+            from: overview.yOpen
+            to: overview.yBase
+            duration: 300
+            easing.type: Easing.OutCubic
+        }
+    }
+
     // Handle all mouse / touch gestures
     GestureArea {
         id: gestureArea
@@ -144,6 +184,13 @@ MouseArea {
         }
     }
 
+    TreeHeader {
+        id: treeHeader
+        height: parent.height * 0.05
+        width: parent.width
+        z: 1
+    }
+
     TreeSurface {
         readonly property real scaledWidth: width * scale
         readonly property real scaledHeight: height * scale
@@ -156,33 +203,25 @@ MouseArea {
     }
 
     TreeComponentsPanel {
+        property real yBase: treeHeader.height + 30
+        property real yOpen: treeControls.height + 30
+
         id: treeComponentsPanel
-        anchors.top: parent.top
-        anchors.topMargin: 20 + (treeControls.node && !treeControls.hide ? treeControls.height : 0)
-        //anchors.verticalCenter: parent.verticalCenter
+        y: yBase
         width: parent.width * 0.15
+        height: parent.height - (treeControls.visible ? treeControls.height : 0) - partitionsPreview.height - 35
         panelCategoryHeight: parent.height * 0.1
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20 + (partitionsPreview.visible ? partitionsPreview.height : 0)
         xBase: parent.width
-        // visible: !treeSamplesPanel.launched
     }
 
-    /*TreeSamplesPanel {
-        id: treeSamplesPanel
-        anchors.bottomMargin: partitionsPreview.visible ? partitionsPreview.height : 0
-        anchors.verticalCenter: parent.verticalCenter
-        width: parent.width * 0.15
-        height: parent.height * 0.9
-        xBase: parent.width
-        visible: !treeComponentsPanel.launched
-    }*/
-
     Item {
+        property real yBase: treeHeader.height + 30
+        property real yOpen: treeControls.height + 30
+
+        id: overview
+        y: yBase
         anchors.left: parent.left
         anchors.leftMargin: 20
-        anchors.top: parent.top
-        anchors.topMargin: 20 + (treeControls.node && !treeControls.hide ? treeControls.height : 0)
         width: parent.width * 0.1
         height: parent.height * 0.1
 
@@ -212,30 +251,66 @@ MouseArea {
 
     }
 
+
     ControlsFlow {
         function open(newNode) {
             node = newNode
-            openAnim.start()
+            openAnimControl.start()
+            downOverlays.start()
         }
 
         function close() {
-            node = null
+            if (treeControls.node) {
+                closeAnimControl.start()
+                upOverlays.start()
+            }
         }
 
         id: treeControls
-        anchors.top: parent.top
+        anchors.top: treeHeader.bottom
         width: parent.width
         y: parent.height
         node: null
 
-        PropertyAnimation {
-            id: openAnim
-            target: treeControls
-            property: "opacity"
-            from: 0
-            to: 1
-            duration: 300
-            easing.type: Easing.OutCubic
+        ParallelAnimation {
+            id: openAnimControl
+            PropertyAnimation {
+                target: treeControls
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+            PropertyAnimation {
+                target: treeHeader
+                property: "y"
+                from: 0
+                to: -treeHeader.height
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        ParallelAnimation {
+            id: closeAnimControl
+            PropertyAnimation {
+                target: treeHeader
+                property: "y"
+                from: -treeHeader.height
+                to: 0
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+            PropertyAnimation {
+                target: treeControls
+                property: "opacity"
+                from: 1
+                to: 0
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+            onFinished: treeControls.node = null
         }
     }
 
@@ -261,6 +336,7 @@ MouseArea {
         size: contentView.yScrollIndicatorSize
         position: contentView.yScrollIndicatorPos
         policy: ScrollBar.AlwaysOn
+        width: 6
 
         onPositionChanged: {
             if (Math.abs(position - contentView.yScrollIndicatorPos) > Number.EPSILON)
@@ -272,12 +348,13 @@ MouseArea {
     ScrollBar {
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors.bottom: partitionsPreview.visible ? partitionsPreview.top : parent.bottom
         visible: size !== 1
         orientation: Qt.Horizontal
         size: contentView.xScrollIndicatorSize
         position: contentView.xScrollIndicatorPos
         policy: ScrollBar.AlwaysOn
+        height: 6
 
         onPositionChanged: {
             // position = (1 - size) *  (1 - ((xOffset - xOffsetMin) / xOffsetWidth))

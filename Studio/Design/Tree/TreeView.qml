@@ -46,13 +46,6 @@ ColumnLayout {
         function onStopContext(pressed) { if (pressed) player.stop() }
     }
 
-    TreeHeader {
-        id: treeHeader
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.12
-        z: 1
-    }
-
     TreeContentView {
         id: contentView
         Layout.fillWidth: true

@@ -24,13 +24,18 @@ Rectangle {
     height: panelCategoryHeight
     color: treeComponentsPanel.filter === filter ? Qt.darker(themeManager.foregroundColor, 1.1) : mouseArea.containsMouse ? baseColor : Qt.lighter(themeManager.foregroundColor, 1.2)
 
-    DefaultText {
-        id: text
-        anchors.fill: parent
-        font.pixelSize: 20
-        fontSizeMode: Text.Fit
-        text: ""
-        color: mouseArea.containsMouse ? "white" : baseColor
+    Item {
+        width: parent.width * 0.7
+        height: parent.height
+        anchors.centerIn: parent
+        DefaultText {
+            id: text
+            anchors.fill: parent
+            font.pixelSize: 40
+            fontSizeMode: Text.Fit
+            text: ""
+            color: mouseArea.containsMouse ? "white" : baseColor
+        }
     }
 
     MouseArea {

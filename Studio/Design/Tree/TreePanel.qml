@@ -4,14 +4,14 @@ Item {
     function open(filt) {
         filter = filt
         if (!launched)
-            openAnim.start()
+            openAnimPanel.start()
         launched = true
     }
 
     function close() {
         launched = false
         filter = 0
-        closeAnim.start()
+        closeAnimPanel.start()
     }
 
     property int filter: 0
@@ -29,12 +29,12 @@ Item {
     x: xClose
 
     ParallelAnimation {
-        id: openAnim
+        id: openAnimPanel
         PropertyAnimation { target: treeComponentsPanel; property: "x"; to: treeComponentsPanel.xOpen; duration: durationAnimation; easing.type: Easing.OutBack }
     }
 
     ParallelAnimation {
-        id: closeAnim
+        id: closeAnimPanel
         PropertyAnimation { target: treeComponentsPanel; property: "x"; to: treeComponentsPanel.xClose; duration: durationAnimation; easing.type: Easing.OutBack; }
     }
 

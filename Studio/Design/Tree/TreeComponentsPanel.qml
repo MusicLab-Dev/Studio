@@ -45,7 +45,7 @@ TreePanel {
             }
 
             TreeComponentCategory {
-                text.text: qsTr("Instruments")
+                text.text: qsTr("Instrum.")
                 filter: PluginModel.Tags.Instrument
             }
 
