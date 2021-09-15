@@ -55,6 +55,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
     qRegisterMetaType<ActionNodeBase>("ActionNodeBase");
     qRegisterMetaType<ActionMoveNode>("ActionMoveNode");
+    qRegisterMetaType<ActionSwapNode>("ActionSwapNode");
     qRegisterMetaType<ActionPartitionBase>("ActionPartitionBase");
     qRegisterMetaType<ActionNotesBase>("ActionNoteBase");
     qRegisterMetaType<ActionAddNotes>("ActionAddNotes");

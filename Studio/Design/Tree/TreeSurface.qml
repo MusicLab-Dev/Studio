@@ -64,6 +64,19 @@ Item {
         treeControls.close()
     }
 
+    function processNodeDrop(validDrag, node) {
+        var lastParent = treeSurface.dragTarget.parentNode
+        var moved = false
+
+        if (validDrag) {
+            if (node.moveToChildren(treeSurface.dragTarget))
+                actionsManager.push(actionsManager.makeActionMoveNode(node, lastParent, treeSurface.dragTarget))
+        } else {
+            if (node.swapNodes(treeSurface.dragTarget))
+                actionsManager.push(actionsManager.makeActionSwapNode(node, treeSurface.dragTarget))
+        }
+    }
+
     signal targetDropped
     signal targetPluginDropped
     signal selectionFinished(point from, point to)

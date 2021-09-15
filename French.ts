@@ -1043,8 +1043,8 @@
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="265"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="292"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="259"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="286"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>

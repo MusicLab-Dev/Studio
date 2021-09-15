@@ -37,6 +37,8 @@ bool ActionsManager::push(const QVariant &data) noexcept
         action = Action::MovePartitions;
     else if (data.userType() == qMetaTypeId<ActionMoveNode>())
         action = Action::MoveNode;
+    else if (data.userType() == qMetaTypeId<ActionSwapNode>())
+        action = Action::SwapNode;
     else {
         qDebug() << "ActionsManager::push: Invalid action type";
         return false;
@@ -87,6 +89,9 @@ bool ActionsManager::undo(void)
     case Action::MoveNode:
         done = undoMoveNode(event.data.value<ActionMoveNode>());
         break;
+    case Action::SwapNode:
+        done = undoSwapNode(event.data.value<ActionSwapNode>());
+        break;
     default:
         return false;
     }
@@ -125,6 +130,9 @@ bool ActionsManager::redo(void)
         break;
     case Action::MoveNode:
         done = redoMoveNode(event.data.value<ActionMoveNode>());
+        break;
+    case Action::SwapNode:
+        done = redoSwapNode(event.data.value<ActionSwapNode>());
         break;
     default:
         return false;
@@ -204,6 +212,16 @@ bool ActionsManager::redoMoveNode(const ActionMoveNode &action)
     return action.newParent->moveToChildren(action.node);
 }
 
+bool ActionsManager::undoSwapNode(const ActionSwapNode &action)
+{
+    return action.target->swapNodes(action.node);
+}
+
+bool ActionsManager::redoSwapNode(const ActionSwapNode &action)
+{
+    return action.node->swapNodes(action.target);
+}
+
 ActionAddNotes ActionsManager::makeActionAddNotes(PartitionModel *partition, const QVector<Note> &notes) const noexcept
 {
     ActionAddNotes action;
@@ -267,12 +285,12 @@ ActionMovePartitions ActionsManager::makeActionMovePartitions(PartitionsModel *p
 
     if (before == after) {
         action.setDirty();
-        return action;
+    } else {
+        action.node = partitions->parentNode();
+        action.partitions = partitions;
+        action.instances = after;
+        action.oldInstances = before;
     }
-    action.node = partitions->parentNode();
-    action.partitions = partitions;
-    action.instances = after;
-    action.oldInstances = before;
     return action;
 }
 
@@ -280,11 +298,26 @@ ActionMoveNode ActionsManager::makeActionMoveNode(NodeModel *node, NodeModel *la
 {
     ActionMoveNode action;
 
-    qDebug() << node->name() << lastParent->name() << newParent->name();
+    if (node == lastParent || node == newParent || lastParent == newParent) {
+        action.setDirty();
+    } else {
+        action.node = node;
+        action.lastParent = lastParent;
+        action.newParent = newParent;
+    }
+    return action;
+}
 
-    action.node = node;
-    action.lastParent = lastParent;
-    action.newParent = newParent;
+ActionSwapNode ActionsManager::makeActionSwapNode(NodeModel *node, NodeModel *target) const noexcept
+{
+    ActionSwapNode action;
+
+    if (node == target) {
+        action.setDirty();
+    } else {
+        action.node = node;
+        action.target = target;
+    }
     return action;
 }
 
@@ -293,7 +326,17 @@ void ActionsManager::nodeDeleted(NodeModel *node) noexcept
     const auto it = std::remove_if(_events.begin(), _events.end(), [node](const Event &elem) {
         switch (elem.action) {
         case Action::MoveNode:
-            return false; // @todo Change this when MoveNode is implemented
+        {
+            const auto *it = reinterpret_cast<const ActionMoveNode *>(elem.data.data());
+            return it->node == node || it->lastParent == node || it->newParent == node || node->isAParent(it->node)
+                    || node->isAParent(it->lastParent) || node->isAParent(it->newParent);
+        }
+        case Action::SwapNode:
+        {
+            const auto *it = reinterpret_cast<const ActionSwapNode *>(elem.data.data());
+            return it->node == node || it->target == node
+                    || node->isAParent(it->node) || node->isAParent(it->target);
+        }
         default:
         {
             const auto *it = reinterpret_cast<const ActionNodeBase *>(elem.data.data());
