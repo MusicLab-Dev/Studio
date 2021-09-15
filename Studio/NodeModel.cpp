@@ -444,8 +444,6 @@ bool NodeModel::swapNodes(NodeModel *target)
             auto selfAudioPtr = std::move(selfParent->audioNode()->children().at(static_cast<std::uint32_t>(selfIndex)));
             auto selfPtr = std::move(selfParent->_children.at(selfIndex));
 
-            qDebug() << name() << selfParent->name() << target->name() << targetParent->name();
-
             // Remove this from self parent
             selfParent->beginRemoveRows(QModelIndex(), selfParent->count() - 1, selfParent->count() - 1);
             selfParent->audioNode()->children().erase(selfParent->audioNode()->children().begin() + selfIndex);
