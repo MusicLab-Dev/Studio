@@ -275,4 +275,9 @@ private:
 
     /** @brief Emit master's graphChanged signal */
     void processGraphChange(void) const noexcept;
+
+    /** @brief Various Node manipulation helpers */
+    static void ProcessSwap(NodeModel * const lhs, NodeModel *rhs);
+    static void ProcessAdd(NodeModel * const parent, NodePtr &&nodePtr, Audio::NodePtr &&audioNodePtr);
+    static void ProcessRemove(NodeModel * const parent, const int targetIndex);
 };

@@ -46,7 +46,7 @@ Rectangle {
         }
 
         onPressed: {
-            open(filter)
+            treeComponentsPanel.open(filter)
         }
     }
 

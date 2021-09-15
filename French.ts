@@ -948,7 +948,8 @@
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="48"/>
-        <source>Instruments</source>
+        <source>Instrum.</source>
+        <oldsource>Instruments</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -65,10 +65,9 @@ Item {
     }
 
     function processNodeDrop(validDrag, node) {
-        var lastParent = treeSurface.dragTarget.parentNode
-        var moved = false
 
         if (validDrag) {
+            var lastParent = treeSurface.dragTarget.parentNode
             if (node.moveToChildren(treeSurface.dragTarget))
                 actionsManager.push(actionsManager.makeActionMoveNode(node, lastParent, treeSurface.dragTarget))
         } else {
