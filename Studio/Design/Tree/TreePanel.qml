@@ -1,14 +1,6 @@
 import QtQuick 2.0
 
 Item {
-    enum Type {
-        Mixer,
-        Sources,
-        Effects,
-        Tools,
-        Void
-    }
-
     function open(filt) {
         filter = filt
         if (!launched)
@@ -18,11 +10,11 @@ Item {
 
     function close() {
         launched = false
-        filter = TreeComponentsPanel.Type.Void
+        filter = 0
         closeAnim.start()
     }
 
-    property int filter: TreeComponentsPanel.Type.Void
+    property int filter: 0
     property bool launched: false
     property real durationAnimation: 300
     property real widthContentRatio: 0.6
@@ -33,27 +25,27 @@ Item {
     property real xClose: xBase - panelCategoryWidth
     property real xOpen: xBase - width
 
-    id: panel
+    id: treeComponentsPanel
     x: xClose
 
     ParallelAnimation {
         id: openAnim
-        PropertyAnimation { target: panel; property: "x"; to: panel.xOpen; duration: durationAnimation; easing.type: Easing.OutBack }
+        PropertyAnimation { target: treeComponentsPanel; property: "x"; to: treeComponentsPanel.xOpen; duration: durationAnimation; easing.type: Easing.OutBack }
     }
 
     ParallelAnimation {
         id: closeAnim
-        PropertyAnimation { target: panel; property: "x"; to: panel.xClose; duration: durationAnimation; easing.type: Easing.OutBack; }
+        PropertyAnimation { target: treeComponentsPanel; property: "x"; to: treeComponentsPanel.xClose; duration: durationAnimation; easing.type: Easing.OutBack; }
     }
 
     SequentialAnimation {
         id: restartAnim
         ParallelAnimation {
-            PropertyAnimation { target: panel; property: "x"; to: panel.xClose; duration: durationAnimation; easing.type: Easing.OutCubic; }
+            PropertyAnimation { target: treeComponentsPanel; property: "x"; to: treeComponentsPanel.xClose; duration: durationAnimation; easing.type: Easing.OutCubic; }
         }
         ScriptAction { script: treeComponentsPanel.filter = treeComponentsPanel.filterTemp }
         ParallelAnimation {
-            PropertyAnimation { target: panel; property: "x"; to: panel.xOpen; duration: durationAnimation; easing.type: Easing.InCubic }
+            PropertyAnimation { target: treeComponentsPanel; property: "x"; to: treeComponentsPanel.xOpen; duration: durationAnimation; easing.type: Easing.InCubic }
         }
     }
 }

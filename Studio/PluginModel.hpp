@@ -21,10 +21,11 @@ class PluginModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
-    Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
-    Q_PROPERTY(QString path READ path NOTIFY pathChanged)
-    Q_PROPERTY(Flags flags READ flags NOTIFY flagsChanged)
+    Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QString description READ description CONSTANT)
+    Q_PROPERTY(QString path READ path CONSTANT)
+    Q_PROPERTY(Flags flags READ flags CONSTANT)
+    Q_PROPERTY(Tags tags READ tags CONSTANT)
 
 public:
     /** @brief Roles of each controls */
@@ -55,6 +56,27 @@ public:
         NoChildren              = static_cast<int>(Audio::IPluginFactory::Flags::NoChildren)
     };
     Q_ENUM(Flags)
+
+    /** @brief Tags of IPluginFactory::Tags */
+    enum class Tags : int {
+        None            = static_cast<int>(Audio::IPluginFactory::Tags::None),
+        // Groups
+        Group           = static_cast<int>(Audio::IPluginFactory::Tags::Group),
+        Mastering       = static_cast<int>(Audio::IPluginFactory::Tags::Mastering),
+        Sequencer       = static_cast<int>(Audio::IPluginFactory::Tags::Sequencer),
+        // Instruments
+        Instrument      = static_cast<int>(Audio::IPluginFactory::Tags::Instrument),
+        Synth           = static_cast<int>(Audio::IPluginFactory::Tags::Synth),
+        Drum            = static_cast<int>(Audio::IPluginFactory::Tags::Drum),
+        Sampler         = static_cast<int>(Audio::IPluginFactory::Tags::Sampler),
+        // Effects
+        Effect          = static_cast<int>(Audio::IPluginFactory::Tags::Effect),
+        Filter          = static_cast<int>(Audio::IPluginFactory::Tags::Filter),
+        Reverb          = static_cast<int>(Audio::IPluginFactory::Tags::Reverb),
+        Delay           = static_cast<int>(Audio::IPluginFactory::Tags::Delay),
+        Distortion      = static_cast<int>(Audio::IPluginFactory::Tags::Distortion)
+    };
+    Q_ENUM(Tags)
 
     /** @brief Parameter type */
     enum class ParamType : int {
@@ -102,9 +124,14 @@ public:
     /** @brief Get the path property */
     [[nodiscard]] QString path(void) const noexcept;
 
-    /** @brief Get the path property */
+    /** @brief Get the flags property */
     [[nodiscard]] Flags flags(void) const noexcept
         { return static_cast<Flags>(_data->getFlags()); }
+
+    /** @brief Get the tags property */
+    [[nodiscard]] Tags tags(void) const noexcept
+        { return static_cast<Tags>(_data->getTags()); }
+
 
     /** @brief Get underlying audio plugin */
     [[nodiscard]] Audio::IPlugin *audioPlugin(void) noexcept { return _data; }
@@ -122,18 +149,6 @@ public slots:
     void setControl(const ControlEvent &event);
 
 signals:
-    /** @brief Notify that the title has changed */
-    void titleChanged(void);
-
-    /** @brief Notify that the description has changed */
-    void descriptionChanged(void);
-
-    /** @brief Notify that the path has changed */
-    void pathChanged(void);
-
-    /** @brief Notify that flags property has changed */
-    void flagsChanged(void);
-
     /** @brief Notify that a control has changed */
     void controlValueChanged(const ParamID paramID);
 

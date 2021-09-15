@@ -31,6 +31,12 @@ struct ActionMoveNode : public ActionNodeBase
 };
 Q_DECLARE_METATYPE(ActionMoveNode)
 
+struct ActionSwapNode : public ActionNodeBase
+{
+    NodeModel *target { nullptr };
+};
+Q_DECLARE_METATYPE(ActionSwapNode)
+
 /** -- Notes --  */
 struct ActionPartitionBase : public ActionNodeBase
 {
@@ -91,18 +97,19 @@ public:
     enum class Action {
         None = 0,
 
-        // Add
+        // Notes
         AddNotes,
-        AddPartitions,
-
-        // Remove
         RemoveNotes,
-        RemovePartitions,
-
-        // Move
         MoveNotes,
+
+        // Partitions
+        AddPartitions,
+        RemovePartitions,
         MovePartitions,
-        MoveNode
+
+        // Nodes
+        MoveNode,
+        SwapNode
     };
     Q_ENUM(Action);
 
@@ -131,6 +138,7 @@ public slots:
 
     /** @brief Nodes wrappers */
     [[nodiscard]] ActionMoveNode makeActionMoveNode(NodeModel *node, NodeModel *lastParent, NodeModel *newParent) const noexcept;
+    [[nodiscard]] ActionSwapNode makeActionSwapNode(NodeModel *node, NodeModel *target) const noexcept;
 
     /** @brief Notes wrappers */
     [[nodiscard]] ActionAddNotes makeActionAddNotes(PartitionModel *partition, const QVector<Note> &notes) const noexcept;
@@ -155,6 +163,8 @@ private:
     /** @brief Action handlers */
     [[nodiscard]] bool undoMoveNode(const ActionMoveNode &action);
     [[nodiscard]] bool redoMoveNode(const ActionMoveNode &action);
+    [[nodiscard]] bool undoSwapNode(const ActionSwapNode &action);
+    [[nodiscard]] bool redoSwapNode(const ActionSwapNode &action);
     [[nodiscard]] bool undoAddNotes(const ActionAddNotes &action);
     [[nodiscard]] bool redoAddNotes(const ActionAddNotes &action);
     [[nodiscard]] bool undoRemoveNotes(const ActionRemoveNotes &action);

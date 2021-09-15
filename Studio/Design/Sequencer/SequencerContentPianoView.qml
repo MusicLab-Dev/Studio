@@ -41,21 +41,31 @@ Item {
     readonly property real totalHeight: keys * rowHeight
     readonly property real snapperHeight: 30
 
+    // Target octave
+    property real targetOctave: 5
+
     id: pianoView
     height: totalHeight
-
 
     Connections {
         function launch(pressed, key) {
             if (sequencerView.node)
                 sequencerView.node.partitions.addOnTheFly(
-                    AudioAPI.noteEvent(!pressed, (targetOctave * keysPerOctave) + key, AudioAPI.velocityMax, 0),
+                    AudioAPI.noteEvent(!pressed, (pianoView.targetOctave * keysPerOctave) + key, AudioAPI.velocityMax, 0),
                     sequencerView.node,
                     sequencerView.partitionIndex
                 )
         }
 
-        property real targetOctave: 5
+        function octaveUp() {
+            pianoView.targetOctave = Math.min(pianoView.targetOctave + 1, octaveMax - 1)
+            contentView.centerTargetOctave()
+        }
+
+        function octaveDown() {
+            pianoView.targetOctave = Math.max(pianoView.targetOctave - 1, octaveMin)
+            contentView.centerTargetOctave()
+        }
 
         id: notesConnections
         target: eventDispatcher
@@ -73,8 +83,8 @@ Item {
         function onNote9(pressed) { launch(pressed, 9) }
         function onNote10(pressed) { launch(pressed, 10) }
         function onNote11(pressed) { launch(pressed, 11) }
-        function onOctaveUp(pressed) { if (pressed) targetOctave = Math.min(targetOctave + 1, octaveMax) }
-        function onOctaveDown(pressed) { if (pressed) targetOctave = Math.max(targetOctave - 1, octaveMin) }
+        function onOctaveUp(pressed) { if (pressed) octaveUp() }
+        function onOctaveDown(pressed) { if (pressed) octaveDown() }
     }
 
     Repeater {
@@ -139,11 +149,11 @@ Item {
     }
 
     Rectangle {
-        y: totalHeight - height - (notesConnections.targetOctave - octaveOffset) * contentView.rowHeight * keysPerOctave
+        y: pianoView.totalHeight - height - (pianoView.targetOctave - pianoView.octaveOffset) * contentView.rowHeight * pianoView.keysPerOctave
         width: contentView.rowHeaderWidth
         height: contentView.rowHeight * keysPerOctave
-        color: themeManager.accentColor
-        opacity: 0.1
+        color: themeManager.getColorFromChain(pianoView.targetOctave)
+        opacity: 1/3
         //border.color: themeManager.accentColor
         //border.width: 1
         z: 10

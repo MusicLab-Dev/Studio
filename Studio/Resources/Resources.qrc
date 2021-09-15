@@ -50,7 +50,11 @@
         <file>Assets/Free.png</file>
         <file>Assets/BoardButton.png</file>
         <file>Assets/BoardPotentiometer.png</file>
+        <file>Templates/SettingsModel.json</file>
+        <file>Templates/TEMPLATE_basic</file>
+        <file>Assets/presse-papiers.png</file>
         <file>Assets/Plugins/Mixer.gif</file>
+        <file>Assets/Plugins/Kick.gif</file>
         <file>Assets/Plugins/Oscillator.gif</file>
         <file>Assets/Plugins/Delay.gif</file>
         <file>Assets/Plugins/Sampler.gif</file>
@@ -58,5 +62,12 @@
         <file>Templates/TEMPLATE_basic</file>
         <file>Assets/presse-papiers.png</file>
         <file>Assets/musical-note.png</file>
+        <file>Assets/Plugins/Cutoff Filter.gif</file>
+        <file>Assets/Plugins/Band Filter.gif</file>
+        <file>Assets/Plugins/Piano.gif</file>
+        <file>Assets/Plugins/Arpeggiator.gif</file>
+        <file>Assets/Plugins/Equalizer.gif</file>
+        <file>Assets/Plugins/Reverb.gif</file>
+        <file>Assets/Plugins/Snare.gif</file>
     </qresource>
 </RCC>

@@ -182,13 +182,7 @@ Column {
                 function onTargetDropped() {
                     if (nodeInstanceBackground.containsDrag) {
                         nodeInstanceBackground.containsDrag = false
-                        var lastParent = treeSurface.dragTarget.parentNode
-                        if (nodeInstanceBackground.validDrag)
-                            nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
-                        else
-                            nodeDelegate.node.moveToParent(treeSurface.dragTarget)
-                        var action = actionsManager.makeActionMoveNode(treeSurface.dragTarget, lastParent, nodeDelegate.node)
-                        actionsManager.push(action)
+                        treeSurface.processNodeDrop(nodeInstanceBackground.validDrag, nodeDelegate.node)
                     }
                 }
 
@@ -318,7 +312,7 @@ Column {
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
                 scaleFactor: 1
-                playing: hovered || treeView.player.isPlayerRunning
+                playing: hovered || (treeView.visible && treeView.player.isPlayerRunning)
 
                 onClicked: {
                     treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)

@@ -2,6 +2,351 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>AEventListener</name>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="18"/>
+        <location filename="Studio/AEventListener.cpp" line="94"/>
+        <source>Action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="20"/>
+        <source>Note 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="22"/>
+        <source>Note 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="24"/>
+        <source>Note 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="26"/>
+        <source>Note 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="28"/>
+        <source>Note 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="30"/>
+        <source>Note 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="32"/>
+        <source>Note 6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="34"/>
+        <source>Note 7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="36"/>
+        <source>Note 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="38"/>
+        <source>Note 9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="40"/>
+        <source>Note 10</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="42"/>
+        <source>Note 11</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="44"/>
+        <source>Octave Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="46"/>
+        <source>Octave Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="48"/>
+        <source>Play Context</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="50"/>
+        <source>Replay Context</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="52"/>
+        <source>Stop Context</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="54"/>
+        <source>Play Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="56"/>
+        <source>Replay Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="58"/>
+        <source>Stop Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="60"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="62"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="64"/>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="66"/>
+        <source>Volume Context</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="68"/>
+        <source>Volume Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="70"/>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="72"/>
+        <source>Redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="74"/>
+        <source>Erase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="76"/>
+        <source>Open Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="78"/>
+        <source>Export Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="80"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="82"/>
+        <source>Save As</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="84"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="86"/>
+        <location filename="Studio/AEventListener.cpp" line="162"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="96"/>
+        <source>Play note 0 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="98"/>
+        <source>Play note 1 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="100"/>
+        <source>Play note 2 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="102"/>
+        <source>Play note 3 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="104"/>
+        <source>Play note 4 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="106"/>
+        <source>Play note 5 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="108"/>
+        <source>Play note 6 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="110"/>
+        <source>Play note 7 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="112"/>
+        <source>Play note 8 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="114"/>
+        <source>Play note 9 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="116"/>
+        <source>Play note 10 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="118"/>
+        <source>Play note 11 in a sequencer within selected octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="120"/>
+        <source>Move selected octave upward</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="122"/>
+        <source>Move selected octave down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="124"/>
+        <source>Play / Pause in current tabulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="126"/>
+        <source>Replay in current tabulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="128"/>
+        <source>Stop in current tabulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="130"/>
+        <source>Play global project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="132"/>
+        <source>Replay global project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="134"/>
+        <source>Stop global project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="136"/>
+        <source>Copy current selection (works over notes and partition instances)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="138"/>
+        <source>Paste current selection (works over notes and partition instances)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="140"/>
+        <source>Cut current selection (works over notes and partition instances)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="142"/>
+        <source>Change the volume in current tabulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="144"/>
+        <source>Change the volume in global project (&apos;Master&apos;)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="146"/>
+        <source>Undo the last action (works over notes and partition instances)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="148"/>
+        <source>Redo the last action (works over notes and partition instances)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="150"/>
+        <source>Erase current selection (works over notes and partition instances)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="152"/>
+        <source>Open an exisiting project file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="154"/>
+        <source>Export the current project into an audio file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="156"/>
+        <source>Save the current project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="158"/>
+        <source>Save the current project into another file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="160"/>
+        <source>Open settings menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BoardsTitle</name>
     <message>
         <location filename="Studio/Design/Boards/BoardsTitle.qml" line="10"/>
@@ -403,122 +748,67 @@
 <context>
     <name>PluginsForeground</name>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="11"/>
-        <source>Effect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="12"/>
-        <source>Analyzer</source>
+        <source>Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="13"/>
-        <source>Delay</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="14"/>
-        <source>Distortion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="15"/>
-        <source>Dynamics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="16"/>
-        <source>EQ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="17"/>
-        <source>Filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="18"/>
-        <source>Spatial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="19"/>
-        <source>Generator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="20"/>
         <source>Mastering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="21"/>
-        <source>Modulation</source>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="14"/>
+        <source>Sequencer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="22"/>
-        <source>PitchShift</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="23"/>
-        <source>Restoration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="24"/>
-        <source>Reverb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="25"/>
-        <source>Surround</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="26"/>
-        <source>Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="27"/>
-        <source>Network</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="28"/>
-        <source>Drum</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="29"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="17"/>
         <source>Instrument</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="30"/>
-        <source>Piano</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="31"/>
-        <source>Sampler</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="32"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="18"/>
         <source>Synth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="33"/>
-        <source>External</source>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="19"/>
+        <source>Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="61"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="20"/>
+        <source>Sampler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="23"/>
+        <source>Effect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="24"/>
+        <source>Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="25"/>
+        <source>Reverb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="26"/>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="27"/>
+        <source>Distortion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="56"/>
         <source>Research</source>
         <translation type="unfinished"></translation>
     </message>
@@ -526,16 +816,13 @@
 <context>
     <name>PluginsView</name>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsView.qml" line="158"/>
-        <source>Close</source>
+        <location filename="Studio/Design/Plugins/PluginsView.qml" line="171"/>
+        <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PluginsViewTitle</name>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsViewTitle.qml" line="6"/>
-        <source>Plugins</source>
+        <location filename="Studio/Design/Plugins/PluginsView.qml" line="178"/>
+        <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -655,17 +942,17 @@
 <context>
     <name>TreeComponentsPanel</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="34"/>
-        <source>Mixer</source>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="43"/>
+        <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="39"/>
-        <source>Sources</source>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="48"/>
+        <source>Instruments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="44"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="53"/>
         <source>Effects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -681,8 +968,8 @@
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="265"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="292"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="251"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="278"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

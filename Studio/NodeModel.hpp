@@ -73,13 +73,6 @@ public:
     /** @brief Virtual destructor */
     ~NodeModel(void) noexcept override;
 
-    /** @brief Get the parent node if it exists */
-    [[nodiscard]] NodeModel *parentNode(void) noexcept
-        { return qobject_cast<NodeModel *>(parent()); }
-    [[nodiscard]] const NodeModel *parentNode(void) const noexcept
-        { return qobject_cast<NodeModel *>(parent()); }
-
-
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;
 
@@ -93,6 +86,16 @@ public:
     [[nodiscard]] NodeModel *get(const int index)
         { return const_cast<NodeModel *>(const_cast<const NodeModel *>(this)->get(index)); }
     [[nodiscard]] const NodeModel *get(const int index) const;
+
+
+    /** @brief Get the parent node if it exists */
+    [[nodiscard]] NodeModel *parentNode(void) noexcept
+        { return qobject_cast<NodeModel *>(parent()); }
+    [[nodiscard]] const NodeModel *parentNode(void) const noexcept
+        { return qobject_cast<NodeModel *>(parent()); }
+
+    /** @brief Set parent node */
+    void setParentNode(NodeModel * const parent) noexcept;
 
 
     /** @brief Get if the node is muted */
@@ -186,6 +189,10 @@ public slots:
 
     /** @brief Make a node the new parent */
     bool moveToParent(NodeModel *target);
+
+    /** @brief Switch two nodes */
+    bool swapNodes(NodeModel *target);
+
 
     /** @brief Duplicate the node */
     bool duplicate(void);

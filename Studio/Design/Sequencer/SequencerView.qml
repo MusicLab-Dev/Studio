@@ -116,7 +116,7 @@ ColumnLayout {
             if (contentView.height === 0)
                 mustCenter = true
             else
-                contentView.yOffset = ((contentView.pianoView.keys - (69 - contentView.pianoView.keyOffset)) * -contentView.rowHeight) + contentView.height / 2
+                contentView.centerTargetOctave()
         }
     }
 
@@ -127,6 +127,25 @@ ColumnLayout {
         function onPlayContext(pressed) { if (pressed) player.playOrPause() }
         function onReplayContext(pressed) { if (pressed) player.replay() }
         function onStopContext(pressed) { if (pressed) player.stop() }
+    }
+
+    Connections {
+        target: eventDispatcher
+        enabled: moduleIndex === modulesView.selectedModule && contentView.placementArea.mode === PlacementArea.None
+
+        function onUndo(pressed) {
+            if (pressed) {
+                actionsManager.undo()
+                contentView.placementArea.resetSelection()
+            }
+        }
+
+        function onRedo(pressed) {
+            if (pressed) {
+                actionsManager.redo()
+                contentView.placementArea.resetSelection()
+            }
+        }
     }
 
     SequencerHeader {
@@ -176,9 +195,9 @@ ColumnLayout {
 
             // When we use loadPartitionNode, contentView.height === 0 so we need to center the view once it is updated
             onHeightChanged: {
-                if (mustCenter) {
-                    contentView.yOffset = ((contentView.pianoView.keys - (69 - contentView.pianoView.keyOffset)) * -contentView.rowHeight) + contentView.height / 2
-                    mustCenter = false
+                if (sequencerView.mustCenter) {
+                    centerTargetOctave()
+                    sequencerView.mustCenter = false
                 }
             }
         }
@@ -199,25 +218,6 @@ ColumnLayout {
 
     ActionsManager {
         id: actionsManager
-    }
-
-    Connections {
-        target: eventDispatcher
-        enabled: moduleIndex === modulesView.selectedModule && contentView.placementArea.mode === PlacementArea.None
-
-        function onUndo(pressed) {
-            if (pressed) {
-                actionsManager.undo()
-                contentView.placementArea.resetSelection()
-            }
-        }
-
-        function onRedo(pressed) {
-            if (pressed) {
-                actionsManager.redo()
-                contentView.placementArea.resetSelection()
-            }
-        }
     }
 
     FMDebugWindow {

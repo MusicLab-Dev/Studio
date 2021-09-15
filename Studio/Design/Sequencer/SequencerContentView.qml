@@ -6,6 +6,12 @@ import AudioAPI 1.0
 import "../Common"
 
 ContentView {
+    function centerTargetOctave() {
+        var centerKey = (pianoView.keys - (pianoView.targetOctave - pianoView.octaveOffset) * pianoView.keysPerOctave) - pianoView.keysPerOctave / 2
+        var dt = -centerKey * rowHeight + height / 2 - rowHeight / 2
+        yOffset = Math.min(Math.max(dt, yOffsetMin), 0)
+    }
+
     property alias pianoView: pianoView
     property alias placementArea: pianoView.placementArea
 
