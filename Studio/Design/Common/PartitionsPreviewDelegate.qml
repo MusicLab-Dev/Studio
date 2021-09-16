@@ -59,7 +59,7 @@ MouseArea {
         color: themeManager.backgroundColor
         border.color: previewDelegate.isSelected ? partitionsPreview.nodeColor : partitionsPreview.nodeAccentColor
         border.width: previewDelegate.isSelected || previewDelegate.containsMouse ? 1 : 0
-        radius: 12
+        radius: 3
     }
 
     PartitionPreview {

@@ -51,11 +51,11 @@ void Studio::InitResources(void)
     qRegisterMetaType<GPoint::CurveRate>("GPoint::CurveRate");
     qRegisterMetaType<GPoint::CurveType>("GPoint::CurveType");
     qRegisterMetaType<PluginModel::ParamType>("PluginModel::ParamType");
-    qRegisterMetaType<PluginTableModel::Tags>("PluginTableModel::Tags");
     qRegisterMetaType<PluginTableModel::ExternalInputType>("PluginTableModel::ExternalInputType");
     qRegisterMetaType<AEventListener::EventTarget>("AEventListener::EventTarget");
     qRegisterMetaType<ActionNodeBase>("ActionNodeBase");
     qRegisterMetaType<ActionMoveNode>("ActionMoveNode");
+    qRegisterMetaType<ActionSwapNode>("ActionSwapNode");
     qRegisterMetaType<ActionPartitionBase>("ActionPartitionBase");
     qRegisterMetaType<ActionNotesBase>("ActionNoteBase");
     qRegisterMetaType<ActionAddNotes>("ActionAddNotes");
@@ -68,6 +68,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<PartitionInstancesAnalysis>("PartitionInstancesAnalysis");
     qRegisterMetaType<BeatRange>("BeatRange");
     qRegisterMetaType<Note>("Note");
+    qRegisterMetaType<GPoint>("GPoint");
     qRegisterMetaType<NoteEvent>("NoteEvent");
     qRegisterMetaType<VolumeCache>("VolumeCache");
     qRegisterMetaType<PartitionInstance>("PartitionInstance");
@@ -75,6 +76,10 @@ void Studio::InitResources(void)
     qRegisterMetaType<QVector<Note>>("QVector<Note>");
     qRegisterMetaType<QVector<PartitionInstance>>("QVector<PartitionInstance>");
     qRegisterMetaType<QVector<NodeModel *>>("QVector<NodeModel *>");
+    qRegisterMetaType<PluginModel::Flags>("PluginModel::Flags");
+    qRegisterMetaType<PluginModel::Tags>("PluginModel::Tags");
+    qRegisterMetaType<ThemeManager::Theme>("ThemeManager::Theme");
+    qRegisterMetaType<ThemeManager::SubChain>("ThemeManager::SubChain");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");

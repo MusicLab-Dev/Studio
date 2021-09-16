@@ -16,7 +16,7 @@ Button {
         height: control.height
         border.width: control.pressed ? (height / 20) : control.hovered ? (height / 24) : 0
         border.color: control.pressed ? themeManager.accentColor : control.hovered ? "#0D86CB" : ""
-        color: control.activated ? themeManager.accentColor : "#001E36"
+        color: control.activated ? themeManager.accentColor : themeManager.foregroundColor
         radius: width / 17
     }
 

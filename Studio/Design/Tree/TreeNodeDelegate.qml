@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQml 2.15
+import QtGraphicalEffects 1.15
 
 import NodeModel 1.0
 import PluginModel 1.0
@@ -13,6 +14,9 @@ Column {
     property NodeModel node: null
     property bool isSelected: false
     property bool inMultipleSelection: false
+
+    // Flags
+    readonly property bool noChildrenFlag: node ? node.plugin.flags & PluginModel.Flags.NoChildren : false
 
     // Colors
     readonly property color color: node ? node.color : "black"
@@ -33,11 +37,17 @@ Column {
         Rectangle {
             id: verticalLinkUp
             color: nodeDelegate.parentNode ? nodeDelegate.parentNode.color : "black"
-            width: 3
+            width: 2
             anchors.top: parent.top
             anchors.bottom: soundMeter.top
             anchors.horizontalCenter: parent.horizontalCenter
             visible: nodeDelegate.parentNode && !nodeInstanceBackground.drag.active
+
+            TreeNote {
+                x: width / -2 + 1
+                y: parent.height - 5 - (parent.height / 25) * (treeSurface.animationUpdateCount % 25)
+                color: verticalLinkUp.color
+            }
         }
 
         Rectangle {
@@ -46,8 +56,14 @@ Column {
             anchors.top: nodeInstanceBackground.bottom
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            width: 3
+            width: 2
             visible: childrenRepeater.count && !nodeInstanceBackground.drag.active
+
+            TreeNote {
+                x: width / -2 + 1
+                y: parent.height - 5 - (parent.height / 25) * (treeSurface.animationUpdateCount % 25)
+                color: verticalLinkDown.color
+            }
         }
 
         SoundMeter {
@@ -84,7 +100,7 @@ Column {
 
             onClicked: {
                 if (mouse.button === Qt.RightButton) {
-                    treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate.node)
+                    treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
                     treeNodeMenu.x = mouseX
                     treeNodeMenu.y = mouseY
                 } else {
@@ -111,7 +127,7 @@ Column {
             }
 
             onPressAndHold: {
-                treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate.node)
+                treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
                 treeNodeMenu.x = mouseX
                 treeNodeMenu.y = mouseY
             }
@@ -167,13 +183,7 @@ Column {
                 function onTargetDropped() {
                     if (nodeInstanceBackground.containsDrag) {
                         nodeInstanceBackground.containsDrag = false
-                        var lastParent = treeSurface.dragTarget.parentNode
-                        if (nodeInstanceBackground.validDrag)
-                            nodeDelegate.node.moveToChildren(treeSurface.dragTarget)
-                        else
-                            nodeDelegate.node.moveToParent(treeSurface.dragTarget)
-                        var action = actionsManager.makeActionMoveNode(treeSurface.dragTarget, lastParent, nodeDelegate.node)
-                        actionsManager.push(action)
+                        treeSurface.processNodeDrop(nodeInstanceBackground.validDrag, nodeDelegate.node)
                     }
                 }
 
@@ -224,13 +234,18 @@ Column {
             }
 
 
-            Rectangle {
+            Item {
                 width: parent.width * 0.6
                 height: parent.height * 0.4
-                color: Qt.lighter(themeManager.foregroundColor, 1.2)
-                anchors.horizontalCenter: parent.horizontalCenter
                 y: - height / 2
-                radius: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: Qt.lighter(themeManager.foregroundColor, 1.2)
+                    radius: 30
+                    opacity: nodeDelegate.isSelected ? 1 : 0.9
+                }
 
                 Item {
                     height: parent.height * 0.5
@@ -248,64 +263,96 @@ Column {
                         elide: Text.ElideRight
                     }
                 }
+
+
             }
 
             Rectangle {
                 id: nodeInstanceBackgroundRect
                 anchors.fill: parent
-                radius: 15
+                radius: 10
                 color: nodeInstanceBackground.containsDrag ? nodeInstanceBackground.validDrag ? nodeDelegate.lightColor : nodeDelegate.pressedColor : nodeDelegate.color
                 border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
-                border.width: 4
+                border.width: 2
+                opacity: nodeDelegate.isSelected ? 1 : 0.9
             }
 
+            DropShadow {
+                id: shadow
+                anchors.fill: nodeInstanceBackgroundRect
+                horizontalOffset: 2
+                verticalOffset: 2
+                radius: 10
+                samples: 17
+                color: "#aa000000"
+                source: nodeInstanceBackgroundRect
+                opacity: nodeDelegate.isSelected ? 1 : 0
+            }
 
-            Item {
+            DefaultText {
+                id: nodeName
                 anchors.top: parent.top
-                anchors.topMargin: parent.height * 0.2
+                anchors.topMargin: nodeInstanceBackgroundRect.border.width * 2
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width * 0.75
-                height: parent.height * 0.4
-                DefaultText {
-                    anchors.fill: parent
-
-                    text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("Error")
-                    color: nodeDelegate.accentColor
-                    fontSizeMode: Text.Fit
-                    font.pointSize: 20
-                    elide: Text.ElideRight
-                }
+                width: parent.width * 0.9
+                height: parent.height * 0.45
+                text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("Error")
+                color: nodeDelegate.accentColor
+                fontSizeMode: Text.Fit
+                font.pointSize: 20
+                elide: Text.ElideRight
             }
 
             DefaultImageButton {
                 anchors.left: parent.left
-                anchors.leftMargin: parent.width * 0.02
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: parent.height * 0.02
-                width: height
-                height: Math.min(parent.height / 2, 35)
+                anchors.leftMargin: nodeInstanceBackgroundRect.border.width * 2
+                anchors.verticalCenter: factoryImageButton.verticalCenter
+                width: factoryImageButton.height
+                height: factoryImageButton.height
                 source: "qrc:/Assets/Plus.png"
                 showBorder: false
                 scaleFactor: 1
                 colorDefault: nodeDelegate.accentColor
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
+                visible: !nodeDelegate.noChildrenFlag
 
                 onClicked: pluginsView.prepareInsertNode(nodeDelegate.node)
+            }
+
+            PluginFactoryImageButton {
+                id: factoryImageButton
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: nodeName.bottom
+                anchors.topMargin: nodeInstanceBackgroundRect.border.width
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: nodeInstanceBackgroundRect.border.width * 2
+                width: height
+                name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
+                colorDefault: nodeDelegate.accentColor
+                colorHovered: nodeDelegate.hoveredColor
+                colorOnPressed: nodeDelegate.pressedColor
+                scaleFactor: 1
+                playing: hovered || (treeView.visible && treeView.player.isPlayerRunning)
+
+                onClicked: {
+                    treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
+                    treeNodeMenu.x = pressX
+                    treeNodeMenu.y = pressY
+                }
             }
 
             DefaultImageButton {
                 readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
 
                 anchors.right: parent.right
-                anchors.rightMargin: parent.width * 0.02
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: parent.height * 0.02
-                width: height
-                height: Math.min(parent.height / 2, 35)
+                anchors.rightMargin: nodeInstanceBackgroundRect.border.width * 2
+                anchors.verticalCenter: factoryImageButton.verticalCenter
+                width: factoryImageButton.height
+                height: factoryImageButton.height
                 source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
                 showBorder: false
-                scaleFactor: 0.8
+                scaleFactor: 1
                 colorDefault: nodeDelegate.accentColor
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
@@ -321,11 +368,24 @@ Column {
         color: verticalLinkDown.color
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: childrenRow.leftMargin
-        anchors.rightMargin: childrenRow.rightMargin
-        height: 3
+        anchors.leftMargin: childrenRow.leftMargin - 1
+        anchors.rightMargin: childrenRow.rightMargin - 1.5
+        height: 2
         visible: childrenRepeater.count > 1
         // When visible is not turned off the tree is perfectly symetric (on selection) but I don't know why
+
+        TreeNote {
+            x: -5 + (parent.width / (2 * 25)) * (treeSurface.animationUpdateCount % 25)
+            y: width / -2 + 1
+            color: horizontalLinkDown.color
+        }
+
+        TreeNote {
+            x:  parent.width - 5 - (parent.width / (2 * 25)) * (treeSurface.animationUpdateCount % 25)
+            y: width / -2 + 1
+            color: horizontalLinkDown.color
+        }
+
     }
 
     Row {

@@ -3,18 +3,28 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 import PluginTableModel 1.0
+import PluginModel 1.0
+import ThemeManager 1.0
 
 import "../Default"
 import "../Help"
 
 TreePanel {
-    enum Type {
-        Mixer,
-        Sources,
-        Effects,
-        Tools,
-        Void
+    function tagsToColor(tags) {
+        if (tags & PluginModel.Tags.Instrument) {
+            return themeManager.getColorFromSubChain(ThemeManager.SubChain.Blue, blueColorIndex++)
+        } else if (tags & PluginModel.Tags.Effect) {
+            return themeManager.getColorFromSubChain(ThemeManager.SubChain.Red, redColorIndex++)
+        } else {
+            return themeManager.getColorFromSubChain(ThemeManager.SubChain.Green, greenColorIndex++)
+        }
     }
+
+    property int redColorIndex: 0
+    property int greenColorIndex: 0
+    property int blueColorIndex: 0
+
+    id: treeComponentsPanel
 
     Item {
         id: panelCategory
@@ -37,18 +47,18 @@ TreePanel {
             anchors.horizontalCenter: parent.horizontalCenter
 
             TreeComponentCategory {
-                text.text: qsTr("Mixer")
-                filter: TreeComponentsPanel.Type.Mixer
+                text.text: qsTr("Groups")
+                filter: PluginModel.Tags.Group
             }
 
             TreeComponentCategory {
-                text.text: qsTr("Sources")
-                filter: TreeComponentsPanel.Type.Sources
+                text.text: qsTr("Instrum.")
+                filter: PluginModel.Tags.Instrument
             }
 
             TreeComponentCategory {
                 text.text: qsTr("Effects")
-                filter: TreeComponentsPanel.Type.Effects
+                filter: PluginModel.Tags.Effect
             }
         }
     }
@@ -75,6 +85,13 @@ TreePanel {
             onWheel: {} // Steal wheel events
         }
 
+        PluginTableModelProxy {
+            id: pluginTableProxy
+            sourceModel: pluginTable
+            tagsFilter: treeComponentsPanel.filter
+            //nameFilter: pluginsForeground.currentSearchText
+        }
+
         ListView {
             id: treeComponentsListView
             anchors.centerIn: parent
@@ -82,24 +99,7 @@ TreePanel {
             height: parent.height * 0.95
             clip: true
             spacing: 20
-            model: PluginTableModelProxy {
-                id: pluginTableProxy
-                sourceModel: pluginTable
-                tagsFilter: {
-                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Void)
-                        return -1
-                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Sources)
-                        return PluginTableModel.Tags.Synth | PluginTableModel.Tags.Sampler | PluginTableModel.Tags.Piano
-                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Effects)
-                        return PluginTableModel.Tags.Analyzer | PluginTableModel.Tags.Delay | PluginTableModel.Tags.Distortion |
-                               PluginTableModel.Tags.EQ | PluginTableModel.Tags.Filter | PluginTableModel.Tags.Distortion
-                    if (treeComponentsPanel.filter === TreeComponentsPanel.Type.Mixer)
-                        return PluginTableModel.Tags.Mastering
-                    return 0;
-
-                }
-                //nameFilter: pluginsForeground.currentSearchText
-            }
+            model: treeComponentsPanel.filter ? pluginTableProxy : null
 
             delegate: TreeComponentDelegate {
                 width: treeComponentsListView.width

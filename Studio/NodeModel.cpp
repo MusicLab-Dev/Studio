@@ -19,7 +19,9 @@
 #include "ThemeManager.hpp"
 
 // Current color index from color chain
-static quint32 CurrentColorIndex = 0u;
+static quint32 CurrentRedColorIndex = 0u;
+static quint32 CurrentGreenColorIndex = 0u;
+static quint32 CurrentBlueColorIndex = 0u;
 
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     :   QAbstractListModel(parent),
@@ -29,7 +31,21 @@ NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
         _plugin(node->plugin(), this)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
-    _data->setColor(ThemeManager::GetColorFromChain(CurrentColorIndex++).rgba());
+
+    // Set color using plugin tags
+    ThemeManager::SubChain subChain {};
+    quint32 index = 0u;
+    if (static_cast<int>(_plugin->tags()) & static_cast<int>(PluginModel::Tags::Instrument)) {
+        subChain = ThemeManager::SubChain::Blue;
+        index = CurrentBlueColorIndex++;
+    } else if (static_cast<int>(_plugin->tags()) & static_cast<int>(PluginModel::Tags::Effect)) {
+        subChain = ThemeManager::SubChain::Red;
+        index = CurrentRedColorIndex++;
+    } else {
+        subChain = ThemeManager::SubChain::Green;
+        index = CurrentGreenColorIndex++;
+    }
+    _data->setColor(ThemeManager::GetColorFromSubChain(subChain, index).rgba());
 }
 
 NodeModel::~NodeModel(void) noexcept
@@ -54,6 +70,15 @@ QVariant NodeModel::data(const QModelIndex &index, int role) const
     default:
         return QVariant();
     }
+}
+
+void NodeModel::setParentNode(NodeModel * const parent) noexcept
+{
+    setParent(parent);
+    if (parent)
+        audioNode()->setParent(parent->audioNode());
+    else
+        audioNode()->setParent(nullptr);
 }
 
 void NodeModel::setMuted(const bool muted)
@@ -290,25 +315,14 @@ bool NodeModel::moveToChildren(NodeModel *target)
 
     return Models::AddProtectedEvent(
         [this, target, targetIndex, hasPaused] {
-            auto parentNode = target->parentNode();
-            auto audioParent = parentNode->audioNode();
-            auto audioPtr = std::move(audioParent->children().at(targetIndex));
-            auto ptr = std::move(parentNode->_children.at(targetIndex));
+            auto targetParent = target->parentNode();
+            auto audioParent = targetParent->audioNode();
 
-            // Remove target node
-            parentNode->beginRemoveRows(QModelIndex(), targetIndex, targetIndex);
-            audioParent->children().erase(audioParent->children().begin() + targetIndex);
-            parentNode->_children.erase(parentNode->_children.begin() + targetIndex);
-            parentNode->endRemoveRows();
-
-            audioPtr->setParent(audioParent);
-            target->setParent(this);
+            // Extract target node from targetParent
+            auto [ptr, audioPtr] = ProcessRemove(targetParent, targetIndex);
 
             // Insert target into children
-            beginInsertRows(QModelIndex(), count(), count());
-            audioNode()->children().push(std::move(audioPtr));
-            _children.push(std::move(ptr));
-            endInsertRows();
+            ProcessAdd(this, std::move(ptr), std::move(audioPtr));
         },
         [this, hasPaused] {
             if (hasPaused) {
@@ -342,39 +356,86 @@ bool NodeModel::moveToParent(NodeModel *target)
     return Models::AddProtectedEvent(
         [this, target, targetIndex, hasPaused] {
             const auto targetParent = target->parentNode();
-            auto audioPtr = std::move(targetParent->audioNode()->children().at(static_cast<std::uint32_t>(targetIndex)));
-            auto ptr = std::move(targetParent->_children.at(targetIndex));
-
-            // Remove target node
-            targetParent->beginRemoveRows(QModelIndex(), targetIndex, targetIndex);
-            targetParent->audioNode()->children().erase(targetParent->audioNode()->children().begin() + targetIndex);
-            targetParent->_children.erase(targetParent->_children.begin() + targetIndex);
-            targetParent->endRemoveRows();
-
             const auto selfParent = this->parentNode();
-            const auto selfIndex = selfParent->getChildIndex(this);
-            auto selfAudioPtr = std::move(selfParent->audioNode()->children().at(static_cast<std::uint32_t>(selfIndex)));
-            auto selfPtr = std::move(selfParent->_children.at(selfIndex));
 
-            // Remove this from self parent
-            selfParent->beginRemoveRows(QModelIndex(), selfParent->count() - 1, selfParent->count() - 1);
-            selfParent->audioNode()->children().erase(selfParent->audioNode()->children().begin() + selfIndex);
-            selfParent->_children.erase(selfParent->_children.begin() + selfIndex);
-            selfParent->endRemoveRows();
+            // Extract target node from targetParent
+            auto [ptr, audioPtr] = ProcessRemove(targetParent, targetIndex);
+
+            // Extract self from self parent
+            const auto selfIndex = selfParent->getChildIndex(this);
+            auto [selfPtr, selfAudioPtr] = ProcessRemove(selfParent, selfIndex);
 
             // Insert target into this
-            beginInsertRows(QModelIndex(), count(), count());
-            audioNode()->children().push(std::move(audioPtr));
-            _children.push(std::move(ptr));
-            endInsertRows();
-            target->setParent(this);
+            ProcessAdd(this, std::move(ptr), std::move(audioPtr));
 
             // Insert this into target parent
-            targetParent->beginInsertRows(QModelIndex(), targetParent->count(), targetParent->count());
-            targetParent->audioNode()->children().push(std::move(selfAudioPtr));
-            targetParent->_children.push(std::move(selfPtr));
-            targetParent->endInsertRows();
-            setParent(targetParent);
+            ProcessAdd(targetParent, std::move(selfPtr), std::move(selfAudioPtr));
+        },
+        [this, hasPaused] {
+            if (hasPaused) {
+                Scheduler::Get()->graph().wait();
+                Scheduler::Get()->invalidateCurrentGraph();
+                Scheduler::Get()->playImpl();
+            } else
+                Scheduler::Get()->invalidateCurrentGraph();
+            processGraphChange();
+        }
+    );
+}
+
+bool NodeModel::swapNodes(NodeModel *target)
+{
+    if (parentNode() == nullptr) {
+        qDebug() << "NodeModel: Cannot swap parent of a node that has no parent";
+        return false;
+    }
+
+    const auto targetParent = target->parentNode();
+
+    if (!targetParent) {
+        qDebug() << "NodeModel: Cannot move a children that has no parent";
+        return false;
+    }
+
+    const auto targetIndex = targetParent->getChildIndex(target);
+    const bool hasPaused = Scheduler::Get()->pauseImpl();
+
+    return Models::AddProtectedEvent(
+        [this, target, targetIndex, hasPaused] {
+            const auto selfParent = this->parentNode();
+            const auto targetParent = target->parentNode();
+
+            // If parents are same, only swap children
+            if (selfParent == targetParent) {
+                beginResetModel();
+                target->beginResetModel();
+                ProcessSwap(this, target);
+                target->endResetModel();
+                endResetModel();
+                return;
+            }
+
+            // Extract target node from targetParent
+            auto [ptr, audioPtr] = ProcessRemove(targetParent, targetIndex);
+
+            // Extract self from self parent
+            const auto selfIndex = selfParent->getChildIndex(this);
+            auto [selfPtr, selfAudioPtr] = ProcessRemove(selfParent, selfIndex);
+
+            // Switch children
+            ProcessSwap(this, target);
+
+            // Insert target into self parent
+            if (target != selfParent)
+                ProcessAdd(selfParent, std::move(ptr), std::move(audioPtr));
+            else
+                ProcessAdd(this, std::move(ptr), std::move(audioPtr));
+
+            // Insert this into target parent
+            if (this != targetParent)
+                ProcessAdd(targetParent, std::move(selfPtr), std::move(selfAudioPtr));
+            else
+                ProcessAdd(target, std::move(selfPtr), std::move(selfAudioPtr));
         },
         [this, hasPaused] {
             if (hasPaused) {
@@ -398,7 +459,6 @@ bool NodeModel::duplicate(void)
     node->setName(name());
     node->setColor(color());
     return true;
-
 }
 
 bool NodeModel::isAParent(NodeModel *node) const noexcept
@@ -443,4 +503,37 @@ void NodeModel::getAllChildrenImpl(QVector<NodeModel *> &res) noexcept
 void NodeModel::processGraphChange(void) const noexcept
 {
     emit Application::Get()->project()->master()->graphChanged();
+}
+
+
+void NodeModel::ProcessSwap(NodeModel * const lhs, NodeModel *rhs)
+{
+    lhs->audioNode()->children().swap(rhs->audioNode()->children());
+    lhs->_children.swap(rhs->_children);
+    for (auto &child : lhs->_children)
+        child->setParentNode(lhs);
+    for (auto &child : rhs->_children)
+        child->setParentNode(rhs);
+}
+
+void NodeModel::ProcessAdd(NodeModel * const parent, NodePtr &&nodePtr, Audio::NodePtr &&audioNodePtr)
+{
+    parent->beginInsertRows(QModelIndex(), parent->count(), parent->count());
+    parent->audioNode()->children().push(std::move(audioNodePtr));
+    parent->_children.push(std::move(nodePtr))
+        ->setParent(parent);
+    parent->endInsertRows();
+}
+
+std::pair<NodeModel::NodePtr, Audio::NodePtr> NodeModel::ProcessRemove(NodeModel * const parent, const int targetIndex)
+{
+    auto &ref = parent->_children.at(targetIndex);
+    parent->beginRemoveRows(QModelIndex(), targetIndex, targetIndex);
+    auto audioPtr = std::move(parent->audioNode()->children().at(static_cast<std::uint32_t>(targetIndex)));
+    auto ptr = std::move(ref);
+    parent->audioNode()->children().erase(parent->audioNode()->children().begin() + targetIndex);
+    parent->_children.erase(parent->_children.begin() + targetIndex);
+    parent->endRemoveRows();
+    ref->setParentNode(nullptr);
+    return std::make_pair(std::move(ptr), std::move(audioPtr));
 }

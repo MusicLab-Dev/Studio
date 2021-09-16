@@ -10,6 +10,8 @@
 
 #include "Note.hpp"
 #include "PartitionInstance.hpp"
+#include "PartitionModel.hpp"
+#include "NodeModel.hpp"
 
 /** @brief Manage the clipboard to the qml */
 class ClipboardManager : public QObject
@@ -18,6 +20,7 @@ class ClipboardManager : public QObject
 
     Q_PROPERTY(State state READ state WRITE setState NOTIFY stateChanged)
     Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
+    Q_PROPERTY(NodeModel *partitionInstanceNode READ partitionInstanceNode WRITE setPartitionInstanceNode NOTIFY partitionInstanceNodeChanged)
 
 public:
 
@@ -47,6 +50,11 @@ public:
     /** @brief Set the count */
     void setCount(int count) noexcept;
 
+    /** @brief Get the binded node */
+    [[nodiscard]] NodeModel *partitionInstanceNode(void) const noexcept { return _partitionInstanceNode; }
+
+    /** @brief Set the binded node */
+    void setPartitionInstanceNode(NodeModel *node) noexcept;
 
 public slots:
     /** @brief Return the clipboard data
@@ -65,11 +73,11 @@ public slots:
         QGuiApplication::clipboard()->setText(data);
     }
 
-    /** @brief Clear the clipboard */
-    void clear(void) noexcept
-    {
-        QGuiApplication::clipboard()->clear();
-    }
+    // /** @brief Clear the clipboard */
+    // void clear(void) noexcept
+    // {
+    //     QGuiApplication::clipboard()->clear();
+    // }
 
     /** @brief Wrapper JSON */
     QString notesToJson(const QVector<Note> &notes) noexcept;
@@ -86,7 +94,11 @@ signals:
     /** @brief Notify when count changed */
     void countChanged(void);
 
+    /** @brief Notify when partitionInstanceNode changed */
+    void partitionInstanceNodeChanged(void);
+
 private:
     int _count = 0;
     State _state = State::Nothing;
+    NodeModel *_partitionInstanceNode = nullptr;
 };

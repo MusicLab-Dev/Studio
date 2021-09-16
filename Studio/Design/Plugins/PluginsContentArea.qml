@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Default"
+import "../Common"
 
 import PluginTableModel 1.0
 import CursorManager 1.0
@@ -29,65 +30,6 @@ GridView {
         visible: false
     }
 
-    delegate: Item {
-        property bool pluginsSquareComponentHovered: false
-
-        id: componentDelegate
-        width: pluginsGrid.cellWidth
-        height: pluginsGrid.cellHeight
-
-        PluginsSquareComponent {
-            id: pluginSquareComponent
-            width: pluginsGrid.cellWidth - x * 2
-            height: pluginsGrid.cellHeight / 1.6
-            x: 7
-            y: 10
-
-            Image {
-                width: parent.width / 1.5
-                height: width
-                x: parent.width / 2 - width / 2
-                y: parent.height / 2 - height / 2
-                source: factoryName ? "qrc:/Assets/Plugins/" + factoryName + ".png" : "qrc:/Assets/Plugins/Default.png"
-            }
-        }
-
-        PluginsSquareComponentTitle {
-            id: title
-            text: factoryName
-            anchors.top: pluginSquareComponent.bottom
-        }
-
-        PluginsSquareComponentDescription {
-            id: description
-            text: factoryDescription
-            anchors.top: title.bottom
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            DefaultToolTip {
-                id: toolTip
-                text: factoryDescription
-                visible: pluginsSquareComponentArea.containsMouse && description.truncated
-            }
-        }
-
-        MouseArea {
-            id: pluginsSquareComponentArea
-            anchors.fill: parent
-            hoverEnabled: true
-
-            onHoveredChanged: {
-                if (containsMouse)
-                    cursorManager.set(CursorManager.Type.Clickable)
-                else
-                    cursorManager.set(CursorManager.Type.Normal)
-            }
-
-            onReleased: {
-                pluginsView.acceptAndClose(factoryPath)
-            }
-        }
+    delegate: PluginsDelegate {
     }
 }

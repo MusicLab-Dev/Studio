@@ -11,10 +11,8 @@ ModulesStaticTab {
         var row = Math.max(Math.min(Math.round(y / modulesTabs.tabHeight), modulesTabs.tabRows), 0)
         var newVisualIdx = Math.min(col + row * modulesTabs.tabsPerRow, modulesTabs.totalTabCount)
         var newIdx = Math.min(Math.max(newVisualIdx - modulesTabs.staticTabCount, 0), modulesView.modules.count - 1)
-        if (tabIndex != newIdx) {
-            modulesView.modules.move(tabIndex, newIdx, 1)
-            modulesView.selectedModule = newIdx
-        }
+        if (tabIndex != newIdx)
+            moveModule(tabIndex, newIdx)
     }
 
     property int visualTabIndex

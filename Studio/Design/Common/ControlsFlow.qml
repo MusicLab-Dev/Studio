@@ -39,22 +39,54 @@ Rectangle {
         height: 1
     }
 
-    Row {
+    RowLayout {
         id: headerRow
         height: nodeControlsFlow.height
-        spacing: 10
-        padding: 10
+        width: parent.width * 0.15
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
 
-        DefaultText {
-            width: contentView.width * 0.1
-            anchors.verticalCenter: parent.verticalCenter
-            horizontalAlignment: Text.AlignLeft
-            fontSizeMode: Text.HorizontalFit
-            font.pixelSize: 30
-            wrapMode: Text.Wrap
-            text: node ? node.plugin.title : ""
-            color: controlsFlow.nodeColor
+        Item {
+            id: icon
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            PluginFactoryImage {
+                width: height
+                height: parent.height * 0.75
+                anchors.centerIn: parent
+                name: node ? node.plugin.title : ""
+                color: node ? node.color : "black"
+            }
         }
+
+        Item {
+            id: name
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.65
+
+            DefaultText {
+                anchors.centerIn: parent
+                width: parent.width * 0.8
+                height: parent.height
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                fontSizeMode: Text.HorizontalFit
+                font.pixelSize: 30
+                wrapMode: Text.Wrap
+                text: node ? qsTr(node.name + "'s controls") : ""
+                color: controlsFlow.nodeColor
+            }
+        }
+
+    }
+
+    Rectangle {
+        anchors.left: headerRow.right
+        anchors.verticalCenter: parent.verticalCenter
+        width: 2
+        height: parent.height * 0.8
+        color: "black"
     }
 
     Flow {
@@ -64,8 +96,7 @@ Rectangle {
         spacing: 20
         anchors.left: headerRow.right
         anchors.right: closeButton.left
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
+        anchors.leftMargin: parent.width * 0.01
         anchors.verticalCenter: parent.verticalCenter
 
         Repeater {
@@ -100,10 +131,10 @@ Rectangle {
     DefaultImageButton {
         id: closeButton
         width: height
-        height: Math.min(parent.height / 2, controlsFlow.baseHeight)
+        height: Math.min(parent.height * 0.25, controlsFlow.baseHeight)
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.rightMargin: 15
         source: "qrc:/Assets/Close.png"
         showBorder: false
         scaleFactor: 1

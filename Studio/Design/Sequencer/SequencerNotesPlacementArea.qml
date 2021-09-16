@@ -161,7 +161,6 @@ PlacementArea {
             if (!pressed || selectionListModel == null)
                 return
             var notes = partition.getNotes(selectionListModel)
-            clipboardManager.clear()
             clipboardManager.state = ClipboardManager.State.Note
             clipboardManager.count = notes.length
             clipboardManager.copy(clipboardManager.notesToJson(notes))
@@ -187,6 +186,8 @@ PlacementArea {
             if (!pressed || selectionListModel == null)
                 return
             var notes = partition.getNotes(selectionListModel)
+            clipboardManager.state = ClipboardManager.State.Note
+            clipboardManager.count = notes.length
             clipboardManager.copy(clipboardManager.notesToJson(notes))
             partition.removeRange(selectionListModel)
             actionsManager.push(actionsManager.makeActionRemoveNotes(partition, notes))

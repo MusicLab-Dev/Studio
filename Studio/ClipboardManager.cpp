@@ -26,6 +26,14 @@ void ClipboardManager::setCount(int count) noexcept
     emit countChanged();
 }
 
+void ClipboardManager::setPartitionInstanceNode(NodeModel *node) noexcept
+{
+    if (_partitionInstanceNode == node)
+        return;
+    _partitionInstanceNode = node;
+    emit partitionInstanceNodeChanged();
+}
+
 QString ClipboardManager::notesToJson(const QVector<Note> &notes) noexcept
 {
     QJsonDocument doc;

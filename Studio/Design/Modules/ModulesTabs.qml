@@ -17,15 +17,21 @@ Item {
     readonly property int staticTabCount: 1
     property bool expanded: false
 
+    id: modulesTabs
+    width: parent.width
+    height: expanded ? tabArea.height : tabHeight
+    clip: true
+
     onAllTabsInOneRowChanged: {
         if (allTabsInOneRow)
             expanded = false
     }
 
-    id: modulesTabs
-    width: parent.width
-    height: expanded ? tabArea.height : tabHeight
-    clip: true
+    onExpandedChanged: {
+        if (!expanded && selectedModule > tabsPerRow) {
+            modulesView.moveModule(selectedModule, 0)
+        }
+    }
 
     Rectangle {
         id: backgroundTabs

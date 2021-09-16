@@ -46,44 +46,10 @@ Item {
         function onStopContext(pressed) { if (pressed) player.stop() }
     }
 
-    Connections {
-        target: eventDispatcher
-        enabled: moduleIndex === modulesView.selectedModule
-
-        function onUndo(pressed) {
-            if (pressed) {
-                actionsManager.undo()
-            }
-        }
-
-        function onRedo(pressed) {
-            if (pressed) {
-                actionsManager.redo()
-            }
-        }
-    }
-
-    ColumnLayout {
-        anchors.fill: parent
-
-        TreeHeader {
-            id: treeHeader
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.12
-            z: 1
-        }
-
-        TreeContentView {
-            id: contentView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-
-        TreeFooter {
-            id: treeFooter
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.12
-        }
+    TreeContentView {
+        id: contentView
+        Layout.fillWidth: true
+        Layout.fillHeight: true
     }
 
     HelpHandler {

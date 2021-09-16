@@ -121,6 +121,11 @@ Rectangle {
         selectedModule = idx
     }
 
+    function moveModule(from, to) {
+        modulesView.modules.move(from, to, 1)
+        modulesView.selectedModule = to
+    }
+
     property alias modules: modules
     property alias totalModuleCount: modulesContent.totalTabCount
     property alias selectedModule: modulesContent.selectedModule
@@ -182,9 +187,7 @@ Rectangle {
 
     SettingsView {
         id: settingsView
-        width: parent.width * 0.9
-        height: parent.height * 0.9
-        anchors.centerIn: parent
+        anchors.fill: parent
     }
 
     BoardsView {

@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import "../Default"
 
@@ -15,7 +16,7 @@ Rectangle {
     property bool hide: false
 
     // Previews configuration
-    readonly property real baseHeight: 60
+    readonly property real baseHeight: 70
     readonly property real delegatePerRow: 4
     readonly property real previewWidth: (previewFlow.width - delegatePerRow * previewFlow.spacing) / delegatePerRow
 
@@ -53,43 +54,65 @@ Rectangle {
         anchors.bottom: parent.bottom
     }
 
-    Row {
+    RowLayout {
         id: headerRow
         height: parent.height
-        padding: 10
-        spacing: 10
+        width: parent.width * 0.15
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
 
-        DefaultText {
-            width: contentView.width * 0.1
-            anchors.verticalCenter: parent.verticalCenter
-            horizontalAlignment: Text.AlignLeft
-            fontSizeMode: Text.Fit
-            font.pixelSize: 30
-            color: partitionsPreview.nodeColor
-            text: partitionsPreview.nodeName
-            wrapMode: Text.Wrap
-        }
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-        DefaultImageButton {
-            id: addPartitionButton
-            width: height
-            height: Math.min(parent.height / 2, partitionsPreview.baseHeight)
-            anchors.verticalCenter: parent.verticalCenter
-            source: "qrc:/Assets/AddPartition.png"
-            showBorder: false
-            scaleFactor: 1
-            colorDefault: partitionsPreview.nodeColor
-            colorHovered: partitionsPreview.nodeHoveredColor
-            colorOnPressed: partitionsPreview.nodePressedColor
+            DefaultImageButton {
+                id: addPartitionButton
+                width: height
+                height: Math.min(parent.height / 2, partitionsPreview.baseHeight)
+                anchors.centerIn: parent
+                source: "qrc:/Assets/AddPartition.png"
+                showBorder: false
+                scaleFactor: 1
+                colorDefault: partitionsPreview.nodeColor
+                colorHovered: partitionsPreview.nodeHoveredColor
+                colorOnPressed: partitionsPreview.nodePressedColor
 
-            onReleased: {
-                // Add a partition and select it on success
-                var partitions = partitionsPreview.node.partitions
-                var idx = partitions.count()
-                if (partitions.add())
-                    contentView.selectPartition(partitionsPreview.node, idx)
+                onReleased: {
+                    // Add a partition and select it on success
+                    var partitions = partitionsPreview.node.partitions
+                    var idx = partitions.count()
+                    if (partitions.add())
+                        contentView.selectPartition(partitionsPreview.node, idx)
+                }
             }
         }
+
+        Item {
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.65
+
+            DefaultText {
+                anchors.centerIn: parent
+                width: parent.width * 0.8
+                height: parent.height
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                fontSizeMode: Text.HorizontalFit
+                font.pixelSize: 30
+                color: partitionsPreview.nodeColor
+                text: partitionsPreview.nodeName + "'s partitions"
+                wrapMode: Text.Wrap
+            }
+        }
+
+    }
+
+    Rectangle {
+        anchors.left: headerRow.right
+        anchors.verticalCenter: parent.verticalCenter
+        width: 2
+        height: parent.height * 0.8
+        color: "black"
     }
 
     Flow {
@@ -97,7 +120,7 @@ Rectangle {
         y: 10
         anchors.left: headerRow.right
         anchors.right: closeButton.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: 20
         anchors.rightMargin: 10
         spacing: 10
 
@@ -116,10 +139,10 @@ Rectangle {
     DefaultImageButton {
         id: closeButton
         width: height
-        height: Math.min(parent.height / 2, partitionsPreview.baseHeight)
+        height: Math.min(parent.height * 0.25, partitionsPreview.baseHeight)
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.rightMargin: 15
         source: "qrc:/Assets/Close.png"
         showBorder: false
         scaleFactor: 1

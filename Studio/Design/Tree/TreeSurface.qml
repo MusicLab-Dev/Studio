@@ -64,6 +64,18 @@ Item {
         treeControls.close()
     }
 
+    function processNodeDrop(validDrag, node) {
+
+        if (validDrag) {
+            var lastParent = treeSurface.dragTarget.parentNode
+            if (node.moveToChildren(treeSurface.dragTarget))
+                actionsManager.push(actionsManager.makeActionMoveNode(node, lastParent, treeSurface.dragTarget))
+        } else {
+            if (node.swapNodes(treeSurface.dragTarget))
+                actionsManager.push(actionsManager.makeActionSwapNode(node, treeSurface.dragTarget))
+        }
+    }
+
     signal targetDropped
     signal targetPluginDropped
     signal selectionFinished(point from, point to)
@@ -84,9 +96,26 @@ Item {
     property int selectionCount: 0
     property NodeModel last: null
 
+    // Animations
+    property int animationUpdateCount: 0
+
     id: treeSurface
     width: Math.max(masterNodeDelegate.width, parent.width)
     height: Math.max(masterNodeDelegate.height, parent.height)
+
+    Timer {
+        id: animationUpdateTimer
+        repeat: true
+        running: player.isPlayerRunning
+        interval: 66
+
+        onRunningChanged: treeSurface.animationUpdateCount = 0
+
+        onTriggered: {
+            if (++treeSurface.animationUpdateCount < 0)
+                treeSurface.animationUpdateCount = 0
+        }
+    }
 
     TreeNodeDelegate {
         id: masterNodeDelegate
