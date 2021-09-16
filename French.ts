@@ -704,22 +704,18 @@
 <context>
     <name>PlannerContentView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="83"/>
-        <source>Change the project name on clicked</source>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="82"/>
+        <source>Grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="82"/>
-        <source>Grid</source>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="83"/>
+        <source>Change the project name on clicked</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PlannerFooter</name>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Description</translation>
-    </message>
     <message>
         <location filename="Studio/Design/Planner/PlannerFooter.qml" line="24"/>
         <source>Planner Footer</source>
@@ -805,10 +801,6 @@
         <location filename="Studio/Design/Planner/PlannerView.qml" line="31"/>
         <source>Planner</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Description</translation>
     </message>
 </context>
 <context>
@@ -1008,45 +1000,56 @@
 <context>
     <name>TreeComponentsPanel</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="43"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="37"/>
+        <source>Tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="38"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="50"/>
         <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="48"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="55"/>
         <source>Instrum.</source>
         <oldsource>Instruments</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="53"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="60"/>
         <source>Effects</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="28"/>
-        <source>Description</source>
-        <translation type="unfinished">Description</translation>
     </message>
 </context>
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="248"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="188"/>
+        <source>Mastering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="189"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="260"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="341"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="255"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="259"/>
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="258"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="340"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="149"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="218"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="259"/>
-        <source>Description</source>
-        <translation type="unfinished">Description</translation>
     </message>
 </context>
 <context>
@@ -1060,7 +1063,7 @@
         <location filename="Studio/Design/Tree/TreeFooter.qml" line="34"/>
         <location filename="Studio/Design/Tree/TreeFooter.qml" line="74"/>
         <source>Description</source>
-        <translation type="unfinished">Description</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeFooter.qml" line="73"/>
