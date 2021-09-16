@@ -7,10 +7,10 @@
 
 #include <QGuiApplication>
 #include <QClipboard>
+#include <QQmlEngine>
 
 #include "Note.hpp"
 #include "PartitionInstance.hpp"
-#include "PartitionModel.hpp"
 #include "NodeModel.hpp"
 
 /** @brief Manage the clipboard to the qml */
@@ -33,7 +33,7 @@ public:
 
     /** @brief Construct a new ClipboardManager */
     explicit ClipboardManager(QObject *parent = nullptr)
-        : QObject(parent) {};
+        : QObject(parent) { QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership); };
 
     /** @brief Destructor */
     ~ClipboardManager(void) override = default;
@@ -93,7 +93,7 @@ signals:
 
     /** @brief Notify when count changed */
     void countChanged(void);
-
+    
     /** @brief Notify when partitionInstanceNode changed */
     void partitionInstanceNodeChanged(void);
 

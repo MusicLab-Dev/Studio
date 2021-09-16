@@ -176,9 +176,13 @@ PlacementArea {
         function onErase(pressed) {
             if (!pressed || selectionListModel == null)
                 return
+            console.debug(nodeInstances.instances, selectionListModel)
             var instances = nodeInstances.instances.getInstances(selectionListModel)
+            console.debug(instances)
             nodeInstances.instances.removeRange(selectionListModel)
-            actionsManager.push(actionsManager.makeActionRemovePartitions(nodeInstances.instances, instances))
+            console.debug(nodeInstances.instances)
+            actionsManager.push(actionsManager.makeActionRemovePartitions(nodeInstances.partitions, instances))
+            console.debug("finished")
             resetSelection()
         }
    }
