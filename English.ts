@@ -916,17 +916,17 @@
 <context>
     <name>SettingsView</name>
     <message>
-        <location filename="Studio/Design/Settings/SettingsView.qml" line="24"/>
+        <location filename="Studio/Design/Settings/SettingsView.qml" line="58"/>
         <source>Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Settings/SettingsView.qml" line="34"/>
+        <location filename="Studio/Design/Settings/SettingsView.qml" line="68"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Settings/SettingsView.qml" line="50"/>
+        <location filename="Studio/Design/Settings/SettingsView.qml" line="84"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
@@ -961,7 +961,7 @@
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="209"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="248"/>
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -969,8 +969,8 @@
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="251"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="278"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="257"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="299"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

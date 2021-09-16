@@ -279,5 +279,5 @@ private:
     /** @brief Various Node manipulation helpers */
     static void ProcessSwap(NodeModel * const lhs, NodeModel *rhs);
     static void ProcessAdd(NodeModel * const parent, NodePtr &&nodePtr, Audio::NodePtr &&audioNodePtr);
-    static void ProcessRemove(NodeModel * const parent, const int targetIndex);
+    static std::pair<NodePtr, Audio::NodePtr> ProcessRemove(NodeModel * const parent, const int targetIndex);
 };

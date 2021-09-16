@@ -75,7 +75,10 @@ QVariant NodeModel::data(const QModelIndex &index, int role) const
 void NodeModel::setParentNode(NodeModel * const parent) noexcept
 {
     setParent(parent);
-    audioNode()->setParent(parent->audioNode());
+    if (parent)
+        audioNode()->setParent(parent->audioNode());
+    else
+        audioNode()->setParent(nullptr);
 }
 
 void NodeModel::setMuted(const bool muted)
@@ -315,12 +318,8 @@ bool NodeModel::moveToChildren(NodeModel *target)
             auto targetParent = target->parentNode();
             auto audioParent = targetParent->audioNode();
 
-            // Extract target node form target parent
-            auto audioPtr = std::move(audioParent->children().at(targetIndex));
-            auto ptr = std::move(targetParent->_children.at(targetIndex));
-
-            // Remove target node
-            ProcessRemove(targetParent, targetIndex);
+            // Extract target node from targetParent
+            auto [ptr, audioPtr] = ProcessRemove(targetParent, targetIndex);
 
             // Insert target into children
             ProcessAdd(this, std::move(ptr), std::move(audioPtr));
@@ -359,20 +358,12 @@ bool NodeModel::moveToParent(NodeModel *target)
             const auto targetParent = target->parentNode();
             const auto selfParent = this->parentNode();
 
-            // Extract target node from target parent
-            auto audioPtr = std::move(targetParent->audioNode()->children().at(static_cast<std::uint32_t>(targetIndex)));
-            auto ptr = std::move(targetParent->_children.at(targetIndex));
+            // Extract target node from targetParent
+            auto [ptr, audioPtr] = ProcessRemove(targetParent, targetIndex);
 
-            // Remove target node
-            ProcessRemove(this, targetIndex);
-
-            // Extract self node from self parent
+            // Extract self from self parent
             const auto selfIndex = selfParent->getChildIndex(this);
-            auto selfAudioPtr = std::move(selfParent->audioNode()->children().at(static_cast<std::uint32_t>(selfIndex)));
-            auto selfPtr = std::move(selfParent->_children.at(selfIndex));
-
-            // Remove this from self parent
-            ProcessRemove(selfParent, selfIndex);
+            auto [selfPtr, selfAudioPtr] = ProcessRemove(selfParent, selfIndex);
 
             // Insert target into this
             ProcessAdd(this, std::move(ptr), std::move(audioPtr));
@@ -424,20 +415,12 @@ bool NodeModel::swapNodes(NodeModel *target)
                 return;
             }
 
-            // Extract target node
-            auto audioPtr = std::move(targetParent->audioNode()->children().at(static_cast<std::uint32_t>(targetIndex)));
-            auto ptr = std::move(targetParent->_children.at(targetIndex));
+            // Extract target node from targetParent
+            auto [ptr, audioPtr] = ProcessRemove(targetParent, targetIndex);
 
-            // Remove target node from targetParent
-            ProcessRemove(targetParent, targetIndex);
-
-            // Extract self node
+            // Extract self from self parent
             const auto selfIndex = selfParent->getChildIndex(this);
-            auto selfAudioPtr = std::move(selfParent->audioNode()->children().at(static_cast<std::uint32_t>(selfIndex)));
-            auto selfPtr = std::move(selfParent->_children.at(selfIndex));
-
-            // Remove self from self parent
-            ProcessRemove(selfParent, selfIndex);
+            auto [selfPtr, selfAudioPtr] = ProcessRemove(selfParent, selfIndex);
 
             // Switch children
             ProcessSwap(this, target);
@@ -542,10 +525,15 @@ void NodeModel::ProcessAdd(NodeModel * const parent, NodePtr &&nodePtr, Audio::N
     parent->endInsertRows();
 }
 
-void NodeModel::ProcessRemove(NodeModel * const parent, const int targetIndex)
+std::pair<NodeModel::NodePtr, Audio::NodePtr> NodeModel::ProcessRemove(NodeModel * const parent, const int targetIndex)
 {
+    auto &ref = parent->_children.at(targetIndex);
     parent->beginRemoveRows(QModelIndex(), targetIndex, targetIndex);
+    auto audioPtr = std::move(parent->audioNode()->children().at(static_cast<std::uint32_t>(targetIndex)));
+    auto ptr = std::move(ref);
     parent->audioNode()->children().erase(parent->audioNode()->children().begin() + targetIndex);
     parent->_children.erase(parent->_children.begin() + targetIndex);
     parent->endRemoveRows();
+    ref->setParentNode(nullptr);
+    return std::make_pair(std::move(ptr), std::move(audioPtr));
 }
