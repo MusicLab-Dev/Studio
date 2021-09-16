@@ -24,7 +24,7 @@ Item {
         border.width: 1
         radius: width / 4
         width: pluginsGrid.cellWidth - x * 2
-        height: pluginsGrid.cellHeight / 1.6
+        height: width
         x: 7
         y: 10
 
@@ -65,7 +65,7 @@ Item {
         elide: Text.ElideRight
         color: pluginsSquareComponentArea.containsMouse ? pluginDelegate.color : "#FFFFFF"
         opacity: pluginsSquareComponentArea.containsMouse ? 1 : 0.7
-        font.pointSize: 12
+        font.pointSize: 9
         font.weight: Font.Thin
 
         DefaultToolTip {

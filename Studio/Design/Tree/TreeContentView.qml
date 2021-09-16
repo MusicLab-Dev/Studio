@@ -254,9 +254,13 @@ MouseArea {
 
     ControlsFlow {
         function open(newNode) {
-            node = newNode
-            openAnimControl.start()
-            downOverlays.start()
+            if (node) {
+                node = newNode
+            } else {
+                node = newNode
+                openAnimControl.start()
+                downOverlays.start()
+            }
         }
 
         function close() {

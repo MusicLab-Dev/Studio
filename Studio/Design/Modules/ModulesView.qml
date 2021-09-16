@@ -187,9 +187,7 @@ Rectangle {
 
     SettingsView {
         id: settingsView
-        width: parent.width * 0.9
-        height: parent.height * 0.9
-        anchors.centerIn: parent
+        anchors.fill: parent
     }
 
     BoardsView {

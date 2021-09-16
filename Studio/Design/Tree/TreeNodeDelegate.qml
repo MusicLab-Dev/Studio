@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQml 2.15
+import QtGraphicalEffects 1.15
 
 import NodeModel 1.0
 import PluginModel 1.0
@@ -233,13 +234,18 @@ Column {
             }
 
 
-            Rectangle {
+            Item {
                 width: parent.width * 0.6
                 height: parent.height * 0.4
-                color: Qt.lighter(themeManager.foregroundColor, 1.2)
-                anchors.horizontalCenter: parent.horizontalCenter
                 y: - height / 2
-                radius: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: Qt.lighter(themeManager.foregroundColor, 1.2)
+                    radius: 30
+                    opacity: nodeDelegate.isSelected ? 1 : 0.9
+                }
 
                 Item {
                     height: parent.height * 0.5
@@ -257,15 +263,30 @@ Column {
                         elide: Text.ElideRight
                     }
                 }
+
+
             }
 
             Rectangle {
                 id: nodeInstanceBackgroundRect
                 anchors.fill: parent
-                radius: 15
+                radius: 10
                 color: nodeInstanceBackground.containsDrag ? nodeInstanceBackground.validDrag ? nodeDelegate.lightColor : nodeDelegate.pressedColor : nodeDelegate.color
                 border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
-                border.width: 4
+                border.width: 2
+                opacity: nodeDelegate.isSelected ? 1 : 0.9
+            }
+
+            DropShadow {
+                id: shadow
+                anchors.fill: nodeInstanceBackgroundRect
+                horizontalOffset: 2
+                verticalOffset: 2
+                radius: 10
+                samples: 17
+                color: "#aa000000"
+                source: nodeInstanceBackgroundRect
+                opacity: nodeDelegate.isSelected ? 1 : 0
             }
 
             DefaultText {
