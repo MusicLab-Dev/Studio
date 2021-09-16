@@ -979,8 +979,8 @@
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="257"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="299"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="273"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="315"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

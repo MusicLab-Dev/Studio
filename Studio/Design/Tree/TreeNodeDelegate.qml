@@ -188,7 +188,7 @@ Column {
                 function onDragPointChanged() {
                     var hover = nodeInstanceBackground.contains(nodeInstanceBackground.mapFromItem(treeSurface, treeSurface.dragPoint))
                     if (nodeInstanceBackground.containsDrag !== hover) {
-                        if (!treeSurface.dragTarget || (hover && !nodeDelegate.node.isAParent(treeSurface.dragTarget)))
+                        if (!treeSurface.dragTarget || (hover && !nodeDelegate.node.isAParent(treeSurface.dragTarget) && nodeDelegate.node !== treeSurface.dragTarget.parentNode))
                             nodeInstanceBackground.validDrag = true
                         else
                             nodeInstanceBackground.validDrag = false

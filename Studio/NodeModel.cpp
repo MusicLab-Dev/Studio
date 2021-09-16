@@ -74,11 +74,14 @@ QVariant NodeModel::data(const QModelIndex &index, int role) const
 
 void NodeModel::setParentNode(NodeModel * const parent) noexcept
 {
+    if (this->parent() == parent)
+        return;
     setParent(parent);
     if (parent)
         audioNode()->setParent(parent->audioNode());
     else
         audioNode()->setParent(nullptr);
+    emit parentNodeChanged();
 }
 
 void NodeModel::setMuted(const bool muted)
