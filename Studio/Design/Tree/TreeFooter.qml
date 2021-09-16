@@ -8,6 +8,7 @@ import Scheduler 1.0
 
 import "../Default"
 import "../Common"
+import "../Help"
 
 Item {
 
@@ -33,6 +34,14 @@ Item {
         anchors.right: playerArea.left
         anchors.rightMargin: 30
         anchors.margins: 10
+
+        HelpArea {
+            name: qsTr("Project Preview")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Left | HelpHandler.Position.Top
+            externalDisplay: true
+            spacing: 20
+        }
 
         Rectangle {
             id: previewBackground
@@ -76,31 +85,42 @@ Item {
         }
     }
 
-    RowLayout {
+    Item {
         id: playerArea
         anchors.right: parent.right
         width: parent.width * 0.3
         height: parent.height
-        spacing: 10
 
-        TimerView {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredHeight: parent.height * 0.5
-            Layout.preferredWidth: parent.width * 0.25
-            currentPlaybackBeat: player.currentPlaybackBeat
+        RowLayout {
+            spacing: 10
+            anchors.fill: parent
+
+            TimerView {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredHeight: parent.height * 0.5
+                Layout.preferredWidth: parent.width * 0.25
+                currentPlaybackBeat: player.currentPlaybackBeat
+            }
+
+            Player {
+                id: player
+                Layout.preferredHeight: parent.height * 0.5
+                Layout.preferredWidth: parent.width * 0.25
+                targetPlaybackMode: Scheduler.Production
+            }
+
+            Bpm {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredHeight: parent.height * 0.5
+                Layout.preferredWidth: parent.width * 0.25
+            }
         }
 
-        Player {
-            id: player
-            Layout.preferredHeight: parent.height * 0.5
-            Layout.preferredWidth: parent.width * 0.25
-            targetPlaybackMode: Scheduler.Production
-        }
-
-        Bpm {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredHeight: parent.height * 0.5
-            Layout.preferredWidth: parent.width * 0.25
+        HelpArea {
+            name: qsTr("Player Area")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Left | HelpHandler.Position.Top
+            externalDisplay: true
         }
     }
 }

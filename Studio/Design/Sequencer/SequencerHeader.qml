@@ -5,6 +5,7 @@ import ThemeManager 1.0
 import ClipboardManager 1.0
 
 import "../Default/"
+import "../Help/"
 import "../Common/"
 
 import PluginModel 1.0
@@ -72,6 +73,13 @@ Rectangle {
                 wrapMode: Text.Wrap
             }
         }
+
+        HelpArea {
+            name: (sequencerControls.visible ? qsTr("Hide") : qsTr("Show")) + qsTr(" controls")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Center
+            externalDisplay: false
+        }
     }
 
 
@@ -110,6 +118,13 @@ Rectangle {
                 text: "<"
                 wrapMode: Text.Wrap
             }
+        }
+
+        HelpArea {
+            name: qsTr("Move to planner")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Bottom
+            externalDisplay: true
         }
     }
 
@@ -161,6 +176,13 @@ Rectangle {
         width: height / 3
         targetNode: sequencerView.node
         enabled: sequencerView.visible
+
+        HelpArea {
+            name: qsTr("Sound meter")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Right
+            externalDisplay: true
+        }
     }
 
     ClipboardIndicator {
@@ -169,5 +191,12 @@ Rectangle {
         anchors.top: parent.top
         anchors.leftMargin: parent.width * 0.01
         width: parent.width * 0.1
+
+        HelpArea {
+            name: qsTr("Clipboard")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Bottom
+            externalDisplay: true
+        }
     }
 }

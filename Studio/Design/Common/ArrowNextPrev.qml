@@ -4,41 +4,44 @@ import ThemeManager 1.0
 import "../Default/"
 import "../Common/"
 
-RowLayout {
+Item {
     property alias prev: prev
     property alias next: next
 
-    spacing: 0
+    RowLayout {
+        anchors.fill: parent
+        spacing: 0
 
-    Item {
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.5
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.5
 
-        DefaultImageButton {
-            id: prev
+            DefaultImageButton {
+                id: prev
 
-            source: "qrc:/Assets/Previous.png"
-            height: width
-            width: parent.width * 0.9
-            anchors.centerIn: parent
-            colorDefault: "white"
-            enabled: false
+                source: "qrc:/Assets/Previous.png"
+                height: width
+                width: parent.width * 0.9
+                anchors.centerIn: parent
+                colorDefault: "white"
+                enabled: false
+            }
         }
-    }
 
-    Item {
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.5
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.5
 
-        DefaultImageButton {
-            id: next
+            DefaultImageButton {
+                id: next
 
-            source: "qrc:/Assets/Next.png"
-            height: width
-            width: parent.width * 0.9
-            anchors.centerIn: parent
-            colorDefault: "white"
-            enabled: false
+                source: "qrc:/Assets/Next.png"
+                height: width
+                width: parent.width * 0.9
+                anchors.centerIn: parent
+                colorDefault: "white"
+                enabled: false
+            }
         }
     }
 }

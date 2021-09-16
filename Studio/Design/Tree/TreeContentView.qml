@@ -256,6 +256,12 @@ MouseArea {
             color: overviewMouse.containsMouse ? themeManager.foregroundColor : app.project.master.color
         }
 
+        HelpArea {
+            name: qsTr("Planner overview")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Bottom
+            externalDisplay: true
+        }
     }
 
 
@@ -332,6 +338,14 @@ MouseArea {
     PartitionsPreview {
         id: partitionsPreview
         anchors.bottom: parent.bottom
+
+        HelpArea {
+            name: qsTr("Partitions")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Top
+            externalDisplay: true
+            visible: partitionsPreview.visible
+        }
     }
 
     TreeNodeTrashArea {

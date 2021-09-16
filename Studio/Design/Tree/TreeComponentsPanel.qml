@@ -32,7 +32,6 @@ TreePanel {
         width: panelCategoryWidth
         height: parent.height
 
-
         Column {
             height: parent.height
             width: parent.width

@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.15
 
 import "../Common"
 import "../Default"
+import "../Help"
 
 import Scheduler 1.0
 
@@ -56,6 +57,13 @@ Rectangle {
                     Layout.preferredWidth: parent.width * 0.25
                 }
             }
+
+            HelpArea {
+                name: qsTr("Player Area")
+                description: qsTr("Description")
+                position: HelpHandler.Position.Left | HelpHandler.Position.Top
+                externalDisplay: true
+            }
         }
 
         Item {
@@ -81,5 +89,13 @@ Rectangle {
     PartitionsPreview {
         id: partitionsPreview
         y: -height
+
+        HelpArea {
+            name: qsTr("Partitions")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Top
+            externalDisplay: true
+            visible: partitionsPreview.visible
+        }
     }
 }
