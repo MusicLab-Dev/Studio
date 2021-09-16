@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtGraphicalEffects 1.15
 
 import ProjectPreview 1.0
 import Scheduler 1.0
@@ -8,25 +9,48 @@ import Scheduler 1.0
 import "../Default"
 import "../Common"
 
-Rectangle {
+Item {
+
     property alias projectPreview: projectPreview
     property alias player: player
 
-    color: themeManager.foregroundColor
+    Rectangle {
+        anchors.fill: parent
+        color: themeManager.foregroundColor
+        opacity: 0.8
+    }
 
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
     }
 
-    Rectangle {
+    Item {
+        id: preview
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: playerArea.left
+        anchors.rightMargin: 30
         anchors.margins: 10
-        color: "#474747"
-        clip: true
+
+        Rectangle {
+            id: previewBackground
+            anchors.fill: parent
+            color: themeManager.backgroundColor
+            clip: true
+        }
+
+        DropShadow {
+            id: shadow
+            anchors.fill: previewBackground
+            horizontalOffset: 4
+            verticalOffset: 4
+            radius: 8
+            samples: 17
+            color: "#80000000"
+            source: previewBackground
+        }
 
         ProjectPreview {
             id: projectPreview
@@ -46,7 +70,7 @@ Rectangle {
                 width: 4
                 height: parent.height
                 color: "white"
-                x: projectPreview.pixelsPerBeatPrecision * player.currentPlaybackBeat - 2
+                x: Math.min(projectPreview.pixelsPerBeatPrecision * player.currentPlaybackBeat - 2, previewBackground.width)
                 visible: app.project.master.latestInstance !== 0
             }
         }
@@ -55,10 +79,9 @@ Rectangle {
     RowLayout {
         id: playerArea
         anchors.right: parent.right
-        width: parent.width / 3
+        width: parent.width * 0.3
         height: parent.height
         spacing: 10
-        anchors.rightMargin: 10
 
         TimerView {
             Layout.alignment: Qt.AlignVCenter
