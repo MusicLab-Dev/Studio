@@ -28,6 +28,18 @@ Column {
 
     id: nodeDelegate
 
+    Component.onCompleted: delegateOpenAnim.start()
+
+    PropertyAnimation {
+        id: delegateOpenAnim
+        target: nodeDelegate
+        property: "opacity"
+        from: 0
+        to: 1
+        duration: 300
+        easing.type: Easing.OutCubic
+    }
+
     Item {
         id: nodeInstance
         width: nodeInstanceBackground.width + treeSurface.instancePadding
@@ -106,15 +118,19 @@ Column {
                 } else {
                     var hasModifier = mouse.modifiers & Qt.ControlModifier
                     if (!hasModifier)
-                        treeSurface.resetSelection()
+                        treeSurface.resetSelection(false)
                     var index = treeSurface.selectionList.indexOf(nodeDelegate)
                     if (index === -1) {
-                        contentView.lastSelectedNode = nodeDelegate
                         treeSurface.selectionList.push(nodeDelegate)
                         ++treeSurface.selectionCount
                         nodeDelegate.isSelected = true
-                        last = nodeDelegate.node
-                        treeControls.open(last)
+                        if (contentView.lastSelectedNode == null) {
+                            contentView.lastSelectedNode = nodeDelegate
+                            treeControls.open(nodeDelegate.node)
+                        } else {
+                            contentView.lastSelectedNode = nodeDelegate
+                            treeControls.change(nodeDelegate.node)
+                        }
                     } else if (hasModifier) {
                         treeSurface.selectionList.splice(index, 1)
                         --treeSurface.selectionCount
@@ -311,7 +327,7 @@ Column {
                 height: factoryImageButton.height
                 source: "qrc:/Assets/Plus.png"
                 showBorder: false
-                scaleFactor: 1
+                scaleFactor: 0.8
                 colorDefault: nodeDelegate.accentColor
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
@@ -324,7 +340,7 @@ Column {
                 id: factoryImageButton
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: nodeName.bottom
-                anchors.topMargin: nodeInstanceBackgroundRect.border.width
+                anchors.topMargin: nodeInstanceBackgroundRect.border.width * 2
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: nodeInstanceBackgroundRect.border.width * 2
                 width: height
@@ -332,7 +348,7 @@ Column {
                 colorDefault: nodeDelegate.accentColor
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
-                scaleFactor: 1
+                scaleFactor: 0.8
                 playing: hovered || (treeView.visible && treeView.player.isPlayerRunning)
 
                 onClicked: {
@@ -352,7 +368,7 @@ Column {
                 height: factoryImageButton.height
                 source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
                 showBorder: false
-                scaleFactor: 1
+                scaleFactor: 0.8
                 colorDefault: nodeDelegate.accentColor
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor

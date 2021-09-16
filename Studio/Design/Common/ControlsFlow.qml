@@ -134,7 +134,7 @@ Rectangle {
         height: Math.min(parent.height * 0.25, controlsFlow.baseHeight)
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        anchors.rightMargin: 15
+        anchors.rightMargin: 35
         source: "qrc:/Assets/Close.png"
         showBorder: false
         scaleFactor: 1

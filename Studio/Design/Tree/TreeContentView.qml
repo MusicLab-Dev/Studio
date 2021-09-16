@@ -95,9 +95,9 @@ MouseArea {
         if (treeSurface.selectionActive)
             treeSurface.endSelection()
         else
-            treeSurface.resetSelection()
+            treeSurface.resetSelection(true)
         treeComponentsPanel.close()
-        //treeSamplesPanel.close()
+        contentView.lastSelectedNode = null
     }
 
     onXOffsetMinChanged: {
@@ -261,6 +261,10 @@ MouseArea {
                 openAnimControl.start()
                 downOverlays.start()
             }
+        }
+
+        function change(newNode) {
+            node = newNode
         }
 
         function close() {
