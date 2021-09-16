@@ -144,10 +144,11 @@ PlacementArea {
             clipboardManager.copy(clipboardManager.partitionInstancesToJson(instances))
             clipboardManager.count = instances.length
             clipboardManager.state = ClipboardManager.State.Partition
+            clipboardManager.partitionInstanceNode = nodeDelegate.node
         }
 
         function onPaste(pressed) {
-            if (!pressed)
+            if (!pressed || clipboardManager.partitionInstanceNode !== nodeDelegate.node)
                 return
             var instances = clipboardManager.jsonToPartitionInstances(clipboardManager.paste())
             var analysis = nodeInstances.instances.getPartitionInstancesAnalysis(instances)
