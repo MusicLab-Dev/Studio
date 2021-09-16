@@ -4,16 +4,12 @@ import QtQuick.Controls 2.15
 import "../Default"
 
 Item {
-    function open()
-    {
-        openAnim.start()
-    }
-
     property real opacityMax: 0.7
 
     MouseArea {
-        anchors.fill: textButton
+        anchors.fill: parent
         onPressedChanged: forceActiveFocus()
+        onClicked: helpHandler.open()
     }
 
     Rectangle {

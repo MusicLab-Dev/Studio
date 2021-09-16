@@ -8,8 +8,9 @@ import ActionsManager 1.0
 import AudioAPI 1.0
 
 import "../Common"
+import "../Help"
 
-ColumnLayout {
+Item {
     enum TweakMode {
         Regular,
         Velocity,
@@ -106,7 +107,6 @@ ColumnLayout {
     property bool mustCenter: false
 
     id: sequencerView
-    spacing: 0
     enabled: false
     focus: true
 
@@ -148,72 +148,81 @@ ColumnLayout {
         }
     }
 
-    SequencerHeader {
-        id: sequencerViewHeader
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.12
-        z: 1
-    }
+    ColumnLayout {
+        spacing: 0
+        anchors.fill: parent
 
-    ControlsFlow {
-        function open() {
-            visible = true
-            openAnim.start()
+        SequencerHeader {
+            id: sequencerViewHeader
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.height * 0.12
+            z: 1
         }
 
-        function close() {
-            visible = false
-        }
+        ControlsFlow {
+            function open() {
+                visible = true
+                openAnim.start()
+            }
 
-        id: sequencerControls
-        closeable: false
-        y: parent.height
-        node: sequencerView.node
-        Layout.fillWidth: true
+            function close() {
+                visible = false
+            }
 
-        PropertyAnimation {
-            id: openAnim
-            target: sequencerControls
-            property: "opacity"
-            from: 0
-            to: 1
-            duration: 300
-            easing.type: Easing.OutCubic
-        }
-    }
+            id: sequencerControls
+            closeable: false
+            y: parent.height
+            node: sequencerView.node
+            Layout.fillWidth: true
 
-    Item {
-        id: contentArea
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-
-        SequencerContentView {
-            id: contentView
-            width: parent.width
-            height: parent.height
-            anchors.fill: parent
-
-            // When we use loadPartitionNode, contentView.height === 0 so we need to center the view once it is updated
-            onHeightChanged: {
-                if (sequencerView.mustCenter) {
-                    centerTargetOctave()
-                    sequencerView.mustCenter = false
-                }
+            PropertyAnimation {
+                id: openAnim
+                target: sequencerControls
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 300
+                easing.type: Easing.OutCubic
             }
         }
 
-        SequencerContentTweakView {
-            visible: tweakMode === SequencerView.TweakMode.Velocity || tweakMode === SequencerView.TweakMode.Tunning
-            y: tweakMode > SequencerView.TweakMode.Regular ? parent.height - height : parent.height
-            width: parent.width
-            height: parent.height / 2
+        Item {
+            id: contentArea
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            SequencerContentView {
+                id: contentView
+                width: parent.width
+                height: parent.height
+                anchors.fill: parent
+
+                // When we use loadPartitionNode, contentView.height === 0 so we need to center the view once it is updated
+                onHeightChanged: {
+                    if (sequencerView.mustCenter) {
+                        centerTargetOctave()
+                        sequencerView.mustCenter = false
+                    }
+                }
+            }
+
+            SequencerContentTweakView {
+                visible: tweakMode === SequencerView.TweakMode.Velocity || tweakMode === SequencerView.TweakMode.Tunning
+                y: tweakMode > SequencerView.TweakMode.Regular ? parent.height - height : parent.height
+                width: parent.width
+                height: parent.height / 2
+            }
+        }
+
+        SequencerFooter {
+            id: sequencerViewFooter
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.height * 0.12
         }
     }
 
-    SequencerFooter {
-        id: sequencerViewFooter
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.12
+    HelpHandler {
+        id: helpHandler
     }
 
     ActionsManager {

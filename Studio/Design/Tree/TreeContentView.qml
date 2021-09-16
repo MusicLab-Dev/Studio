@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Default"
+import "../Help"
 import "../Common"
 
 import NodeModel 1.0
@@ -181,6 +182,12 @@ MouseArea {
             contentView.zoom = Math.min(Math.max(contentView.zoom + contentView.zoomFactor * zoom, 0), 1)
             contentView.incrementXOffset(-oldXRatio * (treeSurface.scaledWidth - oldWidth))
             contentView.incrementYOffset(-oldYRatio * (treeSurface.scaledHeight - oldHeight))
+        }
+
+        HelpArea {
+            name: qsTr("Project's tree area")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Top
         }
     }
 

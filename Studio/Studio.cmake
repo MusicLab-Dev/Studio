@@ -40,6 +40,7 @@ qt5_add_resources(QtResources
     ${StudioDir}/Design/Settings/Settings.qrc
     ${StudioDir}/Design/Export/Export.qrc
     ${StudioDir}/Design/KeyboardShortcuts/KeyboardShortcuts.qrc
+    ${StudioDir}/Design/Help/Help.qrc
     ${CMAKE_BINARY_DIR}/Translations.qrc
 )
 

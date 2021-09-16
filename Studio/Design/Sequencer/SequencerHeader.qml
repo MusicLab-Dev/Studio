@@ -19,6 +19,7 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
+        onClicked: helpHandler.open()
     }
 
     SequencerEdition {
@@ -135,8 +136,7 @@ Rectangle {
 
                 anchors.fill: parent
 
-                onPressed: {
-                }
+                onPressed: helpHandler.open()
             }
 
             DefaultText {
