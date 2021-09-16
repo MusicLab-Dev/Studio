@@ -316,7 +316,6 @@ bool NodeModel::moveToChildren(NodeModel *target)
     return Models::AddProtectedEvent(
         [this, target, targetIndex, hasPaused] {
             auto targetParent = target->parentNode();
-            auto audioParent = targetParent->audioNode();
 
             // Extract target node from targetParent
             auto [ptr, audioPtr] = ProcessRemove(targetParent, targetIndex);
@@ -528,12 +527,13 @@ void NodeModel::ProcessAdd(NodeModel * const parent, NodePtr &&nodePtr, Audio::N
 std::pair<NodeModel::NodePtr, Audio::NodePtr> NodeModel::ProcessRemove(NodeModel * const parent, const int targetIndex)
 {
     auto &ref = parent->_children.at(targetIndex);
+    const auto target = ref.get();
     parent->beginRemoveRows(QModelIndex(), targetIndex, targetIndex);
     auto audioPtr = std::move(parent->audioNode()->children().at(static_cast<std::uint32_t>(targetIndex)));
     auto ptr = std::move(ref);
     parent->audioNode()->children().erase(parent->audioNode()->children().begin() + targetIndex);
     parent->_children.erase(parent->_children.begin() + targetIndex);
     parent->endRemoveRows();
-    ref->setParentNode(nullptr);
+    target->setParentNode(nullptr);
     return std::make_pair(std::move(ptr), std::move(audioPtr));
 }
