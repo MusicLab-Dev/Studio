@@ -78,6 +78,13 @@ TreePanel {
             onWheel: {} // Steal wheel events
         }
 
+        PluginTableModelProxy {
+            id: pluginTableProxy
+            sourceModel: pluginTable
+            tagsFilter: treeComponentsPanel.filter
+            //nameFilter: pluginsForeground.currentSearchText
+        }
+
         ListView {
             id: treeComponentsListView
             anchors.centerIn: parent
@@ -85,12 +92,7 @@ TreePanel {
             height: parent.height * 0.95
             clip: true
             spacing: 20
-            model: PluginTableModelProxy {
-                id: pluginTableProxy
-                sourceModel: pluginTable
-                tagsFilter: treeComponentsPanel.filter ? treeComponentsPanel.filter : -1
-                //nameFilter: pluginsForeground.currentSearchText
-            }
+            model: treeComponentsPanel.filter ? pluginTableProxy : null
 
             delegate: TreeComponentDelegate {
                 width: treeComponentsListView.width
