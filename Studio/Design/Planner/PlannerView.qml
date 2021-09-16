@@ -5,8 +5,9 @@ import ActionsManager 1.0
 
 import "../Default"
 import "../Common"
+import "../Help"
 
-ColumnLayout {
+Item {
     function onNodeDeleted(targetNode) {
         return false
     }
@@ -34,7 +35,6 @@ ColumnLayout {
 
     id: plannerView
     focus: true
-    spacing: 0
 
     Connections {
         target: eventDispatcher
@@ -43,50 +43,6 @@ ColumnLayout {
         function onPlayContext(pressed) { if (pressed) player.playOrPause() }
         function onReplayContext(pressed) { if (pressed) player.replay() }
         function onStopContext(pressed) { if (pressed) player.stop() }
-    }
-
-    Connections {
-        target: eventDispatcher
-
-        function onPlayProject(pressed) { if (pressed) player.playOrPause() }
-        function onReplayProject(pressed) { if (pressed) player.replay() }
-        function onStopProject(pressed) { if (pressed) player.stop() }
-    }
-
-    PlannerHeader {
-        id: plannerHeader
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.12
-        z: 1
-    }
-
-    PlannerContentView {
-        id: contentView
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    PlannerFooter {
-        id: plannerFooter
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.12
-    }
-
-    PlannerNodeMenu {
-        id: plannerNodeMenu
-    }
-
-    PartitionMenu {
-        id: partitionMenu
-    }
-
-    ActionsManager {
-        id: actionsManager
-    }
-
-    Connections {
-        target: eventDispatcher
-        enabled: moduleIndex === modulesView.selectedModule
 
         function onUndo(pressed) {
             if (pressed) {
@@ -101,5 +57,45 @@ ColumnLayout {
                 contentView.resetPlacementAreaSelection()
             }
         }
-   }
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 0
+
+        PlannerHeader {
+            id: plannerHeader
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.height * 0.12
+            z: 1
+        }
+
+        PlannerContentView {
+            id: contentView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+
+        PlannerFooter {
+            id: plannerFooter
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.height * 0.12
+        }
+    }
+
+    HelpHandler {
+        id: helpHandler
+    }
+
+    PlannerNodeMenu {
+        id: plannerNodeMenu
+    }
+
+    PartitionMenu {
+        id: partitionMenu
+    }
+
+    ActionsManager {
+        id: actionsManager
+    }
 }

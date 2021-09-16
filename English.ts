@@ -740,7 +740,7 @@
 <context>
     <name>PlannerView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerView.qml" line="30"/>
+        <location filename="Studio/Design/Planner/PlannerView.qml" line="31"/>
         <source>Planner</source>
         <translation type="unfinished"></translation>
     </message>
@@ -892,7 +892,7 @@
 <context>
     <name>SequencerHeader</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="70"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="71"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -961,7 +961,17 @@
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="248"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="188"/>
+        <source>Project&apos;s tree area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="189"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="255"/>
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>

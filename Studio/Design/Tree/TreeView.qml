@@ -4,8 +4,9 @@ import QtQuick.Layouts 1.15
 import ActionsManager 1.0
 
 import "../Common"
+import "../Help"
 
-ColumnLayout {
+Item {
     function onNodeDeleted(targetNode) {
         return false
     }
@@ -20,7 +21,6 @@ ColumnLayout {
 
     id: treeView
     focus: true
-    spacing: 0
 
     onVisibleChanged: {
         if (visible)
@@ -44,35 +44,6 @@ ColumnLayout {
         function onPlayContext(pressed) { if (pressed) player.playOrPause() }
         function onReplayContext(pressed) { if (pressed) player.replay() }
         function onStopContext(pressed) { if (pressed) player.stop() }
-    }
-
-    TreeContentView {
-        id: contentView
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    TreeFooter {
-        id: treeFooter
-        Layout.fillWidth: true
-        Layout.preferredHeight: parent.height * 0.12
-    }
-
-    TreeNodeMenu {
-        id: treeNodeMenu
-    }
-
-    PartitionMenu {
-        id: partitionMenu
-    }
-
-    ActionsManager {
-        id: actionsManager
-    }
-
-    Connections {
-        target: eventDispatcher
-        enabled: moduleIndex === modulesView.selectedModule
 
         function onUndo(pressed) {
             if (pressed) {
@@ -85,5 +56,38 @@ ColumnLayout {
                 actionsManager.redo()
             }
         }
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 0
+
+        TreeContentView {
+            id: contentView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+
+        TreeFooter {
+            id: treeFooter
+            Layout.fillWidth: true
+            Layout.preferredHeight: parent.height * 0.12
+        }
+    }
+
+    HelpHandler {
+        id: helpHandler
+    }
+
+    TreeNodeMenu {
+        id: treeNodeMenu
+    }
+
+    PartitionMenu {
+        id: partitionMenu
+    }
+
+    ActionsManager {
+        id: actionsManager
     }
 }
