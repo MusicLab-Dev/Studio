@@ -54,10 +54,6 @@ MouseArea {
             width: areaWidth
             height: areaHeight
 
-            Component.onCompleted: {
-                console.log("DELEGATE", x, y, width, height, areaExternalDisplay, areaPosition, areaPosition & HelpHandler.Position.Top)
-            }
-
             DefaultText {
                 text: areaName
                 font.pointSize: 16
