@@ -27,10 +27,10 @@ static const ThemePack ClassicThemePack {
 };
 
 static const ThemePack DarkThemePack {
-    /* background: */ "#525252",
-    /* foreground: */ "#242424",
+    /* background: */ "#24262B",
+    /* foreground: */ "#2E323E",
     /* content: */ "#FFFFFF",
-    /* accent: */ "#31A8FF",
+    /* accent: */ "#6D13FF",
     /* timeline: */ "#00ECBA",
     /* disabled: */ "#3d3d3d"
 };
