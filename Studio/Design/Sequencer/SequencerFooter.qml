@@ -14,7 +14,7 @@ Rectangle {
 
     width: parent.width
     height: parent.height
-    color: themeManager.foregroundColor
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent
@@ -52,37 +52,37 @@ Rectangle {
     }
 
     Item {
-        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width * 0.32
         height: parent.height
 
-        RowLayout {
-            anchors.fill: parent
-            spacing: 10
+        TimerView {
+            width: parent.width / 4
+            height: parent.height / 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            currentPlaybackBeat: player.currentPlaybackBeat
+        }
 
-            TimerView {
-                Layout.alignment: Qt.AlignVCenter
-                Layout.preferredHeight: parent.height * 0.5
-                Layout.preferredWidth: parent.width * 0.25
-                currentPlaybackBeat: player.currentPlaybackBeat
-            }
+        Player {
+            id: player
+            width: parent.width / 2 - 40
+            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            targetPlaybackMode: Scheduler.Partition
+            isPartitionPlayer: true
+            targetNode: sequencerView.node
+            targetPartitionIndex: sequencerView.partitionIndex
+        }
 
-            Player {
-                id: player
-                Layout.preferredHeight: parent.height * 0.5
-                Layout.preferredWidth: parent.width * 0.25
-                targetPlaybackMode: Scheduler.Partition
-                isPartitionPlayer: true
-                targetNode: sequencerView.node
-                targetPartitionIndex: sequencerView.partitionIndex
-            }
-
-            Bpm {
-                Layout.alignment: Qt.AlignVCenter
-                Layout.preferredHeight: parent.height * 0.5
-                Layout.preferredWidth: parent.width * 0.25
-            }
+        Bpm {
+            width: parent.width / 4
+            height: parent.height / 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 10
         }
 
         HelpArea {

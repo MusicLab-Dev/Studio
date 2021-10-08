@@ -199,7 +199,6 @@ RowLayout {
             width: parent.height / 2
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            colorDefault: "white"
 
             onReleased: player.replay()
         }
@@ -217,9 +216,8 @@ RowLayout {
         DefaultImageButton {
             source: player.isSchedulerRunning ? "qrc:/Assets/Pause.png" : "qrc:/Assets/Play.png"
             height: parent.height / 1.5
-            width: parent.height / 1.5
+            width: height
             anchors.centerIn: parent
-            colorDefault: "white"
 
             onReleased: player.playOrPause()
         }
@@ -240,7 +238,6 @@ RowLayout {
             width: parent.height / 2
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            colorDefault: "white"
 
             onReleased: player.stop()
         }

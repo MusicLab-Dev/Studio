@@ -18,12 +18,12 @@ Item {
     property real barThickness: divisionsPerBar ? 2 : 1
     property real beatThickness: divisionsPerBeat ? 2 : 1
     property real divisionThickness: 1
-    property color rowColor: "#041A25"
-    property color groupAColor: themeManager.backgroundColor
-    property color groupBColor: Qt.lighter(groupAColor, 1.33)
+    property color rowColor: Qt.rgba(1, 1, 1, 0.2)
+    property color groupAColor: themeManager.foregroundColor
+    property color groupBColor: themeManager.contentColor
     property color barColor: rowColor
-    property color beatColor: "#162C37"
-    property color divisionColor: "#253A45"
+    property color beatColor: Qt.rgba(1, 1, 1, 0.05)
+    property color divisionColor: Qt.rgba(1, 1, 1, 0.025)
 
     // Intermediate calculus
     readonly property real xGroupOffset: xOffset % groupMarginWidth

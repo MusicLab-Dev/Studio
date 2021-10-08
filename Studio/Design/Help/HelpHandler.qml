@@ -48,7 +48,7 @@ MouseArea {
             color: "transparent"
             border.color: themeManager.accentColor
             border.width: 1
-            radius: 10
+            radius: 8
             x: areaX
             y: areaY
             width: areaWidth

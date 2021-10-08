@@ -25,7 +25,7 @@ Item {
         anchors.fill: parent
         color: "transparent"
         border.color: "white"
-        radius: 10
+        radius: 8
 
         Item {
             id: placeholder
@@ -47,7 +47,7 @@ Item {
             width: parent.width
             color: "transparent"
             border.color: "white"
-            radius: 10
+            radius: 8
 
             Repeater {
                 model: itemsPaths
@@ -63,7 +63,7 @@ Item {
                         width: parent.height / 2
                         anchors.centerIn: parent
                         source: itemsPaths[index]
-                        colorDefault: index > itemUsableTill ? themeManager.disabledColor : index == itemSelected ? themeManager.accentColor : "#FFFFFF"
+                        colorDefault: index > itemUsableTill ? themeManager.disabledColor : index == itemSelected ? themeManager.accentColor : "white"
                         scaleFactor: 1
                         showBorder: false
 
@@ -82,7 +82,7 @@ Item {
                 width: itemWidth
                 border.color: "white"
                 color: "transparent"
-                radius: 10
+                radius: 8
 
                 Behavior on x {
                     SpringAnimation {

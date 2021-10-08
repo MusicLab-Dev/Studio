@@ -15,7 +15,7 @@ Rectangle {
     property color pressedColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 2.2) : "black"
     property color accentColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.6) : "black"
 
-    color: themeManager.foregroundColor
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent
@@ -37,13 +37,13 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width * 0.15
-        height: parent.height * 0.75
+        width: parent.width * 0.1
+        height: parent.height * 0.7
 
         Rectangle {
             id: rectPluginButton
             anchors.fill: parent
-            radius: 15
+            radius: 8
             color: sequencerView.node ? sequencerView.node.color : "black"
             border.color: mousePluginButton.containsPress ? pressedColor : hoveredColor
             border.width: mousePluginButton.containsMouse ? 3 : 0
@@ -82,7 +82,6 @@ Rectangle {
         }
     }
 
-
     Item {
         id: plannerButton
         anchors.left: pluginButton.right
@@ -94,7 +93,7 @@ Rectangle {
         Rectangle {
             id: rectPlannerButton
             anchors.fill: parent
-            radius: 15
+            radius: 8
             color: sequencerView.node ? sequencerView.node.color : "black"
             border.color: mousePlannerButton.containsPress ? pressedColor : hoveredColor
             border.width: mousePlannerButton.containsMouse ? 3 : 0
@@ -110,13 +109,11 @@ Rectangle {
                 }
             }
 
-            DefaultText {
+            DefaultColoredImage {
                 anchors.fill: parent
-                fontSizeMode: Text.HorizontalFit
-                font.pointSize: 20
+                anchors.margins: parent.width * 0.25
+                source: "qrc:/Assets/Chrono.png"
                 color: accentColor
-                text: "<"
-                wrapMode: Text.Wrap
             }
         }
 
@@ -140,7 +137,7 @@ Rectangle {
         Rectangle {
             id: rectHelpButton
             anchors.fill: parent
-            radius: 15
+            radius: 8
             color: sequencerView.node ? sequencerView.node.color : "black"
             border.color: mouseHelpButton.containsPress ? pressedColor : hoveredColor
             border.width: mouseHelpButton.containsMouse ? 3 : 0

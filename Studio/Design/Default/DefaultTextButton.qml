@@ -19,7 +19,6 @@ Button {
     }
 
     contentItem: Item {
-
     }
 
     Text {
@@ -29,17 +28,13 @@ Button {
         horizontalAlignment: Qt.AlignHCenter
         text: control.text
         font: control.font
-        color: control.hovered || control.pressed ? themeManager.accentColor : "#FFFFFF"
+        color: control.pressed ? themeManager.accentColor : control.hovered ? themeManager.semiAccentColor : "white"
         opacity: control.pressed ? 1.0 : control.hovered ? 0.85 : control.enabled ? 0.7 : 0.5
         fontSizeMode: Text.Fit
         // wrapMode: Text.Wrap
         // elide: Text.ElideRight
-
         // onFontInfoChanged: console.log(width)
-
      }
-
-
 
     background: Rectangle {
         id: rectItem

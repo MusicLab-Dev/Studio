@@ -11,7 +11,7 @@ Item {
         canceledCallback = canceled
         fileUrl = ""
         visible = true
-        openAnim.start()
+        openAnim.restart()
     }
 
     function acceptAndClose() {

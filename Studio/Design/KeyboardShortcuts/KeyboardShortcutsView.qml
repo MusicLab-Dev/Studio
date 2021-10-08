@@ -11,7 +11,7 @@ import KeyboardEventListener 1.0
 Item {
     function open() {
         visible = true
-        openAnim.start()
+        openAnim.restart()
     }
 
     function close() {

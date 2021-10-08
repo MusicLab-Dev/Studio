@@ -22,7 +22,7 @@ DefaultComboBox {
 
         contentItem: Text {
             text: comboDelegate.targetPartition.name
-            color: parent.hovered ? "#001E36": "#295F8B"
+            color: "white"
             font: control.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter

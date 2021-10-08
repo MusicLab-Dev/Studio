@@ -28,7 +28,7 @@ CheckBox {
         height: width
         x: control.leftPadding
         y: control.height / 2 - height / 2
-        radius: 5
+        radius: 8
         color: control.checked ? enabledColor : disabledColor
         border.width: control.down ? 2 : control.hovered ? 1 : 0
         border.color: borderColor

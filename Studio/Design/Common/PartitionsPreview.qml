@@ -23,13 +23,13 @@ Rectangle {
     id: partitionsPreview
     width: contentView.width
     height: Math.max(baseHeight, previewFlow.height) + 20
-    color: Qt.darker(themeManager.foregroundColor, 1.1)
+    color: themeManager.backgroundColor
     visible: nodeDelegate && !hide
     // border.color: nodeColor
 
     onVisibleChanged: {
         if (visible)
-            openAnim.start()
+            openAnim.restart()
     }
 
     MouseArea {

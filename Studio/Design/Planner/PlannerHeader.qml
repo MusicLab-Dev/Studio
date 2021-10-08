@@ -7,7 +7,7 @@ import "../Help"
 import "../Common"
 
 Rectangle {
-    color: themeManager.foregroundColor
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent

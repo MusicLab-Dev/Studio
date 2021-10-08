@@ -14,14 +14,14 @@ Item {
         colorBox = isColorBox
         globalTextField.visible = true
         textInput.forceActiveFocus()
-        animOpen.start()
+        animOpen.restart()
     }
 
     function acceptAndClose() {
         if (acceptedCallback)
             acceptedCallback()
         textInput.text = ""
-        animClose.start()
+        animClose.restart()
         acceptedCallback = null
         canceledCallback = null
     }
@@ -30,7 +30,7 @@ Item {
         if (canceledCallback)
             canceledCallback()
         textInput.text = ""
-        animClose.start()
+        animClose.restart()
         acceptedCallback = null
         canceledCallback = null
     }

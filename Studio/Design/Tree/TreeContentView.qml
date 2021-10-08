@@ -236,7 +236,7 @@ MouseArea {
             anchors.fill: parent
             radius: 16
             opacity: overviewMouse.containsMouse ? 1 : 0.6
-            color: overviewMouse.containsMouse ? app.project.master.color : themeManager.foregroundColor
+            color: overviewMouse.containsMouse ? app.project.master.color : themeManager.backgroundColor
         }
 
         MouseArea {
@@ -253,7 +253,7 @@ MouseArea {
             fontSizeMode: Text.Fit
             font.pixelSize: 30
             text: qsTr("Overview")
-            color: overviewMouse.containsMouse ? themeManager.foregroundColor : app.project.master.color
+            color: overviewMouse.containsMouse ? "white" : app.project.master.color
         }
 
         HelpArea {
@@ -271,8 +271,8 @@ MouseArea {
                 node = newNode
             } else {
                 node = newNode
-                openAnimControl.start()
-                downOverlays.start()
+                openAnimControl.restart()
+                downOverlays.restart()
             }
         }
 
@@ -282,8 +282,8 @@ MouseArea {
 
         function close() {
             if (treeControls.node) {
-                closeAnimControl.start()
-                upOverlays.start()
+                closeAnimControl.restart()
+                upOverlays.restart()
             }
         }
 

@@ -23,6 +23,6 @@ TextField {
         width: parent.width
         height: 2
         y: control.height
-        color: control.focus ? themeManager.accentColor : "#001E36"
+        color: control.focus ? themeManager.accentColor : themeManager.semiAccentColor
     }
 }

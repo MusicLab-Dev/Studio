@@ -56,7 +56,7 @@ MouseArea {
 
     Rectangle {
         anchors.fill: parent
-        color: themeManager.backgroundColor
+        color: themeManager.foregroundColor
         border.color: previewDelegate.isSelected ? partitionsPreview.nodeColor : partitionsPreview.nodeAccentColor
         border.width: previewDelegate.isSelected || previewDelegate.containsMouse ? 1 : 0
         radius: 3

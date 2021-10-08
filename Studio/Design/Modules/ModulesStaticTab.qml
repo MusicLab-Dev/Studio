@@ -4,11 +4,13 @@ import QtQuick.Controls 2.15
 import "../Default"
 import "../Common"
 
+
 MouseArea {
     readonly property bool isSelectedModule: tabIndex === modulesTabs.selectedModule
     property int tabIndex
     property alias title: titleLabel.text
     property alias color: background.color
+    property url source: ""
 
     id: tabMouseArea
     width: modulesTabs.tabWidth
@@ -25,13 +27,25 @@ MouseArea {
         border.width: 1
     }
 
+    DefaultColoredImage {
+        id: icon
+        source: tabMouseArea.source
+        x: 8
+        y: 8
+        width: parent.height - 16
+        height: width
+        color: titleLabel.color
+    }
+
     DefaultText {
         id: titleLabel
-        width: parent.width
+        x: parent.height
+        width: parent.width - parent.height
         height: parent.height
-        color: isSelectedModule ? "white" : tabMouseArea.containsPress ? "darkgrey" : tabMouseArea.containsMouse ? "grey" : "#E5E5E5"
+        color: drag.active ? "white" : tabMouseArea.containsPress ? themeManager.accentColor : tabMouseArea.containsMouse ? themeManager.semiAccentColor : tabMouseArea.isSelectedModule ? "white" : "lightgrey"
         fontSizeMode: Text.HorizontalFit
         text: modulesView.getModule(tabIndex).moduleName
+        horizontalAlignment: Text.AlignLeft
         elide: Text.ElideRight
     }
 }

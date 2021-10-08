@@ -21,7 +21,7 @@ Slider {
         implicitHeight: 4
         width: control.availableWidth
         height: implicitHeight
-        radius: 5
+        radius: 8
         color: "#295F8B"
 
         Repeater {

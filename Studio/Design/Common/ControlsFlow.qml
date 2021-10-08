@@ -24,19 +24,13 @@ Rectangle {
     property bool closeable: true
 
     id: controlsFlow
-    color: Qt.darker(themeManager.foregroundColor, 1.1)
+    color: themeManager.backgroundColor
     height: Math.max(baseHeight, headerRow.height) + 20
     visible: node && !hide
 
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
-    }
-
-    Rectangle {
-        color: "black"
-        width: parent.width
-        height: 1
     }
 
     RowLayout {

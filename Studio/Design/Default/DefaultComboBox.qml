@@ -28,7 +28,7 @@ ComboBox {
             ctx.lineTo(width, 0)
             ctx.lineTo(width / 2, height)
             ctx.closePath()
-            ctx.fillStyle = control.pressed || popup.opened ? control.accentColor : themeManager.contentColor
+            ctx.fillStyle = control.pressed || popup.opened ? control.accentColor : "white"
             ctx.fill()
         }
     }
@@ -41,17 +41,17 @@ ComboBox {
         verticalAlignment: Text.AlignVCenter
         leftPadding: 15
         elide: Text.ElideRight
-        color: control.pressed || popup.opened ? control.accentColor : themeManager.contentColor
+        color: "white"
         padding: control.padding
     }
 
     background: Rectangle {
         id: rectBackground
         anchors.fill: control
-        border.width: 2
-        border.color: control.hovered || popup.opened ? control.accentColor : themeManager.contentColor
+        border.width: 1
+        border.color: control.hovered || popup.opened ? control.accentColor : "white"
         color: control.pressed ? themeManager.backgroundColor : themeManager.foregroundColor
-        radius: 10
+        radius: 8
     }
 
     popup: Popup {
@@ -73,25 +73,32 @@ ComboBox {
 
         background: Rectangle {
             color: themeManager.foregroundColor
+            radius: 8
             border.color: control.accentColor
-            border.width: 2
+            border.width: 1
         }
     }
 
     delegate: ItemDelegate {
+        id: itemDelegate
         width: control.width - 4
         hoverEnabled: true
         highlighted: control.highlightedIndex === index
 
         contentItem: Text {
             text: control.textAt(index)
-            color: control.accentColor
+            color: "white"
             font: control.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
         }
 
         background: Rectangle {
+            width: itemDelegate.width - 4
+            height: itemDelegate.height - 4
+            radius: 8
+            x: 2
+            y: 2
             color: parent.hovered ? themeManager.backgroundColor : themeManager.foregroundColor
         }
     }

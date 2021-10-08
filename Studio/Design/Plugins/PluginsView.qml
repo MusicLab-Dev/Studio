@@ -17,7 +17,7 @@ Item {
         canceledCallback = canceled
         selectedPath = ""
         visible = true
-        openAnim.start()
+        openAnim.restart()
     }
 
     function acceptAndClose(path) {

@@ -9,7 +9,7 @@ Rectangle {
     id: control
     width: 40
     height: 40
-    radius: 5
+    radius: 8
     color: "#001E36"
     border.width: mouseArea.containsPress ? 3 : mouseArea.containsMouse ? 2 : 1
     border.color: "grey"

@@ -7,6 +7,12 @@ import "../Settings"
 import "../Boards"
 
 Rectangle {
+    enum ModuleType {
+        Tree,
+        Planner,
+        Sequencer
+    }
+
     function closeAllPopups() {
         workspacesView.cancelAndClose()
         pluginsView.cancelAndClose()
@@ -44,6 +50,7 @@ Rectangle {
     function addNewPlanner(node) {
         app.plannerNodeCache = node
         addModule({
+            type: ModulesView.Planner,
             path: "qrc:/Planner/PlannerView.qml",
             callback: plannerNodeCallback
         })
@@ -52,6 +59,7 @@ Rectangle {
     function addNewPlannerWithMultipleNodes(nodes) {
         app.plannerNodesCache = nodes
         addModule({
+            type: ModulesView.Planner,
             path: "qrc:/Planner/PlannerView.qml",
             callback: plannerMultipleNodesCallback
         })
@@ -59,6 +67,7 @@ Rectangle {
 
     function addNewSequencer() {
         addModule({
+            type: ModulesView.Sequencer,
             path: "qrc:/Sequencer/SequencerView.qml",
             callback: sequencerNewPartitionNodeCallback
         })
@@ -68,6 +77,7 @@ Rectangle {
         app.partitionNodeCache = targetNode
         app.partitionIndexCache = targetPartitionIndex
         addModule({
+            type: ModulesView.Sequencer,
             path: "qrc:/Sequencer/SequencerView.qml",
             callback: sequencerPartitionNodeCallback
         })
@@ -135,7 +145,7 @@ Rectangle {
     property alias boardsView: boardsView
 
     id: modulesView
-    color: "#474747"
+    color: themeManager.foregroundColor
 
     Action {
         property var target: null

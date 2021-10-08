@@ -13,6 +13,5 @@
         <file>TreeNodeTrashArea.qml</file>
         <file>TreePanel.qml</file>
         <file>TreeSamplesPanel.qml</file>
-        <file>TreeNote.qml</file>
     </qresource>
 </RCC>
