@@ -54,7 +54,7 @@ Window {
         property int partitionIndexCache: -1
         property NodeModel plannerNodeCache: null
         property var plannerNodesCache: []
-        property var currentPlayer: null
+        property PlayerBase currentPlayer: null
 
         id: app
         scheduler.analysisTickRate: app.settings.getDefault("soundMeterTickRate", 20)

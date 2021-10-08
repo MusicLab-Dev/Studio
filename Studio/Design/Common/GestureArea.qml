@@ -1,11 +1,13 @@
 import QtQuick 2.15
 
+import CursorManager 1.0
+
 MouseArea {
     signal xZoomed(real zoom, real xPos, real yPos)
     signal yZoomed(real zoom, real xPos, real yPos)
     signal xScrolled(real scroll, real xPos, real yPos)
     signal yScrolled(real scroll, real xPos, real yPos)
-    signal offsetScroll(real xOffset, real yOffset)
+    signal offsetScroll(real vx, real vy)
 
     property bool isDragging: false
     property point lastDragEvent: Qt.point(0, 0)
@@ -15,9 +17,12 @@ MouseArea {
     acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
     onClicked: mouse.accepted = false
-    onReleased: mouse.accepted = false
     onDoubleClicked: mouse.accepted = false
     onPressAndHold: mouse.accepted = false
+
+    onIsDraggingChanged: {
+        cursorManager.set(isDragging ? CursorManager.Type.Move : CursorManager.Type.Normal)
+    }
 
     onPressed: {
         forceActiveFocus()
@@ -25,6 +30,13 @@ MouseArea {
             isDragging = true
             lastDragEvent = Qt.point(mouse.x, mouse.y)
         } else
+            mouse.accepted = false
+    }
+
+    onReleased: {
+        if (isDragging)
+            isDragging = false
+        else
             mouse.accepted = false
     }
 

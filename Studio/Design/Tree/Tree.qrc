@@ -13,5 +13,6 @@
         <file>TreeNodeTrashArea.qml</file>
         <file>TreePanel.qml</file>
         <file>TreeSamplesPanel.qml</file>
+        <file>OverviewButton.qml</file>
     </qresource>
 </RCC>

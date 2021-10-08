@@ -20,7 +20,7 @@ Item {
     property alias timelineCursor: timelineCursor
     readonly property real loopFromIndicatorX: loopFromIndicator.x + loopFromIndicator.width / 2
     readonly property real loopToIndicatorX: loopToIndicator.x + loopToIndicator.width / 2
-    property Player player
+    property PlayerBase playerBase
 
     id: timeline
 
@@ -56,21 +56,21 @@ Item {
             onPressed: {
                 forceActiveFocus()
                 if (mouse.buttons & Qt.RightButton) {
-                    player.disableLoopRange()
+                    playerBase.disableLoopRange()
                     return
                 }
                 var beat = getMouseBeatPrecision()
                 if (mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier) {
-                    if (beat >= player.playFrom) {
+                    if (beat >= playerBase.playFrom) {
                         editMode = ContentViewTimeline.EditMode.Loop
-                        player.timelineBeginLoopMove(player.playFrom, beat)
+                        playerBase.timelineBeginLoopMove(playerBase.playFrom, beat)
                     } else {
                         editMode = ContentViewTimeline.EditMode.InvertedLoop
-                        player.timelineBeginLoopMove(beat, player.playFrom)
+                        playerBase.timelineBeginLoopMove(beat, playerBase.playFrom)
                     }
                 } else {
                     editMode = ContentViewTimeline.EditMode.Playback
-                    player.timelineBeginMove(beat)
+                    playerBase.timelineBeginMove(beat)
                 }
             }
 
@@ -80,19 +80,19 @@ Item {
                 var beat = getMouseBeatPrecision()
                 switch (editMode) {
                 case ContentViewTimeline.EditMode.Playback:
-                    player.timelineMove(beat)
+                    playerBase.timelineMove(beat)
                     break
                 case ContentViewTimeline.EditMode.Loop:
-                    if (beat >= player.loopFrom)
-                        player.timelineLoopMove(beat)
+                    if (beat >= playerBase.loopFrom)
+                        playerBase.timelineLoopMove(beat)
                     else
-                        player.timelineLoopMove(player.loopFrom)
+                        playerBase.timelineLoopMove(playerBase.loopFrom)
                     break
                 case ContentViewTimeline.EditMode.InvertedLoop:
-                    if (beat <= player.loopTo)
-                        player.timelineInvertedLoopMove(beat)
+                    if (beat <= playerBase.loopTo)
+                        playerBase.timelineInvertedLoopMove(beat)
                     else
-                        player.timelineInvertedLoopMove(player.loopTo)
+                        playerBase.timelineInvertedLoopMove(playerBase.loopTo)
                     break
                 default:
                     break
@@ -104,11 +104,11 @@ Item {
                     return
                 switch (editMode) {
                 case ContentViewTimeline.EditMode.Playback:
-                    player.timelineEndMove()
+                    playerBase.timelineEndMove()
                     break
                 case ContentViewTimeline.EditMode.Loop:
                 case ContentViewTimeline.EditMode.InvertedLoop:
-                    player.timelineEndLoopMove()
+                    playerBase.timelineEndLoopMove()
                     break
                 default:
                     break
@@ -149,18 +149,18 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.right: loopFromIndicator.left
-            visible: player.hasLoop
+            visible: playerBase.hasLoop
             height: Math.max(parent.height * 0.1, 4)
             color: "grey"
         }
 
         Rectangle {
             id: loopFromIndicator
-            x: contentView.xOffset + player.loopFrom * contentView.pixelsPerBeatPrecision - width / 2
+            x: contentView.xOffset + playerBase.loopFrom * contentView.pixelsPerBeatPrecision - width / 2
             width: height
             height: parent.height
             radius: width / 2
-            visible: player.hasLoop
+            visible: playerBase.hasLoop
             color: themeManager.accentColor
 
             MouseArea {
@@ -172,11 +172,11 @@ Item {
 
                 drag.onActiveChanged: {
                     if (drag.active)
-                        player.timelineBeginLoopMove(player.loopFrom, player.loopTo)
+                        playerBase.timelineBeginLoopMove(playerBase.loopFrom, playerBase.loopTo)
                     else {
                         var beat = (loopFromIndicator.x - contentView.xOffset + loopFromIndicator.width / 2) / contentView.pixelsPerBeatPrecision
-                        player.timelineInvertedLoopMove(ensureTimelineBeatPrecision(beat))
-                        player.timelineEndLoopMove()
+                        playerBase.timelineInvertedLoopMove(ensureTimelineBeatPrecision(beat))
+                        playerBase.timelineEndLoopMove()
                     }
                 }
 
@@ -195,11 +195,11 @@ Item {
 
         Rectangle {
             id: loopToIndicator
-            x: contentView.xOffset + player.loopTo * contentView.pixelsPerBeatPrecision - width / 2
+            x: contentView.xOffset + playerBase.loopTo * contentView.pixelsPerBeatPrecision - width / 2
             width: height
             height: parent.height
             radius: width / 2
-            visible: player.hasLoop
+            visible: playerBase.hasLoop
             color: themeManager.accentColor
 
             MouseArea {
@@ -211,11 +211,11 @@ Item {
 
                 drag.onActiveChanged: {
                     if (drag.active)
-                        player.timelineBeginLoopMove(player.loopFrom, player.loopTo)
+                        playerBase.timelineBeginLoopMove(playerBase.loopFrom, playerBase.loopTo)
                     else {
                         var beat = (loopToIndicator.x - contentView.xOffset + loopToIndicator.width / 2) / contentView.pixelsPerBeatPrecision
-                        player.timelineLoopMove(ensureTimelineBeatPrecision(beat))
-                        player.timelineEndLoopMove()
+                        playerBase.timelineLoopMove(ensureTimelineBeatPrecision(beat))
+                        playerBase.timelineEndLoopMove()
                     }
                 }
 
@@ -228,7 +228,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: loopToIndicator.right
             anchors.right: parent.right
-            visible: player.hasLoop
+            visible: playerBase.hasLoop
             height: Math.max(parent.height * 0.1, 4)
             color: "grey"
         }

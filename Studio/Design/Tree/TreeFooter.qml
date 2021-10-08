@@ -27,7 +27,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: playerArea.left
-        anchors.margins: 10
+        anchors.margins: 15
 
         HelpArea {
             name: qsTr("Project Preview")
@@ -69,12 +69,43 @@ Rectangle {
                 onReleased: player.timelineEndMove()
             }
 
-            Rectangle {
-                width: 1
-                height: parent.height
-                color: "white"
-                x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * player.currentPlaybackBeat, previewBackground.width), 0)
+            ContentViewTimelineBar {
+                id: playToBar
+                height: parent.height + 20
+                y: -10
+                color: themeManager.timelineColor
+                x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * player.playerBase.currentPlaybackBeat, previewBackground.width), 0)
                 visible: app.project.master.latestInstance !== 0
+            }
+
+            ContentViewTimelineBarCursor {
+                id: playToCursor
+                width: 10
+                height: 10
+                x: playToBar.x - width / 2
+                y: -height - 2
+                visible: playToBar.visible
+            }
+
+            ContentViewTimelineBar {
+                id: playFromBar
+                height: parent.height + 20
+                y: -10
+                color: themeManager.accentColor
+                opacity: 0.5
+                x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * player.playerBase.playFrom, previewBackground.width), 0)
+                visible: playToBar.visible
+            }
+
+            ContentViewTimelineBarCursor {
+                id: playFromCursor
+                opacity: 0.5
+                width: 10
+                height: 10
+                x: playFromBar.x - width / 2
+                y: -height - 2
+                color: themeManager.accentColor
+                visible: playToBar.visible
             }
         }
     }
@@ -91,16 +122,16 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 10
-            currentPlaybackBeat: player.currentPlaybackBeat
+            currentPlaybackBeat: player.playerBase.currentPlaybackBeat
         }
 
-        Player {
+        PlayerRef {
             id: player
             width: parent.width / 2 - 40
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            targetPlaybackMode: Scheduler.Production
+            playerBase: modulesView.productionPlayerBase
         }
 
         Bpm {
