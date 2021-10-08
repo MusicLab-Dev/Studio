@@ -70,7 +70,7 @@ Window {
     }
 
     ThemeManager {
-        property color semiAccentColor: "#FF7BE2" // @todo add this to ThemeManager
+        property color semiAccentColor: Qt.lighter("#8133FF", 1.25)//"#FF7BE2" // @todo add this to ThemeManager
         property color popupDropShadow: "#80000000"
 
         id: themeManager

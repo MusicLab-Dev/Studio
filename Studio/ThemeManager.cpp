@@ -30,7 +30,7 @@ static const ThemePack DarkThemePack {
     /* background: */ "#2E323E",
     /* foreground: */ QColor("#24262B").darker(125),
     /* content: */ QColor("#24262B").darker(150),
-    /* accent: */ "#6D13FF",
+    /* accent: */ "#8133FF", //QColor("#6D13FF").lighter(150),
     /* timeline: */ "#00ECBA",
     /* disabled: */ "#3d3d3d"
 };
