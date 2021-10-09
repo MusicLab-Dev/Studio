@@ -39,6 +39,9 @@ public slots:
     /** @brief Return the count of element in the model */
     int count(void) const noexcept { return _models.size(); }
 
+    /** @brief Return true if the NodeListModel has the same nodes */
+    bool equals(const QVector<NodeModel *> nodes) const noexcept;
+
     /** @brief Get the formated name of the list */
     QString getListName(void) const noexcept;
 

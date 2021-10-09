@@ -39,6 +39,26 @@ QString NodeListModel::getListName(void) const noexcept
     }
 }
 
+bool NodeListModel::equals(const QVector<NodeModel *> nodes) const noexcept
+{
+    if (nodes.count() != _models.count())
+        return false;
+        
+    bool verified = false;
+    for (auto *targetNode : nodes) {
+        verified = false;
+        for (auto *node : _models) {
+            if (node == targetNode) {
+                verified = true;
+                break;
+            }
+        }
+        if (!verified)
+            return false;
+    }
+    return true;
+}
+
 void NodeListModel::loadNode(NodeModel *node)
 {
     beginResetModel();

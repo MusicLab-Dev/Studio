@@ -5,6 +5,7 @@ import "../Plugins"
 import "../Workspaces"
 import "../Settings"
 import "../Boards"
+import "../Planner"
 
 Rectangle {
     enum ModuleType {
@@ -49,20 +50,28 @@ Rectangle {
 
     function addNewPlanner(node) {
         app.plannerNodeCache = node
-        addModule({
-            type: ModulesView.Planner,
-            path: "qrc:/Planner/PlannerView.qml",
-            callback: plannerNodeCallback
-        })
+        var idx = getSamePlanner([node])
+        if (idx === -1)
+            addModule({
+                type: ModulesView.Planner,
+                path: "qrc:/Planner/PlannerView.qml",
+                callback: plannerNodeCallback
+            })
+        else
+            modulesView.changeSelectedModule(idx)
     }
 
     function addNewPlannerWithMultipleNodes(nodes) {
         app.plannerNodesCache = nodes
-        addModule({
-            type: ModulesView.Planner,
-            path: "qrc:/Planner/PlannerView.qml",
-            callback: plannerMultipleNodesCallback
-        })
+        var idx = getSamePlanner(nodes)
+        if (idx === -1)
+            addModule({
+                type: ModulesView.Planner,
+                path: "qrc:/Planner/PlannerView.qml",
+                callback: plannerMultipleNodesCallback
+            })
+        else
+            modulesView.changeSelectedModule(idx)
     }
 
     function addNewSequencer() {
@@ -85,6 +94,17 @@ Rectangle {
 
     function getModule(idx) {
         return modulesContent.getModule(idx)
+    }
+
+    function getSamePlanner(nodes) {
+        for (var i = 0; i < modulesContent.totalTabCount; i++) {
+            var planner = getModule(i)
+            if (planner instanceof PlannerView) {
+                if (planner.nodeList.equals(nodes))
+                    return i;
+            }
+        }
+        return -1
     }
 
     function onNodeDeleted(targetNode) {
