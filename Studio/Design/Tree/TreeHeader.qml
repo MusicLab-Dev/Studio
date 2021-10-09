@@ -3,19 +3,13 @@ import QtQuick.Controls 2.15
 
 import "../Default"
 
-Item {
-    property real opacityMax: 0.7
+Rectangle {
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
         onClicked: helpHandler.open()
-    }
-
-    Rectangle {
-        anchors.fill: parent
-        color: themeManager.foregroundColor
-        opacity: opacityMax
     }
 
     DefaultTextButton {

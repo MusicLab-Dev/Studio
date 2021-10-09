@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Common"
+import "../Help"
 
 import NodeModel 1.0
 import NodeListModel 1.0
@@ -14,7 +15,6 @@ ContentView {
         selectedPartitionIndex = partitionIndex
         placementBeatPrecisionLastWidth = Qt.binding(function() { return selectedPartition.latestNote })
     }
-
     readonly property real linkThickness: 4
     readonly property real linkHalfThickness: linkThickness / 2
     readonly property real headerMargin: 10
@@ -27,6 +27,7 @@ ContentView {
     readonly property real selectedRowHeight: rowHeight * 1.25
     property bool showChildren: true
     property alias nodeViewRepeater: nodeViewRepeater
+    property alias partitionsPreview: partitionsPreview
     property NodeListModel nodeList: NodeListModel {
         id: nodeList
     }
@@ -39,10 +40,10 @@ ContentView {
     signal resetPlacementAreaSelection
 
     id: contentView
-    player: plannerView.player
+    playerBase: plannerView.player.playerBase
     enableRows: false
     xOffsetMin: app.project.master ? Math.max(app.project.master.latestInstance, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0
-    yOffsetMin: nodeView.height > surfaceContentGrid.height - plannerFooter.partitionsPreview.height ? surfaceContentGrid.height - plannerFooter.partitionsPreview.height - nodeView.height : 0
+    yOffsetMin: nodeView.height > surfaceContentGrid.height - partitionsPreview.height ? surfaceContentGrid.height - partitionsPreview.height - nodeView.height : 0
     yZoom: 0.25
 
     Column {
@@ -65,6 +66,26 @@ ContentView {
             delegate: PlannerNodeDelegate {
                 showChildren: contentView.showChildren
             }
+        }
+    }
+
+    PartitionsPreview {
+        id: partitionsPreview
+        y: !partitionsPreview.visible ? parent.height : parent.height - height
+
+        Behavior on y {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        HelpArea {
+            name: qsTr("Partitions")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Top
+            externalDisplay: true
+            visible: partitionsPreview.visible
         }
     }
 }

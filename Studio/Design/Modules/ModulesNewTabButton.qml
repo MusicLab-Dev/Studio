@@ -22,15 +22,15 @@ Rectangle {
         width: barSize
         height: 2
         anchors.centerIn: parent
-        radius: 20
-        color: mouseArea.containsPress ? "#1A6DAA" : mouseArea.containsMouse ? themeManager.accentColor : "white"
+        radius: 8
+        color: mouseArea.containsPress ? themeManager.accentColor : mouseArea.containsMouse ? themeManager.semiAccentColor : "white"
     }
 
     Rectangle {
         width: 2
         height: barSize
         anchors.centerIn: parent
-        radius: 20
+        radius: 8
         color: barHorizontal.color
 
     }

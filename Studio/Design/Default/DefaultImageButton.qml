@@ -5,9 +5,9 @@ import CursorManager 1.0
 Button {
     property alias source: image.source
     property alias fillMode: image.fillMode
-    property color colorOnPressed: "#1A6DAA"
+    property color colorOnPressed: themeManager.accentColor
     property color colorHovered: themeManager.semiAccentColor
-    property color colorDefault: themeManager.accentColor
+    property color colorDefault: "white"
     property color colorDisabled: themeManager.disabledColor
     property real scaleFactor: 0.5
     property alias showBorder: backgroundRect.visible
@@ -30,11 +30,11 @@ Button {
         id: backgroundRect
         width: control.width
         height: control.height
-        color: "transparent"
+        color: themeManager.contentColor
         radius: 40
         visible: true
-        border.width: 1
-        border.color: "white"
+        border.width: 0
+        border.color: "black"
     }
 
     indicator: DefaultColoredImage {

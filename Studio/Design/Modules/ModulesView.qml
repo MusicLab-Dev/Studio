@@ -1,12 +1,19 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import "../Common"
 import "../Plugins"
 import "../Workspaces"
 import "../Settings"
 import "../Boards"
 
 Rectangle {
+    enum ModuleType {
+        Tree,
+        Planner,
+        Sequencer
+    }
+
     function closeAllPopups() {
         workspacesView.cancelAndClose()
         pluginsView.cancelAndClose()
@@ -44,6 +51,7 @@ Rectangle {
     function addNewPlanner(node) {
         app.plannerNodeCache = node
         addModule({
+            type: ModulesView.Planner,
             path: "qrc:/Planner/PlannerView.qml",
             callback: plannerNodeCallback
         })
@@ -52,6 +60,7 @@ Rectangle {
     function addNewPlannerWithMultipleNodes(nodes) {
         app.plannerNodesCache = nodes
         addModule({
+            type: ModulesView.Planner,
             path: "qrc:/Planner/PlannerView.qml",
             callback: plannerMultipleNodesCallback
         })
@@ -59,6 +68,7 @@ Rectangle {
 
     function addNewSequencer() {
         addModule({
+            type: ModulesView.Sequencer,
             path: "qrc:/Sequencer/SequencerView.qml",
             callback: sequencerNewPartitionNodeCallback
         })
@@ -68,6 +78,7 @@ Rectangle {
         app.partitionNodeCache = targetNode
         app.partitionIndexCache = targetPartitionIndex
         addModule({
+            type: ModulesView.Sequencer,
             path: "qrc:/Sequencer/SequencerView.qml",
             callback: sequencerPartitionNodeCallback
         })
@@ -126,6 +137,7 @@ Rectangle {
         modulesView.selectedModule = to
     }
 
+    property alias productionPlayerBase: productionPlayerBase
     property alias modules: modules
     property alias totalModuleCount: modulesContent.totalTabCount
     property alias selectedModule: modulesContent.selectedModule
@@ -135,7 +147,7 @@ Rectangle {
     property alias boardsView: boardsView
 
     id: modulesView
-    color: "#474747"
+    color: themeManager.foregroundColor
 
     Action {
         property var target: null
@@ -164,6 +176,10 @@ Rectangle {
         property var target: null
         id: plannerMultipleNodesCallback
         onTriggered: target.loadMultipleNodes()
+    }
+
+    PlayerBase {
+        id: productionPlayerBase
     }
 
     ListModel {

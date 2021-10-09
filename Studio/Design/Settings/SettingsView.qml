@@ -8,7 +8,7 @@ Item {
 
     function open(multiplePath, accepted, canceled) {
         visible = true
-        openAnim.start()
+        openAnim.restart()
     }
 
     function close() {

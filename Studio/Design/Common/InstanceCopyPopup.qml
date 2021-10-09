@@ -12,7 +12,7 @@ import PartitionModel 1.0
 
 Item {
     function open(actionsManager, node, partitionNode, partition, instance) {
-        openAnim.start()
+        openAnim.restart()
         targetActionsManager = actionsManager
         targetNode = node
         targetPartitionNode = partitionNode

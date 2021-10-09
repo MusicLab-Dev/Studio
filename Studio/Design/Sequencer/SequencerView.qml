@@ -159,10 +159,17 @@ Item {
             z: 1
         }
 
+        Rectangle {
+            color: "black"
+            Layout.preferredWidth: parent.width
+            Layout.preferredHeight: 1
+        }
+
+
         ControlsFlow {
             function open() {
                 visible = true
-                openAnim.start()
+                openAnim.restart()
             }
 
             function close() {

@@ -69,5 +69,7 @@
         <file>Assets/Plugins/Equalizer.gif</file>
         <file>Assets/Plugins/Reverb.gif</file>
         <file>Assets/Plugins/Snare.gif</file>
+        <file>Assets/Chrono.png</file>
+        <file>Assets/Orchestra.png</file>
     </qresource>
 </RCC>

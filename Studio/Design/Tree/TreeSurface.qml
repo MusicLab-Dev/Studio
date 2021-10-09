@@ -55,14 +55,13 @@ Item {
         selectionTo = Qt.point(0, 0)
     }
 
-    function resetSelection(isCloseControls) {
+    function resetSelection() {
         contentView.lastSelectedNode = null
         for (var i = 0; i < selectionList.length; ++i)
             selectionList[i].isSelected = false
         selectionList = []
         selectionCount = 0
-        if (isCloseControls)
-            treeControls.close()
+        treeControls.close()
     }
 
     function processNodeDrop(validDrag, node) {
@@ -97,26 +96,10 @@ Item {
     property int selectionCount: 0
     property NodeModel last: null
 
-    // Animations
-    property int animationUpdateCount: 0
-
     id: treeSurface
     width: Math.max(masterNodeDelegate.width, parent.width)
     height: Math.max(masterNodeDelegate.height, parent.height)
 
-    Timer {
-        id: animationUpdateTimer
-        repeat: true
-        running: player.isPlayerRunning
-        interval: 66
-
-        onRunningChanged: treeSurface.animationUpdateCount = 0
-
-        onTriggered: {
-            if (++treeSurface.animationUpdateCount < 0)
-                treeSurface.animationUpdateCount = 0
-        }
-    }
 
     TreeNodeDelegate {
         id: masterNodeDelegate

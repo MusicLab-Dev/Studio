@@ -36,7 +36,7 @@ Item {
     Rectangle {
         id: backgroundTabs
         anchors.fill: parent
-        color: Qt.lighter(themeManager.foregroundColor, 1.2)
+        color: themeManager.contentColor
     }
 
     ModulesGlobalMenu {
@@ -57,6 +57,7 @@ Item {
             ModulesStaticTab {
                 id: treeTab
                 tabIndex: -1
+                source: "qrc:/Assets/Orchestra.png"
             }
         }
 
@@ -67,6 +68,7 @@ Item {
             delegate: ModulesTab {
                 tabIndex: index
                 visualTabIndex: tabIndex + modulesTabs.staticTabCount
+                source: type === ModulesView.Planner ? "qrc:/Assets/Chrono.png" : "qrc:/Assets/Note.png"
             }
         }
 

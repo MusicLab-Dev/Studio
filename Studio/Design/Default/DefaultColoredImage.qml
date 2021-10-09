@@ -1,7 +1,8 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
 
-Image {
+Item {
+    property alias image: image
     property alias source: image.source
     property alias color: overlay.color
     property alias cached: overlay.cached
@@ -14,6 +15,12 @@ Image {
 
         source: Image {
             id: image
+            width: overlay.width
+            height: overlay.height
+            antialiasing: true
+            mipmap: true
+            smooth: true
+            fillMode: Image.PreserveAspectFit
         }
     }
 }

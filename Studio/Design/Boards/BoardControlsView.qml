@@ -24,7 +24,7 @@ Rectangle {
     id: boardContentView
     color: themeManager.foregroundColor
     visible: false
-    radius: 13
+    radius: 8
 
     DefaultMenu {
         property int targetInput: 0
@@ -64,7 +64,7 @@ Rectangle {
                     anchors.fill: parent
                     anchors.margins: parent.width * 0.02
                     color: "white"
-                    radius: 10
+                    radius: 8
                 }
             }
         }
@@ -94,7 +94,7 @@ Rectangle {
                 background: Rectangle {
                     border.width: parent.hovered ? 5 : 0
                     border.color: themeManager.accentColor
-                    radius: 10
+                    radius: 8
                 }
             }
         }

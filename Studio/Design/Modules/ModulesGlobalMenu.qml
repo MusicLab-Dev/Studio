@@ -42,10 +42,6 @@ DefaultMenuButton {
     id: menuButton
     height: parent.height * 0.05
     width: parent.height * 0.05
-    imageFactor: 0.75
-    rect.color: themeManager.foregroundColor
-    rect.border.color: "black"
-    rect.border.width: 1
 
     onReleased: globalMenu.popup()
 

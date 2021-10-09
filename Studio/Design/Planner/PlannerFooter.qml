@@ -9,11 +9,10 @@ import Scheduler 1.0
 
 Rectangle {
     property alias player: player
-    property alias partitionsPreview: partitionsPreview
 
     width: parent.width
     height: parent.width
-    color: themeManager.foregroundColor
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent
@@ -41,14 +40,14 @@ Rectangle {
                     Layout.alignment: Qt.AlignVCenter
                     Layout.preferredHeight: parent.height * 0.5
                     Layout.preferredWidth: parent.width * 0.25
-                    currentPlaybackBeat: player.currentPlaybackBeat
+                    currentPlaybackBeat: player.playerBase.currentPlaybackBeat
                 }
 
-                Player {
+                PlayerRef {
                     id: player
                     Layout.preferredHeight: parent.height * 0.5
                     Layout.preferredWidth: parent.width * 0.25
-                    targetPlaybackMode: Scheduler.Production
+                    playerBase: modulesView.productionPlayerBase
                 }
 
                 Bpm {
@@ -71,7 +70,7 @@ Rectangle {
             Layout.preferredWidth: parent.width / 3
 
             DefaultImageButton {
-                visible: contentView.lastSelectedNode && partitionsPreview.hide
+                visible: contentView.lastSelectedNode && contentView.partitionsPreview.hide
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -81,21 +80,8 @@ Rectangle {
                 scaleFactor: 1
                 source: "qrc:/Assets/Note.png"
 
-                onReleased: partitionsPreview.hide = false
+                onReleased: contentView.partitionsPreview.hide = false
             }
-        }
-    }
-
-    PartitionsPreview {
-        id: partitionsPreview
-        y: -height
-
-        HelpArea {
-            name: qsTr("Partitions")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Top
-            externalDisplay: true
-            visible: partitionsPreview.visible
         }
     }
 }

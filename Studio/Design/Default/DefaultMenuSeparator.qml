@@ -3,13 +3,13 @@ import QtQuick.Controls 2.15
 
 MenuSeparator {
     id: separator
+    visible: enabled
+    height: enabled ? implicitHeight : 0
 
     contentItem: Rectangle {
         implicitHeight: 1
-        color: separator.enabled ? themeManager.semiAccentColor : "transparent"
+        color: separator.enabled ? themeManager.accentColor : "transparent"
     }
 
-    background: Rectangle {
-        color: themeManager.foregroundColor
-    }
+    background: Item {}
 }

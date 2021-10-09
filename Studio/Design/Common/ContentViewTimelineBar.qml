@@ -5,6 +5,8 @@ import QtQuick.Shapes 1.15
 
 
 Rectangle {
+    width: 1
+
     Behavior on x {
         enabled: !app.scheduler.running
 

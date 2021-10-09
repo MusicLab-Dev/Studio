@@ -6,14 +6,14 @@ Item {
     function open(filt) {
         filter = filt
         if (!launched)
-            openAnimPanel.start()
+            openAnimPanel.restart()
         launched = true
     }
 
     function close() {
         launched = false
         filter = 0
-        closeAnimPanel.start()
+        closeAnimPanel.restart()
     }
 
     property int filter: 0

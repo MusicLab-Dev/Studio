@@ -32,7 +32,7 @@ Rectangle {
                 color: "white"
                 border.width: boardManagerMouseArea.containsMouse ? 5 : 0
                 border.color: themeManager.accentColor
-                radius: 10
+                radius: 8
 
                 Rectangle {
                     id: boardPreview
@@ -42,7 +42,7 @@ Rectangle {
                     y: parent.height / 2 - height / 2
                     anchors.margins: parent.width * 0.02
                     color: boardManagerMouseArea.containsMouse ? themeManager.accentColor : themeManager.foregroundColor
-                    radius: 10
+                    radius: 8
 
                     DefaultText {
                         anchors.centerIn: parent

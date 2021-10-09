@@ -28,7 +28,7 @@ Column {
 
     id: nodeDelegate
 
-    Component.onCompleted: delegateOpenAnim.start()
+    Component.onCompleted: delegateOpenAnim.restart()
 
     PropertyAnimation {
         id: delegateOpenAnim
@@ -54,12 +54,6 @@ Column {
             anchors.bottom: soundMeter.top
             anchors.horizontalCenter: parent.horizontalCenter
             visible: nodeDelegate.parentNode && !nodeInstanceBackground.drag.active
-
-            TreeNote {
-                x: width / -2 + 1
-                y: parent.height - 5 - (parent.height / 25) * (treeSurface.animationUpdateCount % 25)
-                color: verticalLinkUp.color
-            }
         }
 
         Rectangle {
@@ -70,12 +64,6 @@ Column {
             anchors.horizontalCenter: parent.horizontalCenter
             width: 2
             visible: childrenRepeater.count && !nodeInstanceBackground.drag.active
-
-            TreeNote {
-                x: width / -2 + 1
-                y: parent.height - 5 - (parent.height / 25) * (treeSurface.animationUpdateCount % 25)
-                color: verticalLinkDown.color
-            }
         }
 
         SoundMeter {
@@ -279,14 +267,12 @@ Column {
                         elide: Text.ElideRight
                     }
                 }
-
-
             }
 
             Rectangle {
                 id: nodeInstanceBackgroundRect
                 anchors.fill: parent
-                radius: 10
+                radius: 8
                 color: nodeInstanceBackground.containsDrag ? nodeInstanceBackground.validDrag ? nodeDelegate.lightColor : nodeDelegate.pressedColor : nodeDelegate.color
                 border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
                 border.width: 2
@@ -298,11 +284,10 @@ Column {
                 anchors.fill: nodeInstanceBackgroundRect
                 horizontalOffset: 2
                 verticalOffset: 2
-                radius: 10
+                radius: 8
                 samples: 17
                 color: "#aa000000"
                 source: nodeInstanceBackgroundRect
-                opacity: nodeDelegate.isSelected ? 1 : 0
             }
 
             DefaultText {
@@ -349,7 +334,7 @@ Column {
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
                 scaleFactor: 0.8
-                playing: hovered || (treeView.visible && treeView.player.isPlayerRunning)
+                playing: hovered || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
 
                 onClicked: {
                     treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
@@ -389,19 +374,6 @@ Column {
         height: 2
         visible: childrenRepeater.count > 1
         // When visible is not turned off the tree is perfectly symetric (on selection) but I don't know why
-
-        TreeNote {
-            x: -5 + (parent.width / (2 * 25)) * (treeSurface.animationUpdateCount % 25)
-            y: width / -2 + 1
-            color: horizontalLinkDown.color
-        }
-
-        TreeNote {
-            x:  parent.width - 5 - (parent.width / (2 * 25)) * (treeSurface.animationUpdateCount % 25)
-            y: width / -2 + 1
-            color: horizontalLinkDown.color
-        }
-
     }
 
     Row {

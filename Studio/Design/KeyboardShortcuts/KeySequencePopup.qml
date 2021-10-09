@@ -11,7 +11,7 @@ Item {
         modifiers = 0
         acceptedCallback = accepted
         canceledCallback = canceled
-        openAnim.start()
+        openAnim.restart()
         visible = true
         eventDispatcher.keyboardListener.detection = true
     }

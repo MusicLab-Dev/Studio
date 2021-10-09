@@ -15,7 +15,7 @@ Item {
             selectedPath = app.project.path + ".wav"
         else
             selectedPath = app.project.name + ".wav"
-        openAnim.start()
+        openAnim.restart()
         visible = true
     }
 

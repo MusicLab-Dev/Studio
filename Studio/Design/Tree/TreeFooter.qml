@@ -10,16 +10,11 @@ import "../Default"
 import "../Common"
 import "../Help"
 
-Item {
-
+Rectangle {
     property alias projectPreview: projectPreview
     property alias player: player
 
-    Rectangle {
-        anchors.fill: parent
-        color: themeManager.foregroundColor
-        opacity: 0.8
-    }
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent
@@ -32,8 +27,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: playerArea.left
-        anchors.rightMargin: 30
-        anchors.margins: 10
+        anchors.margins: 15
 
         HelpArea {
             name: qsTr("Project Preview")
@@ -46,7 +40,7 @@ Item {
         Rectangle {
             id: previewBackground
             anchors.fill: parent
-            color: themeManager.backgroundColor
+            color: themeManager.foregroundColor
             clip: true
         }
 
@@ -75,12 +69,43 @@ Item {
                 onReleased: player.timelineEndMove()
             }
 
-            Rectangle {
-                width: 4
-                height: parent.height
-                color: "white"
-                x: Math.min(projectPreview.pixelsPerBeatPrecision * player.currentPlaybackBeat - 2, previewBackground.width)
+            ContentViewTimelineBar {
+                id: playToBar
+                height: parent.height + 20
+                y: -10
+                color: themeManager.timelineColor
+                x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * player.playerBase.currentPlaybackBeat, previewBackground.width), 0)
                 visible: app.project.master.latestInstance !== 0
+            }
+
+            ContentViewTimelineBarCursor {
+                id: playToCursor
+                width: 10
+                height: 10
+                x: playToBar.x - width / 2
+                y: -height - 2
+                visible: playToBar.visible
+            }
+
+            ContentViewTimelineBar {
+                id: playFromBar
+                height: parent.height + 20
+                y: -10
+                color: themeManager.accentColor
+                opacity: 0.5
+                x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * player.playerBase.playFrom, previewBackground.width), 0)
+                visible: playToBar.visible
+            }
+
+            ContentViewTimelineBarCursor {
+                id: playFromCursor
+                opacity: 0.5
+                width: 10
+                height: 10
+                x: playFromBar.x - width / 2
+                y: -height - 2
+                color: themeManager.accentColor
+                visible: playToBar.visible
             }
         }
     }
@@ -88,32 +113,33 @@ Item {
     Item {
         id: playerArea
         anchors.right: parent.right
-        width: parent.width * 0.3
+        width: parent.width * 0.32
         height: parent.height
 
-        RowLayout {
-            spacing: 10
-            anchors.fill: parent
+        TimerView {
+            width: parent.width / 4
+            height: parent.height / 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            currentPlaybackBeat: player.playerBase.currentPlaybackBeat
+        }
 
-            TimerView {
-                Layout.alignment: Qt.AlignVCenter
-                Layout.preferredHeight: parent.height * 0.5
-                Layout.preferredWidth: parent.width * 0.25
-                currentPlaybackBeat: player.currentPlaybackBeat
-            }
+        PlayerRef {
+            id: player
+            width: parent.width / 2 - 40
+            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            playerBase: modulesView.productionPlayerBase
+        }
 
-            Player {
-                id: player
-                Layout.preferredHeight: parent.height * 0.5
-                Layout.preferredWidth: parent.width * 0.25
-                targetPlaybackMode: Scheduler.Production
-            }
-
-            Bpm {
-                Layout.alignment: Qt.AlignVCenter
-                Layout.preferredHeight: parent.height * 0.5
-                Layout.preferredWidth: parent.width * 0.25
-            }
+        Bpm {
+            width: parent.width / 4
+            height: parent.height / 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 10
         }
 
         HelpArea {

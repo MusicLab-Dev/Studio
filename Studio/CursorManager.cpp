@@ -10,11 +10,14 @@
 
 void CursorManager::set(const CursorManager::Type &type) const noexcept
 {
+
+    if (QGuiApplication::overrideCursor() != nullptr) // Release previous override
+        QGuiApplication::restoreOverrideCursor();
     switch (type)
     {
-    case CursorManager::Type::Normal:
-        QGuiApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
-        break;
+//    case CursorManager::Type::Normal:
+//        QGuiApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
+//        break;
     case CursorManager::Type::Clickable:
         QGuiApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
         break;

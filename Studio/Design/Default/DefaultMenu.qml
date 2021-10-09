@@ -5,12 +5,13 @@ Menu {
     id: globalMenu
     width: 200
 
-    delegate: DefaultMenuItem {}
-
     background: Rectangle {
-        border.color: themeManager.semiAccentColor
+        border.color: themeManager.accentColor
         border.width: 1
-        z: 1
-        color: "transparent"
+        color: themeManager.foregroundColor
+        radius: 8
+    }
+
+    delegate: DefaultMenuItem {
     }
 }

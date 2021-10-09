@@ -563,7 +563,7 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="Studio/Design/Main/Main.qml" line="36"/>
+        <location filename="Studio/Design/Main/Main.qml" line="40"/>
         <source>Lexo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -584,67 +584,67 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="66"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="62"/>
         <source>New Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="71"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="67"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="76"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="72"/>
         <source>Save Project As...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="81"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="77"/>
         <source>Open Project File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="86"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="82"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="94"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="90"/>
         <source>Basic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="102"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="98"/>
         <source>Demo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="111"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="107"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="116"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="112"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="121"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="117"/>
         <source>Boards</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="126"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="122"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="133"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="129"/>
         <source>Save a project file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="149"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="145"/>
         <source>Load a project file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -693,7 +693,6 @@
     <message>
         <location filename="Studio/Design/Planner/PlannerEdition.qml" line="18"/>
         <source>Edition modes</source>
-        <oldsource>Edition mode</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -722,14 +721,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="94"/>
-        <source>Partitions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="Studio/Design/Planner/PlannerFooter.qml" line="63"/>
         <location filename="Studio/Design/Planner/PlannerFooter.qml" line="95"/>
         <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="94"/>
+        <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -965,8 +964,6 @@
     <message>
         <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="103"/>
         <source>Selected partition</source>
-        <oldsource>Edition precision
-Selected partition</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1001,20 +998,6 @@ Selected partition</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="124"/>
-        <source>Move to planner</source>
-        <oldsource>See in planner</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="79"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="125"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="182"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="197"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="78"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
@@ -1030,12 +1013,25 @@ Selected partition</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="181"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="79"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="122"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="179"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="194"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="121"/>
+        <source>Move to planner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="178"/>
         <source>Sound meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="196"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="193"/>
         <source>Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1092,7 +1088,6 @@ Selected partition</oldsource>
     <message>
         <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="47"/>
         <source>Instrum.</source>
-        <oldsource>Instruments</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1123,7 +1118,6 @@ Selected partition</oldsource>
     <message>
         <location filename="Studio/Design/Tree/TreeContentView.qml" line="260"/>
         <source>Planner overview</source>
-        <oldsource>Open all in planner</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1135,18 +1129,18 @@ Selected partition</oldsource>
 <context>
     <name>TreeFooter</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="39"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="33"/>
         <source>Project Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="40"/>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="121"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="34"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="116"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="120"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="115"/>
         <source>Player Area</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1154,8 +1148,8 @@ Selected partition</oldsource>
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="273"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="315"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="261"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="300"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

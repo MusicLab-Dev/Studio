@@ -6,7 +6,7 @@ DefaultImageButton {
     source: "qrc:/Assets/Close.png"
     showBorder: false
     scaleFactor: 1
-    colorDefault: "red"
-    colorOnPressed: "grey"
-    colorHovered: themeManager.accentColor
+    // colorDefault: themeManager.accentColor
+    // colorOnPressed: "grey"
+    // colorHovered: themeManager.accentColor
 }

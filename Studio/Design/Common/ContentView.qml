@@ -16,7 +16,7 @@ Item {
     default property alias placeholder: placeholder.data
 
     // Inputs
-    property Player player
+    property PlayerBase playerBase
 
     // Display inputs
     property alias enableRows: surfaceContentGrid.enableRows
@@ -127,8 +127,8 @@ Item {
         anchors.fill: parent
 
         onOffsetScroll: {
-            xOffset = Math.min(Math.max(xOffset + xOffset, xOffsetMin), 0)
-            yOffset = Math.min(Math.max(yOffset + yOffset, yOffsetMin), 0)
+            xOffset = Math.min(Math.max(xOffset + vx, xOffsetMin), 0)
+            yOffset = Math.min(Math.max(yOffset + vy, yOffsetMin), 0)
         }
 
         onXScrolled: {
@@ -168,7 +168,7 @@ Item {
 
     ContentViewTimeline {
         id: contentViewTimeline
-        player: contentView.player
+        playerBase: contentView.playerBase
         height: timelineHeight
         width: contentView.width
         z: 1
@@ -202,7 +202,7 @@ Item {
             anchors.fill: surfaceContentGrid
 
             Rectangle {
-                visible: player.hasLoop
+                visible: playerBase.hasLoop
                 color: "grey"
                 opacity: 0.6
                 anchors.left: parent.left
@@ -211,7 +211,7 @@ Item {
             }
 
             Rectangle {
-                visible: player.hasLoop
+                visible: playerBase.hasLoop
                 color: "grey"
                 opacity: 0.6
                 anchors.left: loopToBar.right
@@ -225,7 +225,7 @@ Item {
                 width: 1
                 height: contentView.height
                 color: themeManager.accentColor
-                visible: player.hasLoop
+                visible: playerBase.hasLoop
             }
 
             Rectangle {
@@ -234,7 +234,7 @@ Item {
                 width: 1
                 height: contentView.height
                 color: themeManager.accentColor
-                visible: player.hasLoop
+                visible: playerBase.hasLoop
             }
 
             ScrollBar {
@@ -274,10 +274,9 @@ Item {
     ContentViewTimelineBar {
         id: timelineBar
         visible: x >= rowHeaderWidth
-        color: "#00ECBA"
-        width: 1
+        color: themeManager.timelineColor
         height: parent.height - timelineCursor.height
-        x: rowHeaderWidth + xOffset + player.currentPlaybackBeat * contentView.pixelsPerBeatPrecision
+        x: rowHeaderWidth + xOffset + playerBase.currentPlaybackBeat * contentView.pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1
     }
@@ -287,9 +286,8 @@ Item {
         visible: x >= rowHeaderWidth
         color: themeManager.accentColor
         opacity: 0.5
-        width: 1
         height: parent.height - timelineCursor.height
-        x: rowHeaderWidth + xOffset + player.playFrom * contentView.pixelsPerBeatPrecision
+        x: rowHeaderWidth + xOffset + playerBase.playFrom * contentView.pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1
     }

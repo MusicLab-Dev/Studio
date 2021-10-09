@@ -121,54 +121,14 @@ MouseArea {
             yOffset = yOffsetMax
     }
 
-    ParallelAnimation {
-        id: downOverlays
-        PropertyAnimation {
-            target: treeComponentsPanel
-            property: "y"
-            from: treeComponentsPanel.yBase
-            to: treeComponentsPanel.yOpen
-            duration: 300
-            easing.type: Easing.OutCubic
-        }
-        PropertyAnimation {
-            target: overview
-            property: "y"
-            from: overview.yBase
-            to: overview.yOpen
-            duration: 300
-            easing.type: Easing.OutCubic
-        }
-    }
-
-    ParallelAnimation {
-        id: upOverlays
-        PropertyAnimation {
-            target: treeComponentsPanel
-            property: "y"
-            from: treeComponentsPanel.yOpen
-            to: treeComponentsPanel.yBase
-            duration: 300
-            easing.type: Easing.OutCubic
-        }
-        PropertyAnimation {
-            target: overview
-            property: "y"
-            from: overview.yOpen
-            to: overview.yBase
-            duration: 300
-            easing.type: Easing.OutCubic
-        }
-    }
-
     // Handle all mouse / touch gestures
     GestureArea {
         id: gestureArea
         anchors.fill: parent
 
         onOffsetScroll: {
-            contentView.incrementXOffset(xOffset)
-            contentView.incrementYOffset(yOffset)
+            contentView.incrementXOffset(vx)
+            contentView.incrementYOffset(vy)
         }
 
         onXScrolled: contentView.incrementXOffset(contentView.xScrollFactor * scroll)
@@ -196,6 +156,14 @@ MouseArea {
         height: parent.height * 0.05
         width: parent.width
         z: 1
+        y: treeControls.hide || treeControls.node == null ? 0 : -height
+
+        Behavior on y {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+        }
     }
 
     TreeSurface {
@@ -210,70 +178,40 @@ MouseArea {
     }
 
     TreeComponentsPanel {
-        property real yBase: treeHeader.height + 30
-        property real yOpen: treeControls.height + 30
-
         id: treeComponentsPanel
-        y: yBase
         width: parent.width * 0.15
         height: parent.height - (treeControls.visible ? treeControls.height : 0) - partitionsPreview.height - 35
         panelCategoryHeight: parent.height * 0.1
         xBase: parent.width
+        y: (!treeControls.visible && !treeControls.node ? treeHeader.height : treeControls.height) + 30
+
+        Behavior on y {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+        }
     }
 
-    Item {
-        property real yBase: treeHeader.height + 30
-        property real yOpen: treeControls.height + 30
-
+    OverviewButton {
         id: overview
-        y: yBase
         anchors.left: parent.left
         anchors.leftMargin: 20
         width: parent.width * 0.1
         height: parent.height * 0.1
+        y: (!treeControls.visible ? treeHeader.height : treeControls.height) + 30
 
-        Rectangle {
-            anchors.fill: parent
-            radius: 16
-            opacity: overviewMouse.containsMouse ? 1 : 0.6
-            color: overviewMouse.containsMouse ? app.project.master.color : themeManager.foregroundColor
-        }
-
-        MouseArea {
-            id: overviewMouse
-            hoverEnabled: true
-            anchors.fill: parent
-            onPressed: {
-                modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
+        Behavior on y {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
             }
-        }
-
-        DefaultText {
-            anchors.fill: parent
-            fontSizeMode: Text.Fit
-            font.pixelSize: 30
-            text: qsTr("Overview")
-            color: overviewMouse.containsMouse ? themeManager.foregroundColor : app.project.master.color
-        }
-
-        HelpArea {
-            name: qsTr("Planner overview")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
         }
     }
 
-
     ControlsFlow {
         function open(newNode) {
-            if (node) {
-                node = newNode
-            } else {
-                node = newNode
-                openAnimControl.start()
-                downOverlays.start()
-            }
+            node = newNode
         }
 
         function change(newNode) {
@@ -281,63 +219,32 @@ MouseArea {
         }
 
         function close() {
-            if (treeControls.node) {
-                closeAnimControl.start()
-                upOverlays.start()
-            }
+            node = null
         }
 
         id: treeControls
-        anchors.top: treeHeader.bottom
         width: parent.width
-        y: parent.height
         node: null
+        y: hide || !visible ? -height : 0
 
-        ParallelAnimation {
-            id: openAnimControl
-            PropertyAnimation {
-                target: treeControls
-                property: "opacity"
-                from: 0
-                to: 1
+        Behavior on y {
+            NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutCubic
             }
-            PropertyAnimation {
-                target: treeHeader
-                property: "y"
-                from: 0
-                to: -treeHeader.height
-                duration: 300
-                easing.type: Easing.OutCubic
-            }
-        }
-
-        ParallelAnimation {
-            id: closeAnimControl
-            PropertyAnimation {
-                target: treeHeader
-                property: "y"
-                from: -treeHeader.height
-                to: 0
-                duration: 300
-                easing.type: Easing.OutCubic
-            }
-            PropertyAnimation {
-                target: treeControls
-                property: "opacity"
-                from: 1
-                to: 0
-                duration: 300
-                easing.type: Easing.OutCubic
-            }
-            onFinished: treeControls.node = null
         }
     }
 
     PartitionsPreview {
         id: partitionsPreview
-        anchors.bottom: parent.bottom
+        y: !partitionsPreview.visible ? parent.height : parent.height - height
+
+        Behavior on y {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+        }
 
         HelpArea {
             name: qsTr("Partitions")
@@ -386,23 +293,8 @@ MouseArea {
         height: 6
 
         onPositionChanged: {
-            // position = (1 - size) *  (1 - ((xOffset - xOffsetMin) / xOffsetWidth))
-            // position / (1 - size) = 1 - ((xOffset - xOffsetMin) / xOffsetWidth)
-            // (position / (1 - size)) + ((xOffset - xOffsetMin) / xOffsetWidth) = 1
-            // ((xOffset - xOffsetMin) / xOffsetWidth) = 1 - (position / (1 - size))
-            // xOffset - xOffsetMin = (1 - (position / (1 - size))) * xOffsetWidth
-            // xOffset = ((1 - (position / (1 - size))) * xOffsetWidth) + xOffsetMin
-
-
-            // position / (1 - size) = -((xOffset - xOffsetMin) / xOffsetWidth) + 1
-            // (position / (1 - size)) - 1 = -((xOffset - xOffsetMin) / xOffsetWidth)
-            // -((position / (1 - size)) - 1) = (xOffset - xOffsetMin) / xOffsetWidth
-            // -((position / (1 - size)) - 1) * xOffsetWidth = xOffset - xOffsetMin
-
             if (Math.abs(position - contentView.xScrollIndicatorPos) > Number.EPSILON)
                 contentView.xOffset = ((1 - (position / (1 - size))) * contentView.xOffsetWidth) + contentView.xOffsetMin
-                // contentView.xOffset = (-((position / (1 - size)) - 1) * contentView.xOffsetWidth) - contentView.xOffsetMin
-                // contentView.xOffset = contentView.xOffsetWidth * position / (1 - size)
         }
     }
 
@@ -422,9 +314,10 @@ MouseArea {
     }
 
     DefaultImageButton {
+        id: treeControlsShowButton
         visible: contentView.lastSelectedNode && treeControls.hide
         anchors.right: parent.right
-        anchors.top: parent.top
+        anchors.top: treeHeader.bottom
         anchors.topMargin: 10
         anchors.rightMargin: 10
         width: height

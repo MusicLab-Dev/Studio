@@ -31,10 +31,14 @@ Window {
         return s;
     }
 
+    function setColorAlpha(color, alpha) {
+        return Qt.hsla(color.hslHue, color.hslSaturation, color.hslLightness, alpha)
+    }
+
     id: mainWindow
     visible: true
     title: qsTr("Lexo")
-    minimumWidth: 800
+    minimumWidth: 1020
     minimumHeight: 600
 
     Component.onCompleted: {
@@ -50,7 +54,7 @@ Window {
         property int partitionIndexCache: -1
         property NodeModel plannerNodeCache: null
         property var plannerNodesCache: []
-        property var currentPlayer: null
+        property PlayerBase currentPlayer: null
 
         id: app
         scheduler.analysisTickRate: app.settings.getDefault("soundMeterTickRate", 20)
@@ -66,7 +70,7 @@ Window {
     }
 
     ThemeManager {
-        property color semiAccentColor: "#338DCF" // @todo add this to ThemeManager
+        property color semiAccentColor: Qt.lighter("#8133FF", 1.25)//"#FF7BE2" // @todo add this to ThemeManager
         property color popupDropShadow: "#80000000"
 
         id: themeManager
