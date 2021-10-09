@@ -27,24 +27,9 @@ Rectangle {
     visible: nodeDelegate && !hide
     // border.color: nodeColor
 
-    onVisibleChanged: {
-        if (visible)
-            openAnim.restart()
-    }
-
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
-    }
-
-    PropertyAnimation {
-        id: openAnim
-        target: partitionsPreview
-        property: "opacity"
-        from: 0
-        to: 1
-        duration: 300
-        easing.type: Easing.OutCubic
     }
 
     Rectangle {

@@ -55,14 +55,13 @@ Item {
         selectionTo = Qt.point(0, 0)
     }
 
-    function resetSelection(isCloseControls) {
+    function resetSelection() {
         contentView.lastSelectedNode = null
         for (var i = 0; i < selectionList.length; ++i)
             selectionList[i].isSelected = false
         selectionList = []
         selectionCount = 0
-        if (isCloseControls)
-            treeControls.close()
+        treeControls.close()
     }
 
     function processNodeDrop(validDrag, node) {

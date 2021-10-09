@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import "../Common"
 import "../Plugins"
 import "../Workspaces"
 import "../Settings"
@@ -156,6 +157,7 @@ Rectangle {
         modulesView.selectedModule = to
     }
 
+    property alias productionPlayerBase: productionPlayerBase
     property alias modules: modules
     property alias totalModuleCount: modulesContent.totalTabCount
     property alias selectedModule: modulesContent.selectedModule
@@ -194,6 +196,10 @@ Rectangle {
         property var target: null
         id: plannerMultipleNodesCallback
         onTriggered: target.loadMultipleNodes()
+    }
+
+    PlayerBase {
+        id: productionPlayerBase
     }
 
     ListModel {

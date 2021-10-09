@@ -10,7 +10,9 @@
         <file>EditionModeSelector.qml</file>
         <file>ArrowNextPrev.qml</file>
         <file>GestureArea.qml</file>
+        <file>PlayerRef.qml</file>
         <file>Player.qml</file>
+        <file>PlayerBase.qml</file>
         <file>PlacementArea.qml</file>
         <file>PluginFactoryImage.qml</file>
         <file>PluginFactoryImageButton.qml</file>
