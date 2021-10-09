@@ -123,6 +123,9 @@ set(StudioSources
     ${StudioDir}/ClipboardManager.cpp
     ${StudioDir}/CursorManager.hpp
     ${StudioDir}/CursorManager.cpp
+    ${StudioDir}/PartitionManager.hpp
+    ${StudioDir}/PartitionManager.ipp
+    ${StudioDir}/PartitionManager.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QM_FILES} ${QtResources})
