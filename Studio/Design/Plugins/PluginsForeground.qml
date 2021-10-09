@@ -30,7 +30,7 @@ Rectangle {
     property alias currentSearchText: searchText.text
 
     id: pluginsForeground
-    color: Qt.lighter(themeManager.foregroundColor, 1.2)
+    color: themeManager.backgroundColor
     radius: 30
 
     Rectangle {

@@ -52,12 +52,16 @@ Item {
             }
         }
 
-        Rectangle {
+        Item {
             id: rect
             anchors.fill: parent
-            color: "transparent"
-            border.color: instanceBackground.containsMouse ? componentDelegate.color : "white"
-            radius: width / 4
+
+            Rectangle {
+                anchors.fill: parent
+                color: themeManager.backgroundColor
+                border.color: instanceBackground.containsMouse ? componentDelegate.color : "white"
+                radius: width / 4
+            }
 
             PluginFactoryImage {
                 id: image
@@ -67,7 +71,7 @@ Item {
                 y: parent.height / 2 - height / 2
                 name: factoryName
                 playing: instanceBackground.containsMouse
-                color: componentDelegate.color
+                color: panelContentBackground.color
             }
         }
     }
