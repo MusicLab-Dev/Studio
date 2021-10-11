@@ -59,16 +59,24 @@ Rectangle {
             id: projectPreview
             anchors.fill: parent
             beatLength: app.project.master.latestInstance
-
             Component.onCompleted: targets = [app.project.master]
 
             Connections {
                 target: contentView.treeSurface
+
                 function onSelectionListModified() {
                     if (contentView.treeSurface.selectionList.length)
                         projectPreview.targets = contentView.treeSurface.makeNodeSelectionList()
                     else
                         projectPreview.targets = [app.project.master]
+                }
+            }
+
+            Connections {
+                target: app.project
+
+                function onMasterChanged() {
+                    projectPreview.targets = [app.project.master]
                 }
             }
 
@@ -103,7 +111,7 @@ Rectangle {
                 id: playFromBar
                 height: parent.height + 20
                 y: -10
-                color: themeManager.accentColor
+                color: "white"
                 opacity: 0.5
                 x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * player.playerBase.playFrom, previewBackground.width), 0)
                 visible: playToBar.visible
@@ -116,16 +124,15 @@ Rectangle {
                 height: 10
                 x: playFromBar.x - width / 2
                 y: -height - 2
-                color: themeManager.accentColor
+                color: "white"
                 visible: playToBar.visible
             }
 
             Rectangle {
-                color: themeManager.backgroundColor
+                color: mainWindow.setColorAlpha(themeManager.backgroundColor, 0.5)
                 width: previewText.implicitWidth + 4
                 height: previewText.implicitHeight + 4
                 anchors.right: parent.right
-                opacity: 0.75
 
                 DefaultText {
                     id: previewText

@@ -29,7 +29,6 @@ void ProjectPreview::setPixelsPerBeatPrecision(const qreal value)
         return;
     _pixelsPerBeatPrecision = value;
     emit pixelsPerBeatPrecisionChanged();
-    requestUpdate();
 }
 
 void ProjectPreview::setBeatLength(const Beat value)

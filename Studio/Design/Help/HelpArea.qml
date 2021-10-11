@@ -73,6 +73,13 @@ Item {
     onNameChanged: updateHelpArea()
 
     Connections {
+        target: parent
+
+        function onXChanged() { updateHelpArea() }
+        function onYChanged() { updateHelpArea() }
+    }
+
+    Connections {
         target: helpHandler
         enabled: index !== -1
 

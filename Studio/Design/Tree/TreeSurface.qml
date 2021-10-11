@@ -57,12 +57,13 @@ Item {
 
     function resetSelection() {
         contentView.lastSelectedNode = null
-        for (var i = 0; i < selectionList.length; ++i)
-            selectionList[i].isSelected = false
-        selectionList = []
-        selectionCount = 0
-        treeControls.close()
-        selectionListModified()
+        if (selectionList.length !== 0) {
+            for (var i = 0; i < selectionList.length; ++i)
+                selectionList[i].isSelected = false
+            selectionList = []
+            selectionCount = 0
+            selectionListModified()
+        }
     }
 
     function processNodeDrop(validDrag, node) {
@@ -82,10 +83,8 @@ Item {
         ++selectionCount
         if (contentView.lastSelectedNode == null) {
             contentView.lastSelectedNode = nodeDelegate
-            treeControls.open(nodeDelegate.node)
         } else {
             contentView.lastSelectedNode = nodeDelegate
-            treeControls.change(nodeDelegate.node)
         }
         selectionListModified()
     }

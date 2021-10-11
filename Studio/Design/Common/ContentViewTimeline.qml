@@ -121,7 +121,7 @@ Item {
             id: upTimeline
             height: parent.height / 2
             width: parent.width
-            color: "#00ECBA"
+            color: themeManager.timelineColor
 
             ContentViewTimelineBarCursor {
                 id: timelineCursor
@@ -130,7 +130,7 @@ Item {
 
             ContentViewTimelineBarCursor {
                 id: playFromCursor
-                color: themeManager.accentColor
+                color: "white"
                 x: playFromBar.x - actionBox.width - width / 2
                 opacity: 0.6
             }

@@ -126,6 +126,17 @@ MouseArea {
             yOffset = yOffsetMax
     }
 
+    Component.onCompleted: animDelayTimer.start()
+
+    Timer {
+        id: animDelayTimer
+        interval: 100
+        onTriggered: {
+            controlsBehavior.enabled = true
+            partitionsBehavior.enabled = true
+        }
+    }
+
     Connections {
         function launch(pressed, key) {
             if (contentView.lastSelectedNode) {
@@ -187,16 +198,24 @@ MouseArea {
     }
 
     TreeHeader {
+        property bool requiredVisibility: !treeControls.requiredVisibility
+
         id: treeHeader
         height: parent.height * 0.05
         width: parent.width
         z: 1
-        y: treeControls.hide || treeControls.node == null ? 0 : -height
+        y: requiredVisibility ? 0 : -height
 
         Behavior on y {
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutCubic
+                onRunningChanged: {
+                    if (running && treeHeader.requiredVisibility)
+                        treeHeader.visible = true
+                    else if (!running && !treeHeader.requiredVisibility)
+                        treeHeader.visible = true
+                }
             }
         }
     }
@@ -245,39 +264,53 @@ MouseArea {
     }
 
     ControlsFlow {
-        function open(newNode) {
-            node = newNode
-        }
-
-        function change(newNode) {
-            node = newNode
-        }
-
-        function close() {
-            node = null
-        }
-
         id: treeControls
         width: parent.width
-        node: null
-        y: hide || !visible ? -height : 0
+        node: contentView.lastSelectedNode ? contentView.lastSelectedNode.node : null
+        y: !requiredVisibility ? -height : 0
 
         Behavior on y {
+            id: controlsBehavior
+            enabled: false
+
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutCubic
+                onRunningChanged: {
+                    if (running && treeControls.requiredVisibility)
+                        treeControls.visible = true
+                    else if (!running && !treeControls.requiredVisibility)
+                        treeControls.visible = true
+                }
             }
+        }
+
+        HelpArea {
+            name: qsTr("Controls")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Bottom
+            externalDisplay: true
+            visible: treeControls.requiredVisibility
         }
     }
 
     PartitionsPreview {
         id: partitionsPreview
-        y: !partitionsPreview.visible ? parent.height : parent.height - height
+        y: !requiredVisibility ? parent.height : parent.height - height
 
         Behavior on y {
+            id: partitionsBehavior
+            enabled: false
+
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutCubic
+                onRunningChanged: {
+                    if (running && partitionsPreview.requiredVisibility)
+                        partitionsPreview.visible = true
+                    else if (!running && !partitionsPreview.requiredVisibility)
+                        partitionsPreview.visible = true
+                }
             }
         }
 
@@ -286,7 +319,7 @@ MouseArea {
             description: qsTr("Description")
             position: HelpHandler.Position.Top
             externalDisplay: true
-            visible: partitionsPreview.visible
+            visible: partitionsPreview.requiredVisibility
         }
     }
 

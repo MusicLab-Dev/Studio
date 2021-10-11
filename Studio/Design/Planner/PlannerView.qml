@@ -40,7 +40,7 @@ Item {
         target: eventDispatcher
         enabled: moduleIndex === modulesView.selectedModule
 
-        function onPlayContext(pressed) { if (pressed) player.playOrPause() }
+        function onPlayContext(pressed) { if (pressed) player.replayOrPause() }
         function onReplayContext(pressed) { if (pressed) player.replay() }
         function onStopContext(pressed) { if (pressed) player.stop() }
 

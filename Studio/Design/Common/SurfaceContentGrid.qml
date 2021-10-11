@@ -14,21 +14,23 @@ Item {
     property real rowHeight: 30
 
     // Lines preferences
+    property real rowAccentThickness: 2
     property real rowThickness: 1
     property real barThickness: divisionsPerBar ? 2 : 1
     property real beatThickness: divisionsPerBeat ? 2 : 1
     property real divisionThickness: 1
-    property color rowColor: Qt.rgba(1, 1, 1, 0.2)
+    property color rowColor: mainWindow.setColorAlpha(themeManager.backgroundColor, 0.85)
+    property color rowAccentColor: Qt.rgba(1, 1, 1, 0.2)
     property color groupAColor: themeManager.foregroundColor
     property color groupBColor: themeManager.contentColor
-    property color barColor: rowColor
-    property color beatColor: Qt.rgba(1, 1, 1, 0.05)
-    property color divisionColor: Qt.rgba(1, 1, 1, 0.025)
+    property color barColor: rowAccentColor
+    property color beatColor: mainWindow.setColorAlpha(themeManager.backgroundColor, 0.7)
+    property color divisionColor: mainWindow.setColorAlpha(themeManager.backgroundColor, 0.65)
 
     // Intermediate calculus
     readonly property real xGroupOffset: xOffset % groupMarginWidth
     readonly property real xRowOffset: xOffset % width
-    readonly property real yRowOffset: yOffset % rowHeight
+    readonly property real yRowOffset: yOffset % rowHeight + Math.ceil(yOffset / rowHeight) % 12 * rowHeight
 
     // Vertical display logic
     readonly property int rowsPerColumn: height / rowHeight
@@ -154,10 +156,17 @@ Item {
             var ctx = getContext("2d")
             ctx.reset()
             var offset = 0
-            ctx.fillStyle = rowColor
             var rowsToDraw = rowsPerColumn * 2
+            var thickness = 0
             for (var i = 0; i <= rowsToDraw; ++i) {
-                ctx.fillRect(0, offset, width, rowThickness)
+                if (i % 12) {
+                    thickness = rowThickness
+                    ctx.fillStyle = rowColor
+                } else {
+                    thickness = rowAccentThickness
+                    ctx.fillStyle = rowAccentColor
+                }
+                ctx.fillRect(0, offset, width, thickness)
                 offset += rowHeight
             }
         }

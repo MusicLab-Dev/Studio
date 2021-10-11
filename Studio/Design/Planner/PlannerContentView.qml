@@ -55,16 +55,14 @@ ContentView {
     yZoom: 0.25
     bottomOverlayMargin: partitionsPreview.visible ? partitionsPreview.height : 0
 
-    Component.onCompleted: {
-        animDelayTimer.start()
-    }
+    Component.onCompleted: animDelayTimer.start()
 
     Timer {
         id: animDelayTimer
         interval: 0
+
         onTriggered: {
             partitionsBehavior.enabled = true
-
             if (nodeViewRepeater.count === 1) {
                 var item = nodeViewRepeater.itemAt(0)
                 item.isSelected = true
@@ -120,7 +118,7 @@ ContentView {
 
     PartitionsPreview {
         id: partitionsPreview
-        y: !partitionsPreview.visible ? parent.height : parent.height - height
+        y: !partitionsPreview.requiredVisibility ? parent.height : parent.height - height
 
         Behavior on y {
             id: partitionsBehavior
@@ -129,6 +127,7 @@ ContentView {
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutCubic
+                onFinished: partitionsPreview.visible = partitionsPreview.requiredVisibility
             }
         }
 
@@ -137,7 +136,7 @@ ContentView {
             description: qsTr("Description")
             position: HelpHandler.Position.Top
             externalDisplay: true
-            visible: partitionsPreview.visible
+            visible: partitionsPreview.requiredVisibility
         }
     }
 }

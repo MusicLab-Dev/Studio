@@ -51,16 +51,9 @@ Rectangle {
             MouseArea {
                 id: mousePluginButton
                 hoverEnabled: true
-
                 anchors.fill: parent
 
-                onPressed: {
-                    if (!sequencerControls.visible)
-                        sequencerControls.open()
-                    else
-                        sequencerControls.close()
-
-                }
+                onPressed: sequencerControls.hide = !sequencerControls.hide
             }
 
             DefaultText {

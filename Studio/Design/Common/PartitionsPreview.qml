@@ -6,14 +6,15 @@ import "../Default"
 Rectangle {
     readonly property var nodeDelegate: contentView.lastSelectedNode
     readonly property var node: nodeDelegate ? nodeDelegate.node : null
-    readonly property color nodeColor: nodeDelegate ? nodeDelegate.color : "white"
-    readonly property color nodeAccentColor: nodeDelegate ? nodeDelegate.accentColor : "white"
-    readonly property color nodeHoveredColor: nodeDelegate ? nodeDelegate.hoveredColor : "white"
-    readonly property color nodePressedColor: nodeDelegate ? nodeDelegate.pressedColor : "white"
-    readonly property string nodeName: node ? node.name : "ERROR"
+    readonly property color nodeColor: nodeDelegate ? nodeDelegate.color : color
+    readonly property color nodeAccentColor: nodeDelegate ? nodeDelegate.accentColor : color
+    readonly property color nodeHoveredColor: nodeDelegate ? nodeDelegate.hoveredColor : color
+    readonly property color nodePressedColor: nodeDelegate ? nodeDelegate.pressedColor : color
+    readonly property string nodeName: node ? node.name : ""
 
-    // Hide state
+    // Hide states
     property bool hide: false
+    property bool requiredVisibility: nodeDelegate && !hide
 
     // Previews configuration
     readonly property real baseHeight: 70
@@ -24,7 +25,6 @@ Rectangle {
     width: contentView.width
     height: Math.max(baseHeight, previewFlow.height) + 20
     color: themeManager.backgroundColor
-    visible: nodeDelegate && !hide
     // border.color: nodeColor
 
     MouseArea {

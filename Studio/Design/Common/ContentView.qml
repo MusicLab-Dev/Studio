@@ -285,8 +285,8 @@ Item {
     ContentViewTimelineBar {
         id: playFromBar
         visible: x >= rowHeaderWidth
-        color: themeManager.accentColor
-        opacity: 0.5
+        color: "white"
+        opacity: 0.3
         height: parent.height - timelineCursor.height - contentView.bottomOverlayMargin
         x: rowHeaderWidth + xOffset + playerBase.playFrom * contentView.pixelsPerBeatPrecision
         y: timelineCursor.height
