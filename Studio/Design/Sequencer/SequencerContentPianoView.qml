@@ -53,7 +53,8 @@ Item {
                 sequencerView.node.partitions.addOnTheFly(
                     AudioAPI.noteEvent(!pressed, (pianoView.targetOctave * keysPerOctave) + key, AudioAPI.velocityMax, 0),
                     sequencerView.node,
-                    sequencerView.partitionIndex
+                    sequencerView.partitionIndex,
+                    true
                 )
         }
 
@@ -124,15 +125,16 @@ Item {
                     onPressedChanged: {
                         forceActiveFocus()
                         sequencerView.node.partitions.addOnTheFly(
-                                    AudioAPI.noteEvent(
-                                        pressed ? NoteEvent.On : NoteEvent.Off,
-                                        key.keyIndex,
-                                        AudioAPI.velocityMax,
-                                        0
-                                        ),
-                                    sequencerView.node,
-                                    sequencerView.partitionIndex
-                                    )
+                            AudioAPI.noteEvent(
+                                pressed ? NoteEvent.On : NoteEvent.Off,
+                                key.keyIndex,
+                                AudioAPI.velocityMax,
+                                0
+                            ),
+                            sequencerView.node,
+                            sequencerView.partitionIndex,
+                            true
+                        )
                     }
                 }
 

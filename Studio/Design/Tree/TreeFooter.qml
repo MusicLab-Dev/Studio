@@ -58,7 +58,19 @@ Rectangle {
         ProjectPreview {
             id: projectPreview
             anchors.fill: parent
-            target: app.project.master
+            beatLength: app.project.master.latestInstance
+
+            Component.onCompleted: targets = [app.project.master]
+
+            Connections {
+                target: contentView.treeSurface
+                function onSelectionListModified() {
+                    if (contentView.treeSurface.selectionList.length)
+                        projectPreview.targets = contentView.treeSurface.makeNodeSelectionList()
+                    else
+                        projectPreview.targets = [app.project.master]
+                }
+            }
 
             MouseArea {
                 anchors.fill: parent
@@ -106,6 +118,29 @@ Rectangle {
                 y: -height - 2
                 color: themeManager.accentColor
                 visible: playToBar.visible
+            }
+
+            Rectangle {
+                color: themeManager.backgroundColor
+                width: previewText.implicitWidth + 4
+                height: previewText.implicitHeight + 4
+                anchors.right: parent.right
+                opacity: 0.75
+
+                DefaultText {
+                    id: previewText
+                    x: 2
+                    y: 2
+                    color: "white"
+                    font.pointSize: 12
+                    text: {
+                        switch (projectPreview.targets.length) {
+                        case 0:     return ""
+                        case 1:     return projectPreview.targets[0].name
+                        default:    return qsTr("Selection") + " (" + projectPreview.targets.length + ")"
+                        }
+                    }
+                }
             }
         }
     }

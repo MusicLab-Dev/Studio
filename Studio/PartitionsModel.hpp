@@ -92,7 +92,7 @@ public slots:
     PartitionModel *getPartition(const int index) { return get(index); }
 
     /** @brief Adds a note event on the fly */
-    void addOnTheFly(const NoteEvent &note, NodeModel *node, const quint32 partitionIndex);
+    void addOnTheFly(const NoteEvent &note, NodeModel *node, quint32 partitionIndex, const bool usePartitionIndex);
 
     /** @brief Copy a partition instance that belongs to another PartitionsModel instance */
     bool foreignPartitionInstanceCopy(PartitionModel *partition, const PartitionInstance &instance);

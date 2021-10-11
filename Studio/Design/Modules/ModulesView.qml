@@ -17,7 +17,6 @@ Rectangle {
     function closeAllPopups() {
         workspacesView.cancelAndClose()
         pluginsView.cancelAndClose()
-        boardsView.close()
     }
 
     function addModule(module) {
@@ -144,7 +143,7 @@ Rectangle {
     property alias modulesContent: modulesContent
     property alias workspacesView: workspacesView
     property alias settingsView: settingsView
-    property alias boardsView: boardsView
+//    property alias boardsView: boardsView
 
     id: modulesView
     color: themeManager.foregroundColor
@@ -206,12 +205,12 @@ Rectangle {
         anchors.fill: parent
     }
 
-    BoardsView {
-        id: boardsView
-        width: parent.width * 0.9
-        height: parent.height * 0.9
-        anchors.centerIn: parent
-    }
+//    BoardsView {
+//        id: boardsView
+//        width: parent.width * 0.9
+//        height: parent.height * 0.9
+//        anchors.centerIn: parent
+//    }
 
     Shortcut {
         sequence: "Ctrl+T"

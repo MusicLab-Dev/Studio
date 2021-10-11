@@ -105,6 +105,7 @@ Item {
     // Timeline
     readonly property int timelineHeight: 25
     property alias timelineCursor: contentViewTimeline.timelineCursor
+    property real bottomOverlayMargin: 0
 
     // Edit tools
     property int editMode: ContentView.EditMode.Regular
@@ -275,7 +276,7 @@ Item {
         id: timelineBar
         visible: x >= rowHeaderWidth
         color: themeManager.timelineColor
-        height: parent.height - timelineCursor.height
+        height: parent.height - timelineCursor.height - contentView.bottomOverlayMargin
         x: rowHeaderWidth + xOffset + playerBase.currentPlaybackBeat * contentView.pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1
@@ -286,7 +287,7 @@ Item {
         visible: x >= rowHeaderWidth
         color: themeManager.accentColor
         opacity: 0.5
-        height: parent.height - timelineCursor.height
+        height: parent.height - timelineCursor.height - contentView.bottomOverlayMargin
         x: rowHeaderWidth + xOffset + playerBase.playFrom * contentView.pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1

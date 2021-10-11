@@ -93,6 +93,7 @@ set(StudioSources
     ${StudioDir}/PartitionPreview.hpp
     ${StudioDir}/ProjectPreview.cpp
     ${StudioDir}/ProjectPreview.hpp
+    ${StudioDir}/ProjectPreview.ipp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
     ${StudioDir}/PluginModelProxy.cpp

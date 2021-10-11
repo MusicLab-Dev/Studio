@@ -629,11 +629,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="117"/>
-        <source>Boards</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="122"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
@@ -646,6 +641,24 @@
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="145"/>
         <source>Load a project file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>OverviewButton</name>
+    <message>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="34"/>
+        <source>Overview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="39"/>
+        <source>Planner overview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="40"/>
+        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -675,7 +688,7 @@
 <context>
     <name>PartitionsModel</name>
     <message>
-        <location filename="Studio/PartitionsModel.cpp" line="98"/>
+        <location filename="Studio/PartitionsModel.cpp" line="100"/>
         <source> Copy</source>
         <translation type="unfinished"></translation>
     </message>
@@ -685,6 +698,19 @@
     <message>
         <location filename="Studio/Design/Common/PartitionsPreviewDelegate.qml" line="88"/>
         <source>ERROR</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PlannerContentView</name>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="136"/>
+        <source>Partitions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="137"/>
+        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -716,19 +742,13 @@
 <context>
     <name>PlannerFooter</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="62"/>
+        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="61"/>
         <source>Player Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="63"/>
-        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="95"/>
+        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="62"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="94"/>
-        <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1099,29 +1119,18 @@
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="188"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="183"/>
         <source>Project&apos;s tree area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="189"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="261"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="344"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="184"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="286"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="255"/>
-        <source>Overview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="260"/>
-        <source>Planner overview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="343"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="285"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1135,12 +1144,17 @@
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeFooter.qml" line="34"/>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="116"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="182"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="115"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="140"/>
+        <source>Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="181"/>
         <source>Player Area</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1148,8 +1162,8 @@
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="261"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="300"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="249"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="288"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

@@ -242,7 +242,7 @@ void Scheduler::disableLoopRange(void)
     });
 }
 
-void Scheduler::stopAndWait(void)
+bool Scheduler::stopAndWait(void)
 {
     if (pauseImpl()) {
 #ifdef __APPLE__
@@ -255,7 +255,9 @@ void Scheduler::stopAndWait(void)
         invalidateCurrentGraph<true>();
         setCurrentBeat(0u);
         disableLoopRange();
+        return true;
     }
+    return false;
 }
 
 void Scheduler::changeDevice(const QString &name)

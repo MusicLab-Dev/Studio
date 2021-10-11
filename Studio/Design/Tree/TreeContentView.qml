@@ -7,6 +7,7 @@ import "../Common"
 
 import NodeModel 1.0
 import PartitionModel 1.0
+import AudioAPI 1.0
 
 MouseArea {
     function incrementXOffset(offset) {
@@ -80,6 +81,10 @@ MouseArea {
     // Pixels per beat precision used for partition preview
     property real pixelsPerBeatPrecision: 1 / 8
 
+    // Piano
+    property int targetOctave: 5
+    readonly property int keysPerOctave: 12
+
     id: contentView
 
     onPressed: {
@@ -119,6 +124,36 @@ MouseArea {
     onYOffsetMaxChanged: {
         if (yOffset >= yOffsetMax)
             yOffset = yOffsetMax
+    }
+
+    Connections {
+        function launch(pressed, key) {
+            if (contentView.lastSelectedNode) {
+                contentView.lastSelectedNode.node.partitions.addOnTheFly(
+                    AudioAPI.noteEvent(!pressed, (contentView.targetOctave * contentView.keysPerOctave) + key, AudioAPI.velocityMax, 0),
+                    contentView.lastSelectedNode.node,
+                    0,
+                    false
+                )
+            }
+        }
+
+        id: notesConnections
+        target: eventDispatcher
+        enabled: treeView.moduleIndex === modulesView.selectedModule && contentView.lastSelectedNode
+
+        function onNote0(pressed) { launch(pressed, 0) }
+        function onNote1(pressed) { launch(pressed, 1) }
+        function onNote2(pressed) { launch(pressed, 2) }
+        function onNote3(pressed) { launch(pressed, 3) }
+        function onNote4(pressed) { launch(pressed, 4) }
+        function onNote5(pressed) { launch(pressed, 5) }
+        function onNote6(pressed) { launch(pressed, 6) }
+        function onNote7(pressed) { launch(pressed, 7) }
+        function onNote8(pressed) { launch(pressed, 8) }
+        function onNote9(pressed) { launch(pressed, 9) }
+        function onNote10(pressed) { launch(pressed, 10) }
+        function onNote11(pressed) { launch(pressed, 11) }
     }
 
     // Handle all mouse / touch gestures
@@ -272,7 +307,7 @@ MouseArea {
         size: contentView.yScrollIndicatorSize
         position: contentView.yScrollIndicatorPos
         policy: ScrollBar.AlwaysOn
-        width: 6
+        z: 10
 
         onPositionChanged: {
             if (Math.abs(position - contentView.yScrollIndicatorPos) > Number.EPSILON)
@@ -284,13 +319,13 @@ MouseArea {
     ScrollBar {
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: partitionsPreview.visible ? partitionsPreview.top : parent.bottom
+        anchors.bottom: parent.bottom
         visible: size !== 1
         orientation: Qt.Horizontal
         size: contentView.xScrollIndicatorSize
         position: contentView.xScrollIndicatorPos
         policy: ScrollBar.AlwaysOn
-        height: 6
+        z: 10
 
         onPositionChanged: {
             if (Math.abs(position - contentView.xScrollIndicatorPos) > Number.EPSILON)
@@ -302,13 +337,13 @@ MouseArea {
         visible: contentView.lastSelectedNode && partitionsPreview.hide
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        anchors.rightMargin: 10
         width: height
         height: treeFooter.height / 2
         showBorder: false
         scaleFactor: 1
         source: "qrc:/Assets/Note.png"
+        anchors.bottomMargin: 10
+        anchors.rightMargin: 10
 
         onReleased: partitionsPreview.hide = false
     }

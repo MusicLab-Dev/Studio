@@ -61,23 +61,25 @@ const PartitionModel *PartitionsModel::get(const int index) const noexcept_ndebu
 bool PartitionsModel::add(void)
 {
     const auto oldData = _data->data();
+    const auto scheduler = Scheduler::Get();
 
-    return Models::AddProtectedEvent(
-        [this](void) mutable {
-           _data->push();
-        },
-        [this, name = getAvailablePartitionName(), oldData] {
-            if (_data->data() != oldData) {
-                refreshPartitions();
-                _partitions.back()->setName(name);
-            } else {
-                const auto idx = _partitions.size();
-                beginInsertRows(QModelIndex(), idx, idx);
-                _partitions.push(&_data->at(idx), this, name);
-                endInsertRows();
-            }
-        }
-    );
+    // Temporary fix used because views need to access partition pointer right after creation
+    const bool hasPaused = scheduler->stopAndWait();
+    const auto name = getAvailablePartitionName();
+
+    _data->push();
+    if (_data->data() != oldData) {
+        refreshPartitions();
+        _partitions.back()->setName(name);
+    } else {
+        const auto idx = _partitions.size();
+        beginInsertRows(QModelIndex(), idx, idx);
+        _partitions.push(&_data->at(idx), this, name);
+        endInsertRows();
+    }
+    if (hasPaused)
+        scheduler->playImpl();
+    return true;
 }
 
 bool PartitionsModel::duplicate(const int idx)
@@ -150,8 +152,10 @@ bool PartitionsModel::move(const int from, const int to)
     );
 }
 
-void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, const quint32 partitionIndex)
+void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, quint32 partitionIndex, const bool usePartitionIndex)
 {
+    if (!usePartitionIndex)
+        partitionIndex = std::numeric_limits<std::uint32_t>::max();
     auto scheduler = Scheduler::Get();
     const bool isPlaying = !scheduler->hasExitedGraph();
     const bool graphChanged = scheduler->partitionNode() != node->audioNode() || scheduler->partitionIndex() != partitionIndex;

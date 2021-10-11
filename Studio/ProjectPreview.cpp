@@ -8,19 +8,18 @@
 #include <QPainter>
 
 #include "ProjectPreview.hpp"
-#include "NodeModel.hpp"
 
 ProjectPreview::ProjectPreview(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
 }
 
-void ProjectPreview::setTarget(NodeModel *target)
+void ProjectPreview::setTargets(const QVector<NodeModel *> &value)
 {
-    if (target == _target)
+    if (value == _targets)
         return;
-    _target = target;
-    emit targetChanged();
+    _targets = value;
+    emit targetsChanged();
     requestUpdate();
 }
 
@@ -30,6 +29,16 @@ void ProjectPreview::setPixelsPerBeatPrecision(const qreal value)
         return;
     _pixelsPerBeatPrecision = value;
     emit pixelsPerBeatPrecisionChanged();
+    requestUpdate();
+}
+
+void ProjectPreview::setBeatLength(const Beat value)
+{
+    if (_beatLength == value)
+        return;
+    _beatLength = value;
+    emit beatLengthChanged();
+    requestUpdate();
 }
 
 void ProjectPreview::paint(QPainter *painter)
@@ -59,20 +68,16 @@ void ProjectPreview::paint(QPainter *painter)
 
 void ProjectPreview::collectPaintData(const NodeModel *node) noexcept
 {
-    const auto color = node->color();
-    const auto instances = *node->partitions()->instances()->audioInstances();
-    if (!instances.empty()) {
-        for (const auto &instance : instances) {
-            _data.push(PaintData {
-                color,
-                _currentY,
-                instance.range
-            });
-        }
-        ++_currentY;
-    }
+    collectInstances(node);
     for (const auto &child : node->children()) {
         collectPaintData(child.get());
+    }
+}
+
+void ProjectPreview::collectPaintDataList(void) noexcept
+{
+    for (const auto *node : _targets) {
+        collectInstances(node);
     }
 }
 
@@ -80,9 +85,12 @@ void ProjectPreview::requestUpdate(void)
 {
     _data.clear();
     _currentY = 0;
-    if (!_target || !_target->latestInstance())
+    if (_targets.isEmpty() || !beatLength())
         return;
-    setPixelsPerBeatPrecision(width() / static_cast<qreal>(_target->latestInstance()));
-    collectPaintData(_target);
+    setPixelsPerBeatPrecision(width() / static_cast<qreal>(beatLength()));
+    if (_targets.size() == 1)
+        collectPaintData(_targets[0]);
+    else
+        collectPaintDataList();
     update();
 }

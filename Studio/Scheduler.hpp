@@ -143,8 +143,8 @@ public slots:
     /** @brief Disable the scheduler loop range */
     void disableLoopRange(void);
 
-    /** @brief Stop the scheduler until its completly off */
-    void stopAndWait(void);
+    /** @brief Stop the scheduler until its completly off (return false if already paused) */
+    bool stopAndWait(void);
 
     /** @brief Get elapsed time in beat since last play */
     Beat getAudioElapsedBeat(void) const noexcept { return audioElapsedBeat(); }

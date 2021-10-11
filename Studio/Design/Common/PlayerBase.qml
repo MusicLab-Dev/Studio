@@ -89,9 +89,12 @@ Item {
     }
 
     function playOrPause() {
-        if (!isPlayerRunning && app.scheduler.running)
-            app.currentPlayer.pause()
-        else if (isSchedulerRunning)
+        if (!isPlayerRunning && app.scheduler.running) {
+            if (app.currentPlayer)
+                app.currentPlayer.pause()
+            else
+                app.scheduler.pause()
+        } else if (isSchedulerRunning)
             pause()
         else
             play()
