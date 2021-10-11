@@ -44,14 +44,16 @@ QString AEventListener::eventTargetToString(const int eventTarget) const noexcep
         return AEventListener::tr("Octave Up");
     case EventTarget::OctaveDown:
         return AEventListener::tr("Octave Down");
-    case EventTarget::PlayContext:
-        return AEventListener::tr("Play Context");
+    case EventTarget::PlayPauseContext:
+        return AEventListener::tr("Play / Pause Context");
+    case EventTarget::ReplayStopContext:
+        return AEventListener::tr("Replay / Stop Context");
     case EventTarget::ReplayContext:
         return AEventListener::tr("Replay Context");
     case EventTarget::StopContext:
         return AEventListener::tr("Stop Context");
-    case EventTarget::PlayProject:
-        return AEventListener::tr("Play Project");
+    case EventTarget::PlayPauseProject:
+        return AEventListener::tr("Play / Pause Project");
     case EventTarget::ReplayProject:
         return AEventListener::tr("Replay Project");
     case EventTarget::StopProject:
@@ -120,14 +122,16 @@ QString AEventListener::eventTargetToDescription(const int eventTarget) const no
         return AEventListener::tr("Move selected octave upward");
     case EventTarget::OctaveDown:
         return AEventListener::tr("Move selected octave down");
-    case EventTarget::PlayContext:
+    case EventTarget::PlayPauseContext:
         return AEventListener::tr("Play / Pause in current tabulation");
+    case EventTarget::ReplayStopContext:
+        return AEventListener::tr("Replay / Stop in current tabulation");
     case EventTarget::ReplayContext:
         return AEventListener::tr("Replay in current tabulation");
     case EventTarget::StopContext:
         return AEventListener::tr("Stop in current tabulation");
-    case EventTarget::PlayProject:
-        return AEventListener::tr("Play global project");
+    case EventTarget::PlayPauseProject:
+        return AEventListener::tr("Play / Pause global project");
     case EventTarget::ReplayProject:
         return AEventListener::tr("Replay global project");
     case EventTarget::StopProject:

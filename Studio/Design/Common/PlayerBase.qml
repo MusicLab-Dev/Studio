@@ -111,6 +111,13 @@ Item {
         play()
     }
 
+    function replayOrStop() {
+        if (isSchedulerRunning)
+            stop()
+        else
+            replay()
+    }
+
     function stop() {
         if (isPartitionPlayer && !targetNode)
             return;

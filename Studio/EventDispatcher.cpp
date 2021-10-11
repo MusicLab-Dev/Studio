@@ -93,8 +93,11 @@ bool EventDispatcher::sendSignals(const AEventListener::EventTarget event, const
     case AEventListener::EventTarget::OctaveDown:
         emit octaveDown(booleanValue);
         break;
-    case AEventListener::EventTarget::PlayContext:
-        emit playContext(booleanValue);
+    case AEventListener::EventTarget::PlayPauseContext:
+        emit playPauseContext(booleanValue);
+        break;
+    case AEventListener::EventTarget::ReplayStopContext:
+        emit replayStopContext(booleanValue);
         break;
     case AEventListener::EventTarget::ReplayContext:
         emit replayContext(booleanValue);
@@ -102,8 +105,8 @@ bool EventDispatcher::sendSignals(const AEventListener::EventTarget event, const
     case AEventListener::EventTarget::StopContext:
         emit stopContext(booleanValue);
         break;
-    case AEventListener::EventTarget::PlayProject:
-        emit playProject(booleanValue);
+    case AEventListener::EventTarget::PlayPauseProject:
+        emit playPauseProject(booleanValue);
         break;
     case AEventListener::EventTarget::ReplayProject:
         emit replayProject(booleanValue);

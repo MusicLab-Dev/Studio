@@ -5,7 +5,7 @@
     <name>AEventListener</name>
     <message>
         <location filename="Studio/AEventListener.cpp" line="18"/>
-        <location filename="Studio/AEventListener.cpp" line="94"/>
+        <location filename="Studio/AEventListener.cpp" line="96"/>
         <source>Action</source>
         <translation type="unfinished"></translation>
     </message>
@@ -81,267 +81,278 @@
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="48"/>
-        <source>Play Context</source>
+        <source>Play / Pause Context</source>
+        <oldsource>Play Context</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="50"/>
-        <source>Replay Context</source>
+        <source>Replay / Stop Context</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="52"/>
-        <source>Stop Context</source>
+        <source>Replay Context</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="54"/>
-        <source>Play Project</source>
+        <source>Stop Context</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="56"/>
-        <source>Replay Project</source>
+        <source>Play / Pause Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="58"/>
-        <source>Stop Project</source>
+        <source>Replay Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="60"/>
-        <source>Copy</source>
+        <source>Stop Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="62"/>
-        <source>Paste</source>
+        <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="64"/>
-        <source>Cut</source>
+        <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="66"/>
-        <source>Volume Context</source>
+        <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="68"/>
-        <source>Volume Project</source>
+        <source>Volume Context</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="70"/>
-        <source>Undo</source>
+        <source>Volume Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="72"/>
-        <source>Redo</source>
+        <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="74"/>
-        <source>Erase</source>
+        <source>Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="76"/>
-        <source>Open Project</source>
+        <source>Erase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="78"/>
-        <source>Export Project</source>
+        <source>Open Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="80"/>
-        <source>Save</source>
+        <source>Export Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="82"/>
-        <source>Save As</source>
+        <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="84"/>
-        <source>Settings</source>
+        <source>Save As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="86"/>
-        <location filename="Studio/AEventListener.cpp" line="162"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="88"/>
+        <location filename="Studio/AEventListener.cpp" line="166"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="96"/>
+        <location filename="Studio/AEventListener.cpp" line="98"/>
         <source>Play note 0 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="98"/>
+        <location filename="Studio/AEventListener.cpp" line="100"/>
         <source>Play note 1 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="100"/>
+        <location filename="Studio/AEventListener.cpp" line="102"/>
         <source>Play note 2 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="102"/>
+        <location filename="Studio/AEventListener.cpp" line="104"/>
         <source>Play note 3 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="104"/>
+        <location filename="Studio/AEventListener.cpp" line="106"/>
         <source>Play note 4 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="106"/>
+        <location filename="Studio/AEventListener.cpp" line="108"/>
         <source>Play note 5 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="108"/>
+        <location filename="Studio/AEventListener.cpp" line="110"/>
         <source>Play note 6 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="110"/>
+        <location filename="Studio/AEventListener.cpp" line="112"/>
         <source>Play note 7 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="112"/>
+        <location filename="Studio/AEventListener.cpp" line="114"/>
         <source>Play note 8 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="114"/>
+        <location filename="Studio/AEventListener.cpp" line="116"/>
         <source>Play note 9 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="116"/>
+        <location filename="Studio/AEventListener.cpp" line="118"/>
         <source>Play note 10 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="118"/>
+        <location filename="Studio/AEventListener.cpp" line="120"/>
         <source>Play note 11 in a sequencer within selected octave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="120"/>
+        <location filename="Studio/AEventListener.cpp" line="122"/>
         <source>Move selected octave upward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="122"/>
+        <location filename="Studio/AEventListener.cpp" line="124"/>
         <source>Move selected octave down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="124"/>
+        <location filename="Studio/AEventListener.cpp" line="126"/>
         <source>Play / Pause in current tabulation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/AEventListener.cpp" line="126"/>
-        <source>Replay in current tabulation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="Studio/AEventListener.cpp" line="128"/>
-        <source>Stop in current tabulation</source>
+        <source>Replay / Stop in current tabulation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="130"/>
-        <source>Play global project</source>
+        <source>Replay in current tabulation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="132"/>
-        <source>Replay global project</source>
+        <source>Stop in current tabulation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="134"/>
-        <source>Stop global project</source>
+        <source>Play / Pause global project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="136"/>
-        <source>Copy current selection (works over notes and partition instances)</source>
+        <source>Replay global project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="138"/>
-        <source>Paste current selection (works over notes and partition instances)</source>
+        <source>Stop global project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="140"/>
-        <source>Cut current selection (works over notes and partition instances)</source>
+        <source>Copy current selection (works over notes and partition instances)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="142"/>
-        <source>Change the volume in current tabulation</source>
+        <source>Paste current selection (works over notes and partition instances)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="144"/>
-        <source>Change the volume in global project (&apos;Master&apos;)</source>
+        <source>Cut current selection (works over notes and partition instances)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="146"/>
-        <source>Undo the last action (works over notes and partition instances)</source>
+        <source>Change the volume in current tabulation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="148"/>
-        <source>Redo the last action (works over notes and partition instances)</source>
+        <source>Change the volume in global project (&apos;Master&apos;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="150"/>
-        <source>Erase current selection (works over notes and partition instances)</source>
+        <source>Undo the last action (works over notes and partition instances)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="152"/>
-        <source>Open an exisiting project file</source>
+        <source>Redo the last action (works over notes and partition instances)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="154"/>
-        <source>Export the current project into an audio file</source>
+        <source>Erase current selection (works over notes and partition instances)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="156"/>
-        <source>Save the current project</source>
+        <source>Open an exisiting project file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="158"/>
-        <source>Save the current project into another file</source>
+        <source>Export the current project into an audio file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="160"/>
+        <source>Save the current project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="162"/>
+        <source>Save the current project into another file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/AEventListener.cpp" line="164"/>
         <source>Open settings menu</source>
         <translation type="unfinished"></translation>
     </message>
@@ -704,12 +715,12 @@
 <context>
     <name>PlannerContentView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="136"/>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="135"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="137"/>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="136"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1013,46 +1024,59 @@
 <context>
     <name>SequencerHeader</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="72"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="65"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="78"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="71"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="78"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="71"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="78"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="71"/>
         <source> controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="79"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="122"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="179"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="194"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="72"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="115"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="172"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="187"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="121"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="114"/>
         <source>Move to planner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="178"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="171"/>
         <source>Sound meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="193"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="186"/>
         <source>Clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SequencerView</name>
+    <message>
+        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="178"/>
+        <source>Controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="179"/>
+        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1119,18 +1143,24 @@
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="183"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="194"/>
         <source>Project&apos;s tree area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="184"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="286"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="195"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="290"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="319"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="285"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="289"/>
+        <source>Controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="318"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1144,17 +1174,17 @@
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeFooter.qml" line="34"/>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="182"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="189"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="140"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="147"/>
         <source>Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="181"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="188"/>
         <source>Player Area</source>
         <translation type="unfinished"></translation>
     </message>
