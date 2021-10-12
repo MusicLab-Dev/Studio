@@ -59,7 +59,6 @@ Item {
 
         onPressed: {
             treeComponentsPanel.open(filter)
-            panelContentBackground.color = baseColor
         }
     }
 }

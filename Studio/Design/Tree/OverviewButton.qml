@@ -23,7 +23,7 @@ Item {
         hoverEnabled: true
         anchors.fill: parent
         onPressed: {
-            modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
+           actionEvent()// modulesView.addNewPlannerWithMultipleNodes(treeSurface.selectionList/*app.project.master.getAllChildren()*/)
         }
     }
 

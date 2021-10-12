@@ -33,7 +33,6 @@ TreePanel {
         height: parent.height
 
         Column {
-            height: parent.height
             width: parent.width
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
@@ -69,7 +68,7 @@ TreePanel {
             width: parent.width + panelContent.widthOffset
             height: parent.height
             color: themeManager.backgroundColor
-            opacity: 0.3
+            opacity: 0.9
         }
 
         MouseArea {

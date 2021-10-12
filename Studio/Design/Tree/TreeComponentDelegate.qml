@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 import PluginTableModel 1.0
+import CursorManager 1.0
 
 import "../Default"
 import "../Common"
@@ -39,6 +40,13 @@ Item {
             }
         }
 
+        onHoveredChanged: {
+            if (containsMouse)
+                cursorManager.set(CursorManager.Type.Clickable)
+            else
+                cursorManager.set(CursorManager.Type.Normal)
+        }
+
         Connections {
             enabled: instanceBackground.drag.active
             target: instanceBackground
@@ -58,9 +66,10 @@ Item {
 
             Rectangle {
                 anchors.fill: parent
-                color: themeManager.backgroundColor
+                color: "transparent"
                 border.color: instanceBackground.containsMouse ? componentDelegate.color : "white"
                 radius: width / 4
+                opacity: 1
             }
 
             PluginFactoryImage {
@@ -71,7 +80,7 @@ Item {
                 y: parent.height / 2 - height / 2
                 name: factoryName
                 playing: instanceBackground.containsMouse
-                color: panelContentBackground.color
+                color: componentDelegate.color
             }
         }
     }

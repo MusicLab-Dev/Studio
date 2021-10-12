@@ -81,6 +81,27 @@ Column {
             width: height / 4
         }
 
+        Item {
+            id: openPlanner
+            anchors.right: nodeInstanceBackground.right
+            anchors.bottom: nodeInstanceBackground.top
+            width: nodeInstanceBackground.width * 0.15
+            height: width
+
+            DefaultColoredImage {
+                anchors.fill: parent
+                source: "qrc:/Assets/Chrono.png"
+                color: nodeDelegate.color
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+
+                    onPressed: modulesView.addNewPlanner(nodeDelegate.node)
+                }
+            }
+        }
+
         MouseArea {
             property bool containsDrag: false
             property bool validDrag: false
@@ -245,10 +266,10 @@ Column {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Rectangle {
+                    id: headerBackground
                     anchors.fill: parent
-                    color: Qt.lighter(themeManager.foregroundColor, 1.2)
+                    color: themeManager.backgroundColor
                     radius: 30
-                    opacity: nodeDelegate.isSelected ? 1 : 0.9
                 }
 
                 Item {
@@ -261,7 +282,7 @@ Column {
                         text: nodeDelegate.node ? nodeDelegate.node.plugin.title : qsTr("Error")
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: nodeDelegate.accentColor
+                        color: nodeDelegate.color
                         fontSizeMode: Text.Fit
                         font.pointSize: 8
                         elide: Text.ElideRight
