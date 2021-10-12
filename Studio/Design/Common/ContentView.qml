@@ -106,6 +106,7 @@ Item {
     readonly property int timelineHeight: 25
     property alias timelineCursor: contentViewTimeline.timelineCursor
     property real bottomOverlayMargin: 0
+    property real availableContentHeight: height - timelineCursor.height - contentView.bottomOverlayMargin
 
     // Edit tools
     property int editMode: ContentView.EditMode.Regular
@@ -200,6 +201,9 @@ Item {
         }
 
         Item {
+            property real availableContentHeight: height - contentView.bottomOverlayMargin
+
+            id: surfaceOverlay
             anchors.fill: surfaceContentGrid
 
             Rectangle {
@@ -207,35 +211,35 @@ Item {
                 color: "grey"
                 opacity: 0.6
                 anchors.left: parent.left
-                anchors.right: loopFromBar.left
-                height: contentView.height
+                anchors.right: loopFromBar.visible ? loopFromBar.left : parent.left
+                height: surfaceOverlay.availableContentHeight
             }
 
             Rectangle {
                 visible: playerBase.hasLoop
                 color: "grey"
                 opacity: 0.6
-                anchors.left: loopToBar.right
+                anchors.left: loopToBar.visible ? loopToBar.right : parent.left
                 anchors.right: parent.right
-                height: contentView.height
+                height: surfaceOverlay.availableContentHeight
             }
 
             Rectangle {
                 id: loopFromBar
                 x: contentViewTimeline.loopFromIndicatorX
                 width: 1
-                height: contentView.height
+                height: surfaceOverlay.availableContentHeight
                 color: themeManager.accentColor
-                visible: playerBase.hasLoop
+                visible: playerBase.hasLoop && contentViewTimeline.loopFromIndicatorX >= 0
             }
 
             Rectangle {
                 id: loopToBar
                 x: contentViewTimeline.loopToIndicatorX
                 width: 1
-                height: contentView.height
+                height: surfaceOverlay.availableContentHeight
                 color: themeManager.accentColor
-                visible: playerBase.hasLoop
+                visible: playerBase.hasLoop && contentViewTimeline.loopToIndicatorX >= 0
             }
 
             ScrollBar {
@@ -276,7 +280,7 @@ Item {
         id: timelineBar
         visible: x >= rowHeaderWidth
         color: themeManager.timelineColor
-        height: parent.height - timelineCursor.height - contentView.bottomOverlayMargin
+        height: contentView.availableContentHeight
         x: rowHeaderWidth + xOffset + playerBase.currentPlaybackBeat * contentView.pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1
@@ -287,7 +291,7 @@ Item {
         visible: x >= rowHeaderWidth
         color: "white"
         opacity: 0.3
-        height: parent.height - timelineCursor.height - contentView.bottomOverlayMargin
+        height: contentView.availableContentHeight
         x: rowHeaderWidth + xOffset + playerBase.playFrom * contentView.pixelsPerBeatPrecision
         y: timelineCursor.height
         z: contentViewTimeline.z + 1

@@ -41,7 +41,7 @@ Item {
         enabled: moduleIndex === modulesView.selectedModule
 
         function onAction(pressed) { if (pressed) contentView.actionEvent() }
-        function onPlayPauseContext(pressed) { if (pressed) player.playOrStop() }
+        function onPlayPauseContext(pressed) { if (pressed) player.playOrPause() }
         function onReplayStopContext(pressed) { if (pressed) player.replayOrStop() }
         function onReplayContext(pressed) { if (pressed) player.replay() }
         function onStopContext(pressed) { if (pressed) player.stop() }

@@ -53,7 +53,7 @@ ContentView {
     xOffsetMin: app.project.master ? Math.max(app.project.master.latestInstance, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0
     yOffsetMin: -Math.max(nodeView.height - height, 0)
     yZoom: 0.25
-    bottomOverlayMargin: partitionsPreview.visible ? partitionsPreview.height : 0
+    bottomOverlayMargin: partitionsPreview.requiredVisibility ? partitionsPreview.height : 0
 
     Component.onCompleted: animDelayTimer.start()
 

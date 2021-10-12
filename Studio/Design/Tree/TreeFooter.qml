@@ -1,10 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
-
-import ProjectPreview 1.0
-import Scheduler 1.0
 
 import "../Default"
 import "../Common"
@@ -14,6 +10,7 @@ Rectangle {
     property alias projectPreview: projectPreview
     property alias player: player
 
+    id: treeFooter
     color: themeManager.backgroundColor
 
     MouseArea {
@@ -55,100 +52,10 @@ Rectangle {
             source: previewBackground
         }
 
-        ProjectPreview {
+        TreeProjectPreview {
             id: projectPreview
             anchors.fill: parent
-            beatLength: app.project.master.latestInstance
-            Component.onCompleted: targets = [app.project.master]
-
-            Connections {
-                target: contentView.treeSurface
-
-                function onSelectionListModified() {
-                    if (contentView.treeSurface.selectionList.length)
-                        projectPreview.targets = contentView.treeSurface.makeNodeSelectionList()
-                    else
-                        projectPreview.targets = [app.project.master]
-                }
-            }
-
-            Connections {
-                target: app.project
-
-                function onMasterChanged() {
-                    projectPreview.targets = [app.project.master]
-                }
-            }
-
-            MouseArea {
-                anchors.fill: parent
-
-                enabled: app.project.master.latestInstance !== 0
-                onPressed: player.timelineBeginMove(Math.min(Math.max(mouseX, 0), width) / projectPreview.pixelsPerBeatPrecision)
-                onPositionChanged: player.timelineMove(Math.min(Math.max(mouseX, 0), width) / projectPreview.pixelsPerBeatPrecision)
-                onReleased: player.timelineEndMove()
-            }
-
-            ContentViewTimelineBar {
-                id: playToBar
-                height: parent.height + 20
-                y: -10
-                color: themeManager.timelineColor
-                x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * player.playerBase.currentPlaybackBeat, previewBackground.width), 0)
-                visible: app.project.master.latestInstance !== 0
-            }
-
-            ContentViewTimelineBarCursor {
-                id: playToCursor
-                width: 10
-                height: 10
-                x: playToBar.x - width / 2
-                y: -height - 2
-                visible: playToBar.visible
-            }
-
-            ContentViewTimelineBar {
-                id: playFromBar
-                height: parent.height + 20
-                y: -10
-                color: "white"
-                opacity: 0.5
-                x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * player.playerBase.playFrom, previewBackground.width), 0)
-                visible: playToBar.visible
-            }
-
-            ContentViewTimelineBarCursor {
-                id: playFromCursor
-                opacity: 0.5
-                width: 10
-                height: 10
-                x: playFromBar.x - width / 2
-                y: -height - 2
-                color: "white"
-                visible: playToBar.visible
-            }
-
-            Rectangle {
-                color: mainWindow.setColorAlpha(themeManager.backgroundColor, 0.5)
-                width: previewText.implicitWidth + 4
-                height: previewText.implicitHeight + 4
-                anchors.right: parent.right
-
-                DefaultText {
-                    id: previewText
-                    x: 2
-                    y: 2
-                    color: "white"
-                    font.pointSize: 12
-                    text: {
-                        switch (projectPreview.targets.length) {
-                        case 0:     return ""
-                        case 1:     return projectPreview.targets[0].name
-                        default:    return qsTr("Selection") + " (" + projectPreview.targets.length + ")"
-                        }
-                    }
-                }
-            }
+            playerBase: player.playerBase
         }
     }
 

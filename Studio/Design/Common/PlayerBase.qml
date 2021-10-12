@@ -167,7 +167,7 @@ Item {
         target: app
 
         function onCurrentPlayerChanged() {
-            if (app.currentPlayer !== player && timer.running)
+            if (app.currentPlayer != player && timer.running)
                 timer.stopAndRecordPlaybackBeat()
         }
     }
