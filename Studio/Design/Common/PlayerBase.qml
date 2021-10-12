@@ -89,9 +89,12 @@ Item {
     }
 
     function playOrPause() {
-        if (!isPlayerRunning && app.scheduler.running)
-            app.currentPlayer.pause()
-        else if (isSchedulerRunning)
+        if (!isPlayerRunning && app.scheduler.running) {
+            if (app.currentPlayer)
+                app.currentPlayer.pause()
+            else
+                app.scheduler.pause()
+        } else if (isSchedulerRunning)
             pause()
         else
             play()
@@ -106,6 +109,13 @@ Item {
         beginPlaybackBeat = value
         currentPlaybackBeat = value
         play()
+    }
+
+    function replayOrStop() {
+        if (isSchedulerRunning)
+            stop()
+        else
+            replay()
     }
 
     function stop() {
@@ -157,7 +167,7 @@ Item {
         target: app
 
         function onCurrentPlayerChanged() {
-            if (app.currentPlayer !== player && timer.running)
+            if (app.currentPlayer != player && timer.running)
                 timer.stopAndRecordPlaybackBeat()
         }
     }

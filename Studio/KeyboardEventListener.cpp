@@ -38,11 +38,12 @@ void KeyboardEventListener::resetShortcuts(void)
     add(Qt::Key_Colon,      0,                  EventTarget::OctaveDown);
     add(Qt::Key_Exclam,     0,                  EventTarget::OctaveUp);
 
-    add(Qt::Key_Space,      0,                  EventTarget::PlayContext);
+    add(Qt::Key_Space,      0,                  EventTarget::ReplayStopContext);
+    add(Qt::Key_E,          0,                  EventTarget::PlayPauseContext);
     add(Qt::Key_A,          0,                  EventTarget::ReplayContext);
     add(Qt::Key_Z,          0,                  EventTarget::StopContext);
 
-    add(Qt::Key_I,          0,                  EventTarget::PlayProject);
+    add(Qt::Key_I,          0,                  EventTarget::PlayPauseProject);
     add(Qt::Key_O,          0,                  EventTarget::ReplayProject);
     add(Qt::Key_P,          0,                  EventTarget::StopProject);
     add(Qt::Key_Z,   Qt::CTRL,                  EventTarget::Undo);
@@ -58,7 +59,6 @@ void KeyboardEventListener::resetShortcuts(void)
     add(Qt::Key_P,   Qt::CTRL,                  EventTarget::Settings);
     endResetModel();
 }
-
 
 QHash<int, QByteArray> KeyboardEventListener::roleNames(void) const noexcept
 {

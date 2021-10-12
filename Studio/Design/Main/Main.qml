@@ -77,9 +77,9 @@ Window {
         theme: ThemeManager.Dark
     }
 
-    BoardManager {
-        id: boardManager
-    }
+    // BoardManager {
+    //     id: boardManager
+    // }
 
     PluginTableModel {
         id: pluginTable
@@ -94,7 +94,7 @@ Window {
             !cancelEvents && (mainWindow.activeFocusItem ? !(mainWindow.activeFocusItem["cancelKeyboardEventsOnFocus"] === true) : true)
         }
 
-        boardListener.boardManager: boardManager
+//        boardListener.boardManager: boardManager
     }
 
     DevicesModel {

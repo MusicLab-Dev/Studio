@@ -1,22 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Shapes 1.15
 
 import AudioAPI 1.0
 
 Item {
-    enum EditMode {
-        None,
-        Playback,
-        Loop,
-        InvertedLoop
-    }
-
-    function ensureTimelineBeatPrecision(beat) {
-        return beat - (beat % (AudioAPI.beatPrecision / 4))
-    }
-
-    property int editMode: ContentViewTimeline.EditMode.None
     property alias timelineCursor: timelineCursor
     readonly property real loopFromIndicatorX: loopFromIndicator.x + loopFromIndicator.width / 2
     readonly property real loopToIndicatorX: loopToIndicator.x + loopToIndicator.width / 2
@@ -34,94 +21,26 @@ Item {
     }
 
     Item {
+        id: timelineArea
         anchors.top: parent.top
         anchors.left: actionBox.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         clip: true
 
-        id: timelineArea
-
-        MouseArea {
-            function getMouseBeatPrecision() {
-                return ensureTimelineBeatPrecision(
-                    (Math.abs(contentView.xOffset) + mouseX) / contentView.pixelsPerBeatPrecision
-                )
-            }
-
+        ContentViewTimelineMouseArea {
             id: timelineMouseArea
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
             anchors.fill: parent
-
-            onPressed: {
-                forceActiveFocus()
-                if (mouse.buttons & Qt.RightButton) {
-                    playerBase.disableLoopRange()
-                    return
-                }
-                var beat = getMouseBeatPrecision()
-                if (mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier) {
-                    if (beat >= playerBase.playFrom) {
-                        editMode = ContentViewTimeline.EditMode.Loop
-                        playerBase.timelineBeginLoopMove(playerBase.playFrom, beat)
-                    } else {
-                        editMode = ContentViewTimeline.EditMode.InvertedLoop
-                        playerBase.timelineBeginLoopMove(beat, playerBase.playFrom)
-                    }
-                } else {
-                    editMode = ContentViewTimeline.EditMode.Playback
-                    playerBase.timelineBeginMove(beat)
-                }
-            }
-
-            onPositionChanged: {
-                if (!pressed || mouse.buttons & Qt.RightButton)
-                    return
-                var beat = getMouseBeatPrecision()
-                switch (editMode) {
-                case ContentViewTimeline.EditMode.Playback:
-                    playerBase.timelineMove(beat)
-                    break
-                case ContentViewTimeline.EditMode.Loop:
-                    if (beat >= playerBase.loopFrom)
-                        playerBase.timelineLoopMove(beat)
-                    else
-                        playerBase.timelineLoopMove(playerBase.loopFrom)
-                    break
-                case ContentViewTimeline.EditMode.InvertedLoop:
-                    if (beat <= playerBase.loopTo)
-                        playerBase.timelineInvertedLoopMove(beat)
-                    else
-                        playerBase.timelineInvertedLoopMove(playerBase.loopTo)
-                    break
-                default:
-                    break
-                }
-            }
-
-            onReleased: {
-                if (mouse.buttons & Qt.RightButton)
-                    return
-                switch (editMode) {
-                case ContentViewTimeline.EditMode.Playback:
-                    playerBase.timelineEndMove()
-                    break
-                case ContentViewTimeline.EditMode.Loop:
-                case ContentViewTimeline.EditMode.InvertedLoop:
-                    playerBase.timelineEndLoopMove()
-                    break
-                default:
-                    break
-                }
-                editMode = ContentViewTimeline.EditMode.None
-            }
+            playerBase: timeline.playerBase
+            pixelsPerBeatPrecision: contentView.pixelsPerBeatPrecision
+            xOffset: contentView.xOffset
         }
 
         Rectangle {
             id: upTimeline
             height: parent.height / 2
             width: parent.width
-            color: "#00ECBA"
+            color: themeManager.timelineColor
 
             ContentViewTimelineBarCursor {
                 id: timelineCursor
@@ -130,7 +49,7 @@ Item {
 
             ContentViewTimelineBarCursor {
                 id: playFromCursor
-                color: themeManager.accentColor
+                color: "white"
                 x: playFromBar.x - actionBox.width - width / 2
                 opacity: 0.6
             }
@@ -174,8 +93,10 @@ Item {
                     if (drag.active)
                         playerBase.timelineBeginLoopMove(playerBase.loopFrom, playerBase.loopTo)
                     else {
-                        var beat = (loopFromIndicator.x - contentView.xOffset + loopFromIndicator.width / 2) / contentView.pixelsPerBeatPrecision
-                        playerBase.timelineInvertedLoopMove(ensureTimelineBeatPrecision(beat))
+                        var beat = timelineMouseArea.ensureTimelineBeatPrecision((loopFromIndicator.x - contentView.xOffset + loopFromIndicator.width / 2) / contentView.pixelsPerBeatPrecision)
+                        if (beat === playerBase.loopFrom)
+                            loopFromIndicator.x = Qt.binding(function() { return contentView.xOffset + playerBase.loopFrom * contentView.pixelsPerBeatPrecision - width / 2 })
+                        playerBase.timelineInvertedLoopMove(beat)
                         playerBase.timelineEndLoopMove()
                     }
                 }
@@ -213,8 +134,10 @@ Item {
                     if (drag.active)
                         playerBase.timelineBeginLoopMove(playerBase.loopFrom, playerBase.loopTo)
                     else {
-                        var beat = (loopToIndicator.x - contentView.xOffset + loopToIndicator.width / 2) / contentView.pixelsPerBeatPrecision
-                        playerBase.timelineLoopMove(ensureTimelineBeatPrecision(beat))
+                        var beat = timelineMouseArea.ensureTimelineBeatPrecision((loopToIndicator.x - contentView.xOffset + loopToIndicator.width / 2) / contentView.pixelsPerBeatPrecision)
+                        if (beat === playerBase.loopTo)
+                            loopToIndicator.x = Qt.binding(function() { return contentView.xOffset + playerBase.loopTo * contentView.pixelsPerBeatPrecision - width / 2 })
+                        playerBase.timelineLoopMove(beat)
                         playerBase.timelineEndLoopMove()
                     }
                 }

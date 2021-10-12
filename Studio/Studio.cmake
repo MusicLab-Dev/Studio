@@ -93,6 +93,7 @@ set(StudioSources
     ${StudioDir}/PartitionPreview.hpp
     ${StudioDir}/ProjectPreview.cpp
     ${StudioDir}/ProjectPreview.hpp
+    ${StudioDir}/ProjectPreview.ipp
     ${StudioDir}/PluginModel.cpp
     ${StudioDir}/PluginModel.hpp
     ${StudioDir}/PluginModelProxy.cpp
@@ -123,6 +124,9 @@ set(StudioSources
     ${StudioDir}/ClipboardManager.cpp
     ${StudioDir}/CursorManager.hpp
     ${StudioDir}/CursorManager.cpp
+    ${StudioDir}/PartitionManager.hpp
+    ${StudioDir}/PartitionManager.ipp
+    ${StudioDir}/PartitionManager.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QM_FILES} ${QtResources})

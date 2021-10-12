@@ -124,7 +124,8 @@ Item {
         target: eventDispatcher
         enabled: moduleIndex === modulesView.selectedModule
 
-        function onPlayContext(pressed) { if (pressed) player.playOrPause() }
+        function onPlayPauseContext(pressed) { if (pressed) player.playOrPause() }
+        function onReplayStopContext(pressed) { if (pressed) player.replayOrStop() }
         function onReplayContext(pressed) { if (pressed) player.replay() }
         function onStopContext(pressed) { if (pressed) player.stop() }
     }
@@ -165,31 +166,20 @@ Item {
             Layout.preferredHeight: 1
         }
 
-
         ControlsFlow {
-            function open() {
-                visible = true
-                openAnim.restart()
-            }
-
-            function close() {
-                visible = false
-            }
-
             id: sequencerControls
             closeable: false
             y: parent.height
             node: sequencerView.node
             Layout.fillWidth: true
+            visible: requiredVisibility
 
-            PropertyAnimation {
-                id: openAnim
-                target: sequencerControls
-                property: "opacity"
-                from: 0
-                to: 1
-                duration: 300
-                easing.type: Easing.OutCubic
+            HelpArea {
+                name: qsTr("Controls")
+                description: qsTr("Description")
+                position: HelpHandler.Position.Bottom
+                externalDisplay: true
+                visible: sequencerControls.requiredVisibility
             }
         }
 

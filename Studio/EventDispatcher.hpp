@@ -71,10 +71,11 @@ signals:
     void octaveUp(bool pressed);
     void octaveDown(bool pressed);
 
-    void playContext(bool pressed);
+    void playPauseContext(bool pressed);
+    void replayStopContext(bool pressed);
     void replayContext(bool pressed);
     void stopContext(bool pressed);
-    void playProject(bool pressed);
+    void playPauseProject(bool pressed);
     void replayProject(bool pressed);
     void stopProject(bool pressed);
 

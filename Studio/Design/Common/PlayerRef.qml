@@ -17,6 +17,7 @@ RowLayout {
     function play() { return playerBase.play() }
     function playOrPause() { return playerBase.playOrPause() }
     function replay() { return playerBase.replay() }
+    function replayOrStop() { return playerBase.replayOrStop() }
     function stop() { return playerBase.stop() }
 
     // Inputs

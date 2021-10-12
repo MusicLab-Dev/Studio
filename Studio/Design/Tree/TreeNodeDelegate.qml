@@ -130,22 +130,11 @@ Column {
                         treeSurface.resetSelection(false)
                     var index = treeSurface.selectionList.indexOf(nodeDelegate)
                     if (index === -1) {
-                        treeSurface.selectionList.push(nodeDelegate)
-                        ++treeSurface.selectionCount
+                        treeSurface.addNodeToSelection(nodeDelegate)
                         nodeDelegate.isSelected = true
-                        if (contentView.lastSelectedNode == null) {
-                            contentView.lastSelectedNode = nodeDelegate
-                            treeControls.open(nodeDelegate.node)
-                        } else {
-                            contentView.lastSelectedNode = nodeDelegate
-                            treeControls.change(nodeDelegate.node)
-                        }
                     } else if (hasModifier) {
-                        treeSurface.selectionList.splice(index, 1)
-                        --treeSurface.selectionCount
+                        treeSurface.removeNodeFromSelection(nodeDelegate, index)
                         nodeDelegate.isSelected = false
-                        if (contentView.lastSelectedNode == nodeDelegate)
-                            contentView.lastSelectedNode = null
                     } else
                         contentView.lastSelectedNode = nodeDelegate
                 }
@@ -252,8 +241,7 @@ Column {
                     var max = nodeInstanceBackground.mapToItem(treeSurface, nodeInstanceBackground.width, nodeInstanceBackground.height)
                     if (from.x <= min.x && from.y <= min.y && to.x >= max.x && to.y >= max.y) {
                         nodeDelegate.isSelected = true
-                        treeSurface.selectionList.push(nodeDelegate)
-                        ++treeSurface.selectionCount
+                        treeSurface.addNodeToSelection(nodeDelegate)
                     }
                 }
             }

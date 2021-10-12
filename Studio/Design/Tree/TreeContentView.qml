@@ -7,6 +7,7 @@ import "../Common"
 
 import NodeModel 1.0
 import PartitionModel 1.0
+import AudioAPI 1.0
 
 MouseArea {
     function incrementXOffset(offset) {
@@ -80,6 +81,10 @@ MouseArea {
     // Pixels per beat precision used for partition preview
     property real pixelsPerBeatPrecision: 1 / 8
 
+    // Piano
+    property int targetOctave: 5
+    readonly property int keysPerOctave: 12
+
     id: contentView
 
     onPressed: {
@@ -121,6 +126,47 @@ MouseArea {
             yOffset = yOffsetMax
     }
 
+    Component.onCompleted: animDelayTimer.start()
+
+    Timer {
+        id: animDelayTimer
+        interval: 100
+        onTriggered: {
+            controlsBehavior.enabled = true
+            partitionsBehavior.enabled = true
+        }
+    }
+
+    Connections {
+        function launch(pressed, key) {
+            if (contentView.lastSelectedNode) {
+                contentView.lastSelectedNode.node.partitions.addOnTheFly(
+                    AudioAPI.noteEvent(!pressed, (contentView.targetOctave * contentView.keysPerOctave) + key, AudioAPI.velocityMax, 0),
+                    contentView.lastSelectedNode.node,
+                    0,
+                    false
+                )
+            }
+        }
+
+        id: notesConnections
+        target: eventDispatcher
+        enabled: treeView.moduleIndex === modulesView.selectedModule && contentView.lastSelectedNode
+
+        function onNote0(pressed) { launch(pressed, 0) }
+        function onNote1(pressed) { launch(pressed, 1) }
+        function onNote2(pressed) { launch(pressed, 2) }
+        function onNote3(pressed) { launch(pressed, 3) }
+        function onNote4(pressed) { launch(pressed, 4) }
+        function onNote5(pressed) { launch(pressed, 5) }
+        function onNote6(pressed) { launch(pressed, 6) }
+        function onNote7(pressed) { launch(pressed, 7) }
+        function onNote8(pressed) { launch(pressed, 8) }
+        function onNote9(pressed) { launch(pressed, 9) }
+        function onNote10(pressed) { launch(pressed, 10) }
+        function onNote11(pressed) { launch(pressed, 11) }
+    }
+
     // Handle all mouse / touch gestures
     GestureArea {
         id: gestureArea
@@ -152,16 +198,24 @@ MouseArea {
     }
 
     TreeHeader {
+        property bool requiredVisibility: !treeControls.requiredVisibility
+
         id: treeHeader
         height: parent.height * 0.05
         width: parent.width
         z: 1
-        y: treeControls.hide || treeControls.node == null ? 0 : -height
+        y: requiredVisibility ? 0 : -height
 
         Behavior on y {
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutCubic
+                onRunningChanged: {
+                    if (running && treeHeader.requiredVisibility)
+                        treeHeader.visible = true
+                    else if (!running && !treeHeader.requiredVisibility)
+                        treeHeader.visible = true
+                }
             }
         }
     }
@@ -210,39 +264,53 @@ MouseArea {
     }
 
     ControlsFlow {
-        function open(newNode) {
-            node = newNode
-        }
-
-        function change(newNode) {
-            node = newNode
-        }
-
-        function close() {
-            node = null
-        }
-
         id: treeControls
         width: parent.width
-        node: null
-        y: hide || !visible ? -height : 0
+        node: contentView.lastSelectedNode ? contentView.lastSelectedNode.node : null
+        y: !requiredVisibility ? -height : 0
 
         Behavior on y {
+            id: controlsBehavior
+            enabled: false
+
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutCubic
+                onRunningChanged: {
+                    if (running && treeControls.requiredVisibility)
+                        treeControls.visible = true
+                    else if (!running && !treeControls.requiredVisibility)
+                        treeControls.visible = true
+                }
             }
+        }
+
+        HelpArea {
+            name: qsTr("Controls")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Bottom
+            externalDisplay: true
+            visible: treeControls.requiredVisibility
         }
     }
 
     PartitionsPreview {
         id: partitionsPreview
-        y: !partitionsPreview.visible ? parent.height : parent.height - height
+        y: !requiredVisibility ? parent.height : parent.height - height
 
         Behavior on y {
+            id: partitionsBehavior
+            enabled: false
+
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutCubic
+                onRunningChanged: {
+                    if (running && partitionsPreview.requiredVisibility)
+                        partitionsPreview.visible = true
+                    else if (!running && !partitionsPreview.requiredVisibility)
+                        partitionsPreview.visible = true
+                }
             }
         }
 
@@ -251,7 +319,7 @@ MouseArea {
             description: qsTr("Description")
             position: HelpHandler.Position.Top
             externalDisplay: true
-            visible: partitionsPreview.visible
+            visible: partitionsPreview.requiredVisibility
         }
     }
 
@@ -272,7 +340,7 @@ MouseArea {
         size: contentView.yScrollIndicatorSize
         position: contentView.yScrollIndicatorPos
         policy: ScrollBar.AlwaysOn
-        width: 6
+        z: 10
 
         onPositionChanged: {
             if (Math.abs(position - contentView.yScrollIndicatorPos) > Number.EPSILON)
@@ -284,13 +352,13 @@ MouseArea {
     ScrollBar {
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: partitionsPreview.visible ? partitionsPreview.top : parent.bottom
+        anchors.bottom: parent.bottom
         visible: size !== 1
         orientation: Qt.Horizontal
         size: contentView.xScrollIndicatorSize
         position: contentView.xScrollIndicatorPos
         policy: ScrollBar.AlwaysOn
-        height: 6
+        z: 10
 
         onPositionChanged: {
             if (Math.abs(position - contentView.xScrollIndicatorPos) > Number.EPSILON)
@@ -302,13 +370,13 @@ MouseArea {
         visible: contentView.lastSelectedNode && partitionsPreview.hide
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        anchors.rightMargin: 10
         width: height
         height: treeFooter.height / 2
         showBorder: false
         scaleFactor: 1
         source: "qrc:/Assets/Note.png"
+        anchors.bottomMargin: 10
+        anchors.rightMargin: 10
 
         onReleased: partitionsPreview.hide = false
     }

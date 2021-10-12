@@ -97,7 +97,8 @@ PlacementArea {
                 0
             ),
             sequencerView.node,
-            sequencerView.partitionIndex
+            sequencerView.partitionIndex,
+            true
         )
     }
     function removeOnTheFly() {
@@ -109,7 +110,8 @@ PlacementArea {
                 0
             ),
             sequencerView.node,
-            sequencerView.partitionIndex
+            sequencerView.partitionIndex,
+            true
         )
         onTheFlyKey = -1
     }

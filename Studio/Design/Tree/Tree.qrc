@@ -4,6 +4,7 @@
         <file>TreeHeader.qml</file>
         <file>TreeFooter.qml</file>
         <file>TreeContentView.qml</file>
+        <file>TreeProjectPreview.qml</file>
         <file>TreeSurface.qml</file>
         <file>TreeNodeDelegate.qml</file>
         <file>TreeNodeMenu.qml</file>

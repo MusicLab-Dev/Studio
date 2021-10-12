@@ -14,19 +14,21 @@ import PluginModel 1.0
 Rectangle {
     property NodeModel node
     readonly property real baseHeight: 60
-    readonly property color nodeColor: node ? node.color : "black"
+    readonly property color nodeColor: node ? node.color : color
     readonly property color nodeDarkColor: Qt.darker(nodeColor, 1.25)
     readonly property color nodeLightColor: Qt.lighter(nodeColor, 1.6)
     readonly property color nodeHoveredColor: Qt.darker(nodeColor, 1.8)
     readonly property color nodePressedColor: Qt.darker(nodeColor, 2.2)
     readonly property color nodeAccentColor: Qt.darker(nodeColor, 1.6)
+
+    // Hide states
     property bool hide: false
+    property bool requiredVisibility: node && !hide
     property bool closeable: true
 
     id: controlsFlow
     color: themeManager.backgroundColor
-    height: Math.max(baseHeight, headerRow.height) + 20
-    visible: node && !hide
+    implicitHeight: Math.max(baseHeight, headerRow.height) + 20
 
     MouseArea {
         anchors.fill: parent

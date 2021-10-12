@@ -57,11 +57,13 @@ Item {
 
     function resetSelection() {
         contentView.lastSelectedNode = null
-        for (var i = 0; i < selectionList.length; ++i)
-            selectionList[i].isSelected = false
-        selectionList = []
-        selectionCount = 0
-        treeControls.close()
+        if (selectionList.length !== 0) {
+            for (var i = 0; i < selectionList.length; ++i)
+                selectionList[i].isSelected = false
+            selectionList = []
+            selectionCount = 0
+            selectionListModified()
+        }
     }
 
     function processNodeDrop(validDrag, node) {
@@ -76,9 +78,31 @@ Item {
         }
     }
 
-    signal targetDropped
-    signal targetPluginDropped
-    signal selectionFinished(point from, point to)
+    function addNodeToSelection(nodeDelegate) {
+        selectionList.push(nodeDelegate)
+        ++selectionCount
+        if (contentView.lastSelectedNode == null) {
+            contentView.lastSelectedNode = nodeDelegate
+        } else {
+            contentView.lastSelectedNode = nodeDelegate
+        }
+        selectionListModified()
+    }
+
+    function removeNodeFromSelection(nodeDelegate, index) {
+        treeSurface.selectionList.splice(index, 1)
+        --treeSurface.selectionCount
+        if (contentView.lastSelectedNode == nodeDelegate)
+            contentView.lastSelectedNode = null
+        selectionListModified()
+    }
+
+    function makeNodeSelectionList() {
+        var nodes = []
+        for (var i = 0; i < selectionList.length; ++i)
+            nodes.push(selectionList[i].node)
+        return nodes
+    }
 
     property real instanceDefaultWidth: 150
     property real instanceDefaultHeight: 110
@@ -95,6 +119,11 @@ Item {
     property var selectionList: []
     property int selectionCount: 0
     property NodeModel last: null
+
+    signal targetDropped
+    signal targetPluginDropped
+    signal selectionFinished(point from, point to)
+    signal selectionListModified
 
     id: treeSurface
     width: Math.max(masterNodeDelegate.width, parent.width)

@@ -24,6 +24,7 @@
         <file>Snapper.qml</file>
         <file>SoundMeter.qml</file>
         <file>ContentViewTimeline.qml</file>
+        <file>ContentViewTimelineMouseArea.qml</file>
         <file>TextRoundedButton.qml</file>
         <file>PartitionComboBox.qml</file>
         <file>PartitionsPreview.qml</file>
