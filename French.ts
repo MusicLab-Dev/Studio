@@ -1168,23 +1168,18 @@
 <context>
     <name>TreeFooter</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="33"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="30"/>
         <source>Project Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="34"/>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="189"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="31"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="96"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="147"/>
-        <source>Selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="188"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="95"/>
         <source>Player Area</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1251,6 +1246,14 @@
     <message>
         <location filename="Studio/Design/Tree/TreePanel.qml" line="35"/>
         <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TreeProjectPreview</name>
+    <message>
+        <location filename="Studio/Design/Tree/TreeProjectPreview.qml" line="150"/>
+        <source>Selection</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

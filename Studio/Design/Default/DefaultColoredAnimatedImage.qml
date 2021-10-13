@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
 
-Image {
+Item {
     property alias source: image.source
     property alias color: overlay.color
     property alias cached: overlay.cached
@@ -15,6 +15,11 @@ Image {
 
         source: AnimatedImage {
             id: image
+            width: overlay.width
+            height: overlay.height
+            antialiasing: true
+            mipmap: true
+            smooth: true
 
             onPlayingChanged: {
                 currentFrame = 0
