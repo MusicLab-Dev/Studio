@@ -11,15 +11,16 @@ Item {
     ColorOverlay {
         id: overlay
         anchors.fill: parent
-        cached: true
+        cached: false
 
         source: Image {
             id: image
             width: overlay.width
             height: overlay.height
             antialiasing: true
+            cache: true
             mipmap: true
-            smooth: true
+            smooth: false
             fillMode: Image.PreserveAspectFit
         }
     }

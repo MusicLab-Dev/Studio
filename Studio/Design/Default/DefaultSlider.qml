@@ -22,7 +22,7 @@ Slider {
         width: control.availableWidth
         height: implicitHeight
         radius: 8
-        color: "#295F8B"
+        color: themeManager.foregroundColor
 
         Repeater {
             readonly property real rangeWidth: range[1] - range[0]

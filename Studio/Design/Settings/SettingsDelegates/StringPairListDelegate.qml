@@ -13,7 +13,8 @@ Row {
         text: name
         width: Math.max(parent.width * 0.15, 150)
         height: 40
-        color: "#295F8B"
+        color: "white"
+        horizontalAlignment: Text.AlignLeft
     }
 
 
