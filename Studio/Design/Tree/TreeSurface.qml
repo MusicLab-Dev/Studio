@@ -105,7 +105,7 @@ Item {
     }
 
     property real instanceDefaultWidth: 150
-    property real instanceDefaultHeight: 100
+    property real instanceDefaultHeight: 150
     readonly property real instancePadding: instanceDefaultWidth / 2
     property bool dragActive: false
     property point dragPoint: Qt.point(0, 0)

@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Layouts 1.3
 import QtQml 2.15
 import QtGraphicalEffects 1.15
 
@@ -25,6 +26,8 @@ Column {
     readonly property color hoveredColor: Qt.darker(color, 1.8)
     readonly property color pressedColor: Qt.darker(color, 2.2)
     readonly property color accentColor: Qt.darker(color, 1.6)
+    readonly property real radius: 2
+    readonly property real space: 3
 
     id: nodeDelegate
 
@@ -48,12 +51,23 @@ Column {
 
         Rectangle {
             id: verticalLinkUp
-            color: nodeDelegate.parentNode ? nodeDelegate.parentNode.color : "black"
+            color: nodeDelegate.color
             width: 2
             anchors.top: parent.top
-            anchors.bottom: soundMeter.top
+            anchors.bottom: nodeInstanceBackground.top
             anchors.horizontalCenter: parent.horizontalCenter
             visible: nodeDelegate.parentNode && !nodeInstanceBackground.drag.active
+
+            Rectangle {
+                id: horizontalConnector
+                anchors.top: parent.top
+                anchors.topMargin: -6
+                x: -4
+                width: 10
+                height: width
+                color: themeManager.backgroundColor
+                radius: 2
+            }
         }
 
         Rectangle {
@@ -64,21 +78,6 @@ Column {
             anchors.horizontalCenter: parent.horizontalCenter
             width: 2
             visible: childrenRepeater.count && !nodeInstanceBackground.drag.active
-        }
-
-        SoundMeter {
-            id: soundMeter
-            enabled: treeView.visible
-            // color: nodeInstanceBackgroundRect.border.color
-            targetNode: nodeDelegate.node
-            visible: !nodeInstanceBackground.drag.active
-            anchors.top: nodeInstanceBackground.top
-            anchors.topMargin: 10
-            anchors.bottom: nodeInstanceBackground.bottom
-            anchors.bottomMargin: 10
-            anchors.left: nodeInstanceBackground.right
-            anchors.leftMargin: nodeInstanceBackground.width * 0.05
-            width: height / 4
         }
 
         MouseArea {
@@ -225,39 +224,131 @@ Column {
                 }
             }
 
+            Rectangle {
+                id: topPin
+                anchors.bottom: nodeContent.top
+                anchors.bottomMargin: -2
+                anchors.horizontalCenter: nodeContent.horizontalCenter
+                width: nodeContent.width * 0.16
+                height: 6
+                radius: 2
+                color: themeManager.backgroundColor
+            }
 
-            Item {
-                width: parent.width * 0.6
-                height: parent.height * 0.4
-                y: - height / 2
-                anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                id: bottomPin
+                anchors.top: nodeContent.bottom
+                anchors.topMargin: -2
+                anchors.horizontalCenter: nodeContent.horizontalCenter
+                width: nodeContent.width * 0.16
+                height: 6
+                radius: 2
+                color: themeManager.backgroundColor
+            }
+
+            ColumnLayout {
+                id: nodeContent
+                anchors.fill: parent
+                spacing: nodeDelegate.space
 
                 Rectangle {
-                    anchors.fill: parent
-                    color: Qt.lighter(themeManager.foregroundColor, 1.2)
-                    radius: 30
-                    opacity: nodeDelegate.isSelected ? 1 : 0.9
-                }
-
-                Item {
-                    height: parent.height * 0.5
-                    width: parent.width
-                    anchors.top: parent.top
+                    id: header
+                    Layout.preferredHeight: parent.height * 0.2
+                    Layout.fillWidth: true
+                    radius: nodeDelegate.radius
+                    color: themeManager.backgroundColor
 
                     DefaultText {
-                        anchors.fill: parent
-                        text: nodeDelegate.node ? nodeDelegate.node.plugin.title : qsTr("Error")
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        color: nodeDelegate.accentColor
-                        fontSizeMode: Text.Fit
-                        font.pointSize: 8
+                        anchors.left: parent.left
+                        anchors.leftMargin: parent.width * 0.05
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.right: muteButton.left
+                        text: nodeDelegate.node ? nodeDelegate.node.name : ""
+                        color: nodeDelegate.color
+                        horizontalAlignment: Text.AlignLeft
                         elide: Text.ElideRight
+                        font.pixelSize: 18
+                    }
+
+                    DefaultImageButton {
+                        readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
+
+                        id: muteButton
+                        anchors.right: parent.right
+                        anchors.rightMargin: parent.width * 0.03
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: height
+                        height: parent.height * 0.9
+                        source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
+                        showBorder: false
+                        scaleFactor: 0.8
+                        colorDefault: "white"
+                        colorHovered: nodeDelegate.hoveredColor
+                        colorOnPressed: nodeDelegate.pressedColor
+                        image.antialiasing: false
+
+                        onReleased: nodeDelegate.node.muted = !isMuted
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    spacing: nodeDelegate.space
+
+                    Rectangle {
+                        id: plugin
+                        Layout.fillHeight: true
+                        Layout.preferredWidth: height
+                        radius: nodeDelegate.radius
+                        color: nodeDelegate.color
+
+                        PluginFactoryImageButton {
+                            id: factoryImageButton
+                            anchors.centerIn: parent
+                            width: height
+                            height: parent.height * 0.7
+                            name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
+                            colorDefault: themeManager.backgroundColor
+                            colorHovered: nodeDelegate.hoveredColor
+                            colorOnPressed: nodeDelegate.pressedColor
+                            scaleFactor: 0.8
+                            playing: hovered || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
+
+                            onClicked: {
+                                treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
+                                treeNodeMenu.x = pressX
+                                treeNodeMenu.y = pressY
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: dbMeter
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        radius: nodeDelegate.radius
+                        color: nodeDelegate.color
+
+                        SoundMeter {
+                            id: soundMeter
+                            enabled: treeView.visible
+                            // color: nodeInstanceBackgroundRect.border.color
+                            targetNode: nodeDelegate.node
+                            visible: !nodeInstanceBackground.drag.active
+                            anchors.fill: parent
+                            anchors.rightMargin: 3
+                            anchors.leftMargin: 3
+                            anchors.topMargin: 3
+                            anchors.bottomMargin: 3
+                        }
                     }
                 }
             }
 
-            Rectangle {
+            /*Rectangle {
                 id: nodeInstanceBackgroundRect
                 anchors.fill: parent
                 radius: 8
@@ -265,17 +356,6 @@ Column {
                 border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
                 border.width: 2
                 opacity: nodeDelegate.isSelected ? 1 : 0.9
-            }
-
-            DropShadow {
-                id: shadow
-                anchors.fill: nodeInstanceBackgroundRect
-                horizontalOffset: 2
-                verticalOffset: 2
-                radius: 8
-                samples: 17
-                color: "#aa000000"
-                source: nodeInstanceBackgroundRect
             }
 
             DefaultText {
@@ -347,10 +427,12 @@ Column {
                 colorOnPressed: nodeDelegate.pressedColor
 
                 onReleased: nodeDelegate.node.muted = !isMuted
-            }
+            }*/
 
         }
     }
+
+
 
     Rectangle {
         id: horizontalLinkDown

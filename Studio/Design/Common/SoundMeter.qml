@@ -37,7 +37,7 @@ Rectangle {
     property bool analysisRequested: false
 
     id: soundMeter
-    radius: 8
+    radius: 2
     color: themeManager.foregroundColor
 
     onTargetNodeChanged: {
@@ -130,7 +130,7 @@ Rectangle {
             color: themeManager.accentColor
         }
 
-        Text {
+        /*Text {
             verticalAlignment: Text.AlignVCenter
             text: "12"
             anchors.left: parent.right
@@ -169,6 +169,6 @@ Rectangle {
             anchors.bottomMargin: height / -2
             font.pointSize: 6
             color: "white"
-        }
+        }*/
     }
 }

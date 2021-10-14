@@ -4,6 +4,7 @@ import CursorManager 1.0
 
 Button {
     property alias source: image.source
+    property alias image: image.image
     property alias fillMode: image.fillMode
     property color colorOnPressed: themeManager.accentColor
     property color colorHovered: themeManager.semiAccentColor
