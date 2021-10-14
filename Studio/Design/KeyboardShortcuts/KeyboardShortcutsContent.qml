@@ -97,7 +97,7 @@ Column {
             Rectangle {
                 anchors.fill: parent
                 color: themeManager.foregroundColor
-                radius: 8
+                radius: 6
                 visible: rowDelegate.isSelectedShortcut || rowDelegate.containsMouse
             }
 

@@ -23,7 +23,7 @@ Button {
         color: "transparent"
         border.width: 1
         border.color: "white"
-        radius: 40
+        radius: 6
         visible: showBorder
     }
 

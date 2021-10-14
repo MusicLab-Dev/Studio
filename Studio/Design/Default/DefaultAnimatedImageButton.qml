@@ -32,7 +32,7 @@ Button {
         width: control.width
         height: control.height
         color: "transparent"
-        radius: 40
+        radius: 6
         visible: true
         border.width: 1
         border.color: "white"

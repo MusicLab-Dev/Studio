@@ -37,7 +37,7 @@ Rectangle {
     property bool analysisRequested: false
 
     id: soundMeter
-    radius: 8
+    radius: 6
     color: themeManager.foregroundColor
 
     onTargetNodeChanged: {

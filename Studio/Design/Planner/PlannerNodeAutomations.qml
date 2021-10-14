@@ -64,7 +64,7 @@ Repeater {
                     width: contentView.rowHeaderWidth - x - contentView.headerMargin
                     height: contentView.rowHeight - contentView.headerMargin
                     color: nodeDelegate.node ? nodeDelegate.node.color : "black"
-                    radius: 8
+                    radius: 6
 
                     DefaultText {
                         x: 10

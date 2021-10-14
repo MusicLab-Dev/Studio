@@ -20,7 +20,7 @@ Item {
             antialiasing: true
             cache: true
             mipmap: true
-            smooth: false
+            smooth: true
             fillMode: Image.PreserveAspectFit
         }
     }

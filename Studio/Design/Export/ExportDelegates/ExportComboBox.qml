@@ -7,7 +7,7 @@ import "../../Default"
 RowLayout {
     property alias text: text
     property alias comboBox: comboBox
-    
+
     spacing: 0
 
     Item {
@@ -19,7 +19,7 @@ RowLayout {
             id: text
             width: Math.max(parent.width * 0.15, 150)
             height: parent.height
-            color: "#295F8B"
+            color: "white"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }

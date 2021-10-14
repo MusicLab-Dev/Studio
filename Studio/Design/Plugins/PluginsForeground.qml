@@ -31,7 +31,7 @@ Rectangle {
 
     id: pluginsForeground
     color: themeManager.backgroundColor
-    radius: 30
+    radius: 6
 
     Rectangle {
         width: parent.width * 0.1
@@ -51,8 +51,6 @@ Rectangle {
         DefaultTextInput {
             id: searchText
             anchors.fill: parent
-            color: "white"
-            opacity: 0.42
             placeholderText: qsTr("Research")
         }
     }
@@ -72,7 +70,6 @@ Rectangle {
 
             ScrollBar.vertical: DefaultScrollBar {
                 color: themeManager.accentColor
-                opacity: 0.3
                 visible: parent.contentHeight > parent.height
             }
 
@@ -122,21 +119,10 @@ Rectangle {
                             width: parent.width * 0.85 - x
                             height: 20
                             font.weight: Font.Light
-                            borderColor: "white"
-                            enabledColor: "black"
 
                             Component.onCompleted: {
                                 if (index === 0)
                                     checked = Qt.binding(function() { return filterColumn.categoryChecked })
-                            }
-
-                            Connections {
-                                target: filterColumn
-                                enabled: index !== 0
-                                function onCategoryCheckedChanged() {
-                                    if (!filterColumn.categoryChecked)
-                                        foregroundCheckBox.checked = false
-                                }
                             }
 
                             onCheckedChanged: {
@@ -154,6 +140,15 @@ Rectangle {
                                     pluginsView.currentFilter = filter
                                 }
                             }
+
+                            Connections {
+                                target: filterColumn
+                                enabled: index !== 0
+                                function onCategoryCheckedChanged() {
+                                    if (!filterColumn.categoryChecked)
+                                        foregroundCheckBox.checked = false
+                                }
+                            }
                         }
 
                         Text {
@@ -162,11 +157,10 @@ Rectangle {
                             height: parent.height
                             fontSizeMode: Text.Fit
                             text: {
-                                pluginsContentArea.count
-                                pluginsContentArea.pluginTableProxy.getPluginsCount(modelData)
+                                pluginsContentArea.count // Retrigger on count changed
+                                return pluginsContentArea.pluginTableProxy.getPluginsCount(modelData)
                             }
-                            color: foregroundCheckBox.hovered ? "#00A3FF" : "#FFFFFF"
-                            opacity: foregroundCheckBox.hovered ? 1.0 :  0.42
+                            color: "white"
                             // font.weight: Font.Thin
                         }
                     }

@@ -11,14 +11,11 @@ Rectangle {
     property int parentDepth: 0
     property alias searchFilter: searchBar.text
 
-    onActualPathChanged: {
-        workspaceContentArea.selectedIndex = -1
-        workspaceContentArea.hoveredIndex = -1
-    }
+    onActualPathChanged: workspaceContentArea.selectedIndex = -1
 
     id: workspaceForeground
     color: Qt.lighter(themeManager.foregroundColor, 1.2)
-    radius: 30
+    radius: 6
 
     Rectangle {
         width: parent.width * 0.1
@@ -40,7 +37,6 @@ Rectangle {
             anchors.fill: parent
             placeholderText: qsTr("Default files")
             color: "white"
-            opacity: 0.42
         }
     }
 

@@ -13,7 +13,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: 16
+        radius: 6
         opacity: overviewMouse.containsMouse ? 1 : 0.6
         color: overviewMouse.containsMouse ? app.project.master.color : themeManager.backgroundColor
     }

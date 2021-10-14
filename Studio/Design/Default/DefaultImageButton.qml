@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import CursorManager 1.0
 
 Button {
+    property alias image: image
     property alias source: image.source
     property alias fillMode: image.fillMode
     property color colorOnPressed: themeManager.accentColor
@@ -31,7 +32,7 @@ Button {
         width: control.width
         height: control.height
         color: themeManager.contentColor
-        radius: 40
+        radius: 6
         visible: true
         border.width: 0
         border.color: "black"

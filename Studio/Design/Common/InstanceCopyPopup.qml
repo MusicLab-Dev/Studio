@@ -76,7 +76,7 @@ Item {
         anchors.fill: window
         horizontalOffset: 4
         verticalOffset: 4
-        radius: 8
+        radius: 6
         samples: 17
         color: "#80000000"
         source: window
@@ -126,7 +126,7 @@ Item {
 
                     TextRoundedButton {
                         text: qsTr("Yes")
-                        hoverOnText: false
+                        filled: true
 
                         onReleased: acceptAndClose()
                     }

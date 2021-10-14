@@ -46,7 +46,7 @@ Rectangle {
             anchors.fill: previewBackground
             horizontalOffset: 4
             verticalOffset: 4
-            radius: 8
+            radius: 6
             samples: 17
             color: "#80000000"
             source: previewBackground

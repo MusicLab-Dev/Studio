@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/Settings">
         <file>SettingsView.qml</file>
-        <file>SettingsBackground.qml</file>
         <file>SettingsForeground.qml</file>
         <file>SettingsForegroundCard.qml</file>
         <file>SettingsContentArea.qml</file>

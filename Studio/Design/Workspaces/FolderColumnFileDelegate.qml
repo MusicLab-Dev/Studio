@@ -9,17 +9,19 @@ Row {
     height: 20
     spacing: 4
 
-    Image {
+    DefaultColoredImage {
         id: image
         width: 20
         height: 20
         source: "qrc:/Assets/TestImage4.png"
+        color: themeManager.accentColor
     }
 
     DefaultTextButton {
         width: parent.width - image.width - parent.spacing
         text: fileName
         height: parent.height
+        textItem.horizontalAlignment: Text.AlignLeft
 
         onReleased: {
             workspaceView.fileUrl = fileUrl

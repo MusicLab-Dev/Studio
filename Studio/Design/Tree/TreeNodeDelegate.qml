@@ -257,7 +257,7 @@ Column {
                     id: headerBackground
                     anchors.fill: parent
                     color: themeManager.backgroundColor
-                    radius: 30
+                    radius: 6
                 }
 
                 Item {
@@ -281,7 +281,7 @@ Column {
             Rectangle {
                 id: nodeInstanceBackgroundRect
                 anchors.fill: parent
-                radius: 8
+                radius: 6
                 color: nodeInstanceBackground.containsDrag ? nodeInstanceBackground.validDrag ? nodeDelegate.lightColor : nodeDelegate.pressedColor : nodeDelegate.color
                 border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
                 border.width: 2
@@ -293,7 +293,7 @@ Column {
                 anchors.fill: nodeInstanceBackgroundRect
                 horizontalOffset: 2
                 verticalOffset: 2
-                radius: 8
+                radius: 6
                 samples: 17
                 color: "#aa000000"
                 source: nodeInstanceBackgroundRect

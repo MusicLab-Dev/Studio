@@ -22,7 +22,7 @@ RadioButton {
         implicitWidth: 25
         x: control.leftPadding
         y: control.height / 2 - height / 2
-        radius: width * 0.5
+        radius: 6
         color: themeManager.foregroundColor
         border.width: control.down ? 2 : control.hovered ? 1 : 0
         border.color: control.hovered ? themeManager.accentColor : "transparent"
@@ -32,7 +32,7 @@ RadioButton {
         anchors.fill: control.background
         anchors.margins: control.background.width * 0.15
         color: control.down ? "#001E36" : "transparent"
-        radius: width * 0.5
+        radius: 6
     }
 
     contentItem: Text {

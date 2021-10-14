@@ -51,7 +51,7 @@ ComboBox {
         border.width: 1
         border.color: control.hovered || popup.opened ? control.accentColor : "white"
         color: control.pressed ? themeManager.backgroundColor : themeManager.foregroundColor
-        radius: 8
+        radius: 6
     }
 
     popup: Popup {
@@ -60,6 +60,8 @@ ComboBox {
         width: control.width
         implicitHeight: contentItem.implicitHeight
         padding: 2
+
+        onOpenedChanged: canvas.requestPaint()
 
         contentItem: ListView {
             id: listView
@@ -73,7 +75,7 @@ ComboBox {
 
         background: Rectangle {
             color: themeManager.foregroundColor
-            radius: 8
+            radius: 6
             border.color: control.accentColor
             border.width: 1
         }
@@ -96,7 +98,7 @@ ComboBox {
         background: Rectangle {
             width: itemDelegate.width - 4
             height: itemDelegate.height - 4
-            radius: 8
+            radius: 6
             x: 2
             y: 2
             color: parent.hovered ? themeManager.backgroundColor : themeManager.foregroundColor

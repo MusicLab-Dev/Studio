@@ -22,7 +22,7 @@ Item {
         color: "transparent"
         border.color: pluginsSquareComponentArea.containsMouse ? pluginDelegate.color : "white"
         border.width: 1
-        radius: width / 4
+        radius: 6
         width: pluginsGrid.cellWidth - x * 2
         height: width
         x: 7

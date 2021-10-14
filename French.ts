@@ -1125,17 +1125,17 @@
 <context>
     <name>TreeComponentsPanel</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="42"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="41"/>
         <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="47"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="46"/>
         <source>Instrum.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="52"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="51"/>
         <source>Effects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1187,8 +1187,8 @@
 <context>
     <name>TreeNodeDelegate</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="249"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="288"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="270"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="309"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

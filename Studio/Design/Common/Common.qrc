@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/Common">
-        <file>AddPluginButton.qml</file>
-        <file>AddPreviewButton.qml</file>
         <file>AddButton.qml</file>
         <file>CloseButton.qml</file>
         <file>SettingsButton.qml</file>

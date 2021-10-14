@@ -4,7 +4,6 @@ import QtQuick.Controls 2.15
 import "../Default"
 
 Button {
-    property bool activated: false
     property string iconSource: "qrc:/Assets/Settings/SettingsCategoryButton.png"
 
     id: control
@@ -12,12 +11,13 @@ Button {
     enabled: true // to test disable component
 
     background: Rectangle {
+        id: rect
         width: control.width
         height: control.height
-        border.width: control.pressed ? (height / 20) : control.hovered ? (height / 24) : 0
-        border.color: control.pressed ? themeManager.accentColor : control.hovered ? "#0D86CB" : ""
-        color: control.activated ? themeManager.accentColor : themeManager.foregroundColor
-        radius: width / 17
+        border.width: control.pressed || control.hovered ? 4 : 0
+        border.color: control.pressed ? themeManager.accentColor : control.hovered ? themeManager.semiAccentColor : "white"
+        color: themeManager.contentColor
+        radius: 6
     }
 
     contentItem: Item {
@@ -31,7 +31,7 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         text: control.text
         font: control.font
-        color: control.pressed ? themeManager.accentColor : control.hovered ? "#0D86CB" : "#295F8B"
+        color: "white"
         elide: Text.ElideRight
     }
 
@@ -41,6 +41,6 @@ Button {
         x: control.width / 12
         y: (control.height - height) / 2
         source: iconSource
-        color: control.activated ? "#001E36" : control.pressed || control.hovered ? "#0D86CB" : "#295F8B"
+        color: rect.border.color
     }
 }
