@@ -350,7 +350,7 @@ Column {
                             id: factoryImageButton
                             anchors.centerIn: parent
                             width: height
-                            height: contentArea.containsMouse || (treeView.visible && treeView.player.playerBase.isPlayerRunning) ? parent.height * 0.6 : parent.height * 0.55
+                            height: contentArea.containsMouse ? parent.height * 0.6 : parent.height * 0.55
                             name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
                             color: themeManager.backgroundColor
                             playing: contentArea.containsMouse || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
