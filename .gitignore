@@ -44,3 +44,7 @@ coverage.info
 
 CMakeLists.txt.user
 *.autosave
+
+# Design
+UI_Design/*.png
+UI_Design/*.gif
