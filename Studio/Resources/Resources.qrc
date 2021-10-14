@@ -72,5 +72,6 @@
         <file>Assets/Plugins/Snare.gif</file>
         <file>Assets/Chrono.png</file>
         <file>Assets/Orchestra.png</file>
+        <file>Assets/Plugins/Hat.gif</file>
     </qresource>
 </RCC>
