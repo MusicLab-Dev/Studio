@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.15
 import NodeModel 1.0
 import PluginModel 1.0
 import PluginTableModel 1.0
+import CursorManager 1.0
 
 import "../Default"
 import "../Common"
@@ -124,8 +125,11 @@ Column {
                 treeNodeMenu.y = mouseY
             }
 
-            onDoubleClicked: {
-                modulesView.addNewPlanner(nodeDelegate.node)
+            onHoveredChanged: {
+                if (containsMouse)
+                    cursorManager.set(CursorManager.Type.Clickable)
+                else
+                    cursorManager.set(CursorManager.Type.Normal)
             }
 
             drag.onActiveChanged: {
@@ -252,12 +256,22 @@ Column {
                 anchors.fill: parent
                 spacing: nodeDelegate.space
 
-                Rectangle {
+                Item {
                     id: header
                     Layout.preferredHeight: parent.height * 0.2
                     Layout.fillWidth: true
-                    radius: nodeDelegate.radius
-                    color: themeManager.backgroundColor
+
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: nodeDelegate.radius
+                        color: nodeDelegate.isSelected ? Qt.lighter(themeManager.backgroundColor, 1.25) : themeManager.backgroundColor
+                        border.width: nodeDelegate.isSelected || (nodeInstanceBackground.containsMouse && !contentArea.containsMouse) ? 2 : 0
+                        border.color: nodeDelegate.isSelected ? "white" : nodeDelegate.color
+
+                        Behavior on border.width {
+                            NumberAnimation { duration: 100 }
+                        }
+                    }
 
                     DefaultText {
                         anchors.left: parent.left
@@ -288,7 +302,9 @@ Column {
                         colorHovered: nodeDelegate.hoveredColor
                         colorOnPressed: nodeDelegate.pressedColor
                         image.antialiasing: false
+                        image.smooth: true
 
+                        onHoveredChanged: cursorManager.set(CursorManager.Type.Clickable)
                         onReleased: nodeDelegate.node.muted = !isMuted
                     }
                 }
@@ -298,30 +314,51 @@ Column {
                     Layout.fillWidth: true
                     spacing: nodeDelegate.space
 
-                    Rectangle {
+                    Item {
                         id: plugin
                         Layout.fillHeight: true
                         Layout.preferredWidth: height
-                        radius: nodeDelegate.radius
-                        color: nodeDelegate.color
 
-                        PluginFactoryImageButton {
+                        MouseArea {
+                            id: contentArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            propagateComposedEvents: true
+
+                            drag.onActiveChanged: mouse.accepted = false
+                            onClicked: {
+                                if (app.project.master === nodeDelegate.node)
+                                    modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
+                                else
+                                    modulesView.addNewPlanner(nodeDelegate.node)
+                            }
+                        }
+
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: nodeDelegate.radius
+                            color: nodeDelegate.color
+                            border.width: contentArea.containsMouse ? 2 : 0
+                            border.color: "white"
+
+                            Behavior on border.width {
+                                NumberAnimation { duration: 100 }
+                            }
+                        }
+
+                        PluginFactoryImage {
                             id: factoryImageButton
                             anchors.centerIn: parent
                             width: height
-                            height: parent.height * 0.7
+                            height: contentArea.containsMouse || (treeView.visible && treeView.player.playerBase.isPlayerRunning) ? parent.height * 0.6 : parent.height * 0.55
                             name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
-                            colorDefault: themeManager.backgroundColor
-                            colorHovered: nodeDelegate.hoveredColor
-                            colorOnPressed: nodeDelegate.pressedColor
-                            scaleFactor: 0.8
-                            playing: hovered || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
+                            color: themeManager.backgroundColor
+                            playing: contentArea.containsMouse || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
 
-                            onClicked: {
-                                treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
-                                treeNodeMenu.x = pressX
-                                treeNodeMenu.y = pressY
+                            Behavior on height {
+                                NumberAnimation { duration: 100 }
                             }
+
                         }
                     }
 
@@ -347,92 +384,8 @@ Column {
                     }
                 }
             }
-
-            /*Rectangle {
-                id: nodeInstanceBackgroundRect
-                anchors.fill: parent
-                radius: 8
-                color: nodeInstanceBackground.containsDrag ? nodeInstanceBackground.validDrag ? nodeDelegate.lightColor : nodeDelegate.pressedColor : nodeDelegate.color
-                border.color: nodeInstanceBackground.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isSelected ? nodeDelegate.lightColor : nodeInstanceBackground.containsMouse ? nodeDelegate.hoveredColor : nodeDelegate.color
-                border.width: 2
-                opacity: nodeDelegate.isSelected ? 1 : 0.9
-            }
-
-            DefaultText {
-                id: nodeName
-                anchors.top: parent.top
-                anchors.topMargin: nodeInstanceBackgroundRect.border.width * 2
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width * 0.9
-                height: parent.height * 0.45
-                text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("Error")
-                color: nodeDelegate.accentColor
-                fontSizeMode: Text.Fit
-                font.pointSize: 20
-                elide: Text.ElideRight
-            }
-
-            DefaultImageButton {
-                anchors.left: parent.left
-                anchors.leftMargin: nodeInstanceBackgroundRect.border.width * 2
-                anchors.verticalCenter: factoryImageButton.verticalCenter
-                width: factoryImageButton.height
-                height: factoryImageButton.height
-                source: "qrc:/Assets/Plus.png"
-                showBorder: false
-                scaleFactor: 0.8
-                colorDefault: nodeDelegate.accentColor
-                colorHovered: nodeDelegate.hoveredColor
-                colorOnPressed: nodeDelegate.pressedColor
-                visible: !nodeDelegate.noChildrenFlag
-
-                onClicked: pluginsView.prepareInsertNode(nodeDelegate.node)
-            }
-
-            PluginFactoryImageButton {
-                id: factoryImageButton
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: nodeName.bottom
-                anchors.topMargin: nodeInstanceBackgroundRect.border.width * 2
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: nodeInstanceBackgroundRect.border.width * 2
-                width: height
-                name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
-                colorDefault: nodeDelegate.accentColor
-                colorHovered: nodeDelegate.hoveredColor
-                colorOnPressed: nodeDelegate.pressedColor
-                scaleFactor: 0.8
-                playing: hovered || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
-
-                onClicked: {
-                    treeNodeMenu.openMenu(nodeInstanceBackground, nodeDelegate)
-                    treeNodeMenu.x = pressX
-                    treeNodeMenu.y = pressY
-                }
-            }
-
-            DefaultImageButton {
-                readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
-
-                anchors.right: parent.right
-                anchors.rightMargin: nodeInstanceBackgroundRect.border.width * 2
-                anchors.verticalCenter: factoryImageButton.verticalCenter
-                width: factoryImageButton.height
-                height: factoryImageButton.height
-                source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
-                showBorder: false
-                scaleFactor: 0.8
-                colorDefault: nodeDelegate.accentColor
-                colorHovered: nodeDelegate.hoveredColor
-                colorOnPressed: nodeDelegate.pressedColor
-
-                onReleased: nodeDelegate.node.muted = !isMuted
-            }*/
-
         }
     }
-
-
 
     Rectangle {
         id: horizontalLinkDown

@@ -4,7 +4,7 @@ import CursorManager 1.0
 
 CheckBox {
     property bool elideText: false
-    property color enabledColor: "#001E36"
+    property color enabledColor: themeManager.foregroundColor
     property color disabledColor: themeManager.disabledColor
     property color borderColor: themeManager.accentColor
 

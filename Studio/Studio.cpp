@@ -178,6 +178,11 @@ Studio::Studio(int &argc, char *argv[]) : QGuiApplication(argc, argv)
 
     const QUrl url(QStringLiteral("qrc:/Main/Main.qml"));
 
+    auto id = QFontDatabase::addApplicationFont(":/Fonts/Nunito-Regular.ttf");
+    QStringList loadedFontFamilies = QFontDatabase::applicationFontFamilies(id);
+    QFont font(loadedFontFamilies.at(0), 8, QFont::Normal, false);
+    QGuiApplication::setFont(font);
+
     QObject::connect(&_engine, &QQmlApplicationEngine::objectCreated, this,
         [url](QObject *obj, const QUrl &objUrl) {
             if (!obj && url == objUrl)

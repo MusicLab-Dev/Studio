@@ -17,7 +17,6 @@ ProjectSave::ProjectSave(Project *project)
     : _project(project)
 {}
 
-
 QString ProjectSave::read(void)
 {
     QFile file(_project->path());

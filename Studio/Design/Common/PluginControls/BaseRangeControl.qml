@@ -27,6 +27,7 @@ MouseArea {
     property string unitName: ""
     property string description: ""
     property color accentColor: themeManager.accentColor
+    property real defaultValue: 0
 
     // States
     property bool tracking: false
@@ -57,6 +58,23 @@ MouseArea {
     width: 40
     height: 40
     hoverEnabled: !tracking
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+    onPressed: {
+        if (mouse.button == Qt.RightButton)
+            value = defaultValue
+    }
+
+    onWheel: {
+        /*if (wheel.angleDelta.y != 0) {
+            tracking = false
+            app.setCursorVisibility(true)
+        } else {
+            tracking = true
+            app.setCursorVisibility(false)
+            lastTrackingPos = Qt.point(0, wheel.angleDelta.y)
+        }*/
+    }
 
     onHoveredChanged: {
         if (pressed)
@@ -67,7 +85,10 @@ MouseArea {
             cursorManager.set(CursorManager.Type.Normal)
     }
 
-    Component.onCompleted: valueRatio = (value - minimumValue) / rangeValue
+    Component.onCompleted: {
+        defaultValue = value
+        valueRatio = (value - minimumValue) / rangeValue
+    }
 
     onEdited: value = editedValue
 

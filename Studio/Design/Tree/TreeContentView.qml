@@ -247,7 +247,7 @@ MouseArea {
         }
     }
 
-    OverviewButton {
+    /*OverviewButton {
         id: overview
         anchors.left: parent.left
         anchors.leftMargin: 20
@@ -261,7 +261,7 @@ MouseArea {
                 easing.type: Easing.OutCubic
             }
         }
-    }
+    }*/
 
     ControlsFlow {
         id: treeControls

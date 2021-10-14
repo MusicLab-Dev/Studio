@@ -7,7 +7,7 @@ import ThemeManager 1.0
 import PluginModel 1.0
 import CursorManager 1.0
 
-Rectangle {
+Item {
     property alias mouseArea: mouse
     property alias text: text
     property int filter: 0
@@ -22,19 +22,26 @@ Rectangle {
     id: categoryComponent
     width: parent.width
     height: panelCategoryHeight
-    color: treeComponentsPanel.filter === filter ? Qt.darker(themeManager.foregroundColor, 1.1) : mouseArea.containsMouse ? baseColor : Qt.lighter(themeManager.foregroundColor, 1.2)
+
+    Rectangle {
+        anchors.fill: parent
+        color: treeComponentsPanel.filter === filter ? baseColor : mouseArea.containsMouse ? themeManager.contentColor : themeManager.backgroundColor
+        opacity: panelContentBackground.opacity
+    }
 
     Item {
         width: parent.width * 0.7
         height: parent.height
         anchors.centerIn: parent
+
         DefaultText {
             id: text
             anchors.fill: parent
-            font.pixelSize: 40
-            fontSizeMode: Text.Fit
+            font.pixelSize: 17
+            font.bold: true
             text: ""
-            color: mouseArea.containsMouse ? "white" : baseColor
+            color: treeComponentsPanel.filter === filter ? "white" : baseColor
+            //color: mouseArea.containsMouse ? "white" : baseColor
         }
     }
 
@@ -54,5 +61,4 @@ Rectangle {
             treeComponentsPanel.open(filter)
         }
     }
-
 }

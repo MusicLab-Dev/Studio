@@ -12,12 +12,12 @@ Row {
         width: barWidth
         height: 2
         anchors.verticalCenter: parent.verticalCenter
-        color: "#295F8B"
+        color: themeManager.accentColor
     }
 
     DefaultText {
         id: categoryLabel
-        color: "#295F8B"
+        color: "white"
         text: settingsContentArea.settingsProxyModel.tags ? category.substr(1) : paramCategory
         height: parent.height
     }
@@ -26,6 +26,6 @@ Row {
         width: barWidth
         height: 2
         anchors.verticalCenter: parent.verticalCenter
-        color: "#295F8B"
+        color: themeManager.accentColor
     }
 }
