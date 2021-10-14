@@ -9,7 +9,6 @@ Item {
     property int selectedIndex: -1
     property string selectedPath: ""
     property bool selectedIndexIsDir: true
-    property int hoveredIndex: -1
 
     id: workspaceBackground
 
@@ -34,38 +33,31 @@ Item {
             showDirsFirst: true
         }
 
-        delegate: WorkspacesSquareComponent {
+        delegate: Rectangle {
             id: workspacesSquareComponent
-
+            width: 161
+            height: 161
+            radius: 6
+            color: "transparent"
             border.width: 2
-            border.color: selectedIndex === index ? themeManager.accentColor : hoveredIndex === index ? "#1E6FB0" : "transparent"
+            border.color: workspaceBackground.selectedIndex === index ? themeManager.accentColor : image.hovered ? themeManager.semiAccentColor : "transparent"
 
-            Image {
+            DefaultImageButton {
                 id: image
                 anchors.fill: parent
                 anchors.margins: 5
                 source: fileIsDir ? "qrc:/Assets/TestImage3.png" : "qrc:/Assets/TestImage4.png"
-            }
-
-            WorkspacesSquareComponentTitle {
-                width: image.width * 1.4
-                text: fileName
-                color: "white"
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
+                colorDefault: workspaceBackground.selectedIndex === index ? themeManager.accentColor : "white"
 
                 onDoubleClicked: {
                     if (fileIsDir) {
                         workspaceForeground.actualPath = fileUrl
                         workspaceForeground.parentDepth += 1
+                        workspacesViewBackButtonText.visible = true
                     } else {
                         workspaceView.fileUrl = fileUrl
                         workspaceView.acceptAndClose()
                     }
-                    workspacesViewBackButtonText.visible = true
                 }
 
                 onClicked: {
@@ -74,11 +66,13 @@ Item {
                     selectedIndexIsDir = fileIsDir
                 }
 
-                onEntered: { hoveredIndex = index }
-
                 onPressed: { selectedIndex = index }
+            }
 
-                onExited: { hoveredIndex = -1 }
+            WorkspacesSquareComponentTitle {
+                width: image.width * 1.4
+                text: fileName
+                color: workspaceBackground.selectedIndex === index ? themeManager.accentColor : image.hovered ? themeManager.semiAccentColor : "white"
             }
         }
     }

@@ -1,27 +1,15 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Button {
+DefaultImageButton {
     property bool activated: false
-    property alias source: image.source
 
     id: control
-    hoverEnabled: true
+    source: "qrc:/Assets/FoldButton.png"
+    scaleFactor: 1
+    image.rotation: control.activated ? 0 : -90
+
+    background: Item {}
 
     onReleased: activated = !activated
-
-    background: Rectangle {
-        width: control.width
-        height: control.height
-        color: "transparent"
-    }
-
-    indicator: DefaultColoredImage {
-        id: image
-        width: control.width
-        height: control.height
-        source: "qrc:/Assets/FoldButton.png"
-        color: control.pressed ? "#2577B9" : control.hovered ? "#174D78" : "#163752"
-        rotation: control.activated ? 0 : -90
-    }
 }

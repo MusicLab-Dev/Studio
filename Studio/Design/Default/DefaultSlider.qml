@@ -21,7 +21,7 @@ Slider {
         implicitHeight: 4
         width: control.availableWidth
         height: implicitHeight
-        radius: 8
+        radius: 6
         color: themeManager.foregroundColor
 
         Repeater {
@@ -40,8 +40,8 @@ Slider {
                 height: 15
                 x: index * rep.stepWidth - width / 2
                 y: background.height / 2 - height / 2
-                radius: width * 0.5
-                color: "#295F8B"
+                radius: 6
+                color: themeManager.accentColor
             }
         }
     }

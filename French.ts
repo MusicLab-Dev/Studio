@@ -1185,6 +1185,15 @@
     </message>
 </context>
 <context>
+    <name>TreeNodeDelegate</name>
+    <message>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="270"/>
+        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="309"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TreeNodeMenu</name>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="44"/>

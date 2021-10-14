@@ -9,7 +9,7 @@ Rectangle {
     id: control
     width: 40
     height: 40
-    radius: 8
+    radius: 6
     color: themeManager.foregroundColor
     border.width: mouseArea.containsPress ? 3 : mouseArea.containsMouse ? 2 : 1
     border.color: "grey"

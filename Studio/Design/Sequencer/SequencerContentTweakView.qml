@@ -111,7 +111,7 @@ Rectangle {
                         color: themeManager.getColorFromChain(key)
                         border.width: 0.5
                         border.color: Qt.lighter(themeManager.getColorFromChain(key))
-                        radius: 20
+                        radius: 6
                     }
                 }
             }

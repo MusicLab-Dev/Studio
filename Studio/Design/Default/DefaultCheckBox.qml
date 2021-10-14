@@ -4,9 +4,6 @@ import CursorManager 1.0
 
 CheckBox {
     property bool elideText: false
-    property color enabledColor: themeManager.foregroundColor
-    property color disabledColor: themeManager.disabledColor
-    property color borderColor: themeManager.accentColor
 
     id: control
     text: qsTr("CheckBox")
@@ -28,25 +25,25 @@ CheckBox {
         height: width
         x: control.leftPadding
         y: control.height / 2 - height / 2
-        radius: 8
-        color: control.checked ? enabledColor : disabledColor
+        radius: 6
+        color: control.checked ? themeManager.foregroundColor : themeManager.disabledColor
         border.width: control.down ? 2 : control.hovered ? 1 : 0
-        border.color: borderColor
+        border.color: themeManager.accentColor
     }
 
-    indicator: Image {
+    indicator: DefaultColoredImage {
         anchors.fill: control.background
         anchors.margins: control.background.width * 0.2
         source: "qrc:/Assets/Checked.png"
         visible: control.checked
+        color: themeManager.accentColor
     }
 
     contentItem: Text {
         text: control.text
         elide: elideText ? Text.ElideRight : Text.ElideNone
         font: control.font
-        opacity: control.checked || control.hovered ? 1.0 : 0.42
-        color: control.checked || control.hovered ? themeManager.accentColor : "#FFFFFF"
+        color: "white"
         verticalAlignment: Text.AlignVCenter
         leftPadding: control.background.width * 1.5
         width: control.width - control.background.width

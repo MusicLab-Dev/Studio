@@ -63,7 +63,7 @@ Item {
         anchors.fill: workspaceWindow
         horizontalOffset: 4
         verticalOffset: 4
-        radius: 8
+        radius: 6
         samples: 17
         color: "#80000000"
         source: workspaceWindow
@@ -89,7 +89,7 @@ Item {
             anchors.right: workspacesViewBackButtonText.visible ? workspacesViewBackButtonText.left : workspacesViewCloseButtonText.left
             anchors.rightMargin: 30
             text: qsTr("Accept")
-            hoverOnText: false
+            filled: true
 
             onReleased: {
                 workspaceView.fileUrl = workspaceContentArea.selectedPath

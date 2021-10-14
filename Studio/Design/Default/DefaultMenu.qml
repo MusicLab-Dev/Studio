@@ -9,7 +9,7 @@ Menu {
         border.color: themeManager.accentColor
         border.width: 1
         color: themeManager.foregroundColor
-        radius: 8
+        radius: 6
     }
 
     delegate: DefaultMenuItem {

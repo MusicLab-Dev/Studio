@@ -25,7 +25,7 @@ Item {
         anchors.fill: parent
         color: "transparent"
         border.color: "white"
-        radius: 8
+        radius: 6
 
         Item {
             id: placeholder
@@ -47,7 +47,7 @@ Item {
             width: parent.width
             color: "transparent"
             border.color: "white"
-            radius: 8
+            radius: 6
 
             Repeater {
                 model: itemsPaths
@@ -82,7 +82,7 @@ Item {
                 width: itemWidth
                 border.color: "white"
                 color: "transparent"
-                radius: 8
+                radius: 6
 
                 Behavior on x {
                     SpringAnimation {

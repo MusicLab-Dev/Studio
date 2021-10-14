@@ -16,7 +16,7 @@ Item {
         color: themeManager.foregroundColor
         border.width: 1
         border.color: "white"
-        radius: 8
+        radius: 6
 
 
         Item {

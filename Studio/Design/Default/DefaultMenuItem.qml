@@ -9,7 +9,7 @@ MenuItem {
 
     background: Rectangle {
         color: menuItem.hovered ? themeManager.backgroundColor : themeManager.foregroundColor
-        radius: 8
+        radius: 6
         x: 2
         y: 2
         width: menuItem.width - 4

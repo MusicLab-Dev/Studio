@@ -68,7 +68,7 @@ Item {
                 anchors.fill: parent
                 color: "transparent"
                 border.color: instanceBackground.containsMouse ? componentDelegate.color : "white"
-                radius: width / 4
+                radius: 6
                 opacity: 1
             }
 

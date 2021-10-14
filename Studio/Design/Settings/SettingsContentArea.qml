@@ -59,6 +59,7 @@ ListView {
                 id: delegateLoader
                 width: settingsContentArea.width
                 source: "qrc:/Settings/SettingsDelegates/" + type + "Delegate.qml"
+                focus: true
             }
 
             MouseArea {

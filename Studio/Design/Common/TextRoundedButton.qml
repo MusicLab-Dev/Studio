@@ -5,14 +5,15 @@ import CursorManager 1.0
 import "../Default"
 
 DefaultTextButton {
-    property bool hoverOnText: true
+    property bool filled: false
 
-    id: textRoundedButton
+    id: control
     showBorder: true
     width: 80
     height: 35
-    rectItem.color: textRoundedButton.hoverOnText ? "transparent" : (textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0")
-    rectItem.radius: 8
-    rectItem.border.color: !enabled ? themeManager.disabledColor : textRoundedButton.containsMouse ? themeManager.accentColor : "#1E6FB0"
-    rectItem.border.width: textRoundedButton.hoverOnText ? 1 : 0
+    rectItem.color: !control.filled ? "transparent" : control.pressed ? themeManager.accentColor : control.hovered ? themeManager.semiAccentColor : themeManager.accentColor
+//    rectItem.radius: 6
+//    rectItem.border.color: control.hovered ? themeManager.semiAccentColor : themeManager.accentColor
+    rectItem.border.width: control.filled ? control.hovered : 1
+    textItem.color: control.filled ? "white" : control.pressed ? themeManager.accentColor : control.hovered ? themeManager.semiAccentColor : "white"
 }

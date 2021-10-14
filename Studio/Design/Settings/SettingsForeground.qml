@@ -6,7 +6,7 @@ import "../Default"
 Rectangle {
     id: settingsForeground
     color: Qt.lighter(themeManager.foregroundColor, 1.2)
-    radius: 30
+    radius: 6
 
     Rectangle {
         width: parent.width * 0.1
@@ -24,9 +24,8 @@ Rectangle {
 
         DefaultTextInput {
             anchors.fill: parent
-            placeholderText: qsTr("Default files")
+            placeholderText: qsTr("Research")
             color: "white"
-            opacity: 0.42
 
             onTextChanged: {
                 settingsContentArea.settingsProxyModel.tags = text

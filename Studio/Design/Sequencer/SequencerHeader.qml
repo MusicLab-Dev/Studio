@@ -43,7 +43,7 @@ Rectangle {
         Rectangle {
             id: rectPluginButton
             anchors.fill: parent
-            radius: 8
+            radius: 6
             color: sequencerView.node ? sequencerView.node.color : "black"
             border.color: mousePluginButton.containsPress ? pressedColor : hoveredColor
             border.width: mousePluginButton.containsMouse ? 3 : 0
@@ -86,7 +86,7 @@ Rectangle {
         Rectangle {
             id: rectPlannerButton
             anchors.fill: parent
-            radius: 8
+            radius: 6
             color: sequencerView.node ? sequencerView.node.color : "black"
             border.color: mousePlannerButton.containsPress ? pressedColor : hoveredColor
             border.width: mousePlannerButton.containsMouse ? 3 : 0
@@ -130,7 +130,7 @@ Rectangle {
         Rectangle {
             id: rectHelpButton
             anchors.fill: parent
-            radius: 8
+            radius: 6
             color: sequencerView.node ? sequencerView.node.color : "black"
             border.color: mouseHelpButton.containsPress ? pressedColor : hoveredColor
             border.width: mouseHelpButton.containsMouse ? 3 : 0

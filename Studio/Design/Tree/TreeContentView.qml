@@ -237,14 +237,7 @@ MouseArea {
         height: parent.height - (treeControls.visible ? treeControls.height : 0) - partitionsPreview.height - 35
         panelCategoryHeight: parent.height * 0.1
         xBase: parent.width
-        y: (!treeControls.visible && !treeControls.node ? treeHeader.height : treeControls.height) + 30
-
-        Behavior on y {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutCubic
-            }
-        }
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     /*OverviewButton {
@@ -253,7 +246,7 @@ MouseArea {
         anchors.leftMargin: 20
         width: parent.width * 0.1
         height: parent.height * 0.1
-        y: (!treeControls.visible ? treeHeader.height : treeControls.height) + 30
+        y: (!treeControls.visible ? treeHeader.height : treeControls.height) + 20
 
         Behavior on y {
             NumberAnimation {

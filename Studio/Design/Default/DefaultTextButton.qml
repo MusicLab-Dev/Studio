@@ -29,7 +29,7 @@ Button {
         text: control.text
         font: control.font
         color: control.pressed ? themeManager.accentColor : control.hovered ? themeManager.semiAccentColor : "white"
-        opacity: control.pressed ? 1.0 : control.hovered ? 0.85 : control.enabled ? 0.7 : 0.5
+//        opacity: control.pressed ? 1.0 : control.hovered ? 0.85 : control.enabled ? 0.7 : 0.5
         fontSizeMode: Text.Fit
         // wrapMode: Text.Wrap
         // elide: Text.ElideRight
@@ -41,7 +41,7 @@ Button {
         width: control.width
         height: control.height
         color: "transparent"
-        radius: 40
+        radius: 6
         visible: false
         border.width: 1
         border.color: textItem.color

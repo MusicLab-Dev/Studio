@@ -136,7 +136,7 @@ Row {
                         color: delegateCol.isSelected ? nodeDelegate.color : themeManager.disabledColor
                         border.color: Qt.lighter(nodeDelegate.color, 1.25)
                         border.width: selectorMouseArea.containsMouse
-                        radius: 8
+                        radius: 6
 
                         MouseArea {
                             id: selectorMouseArea

@@ -301,8 +301,8 @@ Column {
                         colorDefault: "white"
                         colorHovered: nodeDelegate.hoveredColor
                         colorOnPressed: nodeDelegate.pressedColor
-                        image.antialiasing: false
-                        image.smooth: true
+                        image.image.antialiasing: false
+                        image.image.smooth: true
 
                         onHoveredChanged: cursorManager.set(CursorManager.Type.Clickable)
                         onReleased: nodeDelegate.node.muted = !isMuted

@@ -22,7 +22,7 @@ Rectangle {
         width: barSize
         height: 2
         anchors.centerIn: parent
-        radius: 8
+        radius: 6
         color: mouseArea.containsPress ? themeManager.accentColor : mouseArea.containsMouse ? themeManager.semiAccentColor : "white"
     }
 
@@ -30,7 +30,7 @@ Rectangle {
         width: 2
         height: barSize
         anchors.centerIn: parent
-        radius: 8
+        radius: 6
         color: barHorizontal.color
 
     }
