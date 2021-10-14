@@ -386,7 +386,7 @@
 <context>
     <name>DefaultCheckBox</name>
     <message>
-        <location filename="Studio/Design/Default/DefaultCheckBox.qml" line="12"/>
+        <location filename="Studio/Design/Default/DefaultCheckBox.qml" line="9"/>
         <source>CheckBox</source>
         <translation type="unfinished"></translation>
     </message>
@@ -828,7 +828,7 @@
 <context>
     <name>PlannerView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerView.qml" line="31"/>
+        <location filename="Studio/Design/Planner/PlannerView.qml" line="39"/>
         <source>Planner</source>
         <translation type="unfinished"></translation>
     </message>
@@ -896,7 +896,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="56"/>
+        <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="54"/>
         <source>Research</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1070,12 +1070,12 @@
 <context>
     <name>SequencerView</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="178"/>
+        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="177"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="179"/>
+        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="178"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1084,7 +1084,7 @@
     <name>SettingsForeground</name>
     <message>
         <location filename="Studio/Design/Settings/SettingsForeground.qml" line="27"/>
-        <source>Default files</source>
+        <source>Research</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1149,18 +1149,18 @@
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeContentView.qml" line="195"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="290"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="319"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="283"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="312"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="289"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="282"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="318"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="311"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1181,15 +1181,6 @@
     <message>
         <location filename="Studio/Design/Tree/TreeFooter.qml" line="95"/>
         <source>Player Area</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TreeNodeDelegate</name>
-    <message>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="270"/>
-        <location filename="Studio/Design/Tree/TreeNodeDelegate.qml" line="309"/>
-        <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1268,12 +1259,12 @@
 <context>
     <name>WorkspacesForeground</name>
     <message>
-        <location filename="Studio/Design/Workspaces/WorkspacesForeground.qml" line="41"/>
+        <location filename="Studio/Design/Workspaces/WorkspacesForeground.qml" line="38"/>
         <source>Default files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Workspaces/WorkspacesForeground.qml" line="79"/>
+        <location filename="Studio/Design/Workspaces/WorkspacesForeground.qml" line="75"/>
         <source>+ NEW WORKSPACE</source>
         <translation type="unfinished"></translation>
     </message>

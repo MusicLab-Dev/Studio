@@ -326,12 +326,7 @@ Column {
                             propagateComposedEvents: true
 
                             drag.onActiveChanged: mouse.accepted = false
-                            onClicked: {
-                                if (app.project.master === nodeDelegate.node)
-                                    modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
-                                else
-                                    modulesView.addNewPlanner(nodeDelegate.node)
-                            }
+                            onClicked: modulesView.addNewPlanner(nodeDelegate.node)
                         }
 
                         Rectangle {

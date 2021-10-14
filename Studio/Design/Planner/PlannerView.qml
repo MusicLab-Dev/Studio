@@ -9,6 +9,14 @@ import "../Help"
 
 Item {
     function onNodeDeleted(targetNode) {
+        var count = nodeList.count()
+        for (var i = 0; i < count; ++i) {
+            var node = nodeList.getNode(i)
+            if (node == targetNode || node.isAParent(targetNode)) {
+                modulesView.removeModule(moduleIndex)
+                return true
+            }
+        }
         return false
     }
 

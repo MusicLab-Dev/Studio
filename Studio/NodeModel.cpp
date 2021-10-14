@@ -243,34 +243,30 @@ NodeModel *NodeModel::addParentNodeImpl(const QString &pluginPath, const bool ad
     if (!paths.isEmpty())
         nodePtr->loadExternalInputs(paths);
 
-    if (!Models::AddProtectedEvent(
-            [this, audioNode = std::move(audioNode)](void) mutable {
-                auto parent = _data->parent();
-                auto &self = *parent->children().find([this](const auto &p) { return p.get() == _data; });
-                self.swap(audioNode);
-                self->setParent(parent);
-                audioNode->setParent(self.get());
-                self->children().push(std::move(audioNode));
-            },
-            [this, node = std::move(node), hasPaused](void) mutable {
-                auto parent = parentNode();
-                setParent(node.get());
-                int i = -1;
-                auto &self = *parent->children().find([this, &i](const auto &p) { ++i; return p.get() == this; });
-                self.swap(node);
-                self->children().push(std::move(node));
-                parent->dataChanged(parent->index(i), parent->index(i), { static_cast<int>(Roles::NodeInstance) });
-                if (hasPaused) {
-                    Scheduler::Get()->graph().wait();
-                    Scheduler::Get()->invalidateCurrentGraph();
-                    Scheduler::Get()->playImpl();
-                } else
-                    Scheduler::Get()->invalidateCurrentGraph();
-                processGraphChange();
-            }
-        ))
-        return nullptr;
-    return nodePtr;
+    const bool success = Models::AddProtectedEvent(
+        [this, node = std::move(node), audioNode = std::move(audioNode)](void) mutable {
+            // Extract self from self parent
+            const auto selfParent = this->parentNode();
+            const auto selfIndex = selfParent->getChildIndex(this);
+            auto [selfPtr, selfAudioNode] = ProcessRemove(selfParent, selfIndex);
+
+            // Insert this into target
+            ProcessAdd(node.get(), std::move(selfPtr), std::move(selfAudioNode));
+
+            // Insert target into self parent
+            ProcessAdd(selfParent, std::move(node), std::move(audioNode));
+        },
+        [this, hasPaused] {
+            if (hasPaused) {
+                Scheduler::Get()->graph().wait();
+                Scheduler::Get()->invalidateCurrentGraph();
+                Scheduler::Get()->playImpl();
+            } else
+                Scheduler::Get()->invalidateCurrentGraph();
+            processGraphChange();
+        }
+    );
+    return success ? nodePtr : nullptr;
 }
 
 bool NodeModel::remove(const int idx)

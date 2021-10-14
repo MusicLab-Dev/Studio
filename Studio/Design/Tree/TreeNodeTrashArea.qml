@@ -21,8 +21,10 @@ DefaultColoredImage {
             if (trashArea.containsDrag) {
                 trashArea.containsDrag = false
                 var node = treeSurface.dragTarget
-                if (treeSurface.dragTarget.parentNode)
+                if (treeSurface.dragTarget.parentNode) {
+                    modulesView.onNodeDeleted(node)
                     node.parentNode.remove(node.parentNode.getChildIndex(node))
+                }
             }
         }
     }

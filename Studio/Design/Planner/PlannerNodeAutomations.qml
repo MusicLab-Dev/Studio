@@ -8,7 +8,7 @@ import AutomationsModel 1.0
 import AutomationModel 1.0
 
 Repeater {
-    property AutomationsModel automations: nodeDelegate.node.automations
+    property AutomationsModel automations: nodeDelegate.node ? nodeDelegate.node.automations : null
     property real linkBottom: 0
     property alias pluginProxy: pluginProxy
 
@@ -25,7 +25,7 @@ Repeater {
     }
 
     delegate: Column {
-        property AutomationModel automation: nodeAutomations.automations.getAutomation(controlParamID)
+        property AutomationModel automation: nodeAutomations.automations ? nodeAutomations.automations.getAutomation(controlParamID) : null
 
         id: automationDelegate
 

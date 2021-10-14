@@ -43,7 +43,7 @@ bool NodeListModel::equals(const QVector<NodeModel *> nodes) const noexcept
 {
     if (nodes.count() != _models.count())
         return false;
-        
+
     bool verified = false;
     for (auto *targetNode : nodes) {
         verified = false;

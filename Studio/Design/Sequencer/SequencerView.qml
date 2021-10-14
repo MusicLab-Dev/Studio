@@ -19,9 +19,8 @@ Item {
     }
 
     function onNodeDeleted(targetNode) {
-        if (node === targetNode || node.isAParent(targetNode)) {
+        if (node == targetNode || node.isAParent(targetNode)) {
             modulesView.removeModule(moduleIndex)
-            actionsManager.nodeDeleted(targetNode)
             return true
         }
         return false
