@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Default"
+import "../Common"
 import "../Common/PluginControls"
 
 import PluginModel 1.0
@@ -27,15 +28,19 @@ Row {
                 color: nodeDelegate.darkColor
             }
 
-            DefaultText {
-                x: 10
-                width: parent.width * 0.5
+            PluginFactoryImage {
+                anchors.left: parent.left
+                anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
-                horizontalAlignment: Text.AlignLeft
-                font.pointSize: 13
-                color: nodeDelegate.accentColor
-                text: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
-                elide: Text.ElideRight
+                width: height
+                height: nodeHeaderMouseArea.containsMouse ? parent.height * 0.6 : parent.height * 0.55
+                name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
+                color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                playing: nodeHeaderMouseArea.containsMouse
+
+                Behavior on height {
+                    NumberAnimation { duration: 100 }
+                }
             }
 
             DefaultImageButton {
@@ -43,11 +48,11 @@ Row {
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
                 width: height
-                height: Math.min(parent.height / 2, 50)
+                height: parent.height * 0.55
                 source: "qrc:/Assets/SelectorMod.png"
                 showBorder: false
                 scaleFactor: 1
-                colorDefault: nodeDelegate.accentColor
+                colorDefault: themeManager.backgroundColor
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
 

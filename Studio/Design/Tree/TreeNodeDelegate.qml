@@ -391,6 +391,8 @@ Column {
                             targetNode: nodeDelegate.node
                             visible: !nodeInstanceBackground.drag.active
                             anchors.fill: parent
+
+                            onMutedChanged: nodeDelegate.node.muted = muted
                         }
                     }
                 }

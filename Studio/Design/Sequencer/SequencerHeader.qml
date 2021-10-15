@@ -159,10 +159,8 @@ Rectangle {
         id: soundMeter
         anchors.left: helpButton.right
         anchors.leftMargin: 10
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.topMargin: 5
-        anchors.bottomMargin: 5
+        anchors.verticalCenter: parent.verticalCenter
+        height: parent.height * 0.75
         width: height / 3
         targetNode: sequencerView.node
         enabled: sequencerView.visible

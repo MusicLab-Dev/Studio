@@ -1,6 +1,7 @@
 import QtQuick 2.15
 
 import NodeModel 1.0
+import CursorManager 1.0
 
 import "../Default"
 import "../Common"
@@ -39,6 +40,8 @@ Item {
         anchors.left: nodeHeaderBackground.right
         anchors.top: nodeHeaderBackground.top
         anchors.leftMargin: 5
+
+        onMutedChanged: nodeDelegate.node.muted = muted
     }
 
     Rectangle {
@@ -48,9 +51,10 @@ Item {
         width: contentView.rowHeaderWidth - x - contentView.headerMargin - soundMeter.width - 12
         height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodeInstances.height) - contentView.headerHalfMargin
         radius: 6
-        color: nodeDelegate.color
-        border.color: nodeHeaderMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isLastSelected ? nodeDelegate.lightColor : nodeDelegate.hoveredColor
-        border.width: nodeHeaderMouseArea.containsMouse || nodeDelegate.isLastSelected ? 4 : 0
+        color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+        //border.color: nodeHeaderMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isLastSelected ? nodeDelegate.lightColor : nodeDelegate.hoveredColor
+        border.color: nodeDelegate.color
+        border.width: nodeHeaderMouseArea.containsMouse ? 2 : 0
 
         MouseArea {
             id: nodeHeaderMouseArea
@@ -83,6 +87,15 @@ Item {
                 plannerNodeMenu.openMenu(nodeDelegate, nodeDelegate.node)
                 plannerNodeMenu.x = mouse.x
                 plannerNodeMenu.y = mouse.y
+            }
+
+            onHoveredChanged: {
+                onHoveredChanged: {
+                    if (containsMouse)
+                        cursorManager.set(CursorManager.Type.Clickable)
+                    else
+                        cursorManager.set(CursorManager.Type.Normal)
+                }
             }
         }
 

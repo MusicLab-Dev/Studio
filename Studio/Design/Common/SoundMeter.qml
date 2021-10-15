@@ -35,6 +35,7 @@ Rectangle {
     property real gainPosition: 0
     readonly property real unitSpacing: height / 12
     property bool analysisRequested: false
+    property bool muted: false
 
     id: soundMeter
     radius: 2
@@ -93,6 +94,14 @@ Rectangle {
         id: soundMeterBackground
         anchors.fill: parent
 
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                soundMeter.muted = !soundMeter.muted
+            }
+        }
+
         Rectangle {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
@@ -101,6 +110,7 @@ Rectangle {
 
             color: themeManager.backgroundColor
             radius: 2
+            visible: !muted
 
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "red" }
@@ -129,16 +139,29 @@ Rectangle {
         Rectangle {
             width: parent.width
             height: 1
-            y: parent.height * (1 - soundMeter.peakPosition)
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height * (1 - soundMeter.peakPosition) - 2
             radius: 2
+
+            Behavior on y {
+                NumberAnimation { duration: 50 }
+            }
         }
 
         Rectangle {
             width: parent.width
             height: 1
+            anchors.horizontalCenter: parent.horizontalCenter
             y: parent.height * (1 - soundMeter.gainPosition)
             color: themeManager.accentColor
             radius: 2
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            color: "red"
+            radius: 2
+            visible: muted
         }
 
         /*Text {

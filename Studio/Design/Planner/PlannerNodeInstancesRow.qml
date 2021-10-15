@@ -26,7 +26,8 @@ Item {
             height: contentView.rowHeight
             color: nodeDelegate.color
             border.color: nodeDelegate.accentColor
-            border.width: 2
+            border.width: 1
+            radius: 2
 
             /*Rectangle {
                 x: Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
