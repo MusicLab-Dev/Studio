@@ -32,11 +32,10 @@ Row {
                 width: parent.width * 0.5
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignLeft
-                fontSizeMode: Text.HorizontalFit
-                font.pointSize: 20
+                font.pointSize: 13
                 color: nodeDelegate.accentColor
                 text: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
-                wrapMode: Text.Wrap
+                elide: Text.ElideRight
             }
 
             DefaultImageButton {

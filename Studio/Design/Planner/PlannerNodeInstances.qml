@@ -28,11 +28,10 @@ Row {
                 width: parent.width * 0.5
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignLeft
-                fontSizeMode: Text.HorizontalFit
-                font.pointSize: 28
+                font.pointSize: 16
                 color: nodeDelegate.accentColor
                 text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("ERROR")
-                wrapMode: Text.Wrap
+                elide: Text.ElideRight
             }
 
             DefaultImageButton {

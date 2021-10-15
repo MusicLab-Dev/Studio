@@ -34,7 +34,7 @@ Item {
         id: soundMeter
         enabled: plannerView.visible
         targetNode: nodeDelegate.node
-        width: height / 5
+        width: height * 0.3
         height: nodeHeaderBackground.height
         anchors.left: nodeHeaderBackground.right
         anchors.top: nodeHeaderBackground.top
