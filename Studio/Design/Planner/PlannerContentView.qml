@@ -51,7 +51,7 @@ ContentView {
     playerBase: plannerView.player.playerBase
     enableRows: false
     xOffsetMin: app.project.master ? Math.max(app.project.master.latestInstance, placementBeatPrecisionTo) * -pixelsPerBeatPrecision : 0
-    yOffsetMin: -Math.max(nodeView.height - height, 0)
+    yOffsetMin: -Math.max(nodeView.height - height / 2, 0)
     yZoom: 0.25
     bottomOverlayMargin: partitionsPreview.requiredVisibility ? partitionsPreview.height : 0
 
