@@ -236,7 +236,7 @@ Column {
                 width: nodeContent.width * 0.16
                 height: 6
                 radius: 2
-                color: themeManager.backgroundColor
+                color: nodeDelegate.color
             }
 
 
@@ -246,9 +246,10 @@ Column {
                 anchors.topMargin: -2
                 anchors.horizontalCenter: nodeContent.horizontalCenter
                 width: nodeContent.width * 0.16
-                height: 6
-                radius: 2
-                color: themeManager.backgroundColor
+                height: topPin.height
+                radius: topPin.radius
+                color: topPin.color
+                visible: nodeDelegate.node.plugin.title === "Mixer"
             }
 
             ColumnLayout {
@@ -257,56 +258,88 @@ Column {
                 spacing: nodeDelegate.space
 
                 Item {
-                    id: header
                     Layout.preferredHeight: parent.height * 0.2
                     Layout.fillWidth: true
 
-                    Rectangle {
+                    RowLayout {
                         anchors.fill: parent
-                        radius: nodeDelegate.radius
-                        color: nodeDelegate.isSelected ? Qt.lighter(themeManager.backgroundColor, 1.25) : themeManager.backgroundColor
-                        border.width: nodeDelegate.isSelected || (nodeInstanceBackground.containsMouse && !contentArea.containsMouse) ? 2 : 0
-                        border.color: nodeDelegate.isSelected ? "white" : nodeDelegate.color
+                        spacing: nodeDelegate.space
 
-                        Behavior on border.width {
-                            NumberAnimation { duration: 100 }
+                        Item {
+                            id: header
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: nodeDelegate.radius
+                                color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                                border.width: nodeInstanceBackground.containsMouse ? 2 : 0
+                                border.color: nodeDelegate.color
+
+                                Behavior on border.width {
+                                    NumberAnimation { duration: 100 }
+                                }
+                            }
+
+                            DefaultText {
+                                anchors.fill: parent
+                                anchors.leftMargin: parent.width * 0.05
+                                text: nodeDelegate.node ? nodeDelegate.node.name : ""
+                                color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                                horizontalAlignment: Text.AlignLeft
+                                elide: Text.ElideRight
+                                font.pixelSize: 18
+                            }
                         }
+
+                        Item {
+                            Layout.fillHeight: true
+                            Layout.preferredWidth: dbMeter.width
+
+                            MouseArea {
+                                id: plannerMouseArea
+                                anchors.fill: parent
+                                hoverEnabled: true
+                            }
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: nodeDelegate.radius
+                                color: plannerButton.hovered ? nodeDelegate.color : themeManager.backgroundColor
+
+                                Behavior on border.width {
+                                    NumberAnimation { duration: 100 }
+                                }
+                            }
+
+                            DefaultImageButton {
+                                id: plannerButton
+                                anchors.centerIn: parent
+                                width: height
+                                height: parent.height * 0.8
+                                source: "qrc:/Assets/Chrono.png"
+                                showBorder: false
+                                scaleFactor: 1
+                                colorDefault: nodeDelegate.color
+                                colorHovered: themeManager.backgroundColor
+                                colorOnPressed: nodeDelegate.pressedColor
+                                image.image.antialiasing: false
+                                image.image.smooth: true
+                                hoverEnabled: true
+
+                                onHoveredChanged: cursorManager.set(CursorManager.Type.Clickable)
+                                onClicked: {
+                                    if (app.project.master === nodeDelegate.node)
+                                        modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
+                                    else
+                                        modulesView.addNewPlanner(nodeDelegate.node)
+                                }
+                            }
+                        }
+
                     }
 
-                    DefaultText {
-                        anchors.left: parent.left
-                        anchors.leftMargin: parent.width * 0.05
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.right: muteButton.left
-                        text: nodeDelegate.node ? nodeDelegate.node.name : ""
-                        color: nodeDelegate.color
-                        horizontalAlignment: Text.AlignLeft
-                        elide: Text.ElideRight
-                        font.pixelSize: 18
-                    }
-
-                    DefaultImageButton {
-                        readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
-
-                        id: muteButton
-                        anchors.right: parent.right
-                        anchors.rightMargin: parent.width * 0.03
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: height
-                        height: parent.height * 0.9
-                        source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
-                        showBorder: false
-                        scaleFactor: 0.8
-                        colorDefault: "white"
-                        colorHovered: nodeDelegate.hoveredColor
-                        colorOnPressed: nodeDelegate.pressedColor
-                        image.image.antialiasing: false
-                        image.image.smooth: true
-
-                        onHoveredChanged: cursorManager.set(CursorManager.Type.Clickable)
-                        onReleased: nodeDelegate.node.muted = !isMuted
-                    }
                 }
 
                 RowLayout {
@@ -319,22 +352,12 @@ Column {
                         Layout.fillHeight: true
                         Layout.preferredWidth: height
 
-                        MouseArea {
-                            id: contentArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            propagateComposedEvents: true
-
-                            drag.onActiveChanged: mouse.accepted = false
-                            onClicked: modulesView.addNewPlanner(nodeDelegate.node)
-                        }
-
                         Rectangle {
                             anchors.fill: parent
                             radius: nodeDelegate.radius
-                            color: nodeDelegate.color
-                            border.width: contentArea.containsMouse ? 2 : 0
-                            border.color: "white"
+                            color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                            //border.width: nodeDelegate.isSelected ? 2 : 0
+                            //border.color: "white"
 
                             Behavior on border.width {
                                 NumberAnimation { duration: 100 }
@@ -345,36 +368,29 @@ Column {
                             id: factoryImageButton
                             anchors.centerIn: parent
                             width: height
-                            height: contentArea.containsMouse || (treeView.visible && treeView.player.playerBase.isPlayerRunning) ? parent.height * 0.6 : parent.height * 0.55
+                            height: nodeInstanceBackground.containsMouse ? parent.height * 0.6 : parent.height * 0.55
                             name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
-                            color: themeManager.backgroundColor
-                            playing: contentArea.containsMouse || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
+                            color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                            //color: themeManager.backgroundColor
+                            playing: nodeInstanceBackground.containsMouse || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
 
                             Behavior on height {
                                 NumberAnimation { duration: 100 }
                             }
-
                         }
                     }
 
-                    Rectangle {
+                    Item {
                         id: dbMeter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-                        radius: nodeDelegate.radius
-                        color: nodeDelegate.color
 
                         SoundMeter {
                             id: soundMeter
                             enabled: treeView.visible
-                            // color: nodeInstanceBackgroundRect.border.color
                             targetNode: nodeDelegate.node
                             visible: !nodeInstanceBackground.drag.active
                             anchors.fill: parent
-                            anchors.rightMargin: 3
-                            anchors.leftMargin: 3
-                            anchors.topMargin: 3
-                            anchors.bottomMargin: 3
                         }
                     }
                 }

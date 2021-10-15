@@ -38,7 +38,7 @@ Rectangle {
 
     id: soundMeter
     radius: 2
-    color: themeManager.foregroundColor
+    color: themeManager.backgroundColor
 
     onTargetNodeChanged: {
         if (targetNode) {
@@ -87,21 +87,30 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    onRmsPositionChanged: console.log(rmsPosition)
+
+    Item {
         id: soundMeterBackground
         anchors.fill: parent
-        anchors.margins: 2
-
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: "red" }
-            GradientStop { position: 0.33; color: "yellow" }
-            GradientStop { position: 1.0; color: "green" }
-        }
 
         Rectangle {
-            width: parent.width
-            height: parent.height * (1 - soundMeter.rmsPosition)
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: parent.height * (soundMeter.rmsPosition)
+
             color: themeManager.backgroundColor
+            radius: 2
+
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "red" }
+                GradientStop { position: 0.33; color: "yellow" }
+                GradientStop { position: 1.0; color: "green" }
+            }
+
+            Behavior on height {
+                NumberAnimation { duration: 50 }
+            }
         }
 
         Repeater {
@@ -110,7 +119,7 @@ Rectangle {
 
             delegate: Rectangle {
                 anchors.right: soundMeterBackground.right
-                color: soundMeter.color
+                color: "white"
                 width: index === 1 ? parent.width : 3
                 height: 1
                 y: (1 + index) * soundMeterBackground.height / 12
@@ -121,6 +130,7 @@ Rectangle {
             width: parent.width
             height: 1
             y: parent.height * (1 - soundMeter.peakPosition)
+            radius: 2
         }
 
         Rectangle {
@@ -128,6 +138,7 @@ Rectangle {
             height: 1
             y: parent.height * (1 - soundMeter.gainPosition)
             color: themeManager.accentColor
+            radius: 2
         }
 
         /*Text {

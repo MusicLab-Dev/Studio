@@ -19,7 +19,7 @@ ContentView {
 
     readonly property real linkThickness: 4
     readonly property real linkHalfThickness: linkThickness / 2
-    readonly property real headerMargin: 10
+    readonly property real headerMargin: 3
     readonly property real headerHalfMargin: headerMargin / 2
     readonly property real linkOffset: 0.1 * rowHeaderWidth
     readonly property real linkChildOffset: 0.3 * rowHeaderWidth
