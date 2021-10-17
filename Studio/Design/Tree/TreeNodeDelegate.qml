@@ -298,35 +298,23 @@ Column {
                             Layout.fillHeight: true
                             Layout.preferredWidth: dbMeter.width
 
-                            MouseArea {
-                                id: plannerMouseArea
-                                anchors.fill: parent
-                                hoverEnabled: true
-                            }
-
                             Rectangle {
                                 anchors.fill: parent
                                 radius: nodeDelegate.radius
                                 color: plannerButton.hovered ? nodeDelegate.color : themeManager.backgroundColor
-
-                                Behavior on border.width {
-                                    NumberAnimation { duration: 100 }
-                                }
                             }
 
                             DefaultImageButton {
                                 id: plannerButton
                                 anchors.centerIn: parent
                                 width: height
-                                height: parent.height * 0.8
+                                height: parent.height
                                 source: "qrc:/Assets/Chrono.png"
                                 showBorder: false
-                                scaleFactor: 1
+                                scaleFactor: 0.8
                                 colorDefault: nodeDelegate.color
                                 colorHovered: themeManager.backgroundColor
                                 colorOnPressed: nodeDelegate.pressedColor
-                                image.image.antialiasing: false
-                                image.image.smooth: true
                                 hoverEnabled: true
 
                                 onHoveredChanged: cursorManager.set(CursorManager.Type.Clickable)
@@ -357,8 +345,8 @@ Column {
                             anchors.fill: parent
                             radius: nodeDelegate.radius
                             color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
-                            //border.width: nodeDelegate.isSelected ? 2 : 0
-                            //border.color: "white"
+                            border.width: nodeInstanceBackground.containsDrag ? 2 : 0
+                            border.color: "white"
 
                             Behavior on border.width {
                                 NumberAnimation { duration: 100 }
@@ -372,7 +360,6 @@ Column {
                             height: nodeInstanceBackground.containsMouse ? parent.height * 0.6 : parent.height * 0.55
                             name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
                             color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
-                            //color: themeManager.backgroundColor
                             playing: nodeInstanceBackground.containsMouse || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
 
                             Behavior on height {

@@ -67,7 +67,6 @@ Item {
     }
 
     function processNodeDrop(validDrag, node) {
-
         if (validDrag) {
             var lastParent = treeSurface.dragTarget.parentNode
             if (node.moveToChildren(treeSurface.dragTarget))
