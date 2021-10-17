@@ -18,6 +18,9 @@ namespace Models
     template<typename ListModel, typename ModelVector, typename AudioModelVector, typename ...Args>
     inline void RefreshModels(ListModel * const root, ModelVector &models, AudioModelVector &audioModels, Args ...args)
     {
+        using ModelType = std::remove_cv_t<std::remove_reference_t<decltype(*models.begin())>>;
+        using AudioModelType = std::remove_cv_t<std::remove_reference_t<decltype(*audioModels.begin())>>;
+
         const auto modelCount = static_cast<int>(models.size());
         const auto audioModelCount = static_cast<int>(audioModels.size());
 
@@ -34,8 +37,13 @@ namespace Models
         } else if (modelCount < audioModelCount) {
             root->beginInsertRows(QModelIndex(), minCount, audioModelCount - 1);
             models.reserve(audioModelCount);
-            for (auto i = minCount; i < audioModelCount; ++i)
-                models.push(&audioModels.at(i), args...);
+            for (auto i = minCount; i < audioModelCount; ++i) {
+                if constexpr (std::is_constructible_v<ModelType, AudioModelType *, Args...>) {
+                    models.push(&audioModels.at(i), args...);
+                } else {
+                    models.push(ModelType::template Make(&audioModels.at(i), args...));
+                }
+            }
             root->endInsertRows();
         }
     }

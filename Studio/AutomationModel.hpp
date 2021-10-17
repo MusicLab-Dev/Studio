@@ -14,6 +14,7 @@
 
 #include "Point.hpp"
 
+class AutomationsModel;
 class AutomationModel;
 
 struct AutomationWrapper
@@ -46,6 +47,11 @@ public:
 
     /** @brief Virtual destructor */
     ~AutomationModel(void) noexcept override = default;
+
+    /** @brief Get the parent automations if it exists */
+    [[nodiscard]] AutomationsModel *parentAutomations(void) noexcept
+        { return reinterpret_cast<AutomationsModel *>(parent()); }
+
 
     /** @brief Get the list of all roles */
     [[nodiscard]] QHash<int, QByteArray> roleNames(void) const noexcept override;

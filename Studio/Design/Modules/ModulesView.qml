@@ -5,7 +5,6 @@ import "../Common"
 import "../Plugins"
 import "../Workspaces"
 import "../Settings"
-import "../Boards"
 import "../Planner"
 
 Rectangle {
@@ -224,13 +223,6 @@ Rectangle {
         id: settingsView
         anchors.fill: parent
     }
-
-//    BoardsView {
-//        id: boardsView
-//        width: parent.width * 0.9
-//        height: parent.height * 0.9
-//        anchors.centerIn: parent
-//    }
 
     Shortcut {
         sequence: "Ctrl+T"

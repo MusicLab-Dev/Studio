@@ -21,6 +21,18 @@
 
 class NodeModel;
 
+/** @brief Pointer to a node model */
+using NodePtr = Core::UniqueAlloc<NodeModel>;
+
+/** @brief Pointer to a partition model */
+using PartitionsPtr = Core::UniqueAlloc<PartitionsModel>;
+
+/** @brief Pointer to a automations model */
+using AutomationsPtr = Core::UniqueAlloc<AutomationsModel>;
+
+/** @brief Pointer to a plugin model */
+using PluginPtr = Core::UniqueAlloc<PluginModel>;
+
 struct NodeWrapper
 {
     Q_GADGET
@@ -48,19 +60,6 @@ class NodeModel : public QAbstractListModel
     Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
 
 public:
-    /** @brief Pointer to a node model */
-    using NodePtr = Core::UniqueAlloc<NodeModel>;
-
-    /** @brief Pointer to a partition model */
-    using PartitionsPtr = Core::UniqueAlloc<PartitionsModel>;
-
-    /** @brief Pointer to a automations model */
-    using AutomationsPtr = Core::UniqueAlloc<AutomationsModel>;
-
-    /** @brief Pointer to a plugin model */
-    using PluginPtr = Core::UniqueAlloc<PluginModel>;
-
-
     /** @brief Roles of each instance */
     enum class Roles : int {
         NodeInstance = Qt::UserRole + 1
@@ -256,9 +255,9 @@ signals:
 private:
     Audio::Node *_data { nullptr };
     Core::FlatVector<NodePtr> _children {};
-    PartitionsPtr _partitions { nullptr };
-    AutomationsPtr _automations { nullptr };
-    PluginPtr _plugin { nullptr };
+    PartitionsPtr _partitions {};
+    AutomationsPtr _automations {};
+    PluginPtr _plugin {};
     Beat _latestInstance { 0u };
 
     /** @brief Prepare a node to be inserted (event free) */

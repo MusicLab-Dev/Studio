@@ -13,10 +13,19 @@ DefaultMenuButton {
 
     function load(path) {
         modulesView.removeAllModules()
-        app.project.loadFrom(path)
+        if (oldCompatibility)
+            app.project.loadOldCompatibilityFrom(path)
+        else
+            app.project.loadFrom(path)
     }
 
     function openProject() {
+        oldCompatibility = false
+        loadFileDialog.open()
+    }
+
+    function openOldCompatibilityProject() {
+        oldCompatibility = true
         loadFileDialog.open()
     }
 
@@ -38,6 +47,8 @@ DefaultMenuButton {
     function settings() {
         modulesView.settingsView.open()
     }
+
+    property bool oldCompatibility: false
 
     id: menuButton
     height: parent.height * 0.05
@@ -79,6 +90,11 @@ DefaultMenuButton {
         }
 
         Action {
+            text: qsTr("Open Old Compatibility Project File...")
+            onTriggered: menuButton.openOldCompatibilityProject()
+        }
+
+        Action {
             text: qsTr("Export")
             onTriggered: menuButton.exportProject()
         }
@@ -113,11 +129,6 @@ DefaultMenuButton {
             onTriggered: keyboardShortcutsView.open()
         }
 
-        // Action {
-        //     text: qsTr("Boards")
-        //     onTriggered: modulesView.boardsView.open()
-        // }
-
         Action {
             text: qsTr("Exit")
             onTriggered: Qt.quit()
@@ -148,7 +159,10 @@ DefaultMenuButton {
         selectExisting: true
         visible: false
 
-        onAccepted: menuButton.load(mainWindow.urlToPath(fileUrl.toString()))
+        onAccepted: {
+            var path = mainWindow.urlToPath(fileUrl.toString())
+            menuButton.load(path)
+        }
 
         onRejected: close()
     }

@@ -11,13 +11,13 @@
 #include "NodeModel.hpp"
 
 PartitionsModel::PartitionsModel(Audio::Partitions *partitions, NodeModel *parent) noexcept
-    : QAbstractListModel(parent), _data(partitions), _instances(&partitions->headerCustomType().instances, this)
+    : QAbstractListModel(parent), _data(partitions), _instances(PartitionInstancesPtr::Make(&partitions->headerCustomType().instances, this))
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
     _instances->connect(_instances.get(), &PartitionInstancesModel::latestInstanceChanged, this, &PartitionsModel::processLatestInstanceChange);
     _partitions.reserve(_data->size());
     for (auto &partition : *_data)
-        _partitions.push(&partition, this);
+        _partitions.push(PartitionPtr::Make(&partition, this));
 }
 
 QHash<int, QByteArray> PartitionsModel::roleNames(void) const noexcept
@@ -74,7 +74,7 @@ bool PartitionsModel::add(void)
     } else {
         const auto idx = _partitions.size();
         beginInsertRows(QModelIndex(), idx, idx);
-        _partitions.push(&_data->at(idx), this, name);
+        _partitions.push(PartitionPtr::Make(&_data->at(idx), this, name));
         endInsertRows();
     }
     if (hasPaused)
@@ -104,7 +104,7 @@ bool PartitionsModel::duplicate(const int idx)
             } else {
                 const auto idx = _partitions.size();
                 beginInsertRows(QModelIndex(), idx, idx);
-                _partitions.push(&_data->at(idx), this, name);
+                _partitions.push(PartitionPtr::Make(&_data->at(idx), this, name));
                 endInsertRows();
             }
         }
@@ -201,14 +201,14 @@ bool PartitionsModel::foreignPartitionInstanceCopy(PartitionModel *partition, co
         [this, partition] {
             _data->push(*partition->audioPartition());
         },
-        [this, oldData, partition, instance, name] {
+        [this, oldData, instance, name] {
             if (_data->data() != oldData) {
                 refreshPartitions();
                 _partitions.back()->setName(name);
             } else {
                 const auto idx = _partitions.size();
                 beginInsertRows(QModelIndex(), idx, idx);
-                _partitions.push(&_data->at(idx), this, name);
+                _partitions.push(PartitionPtr::Make(&_data->at(idx), this, name));
                 endInsertRows();
             }
             auto newInstance = instance;

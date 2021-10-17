@@ -15,7 +15,7 @@ AutomationsModel::AutomationsModel(Audio::Automations *automations, NodeModel *p
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
     _automations.reserve(_data->size());
     for (auto &automation : *_data)
-        _automations.push(&automation, this);
+        _automations.push(AutomationPtr::Make(&automation, this));
 }
 
 QHash<int, QByteArray> AutomationsModel::roleNames(void) const noexcept

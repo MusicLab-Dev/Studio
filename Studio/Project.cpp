@@ -4,20 +4,21 @@
  */
 
 #include <QQmlEngine>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "Models.hpp"
 #include "Project.hpp"
 #include "ProjectSave.hpp"
+#include "ProjectSerializer.hpp"
 
-Audio::Node *Project::createMasterMixer(void)
+Audio::Node *Project::createMaster(const std::string &path)
 {
-    std::string path = "__internal__:/Mixer";
-
-    auto plugin = Audio::PluginTable::Get().instantiate("__internal__:/Mixer");
+    auto plugin = Audio::PluginTable::Get().instantiate(path);
 
     auto &backendChild = _data->master();
     backendChild = std::make_unique<Audio::Node>(nullptr, std::move(plugin));
-    backendChild->setName(Core::FlatString("Master"));
+    backendChild->setName(Core::FlatString(DefaultMasterName));
     backendChild->prepareCache(Scheduler::Get()->audioSpecs());
     return backendChild.get();
 }
@@ -25,7 +26,7 @@ Audio::Node *Project::createMasterMixer(void)
 Project::Project(Audio::Project *project, QObject *parent)
     : QObject(parent), _data(project)
 {
-    recreateMasterMixer();
+    recreateMaster();
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
@@ -51,22 +52,55 @@ bool Project::save(void) noexcept
 {
     if (_path.isEmpty())
         return false;
-
-    ProjectSave psave(this);
-    return psave.save();
+    return saveAs(_path);
 }
 
 bool Project::saveAs(const QString &path) noexcept
 {
-    ProjectSave psave(this);
+    Scheduler::Get()->stopAndWait();
+    QFile file(path);
+    if (!file.open(QFile::WriteOnly)) {
+        qCritical() << "Project::saveAs: Couldn't create file" << path;
+        return false;
+    }
+    QJsonDocument doc;
+    doc.setObject(ProjectSerializer::Serialize(*this));
+    const auto data = doc.toJson(QJsonDocument::JsonFormat::Indented);
+    if (!file.write(data)) {
+        qCritical() << "Project::saveAs: Couldn't write file" << path;
+        return false;
+    }
     setPath(path);
-    return psave.save();
+    return true;
 }
 
 bool Project::loadFrom(const QString &path) noexcept
 {
     Scheduler::Get()->stopAndWait();
-    recreateMasterMixer();
+    recreateMaster();
+    try {
+        QFile file(path);
+        if (!file.open(QFile::ReadOnly)) {
+            qCritical() << "Project::loadFrom: Invalid project file path" << path;
+            return false;
+        }
+        const auto doc = QJsonDocument::fromJson(file.readAll());
+        if (!ProjectSerializer::Deserialize(*this, doc.object())) {
+            qCritical() << "Project::loadFrom: Couldn't deserialize project file object" << path;
+            return false;
+        }
+        setPath(path);
+        return true;
+    } catch (const std::exception &e) {
+        qCritical() << "Project::loadFrom: Exception thrown:" << e.what();
+        return false;
+    }
+}
+
+bool Project::loadOldCompatibilityFrom(const QString &path) noexcept
+{
+    Scheduler::Get()->stopAndWait();
+    recreateMaster();
     ProjectSave psave(this);
     setPath(path);
     emit nameChanged();
@@ -76,14 +110,20 @@ bool Project::loadFrom(const QString &path) noexcept
 void Project::clear(void) noexcept
 {
     Scheduler::Get()->stopAndWait();
-    recreateMasterMixer();
+    recreateMaster();
 }
 
-void Project::recreateMasterMixer(void)
+void Project::recreateMaster(void)
 {
-    _master.reset();
-    if (_data)
-        _data->master().reset();
-    _master = std::make_unique<NodeModel>(createMasterMixer(), this);
+    emplaceMaster(NodePtr::Make(createMaster(), this));
+}
+
+void Project::emplaceMaster(NodePtr &&master)
+{
+    if (_master)
+        disconnect(_master.get(), &NodeModel::latestInstanceChanged, this, &Project::latestInstanceChanged);
+    _master = std::move(master);
+    connect(_master.get(), &NodeModel::latestInstanceChanged, this, &Project::latestInstanceChanged);
     emit masterChanged();
+    emit latestInstanceChanged();
 }

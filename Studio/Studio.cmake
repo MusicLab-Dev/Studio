@@ -34,7 +34,6 @@ qt5_add_resources(QtResources
     ${StudioDir}/Design/Common/Common.qrc
     ${StudioDir}/Design/Tree/Tree.qrc
     ${StudioDir}/Design/Planner/Planner.qrc
-    ${StudioDir}/Design/Boards/Boards.qrc
     ${StudioDir}/Design/Plugins/Plugins.qrc
     ${StudioDir}/Design/Workspaces/Workspaces.qrc
     ${StudioDir}/Design/Settings/Settings.qrc
@@ -55,12 +54,6 @@ set(StudioSources
     ${StudioDir}/AutomationModel.cpp
     ${StudioDir}/AutomationModel.hpp
     ${StudioDir}/Base.hpp
-    ${StudioDir}/Board.cpp
-    ${StudioDir}/Board.hpp
-    ${StudioDir}/BoardEventListener.cpp
-    ${StudioDir}/BoardEventListener.hpp
-    ${StudioDir}/BoardManager.cpp
-    ${StudioDir}/BoardManager.hpp
     ${StudioDir}/ControlEvent.hpp
     ${StudioDir}/AutomationsModel.cpp
     ${StudioDir}/AutomationsModel.hpp
@@ -78,7 +71,6 @@ set(StudioSources
     ${StudioDir}/KeyboardEventListener.cpp
     ${StudioDir}/KeyboardEventListener.hpp
     ${StudioDir}/Models.hpp
-    ${StudioDir}/NetworkLog.hpp
     ${StudioDir}/NodeModel.cpp
     ${StudioDir}/NodeModel.hpp
     ${StudioDir}/NodeListModel.cpp
@@ -107,13 +99,14 @@ set(StudioSources
     ${StudioDir}/Project.hpp
     ${StudioDir}/ProjectSave.cpp
     ${StudioDir}/ProjectSave.hpp
+    ${StudioDir}/ProjectSerializer.cpp
+    ${StudioDir}/ProjectSerializer.hpp
     ${StudioDir}/Scheduler.hpp
     ${StudioDir}/Scheduler.cpp
     ${StudioDir}/SettingsListModel.cpp
     ${StudioDir}/SettingsListModel.hpp
     ${StudioDir}/SettingsListModelProxy.cpp
     ${StudioDir}/SettingsListModelProxy.hpp
-    ${StudioDir}/Socket.hpp
     ${StudioDir}/Studio.cpp
     ${StudioDir}/Studio.hpp
     ${StudioDir}/ThemeManager.cpp

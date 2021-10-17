@@ -6,7 +6,6 @@ import ThemeManager 1.0
 import PluginTableModel 1.0
 import Application 1.0
 import NodeModel 1.0
-import BoardManager 1.0
 import EventDispatcher 1.0
 import DevicesModel 1.0
 import ClipboardManager 1.0
@@ -77,10 +76,6 @@ Window {
         theme: ThemeManager.Dark
     }
 
-    // BoardManager {
-    //     id: boardManager
-    // }
-
     PluginTableModel {
         id: pluginTable
     }
@@ -93,8 +88,6 @@ Window {
         keyboardListener.enabled: {
             !cancelEvents && (mainWindow.activeFocusItem ? !(mainWindow.activeFocusItem["cancelKeyboardEventsOnFocus"] === true) : true)
         }
-
-//        boardListener.boardManager: boardManager
     }
 
     DevicesModel {

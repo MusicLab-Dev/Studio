@@ -19,7 +19,6 @@
 #include "Studio.hpp"
 #include "SettingsListModel.hpp"
 #include "SettingsListModelProxy.hpp"
-#include "BoardManager.hpp"
 #include "EventDispatcher.hpp"
 #include "DevicesModel.hpp"
 #include "ProjectPreview.hpp"
@@ -106,11 +105,8 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<AutomationModel>("AutomationModel", 1, 0, "AutomationModel", "Cannot construct AutomationModel");
     qmlRegisterUncreatableType<PartitionInstancesModel>("PartitionInstancesModel", 1, 0, "PartitionInstancesModel", "Cannot construct PartitionInstancesModel");
     qmlRegisterType<PartitionInstancesModelProxy>("PartitionInstancesModelProxy", 1, 0, "PartitionInstancesModelProxy");
-    qmlRegisterType<BoardManager>("BoardManager", 1, 0, "BoardManager");
-    qmlRegisterUncreatableType<Board>("Board", 1, 0, "Board", "Cannot constrict Board");
     qmlRegisterType<EventDispatcher>("EventDispatcher", 1, 0, "EventDispatcher");
     qmlRegisterUncreatableType<KeyboardEventListener>("KeyboardEventListener", 1, 0, "KeyboardEventListener", "Cannot construct KeyboardEventListener");
-    qmlRegisterUncreatableType<BoardEventListener>("BoardEventListener", 1, 0, "BoardEventListener", "Cannot construct BoardEventListener");
     qmlRegisterType<DevicesModel>("DevicesModel", 1, 0, "DevicesModel");
     qmlRegisterType<PartitionPreview>("PartitionPreview", 1, 0, "PartitionPreview");
     qmlRegisterType<ProjectPreview>("ProjectPreview", 1, 0, "ProjectPreview");
@@ -127,7 +123,6 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Sequencer);
     Q_INIT_RESOURCE(Common);
     Q_INIT_RESOURCE(Planner);
-    Q_INIT_RESOURCE(Boards);
     Q_INIT_RESOURCE(Plugins);
     Q_INIT_RESOURCE(Workspaces);
     Q_INIT_RESOURCE(Settings);
@@ -147,7 +142,6 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Sequencer);
     Q_CLEANUP_RESOURCE(Common);
     Q_CLEANUP_RESOURCE(Planner);
-    Q_CLEANUP_RESOURCE(Boards);
     Q_CLEANUP_RESOURCE(Plugins);
     Q_CLEANUP_RESOURCE(Workspaces);
     Q_CLEANUP_RESOURCE(Settings);

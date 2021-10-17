@@ -20,11 +20,16 @@ class Project : public QObject
     Q_PROPERTY(NodeModel *master READ master NOTIFY masterChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(Beat latestInstance READ latestInstance NOTIFY latestInstanceChanged)
 
 public:
+    static constexpr auto DefaultMasterName = "Master";
+    static constexpr auto DefaultMasterPluginPath = "__internal__:/Mixer";
+
+    static inline const QString DefaultProjectName = "New project";
+
     /** @brief Construct a new project instance */
     explicit Project(Audio::Project *project, QObject *parent = nullptr);
-
 
     /** @brief Get the master node */
     [[nodiscard]] NodeModel *master(void) noexcept { return _master.get(); }
@@ -44,12 +49,25 @@ public:
     /** @brief Set the project path, return true and emit pathChanged on change */
     void setPath(const QString &path) noexcept;
 
+    /** @brief Get the project length in beat */
+    [[nodiscard]] Beat latestInstance(void) const noexcept { return _master->latestInstance(); }
+
+public: // Unsafe functions !
     /** @brief Instantiate a new master node */
-    void recreateMasterMixer(void);
+    void recreateMaster(void);
+
+    /** @brief Emplaces a new master */
+    void emplaceMaster(NodePtr &&master);
+
+    /** @brief Instantiate the master node and return a pointer referencing to it */
+    [[nodiscard]] Audio::Node *createMaster(const std::string &path = DefaultMasterPluginPath);
 
 public slots:
     /** @brief Load a project file from a given path */
     bool loadFrom(const QString &path) noexcept;
+
+    /** @brief Load a project file from a given path using old compatibility file */
+    bool loadOldCompatibilityFrom(const QString &path) noexcept;
 
     /** @brief Save the project in its default file */
     bool save(void) noexcept;
@@ -70,11 +88,11 @@ signals:
     /** @brief Notify when project path changed */
     void pathChanged(void);
 
+    /** @brief Notify when the project length changed */
+    void latestInstanceChanged(void);
+
 private:
     Audio::Project *_data { nullptr };
     QString _path {};
-    std::unique_ptr<NodeModel> _master;
-
-    /** @brief Instantiate the master node and return a pointer referencing to it */
-    [[nodiscard]] Audio::Node *createMasterMixer(void);
+    NodePtr _master;
 };

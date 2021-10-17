@@ -16,6 +16,9 @@
 
 class NodeModel;
 
+using PartitionPtr = Core::UniqueAlloc<PartitionModel>;
+using PartitionInstancesPtr = Core::UniqueAlloc<PartitionInstancesModel>;
+
 /** @brief class that contaign a list of partitionModel */
 class PartitionsModel : public QAbstractListModel
 {
@@ -112,9 +115,9 @@ public: // Allow external insert / remove
 
 private:
     Audio::Partitions *_data { nullptr };
-    Core::TinyVector<Core::UniqueAlloc<PartitionModel>> _partitions;
+    Core::TinyVector<PartitionPtr> _partitions;
     Beat _latestInstance { 0u };
-    Core::UniqueAlloc<PartitionInstancesModel> _instances;
+    PartitionInstancesPtr _instances;
 
     /** @brief Refresh internal models */
     void refreshPartitions(void);

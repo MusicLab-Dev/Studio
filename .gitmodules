@@ -4,6 +4,3 @@
 [submodule "Audio"]
 	path = Audio
 	url = git@github.com:MusicLab-Dev/Audio.git
-[submodule "Protocol"]
-	path = Protocol
-	url = git@github.com:MusicLab-Dev/Protocol.git

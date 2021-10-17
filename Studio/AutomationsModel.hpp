@@ -16,6 +16,8 @@
 
 class NodeModel;
 
+using AutomationPtr = Core::UniqueAlloc<AutomationModel>;
+
 /** @brief Exposes a list of audio automations */
 class AutomationsModel : public QAbstractListModel
 {
@@ -72,7 +74,7 @@ public: // Allow external insert / remove
 
 private:
     Audio::Automations *_data { nullptr };
-    Core::TinyVector<Core::UniqueAlloc<AutomationModel>> _automations;
+    Core::TinyVector<AutomationPtr> _automations;
 
     /** @brief Refresh internal models */
     void refreshAutomations(void);

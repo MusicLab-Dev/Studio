@@ -26,7 +26,7 @@ ProjectPreview {
 
     id: projectPreview
     anchors.fill: parent
-    beatLength: app.project.master.latestInstance
+    beatLength: app.project.latestInstance
 
     Component.onCompleted: targets = [app.project.master]
 

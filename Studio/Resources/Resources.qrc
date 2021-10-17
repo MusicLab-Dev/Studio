@@ -24,7 +24,6 @@
         <file>Assets/Previous.png</file>
         <file>Assets/Close.png</file>
         <file>Assets/BrushMod.png</file>
-        <file>Assets/Board.png</file>
         <file>Assets/Logo.png</file>
         <file>Assets/Soundwave.png</file>
         <file>Assets/Piano.png</file>
@@ -49,8 +48,6 @@
         <file>Assets/Settings/Midi.png</file>
         <file>Assets/Settings/Project.png</file>
         <file>Assets/Free.png</file>
-        <file>Assets/BoardButton.png</file>
-        <file>Assets/BoardPotentiometer.png</file>
         <file>Templates/SettingsModel.json</file>
         <file>Templates/TEMPLATE_basic</file>
         <file>Assets/presse-papiers.png</file>

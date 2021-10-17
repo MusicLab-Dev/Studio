@@ -26,9 +26,9 @@ static quint32 CurrentBlueColorIndex = 0u;
 NodeModel::NodeModel(Audio::Node *node, QObject *parent) noexcept
     :   QAbstractListModel(parent),
         _data(node),
-        _partitions(&node->partitions(), this),
-        _automations(&node->automations(), this),
-        _plugin(node->plugin(), this)
+        _partitions(PartitionsPtr::Make(&node->partitions(), this)),
+        _automations(AutomationsPtr::Make(&node->automations(), this)),
+        _plugin(PluginPtr::Make(node->plugin(), this))
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 
@@ -195,7 +195,7 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
     if (!audioNode)
         return nullptr;
 
-    NodePtr node(audioNode.get(), this);
+    auto node = NodePtr::Make(audioNode.get(), this);
     if (addPartition)
         node->partitions()->get(0)->setName("Partition 0");
     auto nodePtr = node.get();
@@ -236,7 +236,7 @@ NodeModel *NodeModel::addParentNodeImpl(const QString &pluginPath, const bool ad
     if (!audioNode)
         return nullptr;
 
-    NodePtr node(audioNode.get(), parent);
+    auto node = NodePtr::Make(audioNode.get(), parent);
     auto nodePtr = node.get();
     const bool hasPaused = Scheduler::Get()->pauseImpl();
 
@@ -523,7 +523,7 @@ void NodeModel::ProcessAdd(NodeModel * const parent, NodePtr &&nodePtr, Audio::N
     parent->endInsertRows();
 }
 
-std::pair<NodeModel::NodePtr, Audio::NodePtr> NodeModel::ProcessRemove(NodeModel * const parent, const int targetIndex)
+std::pair<NodePtr, Audio::NodePtr> NodeModel::ProcessRemove(NodeModel * const parent, const int targetIndex)
 {
     auto &ref = parent->_children.at(targetIndex);
     const auto target = ref.get();
