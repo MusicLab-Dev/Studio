@@ -35,10 +35,11 @@ Rectangle {
     property real gainPosition: 0
     readonly property real unitSpacing: height / 12
     property bool analysisRequested: false
+    property bool muted: false
 
     id: soundMeter
     radius: 2
-    color: themeManager.foregroundColor
+    color: themeManager.backgroundColor
 
     onTargetNodeChanged: {
         if (targetNode) {
@@ -87,21 +88,39 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    onRmsPositionChanged: console.log(rmsPosition)
+
+    Item {
         id: soundMeterBackground
         anchors.fill: parent
-        anchors.margins: 2
 
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: "red" }
-            GradientStop { position: 0.33; color: "yellow" }
-            GradientStop { position: 1.0; color: "green" }
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                soundMeter.muted = !soundMeter.muted
+            }
         }
 
         Rectangle {
-            width: parent.width
-            height: parent.height * (1 - soundMeter.rmsPosition)
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: parent.height * (soundMeter.rmsPosition)
+
             color: themeManager.backgroundColor
+            radius: 2
+            visible: !muted
+
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "red" }
+                GradientStop { position: 0.33; color: "yellow" }
+                GradientStop { position: 1.0; color: "green" }
+            }
+
+            Behavior on height {
+                NumberAnimation { duration: 50 }
+            }
         }
 
         Repeater {
@@ -110,7 +129,7 @@ Rectangle {
 
             delegate: Rectangle {
                 anchors.right: soundMeterBackground.right
-                color: soundMeter.color
+                color: "white"
                 width: index === 1 ? parent.width : 3
                 height: 1
                 y: (1 + index) * soundMeterBackground.height / 12
@@ -120,14 +139,29 @@ Rectangle {
         Rectangle {
             width: parent.width
             height: 1
-            y: parent.height * (1 - soundMeter.peakPosition)
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height * (1 - soundMeter.peakPosition) - 2
+            radius: 2
+
+            Behavior on y {
+                NumberAnimation { duration: 50 }
+            }
         }
 
         Rectangle {
             width: parent.width
             height: 1
+            anchors.horizontalCenter: parent.horizontalCenter
             y: parent.height * (1 - soundMeter.gainPosition)
             color: themeManager.accentColor
+            radius: 2
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            color: "red"
+            radius: 2
+            visible: muted
         }
 
         /*Text {

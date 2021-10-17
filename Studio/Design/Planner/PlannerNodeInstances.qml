@@ -24,33 +24,12 @@ Row {
             height: nodeInstancesHeader.height
 
             DefaultText {
-                x: 10
-                width: parent.width * 0.5
-                anchors.verticalCenter: parent.verticalCenter
-                horizontalAlignment: Text.AlignLeft
-                fontSizeMode: Text.HorizontalFit
-                font.pointSize: 28
-                color: nodeDelegate.accentColor
+                anchors.fill: parent
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: 16
+                color: nodeDelegate.isSelected ? themeManager.backgroundColor : nodeDelegate.color
                 text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("ERROR")
-                wrapMode: Text.Wrap
-            }
-
-            DefaultImageButton {
-                readonly property bool isMuted: nodeDelegate.node ? nodeDelegate.node.muted : false
-
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-                width: height
-                height: Math.min(parent.height / 2, 50)
-                source: isMuted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
-                showBorder: false
-                scaleFactor: 1
-                colorDefault: nodeDelegate.accentColor
-                colorHovered: nodeDelegate.hoveredColor
-                colorOnPressed: nodeDelegate.pressedColor
-
-                onReleased: nodeDelegate.node.muted = !isMuted
+                elide: Text.ElideRight
             }
         }
     }
