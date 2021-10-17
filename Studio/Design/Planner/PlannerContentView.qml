@@ -54,6 +54,7 @@ ContentView {
     yOffsetMin: -Math.max(nodeView.height - height / 2, 0)
     yZoom: 0.25
     bottomOverlayMargin: partitionsPreview.requiredVisibility ? partitionsPreview.height : 0
+    rowHeaderWidth: width * 0.15
 
     Component.onCompleted: animDelayTimer.start()
 

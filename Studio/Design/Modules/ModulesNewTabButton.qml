@@ -6,8 +6,7 @@ Rectangle {
     property real barSize: width / 4
 
     id: newTabButton
-    color: themeManager.backgroundColor
-    border.color: "black"
+    color: mouseArea.containsMouse ? themeManager.backgroundColor : themeManager.foregroundColor
 
     MouseArea {
         id: mouseArea

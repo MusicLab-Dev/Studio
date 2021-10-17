@@ -197,28 +197,28 @@ MouseArea {
         }
     }
 
-    TreeHeader {
-        property bool requiredVisibility: !treeControls.requiredVisibility
+//    TreeHeader {
+//        property bool requiredVisibility: !treeControls.requiredVisibility
 
-        id: treeHeader
-        height: parent.height * 0.05
-        width: parent.width
-        z: 1
-        y: requiredVisibility ? 0 : -height
+//        id: treeHeader
+//        height: parent.height * 0.05
+//        width: parent.width
+//        z: 1
+//        y: requiredVisibility ? 0 : -height
 
-        Behavior on y {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutCubic
-                onRunningChanged: {
-                    if (running && treeHeader.requiredVisibility)
-                        treeHeader.visible = true
-                    else if (!running && !treeHeader.requiredVisibility)
-                        treeHeader.visible = true
-                }
-            }
-        }
-    }
+//        Behavior on y {
+//            NumberAnimation {
+//                duration: 300
+//                easing.type: Easing.OutCubic
+//                onRunningChanged: {
+//                    if (running && treeHeader.requiredVisibility)
+//                        treeHeader.visible = true
+//                    else if (!running && !treeHeader.requiredVisibility)
+//                        treeHeader.visible = true
+//                }
+//            }
+//        }
+//    }
 
     TreeSurface {
         readonly property real scaledWidth: width * scale
