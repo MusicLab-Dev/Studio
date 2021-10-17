@@ -47,6 +47,7 @@ void KeyboardEventListener::resetShortcuts(void)
     add(Qt::Key_O,          0,                  EventTarget::ReplayProject);
     add(Qt::Key_P,          0,                  EventTarget::StopProject);
     add(Qt::Key_Z,   Qt::CTRL,                  EventTarget::Undo);
+    add(Qt::Key_Z,   Qt::CTRL | Qt::SHIFT,      EventTarget::Redo);
     add(Qt::Key_Y,   Qt::CTRL,                  EventTarget::Redo);
     add(Qt::Key_C,   Qt::CTRL,                  EventTarget::Copy);
     add(Qt::Key_V,   Qt::CTRL,                  EventTarget::Paste);

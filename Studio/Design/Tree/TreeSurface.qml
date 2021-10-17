@@ -71,10 +71,10 @@ Item {
         if (validDrag) {
             var lastParent = treeSurface.dragTarget.parentNode
             if (node.moveToChildren(treeSurface.dragTarget))
-                actionsManager.push(actionsManager.makeActionMoveNode(node, lastParent, treeSurface.dragTarget))
+                actionsManager.push(actionsManager.makeActionMoveNode(treeSurface.dragTarget, lastParent, node))
         } else {
             if (node.swapNodes(treeSurface.dragTarget))
-                actionsManager.push(actionsManager.makeActionSwapNode(node, treeSurface.dragTarget))
+                actionsManager.push(actionsManager.makeActionSwapNode(treeSurface.dragTarget, node))
         }
     }
 

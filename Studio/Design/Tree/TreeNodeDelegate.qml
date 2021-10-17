@@ -249,7 +249,7 @@ Column {
                 height: topPin.height
                 radius: topPin.radius
                 color: topPin.color
-                visible: nodeDelegate.node.plugin.title === "Mixer"
+                visible: nodeDelegate.node ? nodeDelegate.node.plugin.tags & NodeModel.Instrument : false
             }
 
             ColumnLayout {

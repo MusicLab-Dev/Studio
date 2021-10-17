@@ -750,7 +750,7 @@
 <context>
     <name>PlannerNodeInstances</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="33"/>
+        <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="31"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -758,7 +758,7 @@
 <context>
     <name>PlannerNodeInstancesRow</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerNodeInstancesRow.qml" line="60"/>
+        <location filename="Studio/Design/Planner/PlannerNodeInstancesRow.qml" line="61"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1017,8 +1017,8 @@
     <message>
         <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="72"/>
         <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="115"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="172"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="187"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="170"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="185"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1028,12 +1028,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="171"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="169"/>
         <source>Sound meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="186"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="184"/>
         <source>Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
