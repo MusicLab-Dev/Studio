@@ -237,6 +237,7 @@ Column {
                 height: 6
                 radius: 2
                 color: nodeDelegate.color
+                visible: nodeDelegate.parentNode != null
             }
 
 
@@ -249,7 +250,7 @@ Column {
                 height: topPin.height
                 radius: topPin.radius
                 color: topPin.color
-                visible: nodeDelegate.node ? nodeDelegate.node.plugin.tags & NodeModel.Instrument : false
+                visible: !noChildrenFlag
             }
 
             ColumnLayout {
