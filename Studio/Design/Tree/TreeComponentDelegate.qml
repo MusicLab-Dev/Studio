@@ -107,15 +107,6 @@ Item {
         }
     }
 
-    Rectangle {
-        anchors.top: instanceBackground.bottom
-        anchors.topMargin: 15
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: rect.width
-        height: 2
-        color: "black"
-    }
-
     DefaultToolTip { // @todo make this a unique instance
         visible: instanceBackground.containsMouse || instanceBackground.containsPress
         text: factoryDescription
