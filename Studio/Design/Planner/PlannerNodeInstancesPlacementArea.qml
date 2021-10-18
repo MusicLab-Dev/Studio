@@ -101,6 +101,15 @@ PlacementArea {
     color: nodeDelegate.color
     accentColor: nodeDelegate.accentColor
 
+    onInsertRefused: {
+        var partitions = nodeDelegate.node.partitions
+        var idx = partitions.count()
+        if (partitions.add()) {
+            contentView.selectPartition(nodeDelegate.node, idx)
+            modulesView.addSequencerWithExistingPartition(nodeDelegate.node, idx)
+        }
+    }
+
     onCopyTarget: {
         var instance = nodeInstances.instances.getInstance(targetIndex)
         contentView.selectPartition(nodeDelegate.node, instance.partitionIndex)

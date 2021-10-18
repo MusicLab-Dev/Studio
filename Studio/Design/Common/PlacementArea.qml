@@ -89,6 +89,7 @@ MouseArea {
         case PlacementArea.Mode.Insert:
             if (!allowInsert) {
                 mode = PlacementArea.Mode.None
+                insertRefused(mouseBeatPrecision, mouseKey)
                 break
             } else
                 beginInsert(mouseBeatPrecision, mouseKey)
@@ -396,6 +397,9 @@ MouseArea {
     signal detachTargetPreview()
     signal brushInserted(int insertedKey)
     signal brushEnded()
+
+    // Signal emited when an insert is not allowed
+    signal insertRefused(int mouseBeatPrecision, int mouseKey)
 
     // General
     property int mode: PlacementArea.Mode.None

@@ -14,7 +14,7 @@ ContentView {
         selectedPartitionNode = node
         selectedPartition = node.partitions.getPartition(partitionIndex)
         selectedPartitionIndex = partitionIndex
-        placementBeatPrecisionLastWidth = Qt.binding(function() { return selectedPartition.latestNote })
+        placementBeatPrecisionLastWidth = Qt.binding(function() { return selectedPartition ? selectedPartition.latestNote : 0})
     }
 
     readonly property real linkThickness: 4

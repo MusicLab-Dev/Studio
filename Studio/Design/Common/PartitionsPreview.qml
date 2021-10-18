@@ -63,11 +63,13 @@ Rectangle {
                 colorOnPressed: partitionsPreview.nodePressedColor
 
                 onReleased: {
-                    // Add a partition and select it on success
+                    // Add a partition and select it on success then open sequencer
                     var partitions = partitionsPreview.node.partitions
                     var idx = partitions.count()
-                    if (partitions.add())
+                    if (partitions.add()) {
                         contentView.selectPartition(partitionsPreview.node, idx)
+                        modulesView.addSequencerWithExistingPartition(partitionsPreview.node, idx)
+                    }
                 }
             }
         }
