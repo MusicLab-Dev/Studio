@@ -5,7 +5,7 @@ import "../Default"
 
 Rectangle {
     id: settingsForeground
-    color: Qt.lighter(themeManager.foregroundColor, 1.2)
+    color: themeManager.foregroundColor
     radius: 6
 
     Rectangle {

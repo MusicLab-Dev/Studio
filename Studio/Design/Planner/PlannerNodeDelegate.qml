@@ -133,6 +133,14 @@ Item {
             id: nodeAutomations
         }
 
+        Rectangle {
+            width: contentView.rowDataWidth
+            height: 1
+            x: contentView.rowHeaderWidth
+            color: "white"
+            opacity: 0.3
+        }
+
         PlannerNodeChildren {
             id: nodeChildren
         }

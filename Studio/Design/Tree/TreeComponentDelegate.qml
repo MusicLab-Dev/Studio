@@ -20,7 +20,7 @@ Item {
     MouseArea {
         id: instanceBackground
         width: componentDelegate.width * 0.7
-        height: width * 1.1
+        height: width * 1.3
         anchors.horizontalCenter: drag.active ? undefined : parent.horizontalCenter
         hoverEnabled: true
         drag.target: instanceBackground
@@ -61,22 +61,45 @@ Item {
         }
 
         Item {
+            id: header
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width
+            height: 30
+
+            Rectangle {
+                anchors.fill: parent
+                color: instanceBackground.containsMouse ? componentDelegate.color : themeManager.backgroundColor
+                radius: 2
+                opacity: 1
+            }
+
+            DefaultText {
+                anchors.fill: parent
+                text: factoryName
+                color: instanceBackground.containsMouse ? themeManager.backgroundColor : componentDelegate.color
+            }
+
+        }
+
+        Item {
             id: rect
-            anchors.fill: parent
+            anchors.top: header.bottom
+            anchors.topMargin: 3
+            width: parent.width
+            height: width
 
             Rectangle {
                 anchors.fill: parent
                 color: themeManager.backgroundColor
-                radius: 6
+                radius: 2
                 opacity: 1
             }
 
             PluginFactoryImage {
                 id: image
-                width: parent.width / 1.5
+                anchors.centerIn: parent
+                width: parent.width * 0.5
                 height: width
-                x: parent.width / 2 - width / 2
-                y: parent.height / 2 - height / 2
                 name: factoryName
                 playing: instanceBackground.containsMouse
                 color: componentDelegate.color
@@ -84,12 +107,13 @@ Item {
         }
     }
 
-    DefaultText {
+    Rectangle {
         anchors.top: instanceBackground.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 15
         anchors.horizontalCenter: parent.horizontalCenter
-        text: factoryName
-        color: instanceBackground.containsMouse ? componentDelegate.color : "white"
+        width: rect.width
+        height: 2
+        color: "black"
     }
 
     DefaultToolTip { // @todo make this a unique instance

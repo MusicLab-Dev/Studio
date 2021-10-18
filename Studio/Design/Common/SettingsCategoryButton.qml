@@ -14,7 +14,7 @@ Button {
         id: rect
         width: control.width
         height: control.height
-        border.width: control.pressed || control.hovered ? 4 : 0
+        border.width: control.pressed || control.hovered ? 2 : 0
         border.color: control.pressed ? themeManager.accentColor : control.hovered ? themeManager.semiAccentColor : "white"
         color: themeManager.contentColor
         radius: 6

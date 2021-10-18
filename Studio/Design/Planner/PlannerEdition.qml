@@ -6,7 +6,7 @@ import "../Default"
 import "../Common"
 import "../Help"
 
-RowLayout {
+Row {
     spacing: 10
 
     EditionModeSelector {
@@ -24,7 +24,7 @@ RowLayout {
 
     Item {
         Layout.preferredHeight: parent.height
-        Layout.fillWidth: true
+        Layout.preferredWidth: parent.width * 0.25
         Layout.alignment: Qt.AlignHCenter
 
         Snapper {

@@ -36,7 +36,7 @@ Item {
     Rectangle {
         id: backgroundTabs
         anchors.fill: parent
-        color: themeManager.contentColor
+        color: Qt.darker(themeManager.contentColor, 1.1)
     }
 
     ModulesGlobalMenu {
