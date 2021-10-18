@@ -14,10 +14,7 @@ Item {
         height: parent.height * ratioheight
         width: parent.width * ratioWidth
         color: themeManager.foregroundColor
-        border.width: 1
-        border.color: "white"
         radius: 6
-
 
         Item {
             id: placeholder
@@ -26,13 +23,12 @@ Item {
             anchors.centerIn: parent
         }
 
-        Rectangle {
+        Item {
             id: labelContainer
             width: text.contentWidth
             height: text.contentHeight
             x: container.x + 10
             y: -height / 2
-            color: themeManager.foregroundColor
 
             Text {
                 id: text

@@ -22,12 +22,6 @@ Row {
             width: nodeHeaderBackground.width
             height: nodeControlsFlow.height - contentView.headerMargin
 
-            Rectangle {
-                width: parent.width
-                height: 1
-                color: nodeDelegate.darkColor
-            }
-
             PluginFactoryImage {
                 anchors.left: parent.left
                 anchors.leftMargin: 10
@@ -76,15 +70,14 @@ Row {
     }
 
     Item {
-
         width: contentView.rowDataWidth
         height: nodeControlsFlow.height
 
         Rectangle {
             id: nodeControlsData
             anchors.fill: parent
-            color: themeManager.backgroundColor
-            opacity: 0.9
+            color: themeManager.contentColor
+            opacity: 1
         }
 
         Flow {

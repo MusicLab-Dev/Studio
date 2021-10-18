@@ -378,7 +378,7 @@ MouseArea {
         id: treeControlsShowButton
         visible: contentView.lastSelectedNode && treeControls.hide
         anchors.right: parent.right
-        anchors.top: treeHeader.bottom
+        anchors.top: parent.top
         anchors.topMargin: 10
         anchors.rightMargin: 10
         width: height

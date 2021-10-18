@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtGraphicalEffects 1.15
 
 import "../Default"
 import "../Common"
@@ -37,19 +36,9 @@ Rectangle {
         Rectangle {
             id: previewBackground
             anchors.fill: parent
-            color: themeManager.foregroundColor
+            color: themeManager.backgroundColor
             clip: true
-        }
-
-        DropShadow {
-            id: shadow
-            anchors.fill: previewBackground
-            horizontalOffset: 4
-            verticalOffset: 4
             radius: 6
-            samples: 17
-            color: "#80000000"
-            source: previewBackground
         }
 
         TreeProjectPreview {

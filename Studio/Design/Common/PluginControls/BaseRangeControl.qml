@@ -142,7 +142,7 @@ MouseArea {
         color: "transparent"
         radius: width / 2
         border.color: control.containsMouse || control.tracking ? control.accentColor : "white"
-        border.width: 1
+        border.width: 2
 
         DefaultText {
             text: control.shortName

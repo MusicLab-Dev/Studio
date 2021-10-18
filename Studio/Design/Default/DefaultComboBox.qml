@@ -49,7 +49,7 @@ ComboBox {
         id: rectBackground
         anchors.fill: control
         border.width: 1
-        border.color: control.hovered || popup.opened ? control.accentColor : "white"
+        border.color: control.hovered || popup.opened ? control.accentColor : "transparent"
         color: control.pressed ? themeManager.backgroundColor : themeManager.foregroundColor
         radius: 6
     }

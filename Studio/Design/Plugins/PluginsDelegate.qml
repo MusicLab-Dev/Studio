@@ -19,9 +19,7 @@ Item {
 
     Rectangle {
         id: pluginSquareComponent
-        color: "transparent"
-        border.color: pluginsSquareComponentArea.containsMouse ? pluginDelegate.color : "white"
-        border.width: 1
+        color: themeManager.backgroundColor
         radius: 6
         width: pluginsGrid.cellWidth - x * 2
         height: width

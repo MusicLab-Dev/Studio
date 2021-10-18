@@ -23,8 +23,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: "transparent"
-        border.color: "white"
+        color: themeManager.foregroundColor
         radius: 6
 
         Item {
@@ -40,14 +39,11 @@ Item {
             fontSizeMode: Text.Fit
         }
 
-        Rectangle {
+        Item {
             id: rowContainer
             anchors.bottom: parent.bottom
             height: parent.height * 0.7
             width: parent.width
-            color: "transparent"
-            border.color: "white"
-            radius: 6
 
             Repeater {
                 model: itemsPaths
@@ -71,24 +67,6 @@ Item {
                             if (index <= itemUsableTill)
                                 itemSelected = index
                         }
-                    }
-                }
-            }
-
-            Rectangle {
-                id: cursor
-                x: itemSelected * itemWidth
-                height: rowContainer.height
-                width: itemWidth
-                border.color: "white"
-                color: "transparent"
-                radius: 6
-
-                Behavior on x {
-                    SpringAnimation {
-                        spring: 2
-                        damping: 0.3
-                        duration: 400
                     }
                 }
             }

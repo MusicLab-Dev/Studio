@@ -24,7 +24,7 @@ Rectangle {
     id: partitionsPreview
     width: contentView.width
     height: Math.max(baseHeight, previewFlow.height) + 20
-    color: themeManager.backgroundColor
+    color: themeManager.contentColor
     // border.color: nodeColor
 
     MouseArea {

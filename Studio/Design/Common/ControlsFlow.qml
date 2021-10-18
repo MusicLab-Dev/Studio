@@ -27,7 +27,7 @@ Rectangle {
     property bool closeable: true
 
     id: controlsFlow
-    color: themeManager.backgroundColor
+    color: themeManager.contentColor
     implicitHeight: Math.max(baseHeight, headerRow.height) + 20
 
     MouseArea {
