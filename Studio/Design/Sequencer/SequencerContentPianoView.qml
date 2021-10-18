@@ -143,7 +143,7 @@ Item {
                     anchors.verticalCenter: key.isInMiddleOfHashKeys ? parent.verticalCenter : key.isDownHashKey ? parent.TopRight : parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: 5
-                    text: keyIndex % 12 != 0 ? pianoView.keyNames[key.keyOctaveIndex] : pianoView.keyNames[key.keyOctaveIndex] + (key.currentOctave - 1) // Minus one to display the standard A4 middle key
+                    text: keyIndex % 12 == 0 ? pianoView.keyNames[key.keyOctaveIndex] + (key.currentOctave - 1) : !key.isHashKey ? pianoView.keyNames[key.keyOctaveIndex] : "" // Minus one to display the standard A4 middle key
                     color: !key.isHashKey ? "#7B7B7B" : "#E7E7E7"
                     z: 1
                     font.pixelSize: 12
