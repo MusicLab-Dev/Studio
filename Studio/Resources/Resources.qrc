@@ -69,5 +69,18 @@
         <file>Templates/SettingsModel.json</file>
         <file>Templates/TEMPLATE_basic</file>
         <file>Templates/TEMPLATE_demo</file>
+        <file>Assets/Plugins/Arpeggiator.png</file>
+        <file>Assets/Plugins/Band Filter.png</file>
+        <file>Assets/Plugins/Cutoff Filter.png</file>
+        <file>Assets/Plugins/Delay.png</file>
+        <file>Assets/Plugins/Equalizer.png</file>
+        <file>Assets/Plugins/Hat.png</file>
+        <file>Assets/Plugins/Kick.png</file>
+        <file>Assets/Plugins/Mixer.png</file>
+        <file>Assets/Plugins/Oscillator.png</file>
+        <file>Assets/Plugins/Piano.png</file>
+        <file>Assets/Plugins/Reverb.png</file>
+        <file>Assets/Plugins/Sampler.png</file>
+        <file>Assets/Plugins/Snare.png</file>
     </qresource>
 </RCC>

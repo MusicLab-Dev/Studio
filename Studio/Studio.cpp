@@ -29,6 +29,8 @@
 #include "NodeListModel.hpp"
 #include "PluginModelProxy.hpp"
 #include "CursorManager.hpp"
+#include "ColoredSprite.hpp"
+#include "ColoredSpriteManager.hpp"
 
 void Studio::InitResources(void)
 {
@@ -79,6 +81,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<PluginModel::Tags>("PluginModel::Tags");
     qRegisterMetaType<ThemeManager::Theme>("ThemeManager::Theme");
     qRegisterMetaType<ThemeManager::SubChain>("ThemeManager::SubChain");
+    qRegisterMetaType<SpriteCache>("SpriteCache");
 
     qmlRegisterSingletonInstance<AudioAPI>("AudioAPI", 1, 0, "AudioAPI", AudioAPI::Instantiate());
     qmlRegisterUncreatableType<BeatRange>("AudioAPI", 1, 0, "BeatRange", "Cannot construct BeatRange");
@@ -114,6 +117,8 @@ void Studio::InitResources(void)
     qmlRegisterType<ClipboardManager>("ClipboardManager", 1, 0, "ClipboardManager");
     qmlRegisterType<NodeListModel>("NodeListModel", 1, 0, "NodeListModel");
     qmlRegisterType<CursorManager>("CursorManager", 1, 0, "CursorManager");
+    qmlRegisterType<ColoredSprite>("ColoredSprite", 1, 0, "ColoredSprite");
+    qmlRegisterType<ColoredSpriteManager>("ColoredSpriteManager", 1, 0, "ColoredSpriteManager");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);

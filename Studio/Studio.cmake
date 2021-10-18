@@ -120,6 +120,10 @@ set(StudioSources
     ${StudioDir}/PartitionManager.hpp
     ${StudioDir}/PartitionManager.ipp
     ${StudioDir}/PartitionManager.cpp
+    ${StudioDir}/ColoredSprite.hpp
+    ${StudioDir}/ColoredSprite.cpp
+    ${StudioDir}/ColoredSpriteManager.hpp
+    ${StudioDir}/ColoredSpriteManager.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QM_FILES} ${QtResources})
@@ -129,7 +133,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${StudioDir}/..)
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Audio
-    Protocol
     Qt5::Core Qt5::Quick Qt5::Qml Qt5::QuickControls2
     Threads::Threads
 )

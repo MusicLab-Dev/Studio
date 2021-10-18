@@ -10,6 +10,7 @@ import EventDispatcher 1.0
 import DevicesModel 1.0
 import ClipboardManager 1.0
 import CursorManager 1.0
+import ColoredSpriteManager 1.0
 
 import "../Common"
 import "../Modules"
@@ -78,6 +79,10 @@ Window {
 
     PluginTableModel {
         id: pluginTable
+    }
+
+    ColoredSpriteManager {
+        id: coloredSpriteManager
     }
 
     EventDispatcher {

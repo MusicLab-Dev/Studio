@@ -82,7 +82,6 @@
     <message>
         <location filename="Studio/AEventListener.cpp" line="48"/>
         <source>Play / Pause Context</source>
-        <oldsource>Play Context</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -548,7 +547,7 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="Studio/Design/Main/Main.qml" line="39"/>
+        <location filename="Studio/Design/Main/Main.qml" line="40"/>
         <source>Lexo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -561,67 +560,72 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="73"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="83"/>
         <source>New Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="78"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="88"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="83"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="93"/>
         <source>Save Project As...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="88"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="98"/>
         <source>Open Project File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="93"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="103"/>
         <source>Open Old Compatibility Project File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="98"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="108"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="106"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="116"/>
         <source>Basic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="114"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="124"/>
         <source>Demo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="123"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="133"/>
+        <source>Edit project name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="138"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="128"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="143"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="133"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="148"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="140"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="155"/>
         <source>Save a project file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="156"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="171"/>
         <source>Load a project file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -629,17 +633,17 @@
 <context>
     <name>OverviewButton</name>
     <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="34"/>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="43"/>
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="39"/>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="48"/>
         <source>Planner overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="40"/>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="49"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1070,17 +1074,17 @@
 <context>
     <name>SettingsView</name>
     <message>
-        <location filename="Studio/Design/Settings/SettingsView.qml" line="58"/>
+        <location filename="Studio/Design/Settings/SettingsView.qml" line="57"/>
         <source>Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Settings/SettingsView.qml" line="68"/>
+        <location filename="Studio/Design/Settings/SettingsView.qml" line="67"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Settings/SettingsView.qml" line="84"/>
+        <location filename="Studio/Design/Settings/SettingsView.qml" line="83"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1090,7 +1094,6 @@
     <message>
         <location filename="Studio/Design/Common/TimerView.qml" line="10"/>
         <source>Timer</source>
-        <oldsource>Beat timer</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1121,18 +1124,18 @@
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeContentView.qml" line="195"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="283"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="312"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="279"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="308"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="282"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="278"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="311"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="307"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>

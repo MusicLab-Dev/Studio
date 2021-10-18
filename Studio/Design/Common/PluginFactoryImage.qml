@@ -5,7 +5,6 @@ import "../Default"
 DefaultColoredAnimatedImage {
     property string name
 
-    source: name ? "qrc:/Assets/Plugins/" + name + ".gif" : ""
-    fillMode: Image.PreserveAspectFit
+    source: name ? ":/Assets/Plugins/" + name + ".png" : ""
     color: themeManager.accentColor
 }
