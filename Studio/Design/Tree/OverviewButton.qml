@@ -18,7 +18,7 @@ Item {
         anchors.fill: parent
         radius: 6
         opacity: overviewMouse.containsMouse ? 1 : 0.6
-        color: !overviewMouse.containsMouse ? themeManager.contentColor : multiSelection && treeSurface.selectionList[0] ? treeSurface.selectionList[0].node.color : app.project.master.color
+        color: !overviewMouse.containsMouse ? themeManager.contentColor : multiSelection && treeSurface.selectionList.length ? treeSurface.selectionList[0].node.color : app.project.master.color
     }
 
     MouseArea {
