@@ -234,27 +234,23 @@ MouseArea {
     TreeComponentsPanel {
         id: treeComponentsPanel
         width: parent.width * 0.15
-        height: parent.height - (treeControls.visible ? treeControls.height : 0) - partitionsPreview.height - 35
+        anchors.top: treeControls.visible ? treeControls.bottom : parent.top
+        anchors.bottom: partitionsPreview.top
+        anchors.topMargin: 20
+        anchors.bottomMargin: 20
         panelCategoryHeight: parent.height * 0.1
         xBase: parent.width
-        anchors.verticalCenter: parent.verticalCenter
     }
 
-    /*OverviewButton {
+    OverviewButton {
         id: overview
         anchors.left: parent.left
         anchors.leftMargin: 20
         width: parent.width * 0.1
         height: parent.height * 0.1
-        y: (!treeControls.visible ? treeHeader.height : treeControls.height) + 20
-
-        Behavior on y {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutCubic
-            }
-        }
-    }*/
+        anchors.top: treeControls.visible ? treeControls.bottom : parent.top
+        anchors.topMargin: 20
+    }
 
     ControlsFlow {
         id: treeControls

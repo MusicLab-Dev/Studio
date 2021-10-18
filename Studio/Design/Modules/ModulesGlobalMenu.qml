@@ -44,6 +44,16 @@ DefaultMenuButton {
         saveFileDialog.open()
     }
 
+    function editName() {
+        globalTextField.open(
+            app.project.name,
+            function() { app.project.name = globalTextField.text },
+            function () {},
+            false,
+            null
+        );
+    }
+
     function settings() {
         modulesView.settingsView.open()
     }
@@ -117,6 +127,11 @@ DefaultMenuButton {
                     app.project.path = ""
                 }
             }
+        }
+
+        Action {
+            text: qsTr("Edit project name")
+            onTriggered: menuButton.editName()
         }
 
         Action {

@@ -26,7 +26,6 @@ GridView {
         id: scrollBar
         color: themeManager.accentColor
         opacity: 0.3
-        //visible: parent.contentHeight > parent.height
         visible: false
     }
 

@@ -7,5 +7,5 @@ Rectangle {
     width: parent.width * 0.9
     height: parent.height * 0.9
     color: themeManager.contentColor
-    radius: 30
+    radius: 6
 }

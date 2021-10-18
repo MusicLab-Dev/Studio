@@ -3,6 +3,8 @@ import QtQuick 2.15
 import AudioAPI 1.0
 import NodeModel 1.0
 
+import "../Default"
+
 Rectangle {
     function getDecibelRatio(db) {
         if (db >= 12)
@@ -88,19 +90,37 @@ Rectangle {
         }
     }
 
-    onRmsPositionChanged: console.log(rmsPosition)
+    Rectangle {
+        visible: mouseArea.containsMouse || muted
+        anchors.fill: parent
+        color: "red"
+        opacity: 0.5
+        radius: 2
+    }
+
+    DefaultColoredImage {
+        anchors.centerIn: parent
+        width: parent.width * 0.7
+        height: width
+        visible: mouseArea.containsMouse
+        source: muted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
+        color: "white"
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+
+        onClicked: {
+            soundMeter.muted = !soundMeter.muted
+        }
+    }
 
     Item {
         id: soundMeterBackground
-        anchors.fill: parent
-
-        MouseArea {
-            anchors.fill: parent
-
-            onClicked: {
-                soundMeter.muted = !soundMeter.muted
-            }
-        }
+        visible: !muted
+        anchors.fill: parent 
 
         Rectangle {
             id: background
@@ -110,7 +130,6 @@ Rectangle {
             height: parent.height * (soundMeter.rmsPosition)
 
             radius: 2
-            visible: !muted
 
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "red" }
@@ -155,13 +174,6 @@ Rectangle {
             y: parent.height * (1 - soundMeter.gainPosition)
             color: themeManager.accentColor
             radius: 2
-        }
-
-        Rectangle {
-            anchors.fill: parent
-            color: "red"
-            radius: 2
-            visible: muted
         }
 
         /*Text {

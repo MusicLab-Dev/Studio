@@ -28,7 +28,7 @@ Item {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: "grey"
+        color: themeManager.backgroundColor
         opacity: 0.5
     }
 
@@ -50,7 +50,6 @@ Item {
                 id: settingsTitle
                 x: (settingsForeground.width + (parent.width - settingsForeground.width) / 2) - width / 2
                 y: height
-
             }
 
             TextRoundedButton {

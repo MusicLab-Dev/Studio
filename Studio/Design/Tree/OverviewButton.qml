@@ -7,6 +7,7 @@ import "../Common"
 
 import NodeModel 1.0
 import PartitionModel 1.0
+import CursorManager 1.0
 
 Item {
     id: overview
@@ -15,7 +16,7 @@ Item {
         anchors.fill: parent
         radius: 6
         opacity: overviewMouse.containsMouse ? 1 : 0.6
-        color: overviewMouse.containsMouse ? app.project.master.color : themeManager.backgroundColor
+        color: overviewMouse.containsMouse ? app.project.master.color : themeManager.contentColor
     }
 
     MouseArea {
@@ -23,7 +24,14 @@ Item {
         hoverEnabled: true
         anchors.fill: parent
         onPressed: {
-           actionEvent()// modulesView.addNewPlannerWithMultipleNodes(treeSurface.selectionList/*app.project.master.getAllChildren()*/)
+           modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
+        }
+
+        onHoveredChanged: {
+            if (containsMouse)
+                cursorManager.set(CursorManager.Type.Clickable)
+            else
+                cursorManager.set(CursorManager.Type.Normal)
         }
     }
 
@@ -32,7 +40,7 @@ Item {
         fontSizeMode: Text.Fit
         font.pixelSize: 30
         text: qsTr("Overview")
-        color: overviewMouse.containsMouse ? "white" : app.project.master.color
+        color: overviewMouse.containsMouse ? themeManager.contentColor : app.project.master.color
     }
 
     HelpArea {

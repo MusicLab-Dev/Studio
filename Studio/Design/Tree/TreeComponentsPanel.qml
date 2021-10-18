@@ -89,10 +89,12 @@ TreePanel {
             id: treeComponentsListView
             anchors.centerIn: parent
             width: parent.width
-            height: parent.height * 0.92
+            height: parent.height * 0.925
             clip: true
             spacing: 15
             model: treeComponentsPanel.filter ? pluginTableProxy : null
+            flickDeceleration: 7000
+            maximumFlickVelocity: 1500
 
             delegate: TreeComponentDelegate {
                 width: treeComponentsListView.width
