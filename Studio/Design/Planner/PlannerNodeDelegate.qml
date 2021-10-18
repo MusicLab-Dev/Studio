@@ -124,14 +124,10 @@ Item {
             id: nodeInstances
         }
 
-        PlannerRowDataLine {}
-
         PlannerNodeControls {
             id: nodeControls
             visible: nodeDelegate.isSelected
         }
-
-        PlannerRowDataLine {}
 
         PlannerNodeAutomations {
             id: nodeAutomations

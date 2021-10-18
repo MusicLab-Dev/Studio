@@ -66,8 +66,7 @@ Item {
 
             Rectangle {
                 anchors.fill: parent
-                color: "transparent"
-                border.color: instanceBackground.containsMouse ? componentDelegate.color : "white"
+                color: themeManager.backgroundColor
                 radius: 6
                 opacity: 1
             }

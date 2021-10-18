@@ -67,8 +67,9 @@ TreePanel {
             id: panelContentBackground
             width: parent.width + panelContent.widthOffset
             height: parent.height
-            color: themeManager.backgroundColor
+            color: themeManager.contentColor
             opacity: 0.9
+            radius: 6
         }
 
         MouseArea {
@@ -88,9 +89,9 @@ TreePanel {
             id: treeComponentsListView
             anchors.centerIn: parent
             width: parent.width
-            height: parent.height * 0.95
+            height: parent.height * 0.92
             clip: true
-            spacing: 20
+            spacing: 15
             model: treeComponentsPanel.filter ? pluginTableProxy : null
 
             delegate: TreeComponentDelegate {

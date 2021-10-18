@@ -4,7 +4,6 @@
         <file>PlannerHeader.qml</file>
         <file>PlannerFooter.qml</file>
         <file>PlannerContentView.qml</file>
-        <file>PlannerRowDataLine.qml</file>
         <file>PlannerNodeDelegate.qml</file>
         <file>PlannerNodeControls.qml</file>
         <file>PlannerNodeInstances.qml</file>

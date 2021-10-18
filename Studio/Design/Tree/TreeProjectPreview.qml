@@ -136,6 +136,7 @@ ProjectPreview {
         width: previewText.implicitWidth + 4
         height: previewText.implicitHeight + 4
         anchors.right: parent.right
+        radius: 6
 
         DefaultText {
             id: previewText

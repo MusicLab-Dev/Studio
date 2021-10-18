@@ -104,7 +104,5 @@ Repeater {
                 height: contentView.rowHeight
             }
         }
-
-        PlannerRowDataLine {}
     }
 }

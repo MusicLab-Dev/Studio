@@ -14,7 +14,7 @@ Rectangle {
 
     width: parent.width
     height: parent.height
-    color: themeManager.backgroundColor
+    color: themeManager.contentColor
 
     MouseArea {
         anchors.fill: parent
