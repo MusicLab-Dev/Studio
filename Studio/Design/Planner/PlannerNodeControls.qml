@@ -30,7 +30,7 @@ Row {
                 height: nodeHeaderMouseArea.containsMouse ? parent.height * 0.6 : parent.height * 0.55
                 name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
                 color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
-                playing: nodeHeaderMouseArea.containsMouse
+                playing: plannerView.visible && nodeDelegate.isSelected && (nodeHeaderMouseArea.containsMouse || contentView.playerBase.isPlayerRunning)
 
                 Behavior on height {
                     NumberAnimation { duration: 100 }

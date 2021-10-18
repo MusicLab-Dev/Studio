@@ -36,6 +36,7 @@ MouseArea {
     // Alias
     property alias treeSurface: treeSurface
     property alias partitionsPreview: partitionsPreview
+    property PlayerBase playerBase: treeView.player.playerBase
 
     // Horizontal scroll
     property real xOffset: 0

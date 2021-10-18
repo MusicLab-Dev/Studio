@@ -6,7 +6,10 @@
 #pragma once
 
 #include <QImage>
+#include <QColor>
 #include <QQuickPaintedItem>
+
+#include "ColoredSpriteManager.hpp"
 
 class ColoredSprite : public QQuickPaintedItem
 {
@@ -44,6 +47,10 @@ public:
     /** @brief Set the playing property */
     void setPlaying(const bool value);
 
+
+    /** @brief Callback called when the manager loaded the image */
+    void onImageLoaded(const QString &path, const SpriteCache &cache);
+
 signals:
     /** @brief Notify that the source property has changed */
     void sourceChanged(void);
@@ -56,11 +63,11 @@ signals:
 
 private:
     QString _source {};
-    QImage _image {};
+    SpriteCache _cache {};
     QColor _color {};
     quint32 _pos { 0u };
-    quint32 _count { 0u };
     bool _playing { false };
+    bool _loading { false };
 
     /** @brief Request an update */
     void requestUpdate(void) { update(); }

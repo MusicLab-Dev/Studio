@@ -6,6 +6,7 @@
 #include <QDebug>
 
 #include "ColoredSpriteManager.hpp"
+#include "ColoredSprite.hpp"
 
 SpriteCache ImageLoaderThread::Load(const QString &path)
 {
@@ -34,18 +35,30 @@ ImageLoaderThread::ImageLoaderThread(QObject *parent)
 
 void ImageLoaderThread::run(void)
 {
+    qDebug() << "ImageLoaderThread::run: Thread started";
     QString path;
     std::uint32_t tryCount { 0u };
 
-    while (true) {
+    while (!_forceExit) {
         if (_queue.pop(path)) {
+            qDebug() << "ImageLoaderThread::run: Extracted work" << path;
             imageLoaded(path, Load(path));
+            tryCount = 0u;
         } else {
             if (++tryCount == 10u)
                 break;
-            sleep(100);
+            msleep(100);
         }
     }
+    qDebug() << "ImageLoaderThread::run: Thread exited";
+}
+
+
+ColoredSpriteManager::~ColoredSpriteManager(void)
+{
+    _thread.forceExit();
+    _thread.wait();
+    _Instance = nullptr;
 }
 
 ColoredSpriteManager::ColoredSpriteManager(QObject *parent)
@@ -81,6 +94,50 @@ void ColoredSpriteManager::unregisterSprite(void) noexcept
     }
 }
 
+void ColoredSpriteManager::query(const QString &path, ColoredSprite *instance)
+{
+    auto tableIt = _table.find(path);
+
+    if (tableIt != _table.end()) {
+        instance->onImageLoaded(path, *tableIt);
+        return;
+    }
+
+    auto it = _loadTable.find(path);
+
+    if (it != _loadTable.end()) {
+        it->push(instance);
+    } else {
+        it =_loadTable.insert(path, LoadCache { instance });
+        if (!_thread.queue().push(path)) {
+            // Push failed in async queue, we must load synchronously
+            qDebug() << "ColoredSpriteManager::query: Thread async queue is full, loading synchronously" << path;
+            _loadTable.erase(it);
+            const auto cache = ImageLoaderThread::Load(path);
+            instance->onImageLoaded(path, cache);
+            _table.insert(path, cache);
+        } else {
+            if (!_thread.isRunning())
+               _thread.start();
+        }
+    }
+}
+
+void ColoredSpriteManager::cancelQuery(const QString &path, ColoredSprite *instance)
+{
+    auto it = _loadTable.find(path);
+
+    if (it == _loadTable.end()) {
+        qCritical() << "ColoredSpriteManager::cancelQuery: Couldn't retreive query" << path;
+        return;
+    }
+    const auto instanceIt = it->find(instance);
+    if (instanceIt != it->end())
+        it->erase(instanceIt);
+    else
+        qCritical() << "ColoredSpriteManager::cancelQuery: Couldn't find instance in query" << path;
+}
+
 void ColoredSpriteManager::onImageLoaded(const QString &path, const SpriteCache &cache)
 {
     auto it = _loadTable.find(path);
@@ -92,8 +149,8 @@ void ColoredSpriteManager::onImageLoaded(const QString &path, const SpriteCache 
     }
 
     // Dispatch all events
-    for (const auto &func : *it) {
-        func(path, cache);
+    for (const auto instance : *it) {
+        instance->onImageLoaded(path, cache);
     }
 
     // Delete entry from the load table

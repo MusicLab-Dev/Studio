@@ -22,6 +22,8 @@ Item {
         if (node == targetNode || node.isAParent(targetNode)) {
             modulesView.removeModule(moduleIndex)
             return true
+        } else {
+            actionsManager.nodeDeleted(targetNode)
         }
         return false
     }
@@ -29,8 +31,9 @@ Item {
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
         if (node === targetNode && partitionIndex === targetPartitionIndex) {
             modulesView.removeModule(moduleIndex)
-            actionsManager.nodePartitionDeleted(targetNode, targetPartitionIndex)
             return true
+        } else {
+            actionsManager.nodePartitionDeleted(targetNode, targetPartitionIndex)
         }
         return false
     }

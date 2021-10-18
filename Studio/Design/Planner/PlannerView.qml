@@ -9,6 +9,7 @@ import "../Help"
 
 Item {
     function onNodeDeleted(targetNode) {
+        actionsManager.nodeDeleted(targetNode)
         var count = nodeList.count()
         for (var i = 0; i < count; ++i) {
             var node = nodeList.getNode(i)
@@ -21,6 +22,7 @@ Item {
     }
 
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
+        actionsManager.nodePartitionDeleted(targetNode, targetPartitionIndex)
         return false
     }
 

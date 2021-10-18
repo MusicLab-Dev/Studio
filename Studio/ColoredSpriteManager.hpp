@@ -14,6 +14,8 @@
 #include <Core/Vector.hpp>
 #include <Core/Functor.hpp>
 
+class ColoredSprite;
+
 /** @brief Cache structure of a single sprite */
 struct SpriteCache
 {
@@ -61,12 +63,17 @@ public:
     /** @brief Get a constant reference over the async queue */
     [[nodiscard]] const auto &queue(void) const noexcept { return _queue; }
 
+
+    /** @brief Froce the exit of the thread */
+    void forceExit(void) noexcept { _forceExit = true; }
+
 signals:
     /** @brief Notify that an image has been loaded */
     void imageLoaded(const QString &path, const SpriteCache &cache);
 
 private:
     Core::SPSCQueue<QString> _queue;
+    std::atomic<bool> _forceExit { false };
 };
 
 /** @brief Manager that owns every sprite animation */
@@ -78,11 +85,8 @@ public:
     static constexpr int TimerTickRate = 90;
 
 
-    /** @brief Functor used to notify that an image is loaded */
-    using LoadFunc = std::function<void(const QString &, const SpriteCache &)>;
-
     /** @brief Cache that contains notify functors */
-    using LoadCache = Core::TinyVector<LoadFunc>;
+    using LoadCache = Core::TinyVector<ColoredSprite *>;
 
 
     /** @brief Get the manager global instance */
@@ -90,14 +94,17 @@ public:
 
 
     /** @brief Destructor */
-    ~ColoredSpriteManager(void) override = default;
+    ~ColoredSpriteManager(void) override;
 
     /** @brief Constructor */
     ColoredSpriteManager(QObject *parent = nullptr);
 
     /** @brief Query an image to the manager, may start a thread */
-    template<typename Functor>
-    void query(const QString &path, Functor &&functor);
+    void query(const QString &path, ColoredSprite *instance);
+
+
+    /** @brief Cancel a query from an instance */
+    void cancelQuery(const QString &path, ColoredSprite *instance);
 
 
     /** @brief Register a sprite for playback */
@@ -109,6 +116,9 @@ public:
 signals:
     /** @brief Notify that the animation has ticked */
     void animationTick(void);
+
+    /** @brief Notify that an image has been loaded */
+    void imageLoaded(const QString &path, const SpriteCache &cache);
 
 private:
     QMap<QString, SpriteCache> _table {};
@@ -126,5 +136,3 @@ private:
     /** @brief Callback when image loader thread has finished running */
     void onThreadFinished(void);
 };
-
-#include "ColoredSpriteManager.ipp"

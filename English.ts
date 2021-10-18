@@ -803,7 +803,7 @@
 <context>
     <name>PlannerView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerView.qml" line="39"/>
+        <location filename="Studio/Design/Planner/PlannerView.qml" line="41"/>
         <source>Planner</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1045,12 +1045,12 @@
 <context>
     <name>SequencerView</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="177"/>
+        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="180"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="178"/>
+        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="181"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>

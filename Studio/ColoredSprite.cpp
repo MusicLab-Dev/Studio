@@ -5,29 +5,32 @@
 
 #include <QPainter>
 
-#include "ColoredSpriteManager.hpp"
 #include "ColoredSprite.hpp"
 
 ColoredSprite::~ColoredSprite(void)
 {
-    if (_playing)
-        ColoredSpriteManager::Get()->unregisterSprite();
+    if (const auto manager = ColoredSpriteManager::Get(); manager) {
+        if (_loading)
+            ColoredSpriteManager::Get()->cancelQuery(_source, this);
+        if (_playing)
+            ColoredSpriteManager::Get()->unregisterSprite();
+    }
 }
 
 void ColoredSprite::setSource(const QString &value)
 {
     if (value == _source)
         return;
+    if (_loading)
+        ColoredSpriteManager::Get()->cancelQuery(_source, this);
+    _pos = 0u;
+    _cache = SpriteCache();
     _source = value;
     emit sourceChanged();
-    ColoredSpriteManager::Get()->query(_source, [value, this](const QString &path, const SpriteCache &cache) {
-        if (value == path) {
-            _image = cache.image;
-            _pos = 0;
-            _count = cache.frameCount;
-            requestUpdate();
-        }
-    });
+    if (!_source.isEmpty()) {
+        _loading = true;
+        ColoredSpriteManager::Get()->query(_source, this);
+    }
 }
 
 void ColoredSprite::setColor(const QColor &value)
@@ -61,18 +64,40 @@ void ColoredSprite::setPlaying(const bool value)
 
 void ColoredSprite::onAnimationTick(void)
 {
-    if (++_pos >= _count)
+    if (++_pos >= _cache.frameCount)
         _pos = 0u;
     requestUpdate();
 }
 
 void ColoredSprite::paint(QPainter *painter)
 {
-    const auto imageSize = _image.height();
+    // Select the most favorable image
+    QImage *target { nullptr };
+    if (height() - _cache.image.width() < height() - _cache.lowResImage.height())
+        target = &_cache.image;
+    else
+        target = &_cache.lowResImage;
+
+    const auto imageSize = target->height();
     const QRect dest(0, 0, width(), height());
     const QRect source(_pos * imageSize, 0, imageSize, imageSize);
 
-    painter->setRenderHint(QPainter::RenderHint::Antialiasing);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform);
-    painter->drawImage(dest, _image, source);
+//    painter->setRenderHint(QPainter::RenderHint::Antialiasing);
+//    painter->setRenderHint(QPainter::SmoothPixmapTransform);
+
+    painter->drawImage(dest, *target, source);
+    painter->setCompositionMode(QPainter::CompositionMode_SourceIn);
+    painter->fillRect(0, 0, width(), height(), _color);
+}
+
+void ColoredSprite::onImageLoaded(const QString &path, const SpriteCache &cache)
+{
+    if (_loading && _source == path) {
+        _cache = cache;
+        _pos = 0;
+        requestUpdate();
+        _loading = false;
+    } else {
+        qCritical() << "ColoredSprite::onImageLoaded: Not image was queried";
+    }
 }

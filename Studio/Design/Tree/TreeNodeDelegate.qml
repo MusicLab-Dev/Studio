@@ -360,7 +360,7 @@ Column {
                             height: nodeInstanceBackground.containsMouse ? parent.height * 0.6 : parent.height * 0.55
                             name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
                             color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
-                            playing: nodeInstanceBackground.containsMouse || (treeView.visible && treeView.player.playerBase.isPlayerRunning)
+                            playing: treeView.visible && (nodeInstanceBackground.containsMouse || treeView.player.playerBase.isPlayerRunning)
 
                             Behavior on height {
                                 NumberAnimation { duration: 100 }

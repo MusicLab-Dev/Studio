@@ -53,6 +53,7 @@ Rectangle {
                 anchors.centerIn: parent
                 name: node ? node.plugin.title : ""
                 color: node ? node.color : "black"
+                playing: contentView.playerBase.isPlayerRunning
             }
         }
 

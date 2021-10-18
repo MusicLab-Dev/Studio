@@ -8,10 +8,12 @@ import "../Help"
 
 Item {
     function onNodeDeleted(targetNode) {
+        actionsManager.nodeDeleted(targetNode)
         return false
     }
 
     function onNodePartitionDeleted(targetNode, targetPartitionIndex) {
+        actionsManager.nodePartitionDeleted(targetNode, targetPartitionIndex)
         return false
     }
 
