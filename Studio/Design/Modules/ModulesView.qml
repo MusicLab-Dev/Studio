@@ -6,6 +6,7 @@ import "../Plugins"
 import "../Workspaces"
 import "../Settings"
 import "../Planner"
+import "../Sequencer"
 
 Rectangle {
     enum ModuleType {
@@ -48,28 +49,28 @@ Rectangle {
     }
 
     function addNewPlanner(node) {
-        app.plannerNodeCache = node
         var idx = getSamePlanner([node])
-        if (idx === -1)
+        if (idx === -1) {
+            app.plannerNodeCache = node
             addModule({
                 type: ModulesView.Planner,
                 path: "qrc:/Planner/PlannerView.qml",
                 callback: plannerNodeCallback
             })
-        else
+        } else
             modulesView.changeSelectedModule(idx)
     }
 
     function addNewPlannerWithMultipleNodes(nodes) {
-        app.plannerNodesCache = nodes
         var idx = getSamePlanner(nodes)
-        if (idx === -1)
+        if (idx === -1) {
+            app.plannerNodesCache = nodes
             addModule({
                 type: ModulesView.Planner,
                 path: "qrc:/Planner/PlannerView.qml",
                 callback: plannerMultipleNodesCallback
             })
-        else
+        } else
             modulesView.changeSelectedModule(idx)
     }
 
@@ -82,13 +83,21 @@ Rectangle {
     }
 
     function addSequencerWithExistingPartition(targetNode, targetPartitionIndex) {
-        app.partitionNodeCache = targetNode
-        app.partitionIndexCache = targetPartitionIndex
-        addModule({
-            type: ModulesView.Sequencer,
-            path: "qrc:/Sequencer/SequencerView.qml",
-            callback: sequencerPartitionNodeCallback
-        })
+        var idx = getSameSequencer(targetNode, targetPartitionIndex)
+        if (idx === -1) {
+            app.partitionNodeCache = targetNode
+            app.partitionIndexCache = targetPartitionIndex
+            addModule({
+                type: ModulesView.Sequencer,
+                path: "qrc:/Sequencer/SequencerView.qml",
+                callback: sequencerPartitionNodeCallback
+            })
+        } else {
+            modulesView.changeSelectedModule(idx)
+            var sequencer = modulesView.getModule(idx)
+            sequencer.partitionIndex = targetPartitionIndex
+            sequencer.partition = targetNode.partitions.getPartition(targetPartitionIndex)
+        }
     }
 
     function getModule(idx) {
@@ -101,6 +110,18 @@ Rectangle {
             if (planner instanceof PlannerView) {
                 if (planner.nodeList.equals(nodes))
                     return i;
+            }
+        }
+        return -1
+    }
+
+    function getSameSequencer(node) {
+        for (var i = 0; i < modulesContent.totalTabCount; i++) {
+            var sequencer = getModule(i)
+            if (sequencer instanceof SequencerView) {
+                if (sequencer.node != node)
+                    continue;
+                return i;
             }
         }
         return -1
