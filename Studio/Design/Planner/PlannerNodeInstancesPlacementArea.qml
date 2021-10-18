@@ -93,8 +93,10 @@ PlacementArea {
     }
 
     // Preview extension
-    property var previewInstanceOffset: 0
+    property int previewInstanceOffset: 0
     property var moveCache: []
+    property var lastClickTime: undefined // Last time when a click occured
+    property int lastClickTargetFrom: 0 // Last beat position when a click occured
 
     id: placementArea
     allowInsert: contentView.selectedPartition !== null
@@ -113,6 +115,14 @@ PlacementArea {
     onCopyTarget: {
         var instance = nodeInstances.instances.getInstance(targetIndex)
         contentView.selectPartition(nodeDelegate.node, instance.partitionIndex)
+    }
+
+    onLastTargetClicked: {
+        var now = new Date()
+        if (lastClickTime !== undefined && lastClickTargetFrom === previewRange.from && (now.getTime() - lastClickTime.getTime()) <= 500)
+            modulesView.addSequencerWithExistingPartition(contentView.selectedPartitionNode, contentView.selectedPartitionIndex)
+        lastClickTime = now
+        lastClickTargetFrom = previewRange.from
     }
 
     PartitionPreview {
