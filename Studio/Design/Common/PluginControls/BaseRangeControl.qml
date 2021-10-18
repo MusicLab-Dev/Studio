@@ -126,6 +126,16 @@ MouseArea {
         accentColor: control.accentColor
     }
 
+    Canvas {
+        anchors.fill: parent
+
+        onPaint: {
+            var ctx = getContext("2d")
+            ctx.reset()
+            ctx.
+        }
+    }
+
     Rectangle {
         id: controlCircle
         anchors.fill: parent
