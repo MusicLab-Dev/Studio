@@ -40,7 +40,7 @@ Item {
         anchors.fill: parent
         fontSizeMode: Text.Fit
         font.pixelSize: 23
-        text: multiSelection ? qsTr("Open selected") : qsTr("Overview")
+        text: multiSelection ? qsTr("Open selected (" + treeSurface.selectionCount + ")") : qsTr("Overview")
         color: overviewMouse.containsMouse ? themeManager.contentColor : multiSelection && treeSurface.selectionList[0] ? treeSurface.selectionList[0].node.color : app.project.master.color
     }
 
