@@ -30,12 +30,13 @@ Item {
             x: container.x + 10
             y: -height / 2
 
-            Text {
+            DefaultText {
                 id: text
                 anchors.fill: parent
                 color: "white"
                 text: qsTr(label.toUpperCase())
                 font.weight: Font.DemiBold
+                font.pixelSize: 10
             }
         }
     }

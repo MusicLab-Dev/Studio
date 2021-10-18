@@ -120,11 +120,12 @@ Rectangle {
         id: soundMeter
         anchors.left: plannerButton.right
         anchors.leftMargin: 10
-        anchors.verticalCenter: parent.verticalCenter
-        height: parent.height * 0.75
+        anchors.top: plannerButton.top
+        anchors.bottom: plannerButton.bottom
         width: height / 3
         targetNode: sequencerView.node
         enabled: sequencerView.visible
+        color: themeManager.foregroundColor
 
         HelpArea {
             name: qsTr("Sound meter")

@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import AudioAPI 1.0
 
 Item {
+    property alias upTimeline: upTimeline
     property alias timelineCursor: timelineCursor
     readonly property real loopFromIndicatorX: loopFromIndicator.x + loopFromIndicator.width / 2
     readonly property real loopToIndicatorX: loopToIndicator.x + loopToIndicator.width / 2
@@ -15,9 +16,7 @@ Item {
         id: actionBox
         width: contentView.rowHeaderWidth
         height: parent.height
-        color: themeManager.backgroundColor
-        border.color: "black"
-        border.width: 1
+        color: themeManager.foregroundColor
     }
 
     Item {
@@ -60,7 +59,7 @@ Item {
             height: parent.height / 2
             width: parent.width
             anchors.top: upTimeline.bottom
-            color: themeManager.foregroundColor
+            color: themeManager.contentColor
         }
 
         Rectangle {

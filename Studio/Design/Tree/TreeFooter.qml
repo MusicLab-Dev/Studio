@@ -36,7 +36,7 @@ Rectangle {
         Rectangle {
             id: previewBackground
             anchors.fill: parent
-            color: themeManager.backgroundColor
+            color: themeManager.foregroundColor
             clip: true
             radius: 6
         }

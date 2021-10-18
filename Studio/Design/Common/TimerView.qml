@@ -7,7 +7,7 @@ import AudioAPI 1.0
 DefaultSectionWrapper {
     property int currentPlaybackBeat: 0
 
-    label: qsTr("Beat timer")
+    label: qsTr("Timer")
 
     DefaultText {
         font.pixelSize: parent.height * 0.75

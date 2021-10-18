@@ -103,12 +103,12 @@ Rectangle {
         }
 
         Rectangle {
+            id: background
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             height: parent.height * (soundMeter.rmsPosition)
 
-            color: themeManager.backgroundColor
             radius: 2
             visible: !muted
 

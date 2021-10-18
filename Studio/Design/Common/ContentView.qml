@@ -104,6 +104,7 @@ Item {
 
     // Timeline
     readonly property int timelineHeight: 25
+    property alias contentViewTimeline: contentViewTimeline
     property alias timelineCursor: contentViewTimeline.timelineCursor
     property real bottomOverlayMargin: 0
     property real availableContentHeight: height - timelineCursor.height - contentView.bottomOverlayMargin

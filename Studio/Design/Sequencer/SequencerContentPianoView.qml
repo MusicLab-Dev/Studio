@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "../Common"
+import "../Default"
 
 import AudioAPI 1.0
 
@@ -36,7 +37,7 @@ Item {
     readonly property int keyMax: octaveMax * keysPerOctave - 1
     readonly property int keyOffset: octaveOffset * keysPerOctave
     readonly property int keys: keysPerOctave * octaves
-    property real headerFactor: 0.1
+    property real headerFactor: 0.07
     property real keyWidth: parent.width * headerFactor
     readonly property real totalHeight: keys * rowHeight
     readonly property real snapperHeight: 30
@@ -99,7 +100,7 @@ Item {
             readonly property bool isInMiddleOfHashKeys: middleHashKeysStates[keyOctaveIndex]
             readonly property bool isUpHashKey: upHashKeyStates[keyOctaveIndex]
             readonly property bool isDownHashKey: downHashKeyStates[keyOctaveIndex]
-            readonly property color keyColor: keyOctaveIndex === 0 ? "#C2C2C2" : isHashKey ? "#7B7B7B" : "#E7E7E7"
+            readonly property color keyColor: keyOctaveIndex === 0 ? "#C2C2C2" : isHashKey ? themeManager.backgroundColor : "white"
             readonly property int placementOffset: keyOctaveIndex == 11 ? 0 : 1
 
             id: key
@@ -139,6 +140,7 @@ Item {
                 }
 
                 Text {
+                    visible: keyIndex % 12 == 0
                     anchors.verticalCenter: key.isInMiddleOfHashKeys ? parent.verticalCenter : key.isDownHashKey ? parent.TopRight : parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: 5
@@ -155,9 +157,7 @@ Item {
         width: contentView.rowHeaderWidth
         height: contentView.rowHeight * keysPerOctave
         color: themeManager.getColorFromChain(pianoView.targetOctave)
-        opacity: 1/3
-        //border.color: themeManager.accentColor
-        //border.width: 1
+        opacity: 0.1
         z: 10
     }
 
@@ -172,14 +172,24 @@ Item {
             delegate: Rectangle {
                 readonly property var beatRange: range
 
-                y: (pianoView.keys - 1 - (key - pianoView.keyOffset)) * contentView.rowHeight
+                y: ((pianoView.keys - 1 - (key - pianoView.keyOffset)) * contentView.rowHeight)
                 x: contentView.xOffset + beatRange.from * contentView.pixelsPerBeatPrecision
                 width: (beatRange.to - beatRange.from) * contentView.pixelsPerBeatPrecision
                 height: contentView.rowHeight
                 color: themeManager.getColorFromChain(key)
                 border.color: Qt.darker(color, 1.25)
-                border.width: 2
+                border.width: 1
                 opacity: 0.9
+
+                DefaultText {
+                    visible: parent.width > 30
+                    anchors.fill: parent
+                    anchors.leftMargin: 5
+                    horizontalAlignment: Text.AlignLeft
+                    text: keyNames[key % 12] + Math.floor((key / 12) - 1)
+                    font.pixelSize: 12
+                    color: Qt.darker(parent.border.color, 1.25)
+                }
 
                 Rectangle {
                     x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
