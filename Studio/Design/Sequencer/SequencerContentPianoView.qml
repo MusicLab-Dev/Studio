@@ -50,13 +50,18 @@ Item {
 
     Connections {
         function launch(pressed, key) {
-            if (sequencerView.node)
+            if (sequencerView.node) {
+                var targetKey = (pianoView.targetOctave * keysPerOctave) + key
+                var idx = (pianoView.keys - 1) - (targetKey - pianoView.keyOffset)
+                if (idx >= 0 && idx < keyRepeater.count)
+                    keyRepeater.itemAt(idx).isManuallyPressed = pressed
                 sequencerView.node.partitions.addOnTheFly(
-                    AudioAPI.noteEvent(!pressed, (pianoView.targetOctave * keysPerOctave) + key, AudioAPI.velocityMax, 0),
+                    AudioAPI.noteEvent(!pressed, targetKey, AudioAPI.velocityMax, 0),
                     sequencerView.node,
                     sequencerView.partitionIndex,
                     true
                 )
+            }
         }
 
         function octaveUp() {
@@ -90,6 +95,7 @@ Item {
     }
 
     Repeater {
+        id: keyRepeater
         model: pianoView.keys
 
         delegate: Item {
@@ -103,6 +109,10 @@ Item {
             readonly property color keyColor: keyOctaveIndex === 0 ? "#C2C2C2" : isHashKey ? themeManager.backgroundColor : "white"
             readonly property int placementOffset: keyOctaveIndex == 11 ? 0 : 1
 
+            // Pressed state
+            property bool isManuallyPressed: false
+            readonly property bool isPressed: isManuallyPressed || keyMouseArea.containsPress
+
             id: key
             width: pianoView.keyWidth
             height: contentView.rowHeight
@@ -115,7 +125,7 @@ Item {
                 z: 1
                 width: (key.isHashKey ? pianoView.keyWidth * 0.75 : pianoView.keyWidth) - x
                 height: contentView.rowHeight * (key.isHashKey ? 1 : key.isInMiddleOfHashKeys ? 2 : 1.5) + placementOffset
-                color: keyMouseArea.pressed ? Qt.darker(key.keyColor, 1.2) : key.keyColor
+                color: key.isPressed ? Qt.darker(key.keyColor, 1.2) : key.keyColor
                 border.color: key.isHashKey ? color : "#7B7B7B"
                 border.width: 1
 
