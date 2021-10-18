@@ -220,6 +220,7 @@ MouseArea {
 
     // Move
     function beginMove(mouseBeatPrecision, mouseKey, targetIndex, targetBeatRange) {
+        singleTargetMoved = false
         cursorManager.set(CursorManager.Type.Move)
         attachPreview(targetBeatRange, mouseKey)
         previewMouseBeatPrecisionOffset = mouseBeatPrecision - targetBeatRange.from
@@ -247,6 +248,7 @@ MouseArea {
                 AudioAPI.beatRange(placementBeatPrecision, placementBeatPrecision + contentView.placementBeatPrecisionLastWidth),
                 mouseKey
             )
+            singleTargetMoved = true
         }
     }
     function endMove(mouseBeatPrecision, mouseKey) {
@@ -254,8 +256,13 @@ MouseArea {
         if (targetIsPartOfSelection) {
             selectionInsertCache = constructSelectionTargets()
             addTargets(selectionInsertCache)
-        } else
+        } else {
             addTarget(previewRange, previewKey)
+            if (!singleTargetMoved)
+                lastTargetClicked()
+            else
+                singleTargetMoved = false
+        }
         detachPreview()
     }
 
@@ -398,6 +405,9 @@ MouseArea {
     signal brushInserted(int insertedKey)
     signal brushEnded()
 
+    // Signal emited when a move did not move the target
+    signal lastTargetClicked()
+
     // Signal emited when an insert is not allowed
     signal insertRefused(int mouseBeatPrecision, int mouseKey)
 
@@ -417,6 +427,9 @@ MouseArea {
     // Brush
     property var brushLastBeatRange: AudioAPI.beatRange(0, 0)
     property int brushKey: 0
+
+    // Move
+    property bool singleTargetMoved: false // True when the target has moved during the move event (only for non-selection)
 
     // Selection overlay
     property int selectionBeatPrecisionFrom: 0
