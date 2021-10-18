@@ -686,12 +686,12 @@
 <context>
     <name>PlannerContentView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="135"/>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="136"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="136"/>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="137"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -888,62 +888,62 @@
 <context>
     <name>SequencerContentPianoView</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="11"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
         <source>C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="11"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
         <source>C#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="11"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
         <source>D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="11"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
         <source>D#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="11"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
         <source>E</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="11"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
         <source>F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>F#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>G</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>G#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>A#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="12"/>
+        <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1016,24 +1016,24 @@
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="72"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="115"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="170"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="185"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="113"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="132"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="147"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="114"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="112"/>
         <source>Move to planner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="169"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="131"/>
         <source>Sound meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="184"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="146"/>
         <source>Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1089,7 +1089,8 @@
     <name>TimerView</name>
     <message>
         <location filename="Studio/Design/Common/TimerView.qml" line="10"/>
-        <source>Beat timer</source>
+        <source>Timer</source>
+        <oldsource>Beat timer</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1139,18 +1140,18 @@
 <context>
     <name>TreeFooter</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="30"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="29"/>
         <source>Project Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="31"/>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="96"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="30"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="85"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="95"/>
+        <location filename="Studio/Design/Tree/TreeFooter.qml" line="84"/>
         <source>Player Area</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1214,7 +1215,7 @@
 <context>
     <name>TreeProjectPreview</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeProjectPreview.qml" line="150"/>
+        <location filename="Studio/Design/Tree/TreeProjectPreview.qml" line="151"/>
         <source>Selection</source>
         <translation type="unfinished"></translation>
     </message>

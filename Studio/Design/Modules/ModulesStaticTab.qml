@@ -22,7 +22,7 @@ MouseArea {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: drag.active ? themeManager.accentColor : tabMouseArea.isSelectedModule ? themeManager.backgroundColor : themeManager.contentColor
+        color: drag.active ? themeManager.accentColor : tabMouseArea.isSelectedModule ? themeManager.contentColor : themeManager.backgroundColor
     }
 
     DefaultColoredImage {

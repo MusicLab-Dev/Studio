@@ -48,16 +48,12 @@
         <file>Assets/Settings/Midi.png</file>
         <file>Assets/Settings/Project.png</file>
         <file>Assets/Free.png</file>
-        <file>Templates/SettingsModel.json</file>
-        <file>Templates/TEMPLATE_basic</file>
         <file>Assets/presse-papiers.png</file>
         <file>Assets/Plugins/Mixer.gif</file>
         <file>Assets/Plugins/Kick.gif</file>
         <file>Assets/Plugins/Oscillator.gif</file>
         <file>Assets/Plugins/Delay.gif</file>
         <file>Assets/Plugins/Sampler.gif</file>
-        <file>Templates/SettingsModel.json</file>
-        <file>Templates/TEMPLATE_basic</file>
         <file>Assets/presse-papiers.png</file>
         <file>Assets/musical-note.png</file>
         <file>Assets/Plugins/Cutoff Filter.gif</file>
@@ -70,5 +66,8 @@
         <file>Assets/Chrono.png</file>
         <file>Assets/Orchestra.png</file>
         <file>Assets/Plugins/Hat.gif</file>
+        <file>Templates/SettingsModel.json</file>
+        <file>Templates/TEMPLATE_basic</file>
+        <file>Templates/TEMPLATE_demo</file>
     </qresource>
 </RCC>
