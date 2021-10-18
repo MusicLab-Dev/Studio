@@ -10,22 +10,23 @@ import PartitionModel 1.0
 import CursorManager 1.0
 
 Item {
+    property bool multiSelection: treeSurface.selectionCount > 0
+
     id: overview
 
     Rectangle {
         anchors.fill: parent
         radius: 6
         opacity: overviewMouse.containsMouse ? 1 : 0.6
-        color: overviewMouse.containsMouse ? app.project.master.color : themeManager.contentColor
+        color: !overviewMouse.containsMouse ? themeManager.contentColor : multiSelection && treeSurface.selectionList[0] ? treeSurface.selectionList[0].node.color : app.project.master.color
     }
 
     MouseArea {
         id: overviewMouse
         hoverEnabled: true
         anchors.fill: parent
-        onPressed: {
-           modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
-        }
+
+        onPressed: multiSelection ? actionEvent() : modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
 
         onHoveredChanged: {
             if (containsMouse)
@@ -38,9 +39,9 @@ Item {
     DefaultText {
         anchors.fill: parent
         fontSizeMode: Text.Fit
-        font.pixelSize: 30
-        text: qsTr("Overview")
-        color: overviewMouse.containsMouse ? themeManager.contentColor : app.project.master.color
+        font.pixelSize: 23
+        text: multiSelection ? qsTr("Open selected") : qsTr("Overview")
+        color: overviewMouse.containsMouse ? themeManager.contentColor : multiSelection && treeSurface.selectionList[0] ? treeSurface.selectionList[0].node.color : app.project.master.color
     }
 
     HelpArea {

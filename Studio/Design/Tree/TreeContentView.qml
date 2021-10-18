@@ -246,7 +246,7 @@ MouseArea {
         id: overview
         anchors.left: parent.left
         anchors.leftMargin: 20
-        width: parent.width * 0.1
+        width: parent.width * 0.12
         height: parent.height * 0.1
         anchors.top: treeControls.visible ? treeControls.bottom : parent.top
         anchors.topMargin: 20
