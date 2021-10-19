@@ -125,54 +125,44 @@ MouseArea {
         accentColor: control.accentColor
     }
 
-    Rectangle {
+
+    Canvas {
+        readonly property real startAngle: Math.PI * 0.75
+        readonly property real endAngle: Math.PI * 2.25
+        readonly property real stopAngle: Math.PI * (control.valueRatio * 1.5 + 0.75)
+        readonly property real targetSizeRatio: 0.45
+
         id: controlCircle
         anchors.fill: parent
-        color: "transparent"
-        radius: width / 2
-        border.color: control.containsMouse || control.tracking ? control.accentColor : "white"
-        border.width: 2
+        antialiasing: true
+
+        onStopAngleChanged: requestPaint()
+
+        onPaint: {
+            var ctx = getContext("2d")
+            var targetSize = width * targetSizeRatio
+            var center = Qt.point(width / 2, height / 2)
+            ctx.reset()
+            ctx.lineWidth = 4
+            ctx.strokeStyle = control.accentColor
+            ctx.beginPath()
+            ctx.arc(center.x, center.y, targetSize, startAngle, stopAngle, false)
+            ctx.stroke()
+            if (stopAngle !== endAngle) {
+                ctx.beginPath()
+                ctx.strokeStyle = themeManager.backgroundColor
+                ctx.arc(center.x, center.y, targetSize, stopAngle, endAngle, false)
+                ctx.stroke()
+            }
+        }
 
         DefaultText {
             text: control.shortName
             anchors.fill: parent
+            anchors.margins: 6
             fontSizeMode: Text.Fit
             color: control.tracking ? control.accentColor : "white"
-        }
-
-        Item {
-            id: currentTickmark
-            anchors.fill: parent
-            transformOrigin: Item.Center
-            rotation: valueRealRatio * 270 - 135
-
-            Rectangle {
-                anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 6
-                height: 6
-                radius: 3
-                color: Qt.darker("white", 1.65 - 0.65 * valueRealRatio)
-            }
-        }
-
-        Rectangle {
-            id: minTickmark
-            anchors.bottom: parent.bottom
-            width: 6
-            height: 6
-            radius: 3
-            color: "grey"
-        }
-
-        Rectangle {
-            id: maxTickmark
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            width: 6
-            height: 6
-            radius: 3
-            color: "white"
+            elide: Text.ElideRight
         }
     }
 }
