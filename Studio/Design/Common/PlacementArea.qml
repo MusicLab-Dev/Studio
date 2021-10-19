@@ -359,6 +359,7 @@ MouseArea {
         var max = Math.max(selectionBeatPrecisionFrom, selectionBeatPrecisionTo)
         var minKey = Math.min(selectionKeyFrom, selectionKeyTo)
         var maxKey = Math.max(selectionKeyFrom, selectionKeyTo)
+        selectionAboutToChange()
         selectionListModel = selectTargets(AudioAPI.beatRange(min, max), minKey, maxKey)
         refreshSelectionCache()
     }
@@ -404,6 +405,7 @@ MouseArea {
     signal detachTargetPreview()
     signal brushInserted(int insertedKey)
     signal brushEnded()
+    signal selectionAboutToChange()
 
     // Signal emited when a move did not move the target
     signal lastTargetClicked()

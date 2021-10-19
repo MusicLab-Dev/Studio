@@ -125,6 +125,10 @@ PlacementArea {
         lastClickTargetFrom = previewRange.from
     }
 
+    onSelectionAboutToChange: {
+        contentView.resetPlacementAreaSelection()
+    }
+
     PartitionPreview {
         id: placementPartitionPreview
         anchors.fill: previewRectangle

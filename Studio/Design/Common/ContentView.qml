@@ -146,7 +146,7 @@ Item {
             var realPos = xPos > rowHeaderWidth ? xPos - rowHeaderWidth : 0
             var posRatio = realPos / rowDataWidth
             var targetBeat = (-xOffset + realPos) / pixelsPerBeatPrecision
-            xZoom = Math.min(Math.max(xZoom + xZoomFactor * zoom, 0), 1)
+            xZoom = Math.min(Math.max(xZoom + xZoomFactor * -zoom, 0), 1)
             var offset = -targetBeat * pixelsPerBeatPrecision + rowDataWidth * posRatio
             if (offset > 0)
                 offset = 0
@@ -159,7 +159,7 @@ Item {
             var realPos = yPos > timelineHeight ? yPos - timelineHeight : 0
             var posRatio = realPos / surfaceContentGrid.height
             var targetRow = (-yOffset + realPos) / rowHeight
-            yZoom = Math.min(Math.max(yZoom + yZoomFactor * zoom, 0), 1)
+            yZoom = Math.min(Math.max(yZoom + yZoomFactor * -zoom, 0), 1)
             var offset = -targetRow * rowHeight + surfaceContentGrid.height * posRatio
             if (offset > 0)
                 offset = 0

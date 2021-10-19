@@ -1100,17 +1100,17 @@
 <context>
     <name>TreeComponentsPanel</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="41"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="60"/>
         <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="46"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="65"/>
         <source>Instrum.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="51"/>
+        <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="70"/>
         <source>Effects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1118,24 +1118,24 @@
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="193"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="194"/>
         <source>Project&apos;s tree area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="194"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="278"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="307"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="195"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="283"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="312"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="277"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="282"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="306"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="311"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
