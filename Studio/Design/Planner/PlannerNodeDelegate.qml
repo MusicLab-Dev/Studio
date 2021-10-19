@@ -50,7 +50,7 @@ Item {
         y: contentView.headerHalfMargin
         width: contentView.rowHeaderWidth - x - contentView.headerMargin - soundMeter.width - 12
         height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodeInstances.height) - contentView.headerHalfMargin
-        radius: 6
+        radius: 2
         color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
         //border.color: nodeHeaderMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isLastSelected ? nodeDelegate.lightColor : nodeDelegate.hoveredColor
         border.color: nodeDelegate.color

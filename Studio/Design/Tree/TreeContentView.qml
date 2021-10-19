@@ -135,6 +135,7 @@ MouseArea {
         onTriggered: {
             controlsBehavior.enabled = true
             partitionsBehavior.enabled = true
+            treeComponentsPanelBehavior.enabled = true
         }
     }
 
@@ -232,13 +233,17 @@ MouseArea {
 
     TreeComponentsPanel {
         id: treeComponentsPanel
-        width: parent.width * 0.15
         anchors.top: treeControls.visible ? treeControls.bottom : parent.top
         anchors.bottom: partitionsPreview.top
         anchors.topMargin: 20
         anchors.bottomMargin: 20
-        panelCategoryHeight: parent.height * 0.1
-        xBase: parent.width
+        x: contentView.width - width
+
+        Behavior on x {
+            id: treeComponentsPanelBehavior
+            enabled: false
+            NumberAnimation { duration: 100 }
+        }
     }
 
     OverviewButton {

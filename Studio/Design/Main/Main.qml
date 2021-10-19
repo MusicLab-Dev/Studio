@@ -38,7 +38,7 @@ Window {
     id: mainWindow
     visible: true
     title: qsTr("Lexo")
-    minimumWidth: 1020
+    minimumWidth: 800
     minimumHeight: 600
 
     Component.onCompleted: {

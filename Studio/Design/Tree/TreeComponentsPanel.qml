@@ -8,7 +8,17 @@ import ThemeManager 1.0
 
 import "../Default"
 
-TreePanel {
+Row {
+    function open(requestedFilter) {
+        filter = requestedFilter
+        opened = true
+    }
+
+    function close() {
+        filter = 0
+        opened = false
+    }
+
     function tagsToColor(tags) {
         if (tags & PluginModel.Tags.Instrument) {
             return themeManager.getColorFromSubChain(ThemeManager.SubChain.Blue, blueColorIndex++)
@@ -19,23 +29,32 @@ TreePanel {
         }
     }
 
+    property bool opened: false
+    property real cellSize: Math.max(Math.min(125, parent.height / 8), 84)
+    property real categorySize: Math.max(Math.min(100, parent.height / 8), 70)
+
+    // List view filter
+    property int filter: 0
+
+    // Color chain
     property int redColorIndex: 0
     property int greenColorIndex: 0
     property int blueColorIndex: 0
 
     id: treeComponentsPanel
 
-    Item {
+    Rectangle {
         id: panelCategory
-        anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        width: panelCategoryWidth
-        height: parent.height
+        width: categoryColumn.width + 12
+        height: categoryColumn.height + 12
+        color: themeManager.contentColor
+        radius: 6
 
         Column {
-            width: parent.width
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
+            id: categoryColumn
+            anchors.centerIn: parent
+            spacing: 3
 
             TreeComponentCategory {
                 text.text: qsTr("Groups")
@@ -54,23 +73,14 @@ TreePanel {
         }
     }
 
-    Item {
-        property real widthOffset: 50
-
+    Rectangle {
         id: panelContent
-        anchors.left: panelCategory.right
-        anchors.top: parent.top
-        width: panelContentWidth
-        height: parent.height
-
-        Rectangle {
-            id: panelContentBackground
-            width: parent.width + panelContent.widthOffset
-            height: parent.height
-            color: themeManager.contentColor
-            opacity: 0.9
-            radius: 6
-        }
+        width: treeComponentsPanel.cellSize + 24
+        height: treeComponentsPanel.height
+        color: themeManager.contentColor
+        opacity: 1
+        radius: 6
+        visible: treeComponentsPanel.opened
 
         MouseArea {
             anchors.fill: parent
@@ -87,20 +97,19 @@ TreePanel {
 
         ListView {
             id: treeComponentsListView
-            anchors.centerIn: parent
-            width: parent.width
-            height: parent.height * 0.925
+            anchors.topMargin: 12
+            anchors.bottomMargin: 12
+            anchors.fill: parent
             clip: true
-            spacing: 15
+            spacing: 12
             model: treeComponentsPanel.filter ? pluginTableProxy : null
             flickDeceleration: 7000
             maximumFlickVelocity: 1500
 
             delegate: TreeComponentDelegate {
-                width: treeComponentsListView.width
-                height: width
+                width: treeComponentsListView.width - 24
+                x: 12
             }
         }
     }
-
 }

@@ -60,8 +60,8 @@ Item {
         if (selectionList.length !== 0) {
             for (var i = 0; i < selectionList.length; ++i)
                 selectionList[i].isSelected = false
-            selectionList = []
             selectionCount = 0
+            selectionList = []
             selectionListModified()
         }
     }

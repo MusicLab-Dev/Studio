@@ -20,13 +20,13 @@ Item {
     )
 
     id: categoryComponent
-    width: parent.width
-    height: panelCategoryHeight
+    width: treeComponentsPanel.categorySize
+    height: treeComponentsPanel.categorySize
 
     Rectangle {
         anchors.fill: parent
         color: treeComponentsPanel.filter === filter ? baseColor : mouseArea.containsMouse ? themeManager.backgroundColor : themeManager.contentColor
-        opacity: panelContentBackground.opacity
+        radius: 2
     }
 
     Item {

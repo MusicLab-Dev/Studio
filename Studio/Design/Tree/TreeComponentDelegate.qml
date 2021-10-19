@@ -12,103 +12,94 @@ Item {
     property color color: "white"
 
     id: componentDelegate
+    height: delegateColumn.height
 
     Component.onCompleted: {
         color = treeComponentsPanel.tagsToColor(treeComponentsPanel.filter)
     }
 
-    MouseArea {
-        id: instanceBackground
-        width: componentDelegate.width * 0.7
-        height: width * 1.3
-        anchors.horizontalCenter: drag.active ? undefined : parent.horizontalCenter
-        hoverEnabled: true
-        drag.target: instanceBackground
-        drag.smoothed: true
-        Drag.hotSpot.x: width / 2
-        Drag.hotSpot.y: height / 2
+    DefaultToolTip { // @todo make this a unique instance
+        visible: !delegateMouseArea.drag.active && (delegateMouseArea.containsMouse || delegateMouseArea.containsPress)
+        text: factoryDescription
+    }
 
-        drag.onActiveChanged: {
-            if (drag.active) {
-                treeSurface.startPluginDrag(factoryPath, treeSurface.mapFromItem(instanceBackground, mouseX, mouseY))
-                parent = contentView
-            } else {
-                treeSurface.endPluginDrag()
-                parent = componentDelegate
-                x = 0
-                y = 0
-            }
-        }
+    Column {
+        id: delegateColumn
+        spacing: 3
 
-        onHoveredChanged: {
-            if (containsMouse)
-                cursorManager.set(CursorManager.Type.Clickable)
-            else
-                cursorManager.set(CursorManager.Type.Normal)
-        }
-
-        Connections {
-            enabled: instanceBackground.drag.active
-            target: instanceBackground
-
-            function onXChanged() {
-                treeSurface.updateDrag(treeSurface.mapFromItem(instanceBackground, instanceBackground.mouseX, instanceBackground.mouseY))
-            }
-
-            function onYChanged() {
-                treeSurface.updateDrag(treeSurface.mapFromItem(instanceBackground, instanceBackground.mouseX, instanceBackground.mouseY))
-            }
-        }
-
-        Item {
+        Rectangle {
             id: header
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: parent.width
-            height: 30
-
-            Rectangle {
-                anchors.fill: parent
-                color: instanceBackground.containsMouse ? componentDelegate.color : themeManager.backgroundColor
-                radius: 2
-                opacity: 1
-            }
+            width: componentDelegate.width
+            height: componentDelegate.width * 0.2
+            color: delegateMouseArea.containsMouse ? componentDelegate.color : themeManager.backgroundColor
+            radius: 2
 
             DefaultText {
                 anchors.fill: parent
                 text: factoryName
-                color: instanceBackground.containsMouse ? themeManager.backgroundColor : componentDelegate.color
+                color: delegateMouseArea.containsMouse ? themeManager.backgroundColor : componentDelegate.color
             }
-
         }
 
-        Item {
-            id: rect
-            anchors.top: header.bottom
-            anchors.topMargin: 3
-            width: parent.width
-            height: width
+
+        MouseArea {
+            id: delegateMouseArea
+            width: componentDelegate.width
+            height: componentDelegate.width
+            hoverEnabled: true
+            drag.target: delegateColumn
+            drag.smoothed: true
+            Drag.hotSpot.x: width / 2
+            Drag.hotSpot.y: height / 2
+
+            drag.onActiveChanged: {
+                if (drag.active) {
+                    treeSurface.startPluginDrag(factoryPath, treeSurface.mapFromItem(delegateMouseArea, mouseX, mouseY))
+                    delegateColumn.parent = contentView
+                } else {
+                    treeSurface.endPluginDrag()
+                    delegateColumn.parent = componentDelegate
+                    delegateColumn.x = 0
+                    delegateColumn.y = 0
+                }
+            }
+
+            onHoveredChanged: {
+                if (containsMouse)
+                    cursorManager.set(CursorManager.Type.Clickable)
+                else
+                    cursorManager.set(CursorManager.Type.Normal)
+            }
 
             Rectangle {
+                id: rect
                 anchors.fill: parent
                 color: themeManager.backgroundColor
                 radius: 2
-                opacity: 1
+
+                PluginFactoryImage {
+                    id: image
+                    anchors.centerIn: parent
+                    width: parent.width / 1.5
+                    height: width
+                    name: factoryName
+                    playing: delegateMouseArea.containsMouse
+                    color: componentDelegate.color
+                }
             }
 
-            PluginFactoryImage {
-                id: image
-                anchors.centerIn: parent
-                width: parent.width * 0.5
-                height: width
-                name: factoryName
-                playing: instanceBackground.containsMouse
-                color: componentDelegate.color
+            Connections {
+                enabled: delegateMouseArea.drag.active
+                target: delegateColumn
+
+                function onXChanged() {
+                    treeSurface.updateDrag(treeSurface.mapFromItem(delegateMouseArea, delegateMouseArea.mouseX, delegateMouseArea.mouseY))
+                }
+
+                function onYChanged() {
+                    treeSurface.updateDrag(treeSurface.mapFromItem(delegateMouseArea, delegateMouseArea.mouseX, delegateMouseArea.mouseY))
+                }
             }
         }
-    }
-
-    DefaultToolTip { // @todo make this a unique instance
-        visible: instanceBackground.containsMouse || instanceBackground.containsPress
-        text: factoryDescription
     }
 }
