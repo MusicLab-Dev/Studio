@@ -95,7 +95,10 @@ public slots:
     PartitionModel *getPartition(const int index) { return get(index); }
 
     /** @brief Adds a note event on the fly */
-    void addOnTheFly(const NoteEvent &note, NodeModel *node, quint32 partitionIndex, const bool usePartitionIndex);
+    void addOnTheFly(const NoteEvent &note, NodeModel *node);
+
+    /** @brief Adds a note event on the fly targeting a specific partition index */
+    void addOnTheFlyPartition(const NoteEvent &note, NodeModel *node, quint32 partitionIndex);
 
     /** @brief Copy a partition instance that belongs to another PartitionsModel instance */
     bool foreignPartitionInstanceCopy(PartitionModel *partition, const PartitionInstance &instance);
@@ -124,4 +127,7 @@ private:
 
     /** @brief Get an available name for a partition */
     [[nodiscard]] QString getAvailablePartitionName(void) const noexcept;
+
+    /** @brief Non-safe implementation of the add on the fly note */
+    void addOnTheFlyImpl(const NoteEvent &note) noexcept;
 };

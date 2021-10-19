@@ -89,7 +89,7 @@ PlacementArea {
         if (onTheFlyKey !== -1 && onTheFlyKey !== targetKey)
             removeOnTheFly()
         onTheFlyKey = targetKey
-        sequencerView.node.partitions.addOnTheFly(
+        sequencerView.node.partitions.addOnTheFlyPartition(
             AudioAPI.noteEvent(
                 NoteEvent.On,
                 targetKey,
@@ -97,12 +97,11 @@ PlacementArea {
                 0
             ),
             sequencerView.node,
-            sequencerView.partitionIndex,
-            true
+            sequencerView.partitionIndex
         )
     }
     function removeOnTheFly() {
-        sequencerView.node.partitions.addOnTheFly(
+        sequencerView.node.partitions.addOnTheFlyPartition(
             AudioAPI.noteEvent(
                 NoteEvent.Off,
                 onTheFlyKey,
@@ -110,8 +109,7 @@ PlacementArea {
                 0
             ),
             sequencerView.node,
-            sequencerView.partitionIndex,
-            true
+            sequencerView.partitionIndex
         )
         onTheFlyKey = -1
     }

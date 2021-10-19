@@ -152,44 +152,65 @@ bool PartitionsModel::move(const int from, const int to)
     );
 }
 
-void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node, quint32 partitionIndex, const bool usePartitionIndex)
+void PartitionsModel::addOnTheFly(const NoteEvent &note, NodeModel *node)
 {
-    if (!usePartitionIndex)
-        partitionIndex = std::numeric_limits<std::uint32_t>::max();
     auto scheduler = Scheduler::Get();
     const bool isPlaying = !scheduler->hasExitedGraph();
-    const bool graphChanged = scheduler->partitionNode() != node->audioNode() || scheduler->partitionIndex() != partitionIndex;
     bool hasPaused = false;
 
-    if (isPlaying && graphChanged)
+    if (isPlaying && scheduler->playbackMode() != Scheduler::PlaybackMode::Production && node->audioNode() != scheduler->partitionNode())
         hasPaused = scheduler->pauseImpl();
     scheduler->addEvent(
         [this, note] {
-            if (/* note.type != Audio::NoteEvent::EventType::OnOff && */ note.type != Audio::NoteEvent::EventType::PolyPressure) {
-                auto &notesOnTheFly = _data->headerCustomType().notesOnTheFly;
-                if (auto it = std::remove_if(notesOnTheFly.begin(), notesOnTheFly.end(), [note](const NoteEvent evt) {
-                    return (
-                        note.key == evt.key &&
-                        note.sampleOffset == evt.sampleOffset &&
-                        note.type != evt.type
-                    );
-                });     it == notesOnTheFly.end()) {
-                    notesOnTheFly.push(note);
-                } else {
-                    notesOnTheFly.erase(it, notesOnTheFly.end());
-                }
-            } else
-                _data->headerCustomType().notesOnTheFly.push(note);
-            Scheduler::Get()->resetOnTheFlyMiss();
+            addOnTheFlyImpl(note);
         },
-        [this, node, partitionIndex, isPlaying, graphChanged, hasPaused] {
+        [node, isPlaying, hasPaused] {
             const auto scheduler = Scheduler::Get();
             if (hasPaused)
                 scheduler->graph().wait();
-            if (!isPlaying || graphChanged)
-                scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, partitionIndex, 0);
+            if (!isPlaying || hasPaused)
+                scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, std::numeric_limits<std::uint32_t>::max(), 0u);
         }
     );
+}
+
+void PartitionsModel::addOnTheFlyPartition(const NoteEvent &note, NodeModel *node, quint32 partitionIndex)
+{
+    auto scheduler = Scheduler::Get();
+    const bool isPlaying = !scheduler->hasExitedGraph();
+    bool hasPaused = false;
+
+    if (isPlaying && scheduler->partitionNode() != node->audioNode())
+        hasPaused = scheduler->pauseImpl();
+    scheduler->addEvent(
+        [this, note] {
+            addOnTheFlyImpl(note);
+        },
+        [node, partitionIndex, isPlaying, hasPaused] {
+            const auto scheduler = Scheduler::Get();
+            if (hasPaused)
+                scheduler->graph().wait();
+            if (!isPlaying || hasPaused)
+                scheduler->playPartition(Scheduler::PlaybackMode::OnTheFly, node, partitionIndex, 0u);
+        }
+    );
+}
+
+void PartitionsModel::addOnTheFlyImpl(const NoteEvent &note) noexcept
+{
+    if (/* note.type != Audio::NoteEvent::EventType::OnOff && */ note.type != Audio::NoteEvent::EventType::PolyPressure) {
+        auto &notesOnTheFly = _data->headerCustomType().notesOnTheFly;
+        auto it = std::remove_if(notesOnTheFly.begin(), notesOnTheFly.end(), [note](const NoteEvent &evt) {
+            return note.key == evt.key && note.sampleOffset == evt.sampleOffset && note.type != evt.type;
+        });
+        if (it == notesOnTheFly.end()) {
+            notesOnTheFly.push(note);
+        } else {
+            notesOnTheFly.erase(it, notesOnTheFly.end());
+        }
+    } else
+        _data->headerCustomType().notesOnTheFly.push(note);
+    Scheduler::Get()->resetOnTheFlyMiss();
 }
 
 bool PartitionsModel::foreignPartitionInstanceCopy(PartitionModel *partition, const PartitionInstance &instance)

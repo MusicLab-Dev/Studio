@@ -30,16 +30,16 @@ ProjectPreview {
 
     Component.onCompleted: targets = [app.project.master]
 
-    Connections {
-        target: contentView.treeSurface
+//    Connections {
+//        target: contentView.treeSurface
 
-        function onSelectionListModified() {
-            if (contentView.treeSurface.selectionList.length)
-                projectPreview.targets = contentView.treeSurface.makeNodeSelectionList()
-            else
-                projectPreview.targets = [app.project.master]
-        }
-    }
+//        function onSelectionListModified() {
+//            if (contentView.treeSurface.selectionList.length)
+//                projectPreview.targets = contentView.treeSurface.makeNodeSelectionList()
+//            else
+//                projectPreview.targets = [app.project.master]
+//        }
+//    }
 
     Connections {
         target: app.project

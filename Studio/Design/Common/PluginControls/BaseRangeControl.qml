@@ -21,13 +21,13 @@ MouseArea {
     property real value: 0
     property real minimumValue: 0
     property real maximumValue: 1
+    property real defaultValue: 0
     property real stepSize: 0.1
     property string longName: ""
     property string shortName: ""
     property string unitName: ""
     property string description: ""
     property color accentColor: themeManager.accentColor
-    property real defaultValue: 0
 
     // States
     property bool tracking: false
@@ -86,7 +86,6 @@ MouseArea {
     }
 
     Component.onCompleted: {
-        defaultValue = value
         valueRatio = (value - minimumValue) / rangeValue
     }
 

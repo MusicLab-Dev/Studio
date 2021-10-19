@@ -172,6 +172,15 @@ Item {
         }
     }
 
+    Connections {
+        target: app.project.master
+
+        function onGraphChanged() {
+            if (timer.running)
+                timer.stopAndRecordPlaybackBeat()
+        }
+    }
+
     Timer {
         function stopAndRecordPlaybackBeat() {
             timer.stop()

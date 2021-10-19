@@ -127,6 +127,9 @@ public:
     [[nodiscard]] Event &current(void) noexcept { return _events[_backwardCount - 1]; }
 
 public slots:
+    /** @brief Clear all actions */
+    void clear(void) noexcept;
+
     /** @brief Push a new event in the stack */
     bool push(const QVariant &data) noexcept;
 

@@ -4,11 +4,11 @@ import QtQuick.Controls 2.15
 import "../../Default"
 
 BaseRangeControl {
-
     id: control
     value: controlValue
     minimumValue: controlMinValue
     maximumValue: controlMaxValue
+    defaultValue: controlDefaultValue
     stepSize: controlStepValue
     longName: controlTitle
     shortName: controlShortName

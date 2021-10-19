@@ -10,7 +10,8 @@ import PartitionModel 1.0
 import CursorManager 1.0
 
 Item {
-    property bool multiSelection: treeSurface.selectionCount > 0
+    readonly property bool multiSelection: treeSurface.selectionCount > 1
+    readonly property color runtimeColor: multiSelection ? treeSurface.selectionList[0].node.color : app.project.master.color
 
     id: overview
 
@@ -18,7 +19,7 @@ Item {
         anchors.fill: parent
         radius: 6
         opacity: overviewMouse.containsMouse ? 1 : 0.6
-        color: !overviewMouse.containsMouse ? themeManager.contentColor : multiSelection && treeSurface.selectionList.length ? treeSurface.selectionList[0].node.color : app.project.master.color
+        color: overviewMouse.containsMouse ? overview.runtimeColor : themeManager.contentColor
     }
 
     MouseArea {
@@ -26,7 +27,7 @@ Item {
         hoverEnabled: true
         anchors.fill: parent
 
-        onPressed: multiSelection ? actionEvent() : modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
+        onPressed: overview.multiSelection ? contentView.actionEvent() : modulesView.addNewPlannerWithMultipleNodes(app.project.master.getAllChildren())
 
         onHoveredChanged: {
             if (containsMouse)
@@ -40,8 +41,8 @@ Item {
         anchors.fill: parent
         fontSizeMode: Text.Fit
         font.pixelSize: 23
-        text: multiSelection ? qsTr("Open selected (" + treeSurface.selectionCount + ")") : qsTr("Overview")
-        color: overviewMouse.containsMouse ? themeManager.contentColor : multiSelection && treeSurface.selectionList[0] ? treeSurface.selectionList[0].node.color : app.project.master.color
+        text: overview.multiSelection ? qsTr("Open selected (" + treeSurface.selectionCount + ")") : qsTr("Overview")
+        color: overviewMouse.containsMouse ? themeManager.contentColor : overview.runtimeColor
     }
 
     HelpArea {

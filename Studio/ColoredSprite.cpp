@@ -71,6 +71,11 @@ void ColoredSprite::onAnimationTick(void)
 
 void ColoredSprite::paint(QPainter *painter)
 {
+    if (_loading || _cache.image.isNull()) {
+        painter->fillRect(0, 0, width(), height(), _color);
+        return;
+    }
+
     // Select the most favorable image
     QImage *target { nullptr };
     if (height() - _cache.image.width() < height() - _cache.lowResImage.height())

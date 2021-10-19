@@ -633,17 +633,17 @@
 <context>
     <name>OverviewButton</name>
     <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="43"/>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="44"/>
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="48"/>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="49"/>
         <source>Planner overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="49"/>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="50"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -690,12 +690,12 @@
 <context>
     <name>PlannerContentView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="136"/>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="134"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="137"/>
+        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="135"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1118,24 +1118,24 @@
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="195"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="193"/>
         <source>Project&apos;s tree area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="196"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="280"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="309"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="194"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="278"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="307"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="279"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="277"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="308"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="306"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>

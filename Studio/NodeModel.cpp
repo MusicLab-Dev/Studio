@@ -74,13 +74,13 @@ QVariant NodeModel::data(const QModelIndex &index, int role) const
 
 void NodeModel::setParentNode(NodeModel * const parent) noexcept
 {
-    if (this->parent() == parent)
-        return;
-    setParent(parent);
     if (parent)
         audioNode()->setParent(parent->audioNode());
     else
         audioNode()->setParent(nullptr);
+    if (this->parent() == parent)
+        return;
+    setParent(parent);
     emit parentNodeChanged();
 }
 
@@ -211,14 +211,13 @@ NodeModel *NodeModel::addNodeImpl(const QString &pluginPath, const bool addParti
             [this, node = std::move(node), hasPaused](void) mutable {
                 const auto idx = static_cast<int>(_children.size());
                 beginInsertRows(QModelIndex(), idx, idx);
-                _children.push(std::move(node));
+                auto &child = _children.push(std::move(node));
+                child->setParentNode(this);
                 endInsertRows();
-                if (hasPaused) {
-                    Scheduler::Get()->graph().wait();
-                    Scheduler::Get()->invalidateCurrentGraph();
-                    Scheduler::Get()->playImpl();
-                } else
-                    Scheduler::Get()->invalidateCurrentGraph();
+                const auto scheduler = Scheduler::Get();
+                if (hasPaused)
+                    scheduler->graph().wait();
+                scheduler->invalidateCurrentGraph();
                 processGraphChange();
             }
         ))
@@ -257,12 +256,10 @@ NodeModel *NodeModel::addParentNodeImpl(const QString &pluginPath, const bool ad
             ProcessAdd(selfParent, std::move(node), std::move(audioNode));
         },
         [this, hasPaused] {
-            if (hasPaused) {
-                Scheduler::Get()->graph().wait();
-                Scheduler::Get()->invalidateCurrentGraph();
-                Scheduler::Get()->playImpl();
-            } else
-                Scheduler::Get()->invalidateCurrentGraph();
+            const auto scheduler = Scheduler::Get();
+            if (hasPaused)
+                scheduler->graph().wait();
+            scheduler->invalidateCurrentGraph();
             processGraphChange();
         }
     );
@@ -283,12 +280,9 @@ bool NodeModel::remove(const int idx)
             beginRemoveRows(QModelIndex(), idx, idx);
             _children.erase(_children.begin() + idx);
             endRemoveRows();
-            if (hasPaused) {
+            if (hasPaused)
                 scheduler->graph().wait();
-                scheduler->invalidateCurrentGraph();
-                scheduler->playImpl();
-            } else
-                scheduler->invalidateCurrentGraph();
+            scheduler->invalidateCurrentGraph();
             processGraphChange();
         }
     );
@@ -323,12 +317,10 @@ bool NodeModel::moveToChildren(NodeModel *target)
             ProcessAdd(this, std::move(ptr), std::move(audioPtr));
         },
         [this, hasPaused] {
-            if (hasPaused) {
-                Scheduler::Get()->graph().wait();
-                Scheduler::Get()->invalidateCurrentGraph();
-                Scheduler::Get()->playImpl();
-            } else
-                Scheduler::Get()->invalidateCurrentGraph();
+            const auto scheduler = Scheduler::Get();
+            if (hasPaused)
+                scheduler->graph().wait();
+            scheduler->invalidateCurrentGraph();
             processGraphChange();
         }
     );
@@ -370,12 +362,10 @@ bool NodeModel::moveToParent(NodeModel *target)
             ProcessAdd(targetParent, std::move(selfPtr), std::move(selfAudioPtr));
         },
         [this, hasPaused] {
-            if (hasPaused) {
-                Scheduler::Get()->graph().wait();
-                Scheduler::Get()->invalidateCurrentGraph();
-                Scheduler::Get()->playImpl();
-            } else
-                Scheduler::Get()->invalidateCurrentGraph();
+            const auto scheduler = Scheduler::Get();
+            if (hasPaused)
+                scheduler->graph().wait();
+            scheduler->invalidateCurrentGraph();
             processGraphChange();
         }
     );
@@ -436,12 +426,10 @@ bool NodeModel::swapNodes(NodeModel *target)
                 ProcessAdd(target, std::move(selfPtr), std::move(selfAudioPtr));
         },
         [this, hasPaused] {
-            if (hasPaused) {
-                Scheduler::Get()->graph().wait();
-                Scheduler::Get()->invalidateCurrentGraph();
-                Scheduler::Get()->playImpl();
-            } else
-                Scheduler::Get()->invalidateCurrentGraph();
+            const auto scheduler = Scheduler::Get();
+            if (hasPaused)
+                scheduler->graph().wait();
+            scheduler->invalidateCurrentGraph();
             processGraphChange();
         }
     );
@@ -503,7 +491,6 @@ void NodeModel::processGraphChange(void) const noexcept
     emit Application::Get()->project()->master()->graphChanged();
 }
 
-
 void NodeModel::ProcessSwap(NodeModel * const lhs, NodeModel *rhs)
 {
     lhs->audioNode()->children().swap(rhs->audioNode()->children());
@@ -518,8 +505,8 @@ void NodeModel::ProcessAdd(NodeModel * const parent, NodePtr &&nodePtr, Audio::N
 {
     parent->beginInsertRows(QModelIndex(), parent->count(), parent->count());
     parent->audioNode()->children().push(std::move(audioNodePtr));
-    parent->_children.push(std::move(nodePtr))
-        ->setParent(parent);
+    auto &child = parent->_children.push(std::move(nodePtr));
+    child->setParentNode(parent);
     parent->endInsertRows();
 }
 
@@ -532,7 +519,7 @@ std::pair<NodePtr, Audio::NodePtr> NodeModel::ProcessRemove(NodeModel * const pa
     auto ptr = std::move(ref);
     parent->audioNode()->children().erase(parent->audioNode()->children().begin() + targetIndex);
     parent->_children.erase(parent->_children.begin() + targetIndex);
-    parent->endRemoveRows();
     target->setParentNode(nullptr);
+    parent->endRemoveRows();
     return std::make_pair(std::move(ptr), std::move(audioPtr));
 }

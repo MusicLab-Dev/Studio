@@ -93,4 +93,10 @@ Item {
     ActionsManager {
         id: actionsManager
     }
+
+    Connections {
+        target: app.project
+
+        function onMasterChanged() { actionsManager.clear() }
+    }
 }

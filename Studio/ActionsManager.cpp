@@ -19,6 +19,12 @@ ActionsManager::ActionsManager(QObject *parent)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
 
+void ActionsManager::clear(void) noexcept
+{
+    _events.clear();
+    _backwardCount = 0;
+}
+
 bool ActionsManager::push(const QVariant &data) noexcept
 {
     Action action;

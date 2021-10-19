@@ -77,9 +77,7 @@ ContentView {
             if (contentView.lastSelectedNode) {
                 contentView.lastSelectedNode.node.partitions.addOnTheFly(
                     AudioAPI.noteEvent(!pressed, (contentView.targetOctave * contentView.keysPerOctave) + key, AudioAPI.velocityMax, 0),
-                    contentView.lastSelectedNode.node,
-                    0,
-                    false
+                    contentView.lastSelectedNode.node
                 )
             }
         }
