@@ -35,6 +35,9 @@ Item {
         progressRatio = 0
     }
 
+    signal exported(string path)
+    signal canceled()
+
     property bool exporting: false
     property real progressRatio: 0
     property string selectedPath: ""
@@ -64,17 +67,20 @@ Item {
 
         function onExportCompleted() {
             exporting = false
+            exportPopup.exported(exportPopup.selectedPath)
             close()
         }
 
         function onExportCanceled() {
             exporting = false
+            exportPopup.canceled()
             close()
         }
 
         function onExportFailed() {
             error = true
             exporting = false
+            exportPopup.failed()
         }
     }
 
@@ -225,6 +231,7 @@ Item {
                     TextRoundedButton {
                         id: noButton
                         text: qsTr("No")
+                        visible: !exportPopup.exporting
 
                         onReleased: exportPopup.close()
                     }

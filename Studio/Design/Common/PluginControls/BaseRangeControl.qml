@@ -61,8 +61,9 @@ MouseArea {
     acceptedButtons: Qt.LeftButton | Qt.RightButton
 
     onPressed: {
-        if (mouse.button == Qt.RightButton)
-            value = defaultValue
+        if (mouse.button == Qt.RightButton) {
+            edited(defaultValue)
+        }
     }
 
     onWheel: {

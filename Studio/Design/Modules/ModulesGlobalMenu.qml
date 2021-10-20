@@ -54,6 +54,15 @@ DefaultMenuButton {
         );
     }
 
+    function shareProject() {
+        if (app.project.path === "") {
+            shareConnections.enabled = true
+            saveAs()
+        } else {
+            save()
+        }
+    }
+
     function settings() {
         modulesView.settingsView.open()
     }
@@ -65,6 +74,22 @@ DefaultMenuButton {
     width: parent.height * 0.05
 
     onReleased: globalMenu.popup()
+
+    Connections {
+        id: shareConnections
+        enabled: false
+        target: saveFileDialog
+
+        function onSaved() {
+            menuButton.exportProject()
+            enabled = false
+        }
+
+        function onCanceled() {
+            console.log("Project share canceled at save")
+            enabled = false
+        }
+    }
 
     Connections {
         target: eventDispatcher
@@ -134,10 +159,10 @@ DefaultMenuButton {
             onTriggered: menuButton.editName()
         }
 
-        // Action {
-        //     text: qsTr("Share project on community")
-        //     onTriggered: menuButton
-        // }
+        Action {
+            text: qsTr("Share project on community")
+            onTriggered: menuButton.shareProject()
+        }
 
         Action {
             text: qsTr("Preferences")
@@ -156,6 +181,9 @@ DefaultMenuButton {
     }
 
     DefaultFileDialog {
+        signal saved
+        signal canceled
+
         id: saveFileDialog
         title: qsTr("Save a project file")
         folder: shortcuts.home
@@ -165,10 +193,14 @@ DefaultMenuButton {
 
         onAccepted: {
             app.project.saveAs(mainWindow.urlToPath(fileUrl.toString()))
+            saved()
             close()
         }
 
-        onRejected: close()
+        onRejected: {
+            canceled()
+            close()
+        }
     }
 
     DefaultFileDialog {
