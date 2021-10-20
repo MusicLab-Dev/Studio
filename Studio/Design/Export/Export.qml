@@ -21,6 +21,7 @@ Item {
 
     function close() {
         visible = false
+        closed()
     }
 
     function start() {
@@ -36,7 +37,9 @@ Item {
     }
 
     signal exported(string path)
-    signal canceled()
+    signal canceled
+    signal failed
+    signal closed
 
     property bool exporting: false
     property real progressRatio: 0

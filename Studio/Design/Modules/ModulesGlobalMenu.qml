@@ -55,13 +55,16 @@ DefaultMenuButton {
     }
 
     function shareProject() {
-        authentificatePopup.open()
-        // if (app.project.path === "") {
-        //     shareConnections.enabled = true
-        //     saveAs()
-        // } else {
-        //     save()
-        // }
+        if (app.project.path === "") {
+            shareConnections.enabled = true
+            saveAs()
+        } else {
+            save()
+            console.log("Project share save success")
+            exportConnections.enabled = true
+            menuButton.exportProject()
+
+        }
     }
 
     function settings() {
@@ -82,13 +85,43 @@ DefaultMenuButton {
         target: saveFileDialog
 
         function onSaved() {
-            menuButton.exportProject()
             enabled = false
+            exportConnections.enabled = true
+            console.log("Project share save success")
+            menuButton.exportProject()
         }
 
         function onCanceled() {
-            console.log("Project share canceled at save")
             enabled = false
+            console.log("Project share save canceled")
+        }
+    }
+
+    Connections {
+        id: exportConnections
+        enabled: false
+        target: exportManager
+
+        function onExported(path) {
+            enabled = false
+            menuButton.exportProject()
+            console.log("Project share export success", path)
+            communityAPI.requestUploadProject(app.project.path, path)
+        }
+
+        function onCanceled() {
+            enabled = false
+            console.log("Project share export canceled")
+        }
+
+        function onFailed() {
+            enabled = false
+            console.log("Project share export failed")
+        }
+
+        function onClosed() {
+            enabled = false
+            console.log("Project share export closed")
         }
     }
 
