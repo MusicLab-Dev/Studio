@@ -123,6 +123,10 @@ Window {
 
     CommunityAPI {
         id: communityAPI
+
+        onAuthentificationRequired: {
+            authentificatePopup.open()
+        }
     }
 
     Export {
@@ -133,8 +137,6 @@ Window {
     AuthentificatePopup {
         id: authentificatePopup
         anchors.fill: parent
-
-        // Component.onCompleted: open()
     }
 
     KeyboardShortcutsView {

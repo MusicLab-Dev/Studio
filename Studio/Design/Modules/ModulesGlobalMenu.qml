@@ -134,6 +134,11 @@ DefaultMenuButton {
             onTriggered: menuButton.editName()
         }
 
+        // Action {
+            // text: qsTr("Share project on community")
+            // onTriggered: communityAPI.requestUploadProject()
+        // }
+
         Action {
             text: qsTr("Preferences")
             onTriggered: menuButton.settings()
