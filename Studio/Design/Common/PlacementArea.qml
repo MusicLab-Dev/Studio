@@ -53,7 +53,7 @@ MouseArea {
         return Math.max(Math.floor((mouseX - contentView.xOffset) / contentView.pixelsPerBeatPrecision), 0)
     }
     function getPlacementBeatPrecision(mouseBeatPrecision) {
-        var scopedBeatPrecision = mouseBeatPrecision - previewMouseBeatPrecisionOffset
+        var scopedBeatPrecision = mouseBeatPrecision// - previewMouseBeatPrecisionOffset
         if (contentView.placementBeatPrecisionScale >= AudioAPI.beatPrecision)
             scopedBeatPrecision = scopedBeatPrecision - (scopedBeatPrecision % AudioAPI.beatPrecision)
         else if (contentView.placementBeatPrecisionScale !== 0)

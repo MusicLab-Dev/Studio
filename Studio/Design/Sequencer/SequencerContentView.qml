@@ -27,7 +27,7 @@ ContentView {
     clip: true
     placementKeyCount: pianoView.keys
     placementKeyOffset: pianoView.keyOffset
-    placementBeatPrecisionScale: AudioAPI.beatPrecision
+    placementBeatPrecisionScale: AudioAPI.beatPrecision / 4
     contentViewTimeline.upTimeline.color: sequencerView.node ? sequencerView.node.color : "black"
 
     SequencerContentPianoView {

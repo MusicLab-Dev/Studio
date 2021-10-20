@@ -111,7 +111,7 @@ RowLayout {
                 id: snapper
                 Layout.preferredHeight: parent.height * 0.4
                 Layout.preferredWidth: parent.width
-                currentIndex: 4
+                currentIndex: 2
 
                 onActivated: {
                     contentView.placementBeatPrecisionScale = currentValue

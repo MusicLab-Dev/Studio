@@ -55,12 +55,13 @@ DefaultMenuButton {
     }
 
     function shareProject() {
-        if (app.project.path === "") {
-            shareConnections.enabled = true
-            saveAs()
-        } else {
-            save()
-        }
+        authentificatePopup.open()
+        // if (app.project.path === "") {
+        //     shareConnections.enabled = true
+        //     saveAs()
+        // } else {
+        //     save()
+        // }
     }
 
     function settings() {
