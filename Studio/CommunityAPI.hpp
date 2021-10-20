@@ -18,14 +18,29 @@ public:
     static constexpr auto DefaultTokenFile = "LexoToken";
 
     /** @brief Url of the API */
-    // static constexpr auto BaseURL = "https://api.lexostudio.com/";
-    static constexpr auto BaseURL = "http://localhost:8080/api";
+    static constexpr auto BaseURL = "https://api.lexostudio.com/";
+    // static constexpr auto BaseURL = "http://localhost:8080/api";
+
+    /** @brief Type of media */
+    enum class MediaType {
+        Project,
+        Sound
+    };
 
     /** @brief Cache of a pending upload */
     struct UploadCache
     {
+        MediaType type {};
         QString path {};
         QNetworkReply *reply { nullptr };
+    };
+
+    /** @brief Cache of an uploaded file */
+    struct UploadedFile
+    {
+        MediaType type {};
+        QString path {};
+        QString fileId {};
     };
 
 
@@ -41,7 +56,7 @@ public slots:
     void authentificate(const QString &username, const QString &password);
 
     /** @brief Request upload project */
-    void requestUploadProject(const QString &projectPath, const QString &exportPath);
+    bool requestUploadProject(const QString &projectPath, const QString &exportPath);
 
 
 signals:
@@ -61,22 +76,20 @@ signals:
     void uploadSuccess(void);
 
     /** @brief Notify that an upload failed */
-    void uploadFailed(const QString &path);
+    void uploadFailed(void);
 
 
 private:
     std::unique_ptr<QNetworkAccessManager> _manager {};
     QByteArray _token {};
-    QVector<QString> _pending {};
-    QVector<QString> _uploadIds {};
+    QVector<UploadCache> _pending {};
+    QVector<UploadedFile> _uploads {};
     UploadCache _currentUpload {};
     QNetworkReply *_authentificationReply { nullptr };
 
-    /** @brief Cancel all pending requests */
-    void cancelAllRequests(void);
 
     /** @brief Start the upload of a single file */
-    void startUpload(const QString &path);
+    void startUpload(const MediaType type, const QString &path);
 
 
     /** @brief Callback on authentification */
@@ -90,4 +103,7 @@ private:
 
     /** @brief Save token in local storage */
     void saveToken(void);
+
+    /** @brief Launch the browser using uploaded file ids */
+    void launchBrowser(void);
 };

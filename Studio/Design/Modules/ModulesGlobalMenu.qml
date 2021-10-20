@@ -106,7 +106,11 @@ DefaultMenuButton {
             enabled = false
             menuButton.exportProject()
             console.log("Project share export success", path)
-            communityAPI.requestUploadProject(app.project.path, path)
+            if (!communityAPI.requestUploadProject(app.project.path, path)) {
+                authentificateConnections.enabled = true
+                authentificateConnections.projectPath = app.project.path
+                authentificateConnections.exportPath = path
+            }
         }
 
         function onCanceled() {
@@ -122,6 +126,27 @@ DefaultMenuButton {
         function onClosed() {
             enabled = false
             console.log("Project share export closed")
+        }
+    }
+
+    Connections {
+        property string projectPath: ""
+        property string exportPath: ""
+
+        id: authentificateConnections
+        target: authentificatePopup
+        enabled: false
+
+        function onAuthentified() {
+            enabled = false
+            console.log("Project share login success")
+            if (!communityAPI.requestUploadProject(projectPath, exportPath))
+                console.log("Project share re-upload after login error")
+        }
+
+        function onClosed() {
+            enabled = false
+            console.log("Project share login closed")
         }
     }
 

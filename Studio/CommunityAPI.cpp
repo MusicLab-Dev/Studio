@@ -7,9 +7,11 @@
 #include <QNetworkReply>
 #include <QStandardPaths>
 #include <QFile>
+#include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QHttpMultiPart>
+#include <QDesktopServices>
 
 #include "CommunityAPI.hpp"
 
@@ -24,14 +26,22 @@ CommunityAPI::CommunityAPI(QObject *parent)
     loadToken();
 }
 
-void CommunityAPI::requestUploadProject(const QString &projectPath, const QString &exportPath)
+bool CommunityAPI::requestUploadProject(const QString &projectPath, const QString &exportPath)
 {
     // Verify that we have a token
-
+    if (_token.isEmpty()) {
+        emit needAuthentification();
+        return false;
+    }
 
     // Start upload procedure
-    _pending.push_back(exportPath);
-    startUpload(projectPath);
+    UploadCache cache {
+        MediaType::Sound,
+        exportPath
+    };
+    _pending.push_back(cache);
+    startUpload(MediaType::Project, projectPath);
+    return true;
 }
 
 void CommunityAPI::authentificate(const QString &username, const QString &password)
@@ -56,39 +66,31 @@ void CommunityAPI::onAuthentificationReply(void)
         qDebug() << "CommunityAPI: Request error: " << _authentificationReply->errorString();
         qDebug() << _authentificationReply->readAll();
         _authentificationReply = nullptr;
-        emit requestFailed();
+        emit authentificationFailed();
         return;
     }
 
     auto doc = QJsonDocument::fromJson(_authentificationReply->readAll());
     auto replyJson = doc.object();
-    QString token = replyJson["data"].toObject()["token"].toString();
-    qDebug() << token;
+    _token = replyJson["data"].toObject()["token"].toString().toLocal8Bit();
+    qDebug() << _token;
 
     _authentificationReply = nullptr;
-    startUpload(token);
+    emit authentificationSuccess();
 }
 
-void CommunityAPI::startUpload(const QString &token)
+void CommunityAPI::startUpload(const MediaType type, const QString &path)
 {
-    // _currentUpload.path = path;
-    _currentUpload.reply = nullptr;
-
-    enum FileType {
-        Song = 0,
-        Export
-    };
-
-    QString filePath("/home/paul/Downloads/TestFiles/warmup.wav");
-    FileType fileType = filePath.endsWith(".wav") ? FileType::Song : FileType::Export;
+    _currentUpload = UploadCache {};
 
     /* Read and load file data */
-    QFile file(filePath);
+    QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
         qDebug() << "Failed to open file: " << file.errorString();
+        emit uploadFailed();
         return;
     }
-    QByteArray fileContent(file.readAll());
+    QByteArray fileContent { file.readAll() };
     file.close();
 
     /* Create multipart */
@@ -96,8 +98,8 @@ void CommunityAPI::startUpload(const QString &token)
 
     /* Setup file part */
     QHttpPart filePart;
-    QString fileExt(fileType == FileType::Song ? ".wav" : ".lexo");
-    QString mimeType(fileType == FileType::Song ? "audio/wave" : "text/plain");
+    QString fileExt(type == MediaType::Sound ? ".wav" : ".lexo");
+    QString mimeType(type == MediaType::Sound ? "audio/wave" : "text/plain");
     filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant(mimeType));
     filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"file\"; filename=\"file" + fileExt + "\""));
     filePart.setHeader(QNetworkRequest::ContentLengthHeader, fileContent.length());
@@ -106,10 +108,12 @@ void CommunityAPI::startUpload(const QString &token)
     multiPart->append(filePart);
 
     /* Setup request with authorization header */
-    QNetworkRequest request(QUrl(QString(BaseURL) + "/files/" + (fileType == FileType::Song ? "song" : "export")));
-    request.setRawHeader("Authorization", "Bearer " + token.toLocal8Bit());
+    QNetworkRequest request(QUrl(QString(BaseURL) + "/files/" + (type == MediaType::Sound ? "song" : "export")));
+    request.setRawHeader("Authorization", "Bearer " + _token);
 
     /* Start upload */
+    _currentUpload.type = type;
+    _currentUpload.path = path;
     _currentUpload.reply = _manager.get()->post(request, multiPart);
     multiPart->setParent(_currentUpload.reply);
 
@@ -119,42 +123,39 @@ void CommunityAPI::startUpload(const QString &token)
 
 void CommunityAPI::onUploadReply(void)
 {
-    qDebug() << "onUploadReply";
+    if (!_currentUpload.reply) {
+        qCritical() << "CommunityAPI::onUploadReply: No upload pending";
+        return;
+    } else if (_currentUpload.reply->error() != QNetworkReply::NoError) {
+        qDebug() << "CommunityAPI: Request error: " << _currentUpload.reply->errorString();
+        qDebug() << _currentUpload.reply->readAll();
+        _currentUpload.reply = nullptr;
+        emit uploadFailed();
+        return;
+    }
 
     auto doc = QJsonDocument::fromJson(_currentUpload.reply->readAll());
     auto replyJson = doc.object();
     QString fileId = replyJson["data"].toObject()["fileId"].toString();
-    qDebug() << fileId;
-
-    return;
-
-    if (!_currentUpload.reply) {
-        qCritical() << "CommunityAPI::onUploadReply: No upload pending";
-        return;
-    }
+    qDebug() << "File uploaded" << fileId;
 
     // Retreive media id
-    _uploadIds.push_back("1234");
+    _uploads.push_back(UploadedFile { _currentUpload.type, _currentUpload.path, fileId });
 
     // Reset current upload
-    _currentUpload.path = QString();
-    _currentUpload.reply = nullptr;
+    _currentUpload = UploadCache();
 
     // Check if all uploads are done
     if (_pending.isEmpty()) {
         emit uploadSuccess();
+        launchBrowser();
         return;
     }
 
     // Process next pending upload
-    const auto path = _pending.back();
+    const auto next = _pending.back();
     _pending.pop_back();
-    startUpload(path);
-}
-
-void CommunityAPI::cancelAllRequests(void)
-{
-
+    startUpload(next.type, next.path);
 }
 
 void CommunityAPI::loadToken(void)
@@ -174,7 +175,9 @@ void CommunityAPI::saveToken(void)
     if (_token.isEmpty())
         return;
 
-    const QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + QString(DefaultTokenFile);
+    const QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/';
+    const QString path = dir + QString(DefaultTokenFile);
+    QDir().mkpath(dir);
     QFile file(path);
 
     if (!file.open(QFile::WriteOnly)) {
@@ -185,4 +188,27 @@ void CommunityAPI::saveToken(void)
         qCritical() << "CommunityAPI::saveToken: Couldn't write token file" << path;
         return;
     }
+}
+
+void CommunityAPI::launchBrowser(void)
+{
+    if (_uploads.isEmpty()) {
+        qCritical() << "CommunityAPI::launchBrowser: Invalid empy upload list";
+        return;
+    }
+    QString parameters;
+
+    for (const auto &upload : _uploads) {
+        if (!parameters.isEmpty())
+            parameters.push_back('&');
+        if (upload.type == MediaType::Sound)
+            parameters += "?exportId=" + upload.fileId;
+        else
+            parameters += "?mediaId=" + upload.fileId;
+    }
+    _uploads.clear();
+
+    QString url = "https://community.lexostudio.com/" + parameters;
+    qDebug() << "CommunityAPI::launchBrowser: Launching" << url;
+    QDesktopServices::openUrl(QUrl(url));
 }
