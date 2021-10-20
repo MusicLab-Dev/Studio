@@ -1049,8 +1049,8 @@
     <message>
         <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="72"/>
         <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="113"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="132"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="147"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="131"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="146"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1060,12 +1060,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="131"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="130"/>
         <source>Sound meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="146"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="145"/>
         <source>Clipboard</source>
         <translation type="unfinished"></translation>
     </message>

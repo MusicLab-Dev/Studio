@@ -125,7 +125,6 @@ Rectangle {
         width: height / 3
         targetNode: sequencerView.node
         enabled: sequencerView.visible
-        color: themeManager.foregroundColor
 
         HelpArea {
             name: qsTr("Sound meter")

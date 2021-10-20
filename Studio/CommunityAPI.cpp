@@ -204,9 +204,9 @@ void CommunityAPI::launchBrowser(void)
         else
             parameters.push_back('&');
         if (upload.type == MediaType::Sound)
-            parameters += "exportId=" + upload.fileId;
-        else
             parameters += "mediaId=" + upload.fileId;
+        else
+            parameters += "exportId=" + upload.fileId;
     }
     _uploads.clear();
 
