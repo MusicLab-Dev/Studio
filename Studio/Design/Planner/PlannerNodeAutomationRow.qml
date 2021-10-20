@@ -3,12 +3,16 @@ import QtQuick 2.15
 import AudioAPI 1.0
 
 MouseArea {
+    function mouseBeatPrecision() {
+        return Math.max((mouseX - contentView.xOffset) / contentView.pixelsPerBeatPrecision, 0)
+    }
+
     function getPointY(value) {
         return height * (1 - ((value - minValue) / rangeValue))
     }
 
     function addPoint() {
-        var targetBeatPrecision = (mouseX - contentView.xOffset) / contentView.pixelsPerBeatPrecision
+        var targetBeatPrecision = mouseBeatPrecision()
         var point = AudioAPI.point(
             targetBeatPrecision,
             Point.CurveType.Linear,
@@ -37,7 +41,7 @@ MouseArea {
     onPressed: {
         if (mouse.button === Qt.RightButton) {
             isRemoving = true
-            removeFromBeatPrecision = (contentView.xOffset + mouse.x) / contentView.pixelsPerBeatPrecision
+            removeFromBeatPrecision = mouseBeatPrecision()
             removeToBeatPrecision = removeFromBeatPrecision
         } else {
             isRemoving = false
@@ -47,7 +51,7 @@ MouseArea {
 
     onPositionChanged: {
         if (isRemoving)
-            removeToBeatPrecision = Math.max((contentView.xOffset + mouse.x) / contentView.pixelsPerBeatPrecision, 0)
+            removeToBeatPrecision = mouseBeatPrecision()
     }
 
     onReleased: {
