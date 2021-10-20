@@ -18,11 +18,15 @@ Item {
 
     function close() {
         visible = false
+        closed()
     }
 
     function authentificate() {
-
+        communityAPI.authentificate(loginField.text, passwordField.text)
     }
+
+    signal authentified
+    signal closed
 
     property ActionsManager targetActionsManager: null
     property NodeModel targetNode: null
@@ -30,10 +34,19 @@ Item {
     property PartitionModel targetPartition: null
     property var targetInstance: undefined
 
-    id: instanceCopyPopup
+    id: popup
     width: parent.width
     height: parent.height
     visible: false
+
+    Connections {
+        target: communityAPI
+
+        function onAuthentificationSuccess() {
+            popup.authentified()
+            popup.close()
+        }
+    }
 
     ParallelAnimation {
         id: openAnim
@@ -130,7 +143,7 @@ Item {
                         source: "qrc:/Assets/Play.png"
                         scaleFactor: 1
 
-                        onReleased: communityAPI.authentificate(loginField.text, passwordField.text)
+                        onReleased: authentificate()
                     }
                 }
             }
