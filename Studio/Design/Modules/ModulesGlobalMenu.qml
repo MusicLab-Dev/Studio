@@ -8,6 +8,7 @@ DefaultMenuButton {
     function newProject() {
         modulesView.removeAllModules()
         app.project.clear()
+        app.project.path = ""
         app.project.name = qsTr("My Project")
     }
 
