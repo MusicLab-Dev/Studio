@@ -40,6 +40,7 @@ Item {
     property bool muted: false
     property alias mouseArea: mouseArea
     property color targetColor: targetNode ? targetNode.color : "white"
+    property color color: targetNode ? targetNode.color : "white"
 
     id: soundMeter
 
@@ -108,9 +109,9 @@ Item {
         radius: 2
 
         gradient: Gradient {
-            GradientStop { position: 0.0; color: Qt.lighter(soundMeter.targetColor, 1.5) }
-            GradientStop { position: 0.33; color: soundMeter.targetColor }
-            GradientStop { position: 1.0; color: Qt.darker(soundMeter.targetColor, 1.5) }
+            GradientStop { position: 0.0; color: Qt.lighter(soundMeter.color, 1.5) }
+            GradientStop { position: 0.33; color: soundMeter.color }
+            GradientStop { position: 1.0; color: Qt.darker(soundMeter.color, 1.5) }
         }
 
         Rectangle {
