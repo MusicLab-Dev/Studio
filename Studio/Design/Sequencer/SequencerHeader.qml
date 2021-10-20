@@ -54,7 +54,7 @@ Rectangle {
                 hoverEnabled: true
                 anchors.fill: parent
 
-                onPressed: sequencerControls.hide = !sequencerControls.hideùà
+                onPressed: sequencerControls.hide = !sequencerControls.hide
 
                 onHoveredChanged: {
                     if (containsMouse)

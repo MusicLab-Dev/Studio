@@ -5,7 +5,7 @@ import NodeModel 1.0
 
 import "../Default"
 
-Rectangle {
+Item {
     function getDecibelRatio(db) {
         if (db >= 12)
             return 1
@@ -39,10 +39,9 @@ Rectangle {
     property bool analysisRequested: false
     property bool muted: false
     property alias mouseArea: mouseArea
+    property color targetColor: targetNode ? targetNode.color : "white"
 
     id: soundMeter
-    radius: 2
-    color: themeManager.backgroundColor
 
     onTargetNodeChanged: {
         if (targetNode) {
@@ -91,6 +90,54 @@ Rectangle {
         }
     }
 
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+
+        onClicked: {
+            soundMeter.muted = !soundMeter.muted
+        }
+    }
+
+    Rectangle {
+        id: soundMeterBackground
+        visible: !muted
+        anchors.fill: parent
+        anchors.margins: 1
+        radius: 2
+
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: Qt.lighter(soundMeter.targetColor, 1.5) }
+            GradientStop { position: 0.33; color: soundMeter.targetColor }
+            GradientStop { position: 1.0; color: Qt.darker(soundMeter.targetColor, 1.5) }
+        }
+
+        Rectangle {
+            color: themeManager.backgroundColor
+            x: -1
+            y: -1
+            width: parent.width + 2
+            height: (parent.height + 2) * (1 - soundMeter.rmsPosition)
+            radius: 2
+        }
+
+        Rectangle {
+            width: parent.width
+            height: 1
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height * (1 - soundMeter.peakPosition)
+        }
+
+        Rectangle {
+            width: parent.width
+            height: 1
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height * (1 - soundMeter.gainPosition)
+            color: themeManager.accentColor
+        }
+    }
+
     Rectangle {
         visible: mouseArea.containsMouse || muted
         anchors.fill: parent
@@ -106,116 +153,5 @@ Rectangle {
         visible: mouseArea.containsMouse
         source: muted ? "qrc:/Assets/Muted.png" : "qrc:/Assets/Unmuted.png"
         color: "white"
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-
-        onClicked: {
-            soundMeter.muted = !soundMeter.muted
-        }
-    }
-
-    Item {
-        id: soundMeterBackground
-        visible: !muted
-        anchors.fill: parent 
-
-        Rectangle {
-            id: background
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: parent.height * (soundMeter.rmsPosition)
-
-            radius: 2
-
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "red" }
-                GradientStop { position: 0.33; color: "yellow" }
-                GradientStop { position: 1.0; color: "green" }
-            }
-
-            Behavior on height {
-                NumberAnimation { duration: 50 }
-            }
-        }
-
-        Repeater {
-            id: reapeater
-            model: 11
-
-            delegate: Rectangle {
-                anchors.right: soundMeterBackground.right
-                color: "white"
-                width: index === 1 ? parent.width : 3
-                height: 1
-                y: (1 + index) * soundMeterBackground.height / 12
-            }
-        }
-
-        Rectangle {
-            width: parent.width
-            height: 1
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: parent.height * (1 - soundMeter.peakPosition) - 2
-            radius: 2
-
-            Behavior on y {
-                NumberAnimation { duration: 50 }
-            }
-        }
-
-        Rectangle {
-            width: parent.width
-            height: 1
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: parent.height * (1 - soundMeter.gainPosition)
-            color: themeManager.accentColor
-            radius: 2
-        }
-
-        /*Text {
-            verticalAlignment: Text.AlignVCenter
-            text: "12"
-            anchors.left: parent.right
-            y: height / -2
-            anchors.leftMargin: 4
-            font.pointSize: 6
-            color: "white"
-        }
-
-        Text {
-            verticalAlignment: Text.AlignVCenter
-            text: "0"
-            anchors.left: parent.right
-            anchors.leftMargin: 4
-            y: soundMeter.unitSpacing * 2 - height / 2
-            font.pointSize: 6
-            color: "white"
-        }
-
-        Text {
-            verticalAlignment: Text.AlignVCenter
-            text: "-30"
-            anchors.left: parent.right
-            anchors.leftMargin: 3
-            y: soundMeter.unitSpacing * 7 - height / 4
-            font.pointSize: 6
-            color: "white"
-        }
-
-        Text {
-            verticalAlignment: Text.AlignVCenter
-            text: "-60"
-            anchors.left: parent.right
-            anchors.bottom: parent.bottom
-            anchors.leftMargin: 3
-            anchors.bottomMargin: height / -2
-            font.pointSize: 6
-            color: "white"
-        }*/
     }
 }
