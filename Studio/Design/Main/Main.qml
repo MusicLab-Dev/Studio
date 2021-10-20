@@ -124,9 +124,9 @@ Window {
     CommunityAPI {
         id: communityAPI
 
-        onAuthentificationRequired: {
-            authentificatePopup.open()
-        }
+        // onAuthentificationRequired: {
+        //     authentificatePopup.open()
+        // }
     }
 
     Export {

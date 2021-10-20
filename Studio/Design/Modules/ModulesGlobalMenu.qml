@@ -135,8 +135,8 @@ DefaultMenuButton {
         }
 
         // Action {
-            // text: qsTr("Share project on community")
-            // onTriggered: communityAPI.requestUploadProject()
+        //     text: qsTr("Share project on community")
+        //     onTriggered: menuButton
         // }
 
         Action {
