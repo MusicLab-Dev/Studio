@@ -210,7 +210,7 @@ void CommunityAPI::launchBrowser(void)
     }
     _uploads.clear();
 
-    QString url = "https://community.lexostudio.com/#/home/" + parameters;
+    QString url = "https://community.lexostudio.com/#/home" + parameters;
     qDebug() << "CommunityAPI::launchBrowser: Launching" << url;
     QDesktopServices::openUrl(QUrl(url));
 }
