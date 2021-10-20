@@ -583,77 +583,77 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="108"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="109"/>
         <source>New Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="113"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="114"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="118"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="119"/>
         <source>Save Project As...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="123"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="124"/>
         <source>Open Project File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="128"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="129"/>
         <source>Open Old Compatibility Project File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="133"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="134"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="141"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="142"/>
         <source>Basic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="149"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="150"/>
         <source>Demo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="158"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="159"/>
         <source>Edit project name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="163"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="164"/>
         <source>Share project on community</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="168"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="169"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="173"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="174"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="178"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="179"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="188"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="189"/>
         <source>Save a project file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="208"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="209"/>
         <source>Load a project file</source>
         <translation type="unfinished"></translation>
     </message>
