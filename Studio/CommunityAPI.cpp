@@ -200,11 +200,13 @@ void CommunityAPI::launchBrowser(void)
 
     for (const auto &upload : _uploads) {
         if (!parameters.isEmpty())
+            parameters.push_back('?');
+        else
             parameters.push_back('&');
         if (upload.type == MediaType::Sound)
-            parameters += "?exportId=" + upload.fileId;
+            parameters += "exportId=" + upload.fileId;
         else
-            parameters += "?mediaId=" + upload.fileId;
+            parameters += "mediaId=" + upload.fileId;
     }
     _uploads.clear();
 
