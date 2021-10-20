@@ -38,6 +38,7 @@ Rectangle {
     readonly property real unitSpacing: height / 12
     property bool analysisRequested: false
     property bool muted: false
+    property alias mouseArea: mouseArea
 
     id: soundMeter
     radius: 2

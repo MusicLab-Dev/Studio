@@ -9,6 +9,7 @@ import "../Help/"
 import "../Common/"
 
 import PluginModel 1.0
+import CursorManager 1.0
 
 Rectangle {
     property color hoveredColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.8) : "black"
@@ -53,7 +54,14 @@ Rectangle {
                 hoverEnabled: true
                 anchors.fill: parent
 
-                onPressed: sequencerControls.hide = !sequencerControls.hide
+                onPressed: sequencerControls.hide = !sequencerControls.hideùà
+
+                onHoveredChanged: {
+                    if (containsMouse)
+                        cursorManager.set(CursorManager.Type.Clickable)
+                    else
+                        cursorManager.set(CursorManager.Type.Normal)
+                }
             }
 
             DefaultText {
@@ -91,12 +99,18 @@ Rectangle {
 
             MouseArea {
                 id: mousePlannerButton
-                hoverEnabled: true
-
                 anchors.fill: parent
+                hoverEnabled: true
 
                 onPressed: {
                     modulesView.addNewPlanner(sequencerView.node)
+                }
+
+                onHoveredChanged: {
+                    if (containsMouse)
+                        cursorManager.set(CursorManager.Type.Clickable)
+                    else
+                        cursorManager.set(CursorManager.Type.Normal)
                 }
             }
 
@@ -126,6 +140,13 @@ Rectangle {
         targetNode: sequencerView.node
         enabled: sequencerView.visible
         color: themeManager.foregroundColor
+
+        mouseArea.onHoveredChanged: {
+            if (mouseArea.containsMouse)
+                cursorManager.set(CursorManager.Type.Clickable)
+            else
+                cursorManager.set(CursorManager.Type.Normal)
+        }
 
         HelpArea {
             name: qsTr("Sound meter")
