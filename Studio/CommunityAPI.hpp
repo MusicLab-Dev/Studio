@@ -18,8 +18,8 @@ public:
     static constexpr auto DefaultTokenFile = "LexoToken";
 
     /** @brief Url of the API */
-    static constexpr auto BaseURL = "https://api.lexostudio.com/";
-
+    // static constexpr auto BaseURL = "https://api.lexostudio.com/";
+    static constexpr auto BaseURL = "http://localhost:8080/api";
 
     /** @brief Cache of a pending upload */
     struct UploadCache

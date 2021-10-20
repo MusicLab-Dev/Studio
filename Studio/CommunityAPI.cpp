@@ -7,6 +7,9 @@
 #include <QNetworkReply>
 #include <QStandardPaths>
 #include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QHttpMultiPart>
 
 #include "CommunityAPI.hpp"
 
@@ -56,16 +59,59 @@ void CommunityAPI::onAuthentificationReply(void)
         emit requestFailed();
         return;
     }
-    qDebug() << _authentificationReply->readAll();
+
+    auto doc = QJsonDocument::fromJson(_authentificationReply->readAll());
+    auto replyJson = doc.object();
+    QString token = replyJson["data"].toObject()["token"].toString();
+    qDebug() << token;
+
     _authentificationReply = nullptr;
+    startUpload(token);
 }
 
-void CommunityAPI::startUpload(const QString &path)
+void CommunityAPI::startUpload(const QString &token)
 {
-    _currentUpload.path = path;
+    // _currentUpload.path = path;
     _currentUpload.reply = nullptr;
 
-    // _currentUpload.reply = _manager->get(request);
+    enum FileType {
+        Song = 0,
+        Export
+    };
+
+    QString filePath("/home/paul/Downloads/TestFiles/warmup.wav");
+    FileType fileType = filePath.endsWith(".wav") ? FileType::Song : FileType::Export;
+
+    /* Read and load file data */
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "Failed to open file: " << file.errorString();
+        return;
+    }
+    QByteArray fileContent(file.readAll());
+    file.close();
+
+    /* Create multipart */
+    QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+    /* Setup file part */
+    QHttpPart filePart;
+    QString fileExt(fileType == FileType::Song ? ".wav" : ".lexo");
+    QString mimeType(fileType == FileType::Song ? "audio/wave" : "text/plain");
+    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant(mimeType));
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"file\"; filename=\"file" + fileExt + "\""));
+    filePart.setHeader(QNetworkRequest::ContentLengthHeader, fileContent.length());
+    filePart.setBody(fileContent);
+
+    multiPart->append(filePart);
+
+    /* Setup request with authorization header */
+    QNetworkRequest request(QUrl(QString(BaseURL) + "/files/" + (fileType == FileType::Song ? "song" : "export")));
+    request.setRawHeader("Authorization", "Bearer " + token.toLocal8Bit());
+
+    /* Start upload */
+    _currentUpload.reply = _manager.get()->post(request, multiPart);
+    multiPart->setParent(_currentUpload.reply);
 
     connect(_currentUpload.reply, &QNetworkReply::finished, this, &CommunityAPI::onUploadReply);
     connect(_currentUpload.reply, &QNetworkReply::finished, _currentUpload.reply, &QNetworkReply::deleteLater);
@@ -73,6 +119,15 @@ void CommunityAPI::startUpload(const QString &path)
 
 void CommunityAPI::onUploadReply(void)
 {
+    qDebug() << "onUploadReply";
+
+    auto doc = QJsonDocument::fromJson(_currentUpload.reply->readAll());
+    auto replyJson = doc.object();
+    QString fileId = replyJson["data"].toObject()["fileId"].toString();
+    qDebug() << fileId;
+
+    return;
+
     if (!_currentUpload.reply) {
         qCritical() << "CommunityAPI::onUploadReply: No upload pending";
         return;
