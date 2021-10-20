@@ -9,7 +9,7 @@ Button {
 
     id: control
     hoverEnabled: true
-    font.pointSize: 12
+    font.pixelSize: 16
 
     onHoveredChanged: {
         if (hovered)
@@ -21,21 +21,6 @@ Button {
     contentItem: Item {
     }
 
-    Text {
-        id: textItem
-        anchors.fill: parent
-        verticalAlignment: Qt.AlignVCenter
-        horizontalAlignment: Qt.AlignHCenter
-        text: control.text
-        font: control.font
-        color: control.pressed ? themeManager.accentColor : control.hovered ? themeManager.semiAccentColor : "white"
-//        opacity: control.pressed ? 1.0 : control.hovered ? 0.85 : control.enabled ? 0.7 : 0.5
-        fontSizeMode: Text.Fit
-        // wrapMode: Text.Wrap
-        // elide: Text.ElideRight
-        // onFontInfoChanged: console.log(width)
-     }
-
     background: Rectangle {
         id: rectItem
         width: control.width
@@ -45,5 +30,20 @@ Button {
         visible: false
         border.width: 1
         border.color: textItem.color
+    }
+
+    Text {
+        id: textItem
+        anchors.fill: parent
+        verticalAlignment: Qt.AlignVCenter
+        horizontalAlignment: Qt.AlignHCenter
+        text: control.text
+        font: control.font
+        color: control.pressed ? themeManager.accentColor : control.hovered ? themeManager.semiAccentColor : "white"
+        fontSizeMode: Text.Fit
+        // opacity: control.pressed ? 1.0 : control.hovered ? 0.85 : control.enabled ? 0.7 : 0.5
+        // wrapMode: Text.Wrap
+        // elide: Text.ElideRight
+        // onFontInfoChanged: console.log(width)
     }
 }

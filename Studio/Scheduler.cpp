@@ -51,6 +51,7 @@ Scheduler::Scheduler(Audio::ProjectPtr &&project, QObject *parent)
         static_cast<Audio::Format>(_device.format()),
         processBlockSize()
     };
+    setBPM(120.0f);
 
     // Setup tick timer
     _timer.setTimerType(Qt::PreciseTimer);
@@ -81,6 +82,7 @@ void Scheduler::setCurrentBeat(const Beat beat)
 
 void Scheduler::setBPM(const BPM value) noexcept
 {
+    qDebug() << "Setting BPM to " << value << "from" << bpm();
     if (bpm() == value)
         return;
     addEvent(

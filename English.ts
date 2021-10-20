@@ -357,6 +357,29 @@
     </message>
 </context>
 <context>
+    <name>AuthentificatePopup</name>
+    <message>
+        <location filename="Studio/Design/Common/AuthentificatePopup.qml" line="91"/>
+        <source>Please login with your Lexo Community account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Common/AuthentificatePopup.qml" line="101"/>
+        <source>Your email address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Common/AuthentificatePopup.qml" line="107"/>
+        <source>Your password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Common/AuthentificatePopup.qml" line="117"/>
+        <source>No account ? Sign-up</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DefaultCheckBox</name>
     <message>
         <location filename="Studio/Design/Default/DefaultCheckBox.qml" line="9"/>
@@ -547,7 +570,7 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="Studio/Design/Main/Main.qml" line="40"/>
+        <location filename="Studio/Design/Main/Main.qml" line="41"/>
         <source>Lexo</source>
         <translation type="unfinished"></translation>
     </message>

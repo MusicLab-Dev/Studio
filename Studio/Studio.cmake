@@ -124,6 +124,8 @@ set(StudioSources
     ${StudioDir}/ColoredSprite.cpp
     ${StudioDir}/ColoredSpriteManager.hpp
     ${StudioDir}/ColoredSpriteManager.cpp
+    ${StudioDir}/CommunityAPI.hpp
+    ${StudioDir}/CommunityAPI.cpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QM_FILES} ${QtResources})

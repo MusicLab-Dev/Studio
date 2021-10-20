@@ -31,6 +31,7 @@
 #include "CursorManager.hpp"
 #include "ColoredSprite.hpp"
 #include "ColoredSpriteManager.hpp"
+#include "CommunityAPI.hpp"
 
 void Studio::InitResources(void)
 {
@@ -119,6 +120,7 @@ void Studio::InitResources(void)
     qmlRegisterType<CursorManager>("CursorManager", 1, 0, "CursorManager");
     qmlRegisterType<ColoredSprite>("ColoredSprite", 1, 0, "ColoredSprite");
     qmlRegisterType<ColoredSpriteManager>("ColoredSpriteManager", 1, 0, "ColoredSpriteManager");
+    qmlRegisterType<CommunityAPI>("CommunityAPI", 1, 0, "CommunityAPI");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);

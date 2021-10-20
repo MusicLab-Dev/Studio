@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/Common">
+        <file>AuthentificatePopup.qml</file>
         <file>AddButton.qml</file>
         <file>CloseButton.qml</file>
         <file>SettingsButton.qml</file>

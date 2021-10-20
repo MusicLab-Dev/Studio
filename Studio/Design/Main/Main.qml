@@ -11,6 +11,7 @@ import DevicesModel 1.0
 import ClipboardManager 1.0
 import CursorManager 1.0
 import ColoredSpriteManager 1.0
+import CommunityAPI 1.0
 
 import "../Common"
 import "../Modules"
@@ -120,15 +121,24 @@ Window {
         id: cursorManager
     }
 
+    CommunityAPI {
+        id: communityAPI
+    }
+
     Export {
+        id: exportManager
+        anchors.fill: parent
+    }
+
+    AuthentificatePopup {
+        id: authentificatePopup
         anchors.fill: parent
 
-        id: exportManager
+        // Component.onCompleted: open()
     }
 
     KeyboardShortcutsView {
-        anchors.fill: parent
-
         id: keyboardShortcutsView
+        anchors.fill: parent
     }
 }
