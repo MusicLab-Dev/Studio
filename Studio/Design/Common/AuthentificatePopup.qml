@@ -58,7 +58,7 @@ Item {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: "grey"
+        color: themeManager.backgroundColor
         opacity: 0.5
     }
 

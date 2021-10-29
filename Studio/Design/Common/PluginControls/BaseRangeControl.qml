@@ -144,7 +144,7 @@ MouseArea {
             var targetSize = width * targetSizeRatio
             var center = Qt.point(width / 2, height / 2)
             ctx.reset()
-            ctx.lineWidth = 4
+            ctx.lineWidth = 5
             ctx.strokeStyle = control.accentColor
             ctx.beginPath()
             ctx.arc(center.x, center.y, targetSize, startAngle, stopAngle, false)
@@ -164,6 +164,7 @@ MouseArea {
             fontSizeMode: Text.Fit
             color: control.tracking ? control.accentColor : "white"
             elide: Text.ElideRight
+            font.pixelSize: 10
         }
     }
 }

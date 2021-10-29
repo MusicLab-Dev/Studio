@@ -39,6 +39,7 @@ Item {
     property bool analysisRequested: false
     property bool muted: false
     property color color: targetNode ? targetNode.color : "white"
+    property alias mouseArea: mouseArea
 
     id: soundMeter
 
