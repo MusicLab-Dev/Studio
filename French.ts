@@ -1146,24 +1146,24 @@
 <context>
     <name>TreeContentView</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="203"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="231"/>
         <source>Project&apos;s tree area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="204"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="292"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="321"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="232"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="320"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="349"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="291"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="319"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="320"/>
+        <location filename="Studio/Design/Tree/TreeContentView.qml" line="348"/>
         <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>

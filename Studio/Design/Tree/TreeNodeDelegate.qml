@@ -12,6 +12,34 @@ import "../Default"
 import "../Common"
 
 Column {
+    function getFocusRect() {
+        return contentView.mapFromItem(nodeInstance, 0, 0, nodeInstance.width, nodeInstance.height)
+    }
+
+    function selectNode(hasModifier) {
+        var index = treeSurface.selectionList.indexOf(nodeDelegate)
+        if (index === -1) {
+            treeSurface.addNodeToSelection(nodeDelegate)
+            nodeDelegate.isSelected = true
+        } else if (hasModifier) {
+            treeSurface.removeNodeFromSelection(nodeDelegate, index)
+            nodeDelegate.isSelected = false
+            return false
+        } else
+            contentView.lastSelectedNode = nodeDelegate
+        return true
+    }
+
+    function selectRecursively() {
+        if (!nodeDelegate.isSelected) {
+            treeSurface.addNodeToSelection(nodeDelegate)
+            nodeDelegate.isSelected = true
+        }
+        for (var i = 0; i < childrenRepeater.count; ++i) {
+            childrenRepeater.itemAt(i).item.selectRecursively()
+        }
+    }
+
     property NodeModel parentNode: null
     property NodeModel node: null
     property bool isSelected: false
@@ -105,17 +133,25 @@ Column {
                     treeNodeMenu.y = mouseY
                 } else {
                     var hasModifier = mouse.modifiers & Qt.ControlModifier
+                    var selectGroup = mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.AltModifier
                     if (!hasModifier)
                         treeSurface.resetSelection(false)
-                    var index = treeSurface.selectionList.indexOf(nodeDelegate)
-                    if (index === -1) {
-                        treeSurface.addNodeToSelection(nodeDelegate)
-                        nodeDelegate.isSelected = true
-                    } else if (hasModifier) {
-                        treeSurface.removeNodeFromSelection(nodeDelegate, index)
-                        nodeDelegate.isSelected = false
-                    } else
-                        contentView.lastSelectedNode = nodeDelegate
+                    var focusRect = undefined
+                    if (selectGroup) {
+                        nodeDelegate.selectRecursively()
+                        contentView.animateMoveFocusSelection()
+                    } else if (nodeDelegate.selectNode(hasModifier))
+                        contentView.animateMoveFocus(nodeDelegate.getFocusRect())
+                }
+            }
+
+            onDoubleClicked: {
+                var hasModifier = mouse.modifiers & Qt.ControlModifier
+                if (mouse.button === Qt.LeftButton) {
+                    if (!hasModifier)
+                        treeSurface.resetSelection(false)
+                    nodeDelegate.selectRecursively()
+                    contentView.animateMoveFocusSelection()
                 }
             }
 
