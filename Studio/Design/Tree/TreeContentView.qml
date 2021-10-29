@@ -33,6 +33,15 @@ MouseArea {
         selectedPartitionIndex = partitionIndex
     }
 
+    function animateMoveFocus(rect) {
+        var center = Qt.point(
+            rect.x + rect.width / 2,
+            rect.y + rect.height / 2,
+        )
+        var projection = mapFromItem(treeSurface, center)
+        console.log("Projection", projection)
+    }
+
     // Alias
     property alias treeSurface: treeSurface
     property alias partitionsPreview: partitionsPreview

@@ -148,6 +148,10 @@ public slots:
     /** @brief Set a control on the fly */
     void setControl(const ControlEvent &event);
 
+
+    /** @brief Set external inputs of the plugin */
+    void setExternalInputs(const QVector<QString> &paths);
+
 signals:
     /** @brief Notify that a control has changed */
     void controlValueChanged(const ParamID paramID);
@@ -157,5 +161,4 @@ private:
 
     /** @brief Get the current language */
     [[nodiscard]] int language(void) const noexcept;
-
 };

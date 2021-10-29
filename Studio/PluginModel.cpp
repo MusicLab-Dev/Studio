@@ -135,3 +135,13 @@ QString PluginModel::path(void) const noexcept
 {
     return audioPlugin()->factory()->getPath().data();
 }
+
+void PluginModel::setExternalInputs(const QVector<QString> &paths)
+{
+    Audio::ExternalPaths externals;
+    externals.reserve(static_cast<std::uint32_t>(paths.size()));
+    for (auto &path : paths) {
+        externals.push(path.toStdString());
+    }
+    audioPlugin()->setExternalPaths(externals);
+}
