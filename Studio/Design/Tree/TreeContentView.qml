@@ -33,6 +33,43 @@ MouseArea {
         selectedPartitionIndex = partitionIndex
     }
 
+    function animateMoveFocus(rect) {
+        var center = Qt.point(
+            rect.x + rect.width / 2,
+            rect.y + rect.height / 2,
+        )
+        var delta = Qt.point(
+            (width / 2) - center.x,
+            (height / 2) - center.y
+        )
+        app.setCursorPos(mapToGlobal(width / 2, height / 2))
+        incrementXOffset(delta.x)
+        incrementYOffset(delta.y)
+    }
+
+    function animateMoveFocusSelection() {
+        var length = treeSurface.selectionList.length
+        if (!length)
+            return
+        var focusRect = treeSurface.selectionList[0].getFocusRect()
+        var focusLeft = focusRect.left
+        var focusTop = focusRect.top
+        var focusRight = focusRect.right
+        var focusBottom = focusRect.bottom
+        for (var i = 1; i < length; ++i) {
+            var rect = treeSurface.selectionList[i].getFocusRect()
+            focusLeft = Math.min(focusLeft, rect.x)
+            focusTop = Math.min(focusTop, rect.y)
+            focusRight = Math.max(focusRight, rect.right)
+            focusBottom = Math.max(focusBottom, rect.bottom)
+        }
+        focusRect.x = focusLeft
+        focusRect.y = focusTop
+        focusRect.width = focusRight - focusLeft
+        focusRect.height = focusBottom - focusTop
+        animateMoveFocus(focusRect)
+    }
+
     // Alias
     property alias treeSurface: treeSurface
     property alias partitionsPreview: partitionsPreview

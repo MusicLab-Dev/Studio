@@ -38,9 +38,8 @@ Item {
     readonly property real unitSpacing: height / 12
     property bool analysisRequested: false
     property bool muted: false
-    property alias mouseArea: mouseArea
-    property color targetColor: targetNode ? targetNode.color : "white"
     property color color: targetNode ? targetNode.color : "white"
+    property alias mouseArea: mouseArea
 
     id: soundMeter
 

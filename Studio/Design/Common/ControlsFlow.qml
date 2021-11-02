@@ -56,6 +56,55 @@ Rectangle {
                 colorHovered: node ? Qt.lighter(node.color, 1.25) : "black"
                 colorOnPressed: node ? Qt.darker(node.color, 1.25) : "black"
                 playing: contentView.playerBase.isPlayerRunning
+
+                onPressed: menu.openMenu()
+
+                DefaultMenu {
+                    function openMenu() {
+                        visible = true
+                    }
+
+                    function closeMenu() {
+                        visible = false
+                    }
+
+                    id: menu
+                    visible: false
+
+                    Action {
+                        function setNameColor() {
+                            node.name = globalTextField.text
+                            node.color = globalTextField.colorPicked;
+                            menu.closeMenu()
+                        }
+
+                        text: qsTr("Edit name")
+                        enabled: true
+
+                        onTriggered: {
+                            globalTextField.open(node.name, setNameColor, function () { menu.closeMenu() }, true, node.color)
+                        }
+                    }
+
+                    Action {
+                        text: qsTr("Change sample")
+                        enabled: node && (node.plugin.tags & PluginModel.Tags.Sampler)
+
+                        onTriggered: {
+                            modulesView.workspacesView.open(true,
+                                function() {
+                                    var list = []
+                                    for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
+                                        list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
+                                    if (app.currentPlayer)
+                                        app.currentPlayer.pause()
+                                    node.plugin.setExternalInputs(list)
+                                },
+                                function() {}
+                            )
+                        }
+                    }
+                }
             }
         }
 

@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import NodeModel 1.0
+import PluginModel 1.0
 
 import "../Default"
 
@@ -89,6 +90,25 @@ DefaultMenu {
 
         onTriggered: {
             globalTextField.open(targetNode.name, setNameColor, function () { closeMenu() }, true, targetNode.color)
+        }
+    }
+
+    Action {
+        text: qsTr("Change sample")
+        enabled: targetNode && (targetNode.plugin.tags & PluginModel.Tags.Sampler)
+
+        onTriggered: {
+            modulesView.workspacesView.open(true,
+                function() {
+                    var list = []
+                    for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
+                        list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
+                    if (app.currentPlayer)
+                        app.currentPlayer.pause()
+                    targetNode.plugin.setExternalInputs(list)
+                },
+                function() {}
+            )
         }
     }
 

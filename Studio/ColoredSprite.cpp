@@ -71,20 +71,23 @@ void ColoredSprite::onAnimationTick(void)
 
 void ColoredSprite::paint(QPainter *painter)
 {
+    const auto w = static_cast<int>(width());
+    const auto h = static_cast<int>(height());
+
     if (_loading || _cache.image.isNull()) {
-        painter->fillRect(0, 0, width(), height(), _color);
+        painter->fillRect(0, 0, w, h, _color);
         return;
     }
 
     // Select the most favorable image
     QImage *target { nullptr };
-    if (height() - _cache.image.width() < height() - _cache.lowResImage.height())
+    if (h - _cache.image.width() < h - _cache.lowResImage.height())
         target = &_cache.image;
     else
         target = &_cache.lowResImage;
 
     const auto imageSize = target->height();
-    const QRect dest(0, 0, width(), height());
+    const QRect dest(0, 0, w, h);
     const QRect source(_pos * imageSize, 0, imageSize, imageSize);
 
 //    painter->setRenderHint(QPainter::RenderHint::Antialiasing);
@@ -92,7 +95,7 @@ void ColoredSprite::paint(QPainter *painter)
 
     painter->drawImage(dest, *target, source);
     painter->setCompositionMode(QPainter::CompositionMode_SourceIn);
-    painter->fillRect(0, 0, width(), height(), _color);
+    painter->fillRect(0, 0, w, h, _color);
 }
 
 void ColoredSprite::onImageLoaded(const QString &path, const SpriteCache &cache)

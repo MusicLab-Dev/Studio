@@ -171,7 +171,7 @@ bool ProjectSerializer::Deserialize(Project &project, const QJsonObject &serial)
         return false;
     }
     project.setName(name->toString(DefaultProjectNameString));
-    Scheduler::Get()->setBPM(bpm->toInt(120));
+    Scheduler::Get()->setBPM(static_cast<BPM>(bpm->toInt(120)));
     if (!DeserializeProjectImpl(project, master->toObject())) {
         DeserializeCritical() << "Couldn't deserialize project, invalid master node";
         return false;

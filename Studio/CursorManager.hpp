@@ -23,7 +23,7 @@ public:
         ResizeVertical
     };
     Q_ENUM(Type);
-    
+
     /** @brief Constructor */
     explicit CursorManager(QObject *parent = nullptr) : QObject(parent) {}
 
