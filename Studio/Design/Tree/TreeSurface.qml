@@ -128,7 +128,6 @@ Item {
     width: Math.max(masterNodeDelegate.width, parent.width)
     height: Math.max(masterNodeDelegate.height, parent.height)
 
-
     TreeNodeDelegate {
         id: masterNodeDelegate
         node: app.project.master

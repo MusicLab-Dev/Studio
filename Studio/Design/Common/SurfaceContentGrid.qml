@@ -19,13 +19,13 @@ Item {
     property real barThickness: divisionsPerBar ? 2 : 1
     property real beatThickness: divisionsPerBeat ? 2 : 1
     property real divisionThickness: 1
-    property color rowColor: mainWindow.setColorAlpha(themeManager.backgroundColor, 0.85)
+    property color rowColor: mainWindow.setColorAlpha(themeManager.foregroundColor, 0.85)
     property color rowAccentColor: Qt.rgba(1, 1, 1, 0.2)
-    property color groupAColor: themeManager.foregroundColor
-    property color groupBColor: themeManager.contentColor
+    property color groupAColor: themeManager.contentColor
+    property color groupBColor: themeManager.backgroundColor
     property color barColor: rowAccentColor
-    property color beatColor: mainWindow.setColorAlpha(themeManager.backgroundColor, 0.7)
-    property color divisionColor: mainWindow.setColorAlpha(themeManager.backgroundColor, 0.65)
+    property color beatColor: mainWindow.setColorAlpha(themeManager.foregroundColor, 0.7)
+    property color divisionColor: mainWindow.setColorAlpha(themeManager.foregroundColor, 0.65)
 
     // Intermediate calculus
     readonly property real xGroupOffset: xOffset % groupMarginWidth

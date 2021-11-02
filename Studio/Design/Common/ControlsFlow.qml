@@ -27,7 +27,7 @@ Rectangle {
     property bool closeable: true
 
     id: controlsFlow
-    color: themeManager.contentColor
+    color: themeManager.backgroundColor
     implicitHeight: Math.max(baseHeight, headerRow.height) + 20
 
     MouseArea {
@@ -47,12 +47,14 @@ Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            PluginFactoryImage {
+            PluginFactoryImageButton {
                 width: height
-                height: parent.height * 0.75
+                height: parent.height
                 anchors.centerIn: parent
                 name: node ? node.plugin.title : ""
-                color: node ? node.color : "black"
+                colorDefault: node ? node.color : "black"
+                colorHovered: node ? Qt.lighter(node.color, 1.25) : "black"
+                colorOnPressed: node ? Qt.darker(node.color, 1.25) : "black"
                 playing: contentView.playerBase.isPlayerRunning
             }
         }
@@ -75,7 +77,6 @@ Rectangle {
                 color: controlsFlow.nodeColor
             }
         }
-
     }
 
     Rectangle {

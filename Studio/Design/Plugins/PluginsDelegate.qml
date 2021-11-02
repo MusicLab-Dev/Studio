@@ -19,7 +19,7 @@ Item {
 
     Rectangle {
         id: pluginSquareComponent
-        color: themeManager.backgroundColor
+        color: themeManager.foregroundColor
         radius: 6
         width: pluginsGrid.cellWidth - x * 2
         height: width

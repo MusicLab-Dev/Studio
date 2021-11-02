@@ -151,7 +151,7 @@ MouseArea {
             ctx.stroke()
             if (stopAngle !== endAngle) {
                 ctx.beginPath()
-                ctx.strokeStyle = themeManager.backgroundColor
+                ctx.strokeStyle = themeManager.foregroundColor
                 ctx.arc(center.x, center.y, targetSize, stopAngle, endAngle, false)
                 ctx.stroke()
             }

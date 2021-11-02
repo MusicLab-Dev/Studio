@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 import "../Default"
 
 Rectangle {
-    color: themeManager.contentColor
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent

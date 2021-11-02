@@ -13,7 +13,7 @@ Item {
         anchors.centerIn: parent
         height: parent.height * ratioheight
         width: parent.width * ratioWidth
-        color: themeManager.foregroundColor
+        color: themeManager.contentColor
         radius: 6
 
         Item {

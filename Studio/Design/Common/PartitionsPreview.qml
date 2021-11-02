@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.15
 import "../Default"
 
 Rectangle {
-    readonly property var nodeDelegate: contentView.lastSelectedNode
+    property var nodeDelegate: contentView.selectedNode
     readonly property var node: nodeDelegate ? nodeDelegate.node : null
     readonly property color nodeColor: nodeDelegate ? nodeDelegate.color : color
     readonly property color nodeAccentColor: nodeDelegate ? nodeDelegate.accentColor : color
@@ -24,7 +24,7 @@ Rectangle {
     id: partitionsPreview
     width: contentView.width
     height: Math.max(baseHeight, previewFlow.height) + 20
-    color: themeManager.contentColor
+    color: themeManager.backgroundColor
     // border.color: nodeColor
 
     MouseArea {

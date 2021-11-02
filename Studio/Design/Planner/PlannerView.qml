@@ -81,10 +81,37 @@ Item {
             z: 1
         }
 
+        Rectangle {
+            color: "black"
+            visible: sequencerControls.visible
+            Layout.preferredWidth: parent.width
+            Layout.preferredHeight: 1
+        }
+
+        ControlsFlow {
+            id: sequencerControls
+            closeable: false
+            node: contentView.selectedNode ? contentView.selectedNode.node : null
+            Layout.fillWidth: true
+            visible: requiredVisibility
+
+            HelpArea {
+                name: qsTr("Controls")
+                description: qsTr("Description")
+                position: HelpHandler.Position.Bottom
+                externalDisplay: true
+                visible: sequencerControls.requiredVisibility
+            }
+        }
+
         PlannerContentView {
             id: contentView
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            Behavior on y {
+                NumberAnimation { duration: 200 }
+            }
         }
 
         PlannerFooter {

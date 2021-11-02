@@ -21,11 +21,11 @@ Item {
 
     id: categoryComponent
     width: treeComponentsPanel.categorySize
-    height: treeComponentsPanel.categorySize
+    height: treeComponentsPanel.categorySize * 0.7
 
     Rectangle {
         anchors.fill: parent
-        color: treeComponentsPanel.filter === filter ? baseColor : mouseArea.containsMouse ? themeManager.backgroundColor : themeManager.contentColor
+        color: treeComponentsPanel.filter === filter ? baseColor : mouseArea.containsMouse ? themeManager.foregroundColor : themeManager.backgroundColor
         radius: 2
     }
 
@@ -37,7 +37,7 @@ Item {
         DefaultText {
             id: text
             anchors.fill: parent
-            font.pixelSize: 17
+            font.pixelSize: 13
             font.bold: true
             text: ""
             color: treeComponentsPanel.filter === filter ? "white" : baseColor

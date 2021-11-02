@@ -13,7 +13,7 @@ Button {
     property real scaleFactor: 0.5
     property alias showBorder: backgroundRect.visible
     property alias backgroundRadius: backgroundRect.radius
-    property alias backgroundColor: backgroundRect.color
+    property alias foregroundColor: backgroundRect.color
     property alias borderColor: backgroundRect.border.color
     property alias borderWidth: backgroundRect.border.width
 
@@ -31,7 +31,7 @@ Button {
         id: backgroundRect
         width: control.width
         height: control.height
-        color: themeManager.contentColor
+        color: themeManager.backgroundColor
         radius: 6
         visible: true
         border.width: 0

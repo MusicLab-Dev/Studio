@@ -27,7 +27,7 @@ Row {
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 16
-                color: nodeDelegate.isSelected ? themeManager.backgroundColor : nodeDelegate.color
+                color: nodeDelegate.isSelected ? themeManager.foregroundColor : nodeDelegate.color
                 text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("ERROR")
                 elide: Text.ElideRight
             }

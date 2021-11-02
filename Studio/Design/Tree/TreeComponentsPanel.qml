@@ -15,7 +15,6 @@ Row {
     }
 
     function close() {
-        filter = 0
         opened = false
     }
 
@@ -42,45 +41,21 @@ Row {
     property int blueColorIndex: 0
 
     id: treeComponentsPanel
+    x: treeComponentsPanel.opened ? 0 : -panelContent.width
 
-    Rectangle {
-        id: panelCategory
-        anchors.verticalCenter: parent.verticalCenter
-        width: categoryColumn.width + 12
-        height: categoryColumn.height + 12
-        color: themeManager.contentColor
-        radius: 6
-
-        Column {
-            id: categoryColumn
-            anchors.centerIn: parent
-            spacing: 3
-
-            TreeComponentCategory {
-                text.text: qsTr("Groups")
-                filter: PluginModel.Tags.Group
-            }
-
-            TreeComponentCategory {
-                text.text: qsTr("Instrum.")
-                filter: PluginModel.Tags.Instrument
-            }
-
-            TreeComponentCategory {
-                text.text: qsTr("Effects")
-                filter: PluginModel.Tags.Effect
-            }
-        }
+    onXChanged: {
+        if (x <= -panelContent.width)
+            filter = 0
     }
 
     Rectangle {
         id: panelContent
         width: treeComponentsPanel.cellSize + 24
         height: treeComponentsPanel.height
-        color: themeManager.contentColor
+        color: themeManager.backgroundColor
         opacity: 1
         radius: 6
-        visible: treeComponentsPanel.opened
+        //visible: treeComponentsPanel.opened
 
         MouseArea {
             anchors.fill: parent
@@ -109,6 +84,36 @@ Row {
             delegate: TreeComponentDelegate {
                 width: treeComponentsListView.width - 24
                 x: 12
+            }
+        }
+    }
+
+    Rectangle {
+        id: panelCategory
+        anchors.verticalCenter: parent.verticalCenter
+        width: categoryColumn.width + 12
+        height: categoryColumn.height + 12
+        color: themeManager.backgroundColor
+        radius: 6
+
+        Column {
+            id: categoryColumn
+            anchors.centerIn: parent
+            spacing: 3
+
+            TreeComponentCategory {
+                text.text: qsTr("Groups")
+                filter: PluginModel.Tags.Group
+            }
+
+            TreeComponentCategory {
+                text.text: qsTr("Instruments")
+                filter: PluginModel.Tags.Instrument
+            }
+
+            TreeComponentCategory {
+                text.text: qsTr("Effects")
+                filter: PluginModel.Tags.Effect
             }
         }
     }

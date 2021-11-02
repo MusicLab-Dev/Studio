@@ -16,7 +16,7 @@ Rectangle {
     property color pressedColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 2.2) : "black"
     property color accentColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.6) : "black"
 
-    color: themeManager.contentColor
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent
@@ -45,7 +45,7 @@ Rectangle {
             id: rectPluginButton
             anchors.fill: parent
             radius: 6
-            color: sequencerView.node && (mousePluginButton.containsMouse || !sequencerControls.hide) ? sequencerView.node.color : themeManager.foregroundColor
+            color: sequencerView.node && (mousePluginButton.containsMouse || !sequencerControls.hide) ? sequencerView.node.color : themeManager.contentColor
             border.color: mousePluginButton.containsPress ? pressedColor : hoveredColor
             border.width: mousePluginButton.containsMouse && !sequencerControls.hide ? 2 : 0
 
@@ -69,7 +69,7 @@ Rectangle {
                 horizontalAlignment: Text.AlignLeft
                 fontSizeMode: Text.HorizontalFit
                 font.pointSize: 20
-                color: (mousePluginButton.containsMouse || !sequencerControls.hide) ? themeManager.foregroundColor : sequencerView.node.color
+                color: (mousePluginButton.containsMouse || !sequencerControls.hide) ? themeManager.contentColor : sequencerView.node.color
                 text: sequencerView.node ? sequencerView.node.name : qsTr("ERROR")
                 wrapMode: Text.Wrap
             }
@@ -95,7 +95,7 @@ Rectangle {
             id: rectPlannerButton
             anchors.fill: parent
             radius: 6
-            color: sequencerView.node && mousePlannerButton.containsMouse ? sequencerView.node.color : themeManager.foregroundColor
+            color: sequencerView.node && mousePlannerButton.containsMouse ? sequencerView.node.color : themeManager.contentColor
 
             MouseArea {
                 id: mousePlannerButton
@@ -118,7 +118,7 @@ Rectangle {
                 anchors.fill: parent
                 anchors.margins: parent.width * 0.25
                 source: "qrc:/Assets/Chrono.png"
-                color: mousePlannerButton.containsMouse ? themeManager.foregroundColor : sequencerView.node ? sequencerView.node.color : "black"
+                color: mousePlannerButton.containsMouse ? themeManager.contentColor : sequencerView.node ? sequencerView.node.color : "black"
             }
         }
 

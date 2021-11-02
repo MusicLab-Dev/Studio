@@ -14,8 +14,8 @@ ToolTip {
     }
 
     background: Rectangle {
-        color: themeManager.contentColor
-        border.color: themeManager.foregroundColor
+        color: themeManager.backgroundColor
+        border.color: themeManager.contentColor
         border.width: 1
         radius: 6
     }

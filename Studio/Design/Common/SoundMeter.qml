@@ -115,7 +115,7 @@ Item {
         }
 
         Rectangle {
-            color: themeManager.backgroundColor
+            color: themeManager.foregroundColor
             x: -1
             y: -1
             width: parent.width + 2

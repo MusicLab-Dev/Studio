@@ -66,7 +66,7 @@ Column {
                 x: -4
                 width: 10
                 height: width
-                color: themeManager.backgroundColor
+                color: themeManager.foregroundColor
                 radius: 2
             }
         }
@@ -115,7 +115,7 @@ Column {
                         treeSurface.removeNodeFromSelection(nodeDelegate, index)
                         nodeDelegate.isSelected = false
                     } else
-                        contentView.lastSelectedNode = nodeDelegate
+                        contentView.selectedNode = nodeDelegate
                 }
             }
 
@@ -237,7 +237,7 @@ Column {
                 height: 6
                 radius: 2
                 color: nodeDelegate.color
-                visible: nodeDelegate.parentNode != null
+                visible: nodeDelegate.parentNode != null && !nodeInstanceBackground.drag.active
             }
 
 
@@ -250,7 +250,7 @@ Column {
                 height: topPin.height
                 radius: topPin.radius
                 color: topPin.color
-                visible: !noChildrenFlag
+                visible: !noChildrenFlag && !nodeInstanceBackground.drag.active
             }
 
             ColumnLayout {
@@ -274,7 +274,7 @@ Column {
                             Rectangle {
                                 anchors.fill: parent
                                 radius: nodeDelegate.radius
-                                color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                                color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.foregroundColor
                                 border.width: nodeInstanceBackground.containsMouse ? 2 : 0
                                 border.color: nodeDelegate.color
 
@@ -287,7 +287,7 @@ Column {
                                 anchors.fill: parent
                                 anchors.leftMargin: parent.width * 0.05
                                 text: nodeDelegate.node ? nodeDelegate.node.name : ""
-                                color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                                color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.foregroundColor
                                 horizontalAlignment: Text.AlignLeft
                                 elide: Text.ElideRight
                                 font.pixelSize: 18
@@ -299,13 +299,15 @@ Column {
                             Layout.preferredWidth: dbMeter.width
 
                             Rectangle {
+                                visible: !nodeInstanceBackground.drag.active
                                 anchors.fill: parent
                                 radius: nodeDelegate.radius
-                                color: plannerButton.hovered ? nodeDelegate.color : themeManager.backgroundColor
+                                color: plannerButton.hovered ? nodeDelegate.color : themeManager.foregroundColor
                             }
 
                             DefaultImageButton {
                                 id: plannerButton
+                                visible: !nodeInstanceBackground.drag.active
                                 anchors.centerIn: parent
                                 width: height
                                 height: parent.height
@@ -313,7 +315,7 @@ Column {
                                 showBorder: false
                                 scaleFactor: 0.8
                                 colorDefault: nodeDelegate.color
-                                colorHovered: themeManager.backgroundColor
+                                colorHovered: themeManager.foregroundColor
                                 colorOnPressed: nodeDelegate.pressedColor
                                 hoverEnabled: true
 
@@ -344,7 +346,7 @@ Column {
                         Rectangle {
                             anchors.fill: parent
                             radius: nodeDelegate.radius
-                            color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                            color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.foregroundColor
                             border.width: nodeInstanceBackground.containsDrag ? 2 : 0
                             border.color: "white"
 
@@ -359,7 +361,7 @@ Column {
                             width: height
                             height: nodeInstanceBackground.containsMouse ? parent.height * 0.6 : parent.height * 0.55
                             name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
-                            color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                            color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.foregroundColor
                             playing: treeView.visible && (nodeInstanceBackground.containsMouse || treeView.player.playerBase.isPlayerRunning)
 
                             Behavior on height {
@@ -372,12 +374,12 @@ Column {
                         id: dbMeter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
+                        visible: !nodeInstanceBackground.drag.active
 
                         SoundMeter {
                             id: soundMeter
                             enabled: treeView.visible
                             targetNode: nodeDelegate.node
-                            visible: !nodeInstanceBackground.drag.active
                             anchors.fill: parent
 
                             onMutedChanged: nodeDelegate.node.muted = muted

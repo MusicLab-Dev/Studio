@@ -197,29 +197,6 @@ MouseArea {
         }
     }
 
-//    TreeHeader {
-//        property bool requiredVisibility: !treeControls.requiredVisibility
-
-//        id: treeHeader
-//        height: parent.height * 0.05
-//        width: parent.width
-//        z: 1
-//        y: requiredVisibility ? 0 : -height
-
-//        Behavior on y {
-//            NumberAnimation {
-//                duration: 300
-//                easing.type: Easing.OutCubic
-//                onRunningChanged: {
-//                    if (running && treeHeader.requiredVisibility)
-//                        treeHeader.visible = true
-//                    else if (!running && !treeHeader.requiredVisibility)
-//                        treeHeader.visible = true
-//                }
-//            }
-//        }
-//    }
-
     TreeSurface {
         readonly property real scaledWidth: width * scale
         readonly property real scaledHeight: height * scale
@@ -237,19 +214,18 @@ MouseArea {
         anchors.bottom: partitionsPreview.top
         anchors.topMargin: 20
         anchors.bottomMargin: 20
-        x: contentView.width - width
 
         Behavior on x {
             id: treeComponentsPanelBehavior
             enabled: false
-            NumberAnimation { duration: 100 }
+            NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
         }
     }
 
     OverviewButton {
         id: overview
-        anchors.left: parent.left
-        anchors.leftMargin: 20
+        anchors.right: parent.right
+        anchors.rightMargin: 20
         width: parent.width * 0.12
         height: parent.height * 0.1
         anchors.top: treeControls.visible ? treeControls.bottom : parent.top
@@ -290,6 +266,7 @@ MouseArea {
     PartitionsPreview {
         id: partitionsPreview
         y: !requiredVisibility ? parent.height : parent.height - height
+        nodeDelegate: lastSelectedNode
 
         Behavior on y {
             id: partitionsBehavior

@@ -30,7 +30,7 @@ Rectangle {
     property alias currentSearchText: searchText.text
 
     id: pluginsForeground
-    color: themeManager.foregroundColor
+    color: themeManager.contentColor
     radius: 6
 
     Rectangle {

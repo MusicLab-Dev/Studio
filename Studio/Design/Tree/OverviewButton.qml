@@ -19,7 +19,7 @@ Item {
         anchors.fill: parent
         radius: 6
         opacity: overviewMouse.containsMouse ? 1 : 0.6
-        color: overviewMouse.containsMouse ? overview.runtimeColor : themeManager.contentColor
+        color: overviewMouse.containsMouse ? overview.runtimeColor : themeManager.backgroundColor
     }
 
     MouseArea {
@@ -42,7 +42,7 @@ Item {
         fontSizeMode: Text.Fit
         font.pixelSize: 23
         text: overview.multiSelection ? qsTr("Open selected (" + treeSurface.selectionCount + ")") : qsTr("Overview")
-        color: overviewMouse.containsMouse ? themeManager.contentColor : overview.runtimeColor
+        color: overviewMouse.containsMouse ? themeManager.backgroundColor : overview.runtimeColor
     }
 
     HelpArea {
