@@ -7,6 +7,8 @@ import "../Help"
 
 import Scheduler 1.0
 import NodeModel 1.0
+import ThemeManager 1.0
+import CursorManager 1.0
 
 Rectangle {
     property alias player: player
@@ -89,6 +91,32 @@ Rectangle {
             name: qsTr("Player Area")
             description: qsTr("Description")
             position: HelpHandler.Position.Left | HelpHandler.Position.Top
+            externalDisplay: true
+        }
+    }
+
+    SoundMeter {
+        id: soundMeter
+        anchors.right: parent.right
+        anchors.rightMargin: 15
+        anchors.verticalCenter: parent.verticalCenter
+        height: parent.height * 0.8
+        width: height / 3
+        targetNode: sequencerView.node
+        enabled: sequencerView.visible
+        backgroundColor: themeManager.contentColor
+
+        mouseArea.onHoveredChanged: {
+            if (mouseArea.containsMouse)
+                cursorManager.set(CursorManager.Type.Clickable)
+            else
+                cursorManager.set(CursorManager.Type.Normal)
+        }
+
+        HelpArea {
+            name: qsTr("Sound meter")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Right
             externalDisplay: true
         }
     }

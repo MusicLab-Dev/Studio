@@ -39,6 +39,7 @@ Item {
     property bool analysisRequested: false
     property bool muted: false
     property color color: targetNode ? targetNode.color : "white"
+    property color backgroundColor: themeManager.foregroundColor
     property alias mouseArea: mouseArea
 
     id: soundMeter
@@ -114,7 +115,7 @@ Item {
         }
 
         Rectangle {
-            color: themeManager.foregroundColor
+            color: backgroundColor
             x: -1
             y: -1
             width: parent.width + 2

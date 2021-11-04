@@ -104,28 +104,29 @@ QColor ThemeManager::GetColorFromChain(const quint32 index) noexcept
 }
 
 static const QColor RedColorSubChain[] = {
-    QColor(0xE74C3C),
-    QColor(0xCB4335),
-    QColor(0xB03A2E),
-    QColor(0x943126),
+    QColor(0xF03738),
+    QColor(0xFFA965),
+    QColor(0xF9F871),
+    QColor(0xFF978F),
+
 };
 
 constexpr quint32 RedColorSubChainCount = sizeof(RedColorSubChain) / sizeof(RedColorSubChain[0]);
 
 static const QColor GreenColorSubChain[] = {
-    QColor(0x27AE60),
-    QColor(0x229954),
-    QColor(0x1E8449),
-    QColor(0x196F3D), 
+    QColor(0x3CC13B).lighter(125),
+    QColor(0x42FF8E),
+    QColor(0x31E9A7),
+    QColor(0x63BAAA),
 };
 
 constexpr quint32 GreenColorSubChainCount = sizeof(GreenColorSubChain) / sizeof(GreenColorSubChain[0]);
 
 static const QColor BlueColorSubChain[] = {
-    QColor(0x5DADE2),
-    QColor(0x3498DB),
-    QColor(0x2E86C1),
-    QColor(0x2874A6),
+    QColor(0x00C5FF),
+    QColor(0x00DCE7),
+    QColor(0xFF7BE2),
+    QColor(0x6D13FF).lighter(150)
 };
 
 constexpr quint32 BlueColorSubChainCount = sizeof(BlueColorSubChain) / sizeof(BlueColorSubChain[0]);

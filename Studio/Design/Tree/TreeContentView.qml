@@ -42,7 +42,7 @@ MouseArea {
             (width / 2) - center.x,
             (height / 2) - center.y
         )
-        app.setCursorPos(mapToGlobal(width / 2, height / 2))
+        //app.setCursorPos(mapToGlobal(width / 2, height / 2))
         incrementXOffset(delta.x)
         incrementYOffset(delta.y)
     }

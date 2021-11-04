@@ -372,3 +372,20 @@ void PartitionModel::onNotesChanged(void)
     }
     emit notesChanged();
 }
+
+bool PartitionModel::importPartition(const QFile &file) noexcept
+{
+    
+    return true;
+}
+
+bool PartitionModel::exportPartition(const QString &path) noexcept
+{
+    QFile file(path);
+    file.open(QIODevice::WriteOnly | QFile::Truncate);
+    if (!file.exists())
+        throw std::logic_error("PartitionModel::export: not created");
+    //file.write(ProjectSerializer::Serialize(this));
+    file.close();
+    return true;
+}

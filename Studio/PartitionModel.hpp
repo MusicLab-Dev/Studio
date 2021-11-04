@@ -6,10 +6,12 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QFile>
 
 #include <Core/UniqueAlloc.hpp>
 #include <Audio/Partition.hpp>
 
+//#include "ProjectSerializer.hpp"
 #include "Note.hpp"
 
 class PartitionModel;
@@ -170,6 +172,13 @@ public slots:
 
     /** @brief Overlap test in given range */
     bool hasOverlap(const NotesAnalysis &analysis) const noexcept;
+
+
+    /** @brief Import Partition from file */
+    bool importPartition(const QFile &file) noexcept;
+
+    /** @brief Import Partition from file */
+    bool exportPartition(const QString &path) noexcept;
 
 signals:
     /** @brief Notify that the channel has changed */

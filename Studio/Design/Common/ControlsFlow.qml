@@ -88,7 +88,7 @@ Rectangle {
 
                     Action {
                         text: qsTr("Change sample")
-                        enabled: node && (node.plugin.tags & PluginModel.Tags.Sampler)
+                        enabled: node && (node.plugin.flags & PluginModel.Flags.SingleExternalInput)
 
                         onTriggered: {
                             modulesView.workspacesView.open(true,

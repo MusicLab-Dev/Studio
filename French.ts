@@ -380,6 +380,19 @@
     </message>
 </context>
 <context>
+    <name>ControlsFlow</name>
+    <message>
+        <location filename="Studio/Design/Common/ControlsFlow.qml" line="81"/>
+        <source>Edit name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Common/ControlsFlow.qml" line="90"/>
+        <source>Change sample</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DefaultCheckBox</name>
     <message>
         <location filename="Studio/Design/Default/DefaultCheckBox.qml" line="9"/>
@@ -769,12 +782,12 @@
 <context>
     <name>PlannerHeader</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerHeader.qml" line="26"/>
+        <location filename="Studio/Design/Planner/PlannerHeader.qml" line="27"/>
         <source>Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Planner/PlannerHeader.qml" line="27"/>
+        <location filename="Studio/Design/Planner/PlannerHeader.qml" line="28"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1024,13 +1037,19 @@
 <context>
     <name>SequencerFooter</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="89"/>
+        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="91"/>
         <source>Player Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="90"/>
+        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="92"/>
+        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="118"/>
         <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="117"/>
+        <source>Sound meter</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1059,8 +1078,7 @@
     <message>
         <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="80"/>
         <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="127"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="152"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="167"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="174"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1070,13 +1088,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="151"/>
-        <source>Sound meter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="166"/>
-        <source>Clipboard</source>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="173"/>
+        <source>Import MIDI File</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1200,42 +1213,47 @@
 <context>
     <name>TreeNodeMenu</name>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="44"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="45"/>
         <source>Open in planner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="55"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="56"/>
         <source>Open selection in planner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="68"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="69"/>
         <source>Open all children in planner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="87"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="88"/>
         <source>Edit name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="98"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="97"/>
+        <source>Change sample</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="118"/>
         <source>Add child</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="109"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="129"/>
         <source>Add parent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="120"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="140"/>
         <source>Duplicate (only plugin)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="135"/>
+        <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="155"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
