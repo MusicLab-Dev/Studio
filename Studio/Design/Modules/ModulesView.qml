@@ -95,8 +95,7 @@ Rectangle {
         } else {
             modulesView.changeSelectedModule(idx)
             var sequencer = modulesView.getModule(idx)
-            sequencer.partitionIndex = targetPartitionIndex
-            sequencer.partition = targetNode.partitions.getPartition(targetPartitionIndex)
+            sequencer.changePartition(targetPartitionIndex)
         }
     }
 

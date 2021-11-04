@@ -79,8 +79,7 @@ RowLayout {
                         currentIndex: sequencerView.partitionIndex
 
                         onActivated: {
-                            sequencerView.partitionIndex = index
-                            sequencerView.partition = sequencerView.node.partitions.getPartition(index)
+                            sequencerView.changePartition(index)
                         }
                     }
 
@@ -92,8 +91,7 @@ RowLayout {
                         onReleased: {
                             sequencerView.player.stop()
                             if (sequencerView.node.partitions.add()) {
-                                sequencerView.partitionIndex = sequencerView.node.partitions.count() - 1
-                                sequencerView.partition = sequencerView.node.partitions.getPartition(sequencerView.partitionIndex)
+                                sequencerView.changePartition(sequencerView.node.partitions.count() - 1)
                             }
                         }
                     }

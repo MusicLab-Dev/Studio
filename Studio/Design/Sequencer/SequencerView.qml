@@ -98,6 +98,14 @@ Item {
         sequencerView.enabled = true
     }
 
+    function changePartition(targetIndex) {
+        contentView.placementArea.resetSelection()
+        partitionIndex = targetIndex
+        console.log("Changepartition ", targetIndex)
+        partition = node.partitions.getPartition(targetIndex)
+        console.debug("changePartition success!")
+    }
+
     property string moduleName: node && partition ? node.name + " - " + partition.name : "Selecting plugin"
     property int moduleIndex
     property NodeModel node: null

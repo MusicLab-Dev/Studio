@@ -13,6 +13,7 @@
 
 #include "Models.hpp"
 #include "PartitionsModel.hpp"
+#include "ProjectSerializer.hpp"
 
 PartitionModel::PartitionModel(Audio::Partition *partition, PartitionsModel *parent, const QString &name) noexcept
     : QAbstractListModel(parent), _data(partition), _name(name)
@@ -382,10 +383,11 @@ bool PartitionModel::importPartition(const QFile &file) noexcept
 bool PartitionModel::exportPartition(const QString &path) noexcept
 {
     QFile file(path);
-    file.open(QIODevice::WriteOnly | QFile::Truncate);
-    if (!file.exists())
-        throw std::logic_error("PartitionModel::export: not created");
-    //file.write(ProjectSerializer::Serialize(this));
+    if (!file.open(QIODevice::WriteOnly | QFile::Truncate)) {
+        qCritical() << "PartitionModel::export: File couldn't be created" << path;
+        return false;
+    }
+    file.write(QJsonDocument(ProjectSerializer::Serialize(*this)).toJson(QJsonDocument::JsonFormat::Indented));
     file.close();
     return true;
 }

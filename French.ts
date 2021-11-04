@@ -1012,24 +1012,24 @@
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="51"/>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="104"/>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="123"/>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="143"/>
+        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="102"/>
+        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="121"/>
+        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="141"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="103"/>
+        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="101"/>
         <source>Selected partition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="122"/>
+        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="120"/>
         <source>Edition precision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="142"/>
+        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="140"/>
         <source>Undo / Redo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1096,12 +1096,12 @@
 <context>
     <name>SequencerView</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="181"/>
+        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="189"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="182"/>
+        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="190"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
