@@ -185,7 +185,7 @@ Item {
                         id: progressBar
                         width: progressRow.width - cancelButton.width - progressRow.spacing
                         height: cancelButton.height
-                        border.color: exportPopup.exporting ? themeManager.foregroundColor : themeManager.disabledColor
+                        border.color: exportPopup.exporting ? themeManager.contentColor : themeManager.disabledColor
                         border.width: 2
                         color: exportPopup.error ? "red" : "transparent"
 

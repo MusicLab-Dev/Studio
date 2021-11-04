@@ -164,6 +164,7 @@ Item {
 
         Rectangle {
             color: "black"
+            visible: sequencerControls.visible
             Layout.preferredWidth: parent.width
             Layout.preferredHeight: 1
         }

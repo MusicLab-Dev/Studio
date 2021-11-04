@@ -16,7 +16,7 @@ Item {
         id: actionBox
         width: contentView.rowHeaderWidth
         height: parent.height
-        color: themeManager.foregroundColor
+        color: themeManager.contentColor
     }
 
     Item {
@@ -59,7 +59,7 @@ Item {
             height: parent.height / 2
             width: parent.width
             anchors.top: upTimeline.bottom
-            color: themeManager.contentColor
+            color: themeManager.backgroundColor
         }
 
         Rectangle {

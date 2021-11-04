@@ -15,7 +15,7 @@ Rectangle {
 
     id: workspaceCard
     height: cardHeader.height + (expanded ? folderColumnView.height + spacing : 0)
-    color: themeManager.foregroundColor
+    color: themeManager.contentColor
     radius: 6
 
     onExpandedChanged: {

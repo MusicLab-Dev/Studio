@@ -13,8 +13,7 @@ Item {
     readonly property bool isChild: parentDelegate !== null
 
     // Selection
-    property bool isSelected: false
-    property bool isLastSelected: nodeDelegate == contentView.lastSelectedNode
+    property bool isSelected: nodeDelegate == contentView.selectedNode
 
     // Colors
     readonly property color color: nodeDelegate.node ? nodeDelegate.node.color : "black"
@@ -49,10 +48,9 @@ Item {
         x: nodeDelegate.isChild ? contentView.childOffset : contentView.headerMargin
         y: contentView.headerHalfMargin
         width: contentView.rowHeaderWidth - x - contentView.headerMargin - soundMeter.width - 12
-        height: (nodeDelegate.isSelected ? nodeControls.y + nodeControls.height : nodeInstances.height) - contentView.headerHalfMargin
+        height: nodeInstances.height - contentView.headerHalfMargin
         radius: 2
-        color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
-        //border.color: nodeHeaderMouseArea.containsPress ? nodeDelegate.pressedColor : nodeDelegate.isLastSelected ? nodeDelegate.lightColor : nodeDelegate.hoveredColor
+        color: nodeDelegate.isSelected ? nodeDelegate.color : themeManager.foregroundColor
         border.color: nodeDelegate.color
         border.width: nodeHeaderMouseArea.containsMouse ? 2 : 0
 
@@ -72,14 +70,10 @@ Item {
 
             onClicked: {
                 if (mouse.button !== Qt.RightButton) {
-                    if (isLastSelected) {
-                        nodeDelegate.isSelected = !nodeDelegate.isSelected
-                        if (!nodeDelegate.isSelected)
-                            contentView.lastSelectedNode = null
-                    } else {
-                        nodeDelegate.isSelected = true
-                        contentView.lastSelectedNode = nodeDelegate
-                    }
+                    if (!nodeDelegate.isSelected)
+                        contentView.selectedNode = nodeDelegate
+                    else
+                        contentView.selectedNode = null
                 }
             }
 
@@ -124,10 +118,10 @@ Item {
             id: nodeInstances
         }
 
-        PlannerNodeControls {
+        /*PlannerNodeControls {
             id: nodeControls
             visible: nodeDelegate.isSelected
-        }
+        }*/
 
         PlannerNodeAutomations {
             id: nodeAutomations

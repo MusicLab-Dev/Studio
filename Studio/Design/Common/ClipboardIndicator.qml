@@ -36,8 +36,8 @@ MouseArea {
         }
 
         background: Rectangle {
-            color: themeManager.foregroundColor
-            border.color: themeManager.backgroundColor
+            color: themeManager.contentColor
+            border.color: themeManager.foregroundColor
             border.width: 2
         }
     }

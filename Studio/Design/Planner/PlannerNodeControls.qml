@@ -29,7 +29,7 @@ Row {
                 width: height
                 height: nodeHeaderMouseArea.containsMouse ? parent.height * 0.6 : parent.height * 0.55
                 name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
-                color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.backgroundColor
+                color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.foregroundColor
                 playing: plannerView.visible && nodeDelegate.isSelected && (nodeHeaderMouseArea.containsMouse || contentView.playerBase.isPlayerRunning)
 
                 Behavior on height {
@@ -46,7 +46,7 @@ Row {
                 source: "qrc:/Assets/SelectorMod.png"
                 showBorder: false
                 scaleFactor: 1
-                colorDefault: themeManager.backgroundColor
+                colorDefault: themeManager.foregroundColor
                 colorHovered: nodeDelegate.hoveredColor
                 colorOnPressed: nodeDelegate.pressedColor
 
@@ -76,7 +76,7 @@ Row {
         Rectangle {
             id: nodeControlsData
             anchors.fill: parent
-            color: themeManager.contentColor
+            color: themeManager.backgroundColor
             opacity: 1
         }
 

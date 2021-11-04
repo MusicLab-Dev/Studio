@@ -18,7 +18,7 @@ Rectangle {
         anchors.fill: parent
 
         Rectangle {
-            color: themeManager.backgroundColor
+            color: themeManager.foregroundColor
             width: contentView.rowHeaderWidth
             height: parent.height
             border.color: "white"
@@ -53,7 +53,7 @@ Rectangle {
             id: tweakViewContent
             width: parent.width - contentView.rowHeaderWidth
             height: contentView.rowDataWidth
-            color: themeManager.backgroundColor
+            color: themeManager.foregroundColor
             border.color: "white"
             border.width: 1
 
@@ -71,7 +71,7 @@ Rectangle {
                     }
                     DefaultText {
                         text: tweakViewContent.scaleSteps[index] + "%"
-                        color: Qt.lighter(themeManager.backgroundColor)
+                        color: Qt.lighter(themeManager.foregroundColor)
                         x: 3
                     }
                 }

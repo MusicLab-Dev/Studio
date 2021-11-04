@@ -186,7 +186,7 @@ Rectangle {
 //    property alias boardsView: boardsView
 
     id: modulesView
-    color: themeManager.foregroundColor
+    color: themeManager.contentColor
 
     Action {
         property var target: null

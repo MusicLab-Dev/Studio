@@ -24,8 +24,8 @@ Item {
     property real panelCategoryHeight: 100
     property real panelContentWidth: width * widthContentRatio
     property real xBase: 0
-    property real xClose: xBase - panelCategoryWidth
-    property real xOpen: xBase - width
+    property real xClose: -panelCategoryWidth
+    property real xOpen: xBase
 
     id: treeComponentsPanel
     x: xClose

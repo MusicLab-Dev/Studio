@@ -8,7 +8,7 @@ Menu {
     background: Rectangle {
         border.color: themeManager.accentColor
         border.width: 1
-        color: themeManager.foregroundColor
+        color: themeManager.contentColor
         radius: 6
     }
 

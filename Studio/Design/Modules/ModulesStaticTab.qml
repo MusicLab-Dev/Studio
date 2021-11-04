@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import CursorManager 1.0
+
 import "../Default"
 import "../Common"
-
 
 MouseArea {
     readonly property bool isSelectedModule: tabIndex === modulesTabs.selectedModule
@@ -19,10 +20,17 @@ MouseArea {
 
     onPressed: modulesView.changeSelectedModule(tabIndex)
 
+    onHoveredChanged: {
+        if (containsMouse)
+            cursorManager.set(CursorManager.Type.Clickable)
+        else
+            cursorManager.set(CursorManager.Type.Normal)
+    }
+
     Rectangle {
         id: background
         anchors.fill: parent
-        color: drag.active ? themeManager.accentColor : tabMouseArea.isSelectedModule ? themeManager.contentColor : themeManager.backgroundColor
+        color: drag.active ? themeManager.accentColor : tabMouseArea.isSelectedModule ? themeManager.backgroundColor : themeManager.foregroundColor
     }
 
     DefaultColoredImage {

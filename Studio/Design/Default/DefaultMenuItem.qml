@@ -8,7 +8,7 @@ MenuItem {
     hoverEnabled: enabled
 
     background: Rectangle {
-        color: menuItem.hovered ? themeManager.backgroundColor : themeManager.foregroundColor
+        color: menuItem.hovered ? themeManager.foregroundColor : themeManager.contentColor
         radius: 6
         x: 2
         y: 2

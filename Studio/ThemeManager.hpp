@@ -13,9 +13,9 @@ class ThemeManager : public QObject
     Q_OBJECT
 
     Q_PROPERTY(Theme theme READ theme WRITE setTheme NOTIFY themeChanged)
-    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(QColor contentColor READ contentColor NOTIFY contentColorChanged)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QColor accentColor READ accentColor NOTIFY accentColorChanged)
     Q_PROPERTY(QColor timelineColor READ timelineColor NOTIFY timelineColorChanged)
     Q_PROPERTY(QColor disabledColor READ disabledColor NOTIFY disabledColorChanged)
@@ -58,9 +58,9 @@ public:
 
 
     /** @brief Color getters */
-    [[nodiscard]] QColor backgroundColor(void) const noexcept { return _backgroundColor; }
     [[nodiscard]] QColor foregroundColor(void) const noexcept { return _foregroundColor; }
     [[nodiscard]] QColor contentColor(void) const noexcept { return _contentColor; }
+    [[nodiscard]] QColor backgroundColor(void) const noexcept { return _backgroundColor; }
     [[nodiscard]] QColor accentColor(void) const noexcept { return _accentColor; }
     [[nodiscard]] QColor timelineColor(void) const noexcept { return _timelineColor; }
     [[nodiscard]] QColor disabledColor(void) const noexcept { return _disabledColor; }
@@ -77,18 +77,18 @@ signals:
     void themeChanged(void);
 
     /** @brief Notify that a color changed */
-    void backgroundColorChanged(void);
     void foregroundColorChanged(void);
     void contentColorChanged(void);
+    void backgroundColorChanged(void);
     void accentColorChanged(void);
     void timelineColorChanged(void);
     void disabledColorChanged(void);
 
 private:
     Theme _theme { Theme::Classic };
-    QColor _backgroundColor {};
     QColor _foregroundColor {};
     QColor _contentColor {};
+    QColor _backgroundColor {};
     QColor _accentColor {};
     QColor _timelineColor {};
     QColor _disabledColor {};

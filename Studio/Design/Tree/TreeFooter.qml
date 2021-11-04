@@ -10,7 +10,7 @@ Rectangle {
     property alias player: player
 
     id: treeFooter
-    color: themeManager.contentColor
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent
@@ -36,7 +36,7 @@ Rectangle {
         Rectangle {
             id: previewBackground
             anchors.fill: parent
-            color: themeManager.foregroundColor
+            color: themeManager.contentColor
             clip: true
             radius: 6
         }

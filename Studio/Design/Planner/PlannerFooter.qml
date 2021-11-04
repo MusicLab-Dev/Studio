@@ -12,7 +12,7 @@ Rectangle {
 
     width: parent.width
     height: parent.width
-    color: themeManager.contentColor
+    color: themeManager.backgroundColor
 
     MouseArea {
         anchors.fill: parent
@@ -70,7 +70,7 @@ Rectangle {
             Layout.preferredWidth: parent.width / 3
 
             DefaultImageButton {
-                visible: contentView.lastSelectedNode && contentView.partitionsPreview.hide
+                visible: contentView.selectedNode && contentView.partitionsPreview.hide
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter

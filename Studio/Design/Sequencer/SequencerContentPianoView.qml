@@ -4,6 +4,7 @@ import "../Common"
 import "../Default"
 
 import AudioAPI 1.0
+import CursorManager 1.0
 
 Item {
     property alias placementArea: placementArea
@@ -106,7 +107,7 @@ Item {
             readonly property bool isInMiddleOfHashKeys: middleHashKeysStates[keyOctaveIndex]
             readonly property bool isUpHashKey: upHashKeyStates[keyOctaveIndex]
             readonly property bool isDownHashKey: downHashKeyStates[keyOctaveIndex]
-            readonly property color keyColor: keyOctaveIndex === 0 ? "#C2C2C2" : isHashKey ? themeManager.backgroundColor : "white"
+            readonly property color keyColor: keyOctaveIndex === 0 ? "#C2C2C2" : isHashKey ? themeManager.foregroundColor : "white"
             readonly property int placementOffset: keyOctaveIndex == 11 ? 0 : 1
 
             // Pressed state
@@ -132,6 +133,14 @@ Item {
                 MouseArea {
                     id: keyMouseArea
                     anchors.fill: parent
+                    hoverEnabled: true
+
+                    onHoveredChanged: {
+                        if (containsMouse)
+                            cursorManager.set(CursorManager.Type.Clickable)
+                        else
+                            cursorManager.set(CursorManager.Type.Normal)
+                    }
 
                     onPressedChanged: {
                         forceActiveFocus()

@@ -29,7 +29,7 @@ DefaultComboBox {
         }
 
         background: Rectangle {
-            color: parent.hovered ? themeManager.backgroundColor : themeManager.foregroundColor
+            color: parent.hovered ? themeManager.foregroundColor : themeManager.contentColor
         }
     }
 }

@@ -5,7 +5,7 @@ import "../Default"
 
 Rectangle {
     id: settingsForeground
-    color: themeManager.foregroundColor
+    color: themeManager.contentColor
     radius: 6
 
     Rectangle {

@@ -55,7 +55,7 @@ Item {
         id: rect
         anchors.fill: parent
         opacity: 0
-        color: themeManager.backgroundColor
+        color: themeManager.foregroundColor
 
         OpacityAnimator {
             id: animOpen

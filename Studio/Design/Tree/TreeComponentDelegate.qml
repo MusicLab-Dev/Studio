@@ -31,13 +31,13 @@ Item {
             id: header
             width: componentDelegate.width
             height: componentDelegate.width * 0.2
-            color: delegateMouseArea.containsMouse ? componentDelegate.color : themeManager.backgroundColor
+            color: delegateMouseArea.containsMouse ? componentDelegate.color : themeManager.foregroundColor
             radius: 2
 
             DefaultText {
                 anchors.fill: parent
                 text: factoryName
-                color: delegateMouseArea.containsMouse ? themeManager.backgroundColor : componentDelegate.color
+                color: delegateMouseArea.containsMouse ? themeManager.foregroundColor : componentDelegate.color
             }
         }
 
@@ -74,7 +74,7 @@ Item {
             Rectangle {
                 id: rect
                 anchors.fill: parent
-                color: themeManager.backgroundColor
+                color: themeManager.foregroundColor
                 radius: 2
 
                 PluginFactoryImage {

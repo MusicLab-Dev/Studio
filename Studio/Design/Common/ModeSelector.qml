@@ -23,7 +23,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: themeManager.foregroundColor
+        color: themeManager.contentColor
         radius: 6
 
         Item {

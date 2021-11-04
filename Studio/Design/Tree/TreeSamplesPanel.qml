@@ -40,7 +40,7 @@ TreePanel {
             id: panelContentBackground
             width: parent.width + panelContent.widthOffset
             height: parent.height
-            color: Qt.darker(themeManager.foregroundColor, 1.1)
+            color: Qt.darker(themeManager.contentColor, 1.1)
         }
 
         MouseArea {

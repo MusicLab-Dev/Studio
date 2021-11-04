@@ -13,7 +13,7 @@ Shape {
 
     ShapePath {
         id: path
-        fillColor: themeManager.foregroundColor
+        fillColor: themeManager.contentColor
         strokeColor: "transparent"
 
         PathLine {

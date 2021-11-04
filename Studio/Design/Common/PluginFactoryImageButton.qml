@@ -5,9 +5,7 @@ import "../Default"
 DefaultAnimatedImageButton {
     property string name
 
-    source: name ? "qrc:/Assets/Plugins/" + name + ".gif" : ""
-    fillMode: Image.PreserveAspectFit
-    scaleFactor: 1
+    source: name ? ":/Assets/Plugins/" + name + ".png" : ""
     showBorder: false
     playing: hovered
 }

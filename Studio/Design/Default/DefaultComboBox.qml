@@ -50,7 +50,7 @@ ComboBox {
         anchors.fill: control
         border.width: 1
         border.color: control.hovered || popup.opened ? control.accentColor : "transparent"
-        color: control.pressed ? themeManager.backgroundColor : themeManager.foregroundColor
+        color: control.pressed ? themeManager.foregroundColor : themeManager.contentColor
         radius: 6
     }
 
@@ -74,7 +74,7 @@ ComboBox {
         }
 
         background: Rectangle {
-            color: themeManager.foregroundColor
+            color: themeManager.contentColor
             radius: 6
             border.color: control.accentColor
             border.width: 1
@@ -101,7 +101,7 @@ ComboBox {
             radius: 6
             x: 2
             y: 2
-            color: parent.hovered ? themeManager.backgroundColor : themeManager.foregroundColor
+            color: parent.hovered ? themeManager.foregroundColor : themeManager.contentColor
         }
     }
 }

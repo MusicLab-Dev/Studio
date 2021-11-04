@@ -9,7 +9,7 @@ DefaultImageButton {
     showBorder: true
     borderColor: "black"
     backgroundRadius: 0
-    backgroundColor: themeManager.backgroundColor
+    foregroundColor: themeManager.foregroundColor
     rotation: modulesTabs.expanded ? 270 : 90
     transformOrigin: Item.Center
     source: "qrc:/Assets/Next.png"

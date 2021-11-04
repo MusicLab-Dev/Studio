@@ -34,7 +34,7 @@ ContentView {
         id: nodeList
     }
     // Selected node
-    property var lastSelectedNode: null
+    property var selectedNode: null
 
     // Selected partition
     property NodeModel selectedPartitionNode: null
@@ -67,24 +67,24 @@ ContentView {
             if (nodeViewRepeater.count === 1) {
                 var item = nodeViewRepeater.itemAt(0)
                 item.isSelected = true
-                contentView.lastSelectedNode = item
+                contentView.selectedNode = item
             }
         }
     }
 
     Connections {
         function launch(pressed, key) {
-            if (contentView.lastSelectedNode) {
-                contentView.lastSelectedNode.node.partitions.addOnTheFly(
+            if (contentView.selectedNode) {
+                contentView.selectedNode.node.partitions.addOnTheFly(
                     AudioAPI.noteEvent(!pressed, (contentView.targetOctave * contentView.keysPerOctave) + key, AudioAPI.velocityMax, 0),
-                    contentView.lastSelectedNode.node
+                    contentView.selectedNode.node
                 )
             }
         }
 
         id: notesConnections
         target: eventDispatcher
-        enabled: plannerView.moduleIndex === modulesView.selectedModule && contentView.lastSelectedNode
+        enabled: plannerView.moduleIndex === modulesView.selectedModule && contentView.selectedNode
 
         function onNote0(pressed) { launch(pressed, 0) }
         function onNote1(pressed) { launch(pressed, 1) }

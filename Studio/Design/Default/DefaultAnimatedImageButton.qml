@@ -12,7 +12,7 @@ Button {
     property real scaleFactor: 0.5
     property alias showBorder: backgroundRect.visible
     property alias backgroundRadius: backgroundRect.radius
-    property alias backgroundColor: backgroundRect.color
+    property alias foregroundColor: backgroundRect.color
     property alias borderColor: backgroundRect.border.color
     property alias borderWidth: backgroundRect.border.width
 

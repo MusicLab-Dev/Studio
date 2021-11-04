@@ -1,12 +1,14 @@
 import QtQuick 2.15
 
+import CursorManager 1.0
+
 import "../Default"
 
 Rectangle {
     property real barSize: width / 4
 
     id: newTabButton
-    color: mouseArea.containsMouse ? themeManager.backgroundColor : themeManager.foregroundColor
+    color: mouseArea.containsMouse ? themeManager.foregroundColor : themeManager.contentColor
 
     MouseArea {
         id: mouseArea
@@ -14,6 +16,13 @@ Rectangle {
         hoverEnabled: true
 
         onReleased: modulesView.addNewSequencer()
+
+        onHoveredChanged: {
+            if (containsMouse)
+                cursorManager.set(CursorManager.Type.Clickable)
+            else
+                cursorManager.set(CursorManager.Type.Normal)
+        }
     }
 
     Rectangle {

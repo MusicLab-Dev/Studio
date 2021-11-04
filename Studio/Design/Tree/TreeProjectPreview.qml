@@ -131,26 +131,9 @@ ProjectPreview {
         visible: playToBar.visible
     }
 
-    Rectangle {
-        color: mainWindow.setColorAlpha(themeManager.backgroundColor, 0.5)
-        width: previewText.implicitWidth + 4
-        height: previewText.implicitHeight + 4
-        anchors.right: parent.right
-        radius: 6
-
-        DefaultText {
-            id: previewText
-            x: 2
-            y: 2
-            color: "white"
-            font.pointSize: 12
-            text: {
-                switch (projectPreview.targets.length) {
-                case 0:     return ""
-                case 1:     return projectPreview.targets[0].name
-                default:    return qsTr("Selection") + " (" + projectPreview.targets.length + ")"
-                }
-            }
-        }
-    }
+    /*DefaultText {
+        anchors.fill: parent
+        visible: projectPreview.targets.size() <= 1
+        text: "the project is void"
+    }*/
 }

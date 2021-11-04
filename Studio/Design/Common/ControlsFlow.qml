@@ -27,7 +27,7 @@ Rectangle {
     property bool closeable: true
 
     id: controlsFlow
-    color: themeManager.contentColor
+    color: themeManager.backgroundColor
     implicitHeight: Math.max(baseHeight, headerRow.height) + 20
 
     MouseArea {
@@ -47,13 +47,64 @@ Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            PluginFactoryImage {
+            PluginFactoryImageButton {
                 width: height
-                height: parent.height * 0.75
+                height: parent.height
                 anchors.centerIn: parent
                 name: node ? node.plugin.title : ""
-                color: node ? node.color : "black"
+                colorDefault: node ? node.color : "black"
+                colorHovered: node ? Qt.lighter(node.color, 1.25) : "black"
+                colorOnPressed: node ? Qt.darker(node.color, 1.25) : "black"
                 playing: contentView.playerBase.isPlayerRunning
+
+                onPressed: menu.openMenu()
+
+                DefaultMenu {
+                    function openMenu() {
+                        visible = true
+                    }
+
+                    function closeMenu() {
+                        visible = false
+                    }
+
+                    id: menu
+                    visible: false
+
+                    Action {
+                        function setNameColor() {
+                            node.name = globalTextField.text
+                            node.color = globalTextField.colorPicked;
+                            menu.closeMenu()
+                        }
+
+                        text: qsTr("Edit name")
+                        enabled: true
+
+                        onTriggered: {
+                            globalTextField.open(node.name, setNameColor, function () { menu.closeMenu() }, true, node.color)
+                        }
+                    }
+
+                    Action {
+                        text: qsTr("Change sample")
+                        enabled: node && (node.plugin.flags & PluginModel.Flags.SingleExternalInput)
+
+                        onTriggered: {
+                            modulesView.workspacesView.open(true,
+                                function() {
+                                    var list = []
+                                    for (var i = 0; i < modulesView.workspacesView.fileUrls.length; ++i)
+                                        list[i] = mainWindow.urlToPath(modulesView.workspacesView.fileUrls[i].toString())
+                                    if (app.currentPlayer)
+                                        app.currentPlayer.pause()
+                                    node.plugin.setExternalInputs(list)
+                                },
+                                function() {}
+                            )
+                        }
+                    }
+                }
             }
         }
 
@@ -75,7 +126,6 @@ Rectangle {
                 color: controlsFlow.nodeColor
             }
         }
-
     }
 
     Rectangle {

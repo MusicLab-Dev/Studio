@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import AudioAPI 1.0
+import CursorManager 1.0
 
 // The function 'getMouseBeatPrecision()' must be implemented
 MouseArea {
@@ -33,6 +34,14 @@ MouseArea {
 
     id: timelineMouseArea
     acceptedButtons: Qt.LeftButton | Qt.RightButton
+    hoverEnabled: true
+
+    onHoveredChanged: {
+        if (containsMouse)
+            cursorManager.set(CursorManager.Type.Clickable)
+        else
+            cursorManager.set(CursorManager.Type.Normal)
+    }
 
     onPressed: {
         forceActiveFocus()

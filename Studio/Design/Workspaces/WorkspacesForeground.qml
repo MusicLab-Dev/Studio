@@ -14,7 +14,7 @@ Rectangle {
     onActualPathChanged: workspaceContentArea.selectedIndex = -1
 
     id: workspaceForeground
-    color: Qt.lighter(themeManager.foregroundColor, 1.2)
+    color: Qt.lighter(themeManager.contentColor, 1.2)
     radius: 6
 
     Rectangle {
