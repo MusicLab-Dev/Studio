@@ -139,18 +139,15 @@ Column {
                     var focusRect = undefined
                     if (selectGroup) {
                         nodeDelegate.selectRecursively()
-                        contentView.animateMoveFocusSelection()
-                    } else if (nodeDelegate.selectNode(hasModifier))
-                        contentView.animateMoveFocus(nodeDelegate.getFocusRect())
+                    } else
+                        nodeDelegate.selectNode(hasModifier)
                 }
             }
 
             onDoubleClicked: {
-                var hasModifier = mouse.modifiers & Qt.ControlModifier
                 if (mouse.button === Qt.LeftButton) {
-                    if (!hasModifier)
-                        treeSurface.resetSelection(false)
-                    nodeDelegate.selectRecursively()
+                    if (!nodeDelegate.isSelected)
+                        nodeDelegate.selectNode(false)
                     contentView.animateMoveFocusSelection()
                 }
             }
