@@ -74,6 +74,11 @@ public:
     void setMuted(const bool muted);
 
 
+    /** @brief Get the internal audio automation */
+    [[nodiscard]] Audio::Automation *audioAutomation(void) noexcept { return _data; }
+    [[nodiscard]] const Audio::Automation *audioAutomation(void) const noexcept { return _data; }
+
+
     /** @brief Update the internal data */
     void updateInternal(Audio::Automation *data);
 
@@ -102,6 +107,9 @@ signals:
 
     /** @brief Notify that the name property has changed */
     void nameChanged(void);
+
+    /** @brief Notify that internal points has changed */
+    void pointsChanged(void);
 
 private:
     Audio::Automation *_data { nullptr };

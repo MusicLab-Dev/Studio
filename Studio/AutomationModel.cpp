@@ -69,6 +69,7 @@ bool AutomationModel::add(const GPoint &point)
         [this, idx] {
             beginInsertRows(QModelIndex(), idx, idx);
             endInsertRows();
+            pointsChanged();
         }
     );
 }
@@ -84,6 +85,7 @@ bool AutomationModel::remove(const int idx)
         },
         [this] {
             endRemoveRows();
+            pointsChanged();
         }
     );
 }
@@ -114,6 +116,7 @@ bool AutomationModel::set(const int idx, const GPoint &point)
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);
             }
+            pointsChanged();
         }
     );
 }
@@ -134,6 +137,7 @@ bool AutomationModel::removeSelection(const BeatRange &range)
             if (oldCount != _data->size()) {
                 beginResetModel();
                 endResetModel();
+                pointsChanged();
             }
         }
     );
@@ -147,5 +151,6 @@ void AutomationModel::updateInternal(Audio::Automation *data)
     if (_data->data() != data->data()) {
         beginResetModel();
         endResetModel();
+        pointsChanged();
     }
 }

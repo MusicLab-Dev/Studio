@@ -32,6 +32,7 @@
 #include "ColoredSprite.hpp"
 #include "ColoredSpriteManager.hpp"
 #include "CommunityAPI.hpp"
+#include "AutomationPreview.hpp"
 
 void Studio::InitResources(void)
 {
@@ -121,6 +122,7 @@ void Studio::InitResources(void)
     qmlRegisterType<ColoredSprite>("ColoredSprite", 1, 0, "ColoredSprite");
     qmlRegisterType<ColoredSpriteManager>("ColoredSpriteManager", 1, 0, "ColoredSpriteManager");
     qmlRegisterType<CommunityAPI>("CommunityAPI", 1, 0, "CommunityAPI");
+    qmlRegisterType<AutomationPreview>("AutomationPreview", 1, 0, "AutomationPreview");
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);
