@@ -74,13 +74,6 @@ Rectangle {
                 wrapMode: Text.Wrap
             }
         }
-
-        HelpArea {
-            name: (sequencerControls.visible ? qsTr("Hide") : qsTr("Show")) + qsTr(" controls")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Center
-            externalDisplay: false
-        }
     }
 
     Item {
@@ -120,13 +113,6 @@ Rectangle {
                 source: "qrc:/Assets/Chrono.png"
                 color: mousePlannerButton.containsMouse ? themeManager.contentColor : sequencerView.node ? sequencerView.node.color : "black"
             }
-        }
-
-        HelpArea {
-            name: qsTr("Move to planner")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
         }
     }
 
@@ -168,13 +154,6 @@ Rectangle {
                 color: mouseImportFile.containsMouse ? themeManager.contentColor : sequencerView.node ? sequencerView.node.color : "black"
             }
         }
-
-        HelpArea {
-            name: qsTr("Import MIDI File")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }
 
     /*ClipboardIndicator {
@@ -183,12 +162,5 @@ Rectangle {
         anchors.top: parent.top
         anchors.leftMargin: parent.width * 0.01
         width: parent.width * 0.1
-
-        HelpArea {
-            name: qsTr("Clipboard")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }*/
 }

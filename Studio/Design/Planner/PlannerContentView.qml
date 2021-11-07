@@ -129,13 +129,5 @@ ContentView {
                 onFinished: partitionsPreview.visible = partitionsPreview.requiredVisibility
             }
         }
-
-        HelpArea {
-            name: qsTr("Partitions")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Top
-            externalDisplay: true
-            visible: partitionsPreview.requiredVisibility
-        }
     }
 }

@@ -25,14 +25,6 @@ Rectangle {
         anchors.right: playerArea.left
         anchors.margins: 15
 
-        HelpArea {
-            name: qsTr("Project Preview")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Left | HelpHandler.Position.Top
-            externalDisplay: true
-            spacing: 20
-        }
-
         Rectangle {
             id: previewBackground
             anchors.fill: parent
@@ -78,13 +70,6 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 10
-        }
-
-        HelpArea {
-            name: qsTr("Player Area")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Left | HelpHandler.Position.Top
-            externalDisplay: true
         }
     }
 }

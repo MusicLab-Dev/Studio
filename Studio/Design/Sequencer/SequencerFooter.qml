@@ -86,13 +86,6 @@ Rectangle {
             anchors.right: parent.right
             anchors.rightMargin: 10
         }
-
-        HelpArea {
-            name: qsTr("Player Area")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Left | HelpHandler.Position.Top
-            externalDisplay: true
-        }
     }
 
     SoundMeter {
@@ -111,13 +104,6 @@ Rectangle {
                 cursorManager.set(CursorManager.Type.Clickable)
             else
                 cursorManager.set(CursorManager.Type.Normal)
-        }
-
-        HelpArea {
-            name: qsTr("Sound meter")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Right
-            externalDisplay: true
         }
     }
 }

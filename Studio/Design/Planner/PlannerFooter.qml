@@ -56,13 +56,6 @@ Rectangle {
                     Layout.preferredWidth: parent.width * 0.25
                 }
             }
-
-            HelpArea {
-                name: qsTr("Player Area")
-                description: qsTr("Description")
-                position: HelpHandler.Position.Left | HelpHandler.Position.Top
-                externalDisplay: true
-            }
         }
 
         Item {

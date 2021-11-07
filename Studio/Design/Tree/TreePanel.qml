@@ -30,13 +30,6 @@ Item {
     id: treeComponentsPanel
     x: xClose
 
-    HelpArea {
-        name: qsTr("Plugins panel")
-        description: qsTr("Description")
-        position: HelpHandler.Position.Left
-        externalDisplay: true
-    }
-
     ParallelAnimation {
         id: openAnimPanel
         PropertyAnimation { target: treeComponentsPanel; property: "x"; to: treeComponentsPanel.xOpen; duration: durationAnimation; easing.type: Easing.OutBack }

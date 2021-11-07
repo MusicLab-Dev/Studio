@@ -184,14 +184,6 @@ Item {
             node: sequencerView.node
             Layout.fillWidth: true
             visible: requiredVisibility
-
-            HelpArea {
-                name: qsTr("Controls")
-                description: qsTr("Description")
-                position: HelpHandler.Position.Bottom
-                externalDisplay: true
-                visible: sequencerControls.requiredVisibility
-            }
         }
 
         Item {
@@ -227,10 +219,6 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: parent.height * 0.12
         }
-    }
-
-    HelpHandler {
-        id: helpHandler
     }
 
     ActionsManager {

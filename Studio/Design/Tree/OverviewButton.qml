@@ -44,11 +44,4 @@ Item {
         text: overview.multiSelection ? qsTr("Open selected (" + treeSurface.selectionCount + ")") : qsTr("Overview")
         color: overviewMouse.containsMouse ? themeManager.backgroundColor : overview.runtimeColor
     }
-
-    HelpArea {
-        name: qsTr("Planner overview")
-        description: qsTr("Description")
-        position: HelpHandler.Position.Bottom
-        externalDisplay: true
-    }
 }

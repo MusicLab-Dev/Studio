@@ -226,12 +226,6 @@ MouseArea {
             contentView.incrementXOffset(-oldXRatio * (treeSurface.scaledWidth - oldWidth))
             contentView.incrementYOffset(-oldYRatio * (treeSurface.scaledHeight - oldHeight))
         }
-
-        HelpArea {
-            name: qsTr("Project's tree area")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Top
-        }
     }
 
     TreeSurface {
@@ -290,14 +284,6 @@ MouseArea {
                 }
             }
         }
-
-        HelpArea {
-            name: qsTr("Controls")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-            visible: treeControls.requiredVisibility
-        }
     }
 
     PartitionsPreview {
@@ -319,14 +305,6 @@ MouseArea {
                         partitionsPreview.visible = true
                 }
             }
-        }
-
-        HelpArea {
-            name: qsTr("Partitions")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Top
-            externalDisplay: true
-            visible: partitionsPreview.requiredVisibility
         }
     }
 

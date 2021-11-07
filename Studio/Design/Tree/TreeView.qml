@@ -78,10 +78,6 @@ Item {
         }
     }
 
-    HelpHandler {
-        id: helpHandler
-    }
-
     TreeNodeMenu {
         id: treeNodeMenu
     }
