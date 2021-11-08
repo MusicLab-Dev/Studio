@@ -86,14 +86,15 @@ Item {
             visible: sequencerControls.visible
             Layout.preferredWidth: parent.width
             Layout.preferredHeight: 1
+            z: 1
         }
 
-        ControlsFlow {
+        ControlsAutomationsFlow {
             id: sequencerControls
-            closeable: false
             node: contentView.selectedNode ? contentView.selectedNode.node : null
             Layout.fillWidth: true
-            visible: requiredVisibility
+            visible: node
+            z: 1
         }
 
         PlannerContentView {

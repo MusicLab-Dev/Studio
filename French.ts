@@ -380,14 +380,14 @@
     </message>
 </context>
 <context>
-    <name>ControlsFlow</name>
+    <name>ControlsFlow copy</name>
     <message>
-        <location filename="Studio/Design/Common/ControlsFlow.qml" line="81"/>
+        <location filename="Studio/Design/Common/ControlsFlow copy.qml" line="82"/>
         <source>Edit name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/ControlsFlow.qml" line="90"/>
+        <location filename="Studio/Design/Common/ControlsFlow copy.qml" line="91"/>
         <source>Change sample</source>
         <translation type="unfinished"></translation>
     </message>
@@ -729,7 +729,7 @@
 <context>
     <name>PlannerNodeInstancesRow</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerNodeInstancesRow.qml" line="53"/>
+        <location filename="Studio/Design/Planner/PlannerNodeInstancesRow.qml" line="58"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -940,13 +940,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="237"/>
-        <source>Description</source>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="236"/>
+        <source>Export MIDI File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="236"/>
-        <source>Export MIDI File</source>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="237"/>
+        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

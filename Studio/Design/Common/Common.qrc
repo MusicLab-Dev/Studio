@@ -38,9 +38,12 @@
         <file>PluginControls/FloatingControl.qml</file>
         <file>PluginControls/IntegerControl.qml</file>
         <file>ControlsFlow.qml</file>
+        <file>ControlsFlowBase.qml</file>
+        <file>ControlsFlowLoader.qml</file>
         <file>ContentPopup.qml</file>
         <file>InstanceCopyPopup.qml</file>
         <file>FMDebugWindow.qml</file>
         <file>ClipboardIndicator.qml</file>
+        <file>ControlsAutomationsFlow.qml</file>
     </qresource>
 </RCC>
