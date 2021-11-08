@@ -148,6 +148,9 @@ public slots:
     /** @brief Set a control on the fly */
     void setControl(const ControlEvent &event);
 
+    /** @brief Get a control name */
+    QString getControlName(const ParamID paramID) const noexcept;
+
 
     /** @brief Set external inputs of the plugin */
     void setExternalInputs(const QVector<QString> &paths);

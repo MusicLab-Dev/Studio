@@ -66,7 +66,6 @@ ContentView {
             partitionsBehavior.enabled = true
             if (nodeViewRepeater.count === 1) {
                 var item = nodeViewRepeater.itemAt(0)
-                item.isSelected = true
                 contentView.selectedNode = item
             }
         }

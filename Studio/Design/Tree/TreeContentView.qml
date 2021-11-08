@@ -267,7 +267,7 @@ MouseArea {
         id: treeControls
         width: parent.width
         node: contentView.lastSelectedNode ? contentView.lastSelectedNode.node : null
-        y: !requiredVisibility ? -height : 0
+        y: !node ? -height : 0
 
         Behavior on y {
             id: controlsBehavior
@@ -364,21 +364,5 @@ MouseArea {
         anchors.rightMargin: 10
 
         onReleased: partitionsPreview.hide = false
-    }
-
-    DefaultImageButton {
-        id: treeControlsShowButton
-        visible: contentView.lastSelectedNode && treeControls.hide
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.rightMargin: 10
-        width: height
-        height: treeFooter.height / 2
-        showBorder: false
-        scaleFactor: 1
-        source: "qrc:/Assets/Controls.png"
-
-        onReleased: treeControls.hide = false
     }
 }
