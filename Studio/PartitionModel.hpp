@@ -175,7 +175,7 @@ public slots:
 
 
     /** @brief Import Partition from file */
-    bool importPartition(const QFile &file) noexcept;
+    bool importPartition(const QString &path) noexcept;
 
     /** @brief Import Partition from file */
     bool exportPartition(const QString &path) noexcept;
