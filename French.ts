@@ -1056,40 +1056,46 @@
 <context>
     <name>SequencerHeader</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="73"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="74"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="79"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="80"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="79"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="80"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="79"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="80"/>
         <source> controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="80"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="127"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="174"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="81"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="128"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="189"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="251"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="126"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="127"/>
         <source>Move to planner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="173"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="188"/>
         <source>Import MIDI File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="250"/>
+        <source>Export MIDI File</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

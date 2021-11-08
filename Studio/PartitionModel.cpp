@@ -374,10 +374,15 @@ void PartitionModel::onNotesChanged(void)
     emit notesChanged();
 }
 
-bool PartitionModel::importPartition(const QFile &file) noexcept
+bool PartitionModel::importPartition(const QString &path) noexcept
 {
-    
-    return true;
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qCritical() << "PartitionModel::import: File couldn't be opened";
+        return false;
+    }
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    return ProjectSerializer::Deserialize(*this, doc.object());
 }
 
 bool PartitionModel::exportPartition(const QString &path) noexcept

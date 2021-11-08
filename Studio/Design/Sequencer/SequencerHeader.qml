@@ -1,8 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import ThemeManager 1.0
-import ClipboardManager 1.0
+import QtQuick.Dialogs 1.0
 
 import "../Default/"
 import "../Help/"
@@ -10,6 +9,8 @@ import "../Common/"
 
 import PluginModel 1.0
 import CursorManager 1.0
+import ThemeManager 1.0
+import ClipboardManager 1.0
 
 Rectangle {
     property color hoveredColor: sequencerView.node ? Qt.darker(sequencerView.node.color, 1.8) : "black"
@@ -138,6 +139,24 @@ Rectangle {
         width: height
         height: parent.height * 0.7
 
+        FileDialog {
+            id: fileDialogImport
+            title: "Please choose a file"
+            folder: shortcuts.home
+            visible: false
+
+            onAccepted: {
+                var path = fileDialogImport.fileUrl.toString();
+                path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
+                partition.importPartition(path)
+                visible = false
+            }
+
+            onRejected: {
+                visible = false
+            }
+        }
+
         Rectangle {
             id: rectImportFile
             anchors.fill: parent
@@ -150,7 +169,7 @@ Rectangle {
                 hoverEnabled: true
 
                 onPressed: {
-                    modulesView.addNewPlanner(sequencerView.node)
+                    fileDialogImport.visible = true
                 }
 
                 onHoveredChanged: {
@@ -164,13 +183,78 @@ Rectangle {
             DefaultColoredImage {
                 anchors.fill: parent
                 anchors.margins: parent.width * 0.25
-                source: "qrc:/Assets/Chrono.png"
+                source: "qrc:/Assets/Import.png"
                 color: mouseImportFile.containsMouse ? themeManager.contentColor : sequencerView.node ? sequencerView.node.color : "black"
             }
         }
 
         HelpArea {
             name: qsTr("Import MIDI File")
+            description: qsTr("Description")
+            position: HelpHandler.Position.Bottom
+            externalDisplay: true
+        }
+    }
+
+    Item {
+        id: exportFile
+        anchors.left: importFile.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: height
+        height: parent.height * 0.7
+
+        FileDialog {
+            id: fileDialogExport
+            selectExisting: false
+            title: "Export your partition"
+            folder: shortcuts.home
+            visible: false
+
+            onAccepted: {
+                var path = fileDialogExport.fileUrl.toString();
+                path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
+                partition.exportPartition(path)
+                visible = false
+            }
+            onRejected: {
+                visible = false
+            }
+        }
+
+        Rectangle {
+            id: rectExportFile
+            anchors.fill: parent
+            radius: 6
+            color: sequencerView.node && mouseExportFile.containsMouse ? sequencerView.node.color : themeManager.contentColor
+
+            MouseArea {
+                id: mouseExportFile
+                anchors.fill: parent
+                hoverEnabled: true
+
+                onPressed: {
+                    fileDialogExport.visible = true
+                }
+
+                onHoveredChanged: {
+                    if (containsMouse)
+                        cursorManager.set(CursorManager.Type.Clickable)
+                    else
+                        cursorManager.set(CursorManager.Type.Normal)
+                }
+            }
+
+            DefaultColoredImage {
+                anchors.fill: parent
+                anchors.margins: parent.width * 0.25
+                source: "qrc:/Assets/Export.png"
+                color: mouseExportFile.containsMouse ? themeManager.contentColor : sequencerView.node ? sequencerView.node.color : "black"
+            }
+        }
+
+        HelpArea {
+            name: qsTr("Export MIDI File")
             description: qsTr("Description")
             position: HelpHandler.Position.Bottom
             externalDisplay: true

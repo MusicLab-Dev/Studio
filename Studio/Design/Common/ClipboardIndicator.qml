@@ -17,12 +17,13 @@ MouseArea {
     visible: clipboardManager.state !== ClipboardManager.State.Nothing
     hoverEnabled: true
 
-    Image {
+    DefaultColoredImage {
         anchors.centerIn: parent
         width: height
         height: parent.height * 0.5
         id: name
         source: "qrc:/Assets/presse-papiers.png"
+        color: themeManager.foregroundColor
     }
 
     ToolTip {
