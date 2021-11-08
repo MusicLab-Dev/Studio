@@ -678,16 +678,6 @@
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="49"/>
-        <source>Planner overview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="50"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PartitionMenu</name>
@@ -725,70 +715,6 @@
     <message>
         <location filename="Studio/Design/Common/PartitionsPreviewDelegate.qml" line="88"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PlannerContentView</name>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="134"/>
-        <source>Partitions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerContentView.qml" line="135"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PlannerEdition</name>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerEdition.qml" line="18"/>
-        <source>Edition modes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerEdition.qml" line="19"/>
-        <location filename="Studio/Design/Planner/PlannerEdition.qml" line="45"/>
-        <location filename="Studio/Design/Planner/PlannerEdition.qml" line="63"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerEdition.qml" line="44"/>
-        <source>Edition precision</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerEdition.qml" line="62"/>
-        <source>Undo / Redo</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PlannerFooter</name>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="61"/>
-        <source>Player Area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerFooter.qml" line="62"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PlannerHeader</name>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerHeader.qml" line="27"/>
-        <source>Clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerHeader.qml" line="28"/>
-        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -846,16 +772,6 @@
     <message>
         <location filename="Studio/Design/Planner/PlannerView.qml" line="41"/>
         <source>Planner</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerView.qml" line="99"/>
-        <source>Controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Planner/PlannerView.qml" line="100"/>
-        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1004,52 +920,15 @@
     </message>
 </context>
 <context>
-    <name>SequencerEdition</name>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="50"/>
-        <source>Edition modes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="51"/>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="102"/>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="121"/>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="141"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="101"/>
-        <source>Selected partition</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="120"/>
-        <source>Edition precision</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerEdition.qml" line="140"/>
-        <source>Undo / Redo</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>SequencerFooter</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="91"/>
-        <source>Player Area</source>
+        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="99"/>
+        <source>Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="92"/>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="118"/>
+        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="100"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="117"/>
-        <source>Sound meter</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1061,54 +940,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="80"/>
-        <source>Hide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="80"/>
-        <source>Show</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="80"/>
-        <source> controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="81"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="128"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="189"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="251"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="237"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="127"/>
-        <source>Move to planner</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="188"/>
-        <source>Import MIDI File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="250"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="236"/>
         <source>Export MIDI File</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SequencerView</name>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="189"/>
-        <source>Controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerView.qml" line="190"/>
-        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1173,50 +1011,6 @@
     </message>
 </context>
 <context>
-    <name>TreeContentView</name>
-    <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="231"/>
-        <source>Project&apos;s tree area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="232"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="296"/>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="326"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="295"/>
-        <source>Controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeContentView.qml" line="325"/>
-        <source>Partitions</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TreeFooter</name>
-    <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="29"/>
-        <source>Project Preview</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="30"/>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="85"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreeFooter.qml" line="84"/>
-        <source>Player Area</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>TreeNodeMenu</name>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="45"/>
@@ -1261,19 +1055,6 @@
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="155"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TreePanel</name>
-    <message>
-        <location filename="Studio/Design/Tree/TreePanel.qml" line="34"/>
-        <source>Plugins panel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Tree/TreePanel.qml" line="35"/>
-        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
