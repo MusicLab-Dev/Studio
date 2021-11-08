@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 import ActionsManager 1.0
 
 import "../Common"
-import "../Help"
 
 Item {
     function onNodeDeleted(targetNode) {

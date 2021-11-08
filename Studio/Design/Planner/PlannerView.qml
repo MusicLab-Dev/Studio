@@ -5,7 +5,6 @@ import ActionsManager 1.0
 
 import "../Default"
 import "../Common"
-import "../Help"
 
 Item {
     function onNodeDeleted(targetNode) {

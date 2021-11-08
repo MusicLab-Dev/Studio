@@ -9,7 +9,6 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
-//        onClicked: helpHandler.open()
     }
 
     DefaultTextButton {

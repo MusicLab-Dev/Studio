@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 
 import "../Default/"
 import "../Common/"
-import "../Help/"
 
 import ThemeManager 1.0
 import PluginModel 1.0

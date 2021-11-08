@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 
 import "../Default"
 import "../Common"
-import "../Help"
 
 RowLayout {
     spacing: 10

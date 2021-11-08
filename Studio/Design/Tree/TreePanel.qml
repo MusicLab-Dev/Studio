@@ -1,7 +1,5 @@
 import QtQuick 2.15
 
-import "../Help"
-
 Item {
     function open(filt) {
         filter = filt

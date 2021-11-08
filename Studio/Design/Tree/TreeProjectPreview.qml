@@ -7,7 +7,6 @@ import AudioAPI 1.0
 
 import "../Default"
 import "../Common"
-import "../Help"
 
 ProjectPreview {
     enum EditMode {

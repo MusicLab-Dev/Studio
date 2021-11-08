@@ -13,7 +13,6 @@ Rectangle {
     property alias node: controlsFlowBase.node
     property alias controlsFlowBase: controlsFlowBase
     property var menuFunc: null
-    property alias headerText: headerText
     property alias headerRow: headerRow
 
     property real baseHeight: 60
@@ -30,19 +29,20 @@ Rectangle {
 
     RowLayout {
         id: headerRow
-        height: controlsFlowBase.height
+        height: parent.height
         width: parent.width * 0.15
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
 
         Item {
-            id: icon
-            Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.fillHeight: true
 
             PluginFactoryImageButton {
+                id: menuButton
                 width: height
-                height: parent.height
+                height: Math.min(parent.height / 2, controlsFlow.baseHeight)
+                scaleFactor: 1
                 anchors.centerIn: parent
                 name: node ? node.plugin.title : ""
                 colorDefault: controlsFlowBase.nodeColor
@@ -57,19 +57,22 @@ Rectangle {
             }
         }
 
-        DefaultText {
-            property string defaultText: node ? qsTr(node.name + "'s controls") : ""
-
-            id: headerText
-            Layout.fillWidth: true
+        Item {
             Layout.fillHeight: true
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            fontSizeMode: Text.Fit
-//            font.pixelSize: 14
-            wrapMode: Text.Wrap
-            text: defaultText
-            color: controlsFlowBase.nodeColor
+            Layout.preferredWidth: parent.width * 0.65
+
+            DefaultText {
+                anchors.centerIn: parent
+                width: parent.width * 0.8
+                height: parent.height
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                fontSizeMode: Text.HorizontalFit
+                font.pixelSize: 30
+                color: controlsFlowBase.nodeColor
+                text: node ? qsTr(node.name + "'s controls") : ""
+                wrapMode: Text.Wrap
+            }
         }
     }
 

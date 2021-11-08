@@ -4,7 +4,6 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import "../Default"
-import "../Help"
 import "../Common"
 
 Rectangle {
@@ -13,7 +12,6 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
-//        onClicked: helpHandler.open()
     }
 
     ClipboardIndicator {

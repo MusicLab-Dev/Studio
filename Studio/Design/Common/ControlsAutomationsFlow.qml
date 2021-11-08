@@ -3,17 +3,10 @@ import QtQuick 2.15
 import "../Default"
 
 ControlsFlow {
-    property int automationIndex: -1
+    signal automationSelected(int automationIndex)
 
     id: controlsFlow
     baseMargin: 0
-
-    headerText.text: {
-        if (automationIndex === -1 || !node)
-            return headerText.defaultText
-        else
-            return node.name + " automation\n" + node.plugin.getControlName(automationIndex)
-    }
 
     controlsFlowBase.controlsRepeater.delegate: Column {
         width: delegateLoader.width
@@ -32,17 +25,8 @@ ControlsFlow {
             colorDefault: controlsFlowBase.nodeColor
             colorHovered: controlsFlowBase.nodeHoveredColor
             colorOnPressed: controlsFlowBase.nodePressedColor
-            image.fillMode: Image.PreserveAspectCrop
 
-            onReleased: controlsFlow.automationIndex = index
+            onReleased: automationSelected(index)
         }
-    }
-
-    Rectangle {
-        anchors.leftMargin: controlsFlow.headerRow.width
-        anchors.fill: parent
-        color: "red"
-        opacity: 0.5
-        visible: automationIndex !== -1
     }
 }

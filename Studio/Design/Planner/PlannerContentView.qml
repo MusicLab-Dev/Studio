@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Common"
-import "../Help"
 
 import AudioAPI 1.0
 import NodeModel 1.0

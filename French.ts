@@ -674,7 +674,7 @@
 <context>
     <name>OverviewButton</name>
     <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="44"/>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="43"/>
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -705,7 +705,7 @@
 <context>
     <name>PartitionsModel</name>
     <message>
-        <location filename="Studio/PartitionsModel.cpp" line="100"/>
+        <location filename="Studio/PartitionsModel.cpp" line="99"/>
         <source> Copy</source>
         <translation type="unfinished"></translation>
     </message>
@@ -770,7 +770,7 @@
 <context>
     <name>PlannerView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerView.qml" line="41"/>
+        <location filename="Studio/Design/Planner/PlannerView.qml" line="40"/>
         <source>Planner</source>
         <translation type="unfinished"></translation>
     </message>
@@ -920,33 +920,10 @@
     </message>
 </context>
 <context>
-    <name>SequencerFooter</name>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="99"/>
-        <source>Clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="100"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>SequencerHeader</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="74"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="72"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="236"/>
-        <source>Export MIDI File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="237"/>
-        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

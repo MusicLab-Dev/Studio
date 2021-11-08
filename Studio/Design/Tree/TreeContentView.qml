@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Default"
-import "../Help"
 import "../Common"
 
 import NodeModel 1.0
