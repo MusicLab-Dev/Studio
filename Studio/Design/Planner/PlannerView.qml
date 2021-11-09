@@ -94,6 +94,8 @@ Item {
             Layout.fillWidth: true
             visible: node
             z: 1
+            menuFunc: function() { plannerNodeMenu.openMenu(sequencerControls.menuButton, sequencerControls.node) }
+            onAutomationSelected: contentView.selectedNode.selectAutomation(automationIndex)
         }
 
         PlannerContentView {

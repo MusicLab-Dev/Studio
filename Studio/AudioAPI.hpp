@@ -12,6 +12,7 @@
 #include "Note.hpp"
 #include "PartitionInstance.hpp"
 #include "VolumeCache.hpp"
+#include "ControlDescriptor.hpp"
 
 /** @brief AudioAPI class */
 class AudioAPI : public QObject
@@ -71,6 +72,10 @@ public slots:
     /** @brief Convert a decibel volume into a ratio */
     DB decibelToRatio(const DB volume) const noexcept
         { return Audio::ConvertDecibelToRatio(volume); }
+
+
+    /** @brief Extract a control descriptor */
+    ControlDescriptor getControlDescriptor(PluginModel *plugin, const ParamID paramID) const noexcept;
 
 private:
     /** @brief Construct the API */

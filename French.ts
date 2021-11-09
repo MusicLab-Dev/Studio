@@ -721,7 +721,7 @@
 <context>
     <name>PlannerNodeInstances</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="31"/>
+        <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="45"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>

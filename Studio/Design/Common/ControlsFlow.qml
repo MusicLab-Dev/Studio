@@ -14,6 +14,7 @@ Rectangle {
     property alias controlsFlowBase: controlsFlowBase
     property var menuFunc: null
     property alias headerRow: headerRow
+    property alias menuButton: menuButton
 
     property real baseHeight: 60
     property real baseMargin: 20

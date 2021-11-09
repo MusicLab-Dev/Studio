@@ -16,6 +16,12 @@ ContentView {
         placementBeatPrecisionLastWidth = Qt.binding(function() { return selectedPartition ? selectedPartition.latestNote : 0})
     }
 
+    // Display beat range
+    readonly property var displayRange: {
+        var from = -xOffset / pixelsPerBeatPrecision
+        return AudioAPI.beatRange(from, from + width / pixelsPerBeatPrecision)
+    }
+
     readonly property real linkThickness: 4
     readonly property real linkHalfThickness: linkThickness / 2
     readonly property real headerMargin: 3

@@ -7,6 +7,10 @@ import "../Default"
 import "../Common"
 
 Item {
+    function selectAutomation(index) {
+        nodeInstances.selectAutomation(index)
+    }
+
     property NodeModel node: nodeInstance.instance
     property bool showChildren: false
     property var parentDelegate: null

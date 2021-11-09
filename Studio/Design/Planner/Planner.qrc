@@ -14,5 +14,6 @@
         <file>PlannerNodeChildren.qml</file>
         <file>PlannerNodeMenu.qml</file>
         <file>PlannerEdition.qml</file>
+        <file>PlannerNodeAutomationPlacement.qml</file>
     </qresource>
 </RCC>
