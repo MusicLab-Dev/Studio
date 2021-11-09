@@ -76,6 +76,11 @@ Rectangle {
             }
         }
 
+        DefaultToolTip {
+            visible: mousePluginButton.containsMouse
+            text: sequencerControls.hide ? qsTr("Open controls") : qsTr("Close controls")
+        }
+
         HelpArea {
             name: (sequencerControls.visible ? qsTr("Hide") : qsTr("Show")) + qsTr(" controls")
             description: qsTr("Description")
@@ -84,43 +89,18 @@ Rectangle {
         }
     }
 
-    Item {
+    SequencerHeaderButton {
         id: plannerButton
         anchors.left: pluginButton.right
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         width: height
         height: parent.height * 0.7
+        iconSource: "qrc:/Assets/Chrono.png"
+        toolTipText: qsTr("Move to planner")
 
-        Rectangle {
-            id: rectPlannerButton
-            anchors.fill: parent
-            radius: 6
-            color: sequencerView.node && mousePlannerButton.containsMouse ? sequencerView.node.color : themeManager.contentColor
-
-            MouseArea {
-                id: mousePlannerButton
-                anchors.fill: parent
-                hoverEnabled: true
-
-                onPressed: {
-                    modulesView.addNewPlanner(sequencerView.node)
-                }
-
-                onHoveredChanged: {
-                    if (containsMouse)
-                        cursorManager.set(CursorManager.Type.Clickable)
-                    else
-                        cursorManager.set(CursorManager.Type.Normal)
-                }
-            }
-
-            DefaultColoredImage {
-                anchors.fill: parent
-                anchors.margins: parent.width * 0.25
-                source: "qrc:/Assets/Chrono.png"
-                color: mousePlannerButton.containsMouse ? themeManager.contentColor : sequencerView.node ? sequencerView.node.color : "black"
-            }
+        mouseArea.onPressed: {
+            modulesView.addNewPlanner(sequencerView.node)
         }
 
         HelpArea {
@@ -131,17 +111,23 @@ Rectangle {
         }
     }
 
-    Item {
+    SequencerHeaderButton {
         id: importFile
         anchors.left: plannerButton.right
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         width: height
         height: parent.height * 0.7
+        iconSource: "qrc:/Assets/Import.png"
+        toolTipText: qsTr("Import a partition file")
+
+        mouseArea.onPressed: {
+            fileDialogImport.visible = true
+        }
 
         FileDialog {
             id: fileDialogImport
-            title: "Please choose a file"
+            title: qsTr("Please choose a file")
             folder: shortcuts.home
             visible: false
 
@@ -157,37 +143,6 @@ Rectangle {
             }
         }
 
-        Rectangle {
-            id: rectImportFile
-            anchors.fill: parent
-            radius: 6
-            color: sequencerView.node && mouseImportFile.containsMouse ? sequencerView.node.color : themeManager.contentColor
-
-            MouseArea {
-                id: mouseImportFile
-                anchors.fill: parent
-                hoverEnabled: true
-
-                onPressed: {
-                    fileDialogImport.visible = true
-                }
-
-                onHoveredChanged: {
-                    if (containsMouse)
-                        cursorManager.set(CursorManager.Type.Clickable)
-                    else
-                        cursorManager.set(CursorManager.Type.Normal)
-                }
-            }
-
-            DefaultColoredImage {
-                anchors.fill: parent
-                anchors.margins: parent.width * 0.25
-                source: "qrc:/Assets/Import.png"
-                color: mouseImportFile.containsMouse ? themeManager.contentColor : sequencerView.node ? sequencerView.node.color : "black"
-            }
-        }
-
         HelpArea {
             name: qsTr("Import MIDI File")
             description: qsTr("Description")
@@ -196,18 +151,24 @@ Rectangle {
         }
     }
 
-    Item {
+    SequencerHeaderButton {
         id: exportFile
         anchors.left: importFile.right
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         width: height
         height: parent.height * 0.7
+        iconSource: "qrc:/Assets/Export.png"
+        toolTipText: qsTr("Export this partition file")
+
+        mouseArea.onPressed: {
+            fileDialogExport.visible = true
+        }
 
         FileDialog {
             id: fileDialogExport
             selectExisting: false
-            title: "Export your partition"
+            title: qsTr("Export your partition")
             folder: shortcuts.home
             visible: false
 
@@ -222,37 +183,6 @@ Rectangle {
             }
         }
 
-        Rectangle {
-            id: rectExportFile
-            anchors.fill: parent
-            radius: 6
-            color: sequencerView.node && mouseExportFile.containsMouse ? sequencerView.node.color : themeManager.contentColor
-
-            MouseArea {
-                id: mouseExportFile
-                anchors.fill: parent
-                hoverEnabled: true
-
-                onPressed: {
-                    fileDialogExport.visible = true
-                }
-
-                onHoveredChanged: {
-                    if (containsMouse)
-                        cursorManager.set(CursorManager.Type.Clickable)
-                    else
-                        cursorManager.set(CursorManager.Type.Normal)
-                }
-            }
-
-            DefaultColoredImage {
-                anchors.fill: parent
-                anchors.margins: parent.width * 0.25
-                source: "qrc:/Assets/Export.png"
-                color: mouseExportFile.containsMouse ? themeManager.contentColor : sequencerView.node ? sequencerView.node.color : "black"
-            }
-        }
-
         HelpArea {
             name: qsTr("Export MIDI File")
             description: qsTr("Description")
@@ -261,18 +191,4 @@ Rectangle {
         }
     }
 
-    /*ClipboardIndicator {
-        anchors.bottom: parent.bottom
-        anchors.left: soundMeter.right
-        anchors.top: parent.top
-        anchors.leftMargin: parent.width * 0.01
-        width: parent.width * 0.1
-
-        HelpArea {
-            name: qsTr("Clipboard")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
-    }*/
 }

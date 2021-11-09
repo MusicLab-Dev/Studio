@@ -64,6 +64,8 @@ MouseArea {
         }
     }
 
+    onDoubleClicked: playerBase.disableLoopRange()
+
     onPositionChanged: {
         if (!pressed || mouse.buttons & Qt.RightButton)
             return

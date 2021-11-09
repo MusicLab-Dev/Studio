@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.0
 
 import AudioAPI 1.0
 import NodeModel 1.0
@@ -64,6 +65,59 @@ DefaultMenu {
 
         onTriggered: {
             globalTextField.open(targetPartition.name, setName, function () { closeMenu() }, false, null);
+        }
+    }
+
+    Action {
+        text: qsTr("Import...")
+
+        onTriggered: {
+            fileDialogImport.visible = true
+        }
+    }
+
+    FileDialog {
+        id: fileDialogImport
+        title: qsTr("Please choose a file")
+        folder: shortcuts.home
+        visible: false
+
+        onAccepted: {
+            var path = fileDialogImport.fileUrl.toString();
+            path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
+            targetPartition.importPartition(path)
+            visible = false
+        }
+
+        onRejected: {
+            visible = false
+        }
+    }
+
+    Action {
+        text: qsTr("Export...")
+
+        onTriggered: {
+            fileDialogExport.visible = true
+        }
+    }
+
+    FileDialog {
+        id: fileDialogExport
+        selectExisting: false
+        title: qsTr("Export your partition")
+        folder: shortcuts.home
+        visible: false
+
+        onAccepted: {
+            var path = fileDialogExport.fileUrl.toString();
+            path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
+            targetPartition.exportPartition(path)
+            visible = false
+        }
+
+        onRejected: {
+            visible = false
         }
     }
 

@@ -103,6 +103,9 @@ public slots:
     /** @brief Copy a partition instance that belongs to another PartitionsModel instance */
     bool foreignPartitionInstanceCopy(PartitionModel *partition, const PartitionInstance &instance);
 
+    /** @brief Get an available name for a partition */
+    QString getAvailablePartitionName(void) const noexcept;
+
 signals:
     /** @brief Notify that the latest instance of partitions has changed */
     void latestInstanceChanged(void);
@@ -124,9 +127,6 @@ private:
 
     /** @brief Refresh internal models */
     void refreshPartitions(void);
-
-    /** @brief Get an available name for a partition */
-    [[nodiscard]] QString getAvailablePartitionName(void) const noexcept;
 
     /** @brief Non-safe implementation of the add on the fly note */
     void addOnTheFlyImpl(const NoteEvent &note) noexcept;

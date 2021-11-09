@@ -1,9 +1,26 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import CursorManager 1.0
+
 import "../Default"
 
 Rectangle {
+
+    function newPartition() {
+        var partitions = partitionsPreview.node.partitions
+        var idx = partitions.count()
+        if (partitions.add()) {
+            partitions.getPartition(partitions.count() - 1).name = globalTextField.text
+            contentView.selectPartition(partitionsPreview.node, idx)
+            modulesView.addSequencerWithExistingPartition(partitionsPreview.node, idx)
+        }
+    }
+
+    function addNewPartition() {
+        globalTextField.open(partitionsPreview.node.partitions.getAvailablePartitionName(), newPartition, function () { }, false, node.color)
+    }
+
     property var nodeDelegate: contentView.selectedNode
     readonly property var node: nodeDelegate ? nodeDelegate.node : null
     readonly property color nodeColor: nodeDelegate ? nodeDelegate.color : color
@@ -62,15 +79,7 @@ Rectangle {
                 colorHovered: partitionsPreview.nodeHoveredColor
                 colorOnPressed: partitionsPreview.nodePressedColor
 
-                onReleased: {
-                    // Add a partition and select it on success then open sequencer
-                    var partitions = partitionsPreview.node.partitions
-                    var idx = partitions.count()
-                    if (partitions.add()) {
-                        contentView.selectPartition(partitionsPreview.node, idx)
-                        modulesView.addSequencerWithExistingPartition(partitionsPreview.node, idx)
-                    }
-                }
+                onClicked: partitionsPreview.addNewPartition()
             }
         }
 
@@ -119,6 +128,47 @@ Rectangle {
                 id: previewDelegate
                 width: partitionsPreview.previewWidth
                 height: partitionsPreview.baseHeight
+            }
+        }
+
+        Rectangle {
+            width: partitionsPreview.previewWidth
+            height: partitionsPreview.baseHeight
+            color: themeManager.contentColor
+            border.color: partitionsPreview.nodeColor
+            border.width: newPartitionArea.containsMouse ? 1 : 0
+            radius: 3
+
+            MouseArea {
+                id: newPartitionArea
+                anchors.fill: parent
+                hoverEnabled: true
+
+                onClicked: partitionsPreview.addNewPartition()
+
+                onHoveredChanged: {
+                    if (containsMouse)
+                        cursorManager.set(CursorManager.Type.Clickable)
+                    else
+                        cursorManager.set(CursorManager.Type.Normal)
+                }
+            }
+
+            DefaultColoredImage {
+                anchors.centerIn: parent
+                height: newPartitionArea.containsMouse ? parent.height * 0.7 : parent.height * 0.5
+                width: height
+                source: "qrc:/Assets/Plus.png"
+                color: parent.border.color
+
+                Behavior on height {
+                    NumberAnimation { duration: 100 }
+                }
+            }
+
+            DefaultToolTip {
+                visible: newPartitionArea.containsMouse
+                text: qsTr("Add a new partition")
             }
         }
     }

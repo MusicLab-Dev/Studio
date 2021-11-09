@@ -65,7 +65,7 @@ bool PartitionsModel::add(void)
 
     // Temporary fix used because views need to access partition pointer right after creation
     const bool hasPaused = scheduler->stopAndWait();
-    const auto name = getAvailablePartitionName();
+    const QString &name = getAvailablePartitionName();
 
     _data->push();
     if (_data->data() != oldData) {
