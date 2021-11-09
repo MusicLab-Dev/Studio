@@ -14,10 +14,10 @@ set(StudioTestsSources
     ${StudioTestsDir}/tests_ControlsModel.cpp
     ${StudioTestsDir}/tests_Point.cpp
     ${StudioTestsDir}/tests_Project.cpp
-    #${StudioTestsDir}/tests_Application.cpp
+    ${StudioTestsDir}/tests_Application.cpp
     ${StudioTestsDir}/tests_Scheduler.cpp
     ${StudioTestsDir}/tests_PluginTableModel.cpp
-    #${StudioTestsDir}/tests_Device.cpp
+    ${StudioTestsDir}/tests_Device.cpp
     ${StudioTestsDir}/tests_DevicesModel.cpp
     ${StudioTestsDir}/tests_PluginModel.cpp
     ${StudioTestsDir}/tests_ProjectSave.cpp

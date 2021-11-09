@@ -18,6 +18,5 @@ TEST(ProjectSave, transformPartitionsInVariantList)
 
     ProjectSave save(app.project());
 
-    auto list = save.transformPartitionsInVariantList(*app.project()->master()->partitions());
+    auto list = save.transformPartitionsInVariantMap(*app.project()->master()->partitions());
 }
-

@@ -117,9 +117,6 @@ set(StudioSources
     ${StudioDir}/ClipboardManager.cpp
     ${StudioDir}/CursorManager.hpp
     ${StudioDir}/CursorManager.cpp
-    ${StudioDir}/PartitionManager.hpp
-    ${StudioDir}/PartitionManager.ipp
-    ${StudioDir}/PartitionManager.cpp
     ${StudioDir}/ColoredSprite.hpp
     ${StudioDir}/ColoredSprite.cpp
     ${StudioDir}/ColoredSpriteManager.hpp
