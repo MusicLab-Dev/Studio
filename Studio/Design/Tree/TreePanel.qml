@@ -1,7 +1,5 @@
 import QtQuick 2.15
 
-import "../Help"
-
 Item {
     function open(filt) {
         filter = filt
@@ -29,13 +27,6 @@ Item {
 
     id: treeComponentsPanel
     x: xClose
-
-    HelpArea {
-        name: qsTr("Plugins panel")
-        description: qsTr("Description")
-        position: HelpHandler.Position.Left
-        externalDisplay: true
-    }
 
     ParallelAnimation {
         id: openAnimPanel

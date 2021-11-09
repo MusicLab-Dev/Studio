@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.15
 
 import "../Common"
 import "../Default"
-import "../Help"
 
 import Scheduler 1.0
 
@@ -55,13 +54,6 @@ Rectangle {
                     Layout.preferredHeight: parent.height * 0.5
                     Layout.preferredWidth: parent.width * 0.25
                 }
-            }
-
-            HelpArea {
-                name: qsTr("Player Area")
-                description: qsTr("Description")
-                position: HelpHandler.Position.Left | HelpHandler.Position.Top
-                externalDisplay: true
             }
         }
 

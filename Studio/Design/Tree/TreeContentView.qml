@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Default"
-import "../Help"
 import "../Common"
 
 import NodeModel 1.0
@@ -226,12 +225,6 @@ MouseArea {
             contentView.incrementXOffset(-oldXRatio * (treeSurface.scaledWidth - oldWidth))
             contentView.incrementYOffset(-oldYRatio * (treeSurface.scaledHeight - oldHeight))
         }
-
-        HelpArea {
-            name: qsTr("Project's tree area")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Top
-        }
     }
 
     TreeSurface {
@@ -273,7 +266,7 @@ MouseArea {
         id: treeControls
         width: parent.width
         node: contentView.lastSelectedNode ? contentView.lastSelectedNode.node : null
-        y: !requiredVisibility ? -height : 0
+        y: !node ? -height : 0
 
         Behavior on y {
             id: controlsBehavior
@@ -289,14 +282,6 @@ MouseArea {
                         treeControls.visible = true
                 }
             }
-        }
-
-        HelpArea {
-            name: qsTr("Controls")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-            visible: treeControls.requiredVisibility
         }
     }
 
@@ -319,14 +304,6 @@ MouseArea {
                         partitionsPreview.visible = true
                 }
             }
-        }
-
-        HelpArea {
-            name: qsTr("Partitions")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Top
-            externalDisplay: true
-            visible: partitionsPreview.requiredVisibility
         }
     }
 
@@ -386,21 +363,5 @@ MouseArea {
         anchors.rightMargin: 10
 
         onReleased: partitionsPreview.hide = false
-    }
-
-    DefaultImageButton {
-        id: treeControlsShowButton
-        visible: contentView.lastSelectedNode && treeControls.hide
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.rightMargin: 10
-        width: height
-        height: treeFooter.height / 2
-        showBorder: false
-        scaleFactor: 1
-        source: "qrc:/Assets/Controls.png"
-
-        onReleased: treeControls.hide = false
     }
 }

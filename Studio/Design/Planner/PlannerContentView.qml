@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Common"
-import "../Help"
 
 import AudioAPI 1.0
 import NodeModel 1.0
@@ -15,6 +14,12 @@ ContentView {
         selectedPartition = node.partitions.getPartition(partitionIndex)
         selectedPartitionIndex = partitionIndex
         placementBeatPrecisionLastWidth = Qt.binding(function() { return selectedPartition ? selectedPartition.latestNote : 0})
+    }
+
+    // Display beat range
+    readonly property var displayRange: {
+        var from = -xOffset / pixelsPerBeatPrecision
+        return AudioAPI.beatRange(from, from + width / pixelsPerBeatPrecision)
     }
 
     readonly property real linkThickness: 4
@@ -66,7 +71,6 @@ ContentView {
             partitionsBehavior.enabled = true
             if (nodeViewRepeater.count === 1) {
                 var item = nodeViewRepeater.itemAt(0)
-                item.isSelected = true
                 contentView.selectedNode = item
             }
         }
@@ -128,14 +132,6 @@ ContentView {
                 easing.type: Easing.OutCubic
                 onFinished: partitionsPreview.visible = partitionsPreview.requiredVisibility
             }
-        }
-
-        HelpArea {
-            name: qsTr("Partitions")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Top
-            externalDisplay: true
-            visible: partitionsPreview.requiredVisibility
         }
     }
 }

@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 
 import "../Default/"
 import "../Common/"
-import "../Help/"
 
 import ThemeManager 1.0
 import PluginModel 1.0
@@ -45,13 +44,6 @@ RowLayout {
         }
 
         onItemSelectedChanged: contentView.editMode = itemSelected
-
-        HelpArea {
-            name: qsTr("Edition modes")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }
 
     Item {
@@ -96,13 +88,6 @@ RowLayout {
                         }
                     }
                 }
-
-                HelpArea {
-                    name: qsTr("Selected partition")
-                    description: qsTr("Description")
-                    position: HelpHandler.Position.Center
-                    externalDisplay: false
-                }
             }
 
             Snapper {
@@ -114,13 +99,6 @@ RowLayout {
                 onActivated: {
                     contentView.placementBeatPrecisionScale = currentValue
                     contentView.placementBeatPrecisionLastWidth = 0
-                }
-
-                HelpArea {
-                    name: qsTr("Edition precision")
-                    description: qsTr("Description")
-                    position: HelpHandler.Position.Bottom
-                    externalDisplay: true
                 }
             }
         }
@@ -135,12 +113,5 @@ RowLayout {
         next.enabled: true
         prev.onPressed: actionsManager.undo()
         prev.enabled: true
-
-        HelpArea {
-            name: qsTr("Undo / Redo")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }
 }

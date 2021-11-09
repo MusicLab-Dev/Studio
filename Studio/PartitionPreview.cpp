@@ -91,7 +91,7 @@ void PartitionPreview::paint(QPainter *painter)
         rect.setHeight(noteHeight);
         painter->fillRect(rect, color);
         if (noteHeight < 3) {
-            painter->drawLine(QLine(rect.left(), rect.y(), rect.x(), rect.bottom()));
+            painter->drawLine(QLine(rect.x(), rect.y(), rect.x(), rect.bottom()));
             painter->drawLine(QLine(rect.right(), rect.y(), rect.right(), rect.bottom()));
         } else {
             painter->drawRect(rect);

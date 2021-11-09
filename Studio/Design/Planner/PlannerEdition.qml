@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 
 import "../Default"
 import "../Common"
-import "../Help"
 
 RowLayout {
     spacing: 10
@@ -13,13 +12,6 @@ RowLayout {
         id: editModeSelector
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * 0.375
-
-        HelpArea {
-            name: qsTr("Edition modes")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }
 
     Item {
@@ -39,13 +31,6 @@ RowLayout {
                 contentView.placementBeatPrecisionLastWidth = 0
             }
         }
-
-        HelpArea {
-            name: qsTr("Edition precision")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }
 
     ArrowNextPrev {
@@ -57,13 +42,6 @@ RowLayout {
         prev.enabled: true
         next.onPressed: actionsManager.redo()
         next.enabled: true
-
-        HelpArea {
-            name: qsTr("Undo / Redo")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }
 }
 

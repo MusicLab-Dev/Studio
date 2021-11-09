@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 import ActionsManager 1.0
 
 import "../Common"
-import "../Help"
 
 Item {
     function onNodeDeleted(targetNode) {
@@ -76,10 +75,6 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: parent.height * 0.12
         }
-    }
-
-    HelpHandler {
-        id: helpHandler
     }
 
     TreeNodeMenu {

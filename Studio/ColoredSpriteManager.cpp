@@ -35,13 +35,13 @@ ImageLoaderThread::ImageLoaderThread(QObject *parent)
 
 void ImageLoaderThread::run(void)
 {
-    qDebug() << "ImageLoaderThread::run: Thread started";
+//    qDebug() << "ImageLoaderThread::run: Thread started";
     QString path;
     std::uint32_t tryCount { 0u };
 
     while (!_forceExit) {
         if (_queue.pop(path)) {
-            qDebug() << "ImageLoaderThread::run: Extracted work" << path;
+//            qDebug() << "ImageLoaderThread::run: Extracted work" << path;
             imageLoaded(path, Load(path));
             tryCount = 0u;
         } else {
@@ -50,7 +50,7 @@ void ImageLoaderThread::run(void)
             msleep(100);
         }
     }
-    qDebug() << "ImageLoaderThread::run: Thread exited";
+//    qDebug() << "ImageLoaderThread::run: Thread exited";
 }
 
 
@@ -111,7 +111,7 @@ void ColoredSpriteManager::query(const QString &path, ColoredSprite *instance)
         it =_loadTable.insert(path, LoadCache { instance });
         if (!_thread.queue().push(path)) {
             // Push failed in async queue, we must load synchronously
-            qDebug() << "ColoredSpriteManager::query: Thread async queue is full, loading synchronously" << path;
+            qWarning() << "ColoredSpriteManager::query: Thread async queue is full, loading synchronously" << path;
             _loadTable.erase(it);
             const auto cache = ImageLoaderThread::Load(path);
             instance->onImageLoaded(path, cache);
@@ -163,9 +163,6 @@ void ColoredSpriteManager::onImageLoaded(const QString &path, const SpriteCache 
 void ColoredSpriteManager::onThreadFinished(void)
 {
     if (!_loadTable.isEmpty()) {
-        qDebug() << "ColoredSpriteManager::onThreadFinished: Thread finished but load table is not empty";
         _thread.start();
-    } else {
-        qDebug() << "ColoredSpriteManager::onThreadFinished: Loader thread finished";
     }
 }

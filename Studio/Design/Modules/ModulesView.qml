@@ -83,7 +83,7 @@ Rectangle {
     }
 
     function addSequencerWithExistingPartition(targetNode, targetPartitionIndex) {
-        var idx = getSameSequencer(targetNode, targetPartitionIndex)
+        var idx = getSameSequencer(targetNode)
         if (idx === -1) {
             app.partitionNodeCache = targetNode
             app.partitionIndexCache = targetPartitionIndex
@@ -104,23 +104,19 @@ Rectangle {
     }
 
     function getSamePlanner(nodes) {
-        for (var i = 0; i < modulesContent.totalTabCount; i++) {
+        for (var i = 0; i != modules.count; ++i) {
             var planner = getModule(i)
-            if (planner instanceof PlannerView) {
-                if (planner.nodeList.equals(nodes))
-                    return i;
-            }
+            if (planner && planner instanceof PlannerView && planner.nodeList.equals(nodes))
+                return i
         }
         return -1
     }
 
     function getSameSequencer(node) {
-        for (var i = 0; i < modulesContent.totalTabCount; i++) {
+        for (var i = 0; i != modules.count; ++i) {
             var sequencer = getModule(i)
-            if (sequencer instanceof SequencerView) {
-                if (sequencer.node != node)
-                    continue;
-                return i;
+            if (sequencer && sequencer instanceof SequencerView && sequencer.node == node) {
+                return i
             }
         }
         return -1
@@ -177,7 +173,6 @@ Rectangle {
 
     property alias productionPlayerBase: productionPlayerBase
     property alias modules: modules
-    property alias totalModuleCount: modulesContent.totalTabCount
     property alias selectedModule: modulesContent.selectedModule
     property alias modulesContent: modulesContent
     property alias workspacesView: workspacesView

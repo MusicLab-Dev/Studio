@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../Default"
-import "../Help"
 import "../Common"
 
 import NodeModel 1.0
@@ -43,12 +42,5 @@ Item {
         font.pixelSize: 23
         text: overview.multiSelection ? qsTr("Open selected (" + treeSurface.selectionCount + ")") : qsTr("Overview")
         color: overviewMouse.containsMouse ? themeManager.backgroundColor : overview.runtimeColor
-    }
-
-    HelpArea {
-        name: qsTr("Planner overview")
-        description: qsTr("Description")
-        position: HelpHandler.Position.Bottom
-        externalDisplay: true
     }
 }

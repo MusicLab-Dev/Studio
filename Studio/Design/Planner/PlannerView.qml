@@ -5,7 +5,6 @@ import ActionsManager 1.0
 
 import "../Default"
 import "../Common"
-import "../Help"
 
 Item {
     function onNodeDeleted(targetNode) {
@@ -86,22 +85,17 @@ Item {
             visible: sequencerControls.visible
             Layout.preferredWidth: parent.width
             Layout.preferredHeight: 1
+            z: 1
         }
 
-        ControlsFlow {
+        ControlsAutomationsFlow {
             id: sequencerControls
-            closeable: false
             node: contentView.selectedNode ? contentView.selectedNode.node : null
             Layout.fillWidth: true
-            visible: requiredVisibility
-
-            HelpArea {
-                name: qsTr("Controls")
-                description: qsTr("Description")
-                position: HelpHandler.Position.Bottom
-                externalDisplay: true
-                visible: sequencerControls.requiredVisibility
-            }
+            visible: node
+            z: 1
+            menuFunc: function() { plannerNodeMenu.openMenu(sequencerControls.menuButton, sequencerControls.node) }
+            onAutomationSelected: contentView.selectedNode.selectAutomation(automationIndex)
         }
 
         PlannerContentView {
@@ -119,10 +113,6 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: parent.height * 0.12
         }
-    }
-
-    HelpHandler {
-        id: helpHandler
     }
 
     PlannerNodeMenu {

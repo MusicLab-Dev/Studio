@@ -112,6 +112,13 @@ void PluginModel::setControl(const ControlEvent &event)
     );
 }
 
+QString PluginModel::getControlName(const ParamID paramID) const noexcept
+{
+    auto str = _data->getMetaData().controls[paramID].translations.getName(Audio::English);
+
+    return QString::fromLocal8Bit(str.data(), str.length());
+}
+
 void PluginModel::processControlValueChanged(const ParamID paramID)
 {
     const auto modelIndex = index(paramID);

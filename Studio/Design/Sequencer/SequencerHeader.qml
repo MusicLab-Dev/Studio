@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 import QtQuick.Dialogs 1.0
 
 import "../Default/"
-import "../Help/"
 import "../Common/"
 
 import PluginModel 1.0
@@ -22,7 +21,6 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
-//        onClicked: helpHandler.open()
     }
 
     SequencerEdition {
@@ -80,13 +78,6 @@ Rectangle {
             visible: mousePluginButton.containsMouse
             text: sequencerControls.hide ? qsTr("Open controls") : qsTr("Close controls")
         }
-
-        HelpArea {
-            name: (sequencerControls.visible ? qsTr("Hide") : qsTr("Show")) + qsTr(" controls")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Center
-            externalDisplay: false
-        }
     }
 
     SequencerHeaderButton {
@@ -101,13 +92,6 @@ Rectangle {
 
         mouseArea.onPressed: {
             modulesView.addNewPlanner(sequencerView.node)
-        }
-
-        HelpArea {
-            name: qsTr("Move to planner")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
         }
     }
 
@@ -142,13 +126,6 @@ Rectangle {
                 visible = false
             }
         }
-
-        HelpArea {
-            name: qsTr("Import MIDI File")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }
 
     SequencerHeaderButton {
@@ -182,13 +159,5 @@ Rectangle {
                 visible = false
             }
         }
-
-        HelpArea {
-            name: qsTr("Export MIDI File")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }
-
 }
