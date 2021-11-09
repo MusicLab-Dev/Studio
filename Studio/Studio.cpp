@@ -33,6 +33,7 @@
 #include "ColoredSpriteManager.hpp"
 #include "CommunityAPI.hpp"
 #include "AutomationPreview.hpp"
+#include "ControlDescriptor.hpp"
 
 void Studio::InitResources(void)
 {
@@ -76,6 +77,7 @@ void Studio::InitResources(void)
     qRegisterMetaType<VolumeCache>("VolumeCache");
     qRegisterMetaType<PartitionInstance>("PartitionInstance");
     qRegisterMetaType<ControlEvent>("ControlEvent");
+    qRegisterMetaType<ControlDescriptor>("ControlDescriptor");
     qRegisterMetaType<QVector<Note>>("QVector<Note>");
     qRegisterMetaType<QVector<PartitionInstance>>("QVector<PartitionInstance>");
     qRegisterMetaType<QVector<NodeModel *>>("QVector<NodeModel *>");
@@ -93,6 +95,7 @@ void Studio::InitResources(void)
     qmlRegisterUncreatableType<PartitionInstance>("AudioAPI", 1, 0, "PartitionInstance", "Cannot construct PartitionInstance");
     qmlRegisterUncreatableType<GPoint>("AudioAPI", 1, 0, "Point", "Cannot construct Point");
     qmlRegisterUncreatableType<ControlEvent>("AudioAPI", 1, 0, "ControlEvent", "Cannot construct ControlEvent");
+    qmlRegisterUncreatableType<ControlDescriptor>("AudioAPI", 1, 0, "ControlDescriptor", "Cannot construct ControlDescriptor");
     qmlRegisterUncreatableType<PluginModel>("PluginModel", 1, 0, "PluginModel", "Cannot construct PluginModel");
     qmlRegisterType<PluginModelProxy>("PluginModelProxy", 1, 0, "PluginModelProxy");
     qmlRegisterType<PluginTableModel>("PluginTableModel", 1, 0, "PluginTableModel");
@@ -138,7 +141,6 @@ void Studio::InitResources(void)
     Q_INIT_RESOURCE(Export);
     Q_INIT_RESOURCE(KeyboardShortcuts);
     Q_INIT_RESOURCE(Translations);
-    Q_INIT_RESOURCE(Help);
 }
 
 void Studio::DestroyResources(void)
@@ -157,7 +159,6 @@ void Studio::DestroyResources(void)
     Q_CLEANUP_RESOURCE(Export);
     Q_CLEANUP_RESOURCE(KeyboardShortcuts);
     Q_CLEANUP_RESOURCE(Translations);
-    Q_CLEANUP_RESOURCE(Help);
 
     Audio::PluginTable::Destroy();
     Audio::Device::ReleaseDriver();

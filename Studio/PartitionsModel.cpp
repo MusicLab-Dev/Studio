@@ -64,8 +64,9 @@ bool PartitionsModel::add(void)
     const auto scheduler = Scheduler::Get();
 
     // Temporary fix used because views need to access partition pointer right after creation
-    const bool hasPaused = scheduler->stopAndWait();
     const auto name = getAvailablePartitionName();
+
+    scheduler->stopAndWait();
 
     _data->push();
     if (_data->data() != oldData) {
@@ -77,8 +78,6 @@ bool PartitionsModel::add(void)
         _partitions.push(PartitionPtr::Make(&_data->at(idx), this, name));
         endInsertRows();
     }
-    if (hasPaused)
-        scheduler->playImpl();
     return true;
 }
 

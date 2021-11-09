@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.15
 
 import "../Common"
 import "../Default"
-import "../Help"
 
 import Scheduler 1.0
 

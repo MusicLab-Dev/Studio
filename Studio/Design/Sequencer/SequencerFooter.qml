@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.15
 
 import "../Common"
 import "../Default"
-import "../Help"
 
 import Scheduler 1.0
 import NodeModel 1.0
@@ -94,13 +93,6 @@ Rectangle {
         anchors.rightMargin: 15
         anchors.top: parent.top
         width: parent.width * 0.1
-
-        HelpArea {
-            name: qsTr("Clipboard")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
-        }
     }
 
     SoundMeter {

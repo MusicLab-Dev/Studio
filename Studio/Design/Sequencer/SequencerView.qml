@@ -8,7 +8,6 @@ import ActionsManager 1.0
 import AudioAPI 1.0
 
 import "../Common"
-import "../Help"
 
 Item {
     enum TweakMode {
@@ -101,9 +100,7 @@ Item {
     function changePartition(targetIndex) {
         contentView.placementArea.resetSelection()
         partitionIndex = targetIndex
-        console.log("Changepartition ", targetIndex)
         partition = node.partitions.getPartition(targetIndex)
-        console.debug("changePartition success!")
     }
 
     property string moduleName: node && partition ? node.name + " - " + partition.name : "Selecting plugin"
@@ -179,11 +176,10 @@ Item {
 
         ControlsFlow {
             id: sequencerControls
-            closeable: false
             y: parent.height
             node: sequencerView.node
             Layout.fillWidth: true
-            visible: requiredVisibility
+            visible: node
         }
 
         Item {

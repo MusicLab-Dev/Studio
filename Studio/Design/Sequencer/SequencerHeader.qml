@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.15
 import QtQuick.Dialogs 1.0
 
 import "../Default/"
-import "../Help/"
 import "../Common/"
 
 import PluginModel 1.0
@@ -22,7 +21,6 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
-//        onClicked: helpHandler.open()
     }
 
     SequencerEdition {
@@ -230,13 +228,6 @@ Rectangle {
                 source: "qrc:/Assets/Export.png"
                 color: mouseExportFile.containsMouse ? themeManager.contentColor : sequencerView.node ? sequencerView.node.color : "black"
             }
-        }
-
-        HelpArea {
-            name: qsTr("Export MIDI File")
-            description: qsTr("Description")
-            position: HelpHandler.Position.Bottom
-            externalDisplay: true
         }
     }
 

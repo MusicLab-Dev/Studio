@@ -11,11 +11,11 @@ import AudioAPI 1.0
 Item {
     Repeater {
         model: PartitionInstancesModelProxy {
-            range: AudioAPI.beatRange(-contentView.xOffset / contentView.pixelsPerBeatPrecision, (width - contentView.xOffset) / contentView.pixelsPerBeatPrecision)
+            range: contentView.displayRange
             sourceModel: nodeInstances.instances
         }
 
-        delegate: Rectangle {
+        delegate: Item {
             property var instanceRange: range
             readonly property int targetPartitionIndex: partitionIndex
             property PartitionModel partition: nodeInstances.partitions.getPartition(targetPartitionIndex)
@@ -24,10 +24,15 @@ Item {
             x: contentView.xOffset + instanceRange.from * contentView.pixelsPerBeatPrecision
             width: (instanceRange.to - instanceRange.from) * contentView.pixelsPerBeatPrecision
             height: contentView.rowHeight
-            color: nodeDelegate.color
-            border.color: nodeDelegate.accentColor
-            border.width: 1
-            radius: 2
+
+            Rectangle {
+                anchors.fill: parent
+                color: nodeDelegate.color
+                border.color: nodeDelegate.accentColor
+                border.width: 1
+                radius: 2
+                opacity: 0.15
+            }
 
             Rectangle {
                 x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)

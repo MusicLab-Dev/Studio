@@ -380,14 +380,14 @@
     </message>
 </context>
 <context>
-    <name>ControlsFlow</name>
+    <name>ControlsFlow copy</name>
     <message>
-        <location filename="Studio/Design/Common/ControlsFlow.qml" line="81"/>
+        <location filename="Studio/Design/Common/ControlsFlow copy.qml" line="82"/>
         <source>Edit name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/ControlsFlow.qml" line="90"/>
+        <location filename="Studio/Design/Common/ControlsFlow copy.qml" line="91"/>
         <source>Change sample</source>
         <translation type="unfinished"></translation>
     </message>
@@ -674,7 +674,7 @@
 <context>
     <name>OverviewButton</name>
     <message>
-        <location filename="Studio/Design/Tree/OverviewButton.qml" line="44"/>
+        <location filename="Studio/Design/Tree/OverviewButton.qml" line="43"/>
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -705,7 +705,7 @@
 <context>
     <name>PartitionsModel</name>
     <message>
-        <location filename="Studio/PartitionsModel.cpp" line="100"/>
+        <location filename="Studio/PartitionsModel.cpp" line="99"/>
         <source> Copy</source>
         <translation type="unfinished"></translation>
     </message>
@@ -721,7 +721,7 @@
 <context>
     <name>PlannerNodeInstances</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="31"/>
+        <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="45"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -729,7 +729,7 @@
 <context>
     <name>PlannerNodeInstancesRow</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerNodeInstancesRow.qml" line="53"/>
+        <location filename="Studio/Design/Planner/PlannerNodeInstancesRow.qml" line="58"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -770,7 +770,7 @@
 <context>
     <name>PlannerView</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerView.qml" line="41"/>
+        <location filename="Studio/Design/Planner/PlannerView.qml" line="40"/>
         <source>Planner</source>
         <translation type="unfinished"></translation>
     </message>
@@ -920,33 +920,10 @@
     </message>
 </context>
 <context>
-    <name>SequencerFooter</name>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="99"/>
-        <source>Clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="100"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>SequencerHeader</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="74"/>
+        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="72"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="237"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="236"/>
-        <source>Export MIDI File</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
