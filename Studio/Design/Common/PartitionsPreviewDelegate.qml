@@ -63,52 +63,53 @@ MouseArea {
     }
 
     Rectangle {
+        id: background
         anchors.fill: parent
         color: themeManager.contentColor
-        border.color: previewDelegate.isSelected ? partitionsPreview.nodeColor : partitionsPreview.nodeAccentColor
-        border.width: previewDelegate.isSelected || previewDelegate.containsMouse ? 1 : 0
         radius: 3
+    }
+
+    Rectangle {
+        id: header
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: parent.height * 0.2
+        color: partitionsPreview.nodeColor
+        opacity: previewDelegate.isSelected ? 1 : 0.3
+        radius: 3
+    }
+
+    DefaultText {
+        id: headerName
+        anchors.fill: header
+        font.pointSize: 8
+        wrapMode: Text.Wrap
+        horizontalAlignment: Text.AlignHCenter
+        padding: 5
+        text: previewDelegate.partition ? previewDelegate.partition.name : qsTr("ERROR")
+        color: themeManager.panelColor
     }
 
     PartitionPreview {
         id: previewArea
-        y: 2
+        anchors.top: header.bottom
+        anchors.bottom: parent.bottom
         x: -(previewDelegate.playbackBeatPrecision * contentView.pixelsPerBeatPrecision)
         width: previewDelegate.partition ? previewDelegate.partition.latestNote * contentView.pixelsPerBeatPrecision : 0
-        height: parent.height - 4
         target: previewDelegate.partition
         offset: 0
         range: AudioAPI.beatRange(0, previewDelegate.partition ? previewDelegate.partition.latestNote : 0)
     }
 
-    DefaultText {
-        id: headerName
-        visible: !previewDelegate.playing
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.leftMargin: 10 + playbackButton.width
-        anchors.right: playbackButton.left
-        fontSizeMode: Text.Fit
-        font.pointSize: 12
-        opacity: parent.containsMouse ? 0.7 : 0.1
-        wrapMode: Text.Wrap
-        text: previewDelegate.partition ? previewDelegate.partition.name : qsTr("ERROR")
-        color: previewDelegate.containsPress ? partitionsPreview.nodePressedColor : partitionsPreview.nodeColor
-
-        Behavior on opacity {
-            NumberAnimation { duration: 100 }
-        }
-    }
-
     DefaultImageButton {
         id: playbackButton
         visible: previewDelegate.isSelected || previewDelegate.containsMouse
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenter: previewArea.verticalCenter
         anchors.right: parent.right
         anchors.rightMargin: 10
         width: height
-        height: parent.height
+        height: previewArea.height
         source: "qrc:/Assets/Play.png"
         showBorder: false
         scaleFactor: 0.5
@@ -135,4 +136,5 @@ MouseArea {
             }
         }
     }
+
 }

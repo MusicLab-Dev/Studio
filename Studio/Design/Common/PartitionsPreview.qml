@@ -127,8 +127,8 @@ Rectangle {
             width: partitionsPreview.previewWidth
             height: partitionsPreview.baseHeight
             color: themeManager.contentColor
-            border.color: partitionsPreview.nodeColor
-            border.width: newPartitionArea.containsMouse ? 1 : 0
+            //border.color: partitionsPreview.nodeColor
+            //border.width: newPartitionArea.containsMouse ? 1 : 0
             radius: 3
 
             MouseArea {
@@ -151,7 +151,7 @@ Rectangle {
                 height: newPartitionArea.containsMouse ? parent.height * 0.7 : parent.height * 0.5
                 width: height
                 source: "qrc:/Assets/Plus.png"
-                color: parent.border.color
+                color: partitionsPreview.nodeColor
 
                 Behavior on height {
                     NumberAnimation { duration: 100 }

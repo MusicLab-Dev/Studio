@@ -36,7 +36,7 @@ Item {
     Rectangle {
         id: backgroundTabs
         anchors.fill: parent
-        color: themeManager.backgroundColor
+        color: themeManager.panelColor
     }
 
     ModulesGlobalMenu {

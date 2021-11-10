@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/Tree">
         <file>TreeView.qml</file>
-        <file>TreeFooter.qml</file>
+        <file>TreeHeader.qml</file>
         <file>TreeContentView.qml</file>
         <file>TreeProjectPreview.qml</file>
         <file>TreeSurface.qml</file>

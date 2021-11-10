@@ -120,11 +120,6 @@ Item {
             id: nodeInstances
         }
 
-        /*PlannerNodeControls {
-            id: nodeControls
-            visible: nodeDelegate.isSelected
-        }*/
-
         PlannerNodeAutomations {
             id: nodeAutomations
         }

@@ -18,14 +18,14 @@ Item {
 
     property string moduleName: app.project.name
     property int moduleIndex
-    property alias player: treeFooter.player
+    property alias player: treeHeader.player
 
     id: treeView
     focus: true
 
     onVisibleChanged: {
         if (visible)
-            treeFooter.projectPreview.requestUpdate()
+            treeHeader.projectPreview.requestUpdate()
     }
 
     Connections {
@@ -33,7 +33,7 @@ Item {
         enabled: treeView.visible
 
         function onGraphChanged() {
-            treeFooter.projectPreview.requestUpdate()
+            treeHeader.projectPreview.requestUpdate()
         }
     }
 
@@ -60,20 +60,22 @@ Item {
         }
     }
 
-    ColumnLayout {
+    Item {
         anchors.fill: parent
-        spacing: 0
 
         TreeContentView {
             id: contentView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            anchors.top: treeHeader.bottom
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
         }
 
-        TreeFooter {
-            id: treeFooter
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.11
+        TreeHeader {
+            id: treeHeader
+            height: parent.height * 0.11
+            anchors.left: parent.left
+            anchors.right: parent.right
         }
     }
 

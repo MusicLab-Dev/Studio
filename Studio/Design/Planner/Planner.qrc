@@ -2,7 +2,6 @@
     <qresource prefix="/Planner">
         <file>PlannerView.qml</file>
         <file>PlannerHeader.qml</file>
-        <file>PlannerFooter.qml</file>
         <file>PlannerContentView.qml</file>
         <file>PlannerNodeDelegate.qml</file>
         <file>PlannerNodeControls.qml</file>

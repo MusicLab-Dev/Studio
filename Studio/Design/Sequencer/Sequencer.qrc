@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/Sequencer">
         <file>SequencerView.qml</file>
-        <file>SequencerFooter.qml</file>
+        <file>SequencerHeader.qml</file>
         <file>SequencerContentView.qml</file>
         <file>SequencerContentPianoView.qml</file>
         <file>SequencerNotesPlacementArea.qml</file>

@@ -108,9 +108,9 @@ Item {
     property NodeModel node: null
     property PartitionModel partition: null
     property int partitionIndex: 0
-    property alias player: sequencerViewFooter.player
+    property alias player: sequencerViewHeader.player
     property int tweakMode: SequencerView.TweakMode.Regular
-    property alias tweaker: sequencerViewFooter.tweaker
+    property alias tweaker: sequencerViewHeader.tweaker
     property bool mustCenter: false
 
     id: sequencerView
@@ -156,22 +156,32 @@ Item {
         }
     }
 
-    ColumnLayout {
-        spacing: 0
+    Item {
         anchors.fill: parent
+
+        SequencerHeader {
+            id: sequencerViewHeader
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            height: parent.height * 0.11
+        }
 
         ControlsFlow {
             id: sequencerControls
-            y: parent.height
+            anchors.top: sequencerViewHeader.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
             node: sequencerView.node
-            Layout.fillWidth: true
             visible: node
         }
 
         Item {
             id: contentArea
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            anchors.top: sequencerControls.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
             SequencerContentView {
                 id: contentView
@@ -194,12 +204,6 @@ Item {
                 width: parent.width
                 height: parent.height / 2
             }
-        }
-
-        SequencerFooter {
-            id: sequencerViewFooter
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.11
         }
     }
 

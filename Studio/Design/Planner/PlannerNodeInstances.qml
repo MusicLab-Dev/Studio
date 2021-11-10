@@ -1,6 +1,8 @@
 import QtQuick 2.15
+import QtQuick.Layouts 1.3
 
 import "../Default"
+import "../Common"
 
 import PartitionsModel 1.0
 import PartitionInstancesModel 1.0
@@ -37,27 +39,56 @@ Row {
             width: nodeHeaderBackground.width
             height: nodeInstancesHeader.height
 
-            DefaultText {
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 16
-                color: nodeDelegate.isSelected ? themeManager.foregroundColor : nodeDelegate.color
-                text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("ERROR")
-                elide: Text.ElideRight
+            RowLayout {
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.leftMargin: 10
+                anchors.topMargin: 10
+                height: parent.height * 0.3
+
+                DefaultText {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    font.pointSize: 16
+                    color: nodeDelegate.isSelected ? themeManager.foregroundColor : nodeDelegate.color
+                    text: nodeDelegate.node ? nodeDelegate.node.name : qsTr("ERROR")
+                    elide: Text.ElideRight
+                }
+
+                PluginFactoryImage {
+                    id: menuButton
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: height
+                    name: node ? node.plugin.title : ""
+                    color: nodeDelegate.isSelected ? themeManager.foregroundColor : nodeDelegate.color
+                    playing: contentView.playerBase.isPlayerRunning && soundMeter.peakPosition !== 0
+                }
+
             }
 
-            Row {
+            Item {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+            }
+
+            RowLayout {
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 5
-                x: 5
-                width: nodeHeaderBackground.width - 10
-                height: nodeHeaderBackground.height / 3
-                spacing: 5
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottomMargin: 10
+                anchors.leftMargin: 10
+                anchors.rightMargin: 10
+                height: parent.height * 0.3
 
                 DefaultImageButton {
                     id: showAutomationsButton
-                    width: parent.height
-                    height: parent.height
+
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: height
                     source: "qrc:/Assets/Automation.png"
                     scaleFactor: 1
                     showBorder: false
@@ -71,8 +102,8 @@ Row {
                 DefaultComboBox {
                     id: automationCombobox
                     width: parent.width - showAutomationsButton.width - 5
-                    height: parent.height * 0.8
-                    anchors.verticalCenter: parent.verticalCenter
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
                     visible: nodeInstances.showAutomations
                     model: nodeInstances.showAutomations ? nodeDelegate.node.plugin : null
                     currentIndex: nodeInstances.selectedAutomation

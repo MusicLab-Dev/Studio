@@ -30,7 +30,7 @@ MouseArea {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: drag.active ? themeManager.accentColor : tabMouseArea.isSelectedModule ? themeManager.panelColor : themeManager.foregroundColor
+        color: drag.active ? themeManager.accentColor : tabMouseArea.isSelectedModule ? themeManager.backgroundColor : themeManager.contentColor
     }
 
     DefaultColoredImage {
@@ -48,7 +48,7 @@ MouseArea {
         x: parent.height
         width: parent.width - parent.height
         height: parent.height
-        color: drag.active ? "white" : tabMouseArea.containsPress ? themeManager.accentColor : tabMouseArea.containsMouse ? themeManager.semiAccentColor : tabMouseArea.isSelectedModule ? "white" : "lightgrey"
+        color: drag.active ? "white" : tabMouseArea.containsPress ? themeManager.accentColor : tabMouseArea.containsMouse ? themeManager.semiAccentColor : tabMouseArea.isSelectedModule ? themeManager.accentColor : "lightgrey"
         fontSizeMode: Text.HorizontalFit
         text: modulesView.getModule(tabIndex).moduleName
         horizontalAlignment: Text.AlignLeft

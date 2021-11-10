@@ -356,7 +356,7 @@ MouseArea {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         width: height
-        height: treeFooter.height / 2
+        height: treeHeader.height / 2
         showBorder: false
         scaleFactor: 1
         source: "qrc:/Assets/Note.png"

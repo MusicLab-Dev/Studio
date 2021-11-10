@@ -1,24 +1,26 @@
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.0
 
-import "../Common"
 import "../Default"
+import "../Common"
 
-import Scheduler 1.0
-
-Rectangle {
+Item {
+    property alias projectPreview: projectPreview
     property alias player: player
 
-    width: parent.width
-    height: parent.width
-    color: themeManager.backgroundColor
+    Rectangle {
+        id: treeFooter
+        anchors.fill: parent
+        color: themeManager.backgroundColor
+    }
 
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
     }
 
-    DefaultImageButton {
+    /*DefaultImageButton {
         id: undoButton
         anchors.left: parent.left
         anchors.leftMargin: 10
@@ -52,15 +54,42 @@ Rectangle {
             text: "Redo"
             visible: parent.hovered
         }
-    }
+    }*/
 
-    EditionModeSelector {
-        id: editModeSelector
-        anchors.left: redoButton.right
+    SoundMeter {
+        id: soundMeter
+        enabled: treeView.visible
+        targetNode: app.project.master
+        anchors.left: parent.left
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        height: parent.height * 0.7
-        width: parent.width * 0.12
+        height: parent.height * 0.56
+        width: height * 0.4
+        backgroundColor: themeManager.contentColor
+    }
+
+    Item {
+        id: preview
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: soundMeter.right
+        anchors.right: playerArea.left
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        height: parent.height * 0.56
+
+        Rectangle {
+            id: previewBackground
+            anchors.fill: parent
+            color: themeManager.contentColor
+            clip: true
+            radius: 6
+        }
+
+        TreeProjectPreview {
+            id: projectPreview
+            anchors.fill: parent
+            playerBase: player.playerBase
+        }
     }
 
     RowLayout {

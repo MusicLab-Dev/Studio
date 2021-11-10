@@ -39,7 +39,7 @@ Item {
 
     readonly property string moduleName: contentView.nodeViewRepeater.count ? nodeList.getListName() : qsTr("Planner")
     property int moduleIndex
-    readonly property alias player: plannerFooter.player
+    readonly property alias player: plannerHeader.player
     property alias nodeList: contentView.nodeList
 
     id: plannerView
@@ -69,14 +69,15 @@ Item {
         }
     }
 
-    ColumnLayout {
+    Item {
         anchors.fill: parent
-        spacing: 0
 
         ControlsAutomationsFlow {
             id: sequencerControls
+            anchors.top: plannerHeader.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
             node: contentView.selectedNode ? contentView.selectedNode.node : null
-            Layout.fillWidth: true
             visible: node
             z: 1
             menuFunc: function() { plannerNodeMenu.openMenu(sequencerControls.menuButton, sequencerControls.node) }
@@ -85,18 +86,22 @@ Item {
 
         PlannerContentView {
             id: contentView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            anchors.top: sequencerControls.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
             Behavior on y {
                 NumberAnimation { duration: 200 }
             }
         }
 
-        PlannerFooter {
-            id: plannerFooter
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.11
+        PlannerHeader {
+            id: plannerHeader
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: parent.height * 0.11
         }
     }
 

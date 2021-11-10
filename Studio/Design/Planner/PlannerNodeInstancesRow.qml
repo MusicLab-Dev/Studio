@@ -34,6 +34,7 @@ Item {
                 border.color: nodeDelegate.accentColor
                 border.width: 1
                 radius: 2
+                opacity: 0.8
 
                 DefaultText {
                     anchors.fill: parent
@@ -56,7 +57,7 @@ Item {
                 border.color: nodeDelegate.accentColor
                 border.width: 1
                 radius: 2
-                opacity: 0.3
+                opacity: 0.2
 
                 Rectangle {
                     x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
