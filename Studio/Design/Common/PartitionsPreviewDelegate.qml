@@ -5,6 +5,7 @@ import "../Default"
 import AudioAPI 1.0
 import Scheduler 1.0
 import PartitionPreview 1.0
+import CursorManager 1.0
 
 MouseArea {
     readonly property var partition: partitionInstance.instance
@@ -39,6 +40,13 @@ MouseArea {
 
     onDoubleClicked: {
         modulesView.addSequencerWithExistingPartition(partitionsPreview.nodeDelegate.node, previewDelegate.partitionIndex)
+    }
+
+    onHoveredChanged: {
+        if (containsMouse)
+            cursorManager.set(CursorManager.Type.Clickable)
+        else
+            cursorManager.set(CursorManager.Type.Normal)
     }
 
     Timer {
@@ -83,10 +91,14 @@ MouseArea {
         anchors.right: playbackButton.left
         fontSizeMode: Text.Fit
         font.pointSize: 12
-        opacity: 0.8
+        opacity: parent.containsMouse ? 0.7 : 0.1
         wrapMode: Text.Wrap
         text: previewDelegate.partition ? previewDelegate.partition.name : qsTr("ERROR")
         color: previewDelegate.containsPress ? partitionsPreview.nodePressedColor : partitionsPreview.nodeColor
+
+        Behavior on opacity {
+            NumberAnimation { duration: 100 }
+        }
     }
 
     DefaultImageButton {

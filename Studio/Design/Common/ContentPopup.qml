@@ -6,6 +6,6 @@ Rectangle {
     anchors.centerIn: parent
     width: parent.width * 0.9
     height: parent.height * 0.9
-    color: themeManager.backgroundColor
+    color: themeManager.panelColor
     radius: 6
 }

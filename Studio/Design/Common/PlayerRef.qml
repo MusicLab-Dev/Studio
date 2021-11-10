@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.15
 import "../Common"
 import "../Default"
 
-RowLayout {
+DefaultSectionWrapper {
     function timelineBeginMove(target) { return playerBase.timelineBeginMove(target) }
     function timelineMove(target) { return playerBase.timelineMove(target) }
     function timelineEndMove() { return playerBase.timelineEndMove() }
@@ -24,60 +24,69 @@ RowLayout {
     property PlayerBase playerBase
 
     id: player
-    spacing: 0
+    label: qsTr("Player")
 
-    Item {
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.250
+    RowLayout {
+        anchors.fill: parent
+        spacing: 0
 
-        DefaultImageButton {
-            source: "qrc:/Assets/Replay.png"
-            height: parent.height / 2
-            width: parent.height / 2
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
+        Item {
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.3
 
-            onReleased: player.replay()
+            DefaultImageButton {
+                source: "qrc:/Assets/Replay.png"
+                height: parent.height * 0.8
+                width: height
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                foregroundColor: themeManager.contentColor
+
+                onReleased: player.replay()
+            }
+        }
+
+        Item {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+        }
+
+        Item {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width * 0.3
+
+            DefaultImageButton {
+                source: !playerBase.isPlayerRunning && app.scheduler.running ? "qrc:/Assets/Pause.png" : "qrc:/Assets/Play.png"
+                height: parent.height
+                width: height
+                anchors.centerIn: parent
+                colorDefault: app.scheduler.running ? themeManager.accentColor : "white"
+                foregroundColor: themeManager.contentColor
+
+                onReleased: player.playOrPause()
+            }
+        }
+
+        Item {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+        }
+
+        Item {
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.3
+
+            DefaultImageButton {
+                source: "qrc:/Assets/Stop.png"
+                height: parent.height * 0.8
+                width: height
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                foregroundColor: themeManager.contentColor
+
+                onReleased: player.stop()
+            }
         }
     }
 
-    Item {
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.125
-    }
-
-    Item {
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.250
-
-        DefaultImageButton {
-            source: !playerBase.isPlayerRunning && app.scheduler.running ? "qrc:/Assets/Pause.png" : "qrc:/Assets/Play.png"
-            height: parent.height / 1.5
-            width: height
-            anchors.centerIn: parent
-            colorDefault: app.scheduler.running ? themeManager.accentColor : "white"
-
-            onReleased: player.playOrPause()
-        }
-    }
-
-    Item {
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.125
-    }
-
-    Item {
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.250
-
-        DefaultImageButton {
-            source: "qrc:/Assets/Stop.png"
-            height: parent.height / 2
-            width: parent.height / 2
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-
-            onReleased: player.stop()
-        }
-    }
 }

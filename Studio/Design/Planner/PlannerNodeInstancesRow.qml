@@ -26,39 +26,54 @@ Item {
             height: contentView.rowHeight
 
             Rectangle {
-                anchors.fill: parent
+                id: header
+                width: parent.width
+                height: parent.height * 0.2
+                anchors.top: parent.top
                 color: nodeDelegate.color
                 border.color: nodeDelegate.accentColor
                 border.width: 1
                 radius: 2
-                opacity: 0.25
+
+                DefaultText {
+                    anchors.fill: parent
+                    color: themeManager.backgroundColor
+                    text: instanceDelegate.partition ? instanceDelegate.partition.name : qsTr("ERROR")
+                    font.pointSize: 9
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    padding: 5
+                    elide: Text.ElideMiddle
+                }
             }
 
             Rectangle {
-                x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
-                y: parent.height / 8
-                width: 1
-                height: contentView.rowHeight * 3 / 4
-                color: nodeDelegate.accentColor
+                id: body
+                width: parent.width
+                anchors.top: header.bottom
+                anchors.bottom: parent.bottom
+                color: nodeDelegate.color
+                border.color: nodeDelegate.accentColor
+                border.width: 1
+                radius: 2
+                opacity: 0.3
+
+                Rectangle {
+                    x: parent.width - Math.min(parent.width * contentView.placementResizeRatioThreshold, contentView.placementResizeMaxPixelThreshold)
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height * 0.7
+                    width: 1
+                    color: themeManager.backgroundColor
+                }
             }
 
             PartitionPreview {
                 id: preview
-                anchors.fill: parent
+                anchors.fill: body
                 anchors.margins: 2
                 offset: 0
                 range: instanceDelegate.instanceRange
                 target: instanceDelegate.partition
-            }
-
-            DefaultText {
-                width: parent.width
-                height: parent.height * 0.3
-                color: themeManager.contentColor
-                text: instanceDelegate.partition ? instanceDelegate.partition.name : qsTr("ERROR")
-                fontSizeMode: Text.VerticalFit
-                font.pointSize: 12
-                elide: Text.ElideMiddle
             }
         }
     }

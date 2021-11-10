@@ -76,8 +76,6 @@ Item {
                 if (mouse.button !== Qt.RightButton) {
                     if (!nodeDelegate.isSelected)
                         contentView.selectedNode = nodeDelegate
-                    else
-                        contentView.selectedNode = null
                 }
             }
 

@@ -15,6 +15,7 @@ class ThemeManager : public QObject
     Q_PROPERTY(Theme theme READ theme WRITE setTheme NOTIFY themeChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(QColor contentColor READ contentColor NOTIFY contentColorChanged)
+    Q_PROPERTY(QColor panelColor READ panelColor NOTIFY panelColorChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QColor accentColor READ accentColor NOTIFY accentColorChanged)
     Q_PROPERTY(QColor timelineColor READ timelineColor NOTIFY timelineColorChanged)
@@ -61,6 +62,7 @@ public:
     [[nodiscard]] QColor foregroundColor(void) const noexcept { return _foregroundColor; }
     [[nodiscard]] QColor contentColor(void) const noexcept { return _contentColor; }
     [[nodiscard]] QColor backgroundColor(void) const noexcept { return _backgroundColor; }
+    [[nodiscard]] QColor panelColor(void) const noexcept { return _panelColor; }
     [[nodiscard]] QColor accentColor(void) const noexcept { return _accentColor; }
     [[nodiscard]] QColor timelineColor(void) const noexcept { return _timelineColor; }
     [[nodiscard]] QColor disabledColor(void) const noexcept { return _disabledColor; }
@@ -80,6 +82,7 @@ signals:
     void foregroundColorChanged(void);
     void contentColorChanged(void);
     void backgroundColorChanged(void);
+    void panelColorChanged(void);
     void accentColorChanged(void);
     void timelineColorChanged(void);
     void disabledColorChanged(void);
@@ -89,6 +92,7 @@ private:
     QColor _foregroundColor {};
     QColor _contentColor {};
     QColor _backgroundColor {};
+    QColor _panelColor {};
     QColor _accentColor {};
     QColor _timelineColor {};
     QColor _disabledColor {};

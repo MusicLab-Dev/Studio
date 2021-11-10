@@ -52,7 +52,7 @@ Row {
         id: panelContent
         width: treeComponentsPanel.cellSize + 24
         height: treeComponentsPanel.height
-        color: themeManager.backgroundColor
+        color: themeManager.panelColor
         opacity: 1
         radius: 6
         //visible: treeComponentsPanel.opened
@@ -93,7 +93,7 @@ Row {
         anchors.verticalCenter: parent.verticalCenter
         width: categoryColumn.width + 12
         height: categoryColumn.height + 12
-        color: themeManager.backgroundColor
+        color: themeManager.panelColor
         radius: 6
 
         Column {

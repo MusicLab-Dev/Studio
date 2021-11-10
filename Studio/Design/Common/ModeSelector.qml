@@ -11,6 +11,7 @@ Item {
     property var itemsNames: []
     property int itemSelected: 0
     property int itemUsableTill: 0
+    property color color: themeManager.accentColor
 
     // alias
     default property alias placeholder: placeholder.data
@@ -59,7 +60,7 @@ Item {
                         width: parent.height / 2
                         anchors.centerIn: parent
                         source: itemsPaths[index]
-                        colorDefault: index > itemUsableTill ? themeManager.disabledColor : index == itemSelected ? themeManager.accentColor : "white"
+                        colorDefault: index > itemUsableTill ? themeManager.disabledColor : index == itemSelected ? color : "white"
                         scaleFactor: 1
                         showBorder: false
 

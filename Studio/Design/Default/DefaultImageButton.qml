@@ -31,7 +31,7 @@ Button {
         id: backgroundRect
         width: control.width
         height: control.height
-        color: themeManager.backgroundColor
+        color: themeManager.panelColor
         radius: 6
         visible: true
         border.width: 0

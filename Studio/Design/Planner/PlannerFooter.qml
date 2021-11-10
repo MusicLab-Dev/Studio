@@ -18,62 +18,75 @@ Rectangle {
         onPressedChanged: forceActiveFocus()
     }
 
+    DefaultImageButton {
+        id: undoButton
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: height
+        height: parent.height * 0.7
+        source: "qrc:/Assets/Previous.png"
+        foregroundColor: themeManager.contentColor
+
+        onClicked: actionsManager.undo()
+
+        DefaultToolTip {
+            text: "Undo"
+            visible: parent.hovered
+        }
+    }
+
+    DefaultImageButton {
+        id: redoButton
+        anchors.left: undoButton.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: height
+        height: parent.height * 0.7
+        source: "qrc:/Assets/Next.png"
+        foregroundColor: themeManager.contentColor
+
+        onClicked: actionsManager.redo()
+
+        DefaultToolTip {
+            text: "Redo"
+            visible: parent.hovered
+        }
+    }
+
+    EditionModeSelector {
+        id: editModeSelector
+        anchors.left: redoButton.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        height: parent.height * 0.7
+        width: parent.width * 0.12
+    }
+
     RowLayout {
-        anchors.fill: parent
-        spacing: 0
+        id: playerArea
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        width: parent.width * 0.3
+        height: parent.height * 0.7
+        anchors.verticalCenter: parent.verticalCenter
 
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width / 3
+        TimerView {
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.3
+            currentPlaybackBeat: player.playerBase.currentPlaybackBeat
         }
 
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width / 3
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: 10
-
-                TimerView {
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.preferredHeight: parent.height * 0.5
-                    Layout.preferredWidth: parent.width * 0.25
-                    currentPlaybackBeat: player.playerBase.currentPlaybackBeat
-                }
-
-                PlayerRef {
-                    id: player
-                    Layout.preferredHeight: parent.height * 0.5
-                    Layout.preferredWidth: parent.width * 0.25
-                    playerBase: modulesView.productionPlayerBase
-                }
-
-                Bpm {
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.preferredHeight: parent.height * 0.5
-                    Layout.preferredWidth: parent.width * 0.25
-                }
-            }
+        Bpm {
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.3
         }
 
-        Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width / 3
-
-            DefaultImageButton {
-                visible: contentView.selectedNode && contentView.partitionsPreview.hide
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-                width: height
-                height: parent.height * 0.5
-                showBorder: false
-                scaleFactor: 1
-                source: "qrc:/Assets/Note.png"
-
-                onReleased: contentView.partitionsPreview.hide = false
-            }
+        PlayerRef {
+            id: player
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            playerBase: modulesView.productionPlayerBase
         }
     }
 }

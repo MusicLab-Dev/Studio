@@ -14,25 +14,6 @@ RowLayout {
         Layout.preferredWidth: parent.width * 0.375
     }
 
-    Item {
-        Layout.preferredHeight: parent.height
-        Layout.preferredWidth: parent.width * 0.3
-        Layout.alignment: Qt.AlignHCenter
-
-        Snapper {
-            id: snapper
-            height: parent.height * 0.4
-            width: parent.width
-            currentIndex: 4
-            anchors.verticalCenter: parent.verticalCenter
-
-            onActivated: {
-                contentView.placementBeatPrecisionScale = currentValue
-                contentView.placementBeatPrecisionLastWidth = 0
-            }
-        }
-    }
-
     ArrowNextPrev {
         Layout.preferredHeight: parent.height
         Layout.preferredWidth: parent.width * 0.25

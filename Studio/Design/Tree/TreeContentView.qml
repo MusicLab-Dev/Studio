@@ -289,6 +289,7 @@ MouseArea {
         id: partitionsPreview
         y: !requiredVisibility ? parent.height : parent.height - height
         nodeDelegate: lastSelectedNode
+        enabled: requiredVisibility
 
         Behavior on y {
             id: partitionsBehavior
@@ -336,7 +337,7 @@ MouseArea {
     ScrollBar {
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors.bottom: partitionsPreview.top
         visible: size !== 1
         orientation: Qt.Horizontal
         size: contentView.xScrollIndicatorSize

@@ -7,7 +7,7 @@ import "../Default"
 import "../Common"
 
 Rectangle {
-    color: themeManager.backgroundColor
+    color: themeManager.panelColor
 
     MouseArea {
         anchors.fill: parent
@@ -20,14 +20,5 @@ Rectangle {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         width: parent.width * 0.1
-    }
-
-    PlannerEdition {
-        anchors.right: parent.right
-        anchors.rightMargin: 10
-        anchors.verticalCenter: parent.verticalCenter
-
-        height: parent.height * 0.75
-        width: parent.width * 0.4
     }
 }

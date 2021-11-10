@@ -124,6 +124,7 @@ Item {
         }
 
         Rectangle {
+            visible: y !== parent.height
             width: parent.width
             height: 1
             anchors.horizontalCenter: parent.horizontalCenter

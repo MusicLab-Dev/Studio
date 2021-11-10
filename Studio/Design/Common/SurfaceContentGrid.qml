@@ -22,7 +22,7 @@ Item {
     property color rowColor: mainWindow.setColorAlpha(themeManager.foregroundColor, 0.85)
     property color rowAccentColor: Qt.rgba(1, 1, 1, 0.2)
     property color groupAColor: themeManager.contentColor
-    property color groupBColor: themeManager.backgroundColor
+    property color groupBColor: themeManager.panelColor
     property color barColor: rowAccentColor
     property color beatColor: mainWindow.setColorAlpha(themeManager.foregroundColor, 0.7)
     property color divisionColor: mainWindow.setColorAlpha(themeManager.foregroundColor, 0.65)

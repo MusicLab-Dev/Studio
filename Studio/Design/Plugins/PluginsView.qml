@@ -146,7 +146,7 @@ Item {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: themeManager.backgroundColor
+        color: themeManager.panelColor
         opacity: 0.5
     }
 

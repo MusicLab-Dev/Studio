@@ -20,7 +20,7 @@ Rectangle {
     property real baseMargin: 20
 
     id: controlsFlow
-    color: themeManager.backgroundColor
+    color: themeManager.panelColor
     implicitHeight: Math.max(baseHeight, controlsFlowBase.height) + baseMargin
 
     MouseArea {

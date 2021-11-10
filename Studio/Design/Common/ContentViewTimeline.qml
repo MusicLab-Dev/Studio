@@ -17,6 +17,18 @@ Item {
         width: contentView.rowHeaderWidth
         height: parent.height
         color: themeManager.contentColor
+
+        Snapper {
+            id: snapper
+            anchors.fill: parent
+            currentIndex: 4
+
+            onActivated: {
+                contentView.placementBeatPrecisionScale = currentValue
+                contentView.placementBeatPrecisionLastWidth = 0
+            }
+        }
+
     }
 
     Item {
@@ -59,7 +71,7 @@ Item {
             height: parent.height / 2
             width: parent.width
             anchors.top: upTimeline.bottom
-            color: themeManager.backgroundColor
+            color: themeManager.panelColor
         }
 
         Rectangle {

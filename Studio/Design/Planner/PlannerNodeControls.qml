@@ -76,7 +76,7 @@ Row {
         Rectangle {
             id: nodeControlsData
             anchors.fill: parent
-            color: themeManager.backgroundColor
+            color: themeManager.panelColor
             opacity: 1
         }
 

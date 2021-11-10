@@ -93,8 +93,7 @@ ProjectPreview {
 
     ContentViewTimelineBar {
         id: playToBar
-        height: parent.height + 20
-        y: -10
+        height: parent.height
         color: themeManager.timelineColor
         x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * playerBase.currentPlaybackBeat, previewBackground.width), 0)
         visible: app.project.master.latestInstance !== 0
@@ -105,14 +104,12 @@ ProjectPreview {
         width: 10
         height: 10
         x: playToBar.x - width / 2
-        y: -height - 2
         visible: playToBar.visible
     }
 
     ContentViewTimelineBar {
         id: playFromBar
-        height: parent.height + 20
-        y: -10
+        height: parent.height
         color: "white"
         opacity: 0.5
         x: Math.max(Math.min(projectPreview.pixelsPerBeatPrecision * playerBase.playFrom, previewBackground.width), 0)
@@ -125,7 +122,6 @@ ProjectPreview {
         width: 10
         height: 10
         x: playFromBar.x - width / 2
-        y: -height - 2
         color: "white"
         visible: playToBar.visible
     }

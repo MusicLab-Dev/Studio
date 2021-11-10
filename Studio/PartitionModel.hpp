@@ -163,6 +163,9 @@ public slots:
     bool removeRange(const QVector<int> &indexes);
     bool removeExactRange(const QVector<Note> &notes);
 
+    /** @brief Clear the partition */
+    bool clear(void);
+
     /** @brief Select all notes within a specified range (returns indexes) */
     QVector<int> select(const BeatRange &range, const Key keyFrom, const Key keyTo);
 

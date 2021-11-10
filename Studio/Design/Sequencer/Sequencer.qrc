@@ -1,13 +1,11 @@
 <RCC>
     <qresource prefix="/Sequencer">
         <file>SequencerView.qml</file>
-        <file>SequencerHeader.qml</file>
         <file>SequencerFooter.qml</file>
         <file>SequencerContentView.qml</file>
         <file>SequencerContentPianoView.qml</file>
         <file>SequencerNotesPlacementArea.qml</file>
         <file>SequencerContentTweakView.qml</file>
         <file>SequencerEdition.qml</file>
-        <file>SequencerHeaderButton.qml</file>
     </qresource>
 </RCC>

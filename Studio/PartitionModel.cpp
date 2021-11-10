@@ -188,6 +188,23 @@ bool PartitionModel::hasOverlap(const NotesAnalysis &analysis) const noexcept
     return false;
 }
 
+bool PartitionModel::clear(void)
+{
+    if (_data->size() <= 0)
+        return false;
+    return Models::AddProtectedEvent(
+        [this] {
+            _data->clear();
+        },
+        [this] {
+            beginResetModel();
+            endResetModel();
+            onNotesChanged();
+        }
+    );
+    return true;
+}
+
 void PartitionModel::set(const int idx, const Note &note)
 {
     auto newIdx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(note)));
@@ -382,6 +399,7 @@ bool PartitionModel::importPartition(const QString &path) noexcept
         return false;
     }
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    clear();
     return ProjectSerializer::Deserialize(*this, doc.object());
 }
 

@@ -160,20 +160,6 @@ Item {
         spacing: 0
         anchors.fill: parent
 
-        SequencerHeader {
-            id: sequencerViewHeader
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.12
-            z: 1
-        }
-
-        Rectangle {
-            color: "black"
-            visible: sequencerControls.visible
-            Layout.preferredWidth: parent.width
-            Layout.preferredHeight: 1
-        }
-
         ControlsFlow {
             id: sequencerControls
             y: parent.height
@@ -213,7 +199,7 @@ Item {
         SequencerFooter {
             id: sequencerViewFooter
             Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.12
+            Layout.preferredHeight: parent.height * 0.11
         }
     }
 

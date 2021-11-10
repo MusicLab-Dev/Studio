@@ -6,7 +6,6 @@ import CursorManager 1.0
 import "../Default"
 
 Rectangle {
-
     function newPartition() {
         var partitions = partitionsPreview.node.partitions
         var idx = partitions.count()
@@ -41,19 +40,12 @@ Rectangle {
     id: partitionsPreview
     width: contentView.width
     height: Math.max(baseHeight, previewFlow.height) + 20
-    color: themeManager.backgroundColor
+    color: themeManager.panelColor
     // border.color: nodeColor
 
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
-    }
-
-    Rectangle {
-        color: "black"
-        width: parent.width
-        height: 1
-        anchors.bottom: parent.bottom
     }
 
     RowLayout {

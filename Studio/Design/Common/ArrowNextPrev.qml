@@ -13,7 +13,7 @@ Item {
         spacing: 0
 
         Item {
-            Layout.preferredHeight: parent.height
+            Layout.fillHeight: true
             Layout.preferredWidth: parent.width * 0.5
 
             DefaultImageButton {
@@ -21,26 +21,28 @@ Item {
 
                 source: "qrc:/Assets/Previous.png"
                 height: width
-                width: parent.width * 0.9
+                width: parent.width * 0.7
                 anchors.centerIn: parent
                 colorDefault: "white"
                 enabled: false
+                foregroundColor: themeManager.contentColor
             }
         }
 
         Item {
-            Layout.preferredHeight: parent.height
-            Layout.preferredWidth: parent.width * 0.5
+            Layout.fillHeight: true
+            Layout.fillWidth: true
 
             DefaultImageButton {
                 id: next
 
                 source: "qrc:/Assets/Next.png"
                 height: width
-                width: parent.width * 0.9
+                width: parent.width * 0.7
                 anchors.centerIn: parent
                 colorDefault: "white"
                 enabled: false
+                foregroundColor: themeManager.contentColor
             }
         }
     }

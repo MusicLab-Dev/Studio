@@ -73,21 +73,6 @@ Item {
         anchors.fill: parent
         spacing: 0
 
-        PlannerHeader {
-            id: plannerHeader
-            Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.12
-            z: 1
-        }
-
-        Rectangle {
-            color: "black"
-            visible: sequencerControls.visible
-            Layout.preferredWidth: parent.width
-            Layout.preferredHeight: 1
-            z: 1
-        }
-
         ControlsAutomationsFlow {
             id: sequencerControls
             node: contentView.selectedNode ? contentView.selectedNode.node : null
@@ -111,7 +96,7 @@ Item {
         PlannerFooter {
             id: plannerFooter
             Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.12
+            Layout.preferredHeight: parent.height * 0.11
         }
     }
 

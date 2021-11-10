@@ -1,28 +1,69 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.0
 
 import "../Default"
 import "../Common"
 
-Rectangle {
+Item {
     property alias projectPreview: projectPreview
     property alias player: player
 
-    id: treeFooter
-    color: themeManager.backgroundColor
+    Rectangle {
+        id: treeFooter
+        anchors.fill: parent
+        color: themeManager.backgroundColor
+    }
 
     MouseArea {
         anchors.fill: parent
         onPressedChanged: forceActiveFocus()
     }
 
+    DefaultImageButton {
+        id: undoButton
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: height
+        height: parent.height * 0.7
+        source: "qrc:/Assets/Previous.png"
+        foregroundColor: themeManager.contentColor
+
+        onClicked: actionsManager.undo()
+
+        DefaultToolTip {
+            text: "Undo"
+            visible: parent.hovered
+        }
+    }
+
+    DefaultImageButton {
+        id: redoButton
+        anchors.left: undoButton.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: height
+        height: parent.height * 0.7
+        source: "qrc:/Assets/Next.png"
+        foregroundColor: themeManager.contentColor
+
+        onClicked: actionsManager.redo()
+
+        DefaultToolTip {
+            text: "Redo"
+            visible: parent.hovered
+        }
+    }
+
     Item {
         id: preview
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: redoButton.right
         anchors.right: playerArea.left
-        anchors.margins: 15
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        height: parent.height * 0.7
 
         Rectangle {
             id: previewBackground
@@ -39,36 +80,30 @@ Rectangle {
         }
     }
 
-    Item {
+    RowLayout {
         id: playerArea
         anchors.right: parent.right
-        width: parent.width * 0.32
-        height: parent.height
+        anchors.rightMargin: 10
+        width: parent.width * 0.3
+        height: parent.height * 0.89
+        anchors.verticalCenter: parent.verticalCenter
 
         TimerView {
-            width: parent.width / 4
-            height: parent.height / 2
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 10
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.3
             currentPlaybackBeat: player.playerBase.currentPlaybackBeat
+        }
+
+        Bpm {
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.3
         }
 
         PlayerRef {
             id: player
-            width: parent.width / 2 - 40
-            height: parent.height
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             playerBase: modulesView.productionPlayerBase
-        }
-
-        Bpm {
-            width: parent.width / 4
-            height: parent.height / 2
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 10
         }
     }
 }

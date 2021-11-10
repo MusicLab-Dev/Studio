@@ -25,7 +25,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: treeComponentsPanel.filter === filter ? baseColor : mouseArea.containsMouse ? themeManager.foregroundColor : themeManager.backgroundColor
+        color: treeComponentsPanel.filter === filter ? baseColor : mouseArea.containsMouse ? themeManager.foregroundColor : themeManager.panelColor
         radius: 2
     }
 

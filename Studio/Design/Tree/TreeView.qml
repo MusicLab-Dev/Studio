@@ -73,7 +73,7 @@ Item {
         TreeFooter {
             id: treeFooter
             Layout.fillWidth: true
-            Layout.preferredHeight: parent.height * 0.12
+            Layout.preferredHeight: parent.height * 0.11
         }
     }
 

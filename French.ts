@@ -733,7 +733,7 @@
 <context>
     <name>PartitionsPreview</name>
     <message>
-        <location filename="Studio/Design/Common/PartitionsPreview.qml" line="171"/>
+        <location filename="Studio/Design/Common/PartitionsPreview.qml" line="163"/>
         <source>Add a new partition</source>
         <translation type="unfinished"></translation>
     </message>
@@ -948,77 +948,15 @@
     </message>
 </context>
 <context>
-    <name>SequencerHeader</name>
+    <name>SequencerFooter</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="72"/>
-        <source>ERROR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="79"/>
-        <source>Open controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="79"/>
-        <source>Close controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="83"/>
-        <source>Hide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="83"/>
-        <source>Show</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="83"/>
-        <source> controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="84"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="139"/>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="179"/>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="98"/>
-        <source>Move to planner</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="113"/>
-        <source>Import a partition file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="121"/>
+        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="230"/>
         <source>Please choose a file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="138"/>
-        <source>Import MIDI File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="153"/>
-        <source>Export this partition file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="162"/>
+        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="265"/>
         <source>Export your partition</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Sequencer/SequencerHeader.qml" line="178"/>
-        <source>Export MIDI File</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
