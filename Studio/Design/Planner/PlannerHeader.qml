@@ -7,7 +7,7 @@ import "../Default"
 import Scheduler 1.0
 
 Rectangle {
-    property alias player: playerArea.playerRef
+    property alias player: playerArea.player
 
     width: parent.width
     height: parent.width
@@ -63,7 +63,7 @@ Rectangle {
         width: parent.width * 0.12
     }
 
-    Player {
+    PlayerArea {
         id: playerArea
         anchors.right: parent.right
         anchors.rightMargin: 10

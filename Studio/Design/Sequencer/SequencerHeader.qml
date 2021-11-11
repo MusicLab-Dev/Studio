@@ -11,7 +11,7 @@ import ThemeManager 1.0
 import CursorManager 1.0
 
 Rectangle {
-    property alias player: playerArea.playerRef
+    property alias player: playerArea.player
     property alias tweaker: tweaker
 
     width: parent.width
@@ -156,13 +156,17 @@ Rectangle {
         width: height
     }
 
-    Player {
+    PlayerArea {
         id: playerArea
         anchors.right: parent.right
         anchors.rightMargin: 10
         width: parent.width * 0.3
         height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
+        player.targetPlaybackMode: Scheduler.Partition
+        player.isPartitionPlayer: true
+        player.targetNode: sequencerView.node
+        player.targetPartitionIndex: sequencerView.partitionIndex
     }
 
     Item {

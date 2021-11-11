@@ -8,12 +8,10 @@ MenuItem {
     hoverEnabled: enabled
 
     background: Rectangle {
-        color: menuItem.hovered ? themeManager.foregroundColor : themeManager.contentColor
-        radius: 6
-        x: 2
-        y: 2
-        width: menuItem.width - 4
-        height: menuItem.height - 4
+        color: menuItem.hovered ? themeManager.accentColor : themeManager.panelColor
+        radius: 2
+        width: menuItem.width
+        height: menuItem.height
     }
 
     contentItem: Text {

@@ -1,0 +1,3400 @@
+{
+    "bpm": 128,
+    "master": {
+        "automations": [
+            [
+            ],
+            [
+            ]
+        ],
+        "children": [
+            {
+                "automations": [
+                    [
+                    ],
+                    [
+                    ]
+                ],
+                "children": [
+                    {
+                        "automations": [
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ]
+                        ],
+                        "children": [
+                        ],
+                        "color": "#ff00c5ff",
+                        "instances": [
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    4096,
+                                    6144
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    6144,
+                                    8192
+                                ]
+                            }
+                        ],
+                        "muted": false,
+                        "name": "Sub",
+                        "partitions": [
+                            {
+                                "name": "Partition 0",
+                                "notes": [
+                                    {
+                                        "key": 38,
+                                        "range": [
+                                            0,
+                                            384
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 36,
+                                        "range": [
+                                            512,
+                                            896
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 43,
+                                        "range": [
+                                            1024,
+                                            1408
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 34,
+                                        "range": [
+                                            1536,
+                                            1920
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    }
+                                ]
+                            }
+                        ],
+                        "path": "__internal__:/Oscillator",
+                        "plugin": {
+                            "controls": [
+                                -9.3,
+                                0.1,
+                                0.2,
+                                0.8,
+                                0.2,
+                                0,
+                                0,
+                                0
+                            ],
+                            "externalPaths": [
+                            ]
+                        }
+                    },
+                    {
+                        "automations": [
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ]
+                        ],
+                        "children": [
+                            {
+                                "automations": [
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ]
+                                ],
+                                "children": [
+                                ],
+                                "color": "#ffff7be2",
+                                "instances": [
+                                    {
+                                        "offset": 0,
+                                        "partitionIndex": 0,
+                                        "range": [
+                                            0,
+                                            2048
+                                        ]
+                                    },
+                                    {
+                                        "offset": 0,
+                                        "partitionIndex": 0,
+                                        "range": [
+                                            2048,
+                                            3968
+                                        ]
+                                    },
+                                    {
+                                        "offset": 0,
+                                        "partitionIndex": 0,
+                                        "range": [
+                                            4096,
+                                            6144
+                                        ]
+                                    },
+                                    {
+                                        "offset": 0,
+                                        "partitionIndex": 0,
+                                        "range": [
+                                            6144,
+                                            8192
+                                        ]
+                                    }
+                                ],
+                                "muted": false,
+                                "name": "Plucks",
+                                "partitions": [
+                                    {
+                                        "name": "Partition 0",
+                                        "notes": [
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    0,
+                                                    32
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    64,
+                                                    96
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    128,
+                                                    160
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    192,
+                                                    224
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    256,
+                                                    288
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    320,
+                                                    352
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    384,
+                                                    416
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    448,
+                                                    480
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    512,
+                                                    544
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    576,
+                                                    608
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    640,
+                                                    672
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    704,
+                                                    736
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    768,
+                                                    800
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    832,
+                                                    864
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    896,
+                                                    928
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    960,
+                                                    992
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 79,
+                                                "range": [
+                                                    1024,
+                                                    1056
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    1088,
+                                                    1120
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    1152,
+                                                    1184
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 79,
+                                                "range": [
+                                                    1216,
+                                                    1248
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    1280,
+                                                    1312
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    1344,
+                                                    1376
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 79,
+                                                "range": [
+                                                    1408,
+                                                    1440
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    1472,
+                                                    1504
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 79,
+                                                "range": [
+                                                    1536,
+                                                    1568
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    1600,
+                                                    1632
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    1664,
+                                                    1696
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 79,
+                                                "range": [
+                                                    1728,
+                                                    1760
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    1792,
+                                                    1824
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    1856,
+                                                    1888
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 79,
+                                                "range": [
+                                                    1920,
+                                                    1952
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    1984,
+                                                    2016
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "Partition 0 Copy",
+                                        "notes": [
+                                            {
+                                                "key": 81,
+                                                "range": [
+                                                    0,
+                                                    32
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    64,
+                                                    96
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    128,
+                                                    160
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 81,
+                                                "range": [
+                                                    192,
+                                                    224
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    256,
+                                                    288
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    320,
+                                                    352
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 81,
+                                                "range": [
+                                                    384,
+                                                    416
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    448,
+                                                    480
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 79,
+                                                "range": [
+                                                    512,
+                                                    544
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    576,
+                                                    608
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    640,
+                                                    672
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 79,
+                                                "range": [
+                                                    704,
+                                                    736
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    768,
+                                                    800
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    832,
+                                                    864
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 79,
+                                                "range": [
+                                                    896,
+                                                    928
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    960,
+                                                    992
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 86,
+                                                "range": [
+                                                    1024,
+                                                    1056
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    1088,
+                                                    1120
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    1152,
+                                                    1184
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 86,
+                                                "range": [
+                                                    1216,
+                                                    1248
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    1280,
+                                                    1312
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    1344,
+                                                    1376
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 86,
+                                                "range": [
+                                                    1408,
+                                                    1440
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 77,
+                                                "range": [
+                                                    1472,
+                                                    1504
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 84,
+                                                "range": [
+                                                    1536,
+                                                    1568
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    1600,
+                                                    1632
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    1664,
+                                                    1696
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 84,
+                                                "range": [
+                                                    1728,
+                                                    1760
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 76,
+                                                "range": [
+                                                    1792,
+                                                    1824
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    1856,
+                                                    1888
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 84,
+                                                "range": [
+                                                    1920,
+                                                    1952
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    1984,
+                                                    2016
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "path": "__internal__:/Oscillator",
+                                "plugin": {
+                                    "controls": [
+                                        -14.4,
+                                        0,
+                                        0,
+                                        1,
+                                        0.2,
+                                        0,
+                                        0.38,
+                                        0
+                                    ],
+                                    "externalPaths": [
+                                    ]
+                                }
+                            }
+                        ],
+                        "color": "#ffffa965",
+                        "instances": [
+                        ],
+                        "muted": false,
+                        "name": "Delay",
+                        "partitions": [
+                        ],
+                        "path": "__internal__:/Delay",
+                        "plugin": {
+                            "controls": [
+                                0,
+                                0,
+                                0,
+                                0.35000000000000003,
+                                0,
+                                0,
+                                0.5
+                            ],
+                            "externalPaths": [
+                            ]
+                        }
+                    },
+                    {
+                        "automations": [
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                                {
+                                    "beat": 4093,
+                                    "curveRate": 0,
+                                    "curveType": 0,
+                                    "value": 1227.8048780487816
+                                },
+                                {
+                                    "beat": 6142,
+                                    "curveRate": 0,
+                                    "curveType": 0,
+                                    "value": 13220
+                                },
+                                {
+                                    "beat": 7677,
+                                    "curveRate": 0,
+                                    "curveType": 0,
+                                    "value": 14719.024390243902
+                                },
+                                {
+                                    "beat": 8194,
+                                    "curveRate": 0,
+                                    "curveType": 0,
+                                    "value": 1549.0243902439013
+                                },
+                                {
+                                    "beat": 11775,
+                                    "curveRate": 0,
+                                    "curveType": 0,
+                                    "value": 15468.536585365853
+                                },
+                                {
+                                    "beat": 12288,
+                                    "curveRate": 0,
+                                    "curveType": 0,
+                                    "value": 478.2926829268296
+                                }
+                            ],
+                            [
+                            ],
+                            [
+                            ]
+                        ],
+                        "children": [
+                            {
+                                "automations": [
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ],
+                                    [
+                                    ]
+                                ],
+                                "children": [
+                                ],
+                                "color": "#ff00dce7",
+                                "instances": [
+                                    {
+                                        "offset": 0,
+                                        "partitionIndex": 0,
+                                        "range": [
+                                            4096,
+                                            6144
+                                        ]
+                                    },
+                                    {
+                                        "offset": 0,
+                                        "partitionIndex": 1,
+                                        "range": [
+                                            6144,
+                                            8192
+                                        ]
+                                    }
+                                ],
+                                "muted": false,
+                                "name": "Saws",
+                                "partitions": [
+                                    {
+                                        "name": "Drop basic",
+                                        "notes": [
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    0,
+                                                    384
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    0,
+                                                    384
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    0,
+                                                    384
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 50,
+                                                "range": [
+                                                    0,
+                                                    384
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 60,
+                                                "range": [
+                                                    512,
+                                                    896
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 48,
+                                                "range": [
+                                                    512,
+                                                    896
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    512,
+                                                    896
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    512,
+                                                    896
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 55,
+                                                "range": [
+                                                    1024,
+                                                    1408
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 43,
+                                                "range": [
+                                                    1024,
+                                                    1408
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1024,
+                                                    1408
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1024,
+                                                    1408
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 58,
+                                                "range": [
+                                                    1536,
+                                                    1920
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    1536,
+                                                    1920
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1536,
+                                                    1920
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 46,
+                                                "range": [
+                                                    1536,
+                                                    1920
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1536,
+                                                    1920
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "Drop Groove",
+                                        "notes": [
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    0,
+                                                    64
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    0,
+                                                    64
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    0,
+                                                    64
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 50,
+                                                "range": [
+                                                    64,
+                                                    128
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    128,
+                                                    192
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    128,
+                                                    192
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    128,
+                                                    192
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 50,
+                                                "range": [
+                                                    192,
+                                                    256
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    256,
+                                                    320
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    256,
+                                                    320
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    256,
+                                                    320
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 50,
+                                                "range": [
+                                                    320,
+                                                    384
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    384,
+                                                    448
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    384,
+                                                    448
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    384,
+                                                    448
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 72,
+                                                "range": [
+                                                    448,
+                                                    512
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 60,
+                                                "range": [
+                                                    512,
+                                                    576
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    512,
+                                                    576
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    512,
+                                                    576
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 48,
+                                                "range": [
+                                                    576,
+                                                    640
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 60,
+                                                "range": [
+                                                    640,
+                                                    704
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    640,
+                                                    704
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    640,
+                                                    704
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 48,
+                                                "range": [
+                                                    704,
+                                                    768
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    768,
+                                                    832
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 60,
+                                                "range": [
+                                                    768,
+                                                    832
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    768,
+                                                    832
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 48,
+                                                "range": [
+                                                    832,
+                                                    896
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 60,
+                                                "range": [
+                                                    896,
+                                                    928
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    896,
+                                                    928
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    896,
+                                                    928
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 60,
+                                                "range": [
+                                                    960,
+                                                    992
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    960,
+                                                    992
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    960,
+                                                    992
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 48,
+                                                "range": [
+                                                    960,
+                                                    992
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 72,
+                                                "range": [
+                                                    960,
+                                                    992
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1024,
+                                                    1088
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 55,
+                                                "range": [
+                                                    1024,
+                                                    1088
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1024,
+                                                    1088
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 43,
+                                                "range": [
+                                                    1088,
+                                                    1152
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1152,
+                                                    1216
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1152,
+                                                    1216
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 55,
+                                                "range": [
+                                                    1152,
+                                                    1216
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 43,
+                                                "range": [
+                                                    1216,
+                                                    1280
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 55,
+                                                "range": [
+                                                    1280,
+                                                    1344
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1280,
+                                                    1344
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1280,
+                                                    1344
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 43,
+                                                "range": [
+                                                    1344,
+                                                    1408
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1408,
+                                                    1472
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 55,
+                                                "range": [
+                                                    1408,
+                                                    1472
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1408,
+                                                    1472
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 72,
+                                                "range": [
+                                                    1472,
+                                                    1536
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 58,
+                                                "range": [
+                                                    1536,
+                                                    1600
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    1536,
+                                                    1600
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1536,
+                                                    1600
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1536,
+                                                    1600
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 46,
+                                                "range": [
+                                                    1600,
+                                                    1664
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1664,
+                                                    1728
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    1664,
+                                                    1728
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1664,
+                                                    1728
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 58,
+                                                "range": [
+                                                    1664,
+                                                    1728
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 46,
+                                                "range": [
+                                                    1728,
+                                                    1792
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1792,
+                                                    1856
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 58,
+                                                "range": [
+                                                    1792,
+                                                    1856
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    1792,
+                                                    1856
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1792,
+                                                    1856
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 46,
+                                                "range": [
+                                                    1856,
+                                                    1920
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 62,
+                                                "range": [
+                                                    1920,
+                                                    1984
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 65,
+                                                "range": [
+                                                    1920,
+                                                    1984
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 69,
+                                                "range": [
+                                                    1920,
+                                                    1984
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 58,
+                                                "range": [
+                                                    1920,
+                                                    1984
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 74,
+                                                "range": [
+                                                    1920,
+                                                    1984
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            },
+                                            {
+                                                "key": 72,
+                                                "range": [
+                                                    1984,
+                                                    2048
+                                                ],
+                                                "tuning": 0,
+                                                "velocity": 65535
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "path": "__internal__:/Oscillator",
+                                "plugin": {
+                                    "controls": [
+                                        -17.3,
+                                        0,
+                                        0.481,
+                                        1,
+                                        0.2,
+                                        4,
+                                        0.13,
+                                        0
+                                    ],
+                                    "externalPaths": [
+                                    ]
+                                }
+                            }
+                        ],
+                        "color": "#ffffa965",
+                        "instances": [
+                        ],
+                        "muted": false,
+                        "name": "Band Filter",
+                        "partitions": [
+                        ],
+                        "path": "__internal__:/Band Filter",
+                        "plugin": {
+                            "controls": [
+                                0,
+                                0,
+                                217,
+                                10018.897437118902,
+                                0,
+                                0
+                            ],
+                            "externalPaths": [
+                            ]
+                        }
+                    }
+                ],
+                "color": "#ff31e9a7",
+                "instances": [
+                ],
+                "muted": false,
+                "name": "Synths",
+                "partitions": [
+                ],
+                "path": "__internal__:/Mixer",
+                "plugin": {
+                    "controls": [
+                        -0.8,
+                        0
+                    ],
+                    "externalPaths": [
+                    ]
+                }
+            },
+            {
+                "automations": [
+                    [
+                    ],
+                    [
+                    ]
+                ],
+                "children": [
+                    {
+                        "automations": [
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                                {
+                                    "beat": 7,
+                                    "curveRate": 0,
+                                    "curveType": 0,
+                                    "value": 0.24373950941058065
+                                },
+                                {
+                                    "beat": 4051,
+                                    "curveRate": 0,
+                                    "curveType": 0,
+                                    "value": 0.24373950941058065
+                                },
+                                {
+                                    "beat": 4094,
+                                    "curveRate": 0,
+                                    "curveType": 0,
+                                    "value": 0.110955053622667
+                                }
+                            ],
+                            [
+                            ],
+                            [
+                            ]
+                        ],
+                        "children": [
+                        ],
+                        "color": "#ffbc92ff",
+                        "instances": [
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    0,
+                                    2048
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 1,
+                                "range": [
+                                    2048,
+                                    3968
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 1,
+                                "range": [
+                                    4096,
+                                    6144
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 1,
+                                "range": [
+                                    6144,
+                                    8192
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    8192,
+                                    10240
+                                ]
+                            }
+                        ],
+                        "muted": false,
+                        "name": "Piano",
+                        "partitions": [
+                            {
+                                "name": "Partition 0",
+                                "notes": [
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            0,
+                                            512
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 69,
+                                        "range": [
+                                            0,
+                                            512
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            0,
+                                            512
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            0,
+                                            512
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 48,
+                                        "range": [
+                                            512,
+                                            1024
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 60,
+                                        "range": [
+                                            512,
+                                            1024
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            512,
+                                            1024
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 64,
+                                        "range": [
+                                            512,
+                                            1024
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 55,
+                                        "range": [
+                                            1024,
+                                            1536
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 74,
+                                        "range": [
+                                            1024,
+                                            1536
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            1024,
+                                            1536
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1024,
+                                            1536
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 46,
+                                        "range": [
+                                            1536,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1536,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 58,
+                                        "range": [
+                                            1536,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            1536,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            1536,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Partition 0 Copy",
+                                "notes": [
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            0,
+                                            96
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 69,
+                                        "range": [
+                                            0,
+                                            96
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            0,
+                                            96
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            0,
+                                            96
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            96,
+                                            192
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 69,
+                                        "range": [
+                                            96,
+                                            192
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            96,
+                                            192
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            96,
+                                            192
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            192,
+                                            288
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 69,
+                                        "range": [
+                                            192,
+                                            288
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            192,
+                                            288
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            192,
+                                            288
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            288,
+                                            384
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 69,
+                                        "range": [
+                                            288,
+                                            384
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            288,
+                                            384
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            288,
+                                            384
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            384,
+                                            480
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            384,
+                                            480
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            384,
+                                            480
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 69,
+                                        "range": [
+                                            384,
+                                            480
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 60,
+                                        "range": [
+                                            512,
+                                            608
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            512,
+                                            608
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 64,
+                                        "range": [
+                                            512,
+                                            608
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 48,
+                                        "range": [
+                                            512,
+                                            608
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 60,
+                                        "range": [
+                                            608,
+                                            704
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            608,
+                                            704
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 64,
+                                        "range": [
+                                            608,
+                                            704
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 48,
+                                        "range": [
+                                            608,
+                                            704
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 60,
+                                        "range": [
+                                            704,
+                                            800
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            704,
+                                            800
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 64,
+                                        "range": [
+                                            704,
+                                            800
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 48,
+                                        "range": [
+                                            704,
+                                            800
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 48,
+                                        "range": [
+                                            800,
+                                            896
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 60,
+                                        "range": [
+                                            800,
+                                            896
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            800,
+                                            896
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 64,
+                                        "range": [
+                                            800,
+                                            896
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 48,
+                                        "range": [
+                                            896,
+                                            992
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 60,
+                                        "range": [
+                                            896,
+                                            992
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            896,
+                                            992
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 64,
+                                        "range": [
+                                            896,
+                                            992
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 55,
+                                        "range": [
+                                            1024,
+                                            1120
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 74,
+                                        "range": [
+                                            1024,
+                                            1120
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1024,
+                                            1120
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            1024,
+                                            1120
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 55,
+                                        "range": [
+                                            1120,
+                                            1216
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 74,
+                                        "range": [
+                                            1120,
+                                            1216
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1120,
+                                            1216
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            1120,
+                                            1216
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 55,
+                                        "range": [
+                                            1216,
+                                            1312
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 74,
+                                        "range": [
+                                            1216,
+                                            1312
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1216,
+                                            1312
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            1216,
+                                            1312
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 55,
+                                        "range": [
+                                            1312,
+                                            1408
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 74,
+                                        "range": [
+                                            1312,
+                                            1408
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1312,
+                                            1408
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            1312,
+                                            1408
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 55,
+                                        "range": [
+                                            1408,
+                                            1504
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 74,
+                                        "range": [
+                                            1408,
+                                            1504
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1408,
+                                            1504
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 67,
+                                        "range": [
+                                            1408,
+                                            1504
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            1536,
+                                            1632
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            1536,
+                                            1632
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1536,
+                                            1632
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 58,
+                                        "range": [
+                                            1536,
+                                            1632
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 46,
+                                        "range": [
+                                            1536,
+                                            1632
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            1632,
+                                            1728
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            1632,
+                                            1728
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1632,
+                                            1728
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 58,
+                                        "range": [
+                                            1632,
+                                            1728
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 46,
+                                        "range": [
+                                            1632,
+                                            1728
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            1728,
+                                            1824
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            1728,
+                                            1824
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1728,
+                                            1824
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 58,
+                                        "range": [
+                                            1728,
+                                            1824
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 46,
+                                        "range": [
+                                            1728,
+                                            1824
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            1824,
+                                            1920
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            1824,
+                                            1920
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1824,
+                                            1920
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 58,
+                                        "range": [
+                                            1824,
+                                            1920
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 46,
+                                        "range": [
+                                            1824,
+                                            1920
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            1920,
+                                            1984
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            1920,
+                                            1984
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1920,
+                                            1984
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 58,
+                                        "range": [
+                                            1920,
+                                            1984
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 46,
+                                        "range": [
+                                            1920,
+                                            1984
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            1984,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 65,
+                                        "range": [
+                                            1984,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 70,
+                                        "range": [
+                                            1984,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 58,
+                                        "range": [
+                                            1984,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 46,
+                                        "range": [
+                                            1984,
+                                            2048
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    }
+                                ]
+                            }
+                        ],
+                        "path": "__internal__:/Piano",
+                        "plugin": {
+                            "controls": [
+                                -6,
+                                0,
+                                0.16,
+                                0.41000000000000003,
+                                0.14492316675873662,
+                                0.32,
+                                1
+                            ],
+                            "externalPaths": [
+                            ]
+                        }
+                    }
+                ],
+                "color": "#ff63baaa",
+                "instances": [
+                ],
+                "muted": false,
+                "name": "Instruments",
+                "partitions": [
+                ],
+                "path": "__internal__:/Mixer",
+                "plugin": {
+                    "controls": [
+                        -1.8,
+                        0
+                    ],
+                    "externalPaths": [
+                    ]
+                }
+            },
+            {
+                "automations": [
+                    [
+                    ],
+                    [
+                    ]
+                ],
+                "children": [
+                    {
+                        "automations": [
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ]
+                        ],
+                        "children": [
+                        ],
+                        "color": "#ff00dce7",
+                        "instances": [
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    2048,
+                                    3072
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    3072,
+                                    3968
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    4096,
+                                    5120
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    5120,
+                                    6144
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    6144,
+                                    7168
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    7168,
+                                    8192
+                                ]
+                            }
+                        ],
+                        "muted": false,
+                        "name": "Snare",
+                        "partitions": [
+                            {
+                                "name": "Partition 0",
+                                "notes": [
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            128,
+                                            160
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            384,
+                                            416
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            640,
+                                            672
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            896,
+                                            928
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            960,
+                                            992
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    }
+                                ]
+                            }
+                        ],
+                        "path": "__internal__:/Snare",
+                        "plugin": {
+                            "controls": [
+                                0.6000000000000001,
+                                0.154,
+                                0.63,
+                                0.5,
+                                0.46,
+                                0.5700000000000001,
+                                0.0066,
+                                0.6,
+                                0.01
+                            ],
+                            "externalPaths": [
+                            ]
+                        }
+                    },
+                    {
+                        "automations": [
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ]
+                        ],
+                        "children": [
+                        ],
+                        "color": "#ffff7be2",
+                        "instances": [
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    4096,
+                                    4608
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    4608,
+                                    5120
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    5120,
+                                    5632
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    5632,
+                                    6144
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    6144,
+                                    6656
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    6656,
+                                    7168
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    7168,
+                                    7680
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    7680,
+                                    8192
+                                ]
+                            }
+                        ],
+                        "muted": false,
+                        "name": "Kick",
+                        "partitions": [
+                            {
+                                "name": "Partition 0",
+                                "notes": [
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            0,
+                                            32
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            128,
+                                            160
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            256,
+                                            288
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 50,
+                                        "range": [
+                                            384,
+                                            416
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    }
+                                ]
+                            }
+                        ],
+                        "path": "__internal__:/Kick",
+                        "plugin": {
+                            "controls": [
+                                -6,
+                                0.3,
+                                0,
+                                0.1,
+                                0.25,
+                                0.2,
+                                0.15,
+                                0
+                            ],
+                            "externalPaths": [
+                            ]
+                        }
+                    },
+                    {
+                        "automations": [
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ],
+                            [
+                            ]
+                        ],
+                        "children": [
+                        ],
+                        "color": "#ff00c5ff",
+                        "instances": [
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    3072,
+                                    4096
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    4096,
+                                    5120
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    5120,
+                                    6144
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    6144,
+                                    7168
+                                ]
+                            },
+                            {
+                                "offset": 0,
+                                "partitionIndex": 0,
+                                "range": [
+                                    7168,
+                                    8192
+                                ]
+                            }
+                        ],
+                        "muted": false,
+                        "name": "Hat",
+                        "partitions": [
+                            {
+                                "name": "Partition 0",
+                                "notes": [
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            64,
+                                            96
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            192,
+                                            224
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            320,
+                                            352
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            448,
+                                            480
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            576,
+                                            608
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            704,
+                                            736
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            832,
+                                            864
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            960,
+                                            992
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    },
+                                    {
+                                        "key": 62,
+                                        "range": [
+                                            992,
+                                            1024
+                                        ],
+                                        "tuning": 0,
+                                        "velocity": 65535
+                                    }
+                                ]
+                            }
+                        ],
+                        "path": "__internal__:/Hat",
+                        "plugin": {
+                            "controls": [
+                                -6,
+                                0,
+                                0.12,
+                                6000,
+                                4000,
+                                0.1,
+                                0
+                            ],
+                            "externalPaths": [
+                            ]
+                        }
+                    }
+                ],
+                "color": "#ff42ff8e",
+                "instances": [
+                ],
+                "muted": false,
+                "name": "Mixer",
+                "partitions": [
+                ],
+                "path": "__internal__:/Mixer",
+                "plugin": {
+                    "controls": [
+                        0,
+                        0
+                    ],
+                    "externalPaths": [
+                    ]
+                }
+            }
+        ],
+        "color": "#ff4bf14a",
+        "instances": [
+        ],
+        "muted": false,
+        "name": "Master",
+        "partitions": [
+        ],
+        "path": "__internal__:/Mixer",
+        "plugin": {
+            "controls": [
+                0,
+                0
+            ],
+            "externalPaths": [
+            ]
+        }
+    },
+    "name": "My Project",
+    "version": 1
+}

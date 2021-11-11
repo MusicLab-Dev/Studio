@@ -10,7 +10,7 @@
         <file>ArrowNextPrev.qml</file>
         <file>GestureArea.qml</file>
         <file>PlayerRef.qml</file>
-        <file>Player.qml</file>
+        <file>PlayerArea.qml</file>
         <file>PlayerBase.qml</file>
         <file>PlacementArea.qml</file>
         <file>PluginFactoryImage.qml</file>
@@ -45,5 +45,6 @@
         <file>FMDebugWindow.qml</file>
         <file>ClipboardIndicator.qml</file>
         <file>ControlsAutomationsFlow.qml</file>
+        <file>Player.qml</file>
     </qresource>
 </RCC>

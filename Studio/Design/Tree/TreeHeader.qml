@@ -7,7 +7,7 @@ import "../Common"
 
 Item {
     property alias projectPreview: projectPreview
-    property alias player: playerArea.playerRef
+    property alias player: playerArea.player
 
     Rectangle {
         id: treeFooter
@@ -92,7 +92,7 @@ Item {
         backgroundColor: themeManager.contentColor
     }
 
-    Player {
+    PlayerArea {
         id: playerArea
         anchors.right: parent.right
         anchors.rightMargin: 10

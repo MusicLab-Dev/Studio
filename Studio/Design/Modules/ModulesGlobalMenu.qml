@@ -212,6 +212,14 @@ DefaultMenuButton {
                     app.project.path = ""
                 }
             }
+
+            Action {
+                text: qsTr("Warmup")
+                onTriggered: {
+                    menuButton.load(":/Templates/TEMPLATE_warmup")
+                    app.project.path = ""
+                }
+            }
         }
 
         Action {

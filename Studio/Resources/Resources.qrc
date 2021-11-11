@@ -60,6 +60,7 @@
         <file>Templates/SettingsModel.json</file>
         <file>Templates/TEMPLATE_basic</file>
         <file>Templates/TEMPLATE_demo</file>
+        <file>Templates/TEMPLATE_warmup</file>
         <file>Assets/Plugins/Arpeggiator.png</file>
         <file>Assets/Plugins/Band Filter.png</file>
         <file>Assets/Plugins/Cutoff Filter.png</file>

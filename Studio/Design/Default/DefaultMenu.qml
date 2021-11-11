@@ -6,10 +6,8 @@ Menu {
     width: 200
 
     background: Rectangle {
-        border.color: themeManager.accentColor
-        border.width: 1
-        color: themeManager.contentColor
-        radius: 6
+        color: themeManager.backgroundColor
+        radius: 2
     }
 
     delegate: DefaultMenuItem {
