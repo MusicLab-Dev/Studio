@@ -75,7 +75,4 @@ public: // Allow external insert / remove
 private:
     Audio::Automations *_data { nullptr };
     Core::TinyVector<AutomationPtr> _automations;
-
-    /** @brief Refresh internal models */
-    void refreshAutomations(void);
 };

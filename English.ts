@@ -636,37 +636,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="218"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="217"/>
+        <source>Warmup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="226"/>
         <source>Edit project name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="223"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="231"/>
         <source>Share project on community</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="228"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="236"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="233"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="241"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="238"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="246"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="248"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="256"/>
         <source>Save a project file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="268"/>
+        <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="276"/>
         <source>Load a project file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -741,7 +746,7 @@
 <context>
     <name>PartitionsPreviewDelegate</name>
     <message>
-        <location filename="Studio/Design/Common/PartitionsPreviewDelegate.qml" line="88"/>
+        <location filename="Studio/Design/Common/PartitionsPreviewDelegate.qml" line="90"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -749,7 +754,7 @@
 <context>
     <name>PlannerNodeInstances</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="45"/>
+        <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="58"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -757,7 +762,7 @@
 <context>
     <name>PlannerNodeInstancesRow</name>
     <message>
-        <location filename="Studio/Design/Planner/PlannerNodeInstancesRow.qml" line="58"/>
+        <location filename="Studio/Design/Planner/PlannerNodeInstancesRow.qml" line="42"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -800,6 +805,14 @@
     <message>
         <location filename="Studio/Design/Planner/PlannerView.qml" line="40"/>
         <source>Planner</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PlayerRef</name>
+    <message>
+        <location filename="Studio/Design/Common/PlayerRef.qml" line="27"/>
+        <source>Player</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -948,14 +961,14 @@
     </message>
 </context>
 <context>
-    <name>SequencerFooter</name>
+    <name>SequencerSettingsPartition</name>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="230"/>
+        <location filename="Studio/Design/Sequencer/SequencerSettingsPartition.qml" line="91"/>
         <source>Please choose a file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerFooter.qml" line="265"/>
+        <location filename="Studio/Design/Sequencer/SequencerSettingsPartition.qml" line="126"/>
         <source>Export your partition</source>
         <translation type="unfinished"></translation>
     </message>

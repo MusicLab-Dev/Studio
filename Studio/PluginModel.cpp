@@ -116,7 +116,7 @@ QString PluginModel::getControlName(const ParamID paramID) const noexcept
 {
     auto str = _data->getMetaData().controls[paramID].translations.getName(Audio::English);
 
-    return QString::fromLocal8Bit(str.data(), str.length());
+    return QString::fromLocal8Bit(str.data(), static_cast<int>(str.length()));
 }
 
 void PluginModel::processControlValueChanged(const ParamID paramID)

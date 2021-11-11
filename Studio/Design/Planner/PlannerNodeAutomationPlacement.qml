@@ -23,7 +23,6 @@ MouseArea {
             (1 - (mouseY / height)) * controlRangeValue + controlDescriptor.controlMinValue
         )
         point.value = Math.min(Math.max(point.value, controlDescriptor.controlMinValue), controlDescriptor.controlMaxValue)
-        console.log("Adding point", controlRangeValue, controlDescriptor.controlMinValue)
         automation.add(point)
     }
 

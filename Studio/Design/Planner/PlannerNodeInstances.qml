@@ -97,7 +97,11 @@ Row {
                     colorHovered: nodeDelegate.hoveredColor
                     colorDefault: nodeInstances.showAutomations ? "white" : nodeDelegate.accentColor
 
-                    onReleased: nodeInstances.showAutomations = !nodeInstances.showAutomations
+                    onReleased: {
+                        if (nodeInstances.selectedAutomation === -1)
+                            nodeInstances.selectedAutomation = 0
+                        nodeInstances.showAutomations = !nodeInstances.showAutomations
+                    }
                 }
 
                 DefaultComboBox {
@@ -146,9 +150,13 @@ Row {
             model: nodeInstances.showAutomations && nodeDelegate.node ? nodeDelegate.node.plugin : null
 
             delegate: AutomationPreview {
+                width: contentView.rowDataWidth
+                height: contentView.rowHeight
                 target: nodeDelegate.node.automations.getAutomation(index)
                 range: contentView.displayRange
                 pixelsPerBeatPrecision: contentView.pixelsPerBeatPrecision
+                color: nodeDelegate.color
+                isAccent: nodeInstances.selectedAutomation === index
             }
         }
 

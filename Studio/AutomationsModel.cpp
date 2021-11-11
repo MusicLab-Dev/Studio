@@ -14,8 +14,11 @@ AutomationsModel::AutomationsModel(Audio::Automations *automations, NodeModel *p
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
     _automations.reserve(_data->size());
-    for (auto &automation : *_data)
-        _automations.push(AutomationPtr::Make(&automation, this));
+    ParamID paramID { 0u };
+    for (auto &automation : *_data) {
+        _automations.push(AutomationPtr::Make(&automation, paramID, this));
+        ++paramID;
+    }
 }
 
 QHash<int, QByteArray> AutomationsModel::roleNames(void) const noexcept
@@ -42,9 +45,4 @@ const AutomationModel *AutomationsModel::get(const int index) const noexcept_nde
     coreAssert(index >= 0 && index < count(),
         throw std::range_error("AutomationsModel::get: Given index is not in range: " + std::to_string(index) + " out of [0, " + std::to_string(count()) + "["));
     return _automations.at(index).get();
-}
-
-void AutomationsModel::refreshAutomations(void)
-{
-    Models::RefreshModels(this, _automations, *_data, this);
 }

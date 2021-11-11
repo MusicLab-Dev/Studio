@@ -43,7 +43,7 @@ public:
     };
 
     /** @brief Default constructor */
-    explicit AutomationModel(Audio::Automation *automation, QObject *parent = nullptr) noexcept;
+    explicit AutomationModel(Audio::Automation *automation, const ParamID paramID, QObject *parent = nullptr) noexcept;
 
     /** @brief Virtual destructor */
     ~AutomationModel(void) noexcept override = default;
@@ -61,6 +61,10 @@ public:
 
     /** @brief Query a role from children */
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
+
+
+    /** @brief Get the internal paramID of the automation */
+    [[nodiscard]] ParamID paramID(void) const noexcept { return _paramID; }
 
 
     /** @brief Get point at index */
@@ -113,4 +117,5 @@ signals:
 
 private:
     Audio::Automation *_data { nullptr };
+    ParamID _paramID {};
 };

@@ -10,8 +10,8 @@
 #include "AutomationModel.hpp"
 #include "Scheduler.hpp"
 
-AutomationModel::AutomationModel(Audio::Automation *automation, QObject *parent) noexcept
-    : QAbstractListModel(parent), _data(automation)
+AutomationModel::AutomationModel(Audio::Automation *automation, const ParamID paramID, QObject *parent) noexcept
+    : QAbstractListModel(parent), _data(automation), _paramID(paramID)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::ObjectOwnership::CppOwnership);
 }
@@ -69,7 +69,7 @@ bool AutomationModel::add(const GPoint &point)
         [this, idx] {
             beginInsertRows(QModelIndex(), idx, idx);
             endInsertRows();
-            pointsChanged();
+            emit pointsChanged();
         }
     );
 }
@@ -85,7 +85,7 @@ bool AutomationModel::remove(const int idx)
         },
         [this] {
             endRemoveRows();
-            pointsChanged();
+            emit pointsChanged();
         }
     );
 }
@@ -116,7 +116,7 @@ bool AutomationModel::set(const int idx, const GPoint &point)
                 const auto modelIndex = index(idx);
                 emit dataChanged(modelIndex, modelIndex);
             }
-            pointsChanged();
+            emit pointsChanged();
         }
     );
 }
@@ -137,7 +137,7 @@ bool AutomationModel::removeSelection(const BeatRange &range)
             if (oldCount != _data->size()) {
                 beginResetModel();
                 endResetModel();
-                pointsChanged();
+                emit pointsChanged();
             }
         }
     );
@@ -151,6 +151,6 @@ void AutomationModel::updateInternal(Audio::Automation *data)
     if (_data->data() != data->data()) {
         beginResetModel();
         endResetModel();
-        pointsChanged();
+        emit pointsChanged();
     }
 }
