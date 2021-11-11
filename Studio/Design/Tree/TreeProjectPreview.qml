@@ -55,6 +55,11 @@ ProjectPreview {
         pixelsPerBeatPrecision: projectPreview.pixelsPerBeatPrecision
     }
 
+    DefaultToolTip {
+        visible: timelineMouseArea.containsMouse
+        text: "Project Preview"
+    }
+
     Rectangle {
         visible: playerBase.hasLoop
         color: "grey"
@@ -125,10 +130,4 @@ ProjectPreview {
         color: "white"
         visible: playToBar.visible
     }
-
-    /*DefaultText {
-        anchors.fill: parent
-        visible: projectPreview.targets.size() <= 1
-        text: "the project is void"
-    }*/
 }

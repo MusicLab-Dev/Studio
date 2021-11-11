@@ -83,6 +83,7 @@ Row {
                 anchors.leftMargin: 10
                 anchors.rightMargin: 10
                 height: parent.height * 0.3
+                spacing: 10
 
                 DefaultImageButton {
                     id: showAutomationsButton

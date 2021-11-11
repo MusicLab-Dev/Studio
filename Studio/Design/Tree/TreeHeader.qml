@@ -7,7 +7,7 @@ import "../Common"
 
 Item {
     property alias projectPreview: projectPreview
-    property alias player: player
+    property alias player: playerArea.playerRef
 
     Rectangle {
         id: treeFooter
@@ -56,23 +56,11 @@ Item {
         }
     }*/
 
-    SoundMeter {
-        id: soundMeter
-        enabled: treeView.visible
-        targetNode: app.project.master
-        anchors.left: parent.left
-        anchors.leftMargin: 10
-        anchors.verticalCenter: parent.verticalCenter
-        height: parent.height * 0.56
-        width: height * 0.4
-        backgroundColor: themeManager.contentColor
-    }
-
     Item {
         id: preview
         anchors.verticalCenter: parent.verticalCenter
-        anchors.left: soundMeter.right
-        anchors.right: playerArea.left
+        anchors.left: parent.left
+        anchors.right: soundMeter.left
         anchors.leftMargin: 10
         anchors.rightMargin: 10
         height: parent.height * 0.56
@@ -92,30 +80,24 @@ Item {
         }
     }
 
-    RowLayout {
+    SoundMeter {
+        id: soundMeter
+        enabled: treeView.visible
+        targetNode: app.project.master
+        anchors.right: playerArea.left
+        anchors.rightMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        height: parent.height * 0.56
+        width: height * 0.4
+        backgroundColor: themeManager.contentColor
+    }
+
+    Player {
         id: playerArea
         anchors.right: parent.right
         anchors.rightMargin: 10
         width: parent.width * 0.3
         height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
-
-        TimerView {
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width * 0.3
-            currentPlaybackBeat: player.playerBase.currentPlaybackBeat
-        }
-
-        Bpm {
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width * 0.3
-        }
-
-        PlayerRef {
-            id: player
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            playerBase: modulesView.productionPlayerBase
-        }
     }
 }

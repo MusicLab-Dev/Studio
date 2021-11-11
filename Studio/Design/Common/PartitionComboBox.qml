@@ -16,7 +16,7 @@ DefaultComboBox {
         property var targetPartition: partitionInstance.instance
 
         id: comboDelegate
-        width: control.width - 4
+        width: control.width
         hoverEnabled: true
         highlighted: control.highlightedIndex === index
 
@@ -29,7 +29,8 @@ DefaultComboBox {
         }
 
         background: Rectangle {
-            color: parent.hovered ? themeManager.foregroundColor : themeManager.contentColor
+            color: parent.hovered ? themeManager.accentColor : themeManager.contentColor
+            radius: 2
         }
     }
 }

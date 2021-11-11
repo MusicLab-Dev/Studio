@@ -7,7 +7,7 @@ import "../Default"
 import Scheduler 1.0
 
 Rectangle {
-    property alias player: player
+    property alias player: playerArea.playerRef
 
     width: parent.width
     height: parent.width
@@ -63,30 +63,12 @@ Rectangle {
         width: parent.width * 0.12
     }
 
-    RowLayout {
+    Player {
         id: playerArea
         anchors.right: parent.right
         anchors.rightMargin: 10
         width: parent.width * 0.3
         height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
-
-        TimerView {
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width * 0.3
-            currentPlaybackBeat: player.playerBase.currentPlaybackBeat
-        }
-
-        Bpm {
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width * 0.3
-        }
-
-        PlayerRef {
-            id: player
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            playerBase: modulesView.productionPlayerBase
-        }
     }
 }

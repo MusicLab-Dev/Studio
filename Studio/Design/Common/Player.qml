@@ -1,27 +1,28 @@
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick 2.0
+import QtQuick.Layouts 1.3
 
-PlayerRef {
-    // Inputs
-    property alias targetPlaybackMode: base.targetPlaybackMode
-    property alias isPartitionPlayer: base.isPartitionPlayer
-    property alias targetNode: base.targetNode
-    property alias targetPartitionIndex: base.targetPartitionIndex
+import "."
 
-    // Loop inputs
-    property alias hasLoop: base.hasLoop
-    property alias playFrom: base.playFrom
-    property alias loopFrom: base.loopFrom
-    property alias loopTo: base.loopTo
-    property alias loopRange: base.loopRange
+RowLayout {
+    property alias playerRef: player
 
-    // Cache
-    property alias currentPlaybackBeat: base.currentPlaybackBeat
-    property alias isPlayerRunning: base.isPlayerRunning
+    id: playerArea
 
-    playerBase: base
+    TimerView {
+        Layout.fillHeight: true
+        Layout.preferredWidth: parent.width * 0.3
+        currentPlaybackBeat: player.playerBase.currentPlaybackBeat
+    }
 
-    PlayerBase {
-        id: base
+    Bpm {
+        Layout.fillHeight: true
+        Layout.preferredWidth: parent.width * 0.3
+    }
+
+    PlayerRef {
+        id: player
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        playerBase: modulesView.productionPlayerBase
     }
 }

@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import CursorManager 1.0
+
 ComboBox {
     property alias rectBackground: rectBackground
     property alias listView: listView
@@ -10,7 +12,13 @@ ComboBox {
     hoverEnabled: true
 
     onPressedChanged: canvas.requestPaint()
-    onHoveredChanged: canvas.requestPaint()
+    onHoveredChanged: {
+        canvas.requestPaint()
+        if (hovered)
+            cursorManager.set(CursorManager.Type.Clickable)
+        else
+            cursorManager.set(CursorManager.Type.Normal)
+    }
 
     indicator: Canvas {
         id: canvas
@@ -41,15 +49,13 @@ ComboBox {
         verticalAlignment: Text.AlignVCenter
         leftPadding: 15
         elide: Text.ElideRight
-        color: "white"
+        color: control.hovered ? themeManager.accentColor : "white"
         padding: control.padding
     }
 
     background: Rectangle {
         id: rectBackground
         anchors.fill: control
-        border.width: 1
-        border.color: control.hovered || popup.opened ? control.accentColor : "transparent"
         color: control.pressed ? themeManager.foregroundColor : themeManager.contentColor
         radius: 6
     }
@@ -74,10 +80,10 @@ ComboBox {
         }
 
         background: Rectangle {
-            color: themeManager.contentColor
-            radius: 6
-            border.color: control.accentColor
-            border.width: 1
+            color: themeManager.panelColor
+            radius: 2
+            //border.color: control.accentColor
+            //border.width: 1
         }
     }
 
@@ -86,6 +92,13 @@ ComboBox {
         width: control.width - 4
         hoverEnabled: true
         highlighted: control.highlightedIndex === index
+
+        onHoveredChanged: {
+            if (hovered)
+                cursorManager.set(CursorManager.Type.Clickable)
+            else
+                cursorManager.set(CursorManager.Type.Normal)
+        }
 
         contentItem: Text {
             text: control.textAt(index)
@@ -96,12 +109,10 @@ ComboBox {
         }
 
         background: Rectangle {
-            width: itemDelegate.width - 4
-            height: itemDelegate.height - 4
-            radius: 6
-            x: 2
-            y: 2
-            color: parent.hovered ? themeManager.foregroundColor : themeManager.contentColor
+            width: itemDelegate.width
+            height: itemDelegate.height
+            radius: 2
+            color: parent.hovered ? themeManager.accentColor : themeManager.panelColor
         }
     }
 }

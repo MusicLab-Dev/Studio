@@ -11,7 +11,7 @@ import ThemeManager 1.0
 import CursorManager 1.0
 
 Rectangle {
-    property alias player: player
+    property alias player: playerArea.playerRef
     property alias tweaker: tweaker
 
     width: parent.width
@@ -100,28 +100,9 @@ Rectangle {
         onItemSelectedChanged: contentView.editMode = itemSelected
     }
 
-    DefaultImageButton {
-        id: plannerButton
-        anchors.left: editModeSelector.right
-        anchors.leftMargin: 10
-        anchors.verticalCenter: parent.verticalCenter
-        width: height
-        height: parent.height * 0.7
-        source: "qrc:/Assets/Chrono.png"
-        foregroundColor: themeManager.contentColor
-        colorHovered: sequencerView.node ? sequencerView.node.color : themeManager.accentColor
-
-        onClicked: modulesView.addNewPlanner(sequencerView.node)
-
-        DefaultToolTip {
-            text: "Move to planner"
-            visible: parent.hovered
-        }
-    }
-
     SoundMeter {
         id: soundMeter
-        anchors.left: plannerButton.right
+        anchors.left: editModeSelector.right
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height * 0.7
@@ -294,6 +275,26 @@ Rectangle {
         }
     }
 
+
+    DefaultImageButton {
+        id: plannerButton
+        anchors.left: partitionComboBox.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: height
+        height: parent.height * 0.7
+        source: "qrc:/Assets/Chrono.png"
+        foregroundColor: themeManager.contentColor
+        colorHovered: sequencerView.node ? sequencerView.node.color : themeManager.accentColor
+
+        onClicked: modulesView.addNewPlanner(sequencerView.node)
+
+        DefaultToolTip {
+            text: "Move to planner"
+            visible: parent.hovered
+        }
+    }
+
     ClipboardIndicator {
         anchors.left: partitionComboBox.right
         anchors.leftMargin: 10
@@ -302,31 +303,13 @@ Rectangle {
         width: height
     }
 
-    RowLayout {
+    Player {
         id: playerArea
         anchors.right: parent.right
         anchors.rightMargin: 10
         width: parent.width * 0.3
         height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
-
-        TimerView {
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width * 0.3
-            currentPlaybackBeat: player.playerBase.currentPlaybackBeat
-        }
-
-        Bpm {
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width * 0.3
-        }
-
-        PlayerRef {
-            id: player
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            playerBase: modulesView.productionPlayerBase
-        }
     }
 
     Item {
