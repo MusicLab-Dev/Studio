@@ -107,7 +107,7 @@ Item {
             readonly property bool isInMiddleOfHashKeys: middleHashKeysStates[keyOctaveIndex]
             readonly property bool isUpHashKey: upHashKeyStates[keyOctaveIndex]
             readonly property bool isDownHashKey: downHashKeyStates[keyOctaveIndex]
-            readonly property color keyColor: keyOctaveIndex === 0 ? "#C2C2C2" : isHashKey ? themeManager.foregroundColor : "white"
+            readonly property color keyColor: keyOctaveIndex === 0 ? "#C2C2C2" : isHashKey ? themeManager.panelColor : "white"
             readonly property int placementOffset: keyOctaveIndex == 11 ? 0 : 1
 
             // Pressed state
@@ -163,9 +163,9 @@ Item {
                     anchors.right: parent.right
                     anchors.rightMargin: 5
                     text: keyIndex % 12 == 0 ? pianoView.keyNames[key.keyOctaveIndex] + (key.currentOctave - 1) : !key.isHashKey ? pianoView.keyNames[key.keyOctaveIndex] : "" // Minus one to display the standard A4 middle key
-                    color: !key.isHashKey ? "#7B7B7B" : "#E7E7E7"
+                    color: "#7B7B7B"
                     z: 1
-                    font.pixelSize: 12
+                    font.pixelSize: 10
                 }
             }
         }

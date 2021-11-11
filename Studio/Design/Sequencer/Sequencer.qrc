@@ -7,5 +7,6 @@
         <file>SequencerNotesPlacementArea.qml</file>
         <file>SequencerContentTweakView.qml</file>
         <file>SequencerEdition.qml</file>
+        <file>SequencerSettingsPartition.qml</file>
     </qresource>
 </RCC>
