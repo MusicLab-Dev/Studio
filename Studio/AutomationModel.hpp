@@ -99,8 +99,8 @@ public slots:
     /** @brief Get point at index */
     QVariant getPoint(const int index) const { return QVariant::fromValue(get(index)); }
 
-    /** @brief Set point at index */
-    bool set(const int index, const GPoint &point);
+    /** @brief Set point at index (-1 on error) */
+    int set(const int index, const GPoint &point);
 
     /** @brief Remove all points between a given range*/
     bool removeSelection(const BeatRange &range);

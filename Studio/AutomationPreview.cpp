@@ -117,6 +117,7 @@ void AutomationPreview::paint(QPainter *painter)
         y = ParamValueToPixel(begin->value, minValue, widthValue, realHeight);
         leftMost = begin - 1;
     } else {
+        _firstIndex = static_cast<int>(std::distance(begin, leftMost));
         x = BeatValueToPixel(leftMost->beat, pixelsPerBeatBeat);
         y = ParamValueToPixel(leftMost->value, minValue, widthValue, realHeight);
     }
@@ -132,8 +133,13 @@ void AutomationPreview::paint(QPainter *painter)
         x = BeatValueToPixel(leftMost->beat, pixelsPerBeatBeat);
         y = ParamValueToPixel(leftMost->value, minValue, widthValue, realHeight);
         path.lineTo(x, y);
-        if (accent)
-            path.addRoundedRect(x - 5, y - 5, 10, 10, 5, 5);
+        if (accent) {
+            QRectF rect(static_cast<float>(x) - 5.0f, static_cast<float>(y) - 5.0f, 10.0f, 10.0f);
+            path.addRoundedRect(rect, 5, 5);
+            _points.push_back(QRect {
+                x - 10, y - 10, 20, 20
+            });
+        }
     }
 
     // Last point
@@ -151,4 +157,27 @@ void AutomationPreview::paint(QPainter *painter)
         painter->setBrush(finalColor);
     painter->setPen(finalColor);
     painter->drawPath(path);
+}
+
+int AutomationPreview::findPoint(const QPoint &point) noexcept
+{
+    int index = 0;
+    for (const auto &rect : _points) {
+        if (!rect.contains(point))
+            ++index;
+        else
+            return _firstIndex + index;
+    }
+    return -1;
+}
+
+QPoint AutomationPreview::getVisualPoint(const int index) noexcept
+{
+    return _points[index - _firstIndex].center();
+}
+
+void AutomationPreview::requestUpdate(void)
+{
+    _points.clear();
+    update();
 }

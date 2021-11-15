@@ -98,13 +98,13 @@ const GPoint &AutomationModel::get(const int idx) const noexcept_ndebug
     return reinterpret_cast<const GPoint &>(_data->at(idx));
 }
 
-bool AutomationModel::set(const int idx, const GPoint &point)
+int AutomationModel::set(const int idx, const GPoint &point)
 {
     auto newIdx = static_cast<int>(std::distance(_data->begin(), _data->findSortedPlacement(point)));
 
     coreAssert(idx >= 0 && idx < count(),
         throw std::range_error("AutomationModel::set: Given index is not in range: " + std::to_string(idx) + " out of [0, " + std::to_string(count()) + "["));
-    return Models::AddProtectedEvent(
+    const bool success = Models::AddProtectedEvent(
         [this, point, idx] {
             _data->assign(idx, point);
         },
@@ -119,6 +119,7 @@ bool AutomationModel::set(const int idx, const GPoint &point)
             emit pointsChanged();
         }
     );
+    return success ? idx : -1;
 }
 
 bool AutomationModel::removeSelection(const BeatRange &range)

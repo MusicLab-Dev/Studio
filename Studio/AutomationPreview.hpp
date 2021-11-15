@@ -6,6 +6,7 @@
 #pragma once
 
 #include <QQuickPaintedItem>
+#include <QRect>
 
 #include "Base.hpp"
 
@@ -57,6 +58,15 @@ public:
     /** @brief Draw target within specified range */
     void paint(QPainter *painter) final;
 
+
+public slots:
+    /** @brief Tries to find a point from a pixel position */
+    int findPoint(const QPoint &point) noexcept;
+
+    /** @brief Get the visual center of point at index */
+    QPoint getVisualPoint(const int index) noexcept;
+
+
 signals:
     /** @brief Notify when target property changes */
     void targetChanged(void);
@@ -83,7 +93,9 @@ private:
     ParamValue _minValue {};
     ParamValue _maxValue {};
     ParamValue _widthValue {};
+    QVector<QRect> _points {};
+    int _firstIndex { 0 };
 
     /** @brief Request an update */
-    void requestUpdate(void) { update(); }
+    void requestUpdate(void);
 };

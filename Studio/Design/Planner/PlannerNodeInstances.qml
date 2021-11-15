@@ -147,9 +147,11 @@ Row {
         }
 
         Repeater {
+            id: automationPreviewRepeater
             model: nodeInstances.showAutomations && nodeDelegate.node ? nodeDelegate.node.plugin : null
 
             delegate: AutomationPreview {
+                id: delegatePreview
                 width: contentView.rowDataWidth
                 height: contentView.rowHeight
                 target: nodeDelegate.node.automations.getAutomation(index)
@@ -157,10 +159,18 @@ Row {
                 pixelsPerBeatPrecision: contentView.pixelsPerBeatPrecision
                 color: nodeDelegate.color
                 isAccent: nodeInstances.selectedAutomation === index
+
+                onIsAccentChanged: {
+                    if (isAccent)
+                        automationPlacement.preview = delegatePreview
+                    else if (automationPlacement.preview == delegatePreview)
+                        automationPlacement.preview = null
+                }
             }
         }
 
         PlannerNodeAutomationPlacement {
+            id: automationPlacement
             width: contentView.rowDataWidth
             height: contentView.rowHeight
             automation: nodeDelegate.node && nodeInstances.selectedAutomation !== -1 ? nodeDelegate.node.automations.getAutomation(nodeInstances.selectedAutomation) : null
