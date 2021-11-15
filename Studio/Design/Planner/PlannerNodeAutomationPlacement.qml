@@ -13,23 +13,33 @@ MouseArea {
         Remove
     }
 
-    function mouseBeatPrecision() {
-        var mouseBeat = Math.max((mouseX - contentView.xOffset) / contentView.pixelsPerBeatPrecision, 0)
-        return Math.max(mouseBeat - (mouseBeat % 32), 0)
+    function roundToStep(value, step) {
+        var diff = value % step
+        if (diff < step / 2)
+            return value - diff
+        else
+            return value - diff + step
     }
 
-    function mouseParamValue() {
-        var value = (1 - (mouseY / height)) * controlRangeValue + controlDescriptor.controlMinValue
-        value = Math.min(Math.max(value, controlDescriptor.controlMinValue), controlDescriptor.controlMaxValue)
-        return value - (value % controlDescriptor.controlStepValue)
+    function getBeatPrecision(posX) {
+        var mouseBeat = (posX - contentView.xOffset) / contentView.pixelsPerBeatPrecision
+        return Math.max(roundToStep(mouseBeat, pixelsPerStepBeat), 0)
     }
 
-    function pixelsToBeatPrecision(pixels) {
-        return pixels / pixelsPerBeatPrecision
+    function getParamValue(posY) {
+        var value = (1 - (posY / height)) * controlRangeValue + controlDescriptor.controlMinValue
+        value = value - (value % controlDescriptor.controlStepValue)
+        return Math.min(Math.max(value, controlDescriptor.controlMinValue), controlDescriptor.controlMaxValue)
     }
 
-    function pixelsToValue(pixels) {
-        return (1 - (pixels / height)) * controlRangeValue + controlDescriptor.controlMinValue
+    function clampBeatPixels(posX) {
+        var beat = roundToStep(posX, pixelsPerStepBeat)
+        return Math.max(beat, 0)
+    }
+
+    function clampValuePixels(posY) {
+        var value = roundToStep(mouseY, pixelsPerStepValue)
+        return Math.max(Math.min(value, height), 0)
     }
 
     function resetCache() {
@@ -39,30 +49,28 @@ MouseArea {
 
     function updatePreview() {
         previewPoint = Qt.point(
-            Math.max(Math.min(mouseX - (mouseX % (contentView.pixelsPerBeatPrecision * 32)), width), 0),
-            Math.max(Math.min(mouseY - (mouseY % pixelsPerStepValue), height), 0)
+            clampBeatPixels(mouseX),
+            clampValuePixels(mouseY)
         )
     }
 
     function insertPreview() {
-        var mouseBeat = mouseBeatPrecision()
-        var mouseValue = mouseParamValue()
         var point = AudioAPI.point(
-            mouseBeat,
+            getBeatPrecision(previewPoint.x),
             Point.CurveType.Linear,
             0,
-            mouseValue
+            getParamValue(previewPoint.y)
         )
         automation.add(point)
     }
 
     function initRemovePreview() {
-        var mouseBeat = mouseBeatPrecision()
+        var mouseBeat = getBeatPrecision(mouseX)
         removeRange = AudioAPI.beatRange(mouseBeat, mouseBeat + 32)
     }
 
     function updateRemovePreview() {
-        var mouseBeat = mouseBeatPrecision()
+        var mouseBeat = getBeatPrecision(mouseX)
         if (mouseBeat != removeRange.from)
             removeRange = AudioAPI.beatRange(removeRange.from, mouseBeat)
     }
@@ -72,7 +80,6 @@ MouseArea {
             removeRange = AudioAPI.beatRange(removeRange.to, removeRange.from)
         automation.removeSelection(removeRange)
     }
-
 
     // Inputs
     property AutomationModel automation: null
@@ -89,6 +96,7 @@ MouseArea {
 
     // Cache
     property real pixelsPerStepValue: controlDescriptor !== undefined ? height / (controlRangeValue / controlDescriptor.controlStepValue) : 0
+    property real pixelsPerStepBeat: contentView.pixelsPerBeatPrecision * 32
 
     id: automationRow
     acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -180,7 +188,7 @@ MouseArea {
         visible: parent != automationRow
         text: {
             if (pointPreview.visible) {
-                return pixelsToValue(previewPoint.y).toFixed(3)
+                return getParamValue(previewPoint.y).toFixed(3)
             } else if (pointHover.visible) {
                 var point = automation.getPoint(hoverIndex)
                 return point.value.toFixed(3)
