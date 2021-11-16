@@ -28,7 +28,7 @@ MouseArea {
 
     function getParamValue(posY) {
         var value = (1 - (posY / height)) * controlRangeValue + controlDescriptor.controlMinValue
-        value = value - (value % controlDescriptor.controlStepValue)
+        value = roundToStep(value, controlDescriptor.controlStepValue)
         return Math.min(Math.max(value, controlDescriptor.controlMinValue), controlDescriptor.controlMaxValue)
     }
 
