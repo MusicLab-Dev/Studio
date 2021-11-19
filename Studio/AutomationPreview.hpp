@@ -89,6 +89,7 @@ private:
     qreal _pixelsPerBeatPrecision {};
     QColor _color {};
     bool _isAccent {};
+    ParamID _paramID {};
     ParamValue _stepValue {};
     ParamValue _minValue {};
     ParamValue _maxValue {};
@@ -98,4 +99,7 @@ private:
 
     /** @brief Request an update */
     void requestUpdate(void);
+
+    /** @brief Handle control value changes */
+    void onControlValueChanged(const ParamID paramID);
 };

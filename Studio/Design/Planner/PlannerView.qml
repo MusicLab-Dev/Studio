@@ -81,7 +81,12 @@ Item {
             visible: node
             z: 1
             menuFunc: function() { plannerNodeMenu.openMenu(sequencerControls.menuButton, sequencerControls.node) }
-            onAutomationSelected: contentView.selectedNode.selectAutomation(automationIndex)
+            onAutomationSelected: {
+                if (contentView.selectedNode.showAutomations && contentView.selectedNode.selectedAutomation === automationIndex)
+                    contentView.selectedNode.hideAutomations()
+                else
+                    contentView.selectedNode.selectAutomation(automationIndex)
+            }
         }
 
         PlannerContentView {

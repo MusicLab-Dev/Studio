@@ -11,10 +11,16 @@ Item {
         nodeInstances.selectAutomation(index)
     }
 
+    function hideAutomations(index) {
+        nodeInstances.hideAutomations()
+    }
+
     property NodeModel node: nodeInstance.instance
     property bool showChildren: false
     property var parentDelegate: null
     readonly property bool isChild: parentDelegate !== null
+    readonly property int selectedAutomation: nodeInstances.selectedAutomation
+    readonly property bool showAutomations: nodeInstances.showAutomations
 
     // Selection
     property bool isSelected: nodeDelegate == contentView.selectedNode
