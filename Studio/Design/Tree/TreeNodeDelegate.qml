@@ -395,7 +395,8 @@ Column {
                             height: nodeInstanceBackground.containsMouse ? parent.height * 0.6 : parent.height * 0.55
                             name: nodeDelegate.node ? nodeDelegate.node.plugin.title : ""
                             color: !nodeDelegate.isSelected ? nodeDelegate.color : themeManager.foregroundColor
-                            playing: soundMeter.peakPosition !== 0 && treeView.visible && (nodeInstanceBackground.containsMouse || treeView.player.playerBase.isPlayerRunning)
+                            playing: treeView.visible && (treeView.player.playerBase.isPlayerRunning || nodeInstanceBackground.containsMouse) // Cheap version
+//                            playing: treeView.visible && (soundMeter.peakPosition !== 0 || nodeInstanceBackground.containsMouse) // Costly version
 
                             Behavior on height {
                                 NumberAnimation { duration: 100 }
