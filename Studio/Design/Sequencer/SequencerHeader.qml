@@ -149,7 +149,7 @@ Rectangle {
     }
 
     ClipboardIndicator {
-        anchors.left: partitionComboBox.right
+        anchors.left: plannerButton.right
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height * 0.7
