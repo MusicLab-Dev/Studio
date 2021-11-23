@@ -91,7 +91,7 @@ Item {
 
         PlannerContentView {
             id: contentView
-            anchors.top: sequencerControls.bottom
+            anchors.top: selectedNode === null ? plannerHeader.bottom : sequencerControls.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom

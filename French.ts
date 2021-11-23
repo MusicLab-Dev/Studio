@@ -382,14 +382,12 @@
 <context>
     <name>ControlsFlow copy</name>
     <message>
-        <location filename="Studio/Design/Common/ControlsFlow copy.qml" line="82"/>
         <source>Edit name</source>
-        <translation>Modifier le nom</translation>
+        <translation type="vanished">Modifier le nom</translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/ControlsFlow copy.qml" line="91"/>
         <source>Change sample</source>
-        <translation>Changer l&apos;échantillon</translation>
+        <translation type="vanished">Changer l&apos;échantillon</translation>
     </message>
 </context>
 <context>

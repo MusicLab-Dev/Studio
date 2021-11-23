@@ -380,19 +380,6 @@
     </message>
 </context>
 <context>
-    <name>ControlsFlow copy</name>
-    <message>
-        <location filename="Studio/Design/Common/ControlsFlow copy.qml" line="82"/>
-        <source>Edit name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Studio/Design/Common/ControlsFlow copy.qml" line="91"/>
-        <source>Change sample</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>DefaultCheckBox</name>
     <message>
         <location filename="Studio/Design/Default/DefaultCheckBox.qml" line="9"/>
