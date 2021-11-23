@@ -2,6 +2,8 @@ import QtQuick 2.15
 
 import "../Default"
 
+import AutomationModel 1.0
+
 ControlsFlow {
     signal automationSelected(int automationIndex)
 
@@ -9,6 +11,9 @@ ControlsFlow {
     baseMargin: 0
 
     controlsFlowBase.controlsRepeater.delegate: Column {
+        property AutomationModel automation: controlsFlowBase.node ? controlsFlowBase.node.automations.getAutomation(index) : null
+
+        id: delegateCol
         width: delegateLoader.width
 
         ControlsFlowLoader {
@@ -22,7 +27,7 @@ ControlsFlow {
             height: 20
             scaleFactor: 1
             source: "qrc:/Assets/Automation.png"
-            colorDefault: controlsFlowBase.nodeColor
+            colorDefault: delegateCol.automation && delegateCol.automation.count ? controlsFlowBase.nodeColor : "white"
             colorHovered: controlsFlowBase.nodeHoveredColor
             colorOnPressed: controlsFlowBase.nodePressedColor
 

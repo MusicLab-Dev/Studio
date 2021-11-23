@@ -34,7 +34,7 @@
                 "help": "The number of cached audio frames used to reduce input lag\nHigher is faster but less precise",
                 "tags": ["cache", "block"],
                 "type": "ComboBox",
-                "values": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                "values": [2, 3, 4, 5, 6, 7, 8, 9],
                 "start": 3
             }
         ]

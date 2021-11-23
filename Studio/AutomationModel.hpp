@@ -35,6 +35,7 @@ class AutomationModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
+    Q_PROPERTY(int count READ count NOTIFY pointsChanged)
 
 public:
     /** @brief Roles of each Control */
@@ -86,10 +87,10 @@ public:
     /** @brief Update the internal data */
     void updateInternal(Audio::Automation *data);
 
-public slots:
     /** @brief Return the count of element in the model */
     [[nodiscard]] int count(void) const noexcept { return static_cast<int>(_data->size()); }
 
+public slots:
     /** @brief Add point */
     bool add(const GPoint &point);
 

@@ -63,8 +63,9 @@ Rectangle {
         width: parent.width * 0.12
     }
 
-    PlayerArea {
+    PlayerRefArea {
         id: playerArea
+        player.playerBase: modulesView.productionPlayerBase
         anchors.right: parent.right
         anchors.rightMargin: 10
         width: parent.width * 0.3

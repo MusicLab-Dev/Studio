@@ -53,6 +53,7 @@ ProjectPreview {
         anchors.fill: parent
         playerBase: projectPreview.playerBase
         pixelsPerBeatPrecision: projectPreview.pixelsPerBeatPrecision
+        enabled: beatLength
     }
 
     DefaultToolTip {

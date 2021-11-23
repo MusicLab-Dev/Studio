@@ -92,12 +92,13 @@ Item {
         backgroundColor: themeManager.contentColor
     }
 
-    PlayerArea {
+    PlayerRefArea {
         id: playerArea
         anchors.right: parent.right
         anchors.rightMargin: 10
         width: parent.width * 0.3
         height: parent.height * 0.7
         anchors.verticalCenter: parent.verticalCenter
+        player.playerBase: modulesView.productionPlayerBase
     }
 }

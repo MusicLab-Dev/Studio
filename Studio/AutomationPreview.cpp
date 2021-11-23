@@ -21,17 +21,23 @@ void AutomationPreview::setTarget(AutomationModel *target)
 {
     if (target == _target)
         return;
-    if (_target)
+    if (_target) {
         disconnect(_target, &AutomationModel::pointsChanged, this, &AutomationPreview::requestUpdate);
+        const auto plugin = _target->parentAutomations()->parentNode()->plugin();
+        disconnect(plugin, &PluginModel::controlValueChanged, this, &AutomationPreview::onControlValueChanged);
+    }
     _target = target;
     if (_target) {
-        connect(_target, &AutomationModel::pointsChanged, this, &AutomationPreview::requestUpdate);
-        const auto &meta = _target->parentAutomations()->parentNode()->plugin()->audioPlugin()->getMetaData();
+        const auto plugin = _target->parentAutomations()->parentNode()->plugin();
+        const auto &meta = plugin->audioPlugin()->getMetaData();
         const auto rangeValues = meta.controls[_target->paramID()].rangeValues;
+        _paramID = _target->paramID();
         _stepValue = rangeValues.step;
         _minValue = rangeValues.min;
         _maxValue = rangeValues.max;
         _widthValue = _maxValue - _minValue;
+        connect(_target, &AutomationModel::pointsChanged, this, &AutomationPreview::requestUpdate);
+        connect(plugin, &PluginModel::controlValueChanged, this, &AutomationPreview::onControlValueChanged);
     }
     emit targetChanged();
     requestUpdate();
@@ -78,11 +84,30 @@ void AutomationPreview::paint(QPainter *painter)
     static constexpr auto BeatValueToPixel = [](const auto beat, const auto pixelsPerBeat) {
         return static_cast<int>(beat * pixelsPerBeat);
     };
-    static constexpr auto ParamValueToPixel = [](const auto value, const auto minValue, const auto widthValue, const auto height) {
+    static constexpr auto ParamValueToPixel = [](const ParamValue value, const ParamValue minValue, const ParamValue widthValue, const ParamValue height) {
         return static_cast<int>((1 - ((value - minValue) / widthValue)) * height);
     };
 
-    if (!_target || _target->audioAutomation()->empty()) {
+    // No target => no preview
+    if (!_target)
+        return;
+
+    // Setup colors
+    QColor primaryColor(_color);
+    QColor secondaryColor(_color);
+    if (!_isAccent) {
+        primaryColor.setAlpha(255 >> 3);
+        secondaryColor = primaryColor;
+    } else
+        secondaryColor.setAlpha(255 >> 1);
+
+    // No points => show current value if accent
+    if (_target->audioAutomation()->empty()) {
+        if (_isAccent) {
+            auto paramY = ParamValueToPixel(_target->parentAutomations()->parentNode()->plugin()->getControl(_paramID), _minValue, _widthValue, height());
+            painter->setPen(secondaryColor);
+            painter->drawLine(0, paramY, static_cast<int>(width()), paramY);
+        }
         return;
     }
 
@@ -103,23 +128,28 @@ void AutomationPreview::paint(QPainter *painter)
         }
     }
 
+    // Setup path constants
     QPainterPath path;
-    const auto pixelsPerBeatBeat = pixelsPerBeatPrecision();
+    const auto pixelsPerBeat = pixelsPerBeatPrecision();
     const auto minValue = _minValue;
     const auto widthValue = _widthValue;
     const auto realHeight = height();
+    const auto xOffset = static_cast<int>(pixelsPerBeat * range.from);
 
     // First point: process leftmost and increment it
     int x = 0;
     int y = 0;
     if (leftMost == nullptr) {
-        x = BeatValueToPixel(begin->beat, pixelsPerBeatBeat);
+        x = BeatValueToPixel(begin->beat, pixelsPerBeat) - xOffset;
         y = ParamValueToPixel(begin->value, minValue, widthValue, realHeight);
-        leftMost = begin - 1;
+        leftMost = begin;
+        painter->setPen(secondaryColor);
+        painter->drawLine(0, y, x, y);
     } else {
         _firstIndex = static_cast<int>(std::distance(begin, leftMost));
-        x = BeatValueToPixel(leftMost->beat, pixelsPerBeatBeat);
+        x = BeatValueToPixel(leftMost->beat, pixelsPerBeat) - xOffset;
         y = ParamValueToPixel(leftMost->value, minValue, widthValue, realHeight);
+        ++leftMost;
     }
     path.moveTo(x, y);
 
@@ -129,8 +159,8 @@ void AutomationPreview::paint(QPainter *painter)
 
     // Middle points
     const auto accent = _isAccent;
-    for (++leftMost; leftMost != rightMost; ++leftMost) {
-        x = BeatValueToPixel(leftMost->beat, pixelsPerBeatBeat);
+    for (; leftMost != rightMost; ++leftMost) {
+        x = BeatValueToPixel(leftMost->beat, pixelsPerBeat) - xOffset;
         y = ParamValueToPixel(leftMost->value, minValue, widthValue, realHeight);
         path.lineTo(x, y);
         if (accent) {
@@ -144,18 +174,19 @@ void AutomationPreview::paint(QPainter *painter)
 
     // Last point
     if (rightMost != end) {
-        x = BeatValueToPixel(rightMost->beat, pixelsPerBeatBeat);
+        x = BeatValueToPixel(rightMost->beat, pixelsPerBeat) - xOffset;
         y = ParamValueToPixel(rightMost->value, minValue, widthValue, realHeight);
         path.lineTo(x, y);
+    } else {
+        auto right = static_cast<int>(width());
+        painter->setPen(secondaryColor);
+        painter->drawLine(x, y, right, y);
     }
 
     // Draw the built path
-    auto finalColor = _color;
-    if (!accent)
-        finalColor.setAlpha(255 >> 3);
-    else
-        painter->setBrush(finalColor);
-    painter->setPen(finalColor);
+    if (accent) // Only brush when accent
+        painter->setBrush(primaryColor);
+    painter->setPen(primaryColor);
     painter->drawPath(path);
 }
 
@@ -180,4 +211,10 @@ void AutomationPreview::requestUpdate(void)
 {
     _points.clear();
     update();
+}
+
+void AutomationPreview::onControlValueChanged(const ParamID paramID)
+{
+    if (paramID == _paramID && _target->audioAutomation()->empty())
+        requestUpdate();
 }
