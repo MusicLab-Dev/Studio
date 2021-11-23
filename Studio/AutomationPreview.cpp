@@ -170,6 +170,7 @@ void AutomationPreview::paint(QPainter *painter)
                 x - 10, y - 10, 20, 20
             });
         }
+        path.moveTo(x, y);
     }
 
     // Last point

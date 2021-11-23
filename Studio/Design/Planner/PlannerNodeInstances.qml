@@ -154,7 +154,7 @@ Row {
                 id: delegatePreview
                 width: contentView.rowDataWidth
                 height: contentView.rowHeight
-                target: nodeDelegate.node.automations.getAutomation(index)
+                target: nodeDelegate.node ? nodeDelegate.node.automations.getAutomation(index) : null
                 range: contentView.displayRange
                 pixelsPerBeatPrecision: contentView.pixelsPerBeatPrecision
                 color: nodeDelegate.color

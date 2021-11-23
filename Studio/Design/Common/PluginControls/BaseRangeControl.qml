@@ -6,7 +6,7 @@ import "../../Default"
 import CursorManager 1.0
 
 MouseArea {
-    function incrementValue(offset) {
+    function incrementValuePixels(offset) {
         valueRatio = Math.max(Math.min(valueRatio + offset / pixelsRange, 1), 0)
         var editedValue = (minimumValue + valueRatio * rangeValue) / stepSize
         if (offset < 0)
@@ -37,8 +37,12 @@ MouseArea {
     // Cache
     property real valueRatio: 0
     readonly property real rangeValue: maximumValue - minimumValue
+    readonly property real stepCount: rangeValue / stepSize
     readonly property real valueRealRatio: (value - minimumValue) / rangeValue
-    readonly property real pixelsRange: (rangeValue / stepSize) * 2 // Represent the total range as pixels to travel
+    readonly property real pixelsRange: stepCount * 2 // Represent the total range as pixels to travel
+    readonly property real slowIncrementStep: pixelsRange / stepCount
+    readonly property real incrementStep: slowIncrementStep * 10
+    readonly property real fastIncrementStep: slowIncrementStep * 100
 
     // Tooltip
     readonly property string tooltipPrefixText: longName + ": "
@@ -67,14 +71,14 @@ MouseArea {
     }
 
     onWheel: {
-        /*if (wheel.angleDelta.y != 0) {
-            tracking = false
-            app.setCursorVisibility(true)
-        } else {
-            tracking = true
-            app.setCursorVisibility(false)
-            lastTrackingPos = Qt.point(0, wheel.angleDelta.y)
-        }*/
+        var count = wheel.angleDelta.y >= 0 ? 1 : -1
+        if (wheel.modifiers & Qt.ShiftModifier)
+            count *= fastIncrementStep
+        else if (wheel.modifiers & Qt.ControlModifier)
+            count *= slowIncrementStep
+        else
+            count *= incrementStep
+        incrementValuePixels(count)
     }
 
     onHoveredChanged: {
@@ -113,7 +117,7 @@ MouseArea {
             var offset = -(mouseY - lastTrackingPos.y) * speedMultiplier
             if (offset !== 0) {
                 preventNoiseEvents = true
-                incrementValue(offset)
+                incrementValuePixels(offset)
                 app.setCursorPos(control.mapToGlobal(lastTrackingPos))
                 preventNoiseEvents = false
             }
