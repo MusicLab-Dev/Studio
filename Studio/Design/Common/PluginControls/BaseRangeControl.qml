@@ -67,14 +67,9 @@ MouseArea {
     }
 
     onWheel: {
-        /*if (wheel.angleDelta.y != 0) {
-            tracking = false
-            app.setCursorVisibility(true)
-        } else {
-            tracking = true
-            app.setCursorVisibility(false)
-            lastTrackingPos = Qt.point(0, wheel.angleDelta.y)
-        }*/
+        preventNoiseEvents = true
+        incrementValue(-wheel.angleDelta.y / 2)
+        preventNoiseEvents = false
     }
 
     onHoveredChanged: {
