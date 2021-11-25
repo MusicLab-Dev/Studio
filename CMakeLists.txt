@@ -6,14 +6,14 @@ include(${StudioRoot}/CompileOptions/ToolchainOptions.cmake)
 
 project(Studio)
 
-# if(MSVC)
-#     message("/!\\ Compiling for static MSVC /!\\")
-#     add_compile_options(
-#         $<$<CONFIG:>:/MT> #---------|
-#         $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
-#         $<$<CONFIG:Release>:/MT> #--|
-#     )
-# endif()
+if(MSVC)
+    message("/!\\ Compiling for static MSVC /!\\")
+    add_compile_options(
+        $<$<CONFIG:>:/MT> #---------|
+        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+        $<$<CONFIG:Release>:/MT> #--|
+    )
+endif()
 
 include(${StudioRoot}/CompileOptions/CompileOptions.cmake)
 
