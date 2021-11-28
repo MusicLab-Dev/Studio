@@ -247,11 +247,7 @@ void Scheduler::disableLoopRange(void)
 bool Scheduler::stopAndWait(void)
 {
     if (pauseImpl()) {
-#ifdef __APPLE__
         atomic_sync::atomic_wait_explicit(&_blockGenerated, false, std::memory_order_relaxed);
-#else
-        atomic_sync::atomic_wait_explicit(&_blockGenerated, false, std::memory_order::memory_order_relaxed);
-#endif
         onCatchingAudioThread();
         wait();
         invalidateCurrentGraph<true>();
