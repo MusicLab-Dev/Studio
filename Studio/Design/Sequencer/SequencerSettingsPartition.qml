@@ -93,9 +93,7 @@ ColumnLayout {
                 visible: false
 
                 onAccepted: {
-                    var path = fileDialogImport.fileUrl.toString();
-                    path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
-                    partition.importPartition(path)
+                    partition.importPartition(urlToPath(fileDialogImport.fileUrl))
                     visible = false
                 }
 
@@ -128,9 +126,7 @@ ColumnLayout {
                 visible: false
 
                 onAccepted: {
-                    var path = fileDialogExport.fileUrl.toString();
-                    path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
-                    partition.exportPartition(path)
+                    partition.exportPartition(urlToPath(fileDialogExport.fileUrl))
                     visible = false
                 }
                 onRejected: {

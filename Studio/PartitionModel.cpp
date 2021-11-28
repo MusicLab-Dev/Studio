@@ -395,7 +395,7 @@ bool PartitionModel::importPartition(const QString &path) noexcept
 {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-        qCritical() << "PartitionModel::import: File couldn't be opened";
+        qCritical() << "PartitionModel::import: File couldn't be opened" << path;
         return false;
     }
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());

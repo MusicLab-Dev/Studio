@@ -83,9 +83,7 @@ DefaultMenu {
         visible: false
 
         onAccepted: {
-            var path = fileDialogImport.fileUrl.toString();
-            path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
-            targetPartition.importPartition(path)
+            targetPartition.importPartition(urlToPath(fileDialogImport.fileUrl))
             visible = false
         }
 
@@ -110,9 +108,7 @@ DefaultMenu {
         visible: false
 
         onAccepted: {
-            var path = fileDialogExport.fileUrl.toString();
-            path = path.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"");
-            targetPartition.exportPartition(path)
+            targetPartition.exportPartition(urlToPath(fileDialogImport.fileUrl))
             visible = false
         }
 
