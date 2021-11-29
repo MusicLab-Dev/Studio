@@ -406,7 +406,7 @@ bool PartitionModel::importPartition(const QString &path) noexcept
 bool PartitionModel::exportPartition(const QString &path) noexcept
 {
     QFile file(path);
-    if (!file.open(QIODevice::WriteOnly | QFile::Truncate)) {
+    if (!file.open(QIODevice::WriteOnly)) {
         qCritical() << "PartitionModel::export: File couldn't be created" << path;
         return false;
     }
