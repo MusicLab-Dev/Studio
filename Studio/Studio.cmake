@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
-project(Studio)
+project(Studio VERSION 0.3)
+
+set(COMPANY "Lexo")
+set(COPYRIGHT "Copyright (c) 2021 Lexo. All rights reserved.")
+set(IDENTIFIER "com.lexo.LexoStudio")
 
 get_filename_component(StudioDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
@@ -8,13 +12,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml LinguistTools REQUIRED)
-if (NOT Apple)
-    find_package(Qt5QmlImportScanner REQUIRED)
-endif()
+find_package(Qt5QmlImportScanner REQUIRED)
 
 find_package(Threads)
 
-set(APP_ICON_RESOURCE_WINDOWS "${StudioRoot}/Lexo.rc")
+set(APP_ICON_NAME "Lexo")
+set(APP_ICON_RESOURCE_WINDOWS "${StudioRoot}/${APP_ICON_NAME}.rc")
+set(APP_ICON_RESOURCE_MACOS "${StudioRoot}/${APP_ICON_NAME}.icns")
 
 set(AppTranslationFiles
     English.ts
@@ -153,10 +157,25 @@ set(StudioAppSources
 
 set(Application ${PROJECT_NAME}App)
 
-add_executable(${Application} ${StudioAppSources} ${APP_ICON_RESOURCE_WINDOWS})
+if(APPLE)
+    # Identify MacOS bundle
+    set(MACOSX_BUNDLE_BUNDLE_NAME LexoStudio)
+    set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+    set(MACOSX_BUNDLE_COPYRIGHT ${COPYRIGHT})
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER ${IDENTIFIER})
+    set(MACOSX_BUNDLE_ICON_FILE ${APP_ICON_NAME}.icns)
+    set(APP_ICON_MACOSX ${APP_ICON_RESOURCE_MACOS})
+    set_source_files_properties(${APP_ICON_RESOURCE_MACOS} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    add_executable(${Application} MACOSX_BUNDLE ${StudioAppSources} ${APP_ICON_RESOURCE_MACOS})
+elseif(MSVC)
+    add_executable(${Application} ${StudioAppSources} ${APP_ICON_RESOURCE_WINDOWS})
+else()
+    add_executable(${Application} ${StudioAppSources})
+endif()
 
 target_link_libraries(${Application} PUBLIC Studio)
 
-if (NOT APPLE)
-    qt5_import_qml_plugins(${Application})
-endif()
+qt5_import_qml_plugins(${Application})
+
