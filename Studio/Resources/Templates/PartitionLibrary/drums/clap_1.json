@@ -1,0 +1,23 @@
+{
+    "name": "kick_2|4",
+    "notes": [
+        {
+            "key": 48,
+            "range": [
+                0,
+                32
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 48,
+            "range": [
+                256,
+                288
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        }
+    ]
+}

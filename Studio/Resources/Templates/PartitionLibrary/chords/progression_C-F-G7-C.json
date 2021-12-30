@@ -1,0 +1,149 @@
+{
+    "name": "Partition 0",
+    "notes": [
+        {
+            "key": 57,
+            "range": [
+                0,
+                512
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 69,
+            "range": [
+                0,
+                512
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 72,
+            "range": [
+                0,
+                512
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 76,
+            "range": [
+                0,
+                512
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 53,
+            "range": [
+                512,
+                1024
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 69,
+            "range": [
+                512,
+                1024
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 72,
+            "range": [
+                512,
+                1024
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 77,
+            "range": [
+                512,
+                1024
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 60,
+            "range": [
+                1024,
+                1536
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 67,
+            "range": [
+                1024,
+                1536
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 72,
+            "range": [
+                1024,
+                1536
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 76,
+            "range": [
+                1024,
+                1536
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 55,
+            "range": [
+                1536,
+                2048
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 67,
+            "range": [
+                1536,
+                2048
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 71,
+            "range": [
+                1536,
+                2048
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 74,
+            "range": [
+                1536,
+                2048
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        }
+    ]
+}

@@ -1,0 +1,50 @@
+{
+    "name": "kick_2|4",
+    "notes": [
+        {
+            "key": 48,
+            "range": [
+                0,
+                32
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 48,
+            "range": [
+                128,
+                160
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 48,
+            "range": [
+                256,
+                288
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 48,
+            "range": [
+                384,
+                416
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 48,
+            "range": [
+                448,
+                480
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        }
+    ]
+}

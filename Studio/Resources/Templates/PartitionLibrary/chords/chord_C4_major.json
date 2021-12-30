@@ -1,0 +1,32 @@
+{
+    "name": "Partition 0",
+    "notes": [
+        {
+            "key": 60,
+            "range": [
+                0,
+                512
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 67,
+            "range": [
+                0,
+                512
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 64,
+            "range": [
+                0,
+                512
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        }
+    ]
+}
