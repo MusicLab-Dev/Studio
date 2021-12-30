@@ -13,6 +13,7 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml LinguistTools REQUIRED)
 find_package(Qt5QmlImportScanner REQUIRED)
+find_package(RtMidi CONFIG REQUIRED)
 
 find_package(Threads)
 
@@ -144,6 +145,7 @@ PUBLIC
     Audio
     Qt5::Core Qt5::Quick Qt5::Qml Qt5::QuickControls2
     Threads::Threads
+    RtMidi::rtmidi
 )
 
 if(CODE_COVERAGE)
