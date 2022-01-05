@@ -148,6 +148,25 @@ Rectangle {
         }
     }
 
+    /*DefaultImageButton {
+        id: velocityMod
+        anchors.left: partitionComboBox.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        width: height
+        height: parent.height * 0.7
+        source: "qrc:/Assets/VelocityMod.png"
+        foregroundColor: themeManager.contentColor
+        colorHovered: sequencerView.node ? sequencerView.node.color : themeManager.accentColor
+
+        onClicked: modulesView.addNewPlanner(sequencerView.node)
+
+        DefaultToolTip {
+            text: "Move to planner"
+            visible: parent.hovered
+        }
+    }*/
+
     ClipboardIndicator {
         anchors.left: plannerButton.right
         anchors.leftMargin: 10

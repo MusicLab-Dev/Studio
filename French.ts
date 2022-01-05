@@ -1,359 +1,359 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR" sourcelanguage="en_US">
+<TS version="2.1">
 <context>
     <name>AEventListener</name>
     <message>
         <location filename="Studio/AEventListener.cpp" line="18"/>
         <location filename="Studio/AEventListener.cpp" line="96"/>
         <source>Action</source>
-        <translation>Action</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="20"/>
         <source>Note 0</source>
-        <translation>Note 0</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="22"/>
         <source>Note 1</source>
-        <translation>Note 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="24"/>
         <source>Note 2</source>
-        <translation>Note 2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="26"/>
         <source>Note 3</source>
-        <translation>Note 3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="28"/>
         <source>Note 4</source>
-        <translation>Note 4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="30"/>
         <source>Note 5</source>
-        <translation>Note 5</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="32"/>
         <source>Note 6</source>
-        <translation>Note 6</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="34"/>
         <source>Note 7</source>
-        <translation>Note 7</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="36"/>
         <source>Note 8</source>
-        <translation>Note 8</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="38"/>
         <source>Note 9</source>
-        <translation>Note 9</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="40"/>
         <source>Note 10</source>
-        <translation>Note 10</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="42"/>
         <source>Note 11</source>
-        <translation>Note 11</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="44"/>
         <source>Octave Up</source>
-        <translation>Octave +</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="46"/>
         <source>Octave Down</source>
-        <translation>Octave -</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="48"/>
         <source>Play / Pause Context</source>
-        <translation>Lecture / Pause Contexte</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="50"/>
         <source>Replay / Stop Context</source>
-        <translation>ReJouer / Stop Contexte</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="52"/>
         <source>Replay Context</source>
-        <translation>Rejouer contexte</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="54"/>
         <source>Stop Context</source>
-        <translation>Stop Contexte</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="56"/>
         <source>Play / Pause Project</source>
-        <translation>Jouer / Pause Projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="58"/>
         <source>Replay Project</source>
-        <translation>Rejouer Projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="60"/>
         <source>Stop Project</source>
-        <translation>Stop Projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="62"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="64"/>
         <source>Paste</source>
-        <translation>Coller</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="66"/>
         <source>Cut</source>
-        <translation>Couper</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="68"/>
         <source>Volume Context</source>
-        <translation>Volume Contexte</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="70"/>
         <source>Volume Project</source>
-        <translation>Volume Projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="72"/>
         <source>Undo</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="74"/>
         <source>Redo</source>
-        <translation>Refaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="76"/>
         <source>Erase</source>
-        <translation>Effacer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="78"/>
         <source>Open Project</source>
-        <translation>Ouvrir Projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="80"/>
         <source>Export Project</source>
-        <translation>Exporter Projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="82"/>
         <source>Save</source>
-        <translation>Sauvegarder</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="84"/>
         <source>Save As</source>
-        <translation>Enregistrer sous</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="86"/>
         <source>Settings</source>
-        <translation>Paramètres</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="88"/>
         <location filename="Studio/AEventListener.cpp" line="166"/>
         <source>Unknown</source>
-        <translation>Inconnue</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="98"/>
         <source>Play note 0 in a sequencer within selected octave</source>
-        <translation>Jouer la note 0 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="100"/>
         <source>Play note 1 in a sequencer within selected octave</source>
-        <translation>Jouer la note 1 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="102"/>
         <source>Play note 2 in a sequencer within selected octave</source>
-        <translation>Jouer la note 2 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="104"/>
         <source>Play note 3 in a sequencer within selected octave</source>
-        <translation>Jouer la note 3 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="106"/>
         <source>Play note 4 in a sequencer within selected octave</source>
-        <translation>Jouer la note 4 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="108"/>
         <source>Play note 5 in a sequencer within selected octave</source>
-        <translation>Jouer la note 5 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="110"/>
         <source>Play note 6 in a sequencer within selected octave</source>
-        <translation>Jouer la note 6 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="112"/>
         <source>Play note 7 in a sequencer within selected octave</source>
-        <translation>Jouer la note 7 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="114"/>
         <source>Play note 8 in a sequencer within selected octave</source>
-        <translation>Jouer la note 8 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="116"/>
         <source>Play note 9 in a sequencer within selected octave</source>
-        <translation>Jouer la note 9 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="118"/>
         <source>Play note 10 in a sequencer within selected octave</source>
-        <translation>Jouer la note 10 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="120"/>
         <source>Play note 11 in a sequencer within selected octave</source>
-        <translation>Jouer la note 11 dans le sequenceur dans l&apos;octave sélectionnée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="122"/>
         <source>Move selected octave upward</source>
-        <translation>Déplacer l&apos;octave sélectionnée vers le haut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="124"/>
         <source>Move selected octave down</source>
-        <translation>Déplacer l&apos;octave sélectionnée vers le bas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="126"/>
         <source>Play / Pause in current tabulation</source>
-        <translation>Jouer / Pause dans la tabulation actuelle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="128"/>
         <source>Replay / Stop in current tabulation</source>
-        <translation>Rejouer / Stop dans la tabulation actuelle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="130"/>
         <source>Replay in current tabulation</source>
-        <translation>Rejouer dans la tabulation actuelle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="132"/>
         <source>Stop in current tabulation</source>
-        <translation>Stop dans la tabulation actuelle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="134"/>
         <source>Play / Pause global project</source>
-        <translation>Jouer / Pause projet global</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="136"/>
         <source>Replay global project</source>
-        <translation>Rejouer projet global</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="138"/>
         <source>Stop global project</source>
-        <translation>Stop projet global</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="140"/>
         <source>Copy current selection (works over notes and partition instances)</source>
-        <translation>Copier la sélection actuelle (fonctionne sur les notes et les instances de partition)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="142"/>
         <source>Paste current selection (works over notes and partition instances)</source>
-        <translation>Coller la sélection actuelle (fonctionne sur les notes et les instances de partition)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="144"/>
         <source>Cut current selection (works over notes and partition instances)</source>
-        <translation>Couper la sélection actuelle (fonctionne sur les notes et les instances de partition)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="146"/>
         <source>Change the volume in current tabulation</source>
-        <translation>Changer le bolume de la tabulation actuelle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="148"/>
         <source>Change the volume in global project (&apos;Master&apos;)</source>
-        <translation>Changer le volume dans le projet global (&quot;Master&quot;)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="150"/>
         <source>Undo the last action (works over notes and partition instances)</source>
-        <translation>Annuler la dernière action (fonctionne sur les notes et les instances de partition)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="152"/>
         <source>Redo the last action (works over notes and partition instances)</source>
-        <translation>Refaire la dernière action (fonctionne sur les notes et les instances de partition)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="154"/>
         <source>Erase current selection (works over notes and partition instances)</source>
-        <translation>Effacer la sélection actuelle (fonctionne sur les notes et les instances de partition)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="156"/>
         <source>Open an exisiting project file</source>
-        <translation>Ouvrir un projet existant</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="158"/>
         <source>Export the current project into an audio file</source>
-        <translation>Exporter le projet en cours dans un fichier audio</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="160"/>
         <source>Save the current project</source>
-        <translation>Sauvegarder le projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="162"/>
         <source>Save the current project into another file</source>
-        <translation>Sauvegarder le projet dans un autre ficher</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/AEventListener.cpp" line="164"/>
         <source>Open settings menu</source>
-        <translation>Ouvrir les paramètres</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -361,33 +361,22 @@
     <message>
         <location filename="Studio/Design/Common/AuthentificatePopup.qml" line="104"/>
         <source>Please login with your Lexo Community account</source>
-        <translation>Veuillez vous connecter avec votre compte Lexo Community</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/AuthentificatePopup.qml" line="114"/>
         <source>Your email address</source>
-        <translation>Votre adresse email</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/AuthentificatePopup.qml" line="120"/>
         <source>Your password</source>
-        <translation>Votre mot de passe</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/AuthentificatePopup.qml" line="130"/>
         <source>No account ? Sign-up</source>
-        <translation>Pas de compte ? Inscrivez-vous</translation>
-    </message>
-</context>
-<context>
-    <name>ControlsFlow copy</name>
-    <message>
-        <source>Edit name</source>
-        <translation type="vanished">Modifier le nom</translation>
-    </message>
-    <message>
-        <source>Change sample</source>
-        <translation type="vanished">Changer l&apos;échantillon</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -395,7 +384,7 @@
     <message>
         <location filename="Studio/Design/Default/DefaultCheckBox.qml" line="9"/>
         <source>CheckBox</source>
-        <translation>Case à cocher</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -403,7 +392,7 @@
     <message>
         <location filename="Studio/Design/Default/DefaultFloatingTextBox.qml" line="12"/>
         <source>Enter number(s)</source>
-        <translation>Entrer nombres</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -411,7 +400,7 @@
     <message>
         <location filename="Studio/Design/Default/DefaultIntegerTextBox.qml" line="12"/>
         <source>Enter number(s)</source>
-        <translation>Entrer nombres</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -419,7 +408,7 @@
     <message>
         <location filename="Studio/Design/Default/DefaultRadioButton.qml" line="9"/>
         <source>RadioButton</source>
-        <translation>Button Radio</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -427,7 +416,7 @@
     <message>
         <location filename="Studio/Design/Default/DefaultTextBox.qml" line="10"/>
         <source>Enter some text</source>
-        <translation>Entre un texte</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -435,37 +424,37 @@
     <message>
         <location filename="Studio/Design/Export/Export.qml" line="143"/>
         <source>Export project &apos;</source>
-        <translation>Exporter projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Export/Export.qml" line="143"/>
         <source>&apos; ?</source>
-        <translation>?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Export/Export.qml" line="170"/>
         <source>Select</source>
-        <translation>Sélectionner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Export/Export.qml" line="213"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Export/Export.qml" line="228"/>
         <source>Yes</source>
-        <translation>Oui</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Export/Export.qml" line="236"/>
         <source>No</source>
-        <translation>Non</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Export/Export.qml" line="248"/>
         <source>Choose export path</source>
-        <translation>Choisir chemin d&apos;exportation</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -473,7 +462,7 @@
     <message>
         <location filename="Studio/Design/Common/GlobalTextField.qml" line="98"/>
         <source>color</source>
-        <translation>Couleur</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -481,27 +470,27 @@
     <message>
         <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="111"/>
         <source>Do you want to copy partition &apos;</source>
-        <translation>Voulez-vous copier la partition &apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="111"/>
         <source>&apos; from &apos;</source>
-        <translation>&apos; depuis &apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="112"/>
         <source>&apos; into &apos;</source>
-        <translation>&apos; à &apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="128"/>
         <source>Yes</source>
-        <translation>Oui</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/InstanceCopyPopup.qml" line="136"/>
         <source>No</source>
-        <translation>Non</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -509,22 +498,22 @@
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="114"/>
         <source>Press desired key combination and press &apos;Yes&apos;</source>
-        <translation>Appuyez sur la combinaison de touches souhaitée et appuyez sur &apos;Oui&apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="133"/>
         <source>Undefined</source>
-        <translation>Indéfinie</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="147"/>
         <source>Yes</source>
-        <translation>Oui</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeySequencePopup.qml" line="155"/>
         <source>No</source>
-        <translation>Non</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -532,32 +521,32 @@
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeyboardShortcutsContent.qml" line="26"/>
         <source>Command</source>
-        <translation>Commande</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeyboardShortcutsContent.qml" line="36"/>
         <source>Keybinding</source>
-        <translation>Associer les touches</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeyboardShortcutsContent.qml" line="45"/>
         <source>Repeat</source>
-        <translation>Répéteer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeyboardShortcutsContent.qml" line="56"/>
         <source>Description</source>
-        <translation>Déscription</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeyboardShortcutsContent.qml" line="66"/>
         <source>Add Keyboard Shortcut</source>
-        <translation>Ajouter un raccourci clavier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeyboardShortcutsContent.qml" line="127"/>
         <source>Undefined</source>
-        <translation>Indéfinie</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -565,25 +554,25 @@
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeyboardShortcutsView.qml" line="60"/>
         <source>Keyboard shortcuts</source>
-        <translation>Raccourcis clavier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeyboardShortcutsView.qml" line="67"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/KeyboardShortcuts/KeyboardShortcutsView.qml" line="77"/>
         <source>Reset</source>
-        <translation>Réinitialiser</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Main</name>
     <message>
-        <location filename="Studio/Design/Main/Main.qml" line="41"/>
+        <location filename="Studio/Design/Main/Main.qml" line="42"/>
         <source>Lexo</source>
-        <translation>Lexo</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -591,87 +580,87 @@
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="12"/>
         <source>My Project</source>
-        <translation>Mon Projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="168"/>
         <source>New Project</source>
-        <translation>Nouveau Projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="173"/>
         <source>Save</source>
-        <translation>Sauvegarder</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="178"/>
         <source>Save Project As...</source>
-        <translation>Enregistrer le projet sous...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="183"/>
         <source>Open Project File...</source>
-        <translation>Ouvrir le fichier de projet...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="188"/>
         <source>Open Old Compatibility Project File...</source>
-        <translation>Ouvrir un ancien fichier de projet de compatibilité...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="193"/>
         <source>Export</source>
-        <translation>Exportation</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="201"/>
         <source>Basic</source>
-        <translation>Basic</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="209"/>
         <source>Demo</source>
-        <translation>Demo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="217"/>
         <source>Warmup</source>
-        <translation>Warmup</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="226"/>
         <source>Edit project name</source>
-        <translation>Modifier le nom du projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="231"/>
         <source>Share project on community</source>
-        <translation>Partager le projet à la communauté</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="236"/>
         <source>Preferences</source>
-        <translation>Préférences</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="241"/>
         <source>Keyboard shortcuts</source>
-        <translation>Raccourcis clavier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="246"/>
         <source>Exit</source>
-        <translation>Quitter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="256"/>
         <source>Save a project file</source>
-        <translation>Sauvegarder un projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Modules/ModulesGlobalMenu.qml" line="276"/>
         <source>Load a project file</source>
-        <translation>Charger un projet</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -679,7 +668,7 @@
     <message>
         <location filename="Studio/Design/Tree/OverviewButton.qml" line="43"/>
         <source>Overview</source>
-        <translation>Aperçu</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -687,42 +676,42 @@
     <message>
         <location filename="Studio/Design/Common/PartitionMenu.qml" line="47"/>
         <source>Open in sequencer</source>
-        <translation>Ouvrir dans le séquenceur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/PartitionMenu.qml" line="63"/>
         <source>Edit name</source>
-        <translation>Modifier le nom</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/PartitionMenu.qml" line="72"/>
         <source>Import...</source>
-        <translation>Importer...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Common/PartitionMenu.qml" line="81"/>
         <source>Please choose a file</source>
-        <translation>Veuillez choisir un fichier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/PartitionMenu.qml" line="98"/>
+        <location filename="Studio/Design/Common/PartitionMenu.qml" line="96"/>
         <source>Export...</source>
-        <translation>Exporter...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/PartitionMenu.qml" line="108"/>
+        <location filename="Studio/Design/Common/PartitionMenu.qml" line="106"/>
         <source>Export your partition</source>
-        <translation>Exporter la partition</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/PartitionMenu.qml" line="128"/>
+        <location filename="Studio/Design/Common/PartitionMenu.qml" line="124"/>
         <source>Duplicate</source>
-        <translation>Dupliquer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/PartitionMenu.qml" line="138"/>
+        <location filename="Studio/Design/Common/PartitionMenu.qml" line="134"/>
         <source>Remove</source>
-        <translation>Supprimer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -730,7 +719,7 @@
     <message>
         <location filename="Studio/PartitionsModel.cpp" line="99"/>
         <source> Copy</source>
-        <translation>Copier</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -738,7 +727,7 @@
     <message>
         <location filename="Studio/Design/Common/PartitionsPreview.qml" line="163"/>
         <source>Add a new partition</source>
-        <translation>Ajouter une nouvelle partition</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -746,7 +735,7 @@
     <message>
         <location filename="Studio/Design/Common/PartitionsPreviewDelegate.qml" line="90"/>
         <source>ERROR</source>
-        <translation>ERREUR</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -754,7 +743,7 @@
     <message>
         <location filename="Studio/Design/Planner/PlannerNodeInstances.qml" line="58"/>
         <source>ERROR</source>
-        <translation>ERREUR</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -762,7 +751,7 @@
     <message>
         <location filename="Studio/Design/Planner/PlannerNodeInstancesRow.qml" line="42"/>
         <source>ERROR</source>
-        <translation>ERREUR</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -770,32 +759,32 @@
     <message>
         <location filename="Studio/Design/Planner/PlannerNodeMenu.qml" line="41"/>
         <source>Focus node</source>
-        <translation>Focus node</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Planner/PlannerNodeMenu.qml" line="53"/>
         <source>Focus parent node</source>
-        <translation>Focus node parent</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Planner/PlannerNodeMenu.qml" line="73"/>
         <source>Edit name</source>
-        <translation>Modifier nom</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Planner/PlannerNodeMenu.qml" line="84"/>
         <source>Add child</source>
-        <translation>Ajouter enfant</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Planner/PlannerNodeMenu.qml" line="94"/>
         <source>Add parent</source>
-        <translation>Ajouter parent</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Planner/PlannerNodeMenu.qml" line="110"/>
         <source>Remove</source>
-        <translation>Supprimer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -803,7 +792,7 @@
     <message>
         <location filename="Studio/Design/Planner/PlannerView.qml" line="40"/>
         <source>Planner</source>
-        <translation>Plannificateur</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -811,7 +800,7 @@
     <message>
         <location filename="Studio/Design/Common/PlayerRef.qml" line="27"/>
         <source>Player</source>
-        <translation>Player</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -819,67 +808,67 @@
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="12"/>
         <source>Group</source>
-        <translation>Groupe</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="13"/>
         <source>Mastering</source>
-        <translation>Mastering</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="14"/>
         <source>Sequencer</source>
-        <translation>Sequenceur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="17"/>
         <source>Instrument</source>
-        <translation>Instrument</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="18"/>
         <source>Synth</source>
-        <translation>Synth</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="19"/>
         <source>Drum</source>
-        <translation>Drum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="20"/>
         <source>Sampler</source>
-        <translation>Échantillonneur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="23"/>
         <source>Effect</source>
-        <translation>Effet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="24"/>
         <source>Filter</source>
-        <translation>Filtre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="25"/>
         <source>Reverb</source>
-        <translation>Réverbération</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="26"/>
         <source>Delay</source>
-        <translation>Delay</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="27"/>
         <source>Distortion</source>
-        <translation>Distortion</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsForeground.qml" line="54"/>
         <source>Research</source>
-        <translation>Recherche</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -887,12 +876,12 @@
     <message>
         <location filename="Studio/Design/Plugins/PluginsView.qml" line="171"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Plugins/PluginsView.qml" line="178"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -900,62 +889,62 @@
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>C</source>
-        <translation>C</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>C#</source>
-        <translation>C#</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>D</source>
-        <translation>D</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>D#</source>
-        <translation>D#</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>E</source>
-        <translation>E</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="13"/>
         <source>F</source>
-        <translation>F</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="14"/>
         <source>F#</source>
-        <translation>F#</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="14"/>
         <source>G</source>
-        <translation>G</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="14"/>
         <source>G#</source>
-        <translation>G#</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="14"/>
         <source>A</source>
-        <translation>A</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="14"/>
         <source>A#</source>
-        <translation>A#</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Sequencer/SequencerContentPianoView.qml" line="14"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -963,12 +952,12 @@
     <message>
         <location filename="Studio/Design/Sequencer/SequencerSettingsPartition.qml" line="91"/>
         <source>Please choose a file</source>
-        <translation>Veuillez choisir un fichier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerSettingsPartition.qml" line="126"/>
+        <location filename="Studio/Design/Sequencer/SequencerSettingsPartition.qml" line="124"/>
         <source>Export your partition</source>
-        <translation>Exporter la partition</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -976,7 +965,7 @@
     <message>
         <location filename="Studio/Design/Settings/SettingsForeground.qml" line="27"/>
         <source>Research</source>
-        <translation>Recherche</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -984,7 +973,7 @@
     <message>
         <location filename="Studio/Design/Settings/SettingsTitle.qml" line="6"/>
         <source>Results</source>
-        <translation>Résultats</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -992,17 +981,17 @@
     <message>
         <location filename="Studio/Design/Settings/SettingsView.qml" line="57"/>
         <source>Defaults</source>
-        <translation>Défaults</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Settings/SettingsView.qml" line="67"/>
         <source>Reload</source>
-        <translation>Recharger</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Settings/SettingsView.qml" line="83"/>
         <source>Done</source>
-        <translation>Terminé</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1010,7 +999,7 @@
     <message>
         <location filename="Studio/Design/Common/TimerView.qml" line="12"/>
         <source>Timer</source>
-        <translation>Minuteur</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1018,17 +1007,17 @@
     <message>
         <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="105"/>
         <source>Groups</source>
-        <translation>Groupes</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="110"/>
         <source>Instruments</source>
-        <translation>Instruments</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeComponentsPanel.qml" line="115"/>
         <source>Effects</source>
-        <translation>Effets</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1036,47 +1025,47 @@
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="45"/>
         <source>Open in planner</source>
-        <translation>Ouvrir dans le plannificateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="56"/>
         <source>Open selection in planner</source>
-        <translation>Ouvrir la séléction dans le plannificateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="69"/>
         <source>Open all children in planner</source>
-        <translation>Ouvrir les enfants dans le plannificateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="88"/>
         <source>Edit name</source>
-        <translation>Midifier le nom</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="97"/>
         <source>Change sample</source>
-        <translation>Modifier l&apos;échantillon</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="118"/>
         <source>Add child</source>
-        <translation>Ajouter un enfant</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="129"/>
         <source>Add parent</source>
-        <translation>Ajouter un parent</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="140"/>
         <source>Duplicate (only plugin)</source>
-        <translation>Dupliquer (seulement le plugin)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Tree/TreeNodeMenu.qml" line="155"/>
         <source>Remove</source>
-        <translation>Supprimer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1084,7 +1073,7 @@
     <message>
         <location filename="Studio/Design/Tree/TreeSamplesPanel.qml" line="25"/>
         <source>Samples</source>
-        <translation>Echantillons</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1092,12 +1081,12 @@
     <message>
         <location filename="Studio/Design/Workspaces/WorkspacesForeground.qml" line="38"/>
         <source>Default files</source>
-        <translation>Fichiers par défault</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Workspaces/WorkspacesForeground.qml" line="75"/>
         <source>+ NEW WORKSPACE</source>
-        <translation>+ NOUVEAU ESPACE DE TRAVAIL</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1105,17 +1094,17 @@
     <message>
         <location filename="Studio/Design/Workspaces/WorkspacesView.qml" line="91"/>
         <source>Accept</source>
-        <translation>Accepter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Workspaces/WorkspacesView.qml" line="109"/>
         <source>Back</source>
-        <translation>Retour</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Studio/Design/Workspaces/WorkspacesView.qml" line="125"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

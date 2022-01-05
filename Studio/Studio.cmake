@@ -13,9 +13,11 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt5 COMPONENTS Core Quick QuickControls2 Qml LinguistTools REQUIRED)
 find_package(Qt5QmlImportScanner REQUIRED)
-find_package(RtMidi CONFIG REQUIRED)
 
 find_package(Threads)
+
+set (CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};C:/vcpkg/packages/rtmidi_x64-windows-static/share/rtmidi") 
+find_package(RtMidi REQUIRED)
 
 set(APP_ICON_NAME "Lexo")
 set(APP_ICON_RESOURCE_WINDOWS "${StudioRoot}/${APP_ICON_NAME}.rc")
@@ -134,6 +136,8 @@ set(StudioSources
     ${StudioDir}/AutomationPreview.hpp
     ${StudioDir}/AutomationPreview.cpp
     ${StudioDir}/ControlDescriptor.hpp
+    ${StudioDir}/MidiController.cpp
+    ${StudioDir}/MidiController.hpp
 )
 
 add_library(${PROJECT_NAME} ${StudioSources} ${QM_FILES} ${QtResources})

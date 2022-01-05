@@ -78,6 +78,19 @@ ContentView {
     }
 
     Connections {
+        target: midiController
+        enabled: plannerView.moduleIndex === modulesView.selectedModule && contentView.selectedNode
+
+        function onOutput(noteOn, noteNumber, velocity) {
+            contentView.selectedNode.node.partitions.addOnTheFly(
+                AudioAPI.noteEvent(!noteOn, noteNumber, AudioAPI.velocityMax, 0),
+                contentView.selectedNode.node
+            )
+            console.debug(noteOn, noteNumber, velocity)
+        }
+    }
+
+    Connections {
         function launch(pressed, key) {
             if (contentView.selectedNode) {
                 contentView.selectedNode.node.partitions.addOnTheFly(

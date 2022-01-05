@@ -570,7 +570,7 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="Studio/Design/Main/Main.qml" line="41"/>
+        <location filename="Studio/Design/Main/Main.qml" line="42"/>
         <source>Lexo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -694,22 +694,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/PartitionMenu.qml" line="98"/>
+        <location filename="Studio/Design/Common/PartitionMenu.qml" line="96"/>
         <source>Export...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/PartitionMenu.qml" line="108"/>
+        <location filename="Studio/Design/Common/PartitionMenu.qml" line="106"/>
         <source>Export your partition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/PartitionMenu.qml" line="128"/>
+        <location filename="Studio/Design/Common/PartitionMenu.qml" line="124"/>
         <source>Duplicate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Common/PartitionMenu.qml" line="138"/>
+        <location filename="Studio/Design/Common/PartitionMenu.qml" line="134"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -955,7 +955,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Studio/Design/Sequencer/SequencerSettingsPartition.qml" line="126"/>
+        <location filename="Studio/Design/Sequencer/SequencerSettingsPartition.qml" line="124"/>
         <source>Export your partition</source>
         <translation type="unfinished"></translation>
     </message>
