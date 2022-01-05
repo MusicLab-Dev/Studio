@@ -12,6 +12,7 @@ import ClipboardManager 1.0
 import CursorManager 1.0
 import ColoredSpriteManager 1.0
 import CommunityAPI 1.0
+import MidiController 1.0
 
 import "../Common"
 import "../Modules"
@@ -142,5 +143,9 @@ Window {
     KeyboardShortcutsView {
         id: keyboardShortcutsView
         anchors.fill: parent
+    }
+
+    MidiController {
+        id: midiController
     }
 }

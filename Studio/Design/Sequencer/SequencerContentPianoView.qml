@@ -167,6 +167,10 @@ Item {
                     z: 1
                     font.pixelSize: 10
                 }
+
+                Rectangle {
+                    anchors.right: parent.right
+                }
             }
         }
     }

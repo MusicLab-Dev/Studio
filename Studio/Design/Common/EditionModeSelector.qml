@@ -14,7 +14,7 @@ ModeSelector {
         "Selector",
         "CutMod",
     ]
-    itemUsableTill: 3
+    itemUsableTill: 2
 
     placeholder: Snapper {
         id: brushSnapper

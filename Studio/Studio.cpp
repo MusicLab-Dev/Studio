@@ -34,6 +34,7 @@
 #include "CommunityAPI.hpp"
 #include "AutomationPreview.hpp"
 #include "ControlDescriptor.hpp"
+#include "MidiController.hpp"
 
 void Studio::InitResources(void)
 {
@@ -126,6 +127,8 @@ void Studio::InitResources(void)
     qmlRegisterType<ColoredSpriteManager>("ColoredSpriteManager", 1, 0, "ColoredSpriteManager");
     qmlRegisterType<CommunityAPI>("CommunityAPI", 1, 0, "CommunityAPI");
     qmlRegisterType<AutomationPreview>("AutomationPreview", 1, 0, "AutomationPreview");
+    qmlRegisterType<MidiController>("MidiController", 1, 0, "MidiController");
+
 
     Q_INIT_RESOURCE(Resources);
     Q_INIT_RESOURCE(Main);

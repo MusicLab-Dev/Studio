@@ -176,6 +176,19 @@ MouseArea {
     }
 
     Connections {
+        target: midiController
+        enabled: treeView.moduleIndex === modulesView.selectedModule && contentView.lastSelectedNode
+
+        function onOutput(noteOn, noteNumber, velocity) {
+            contentView.lastSelectedNode.node.partitions.addOnTheFly(
+                AudioAPI.noteEvent(!noteOn, noteNumber, AudioAPI.velocityMax, 0),
+                contentView.lastSelectedNode.node
+            )
+            console.debug(noteOn, noteNumber, velocity)
+        }
+    }
+
+    Connections {
         function launch(pressed, key) {
             if (contentView.lastSelectedNode) {
                 contentView.lastSelectedNode.node.partitions.addOnTheFly(

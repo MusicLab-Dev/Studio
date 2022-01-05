@@ -145,6 +145,18 @@ PlacementArea {
 
 
     Connections {
+        target: midiController
+        enabled: sequencerView.moduleIndex === modulesView.selectedModule
+
+        function onOutput(noteOn, noteNumber, velocity) {
+            if (noteOn)
+                addOnTheFly(noteNumber)
+            console.debug(noteOn, noteNumber, velocity)
+            keyRepeater.itemAt(noteNumber).isManuallyPressed = pressed
+        }
+    }
+
+    Connections {
         target: partition
         enabled: placementArea.selectionInsertCache !== null
 

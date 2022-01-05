@@ -1,0 +1,113 @@
+{
+    "name": "Partition 0 (Master - kick_2|4)",
+    "notes": [
+        {
+            "key": 74,
+            "range": [
+                32,
+                64
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 60,
+            "range": [
+                64,
+                96
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 64,
+            "range": [
+                96,
+                128
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 74,
+            "range": [
+                160,
+                192
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 60,
+            "range": [
+                192,
+                224
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 64,
+            "range": [
+                224,
+                256
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 74,
+            "range": [
+                288,
+                320
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 60,
+            "range": [
+                320,
+                352
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 64,
+            "range": [
+                352,
+                384
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 74,
+            "range": [
+                416,
+                448
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 60,
+            "range": [
+                448,
+                480
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        },
+        {
+            "key": 64,
+            "range": [
+                480,
+                512
+            ],
+            "tuning": 0,
+            "velocity": 65535
+        }
+    ]
+}
